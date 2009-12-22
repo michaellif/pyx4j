@@ -1,0 +1,6 @@
+<module rename-to='daycare_site'>
+	<inherits name='com.google.gwt.user.User'/>
+	
+	<source path="admin"/>
+	
+</module>
