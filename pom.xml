@@ -97,6 +97,15 @@
     <modules>
         <module>pyx-commons</module>
         <module>gwt/pyx-gwt-unit</module>
+
+        <module>entity/pyx-entity-shared</module>
+        <module>entity/pyx-entity-gwt</module>
+        <module>entity/pyx-entity-persistence</module>
+
+        <module>incubator/tester/tester-domain</module>
+        <module>incubator/tester/tester-client</module>
+        <module>incubator/tester/tester-gae-server</module>
+
 <!--
         log\log-shared
         commons
