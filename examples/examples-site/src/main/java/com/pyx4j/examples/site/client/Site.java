@@ -41,6 +41,7 @@ import com.pyx4j.examples.site.client.pages.ContactUs;
 import com.pyx4j.examples.site.client.pages.Philosophy;
 import com.pyx4j.examples.site.client.pages.Photogalery;
 import com.pyx4j.examples.site.client.pages.Programs;
+import com.pyx4j.widgets.GlassPanel;
 
 /**
  * Application that demonstrates all of the built-in widgets.

@@ -8,6 +8,7 @@
 
     <artifactId>pyx-site-admin</artifactId>
     <name>pyx-site-admin</name>
+    <version>0.0.1-SNAPSHOT</version>
     <description>pyx-site-admin implementations</description>
 
 	<dependencies>
