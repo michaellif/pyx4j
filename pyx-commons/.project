@@ -1,0 +1,12 @@
+<projectDescription>
+  <name>pyx-commons</name>
+  <comment>pyx-commons implementations</comment>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>

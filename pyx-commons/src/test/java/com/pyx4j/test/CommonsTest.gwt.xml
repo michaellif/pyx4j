@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<inherits name='com.pyx4j.Commons'/>
+    <source path="commons"/> 
+</module>
