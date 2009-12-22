@@ -1,0 +1,14 @@
+<projectDescription>
+  <name>pyx-gwt-unit</name>
+  <comment>Asynchronous Unit Tests for GWT</comment>
+  <projects/>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>com.google.gwt.eclipse.core.gwtNature</nature>
+  </natures>
+</projectDescription>

@@ -5,6 +5,13 @@
 
 2.
 
+
 TODO
+ Misha:
+    Module for UncaughtHandler
+    Module for MessageDialog and Message
+    Module for ClientState class
+
+ Vlad:
    Ivestigate common logger!
 
