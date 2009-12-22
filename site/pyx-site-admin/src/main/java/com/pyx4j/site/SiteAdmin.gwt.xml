@@ -1,5 +1,7 @@
 <module rename-to='daycare_site'>
 	<inherits name='com.google.gwt.user.User'/>
+	<inherits name='com.pyx4j.Widgets'/>
+	
 	
 	<source path="admin"/>
 	

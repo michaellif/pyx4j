@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.site.admin.richtext.RichTextToolbar;
+import com.pyx4j.widgets.richtext.RichTextToolbar;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
