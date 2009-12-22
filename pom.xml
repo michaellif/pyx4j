@@ -1,0 +1,32 @@
+
+    <modules>
+        log\log-shared
+        commons
+        rpc\rpc-shared
+
+        log\log-gwt  (Impl logger for GWT)
+        gwt\gwt-widgets
+        gwt\gwt-unit
+        gwt\gwt-forms
+
+        rpc\rpc-gwt
+
+        gwt\gwt-ria
+        gwt\gwt-site
+
+        entity\entity-shared
+
+        entity\entity-gwt
+
+        log\log-server
+
+
+        rpc\rpc-server
+
+        entity\entity-persistence
+        entity\entity-gae
+        entity\entity-hibernate
+        entity\entity-persistence
+
+    </modules>
+
