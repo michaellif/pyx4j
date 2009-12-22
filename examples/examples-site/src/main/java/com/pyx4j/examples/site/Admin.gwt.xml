@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='site_admin'>
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<inherits name="com.google.gwt.maps.GoogleMaps" />
+  <inherits name="com.pyx4j.site.SiteAdmin" />
+
+  <entry-point class='com.pyx4j.site.admin.Admin'/>
+
+</module>
