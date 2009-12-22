@@ -8,8 +8,10 @@
 
 TODO
  Misha:
-    Module for UncaughtHandler
+    Module for UncaughtHandler -> pyx-gwt-commons
     Module for MessageDialog and Message
+    DefaultExceptionHandler ->  pyx-gwt-commons
+
     Module for ClientState class
 
  Vlad:

@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.unit.GCaseMeta;
 import com.pyx4j.unit.GCaseResultAsyncCallback;
@@ -159,7 +160,7 @@ public class TestRunnerDialog extends DialogBox {
             @Override
             public void onFailure(Throwable reason) {
                 //TODO
-                //MessageDialog.error("Error", "Tests are not avalable", reason);
+                //MessageDialog.error("Error", "Tests are not available", reason);
             }
 
             @Override
