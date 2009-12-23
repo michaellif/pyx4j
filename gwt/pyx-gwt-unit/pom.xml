@@ -10,8 +10,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-gwt-unit2</artifactId>
-    <name>pyx-gwt-unit2</name>
+    <artifactId>pyx-gwt-unit</artifactId>
+    <name>pyx-gwt-unit</name>
     <description>Asynchronous Unit Tests for GWT</description>
 
   <dependencies>
