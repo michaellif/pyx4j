@@ -9,11 +9,12 @@
 package com.pyx4j.entity.client;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.impl.IEntityFactory;
 
-public class ClientEntityFactory {
+public class ClientEntityFactory implements IEntityFactory {
 
     //TODO
-    public static <T extends IObject<?>> T create(Class<T> clazz) {
+    public <T extends IObject<?>> T create(Class<T> clazz) {
         return null;
     }
 }

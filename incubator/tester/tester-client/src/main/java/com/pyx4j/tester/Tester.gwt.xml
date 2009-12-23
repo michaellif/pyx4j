@@ -3,7 +3,8 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='om.pyx4j.entity.Entity'/>
-    <inherits name='om.pyx4j.tester.TesterDomain'/>
+    <inherits name='com.pyx4j.entity.EntityShared'/>
+    <inherits name='com.pyx4j.tester.TesterDomain'/>
+    <inherits name='com.pyx4j.entity.tests.EntitySharedTests'/>
 	<source path="client"/>
 </module>

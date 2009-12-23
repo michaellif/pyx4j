@@ -2,24 +2,19 @@
  * Pyx4j framework
  * Copyright (C) 2008-2009 pyx4j.com.
  *
- * Created on Dec 22, 2009
+ * Created on Dec 23, 2009
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.server.test;
+package com.pyx4j.entity.test.shared;
 
-import junit.framework.TestCase;
-
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.impl.EntityFactory;
-import com.pyx4j.tester.domain.Address;
-import com.pyx4j.tester.domain.Country;
+import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.Country;
 
-public class ServerEntityFactoryTest extends TestCase {
+public class FactoryTest extends InitializerTestCase {
 
     public void testObjectCreation() {
-
-        EntityFactory.setImplementation(new ServerEntityFactory());
 
         Country country = EntityFactory.create(Country.class);
         country.name().setValue("Canada");
