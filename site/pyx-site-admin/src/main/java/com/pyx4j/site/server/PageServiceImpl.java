@@ -10,8 +10,6 @@ import com.google.appengine.api.datastore.Text;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import com.pyx4j.site.admin.PageService;
-import com.pyx4j.site.shared.PageData;
-
 
 /**
  * The server side implementation of the RPC service.
