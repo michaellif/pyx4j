@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id: UnitFailureGWTTest.java 4436 2009-12-22 08:45:29Z vlads $
  */
-package com.pyx4j.test.unit;
+package com.pyx4j.unit.test.client;
 
 import junit.framework.TestCase;
 

@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id: UnitExampleEntryPoint.java 4436 2009-12-22 08:45:29Z vlads $
  */
-package com.pyx4j.launch.example;
+package com.pyx4j.unit.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;

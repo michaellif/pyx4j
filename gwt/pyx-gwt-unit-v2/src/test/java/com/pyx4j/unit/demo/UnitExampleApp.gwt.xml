@@ -6,18 +6,12 @@
 	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
 	
 	<inherits name='com.pyx4j.unit.Unit'/>
-    <inherits name='com.pyx4j.test.UnitTests'/>
+    <inherits name='com.pyx4j.unit.test.UnitTests'/>
 	<inherits name='com.pyx4j.test.CommonsTests'/>
 
-    <!--  
-     http://localhost:8888/com.pyx4j.launch.UnitExampleApp/
-	or
-     http://localhost:8888/com.pyx4j.launch.UnitExampleApp/?gwt.codesvr=localhost:9997
-    -->
-
-    <entry-point class='com.pyx4j.launch.example.UnitExampleEntryPoint'/>
+    <entry-point class='com.pyx4j.unit.demo.client.UnitExampleEntryPoint'/>
     
     
-	<source path="example" />
+	<source path="client" />
 
 </module>
