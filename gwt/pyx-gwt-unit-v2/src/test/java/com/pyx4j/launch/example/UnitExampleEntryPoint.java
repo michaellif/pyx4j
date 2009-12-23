@@ -13,7 +13,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.pyx4j.unit.ui.TestRunnerDialog;
+
+import com.pyx4j.unit.client.ui.TestRunnerDialog;
 
 public class UnitExampleEntryPoint implements EntryPoint {
 

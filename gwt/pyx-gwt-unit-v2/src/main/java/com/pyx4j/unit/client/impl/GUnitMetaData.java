@@ -6,12 +6,12 @@
  * @author vlads
  * @version $Id: GUnitMetaData.java 4436 2009-12-22 08:45:29Z vlads $
  */
-package com.pyx4j.unit.impl;
+package com.pyx4j.unit.client.impl;
 
 import java.util.List;
 import java.util.Set;
 
-import com.pyx4j.unit.GCaseMeta;
+import com.pyx4j.unit.client.GCaseMeta;
 
 import junit.framework.TestCase;
 

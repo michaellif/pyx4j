@@ -3,7 +3,7 @@
 <!-- @version $Revision: 4436 $ ($Author: vlads $) $Date: 2009-12-22 03:45:29 -0500 (Tue, 22 Dec 2009) $ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-	<inherits name='com.pyx4j.Unit'/>
+	<inherits name='com.pyx4j.unit.Unit'/>
     
 	<source path="unit" />
 

@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id: GUnitTester.java 4436 2009-12-22 08:45:29Z vlads $
  */
-package com.pyx4j.unit;
+package com.pyx4j.unit.client;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,8 +16,9 @@ import java.util.Vector;
 import junit.framework.TestCase;
 
 import com.google.gwt.core.client.GWT;
-import com.pyx4j.unit.impl.AbstractGCaseMeta;
-import com.pyx4j.unit.impl.GUnitMetaData;
+
+import com.pyx4j.unit.client.impl.AbstractGCaseMeta;
+import com.pyx4j.unit.client.impl.GUnitMetaData;
 
 
 public class GUnitTester {

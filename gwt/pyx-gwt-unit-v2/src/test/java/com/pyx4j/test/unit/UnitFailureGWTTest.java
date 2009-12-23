@@ -11,7 +11,8 @@ package com.pyx4j.test.unit;
 import junit.framework.TestCase;
 
 import com.google.gwt.user.client.Timer;
-import com.pyx4j.unit.GUnitTester;
+
+import com.pyx4j.unit.client.GUnitTester;
 
 public class UnitFailureGWTTest extends TestCase {
 

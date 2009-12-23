@@ -5,7 +5,7 @@
     <inherits name='com.google.gwt.user.User'/>
 	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
 	
-	<inherits name='com.pyx4j.Unit'/>
+	<inherits name='com.pyx4j.unit.Unit'/>
     <inherits name='com.pyx4j.test.UnitTests'/>
 	<inherits name='com.pyx4j.test.CommonsTests'/>
 

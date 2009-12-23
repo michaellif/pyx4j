@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id: GUnitMetaDataGenerator.java 4436 2009-12-22 08:45:29Z vlads $
  */
-package com.pyx4j.rebind;
+package com.pyx4j.unit.rebind;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -24,8 +24,8 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
-import com.pyx4j.unit.impl.AbstractGCaseMeta;
-import com.pyx4j.unit.impl.AbstractGUnitMetaData;
+import com.pyx4j.unit.client.impl.AbstractGCaseMeta;
+import com.pyx4j.unit.client.impl.AbstractGUnitMetaData;
 
 public class GUnitMetaDataGenerator extends Generator {
 

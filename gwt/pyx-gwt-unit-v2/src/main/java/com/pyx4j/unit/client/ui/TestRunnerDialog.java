@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id: TestRunnerDialog.java 4443 2009-12-22 19:32:06Z vlads $
  */
-package com.pyx4j.unit.ui;
+package com.pyx4j.unit.client.ui;
 
 import java.util.List;
 import java.util.Vector;
@@ -29,11 +29,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.unit.GCaseMeta;
-import com.pyx4j.unit.GCaseResultAsyncCallback;
-import com.pyx4j.unit.GResult;
-import com.pyx4j.unit.GUnitTester;
-import com.pyx4j.unit.TestAwareExceptionHandler;
+import com.pyx4j.unit.client.GCaseMeta;
+import com.pyx4j.unit.client.GCaseResultAsyncCallback;
+import com.pyx4j.unit.client.GResult;
+import com.pyx4j.unit.client.GUnitTester;
+import com.pyx4j.unit.client.TestAwareExceptionHandler;
 
 /**
  * Initial GUI for tests, require Additional GWT module 'com.pyx4j.Unit'.
