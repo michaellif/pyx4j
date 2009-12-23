@@ -3,7 +3,5 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-
-	<source path="widgets" />
-	<super-source path="junit"/>
+	<source path="client" />
 </module>

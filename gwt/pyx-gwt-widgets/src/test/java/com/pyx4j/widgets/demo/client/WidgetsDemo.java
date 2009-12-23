@@ -1,7 +1,14 @@
-package com.pyx4j.site.admin;
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2009 pyx4j.com.
+ *
+ * Created on Dec 22, 2009
+ * @author vlads
+ * @version $Id: UnitExampleEntryPoint.java 4436 2009-12-22 08:45:29Z vlads $
+ */
+package com.pyx4j.widgets.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -16,18 +23,12 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
-import com.pyx4j.widgets.client.richtext.RichTextToolbar;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Admin implements EntryPoint {
+public class WidgetsDemo implements EntryPoint {
 
-    private final PageServiceAsync pageService = GWT.create(PageService.class);
-
-    /**
-     * This is the entry point method.
-     */
     public void onModuleLoad() {
 
         VerticalPanel contentPanel = new VerticalPanel();
@@ -55,42 +56,13 @@ public class Admin implements EntryPoint {
         pageNameTextBox.setFocus(true);
         pageNameTextBox.selectAll();
 
-        // Create a handler for the sendButton and nameField
-        class MyHandler implements ClickHandler, KeyUpHandler {
-            /**
-             * Fired when the user clicks on the sendButton.
-             */
+        class MyHandler implements ClickHandler {
             public void onClick(ClickEvent event) {
-                sendNameToServer();
-            }
-
-            /**
-             * Fired when the user types in the nameField.
-             */
-            public void onKeyUp(KeyUpEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    sendNameToServer();
-                }
-            }
-
-            /**
-             * Send the name from the nameField to the server and wait for a response.
-             */
-            private void sendNameToServer() {
-                pageService.setPageHTML(pageNameTextBox.getText(), pageEditor.getHTML(), new AsyncCallback<Void>() {
-                    public void onFailure(Throwable caught) {
-                    }
-
-                    public void onSuccess(Void result) {
-                        htmlViewer.setText(pageEditor.getHTML());
-                    }
-                });
+                htmlViewer.setText(pageEditor.getHTML());
             }
         }
 
-        // Add a handler to send the name to the server
         MyHandler handler = new MyHandler();
         sendButton.addClickHandler(handler);
-        pageNameTextBox.addKeyUpHandler(handler);
     }
 }

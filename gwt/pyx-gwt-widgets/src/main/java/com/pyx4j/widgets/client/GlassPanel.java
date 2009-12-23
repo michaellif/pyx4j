@@ -1,4 +1,4 @@
-package com.pyx4j.widgets;
+package com.pyx4j.widgets.client;
 
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
