@@ -1,4 +1,4 @@
-package com.pyx4j.ria.client;
+package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Button;
@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.TextBox;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class RiaExampleApp implements EntryPoint {
+public class RiaDemo implements EntryPoint {
 
     public void onModuleLoad() {
         final Button sendButton = new Button("Send");

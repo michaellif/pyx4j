@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 
-public class UnitExampleEntryPoint implements EntryPoint {
+public class UnitDemo implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
