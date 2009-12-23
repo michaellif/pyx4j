@@ -4,7 +4,7 @@
  *
  * Created on Apr 21, 2009
  * @author vlads
- * @version $Id: TestRunnerDialog.java 4443 2009-12-22 19:32:06Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.unit.client.ui;
 

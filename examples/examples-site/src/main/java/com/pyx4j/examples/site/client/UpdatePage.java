@@ -4,7 +4,7 @@
  *
  * Created on Dec 20, 2009
  * @author Misha
- * @version $Id: UpdatePage.java 4161 2009-12-21 01:32:13Z michaellif $
+ * @version $Id$
  */
 package com.pyx4j.examples.site.client;
 

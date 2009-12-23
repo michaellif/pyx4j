@@ -4,7 +4,7 @@
  *
  * Created on Sep 28, 2009
  * @author vlads
- * @version $Id: TestAwareExceptionHandler.java 4436 2009-12-22 08:45:29Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.unit.client;
 

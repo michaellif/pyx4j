@@ -4,7 +4,7 @@
  *
  * Created on Dec 23, 2009
  * @author Michael
- * @version $Id: code-templates.xml 3267 2009-04-13 18:13:18Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.widgets.client.richtext;
 
