@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-persistence</artifactId>
-    <name>pyx-entity-persistence</name>
-    <description>pyx-entity-persistence implementations</description>
+    <artifactId>pyx-entity-server</artifactId>
+    <name>pyx-entity-server</name>
+    <description>pyx-entity Server Side Implementations</description>
 
     <dependencies>
 

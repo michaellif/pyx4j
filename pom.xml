@@ -100,7 +100,7 @@
 
         <module>entity/pyx-entity-shared</module>
         <module>entity/pyx-entity-gwt</module>
-        <module>entity/pyx-entity-persistence</module>
+        <module>entity/pyx-entity-server</module>
 
         <module>incubator/tester/tester-domain</module>
         <module>incubator/tester/tester-client</module>
