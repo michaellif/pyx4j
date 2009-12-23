@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision: 4446 $ ($Author: michaellif $) $Date: 2009-12-22 16:16:02 -0500 (Tue, 22 Dec 2009) $ -->
+<module rename-to='test'>
+    <inherits name='com.google.gwt.user.User'/>
+	<inherits name='com.google.gwt.user.theme.standard.Standard'/>
+	
+	<inherits name='com.pyx4j.Unit'/>
+    <inherits name='com.pyx4j.test.UnitTests'/>
+	<inherits name='com.pyx4j.test.CommonsTests'/>
+
+    <!--  
+     http://localhost:8888/com.pyx4j.launch.UnitExampleApp/
+	or
+     http://localhost:8888/com.pyx4j.launch.UnitExampleApp/?gwt.codesvr=localhost:9997
+    -->
+
+    <entry-point class='com.pyx4j.launch.example.UnitExampleEntryPoint'/>
+    
+    
+	<source path="example" />
+
+</module>
