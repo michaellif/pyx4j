@@ -231,7 +231,7 @@
                         <manifestEntries>
                             <Version>${label}</Version>
                             <Build-Time>${cctimestamp}</Build-Time>
-                            <Implementation-Version>${pom.version}</Implementation-Version>
+                            <Implementation-Version>${project.version}</Implementation-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
