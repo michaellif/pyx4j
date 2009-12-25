@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.4"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/My/Programs/eclipse/eclipse-3.5-gwt2/plugins/com.google.appengine.eclipse.sdkbundle.1.3.0_1.3.0.v200912141120/appengine-java-sdk-1.3.0/lib/impl/appengine-local-runtime.jar"/>
-	<classpathentry kind="lib" path="C:/My/Programs/eclipse/eclipse-3.5-gwt2/plugins/com.google.appengine.eclipse.sdkbundle.1.3.0_1.3.0.v200912141120/appengine-java-sdk-1.3.0/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="C:/My/Programs/Eclipse/eclipse-3.5.1/plugins/com.google.appengine.eclipse.sdkbundle.1.3.0_1.3.0.v200912141120/appengine-java-sdk-1.3.0/lib/impl/appengine-local-runtime.jar"/>
+	<classpathentry kind="lib" path="C:/My/Programs/Eclipse/eclipse-3.5.1/plugins/com.google.appengine.eclipse.sdkbundle.1.3.0_1.3.0.v200912141120/appengine-java-sdk-1.3.0/lib/impl/appengine-api-stubs.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

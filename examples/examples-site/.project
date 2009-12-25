@@ -50,4 +50,11 @@
 		<nature>com.google.gdt.eclipse.core.webAppNature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>C:/My/Projects/PYX4J/pyx4j/site/pyx-site-admin/src/main/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>

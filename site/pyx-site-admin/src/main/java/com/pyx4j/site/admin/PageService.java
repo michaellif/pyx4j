@@ -8,8 +8,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("page")
 public interface PageService extends RemoteService {
-	
-	String getPageHTML(String name);
-	void setPageHTML(String name, String html);
-	
+
+    String loadPageHtml(String name);
+
+    void savePageHtml(String name, String html);
+
 }

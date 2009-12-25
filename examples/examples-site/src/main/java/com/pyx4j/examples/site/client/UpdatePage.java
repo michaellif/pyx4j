@@ -67,7 +67,7 @@ public class UpdatePage extends VerticalPanel {
              * Send the name from the nameField to the server and wait for a response.
              */
             private void refresh() {
-                pageService.getPageHTML(nameField.getText(), new AsyncCallback<String>() {
+                pageService.loadPageHtml(nameField.getText(), new AsyncCallback<String>() {
                     public void onFailure(Throwable caught) {
                         page.setText(caught.getMessage());
                     }

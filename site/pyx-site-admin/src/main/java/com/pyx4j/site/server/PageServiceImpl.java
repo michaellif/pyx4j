@@ -1,12 +1,11 @@
 package com.pyx4j.site.server;
 
-import java.util.List;
-
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
-import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import com.pyx4j.site.admin.PageService;
@@ -17,41 +16,30 @@ import com.pyx4j.site.admin.PageService;
 @SuppressWarnings("serial")
 public class PageServiceImpl extends RemoteServiceServlet implements PageService {
 
-    private static final PersistenceManagerFactory pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
+    public void savePageHtml(String pageName, String html) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    public String getPageHTML(String pageName) {
-        PageData page = loadPage(pageName, pmfInstance.getPersistenceManager());
-        if (page != null) {
-            return page.getHtml().getValue();
-        } else {
-            return "ERROR: Page " + pageName + " not found";
-        }
+        Key key = KeyFactory.createKey("Page", pageName);
+
+        Entity entity = new Entity(key);
+        entity.setProperty("html", html);
+
+        datastore.put(entity);
 
     }
 
-    public void setPageHTML(String pageName, String html) {
-        PersistenceManager pm = pmfInstance.getPersistenceManager();
-        PageData page = loadPage(pageName, pm);
-        if (page == null) {
-            page = new PageData(pageName, new Text(html));
-        } else {
-            page.setHtml(new Text(html));
-        }
+    public String loadPageHtml(String pageName) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        Key key = KeyFactory.createKey("Page", pageName);
+
+        Entity entity;
         try {
-            pm.makePersistent(page);
-        } finally {
-            pm.close();
+            entity = datastore.get(key);
+            return (String) entity.getProperty("html");
+        } catch (EntityNotFoundException e) {
+            return "ERROR: Page not found";
         }
-    }
 
-    private PageData loadPage(String pageName, PersistenceManager pm) {
-        String query = "select from " + PageData.class.getName() + " where pageName == " + pageName;
-        List<PageData> pages = (List<PageData>) pm.newQuery(query).execute();
-        if (pages != null && pages.size() == 1) {
-            return pages.get(0);
-        } else {
-            return null;
-        }
     }
-
 }

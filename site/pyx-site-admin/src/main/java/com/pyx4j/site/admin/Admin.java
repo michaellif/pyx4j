@@ -77,7 +77,7 @@ public class Admin implements EntryPoint {
              * Send the name from the nameField to the server and wait for a response.
              */
             private void sendNameToServer() {
-                pageService.setPageHTML(pageNameTextBox.getText(), pageEditor.getHTML(), new AsyncCallback<Void>() {
+                pageService.savePageHtml(pageNameTextBox.getText(), pageEditor.getHTML(), new AsyncCallback<Void>() {
                     public void onFailure(Throwable caught) {
                     }
 
