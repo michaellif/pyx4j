@@ -138,14 +138,18 @@
 -->
     </modules>
 
-<!--
     <repositories>
         <repository>
-            <id>pyx4me-web</id>
-            <url>http://www.pyx4me.com/maven2</url>
+            <id>google-gae-jclouds-repository</id>
+            <url>http://jclouds.googlecode.com/svn/repo</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
     </repositories>
--->
 
     <pluginRepositories>
 <!--
@@ -164,6 +168,7 @@
 
     <properties>
         <gwtVersion>2.0.0</gwtVersion>
+        <gaeVersion>1.3.0</gaeVersion>
 
         <buildLabel>${project.version}</buildLabel>
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
@@ -183,6 +188,31 @@
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
                 <version>${gwtVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-dev</artifactId>
+                <version>${gwtVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api-stubs</artifactId>
+                <version>${gaeVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api</artifactId>
+                <version>${gaeVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-local-runtime</artifactId>
+                <version>${gaeVersion}</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>

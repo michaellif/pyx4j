@@ -40,7 +40,6 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
-            <version>${gwtVersion}</version>
             <optional>true</optional>
         </dependency>
 
