@@ -13,5 +13,5 @@ package com.pyx4j.widgets.client.dialog;
  * Create Dialog with Cancel button.
  */
 public interface CancelOption extends DialogOptions {
-    public void onClickCancel();
+    public boolean onClickCancel();
 }

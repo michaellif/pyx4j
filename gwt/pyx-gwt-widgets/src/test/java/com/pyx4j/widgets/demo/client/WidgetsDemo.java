@@ -95,8 +95,8 @@ public class WidgetsDemo implements EntryPoint {
             Dialog dialog = new Dialog("Caption2", new HTML("Test2Test2"), new OkOption() {
 
                 @Override
-                public void onClickOk() {
-                    //do nothing
+                public boolean onClickOk() {
+                    return true;
                 }
             });
             dialog.show();

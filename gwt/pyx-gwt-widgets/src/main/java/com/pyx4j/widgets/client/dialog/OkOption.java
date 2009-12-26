@@ -13,5 +13,7 @@ package com.pyx4j.widgets.client.dialog;
  * Create Dialog with Ok button.
  */
 public interface OkOption extends DialogOptions {
-    public void onClickOk();
+
+    public boolean onClickOk();
+
 }

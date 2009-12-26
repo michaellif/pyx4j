@@ -13,5 +13,5 @@ package com.pyx4j.widgets.client.dialog;
  * TODO Add docs
  */
 public interface CloseOption extends DialogOptions {
-    public void onClickClose();
+    public boolean onClickClose();
 }

@@ -14,8 +14,8 @@ package com.pyx4j.widgets.client.dialog;
  */
 public interface Custom3Option extends DialogOptions {
 
-    public String customButtonText();
+    public String custom3Text();
 
-    public void onClickCustom3();
+    public boolean onClickCustom3();
 
 }

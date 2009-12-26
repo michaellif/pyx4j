@@ -13,5 +13,7 @@ package com.pyx4j.widgets.client.dialog;
  * Create Dialog with Yes button.
  */
 public interface YesOption extends DialogOptions {
-    public void onClickYes();
+
+    public boolean onClickYes();
+
 }

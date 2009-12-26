@@ -54,10 +54,11 @@ public class Dialog extends DialogPanel {
         this("Information", message, Type.Info, new OkOption() {
 
             @Override
-            public void onClickOk() {
-                //do nothing
+            public boolean onClickOk() {
+                return true;
             }
         });
+
     }
 
     public Dialog(String caption, String message, Type type, DialogOptions options) {
@@ -89,49 +90,42 @@ public class Dialog extends DialogPanel {
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         ClickHandler buttonListener = new ButtonListener();
 
+        int index = 0;
+
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).customButtonText(), buttonListener);
-            DOM.setStyleAttribute(custom1Button.getElement(), "padding", "0,5,0,5");
-            buttonsPanel.add(custom1Button);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener);
+            buttonsPanel.insert(custom1Button, index);
         }
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).customButtonText(), buttonListener);
-            DOM.setStyleAttribute(custom2Button.getElement(), "padding", "0,5,0,5");
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener);
             buttonsPanel.add(custom2Button);
         }
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).customButtonText(), buttonListener);
-            DOM.setStyleAttribute(custom3Button.getElement(), "padding", "0,5,0,5");
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener);
             buttonsPanel.add(custom3Button);
         }
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).customButtonText(), buttonListener);
-            DOM.setStyleAttribute(custom4Button.getElement(), "padding", "0,5,0,5");
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener);
             buttonsPanel.add(custom4Button);
         }
         if (options instanceof YesOption) {
             yesButton = createButton("Yes", buttonListener);
-            DOM.setStyleAttribute(yesButton.getElement(), "padding", "0,5,0,5");
             buttonsPanel.add(yesButton);
         }
         if (options instanceof NoOption) {
             noButton = createButton("No", buttonListener);
-            DOM.setStyleAttribute(noButton.getElement(), "padding", "0,5,0,5");
             buttonsPanel.add(noButton);
         }
         if (options instanceof OkOption) {
             okButton = createButton(optionTextOk(), buttonListener);
-            DOM.setStyleAttribute(okButton.getElement(), "padding", "0,5,0,5");
             buttonsPanel.add(okButton);
         }
         if (options instanceof CancelOption) {
             cancelButton = createButton(optionTextCancel(), buttonListener);
-            DOM.setStyleAttribute(cancelButton.getElement(), "padding", "0,5,0,5");
             buttonsPanel.add(cancelButton);
         }
         if (options instanceof CloseOption) {
             closeButton = createButton(optionTextClose(), buttonListener);
-            DOM.setStyleAttribute(closeButton.getElement(), "padding", "0,5,0,5");
             buttonsPanel.add(closeButton);
         }
 
@@ -166,38 +160,48 @@ public class Dialog extends DialogPanel {
     }
 
     private Button createButton(String text, ClickHandler buttonListener) {
-        Button retVal = new Button(text);
-        retVal.ensureDebugId("Dialog." + text);
-        retVal.addClickHandler(buttonListener);
-        DOM.setStyleAttribute(retVal.getElement(), "margin", "3px");
+        Button button = new Button(text);
+        button.ensureDebugId("Dialog." + text);
+        button.addClickHandler(buttonListener);
+        DOM.setStyleAttribute(button.getElement(), "margin", "3px");
+        DOM.setStyleAttribute(button.getElement(), "padding", "0,5,0,5");
         if (firstButton == null) {
-            firstButton = retVal;
+            firstButton = button;
         }
-        return retVal;
+        return button;
     }
 
     private class ButtonListener implements ClickHandler {
         public void onClick(ClickEvent event) {
             Object sender = event.getSource();
-            if (sender == yesButton) {
-                ((YesOption) options).onClickYes();
-            } else if (sender == noButton) {
-                ((NoOption) options).onClickNo();
-            } else if (sender == okButton) {
-                ((OkOption) options).onClickOk();
-            } else if (sender == cancelButton) {
-                ((CancelOption) options).onClickCancel();
-            } else if (sender == closeButton) {
-                ((CloseOption) options).onClickClose();
-            } else if (sender == custom1Button) {
-                ((Custom1Option) options).onClickCustom1();
-            } else if (sender == custom2Button) {
-                ((Custom2Option) options).onClickCustom2();
-            } else if (sender == custom3Button) {
-                ((Custom3Option) options).onClickCustom3();
-            } else if (sender == custom4Button) {
-                ((Custom4Option) options).onClickCustom4();
+            if (triggerOption(sender)) {
+                hide();
             }
+        }
+
+    }
+
+    private boolean triggerOption(Object sender) {
+        if (sender == yesButton) {
+            return ((YesOption) options).onClickYes();
+        } else if (sender == noButton) {
+            return ((NoOption) options).onClickNo();
+        } else if (sender == okButton) {
+            return ((OkOption) options).onClickOk();
+        } else if (sender == cancelButton) {
+            return ((CancelOption) options).onClickCancel();
+        } else if (sender == closeButton) {
+            return ((CloseOption) options).onClickClose();
+        } else if (sender == custom1Button) {
+            return ((Custom1Option) options).onClickCustom1();
+        } else if (sender == custom2Button) {
+            return ((Custom2Option) options).onClickCustom2();
+        } else if (sender == custom3Button) {
+            return ((Custom3Option) options).onClickCustom3();
+        } else if (sender == custom4Button) {
+            return ((Custom4Option) options).onClickCustom4();
+        } else {
+            return true;
         }
     }
 

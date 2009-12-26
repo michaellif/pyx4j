@@ -13,5 +13,5 @@ package com.pyx4j.widgets.client.dialog;
  * Create Dialog with No button.
  */
 public interface NoOption extends DialogOptions {
-    public void onClickNo();
+    public boolean onClickNo();
 }
