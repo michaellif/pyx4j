@@ -1,0 +1,18 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2009 pyx4j.com.
+ *
+ * Created on Apr 20, 2009
+ * @author michaellif
+ * @version $Id$
+ */
+package com.pyx4j.ria.client.app;
+
+public interface IApplication {
+
+    public void onLoad();
+
+    public void onDiscard();
+
+    public void openView(IView view);
+}

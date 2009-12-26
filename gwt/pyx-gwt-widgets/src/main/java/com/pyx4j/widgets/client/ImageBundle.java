@@ -11,8 +11,10 @@ package com.pyx4j.widgets.client;
 import com.google.gwt.resources.client.ClientBundle;
 
 import com.pyx4j.widgets.client.dialog.images.DialogImages;
+import com.pyx4j.widgets.client.menu.images.MenuImages;
 import com.pyx4j.widgets.client.richtext.images.RichTextImages;
+import com.pyx4j.widgets.client.tabpanel.images.TabpanelImages;
 
-public interface ImageBundle extends ClientBundle, DialogImages, RichTextImages {
+public interface ImageBundle extends ClientBundle, DialogImages, RichTextImages, TabpanelImages, MenuImages {
 
 }
