@@ -11,11 +11,11 @@ package com.pyx4j.entity.test.shared.domain;
 import java.util.Date;
 
 import com.pyx4j.entity.shared.IMember;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IOwnedMember;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Employee extends IObject<Department> {
+public interface Employee extends IEntity<Department> {
 
     IPrimitive<String, Employee> firstName();
 

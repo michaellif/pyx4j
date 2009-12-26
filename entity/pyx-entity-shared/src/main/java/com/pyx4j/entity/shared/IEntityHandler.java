@@ -8,7 +8,7 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IEntityHandler<T extends IEntity<?, ?>> {
+public interface IEntityHandler<T extends IObject<?, ?>> {
 
     public Class<T> getEntityClass();
 

@@ -22,9 +22,9 @@ import com.pyx4j.entity.shared.IOwnedMember;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implements ISet<IEntity<T, ?>, IObject<?>> {
+public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implements ISet<IObject<T, ?>, IEntity<?>> {
 
-    SetHandler(Class<T> clazz, ObjectHandler<?> parentHandler, IObject<?> parent, String fieldName) {
+    SetHandler(Class<T> clazz, EntityHandler<?> parentHandler, IEntity<?> parent, String fieldName) {
         super(clazz, parentHandler, parent, fieldName);
     }
 
@@ -56,7 +56,7 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
     }
 
     @Override
-    public void set(ISet<IEntity<T, ?>, IObject<?>> entity) {
+    public void set(ISet<IObject<T, ?>, IEntity<?>> entity) {
         setValue(entity.getValue());
     }
 
@@ -67,7 +67,7 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
         if (data == null) {
             return null;
         } else {
-            return (Set<IEntity<?, ?>>) data.get(getFieldName());
+            return (Set<IObject<?, ?>>) data.get(getFieldName());
         }
     }
 
@@ -83,7 +83,7 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean add(IEntity<T, ?> entity) {
+    public boolean add(IObject<T, ?> entity) {
         Map<String, Object> data = getParentHandler().getValue();
         if (data == null) {
             data = new HashMap<String, Object>();
@@ -96,7 +96,7 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
     }
 
     @Override
-    public boolean addAll(Collection<? extends IEntity<T, ?>> c) {
+    public boolean addAll(Collection<? extends IObject<T, ?>> c) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -111,10 +111,10 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
 
     @Override
     public boolean contains(Object o) {
-        if (o instanceof IEntity<?, ?>) {
+        if (o instanceof IObject<?, ?>) {
             Set<?> set = getValue();
             if (set != null) {
-                return set.contains(((IEntity<?, ?>) o).getValue());
+                return set.contains(((IObject<?, ?>) o).getValue());
             }
         }
         return false;
@@ -133,7 +133,7 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
     }
 
     @Override
-    public Iterator<IEntity<T, ?>> iterator() {
+    public Iterator<IObject<T, ?>> iterator() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -169,7 +169,7 @@ public class SetHandler<T extends IEntity<?, ?>> extends EntityHandler<T> implem
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <TT> TT[] toArray(TT[] a) {
         // TODO Auto-generated method stub
         return null;
     }

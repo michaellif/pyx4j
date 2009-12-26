@@ -10,16 +10,16 @@ package com.pyx4j.entity.server;
 
 import java.lang.reflect.Proxy;
 
-import com.pyx4j.entity.server.proxies.ObjectHandler;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.server.proxies.EntityHandler;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.impl.IEntityFactory;
 
 public class ServerEntityFactory implements IEntityFactory {
 
     @SuppressWarnings("unchecked")
-    public <T extends IObject<?>> T create(Class<T> clazz) {
+    public <T extends IEntity<?>> T create(Class<T> clazz) {
         Class<?>[] interfaces = new Class[] { clazz };
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new ObjectHandler(clazz));
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new EntityHandler(clazz));
     }
 
 }

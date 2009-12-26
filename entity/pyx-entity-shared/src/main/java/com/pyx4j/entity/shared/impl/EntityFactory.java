@@ -8,7 +8,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 
 public class EntityFactory {
 
@@ -18,7 +18,7 @@ public class EntityFactory {
         EntityFactory.impl = impl;
     }
 
-    public static <T extends IObject<?>> T create(Class<T> clazz) {
+    public static <T extends IEntity<?>> T create(Class<T> clazz) {
         return impl.create(clazz);
     }
 }

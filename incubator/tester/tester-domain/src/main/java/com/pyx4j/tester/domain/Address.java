@@ -9,10 +9,10 @@
 package com.pyx4j.tester.domain;
 
 import com.pyx4j.entity.shared.IMember;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Address extends IObject<Address> {
+public interface Address extends IEntity<Address> {
 
     interface AddressCountry extends Country, IMember<Address> {
     }

@@ -10,6 +10,6 @@ package com.pyx4j.entity.shared;
 
 import java.util.Set;
 
-public interface ISet<TYPE extends IEntity<?, ?>, PARENT extends IObject<?>> extends IOwnedMember<PARENT>, IEntity<Set<?>, ISet<TYPE, PARENT>>, Set<TYPE> {
+public interface ISet<TYPE extends IObject<?, ?>, PARENT extends IEntity<?>> extends IOwnedMember<PARENT>, IObject<Set<?>, ISet<TYPE, PARENT>>, Set<TYPE> {
 
 }

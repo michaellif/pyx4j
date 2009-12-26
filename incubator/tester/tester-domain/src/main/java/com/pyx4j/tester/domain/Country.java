@@ -8,10 +8,10 @@
  */
 package com.pyx4j.tester.domain;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Country extends IObject<Country> {
+public interface Country extends IEntity<Country> {
 
     IPrimitive<String, Country> name();
 

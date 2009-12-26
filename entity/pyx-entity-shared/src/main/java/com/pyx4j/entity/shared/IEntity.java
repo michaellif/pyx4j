@@ -8,16 +8,8 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IEntity<TYPE, E extends IEntity<?, ?>> {
+import java.util.Map;
 
-    boolean isNull();
-
-    void set(E entity);
-
-    void setValue(TYPE value);
-
-    TYPE getValue();
-
-    Path getPath();
+public interface IEntity<E extends IObject<?, ?>> extends IObject<Map<String, Object>, E> {
 
 }

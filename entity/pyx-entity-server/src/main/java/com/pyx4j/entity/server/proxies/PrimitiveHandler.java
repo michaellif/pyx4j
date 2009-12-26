@@ -12,14 +12,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IOwnedMember;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
-public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends EntityHandler<T> implements IPrimitive<Object, IObject<?>> {
+public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends ObjectHandler<T> implements IPrimitive<Object, IEntity<?>> {
 
-    PrimitiveHandler(Class<T> clazz, ObjectHandler<?> parentHandler, IObject<?> parent, String fieldName) {
+    PrimitiveHandler(Class<T> clazz, EntityHandler<?> parentHandler, IEntity<?> parent, String fieldName) {
         super(clazz, parentHandler, parent, fieldName);
     }
 
@@ -66,7 +66,7 @@ public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends EntityHandler<
     }
 
     @Override
-    public void set(IPrimitive<Object, IObject<?>> entity) {
+    public void set(IPrimitive<Object, IEntity<?>> entity) {
         setValue(entity.getValue());
 
     }

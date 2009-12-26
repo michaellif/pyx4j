@@ -8,9 +8,9 @@
  */
 package com.pyx4j.entity.client.ui;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 
-public interface IForm<E extends IEntity<?, ?>> {
+public interface IForm<E extends IObject<?, ?>> {
 
     void setEntity(E entity);
 

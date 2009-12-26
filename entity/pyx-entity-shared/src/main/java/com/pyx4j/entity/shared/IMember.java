@@ -8,6 +8,6 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IMember<PARENT extends IObject<?>> {
+public interface IMember<PARENT extends IEntity<?>> {
 
 }
