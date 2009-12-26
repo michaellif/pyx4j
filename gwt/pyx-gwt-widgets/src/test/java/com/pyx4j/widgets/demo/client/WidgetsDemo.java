@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.DialogPanel;
 import com.pyx4j.widgets.client.dialog.OkOption;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
