@@ -19,8 +19,11 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.widgets.client.dialog.Custom1Option;
+import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
+import com.pyx4j.widgets.client.dialog.GlueOption;
+import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -90,13 +93,51 @@ public class WidgetsDemo implements EntryPoint {
         }
     }
 
+    interface Options2 extends YesNoCancelOption, Custom1Option, Custom2Option, GlueOption {
+
+    }
+
     class DialogButtonHandler2 implements ClickHandler {
+
         public void onClick(ClickEvent event) {
-            Dialog dialog = new Dialog("Caption2", new HTML("Test2Test2"), new OkOption() {
+            Dialog dialog = new Dialog("Caption2", new HTML("Test2Test2"), new Options2() {
 
                 @Override
-                public boolean onClickOk() {
+                public boolean onClickCancel() {
+                    // TODO Auto-generated method stub
                     return true;
+                }
+
+                @Override
+                public boolean onClickNo() {
+                    // TODO Auto-generated method stub
+                    return true;
+                }
+
+                @Override
+                public boolean onClickYes() {
+                    // TODO Auto-generated method stub
+                    return true;
+                }
+
+                @Override
+                public String custom1Text() {
+                    return "Custom1";
+                }
+
+                @Override
+                public boolean onClickCustom1() {
+                    return false;
+                }
+
+                @Override
+                public String custom2Text() {
+                    return "Custom2";
+                }
+
+                @Override
+                public boolean onClickCustom2() {
+                    return false;
                 }
             });
             dialog.show();

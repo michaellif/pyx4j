@@ -11,11 +11,16 @@ package com.pyx4j.widgets.client.dialog;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.ImageBundle;
@@ -28,7 +33,7 @@ public class Dialog extends DialogPanel {
         Error, Warning, Info, Confirm
     }
 
-    protected Button firstButton;
+    protected Button focusButton;
 
     protected Button yesButton;
 
@@ -78,7 +83,9 @@ public class Dialog extends DialogPanel {
         message.setSize("100%", "100%");
         content.setCellHeight(message, "100%");
 
-        content.add(createButtonsPanel(), DockPanel.SOUTH);
+        Panel buttonPanel = createButtonsPanel();
+        content.add(buttonPanel, DockPanel.SOUTH);
+        content.setCellWidth(buttonPanel, "100%");
 
         setWidget(content);
         setPixelSize(400, 300);
@@ -88,45 +95,65 @@ public class Dialog extends DialogPanel {
 
     private HorizontalPanel createButtonsPanel() {
         HorizontalPanel buttonsPanel = new HorizontalPanel();
+        buttonsPanel.setWidth("100%");
+        DOM.setStyleAttribute(buttonsPanel.getElement(), "padding", "3px");
+
         ClickHandler buttonListener = new ButtonListener();
 
         int index = 0;
 
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener);
-            buttonsPanel.insert(custom1Button, index);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener, false);
+            buttonsPanel.insert(custom1Button, index++);
         }
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener);
-            buttonsPanel.add(custom2Button);
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener, false);
+            buttonsPanel.insert(custom2Button, index++);
         }
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener);
-            buttonsPanel.add(custom3Button);
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener, false);
+            buttonsPanel.insert(custom3Button, index++);
         }
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener);
-            buttonsPanel.add(custom4Button);
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener, false);
+            buttonsPanel.insert(custom4Button, index++);
         }
+
+        {
+            Panel glue = new SimplePanel();
+            glue.setWidth("100%");
+            if (options instanceof GlueOption) {
+                buttonsPanel.insert(glue, index++);
+                Panel rigid = new SimplePanel();
+                rigid.setWidth("30px");
+                buttonsPanel.insert(rigid, 0);
+                index++;
+            } else {
+                buttonsPanel.insert(glue, 0);
+                index++;
+            }
+            buttonsPanel.setCellWidth(glue, "100%");
+        }
+
         if (options instanceof YesOption) {
-            yesButton = createButton("Yes", buttonListener);
-            buttonsPanel.add(yesButton);
+            yesButton = createButton("Yes", buttonListener, true);
+            buttonsPanel.insert(yesButton, index++);
         }
         if (options instanceof NoOption) {
-            noButton = createButton("No", buttonListener);
-            buttonsPanel.add(noButton);
+            noButton = createButton("No", buttonListener, true);
+            buttonsPanel.insert(noButton, index++);
         }
         if (options instanceof OkOption) {
-            okButton = createButton(optionTextOk(), buttonListener);
-            buttonsPanel.add(okButton);
+            okButton = createButton(optionTextOk(), buttonListener, true);
+            buttonsPanel.insert(okButton, index++);
         }
         if (options instanceof CancelOption) {
-            cancelButton = createButton(optionTextCancel(), buttonListener);
-            buttonsPanel.add(cancelButton);
+            cancelButton = createButton(optionTextCancel(), buttonListener, true);
+            buttonsPanel.insert(cancelButton, index++);
         }
         if (options instanceof CloseOption) {
-            closeButton = createButton(optionTextClose(), buttonListener);
-            buttonsPanel.add(closeButton);
+            closeButton = createButton(optionTextClose(), buttonListener, true);
+            buttonsPanel.insert(closeButton, index++);
         }
 
         return buttonsPanel;
@@ -159,14 +186,13 @@ public class Dialog extends DialogPanel {
         return "Close";
     }
 
-    private Button createButton(String text, ClickHandler buttonListener) {
+    private Button createButton(String text, ClickHandler buttonListener, boolean canHaveFocus) {
         Button button = new Button(text);
         button.ensureDebugId("Dialog." + text);
         button.addClickHandler(buttonListener);
         DOM.setStyleAttribute(button.getElement(), "margin", "3px");
-        DOM.setStyleAttribute(button.getElement(), "padding", "0,5,0,5");
-        if (firstButton == null) {
-            firstButton = button;
+        if (canHaveFocus && focusButton == null) {
+            focusButton = button;
         }
         return button;
     }
@@ -224,6 +250,22 @@ public class Dialog extends DialogPanel {
 
         }
 
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (this.focusButton != null) {
+            requestFocus(this.focusButton);
+        }
+    }
+
+    public void requestFocus(final FocusWidget focusWidget) {
+        DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+            public void execute() {
+                focusWidget.setFocus(true);
+            }
+        });
     }
 
 }
