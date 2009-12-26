@@ -20,6 +20,7 @@ public class ResizibleScrollPanel extends SimplePanel implements ResizableWidget
 
     private final SimplePanel viewportPanel;
 
+    //TODO check that RIA folder uses this class
     public ResizibleScrollPanel() {
 
         DOM.setStyleAttribute(getElement(), "position", "relative");
