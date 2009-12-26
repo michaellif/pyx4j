@@ -24,6 +24,7 @@ import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
 import com.pyx4j.widgets.client.ImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.ResizibleScrollPanel;
 import com.pyx4j.widgets.client.dialog.images.DialogImages;
 
 public class Dialog extends DialogPanel {
@@ -205,13 +206,7 @@ public class Dialog extends DialogPanel {
         }
     }
 
-    static class MessagePanel extends DockPanel implements ResizableWidget {
-
-        private static ResizableWidgetCollection resizableWidgetCollection = new ResizableWidgetCollection(50);
-
-        private final SimplePanel scrollPanel;
-
-        private final SimplePanel viewportPanel;
+    static class MessagePanel extends DockPanel {
 
         MessagePanel(final String message, Type type) {
 
@@ -221,49 +216,15 @@ public class Dialog extends DialogPanel {
 
             add(new Image(images.warning()), DockPanel.WEST);
 
-            scrollPanel = new SimplePanel();
+            ResizibleScrollPanel scrollPanel = new ResizibleScrollPanel();
             add(scrollPanel, DockPanel.CENTER);
             setCellHeight(scrollPanel, "100%");
             setCellWidth(scrollPanel, "100%");
 
-            DOM.setStyleAttribute(scrollPanel.getElement(), "position", "relative");
-            scrollPanel.setSize("100%", "100%");
-
-            viewportPanel = new SimplePanel();
-            viewportPanel.add(new HTML(message));
-
-            scrollPanel.add(viewportPanel);
-
-            viewportPanel.setSize("100%", "100%");
-
-            DOM.setStyleAttribute(viewportPanel.getElement(), "overflow", "auto");
-            DOM.setStyleAttribute(viewportPanel.getElement(), "position", "absolute");
-            DOM.setStyleAttribute(viewportPanel.getElement(), "top", "0px");
-            DOM.setStyleAttribute(viewportPanel.getElement(), "left", "0px");
+            scrollPanel.setViewport(new HTML(message));
 
         }
 
-        @Override
-        protected void onAttach() {
-            super.onAttach();
-            resizableWidgetCollection.add(this);
-        }
-
-        @Override
-        protected void onDetach() {
-            super.onDetach();
-            resizableWidgetCollection.remove(this);
-        }
-
-        @Override
-        public void onResize(int width, int height) {
-            onResize();
-        }
-
-        public void onResize() {
-            viewportPanel.setWidth(scrollPanel.getOffsetWidth() + "px");
-            viewportPanel.setHeight(scrollPanel.getOffsetHeight() + "px");
-        }
     }
 
 }
