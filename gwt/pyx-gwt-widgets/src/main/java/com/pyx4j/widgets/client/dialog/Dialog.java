@@ -14,9 +14,13 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
 import com.pyx4j.widgets.client.DecoratorPanel;
+
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
@@ -256,7 +260,15 @@ public class Dialog extends DialogPanel {
             setCellHeight(scrollPanel, "100%");
             setCellWidth(scrollPanel, "100%");
 
-            scrollPanel.setViewport(new HTML(message));
+            HTML htmlMessage = new HTML(message);
+
+            HorizontalPanel htmlHolder = new HorizontalPanel();
+            htmlHolder.setSize("100%", "100%");
+            htmlHolder.add(htmlMessage);
+            htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
+            htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
+
+            scrollPanel.setContentWidget(htmlHolder);
 
         }
     }

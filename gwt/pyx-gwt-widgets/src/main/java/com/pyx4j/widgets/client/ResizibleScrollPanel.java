@@ -18,7 +18,7 @@ public class ResizibleScrollPanel extends SimplePanel implements ResizableWidget
 
     private static ResizableWidgetCollection resizableWidgetCollection = new ResizableWidgetCollection(50);
 
-    private final SimplePanel viewportPanel;
+    private final SimplePanel contentPanel;
 
     //TODO check that RIA folder uses this class
     public ResizibleScrollPanel() {
@@ -26,16 +26,16 @@ public class ResizibleScrollPanel extends SimplePanel implements ResizableWidget
         DOM.setStyleAttribute(getElement(), "position", "relative");
         setSize("100%", "100%");
 
-        viewportPanel = new SimplePanel();
+        contentPanel = new SimplePanel();
 
-        add(viewportPanel);
+        add(contentPanel);
 
-        viewportPanel.setSize("100%", "100%");
+        contentPanel.setSize("100%", "100%");
 
-        DOM.setStyleAttribute(viewportPanel.getElement(), "overflow", "auto");
-        DOM.setStyleAttribute(viewportPanel.getElement(), "position", "absolute");
-        DOM.setStyleAttribute(viewportPanel.getElement(), "top", "0px");
-        DOM.setStyleAttribute(viewportPanel.getElement(), "left", "0px");
+        DOM.setStyleAttribute(contentPanel.getElement(), "overflow", "auto");
+        DOM.setStyleAttribute(contentPanel.getElement(), "position", "absolute");
+        DOM.setStyleAttribute(contentPanel.getElement(), "top", "0px");
+        DOM.setStyleAttribute(contentPanel.getElement(), "left", "0px");
 
     }
 
@@ -57,11 +57,11 @@ public class ResizibleScrollPanel extends SimplePanel implements ResizableWidget
     }
 
     public void onResize() {
-        viewportPanel.setWidth(getOffsetWidth() + "px");
-        viewportPanel.setHeight(getOffsetHeight() + "px");
+        contentPanel.setWidth(getOffsetWidth() + "px");
+        contentPanel.setHeight(getOffsetHeight() + "px");
     }
 
-    public void setViewport(Widget w) {
-        viewportPanel.add(w);
+    public void setContentWidget(Widget w) {
+        contentPanel.add(w);
     }
 }
