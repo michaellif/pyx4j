@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -231,11 +230,18 @@ public class Dialog extends DialogPanel {
 
         MessagePanel(final String message, Type type) {
 
+            DOM.setStyleAttribute(getElement(), "padding", "10px");
+            DOM.setStyleAttribute(getElement(), "paddingRight", "30px");
+
             ImageBundle images = ImageFactory.getImages();
 
             setSize("100%", "100%");
 
-            add(new Image(images.warning()), DockPanel.WEST);
+            Image image = new Image(images.warning());
+            DOM.setStyleAttribute(image.getElement(), "padding", "10px");
+
+            add(image, DockPanel.WEST);
+            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
 
             ResizibleScrollPanel scrollPanel = new ResizibleScrollPanel();
             add(scrollPanel, DockPanel.CENTER);
