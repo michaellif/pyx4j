@@ -15,11 +15,16 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
+
+import com.pyx4j.widgets.client.dialog.images.DialogImages;
+import com.pyx4j.widgets.client.images.ImageBundle;
+import com.pyx4j.widgets.client.images.ImageFactory;
 
 public class Dialog extends DialogPanel {
 
@@ -209,9 +214,12 @@ public class Dialog extends DialogPanel {
         private final SimplePanel viewportPanel;
 
         MessagePanel(final String message, Type type) {
+
+            ImageBundle images = ImageFactory.getImages();
+
             setSize("100%", "100%");
 
-            add(new Label("Image"), DockPanel.WEST);
+            add(new Image(images.warning()), DockPanel.WEST);
 
             scrollPanel = new SimplePanel();
             add(scrollPanel, DockPanel.CENTER);
