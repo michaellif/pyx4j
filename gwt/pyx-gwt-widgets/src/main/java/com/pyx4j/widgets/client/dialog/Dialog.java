@@ -100,60 +100,56 @@ public class Dialog extends DialogPanel {
 
         ClickHandler buttonListener = new ButtonListener();
 
-        int index = 0;
-
         if (options instanceof Custom1Option) {
             custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener, false);
-            buttonsPanel.insert(custom1Button, index++);
+            buttonsPanel.add(custom1Button);
         }
         if (options instanceof Custom2Option) {
             custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener, false);
-            buttonsPanel.insert(custom2Button, index++);
+            buttonsPanel.add(custom2Button);
         }
         if (options instanceof Custom3Option) {
             custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener, false);
-            buttonsPanel.insert(custom3Button, index++);
+            buttonsPanel.add(custom3Button);
         }
         if (options instanceof Custom4Option) {
             custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener, false);
-            buttonsPanel.insert(custom4Button, index++);
+            buttonsPanel.add(custom4Button);
         }
 
         {
             Panel glue = new SimplePanel();
             glue.setWidth("100%");
             if (options instanceof GlueOption) {
-                buttonsPanel.insert(glue, index++);
+                buttonsPanel.add(glue);
                 Panel rigid = new SimplePanel();
                 rigid.setWidth("30px");
                 buttonsPanel.insert(rigid, 0);
-                index++;
             } else {
                 buttonsPanel.insert(glue, 0);
-                index++;
             }
             buttonsPanel.setCellWidth(glue, "100%");
         }
 
         if (options instanceof YesOption) {
             yesButton = createButton("Yes", buttonListener, true);
-            buttonsPanel.insert(yesButton, index++);
+            buttonsPanel.add(yesButton);
         }
         if (options instanceof NoOption) {
             noButton = createButton("No", buttonListener, true);
-            buttonsPanel.insert(noButton, index++);
+            buttonsPanel.add(noButton);
         }
         if (options instanceof OkOption) {
             okButton = createButton(optionTextOk(), buttonListener, true);
-            buttonsPanel.insert(okButton, index++);
+            buttonsPanel.add(okButton);
         }
         if (options instanceof CancelOption) {
             cancelButton = createButton(optionTextCancel(), buttonListener, true);
-            buttonsPanel.insert(cancelButton, index++);
+            buttonsPanel.add(cancelButton);
         }
         if (options instanceof CloseOption) {
             closeButton = createButton(optionTextClose(), buttonListener, true);
-            buttonsPanel.insert(closeButton, index++);
+            buttonsPanel.add(closeButton);
         }
 
         return buttonsPanel;
