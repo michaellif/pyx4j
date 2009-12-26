@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
+import com.pyx4j.widgets.client.DecoratorPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
@@ -22,6 +23,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.style.Theme.CSSClass;
 import com.pyx4j.widgets.client.ImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -226,32 +228,37 @@ public class Dialog extends DialogPanel {
         }
     }
 
-    static class MessagePanel extends DockPanel {
+    static class MessagePanel extends DecoratorPanel {
 
         MessagePanel(final String message, Type type) {
 
+            super(false, false, true, false, 1, CSSClass.pyx4j_Section_Border.name());
+            setSize("100%", "100%");
+
             DOM.setStyleAttribute(getElement(), "padding", "10px");
-            DOM.setStyleAttribute(getElement(), "paddingRight", "30px");
+
+            DockPanel contentPanel = new DockPanel();
+            contentPanel.setSize("100%", "100%");
+            DOM.setStyleAttribute(contentPanel.getElement(), "paddingBottom", "10px");
+
+            setWidget(contentPanel);
 
             ImageBundle images = ImageFactory.getImages();
-
-            setSize("100%", "100%");
 
             Image image = new Image(images.warning());
             DOM.setStyleAttribute(image.getElement(), "padding", "10px");
 
-            add(image, DockPanel.WEST);
+            contentPanel.add(image, DockPanel.WEST);
             setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
 
             ResizibleScrollPanel scrollPanel = new ResizibleScrollPanel();
-            add(scrollPanel, DockPanel.CENTER);
+            contentPanel.add(scrollPanel, DockPanel.CENTER);
             setCellHeight(scrollPanel, "100%");
             setCellWidth(scrollPanel, "100%");
 
             scrollPanel.setViewport(new HTML(message));
 
         }
-
     }
 
     @Override
