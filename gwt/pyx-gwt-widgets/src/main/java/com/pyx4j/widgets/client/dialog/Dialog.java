@@ -10,6 +10,7 @@ package com.pyx4j.widgets.client.dialog;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
@@ -248,9 +249,27 @@ public class Dialog extends DialogPanel {
             setWidget(contentPanel);
 
             ImageBundle images = ImageFactory.getImages();
+            ImageResource imageResource = null;
 
-            Image image = new Image(images.warning());
-            DOM.setStyleAttribute(image.getElement(), "padding", "10px");
+            switch (type) {
+            case Info:
+                imageResource = images.info();
+                break;
+            case Confirm:
+                imageResource = images.confirm();
+                break;
+            case Warning:
+                imageResource = images.warning();
+                break;
+            case Error:
+                imageResource = images.error();
+                break;
+            default:
+                break;
+            }
+
+            Image image = new Image(imageResource);
+            DOM.setStyleAttribute(image.getElement(), "margin", "10px");
 
             contentPanel.add(image, DockPanel.WEST);
             setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);

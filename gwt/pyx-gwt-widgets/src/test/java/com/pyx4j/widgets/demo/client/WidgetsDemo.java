@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.GlueOption;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -87,8 +88,9 @@ public class WidgetsDemo implements EntryPoint {
     }
 
     class DialogButtonHandler1 implements ClickHandler {
+
         public void onClick(ClickEvent event) {
-            Dialog dialog = new Dialog("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
+            Dialog dialog = new Dialog("TestTestTestTestTe");
             dialog.show();
         }
     }
@@ -100,7 +102,7 @@ public class WidgetsDemo implements EntryPoint {
     class DialogButtonHandler2 implements ClickHandler {
 
         public void onClick(ClickEvent event) {
-            Dialog dialog = new Dialog("Caption2", new HTML("Test2Test2"), new Options2() {
+            Dialog dialog = new Dialog("Caption2", "Test2Test2", Type.Error, new Options2() {
 
                 @Override
                 public boolean onClickCancel() {
