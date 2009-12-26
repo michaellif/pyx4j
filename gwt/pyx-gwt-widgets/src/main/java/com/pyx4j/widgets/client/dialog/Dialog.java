@@ -22,9 +22,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
+import com.pyx4j.widgets.client.ImageBundle;
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dialog.images.DialogImages;
-import com.pyx4j.widgets.client.images.ImageBundle;
-import com.pyx4j.widgets.client.images.ImageFactory;
 
 public class Dialog extends DialogPanel {
 

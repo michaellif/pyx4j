@@ -6,7 +6,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.widgets.client.images;
+package com.pyx4j.widgets.client;
 
 import com.google.gwt.core.client.GWT;
 
