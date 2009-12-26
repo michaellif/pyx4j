@@ -15,6 +15,6 @@ import com.pyx4j.widgets.client.menu.images.MenuImages;
 import com.pyx4j.widgets.client.richtext.images.RichTextImages;
 import com.pyx4j.widgets.client.tabpanel.images.TabpanelImages;
 
-public interface ImageBundle extends ClientBundle, DialogImages, RichTextImages, TabpanelImages, MenuImages {
+public interface WidgetsImageBundle extends ClientBundle, DialogImages, RichTextImages, TabpanelImages, MenuImages {
 
 }

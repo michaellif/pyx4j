@@ -17,9 +17,7 @@
 		<dependency>
 			<groupId>com.googlecode.gwt-incubator</groupId>
 			<artifactId>gwt-incubator</artifactId>
-			<version>1.7.2009.06.22</version>
 		</dependency>
-
 	</dependencies>
 
 </project>

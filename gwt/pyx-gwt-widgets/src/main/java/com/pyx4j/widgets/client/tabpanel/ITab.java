@@ -8,14 +8,14 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Widget;
 
 public interface ITab {
 
     String getTitle();
 
-    AbstractImagePrototype getImagePrototype();
+    ImageResource getImageResource();
 
     Widget getContentPane();
 

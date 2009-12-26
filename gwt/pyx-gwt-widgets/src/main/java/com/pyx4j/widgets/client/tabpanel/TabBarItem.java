@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -25,7 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.widgets.client.ImageBundle;
+import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.Tooltip;
 
@@ -47,9 +48,9 @@ public class TabBarItem extends HorizontalPanel {
 
     private Image closeImage;
 
-    private final ImageBundle images = ImageFactory.getImages();
+    private final WidgetsImageBundle images = ImageFactory.getImages();
 
-    public TabBarItem(final TabBar parent, String labelString, AbstractImagePrototype imagePrototype, boolean closable) {
+    public TabBarItem(final TabBar parent, String labelString, ImageResource imageResource, boolean closable) {
         super();
         sinkEvents(Event.ONCLICK);
         addClickHandler(parent);
@@ -66,8 +67,8 @@ public class TabBarItem extends HorizontalPanel {
         rightSubpanel.setStyleName("gwt-TabBarItemRight");
         DOM.setElementProperty(rightSubpanel.getElement(), "cellSpacing", "4");
 
-        if (imagePrototype != null) {
-            Image image = imagePrototype.createImage();
+        if (imageResource != null) {
+            Image image = new Image(imageResource);
             image.setStyleName("gwt-TabBarItemImage");
             rightSubpanel.add(image);
             rightSubpanel.setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);

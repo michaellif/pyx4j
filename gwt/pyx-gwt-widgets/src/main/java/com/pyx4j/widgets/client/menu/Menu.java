@@ -11,7 +11,6 @@ package com.pyx4j.widgets.client.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -24,15 +23,16 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Accessibility;
 import com.google.gwt.user.client.ui.HasAnimation;
-import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.PopupListener;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.impl.FocusImpl;
+
+import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.menu.images.MenuImages;
 
 public class Menu extends Widget implements PopupListener, HasAnimation, HasCloseHandlers<PopupPanel> {
 
@@ -41,18 +41,6 @@ public class Menu extends Widget implements PopupListener, HasAnimation, HasClos
     private boolean inEventHandler;
 
     private boolean hidePopupHack;
-
-    /**
-     * An {@link ImageBundle} that provides images for {@link Menu}.
-     */
-    public interface MenuBarImages extends ImageBundle {
-        /**
-         * An image indicating a {@link ActionMenuItem} has an associated submenu.
-         * 
-         * @return a prototype of this image
-         */
-        AbstractImagePrototype menuBarSubMenuIcon();
-    }
 
     private static final String STYLENAME_DEFAULT = "gwt-MenuBar";
 
@@ -80,14 +68,14 @@ public class Menu extends Widget implements PopupListener, HasAnimation, HasClos
 
     public Menu(boolean vertical) {
         super();
-        init(vertical, GWT.<MenuBarImages> create(MenuBarImages.class));
+        init(vertical, ImageFactory.getImages());
     }
 
-    public Menu(boolean vertical, MenuBarImages images) {
+    public Menu(boolean vertical, MenuImages images) {
         init(vertical, images);
     }
 
-    public Menu(MenuBarImages images) {
+    public Menu(MenuImages images) {
         this(false, images);
     }
 
@@ -197,8 +185,8 @@ public class Menu extends Widget implements PopupListener, HasAnimation, HasClos
     }
 
     /**
-     * Adds a thin line to the {@link Menu} to separate sections of
-     * {@link ActionMenuItem}s at the specified index.
+     * Adds a thin line to the {@link Menu} to separate sections of {@link ActionMenuItem}
+     * s at the specified index.
      * 
      * @param beforeIndex
      *            the index where the seperator should be inserted
@@ -211,8 +199,8 @@ public class Menu extends Widget implements PopupListener, HasAnimation, HasClos
     }
 
     /**
-     * Adds a thin line to the {@link Menu} to separate sections of
-     * {@link ActionMenuItem}s at the specified index.
+     * Adds a thin line to the {@link Menu} to separate sections of {@link ActionMenuItem}
+     * s at the specified index.
      * 
      * @param separator
      *            the {@link MenuItemSeparator} to be inserted
@@ -721,7 +709,7 @@ public class Menu extends Widget implements PopupListener, HasAnimation, HasClos
         }
     }
 
-    private void init(boolean vertical, MenuBarImages images) {
+    private void init(boolean vertical, MenuImages images) {
 
         Element table = DOM.createTable();
         body = DOM.createTBody();

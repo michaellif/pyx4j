@@ -8,21 +8,21 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Widget;
 
 public class BasicTab implements ITab {
 
     private final Widget contentPane;
 
-    private final AbstractImagePrototype imagePrototype;
+    private final ImageResource imageResource;
 
     private final String title;
 
-    public BasicTab(Widget contentPane, String title, AbstractImagePrototype imagePrototype) {
+    public BasicTab(Widget contentPane, String title, ImageResource imageResource) {
         super();
         this.contentPane = contentPane;
-        this.imagePrototype = imagePrototype;
+        this.imageResource = imageResource;
         this.title = title;
     }
 
@@ -32,8 +32,8 @@ public class BasicTab implements ITab {
     }
 
     @Override
-    public AbstractImagePrototype getImagePrototype() {
-        return imagePrototype;
+    public ImageResource getImageResource() {
+        return imageResource;
     }
 
     @Override

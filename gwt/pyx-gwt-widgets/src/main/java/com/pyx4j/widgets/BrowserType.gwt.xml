@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<inherits name="com.google.gwt.user.User"/>
+
+    <replace-with class="com.pyx4j.widgets.client.util.BrowserType.ImplUnknown">
+        <when-type-is class="com.pyx4j.widgets.client.util.BrowserType.Impl"/>
+    </replace-with>
+    
+    <replace-with class="com.pyx4j.widgets.client.util.BrowserType.ImplIE8">
+        <when-type-is class="com.pyx4j.widgets.client.util.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="ie8"/>
+    </replace-with>
+    
+    <replace-with class="com.pyx4j.widgets.client.util.BrowserType.ImplIE6">
+        <when-type-is class="com.pyx4j.widgets.client.util.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="ie6"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.widgets.client.util.BrowserType.ImplMozilla">
+        <when-type-is class="com.pyx4j.widgets.client.util.BrowserType.Impl"/>
+        <any>
+            <when-property-is name="user.agent" value="gecko"/>
+            <when-property-is name="user.agent" value="gecko1_8"/>
+        </any>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.widgets.client.util.BrowserType.ImplSafari">
+        <when-type-is class="com.pyx4j.widgets.client.util.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.widgets.client.util.BrowserType.ImplOpera">
+        <when-type-is class="com.pyx4j.widgets.client.util.BrowserType.Impl"/>
+        <when-property-is name="user.agent" value="opera"/>
+    </replace-with>
+
+</module>  

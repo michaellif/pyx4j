@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.widgets.client.ImageBundle;
+import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
 
 /**
@@ -130,7 +130,7 @@ public class RichTextToolbar extends Composite {
             RichTextArea.FontSize.X_SMALL, RichTextArea.FontSize.SMALL, RichTextArea.FontSize.MEDIUM, RichTextArea.FontSize.LARGE,
             RichTextArea.FontSize.X_LARGE, RichTextArea.FontSize.XX_LARGE };
 
-    private final ImageBundle images = ImageFactory.getImages();
+    private final WidgetsImageBundle images = ImageFactory.getImages();
 
     private final EventHandler handler = new EventHandler();
 

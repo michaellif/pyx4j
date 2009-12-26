@@ -20,7 +20,6 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -28,6 +27,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.ria.client.ImageFactory;
 import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
@@ -36,10 +36,6 @@ import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
 //TODO restore scroll position on view selection change
 
 public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<ITab>, SelectionHandler<ITab>, CloseHandler<ITab> {
-
-    private static AbstractImagePrototype minimizeFolderPrototype = ApplicationManager.getAppImages().minimizeFolder();
-
-    private static AbstractImagePrototype viewMenuPrototype = ApplicationManager.getAppImages().viewMenu();
 
     private final List<IView> views = new ArrayList<IView>();
 
@@ -72,7 +68,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         headerPane.add(tabBar);
         headerPane.setCellWidth(tabBar, "100%");
 
-        Image minimizeFolderImage = minimizeFolderPrototype.createImage();
+        Image minimizeFolderImage = new Image(ImageFactory.getImages().minimizeFolder());
         minimizeFolderImage.setHeight("100%");
 
         //Fix for Chrome
@@ -96,7 +92,8 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         DeckPanel contentDeck = tabPanel.getDeck();
         setContentPane(contentDeck);
 
-        menuButton = viewMenuPrototype.createImage();
+        menuButton = new Image(ImageFactory.getImages().viewMenu());
+
         DOM.setStyleAttribute(menuButton.getElement(), "cursor", "pointer");
         DOM.setStyleAttribute(menuButton.getElement(), "cursor", "hand");
         DOM.setStyleAttribute(menuButton.getElement(), "margin", "3");

@@ -10,6 +10,7 @@ package com.pyx4j.widgets.client.tabpanel;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -23,14 +24,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
-import com.pyx4j.widgets.client.ImageBundle;
+import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
 
 public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 
     private static final String FIRST_TAB_DEPENDENT_STYLE = "first";
 
-    private final ImageBundle images = ImageFactory.getImages();
+    private final WidgetsImageBundle images = ImageFactory.getImages();
 
     private final HorizontalPanel tabBarPanel;
 
@@ -133,8 +134,8 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
      * @param asHTML
      *            <code>true</code> to treat the specified text as html
      */
-    public void addTab(String text, AbstractImagePrototype imagePrototype, boolean closable) {
-        insertTab(text, imagePrototype, getTabCount(), closable);
+    public void addTab(String text, ImageResource imageResource, boolean closable) {
+        insertTab(text, imageResource, getTabCount(), closable);
     }
 
     /**
@@ -182,12 +183,12 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
      * @param beforeIndex
      *            the index before which this tab will be inserted
      */
-    public void insertTab(String label, AbstractImagePrototype imagePrototype, int beforeIndex, boolean closable) {
+    public void insertTab(String label, ImageResource imageResource, int beforeIndex, boolean closable) {
         if ((beforeIndex < 0) || (beforeIndex > getTabCount())) {
             throw new IndexOutOfBoundsException();
         }
 
-        TabBarItem item = new TabBarItem(this, label, imagePrototype, closable);
+        TabBarItem item = new TabBarItem(this, label, imageResource, closable);
 
         if (beforeIndex == 0) {
             if (tabsPanel.getWidgetCount() > 0) {

@@ -52,7 +52,7 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
     }
 
     public void insert(ITab tab, int index, boolean closable) {
-        tabBar.insertTab(tab.getTitle(), tab.getImagePrototype(), index, closable);
+        tabBar.insertTab(tab.getTitle(), tab.getImageResource(), index, closable);
         deck.insert(tab.getContentPane(), index);
         tabs.add(index, tab);
     }

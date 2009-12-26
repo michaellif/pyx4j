@@ -6,15 +6,15 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.widgets.client;
+package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.core.client.GWT;
 
 public class ImageFactory {
 
-    private static WidgetsImageBundle bundle = GWT.create(WidgetsImageBundle.class);
+    private static RiaDemoImageBundle bundle = GWT.create(RiaDemoImageBundle.class);
 
-    public static WidgetsImageBundle getImages() {
+    public static RiaDemoImageBundle getImages() {
         return bundle;
     }
 

@@ -2,7 +2,8 @@
 <module rename-to='test'>
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
-  <entry-point class='com.pyx4j.ria.demo.client.RiaDemo'/>
+  <inherits name='com.pyx4j.ria.Ria'/>
+  <entry-point class='com.pyx4j.ria.demo.client.RiaClient'/>
 
   <source path='client'/>
 

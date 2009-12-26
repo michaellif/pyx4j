@@ -14,9 +14,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
-import com.pyx4j.widgets.client.DecoratorPanel;
-
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
@@ -28,10 +25,11 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
-import com.pyx4j.widgets.client.ImageBundle;
+import com.pyx4j.widgets.client.DecoratorPanel;
+import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
+import com.pyx4j.widgets.client.style.Theme.CSSClass;
 
 public class Dialog extends DialogPanel {
 
@@ -248,7 +246,7 @@ public class Dialog extends DialogPanel {
 
             setWidget(contentPanel);
 
-            ImageBundle images = ImageFactory.getImages();
+            WidgetsImageBundle images = ImageFactory.getImages();
             ImageResource imageResource = null;
 
             switch (type) {

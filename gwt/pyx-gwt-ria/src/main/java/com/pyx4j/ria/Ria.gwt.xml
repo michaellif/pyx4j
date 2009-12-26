@@ -4,7 +4,7 @@
 <module>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.google.gwt.widgetideas.BasicWidget' />
-    <inherits name='com.pyx4j.widgets.BrowserType' />
+    <inherits name='com.pyx4j.widgets.Widgets' />
     
 	<source path="client" />
 </module>
