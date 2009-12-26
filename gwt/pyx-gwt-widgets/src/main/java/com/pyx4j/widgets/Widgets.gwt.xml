@@ -3,5 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.widgetideas.BasicWidget' />
+    
 	<source path="client" />
 </module>

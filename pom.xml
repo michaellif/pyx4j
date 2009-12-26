@@ -149,6 +149,16 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>pyx4j-internal</id>
+            <url>http://repository.pyx4j.com/internal/maven2-internal</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <pluginRepositories>
