@@ -19,13 +19,13 @@ public interface RichTextImages extends ClientBundle {
     @Source("drive_link.png")
     ImageResource createLink();
 
-    @Source("image.png")
+    @Source("17384.png")
     ImageResource hr();
 
     @Source("text_indent.png")
     ImageResource indent();
 
-    @Source("image.png")
+    @Source("44753.png")
     ImageResource insertImage();
 
     @Source("text_italic.png")
@@ -40,13 +40,13 @@ public interface RichTextImages extends ClientBundle {
     @Source("text_align_right.png")
     ImageResource justifyRight();
 
-    @Source("image.png")
+    @Source("22397.png")
     ImageResource ol();
 
     @Source("text_indent_remove.png")
     ImageResource outdent();
 
-    @Source("image.png")
+    @Source("29083.png")
     ImageResource removeFormat();
 
     @Source("image.png")
@@ -61,7 +61,7 @@ public interface RichTextImages extends ClientBundle {
     @Source("text_superscript.png")
     ImageResource superscript();
 
-    @Source("image.png")
+    @Source("10381.png")
     ImageResource ul();
 
     @Source("text_underline.png")
