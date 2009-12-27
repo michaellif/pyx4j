@@ -10,8 +10,9 @@ package com.pyx4j.ria.client.app.images;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.HorizontalSplitPanel.Resources;
 
-public interface AppImages extends ClientBundle {
+public interface AppImages extends ClientBundle, Resources, com.google.gwt.user.client.ui.VerticalSplitPanel.Resources {
 
     @Source("folder-minimize.png")
     ImageResource minimizeFolder();
@@ -24,5 +25,14 @@ public interface AppImages extends ClientBundle {
 
     @Source("header_background.png")
     ImageResource headerBackground();
+
+    @Source("empty3x3.png")
+    ImageResource horizontalSplitPanelThumb();
+
+    @Source("empty3x3.png")
+    ImageResource verticalSplitPanelThumb();
+
+    @Source("empty1x1.png")
+    ImageResource empty();
 
 }

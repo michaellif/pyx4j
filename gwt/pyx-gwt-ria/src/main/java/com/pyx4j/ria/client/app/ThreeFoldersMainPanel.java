@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 
+import com.pyx4j.ria.demo.client.ImageFactory;
+
 public class ThreeFoldersMainPanel extends SimplePanel {
 
     private final FolderSectionPanel leftFolder;
@@ -24,13 +26,13 @@ public class ThreeFoldersMainPanel extends SimplePanel {
     public ThreeFoldersMainPanel() {
         setSize("100%", "100%");
 
-        HorizontalSplitPanel horizSplit = new HorizontalSplitPanel();
+        HorizontalSplitPanel horizSplit = new HorizontalSplitPanel(ImageFactory.getImages());
         setHorizontalSplitCursor(horizSplit.getElement());
         removeScrollBars(horizSplit.getElement());
         leftFolder = new FolderSectionPanel();
         horizSplit.setLeftWidget(leftFolder);
 
-        VerticalSplitPanel vertSplit = new VerticalSplitPanel();
+        VerticalSplitPanel vertSplit = new VerticalSplitPanel(ImageFactory.getImages());
         setVerticalSplitCursor(vertSplit.getElement());
         removeScrollBars(vertSplit.getElement());
 
