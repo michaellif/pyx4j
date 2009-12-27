@@ -6,7 +6,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.client.app;
+package com.pyx4j.ria.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.ImageFactory;
 import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;

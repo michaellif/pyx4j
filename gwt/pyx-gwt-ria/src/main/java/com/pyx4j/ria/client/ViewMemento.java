@@ -6,7 +6,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.client.app;
+package com.pyx4j.ria.client;
 
 public class ViewMemento {
 

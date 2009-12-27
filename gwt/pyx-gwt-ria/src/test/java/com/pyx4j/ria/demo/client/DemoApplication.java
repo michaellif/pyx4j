@@ -17,12 +17,12 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.ria.client.app.HeaderPanel;
-import com.pyx4j.ria.client.app.IApplication;
-import com.pyx4j.ria.client.app.IView;
-import com.pyx4j.ria.client.app.Perspective;
-import com.pyx4j.ria.client.app.StatusBar;
-import com.pyx4j.ria.client.app.ThreeFoldersMainPanel;
+import com.pyx4j.ria.client.HeaderPanel;
+import com.pyx4j.ria.client.IApplication;
+import com.pyx4j.ria.client.IView;
+import com.pyx4j.ria.client.Perspective;
+import com.pyx4j.ria.client.StatusBar;
+import com.pyx4j.ria.client.ThreeFoldersMainPanel;
 
 public class DemoApplication implements IApplication {
 

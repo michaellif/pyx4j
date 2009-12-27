@@ -2,7 +2,7 @@ package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 
-import com.pyx4j.ria.client.app.ApplicationManager;
+import com.pyx4j.ria.client.ApplicationManager;
 
 public class RiaClient implements EntryPoint {
 

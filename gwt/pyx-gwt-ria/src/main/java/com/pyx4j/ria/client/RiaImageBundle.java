@@ -10,7 +10,7 @@ package com.pyx4j.ria.client;
 
 import com.google.gwt.resources.client.ClientBundle;
 
-import com.pyx4j.ria.client.app.images.AppImages;
+import com.pyx4j.ria.client.images.AppImages;
 
 public interface RiaImageBundle extends ClientBundle, AppImages {
 

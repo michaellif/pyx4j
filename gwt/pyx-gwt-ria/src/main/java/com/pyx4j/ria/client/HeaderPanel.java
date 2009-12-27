@@ -6,7 +6,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.client.app;
+package com.pyx4j.ria.client;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.ria.client.ImageFactory;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class HeaderPanel extends TransparentDeckPanel {

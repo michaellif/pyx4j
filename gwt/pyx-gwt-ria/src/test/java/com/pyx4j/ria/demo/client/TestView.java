@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.app.AbstractView;
+import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.menu.ActionMenuItem;
 import com.pyx4j.widgets.client.menu.Menu;

@@ -16,7 +16,7 @@ import com.pyx4j.widgets.client.style.classic.ClassicTheme;
 import com.pyx4j.widgets.client.style.gray.GrayTheme;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
-public class Toolbar extends com.pyx4j.ria.client.app.Toolbar {
+public class Toolbar extends com.pyx4j.ria.client.Toolbar {
 
     public Toolbar(final DemoApplication app) {
 
