@@ -25,7 +25,7 @@ public class HeaderPanel extends TransparentDeckPanel {
 
     public HeaderPanel(String text) {
 
-        String imageURL = new Image(ImageFactory.getImages().minimizeFolder()).getUrl();
+        String imageURL = new Image(ImageFactory.getImages().headerBackground()).getUrl();
 
         HTML holder = new HTML();
         holder.setHTML("<img src=" + imageURL + " style='width:100%; height:" + HEADER_HEIGHT + "' alt=''>");
@@ -41,13 +41,13 @@ public class HeaderPanel extends TransparentDeckPanel {
 
         HorizontalPanel panel = new HorizontalPanel();
         panel.setSpacing(0);
-        //TODO
-        //        Image logoImage = ApplicationManager.getAppImages().headerLogoImage().createImage();
-        //        DOM.setStyleAttribute(logoImage.getElement(), "margin", "0 6 0 6");
-        //        DOM.setStyleAttribute(logoImage.getElement(), "border", "0");
-        //
-        //        panel.add(logoImage);
-        //        panel.setCellVerticalAlignment(logoImage, HasVerticalAlignment.ALIGN_MIDDLE);
+
+        Image logoImage = new Image(ImageFactory.getImages().headerLogoImage());
+        DOM.setStyleAttribute(logoImage.getElement(), "margin", "0 6 0 6");
+        DOM.setStyleAttribute(logoImage.getElement(), "border", "0");
+
+        panel.add(logoImage);
+        panel.setCellVerticalAlignment(logoImage, HasVerticalAlignment.ALIGN_MIDDLE);
         panel.add(label);
         panel.setCellHorizontalAlignment(label, HasHorizontalAlignment.ALIGN_LEFT);
         panel.setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);

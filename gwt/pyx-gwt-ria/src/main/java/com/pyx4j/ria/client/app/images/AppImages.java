@@ -14,6 +14,9 @@ import com.google.gwt.user.client.ui.HorizontalSplitPanel.Resources;
 
 public interface AppImages extends ClientBundle, Resources, com.google.gwt.user.client.ui.VerticalSplitPanel.Resources {
 
+    @Source("bricks.png")
+    ImageResource headerLogoImage();
+
     @Source("folder-minimize.png")
     ImageResource minimizeFolder();
 
