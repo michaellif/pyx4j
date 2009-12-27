@@ -18,15 +18,15 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.ResizableWidget;
-import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.WidgetsImageBundle;
 
-public class TabBar extends Composite implements ClickHandler, ResizableWidget {
+public class TabBar extends Composite implements ClickHandler, RequiresResize, ProvidesResize {
 
     private static final String FIRST_TAB_DEPENDENT_STYLE = "first";
 
@@ -314,20 +314,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         }
     }
 
-    @Override
-    protected void onAttach() {
-        super.onAttach();
-        ResizableWidgetCollection.get().add(this);
-    }
-
-    @Override
-    protected void onDetach() {
-        super.onDetach();
-        ResizableWidgetCollection.get().remove(this);
-    }
-
-    @Override
-    public void onResize(int width, int height) {
+    public void onResize() {
         adjustScrollPanelWidth();
     }
 

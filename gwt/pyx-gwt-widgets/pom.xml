@@ -13,11 +13,4 @@
     <name>pyx-entity-widgets</name>
     <description>pyx-widgets Implementations</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.googlecode.gwt-incubator</groupId>
-			<artifactId>gwt-incubator</artifactId>
-		</dependency>
-	</dependencies>
-
 </project>

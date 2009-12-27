@@ -3,7 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='com.google.gwt.widgetideas.BasicWidget' />
     <inherits name='com.pyx4j.widgets.BrowserType' />
     
 	<source path="client" />

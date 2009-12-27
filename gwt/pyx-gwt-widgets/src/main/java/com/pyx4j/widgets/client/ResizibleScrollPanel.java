@@ -9,14 +9,12 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.ResizableWidget;
-import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
-public class ResizibleScrollPanel extends SimplePanel implements ResizableWidget {
-
-    private static ResizableWidgetCollection resizableWidgetCollection = new ResizableWidgetCollection(50);
+public class ResizibleScrollPanel extends SimplePanel implements ProvidesResize, RequiresResize {
 
     private final SimplePanel contentPanel;
 
@@ -37,23 +35,6 @@ public class ResizibleScrollPanel extends SimplePanel implements ResizableWidget
         DOM.setStyleAttribute(contentPanel.getElement(), "top", "0px");
         DOM.setStyleAttribute(contentPanel.getElement(), "left", "0px");
 
-    }
-
-    @Override
-    protected void onAttach() {
-        super.onAttach();
-        resizableWidgetCollection.add(this);
-    }
-
-    @Override
-    protected void onDetach() {
-        super.onDetach();
-        resizableWidgetCollection.remove(this);
-    }
-
-    @Override
-    public void onResize(int width, int height) {
-        onResize();
     }
 
     public void onResize() {
