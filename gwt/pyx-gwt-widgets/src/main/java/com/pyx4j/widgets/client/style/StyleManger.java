@@ -8,6 +8,7 @@
  */
 package com.pyx4j.widgets.client.style;
 
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.user.client.Cookies;
 
 import com.pyx4j.widgets.client.style.classic.ClassicTheme;
@@ -20,12 +21,9 @@ public class StyleManger {
 
     private static StyleManger instance;
 
-    private final StyleInjector styleInjector;
-
     private Theme theme;
 
     private StyleManger() {
-        styleInjector = new StyleInjector();
     }
 
     public static StyleManger instance() {
@@ -42,7 +40,8 @@ public class StyleManger {
         for (Style style : theme.getStyles()) {
             stylesString.append(style.toString(theme));
         }
-        instance().styleInjector.injectStyle(stylesString.toString());
+
+        StyleInjector.inject(stylesString.toString());
         Cookies.setCookie(STYLE_COOKIE, theme.getClass().getName());
     }
 
