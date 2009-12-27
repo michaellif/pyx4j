@@ -12,8 +12,8 @@ import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
 import com.pyx4j.widgets.client.DecoratorPanel;
+import com.pyx4j.widgets.client.style.Theme.CSSClass;
 
 public class TabPanelComposite extends SimplePanel {
 

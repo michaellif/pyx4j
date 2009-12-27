@@ -11,8 +11,8 @@ package com.pyx4j.ria.demo.client.proving;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.ria.client.app.IApplication;
-import com.pyx4j.widgets.client.menu.Menu;
 import com.pyx4j.widgets.client.menu.ActionMenuItem;
+import com.pyx4j.widgets.client.menu.Menu;
 
 public class ProvingManager {
 

@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import com.pyx4j.unit.client.GCaseMeta;
-
 import junit.framework.TestCase;
+
+import com.pyx4j.unit.client.GCaseMeta;
 
 
 public abstract class AbstractGUnitMetaData implements GUnitMetaData {

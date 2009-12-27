@@ -39,8 +39,6 @@ public class LogRangeView extends AbstractProvingView {
         });
 
         debug.addAction("(s, int)", new Runnable() {
-            int n = 22;
-
             @Override
             public void run() {
                 //TODO Logger.debug(text.getValue(), n++);

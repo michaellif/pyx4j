@@ -13,8 +13,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.ria.client.app.HeaderPanel;
@@ -77,7 +77,7 @@ public class DemoApplication implements IApplication {
         perspective.setToolbarActions(new Toolbar(this));
 
         HorizontalPanel links = new HorizontalPanel();
-        Hyperlink logoutHyperlink = new Hyperlink("Sign out", "Sign-out");
+        Anchor logoutHyperlink = new Anchor("Sign out", "Sign-out");
         DOM.setStyleAttribute(logoutHyperlink.getElement(), "marginRight", "10px");
         DOM.setStyleAttribute(logoutHyperlink.getElement(), "whiteSpace", "nowrap");
         logoutHyperlink.addClickHandler(new ClickHandler() {

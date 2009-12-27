@@ -12,8 +12,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-//import net.auroris.colorpicker.client.ColorPicker;
-
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -24,24 +22,22 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.app.AbstractView; //TODO import com.pyx4j.client.log.Logger;
+import com.pyx4j.ria.client.app.AbstractView;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.GroupBoxPanel;
+import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.Theme.ThemeColorProperty;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.GroupBoxPanel;
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
 
 public class ThemeEditor extends AbstractView {
 

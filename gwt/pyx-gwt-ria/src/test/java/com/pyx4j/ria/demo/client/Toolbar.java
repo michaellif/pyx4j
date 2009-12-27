@@ -10,10 +10,9 @@ package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.user.client.Command;
 
-//TODO import com.pyx4j.client.log.Logger;
+import com.pyx4j.ria.client.style.ThemeEditor;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.classic.ClassicTheme;
-import com.pyx4j.ria.client.style.ThemeEditor;
 import com.pyx4j.widgets.client.style.gray.GrayTheme;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 

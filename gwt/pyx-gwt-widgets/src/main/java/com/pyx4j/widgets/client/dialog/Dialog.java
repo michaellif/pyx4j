@@ -26,9 +26,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.DecoratorPanel;
-import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
+import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.style.Theme.CSSClass;
 
 public class Dialog extends DialogPanel {

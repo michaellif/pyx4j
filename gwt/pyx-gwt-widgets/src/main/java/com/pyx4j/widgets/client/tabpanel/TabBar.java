@@ -13,7 +13,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -24,8 +23,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
-import com.pyx4j.widgets.client.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.WidgetsImageBundle;
 
 public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 

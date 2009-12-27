@@ -9,7 +9,6 @@
 package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -17,10 +16,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.app.AbstractView;
-import com.pyx4j.ria.client.app.ApplicationManager; //TODO import com.pyx4j.client.log.Logger;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.menu.Menu;
 import com.pyx4j.widgets.client.menu.ActionMenuItem;
+import com.pyx4j.widgets.client.menu.Menu;
 import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.menu.SubMenuItem;
 

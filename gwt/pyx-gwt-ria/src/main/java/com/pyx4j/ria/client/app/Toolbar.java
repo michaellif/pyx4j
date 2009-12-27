@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.app.BarSeparator;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.style.Theme.CSSClass;
 

@@ -9,14 +9,13 @@
 package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.ria.demo.client.proving.ProvingManager;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
-import com.pyx4j.widgets.client.menu.Menu;
 import com.pyx4j.widgets.client.menu.ActionMenuItem;
+import com.pyx4j.widgets.client.menu.Menu;
 import com.pyx4j.widgets.client.menu.SubMenuItem;
-
-import com.google.gwt.user.client.ui.HTML;
 
 //TODO import com.pyx4j.client.log.Logger;
 

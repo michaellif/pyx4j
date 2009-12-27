@@ -11,9 +11,9 @@ package com.pyx4j.unit.client.impl;
 import java.util.List;
 import java.util.Set;
 
-import com.pyx4j.unit.client.GCaseMeta;
-
 import junit.framework.TestCase;
+
+import com.pyx4j.unit.client.GCaseMeta;
 
 
 public interface GUnitMetaData {
