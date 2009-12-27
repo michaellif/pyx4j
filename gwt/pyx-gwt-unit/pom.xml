@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://maven.apache.org/POM/4.0.0">
-    <!-- @version $Revision$ ($Author$) $Date$ -->
+<!-- @version $Revision$ ($Author$) $Date$ -->
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -43,6 +43,14 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-server</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 
     <build>
