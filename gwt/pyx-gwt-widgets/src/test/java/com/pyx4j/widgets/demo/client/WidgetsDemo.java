@@ -89,7 +89,7 @@ public class WidgetsDemo implements EntryPoint {
     class DialogButtonHandler1 implements ClickHandler {
 
         public void onClick(ClickEvent event) {
-            Dialog dialog = new Dialog("TestTestTestTestTe");
+            Dialog dialog = new Dialog("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
             dialog.show();
         }
     }
