@@ -9,30 +9,30 @@
 package com.pyx4j.ria.demo.client.proving;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.ria.client.IApplication;
-import com.pyx4j.widgets.client.menu.ActionMenuItem;
-import com.pyx4j.widgets.client.menu.Menu;
 
 public class ProvingManager {
 
-    public static void createMenu(Menu provingMenuBar, final IApplication app) {
+    public static void createMenu(MenuBar provingMenuBar, final IApplication app) {
 
-        provingMenuBar.addItem(new ActionMenuItem("Logger", new Command() {
+        provingMenuBar.addItem(new MenuItem("Logger", new Command() {
             @Override
             public void execute() {
                 app.openView(new LogRangeView());
             }
         }));
 
-        provingMenuBar.addItem(new ActionMenuItem("StatusBar", new Command() {
+        provingMenuBar.addItem(new MenuItem("StatusBar", new Command() {
             @Override
             public void execute() {
                 app.openView(new StatusBarProvingView());
             }
         }));
 
-        provingMenuBar.addItem(new ActionMenuItem("ui - Button Range", new Command() {
+        provingMenuBar.addItem(new MenuItem("ui - Button Range", new Command() {
             @Override
             public void execute() {
                 app.openView(new ButtonRangeView());

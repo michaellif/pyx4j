@@ -10,48 +10,47 @@ package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.ria.demo.client.proving.ProvingManager;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
-import com.pyx4j.widgets.client.menu.ActionMenuItem;
-import com.pyx4j.widgets.client.menu.Menu;
-import com.pyx4j.widgets.client.menu.SubMenuItem;
 
 //TODO import com.pyx4j.client.log.Logger;
 
-public class MainMenu extends Menu {
+public class MainMenu extends MenuBar {
 
     public MainMenu(final DemoApplication app) {
 
-        Menu fileMenuBar = new Menu(true);
-        addItem(new SubMenuItem("File", fileMenuBar));
+        MenuBar fileMenuBar = new MenuBar(true);
+        addItem(new MenuItem("File", fileMenuBar));
 
-        fileMenuBar.addItem(new ActionMenuItem("Open", app.getOpenCommand()));
+        fileMenuBar.addItem(new MenuItem("Open", app.getOpenCommand()));
 
-        fileMenuBar.addItem(new ActionMenuItem("Save", app.getSaveCommand()));
+        fileMenuBar.addItem(new MenuItem("Save", app.getSaveCommand()));
 
-        fileMenuBar.addItem(new ActionMenuItem("Print", new Command() {
+        fileMenuBar.addItem(new MenuItem("Print", new Command() {
             @Override
             public void execute() {
                 //TODO Logger.warn("Save");
             }
         }));
 
-        Menu provingMenuBar = new Menu(true);
-        addItem(new SubMenuItem("Proving", provingMenuBar));
+        MenuBar provingMenuBar = new MenuBar(true);
+        addItem(new MenuItem("Proving", provingMenuBar));
         ProvingManager.createMenu(provingMenuBar, app);
 
-        Menu helpMenuBar = new Menu(true);
-        addItem(new SubMenuItem("Help", helpMenuBar));
+        MenuBar helpMenuBar = new MenuBar(true);
+        addItem(new MenuItem("Help", helpMenuBar));
 
-        helpMenuBar.addItem(new ActionMenuItem("Welcome", new Command() {
+        helpMenuBar.addItem(new MenuItem("Welcome", new Command() {
             @Override
             public void execute() {
                 //TODO Logger.error("Welcome");
             }
         }));
         helpMenuBar.addSeparator();
-        helpMenuBar.addItem(new ActionMenuItem("About", new Command() {
+        helpMenuBar.addItem(new MenuItem("About", new Command() {
             @Override
             public void execute() {
                 DialogPanel aboutPanel = new DialogPanel();
