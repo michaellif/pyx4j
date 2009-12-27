@@ -144,11 +144,8 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
                 MenuBar menuButtonBar = new MenuBar();
                 menuButtonBar.setAnimationEnabled(true);
 
-                String imageURL = ImageFactory.getImages().viewMenu().getURL();
-                HTML imageHtml = new HTML();
-                imageHtml.setHTML("<img src=" + imageURL + "' alt=''>");
-
-                MenuItem menuButtonItem = new MenuItem(imageHtml.getHTML(), true, menu);
+                //TODO didn't find a proper way to create menu with icon
+                MenuItem menuButtonItem = new MenuItem("<img src=images/view-menu.png ' alt=''>", true, menu);
                 menuButtonBar.addItem(menuButtonItem);
 
                 toolbarHolderPane.add(menuButtonBar);
