@@ -124,13 +124,12 @@ public class GroupBoxPanel extends FieldSetPanel {
             borderStyle.setProperty("borderTop", "1px solid");
             borderStyle.setProperty("borderColor", "#387cbb");
         }
-        //TODO
-        //        if (expended) {
-        //            ApplicationManager.getAppImages().groupBoxOpen().applyTo(collapseButton);
-        //        } else {
-        //            ApplicationManager.getAppImages().groupBoxClose().applyTo(collapseButton);
-        //        }
+
+        if (expended) {
+            collapseButton.setResource(ImageFactory.getImages().groupBoxOpen());
+        } else {
+            collapseButton.setResource(ImageFactory.getImages().groupBoxClose());
+        }
         collapseButtonTooltip.setTooltipText(tooltipText());
     }
-
 }
