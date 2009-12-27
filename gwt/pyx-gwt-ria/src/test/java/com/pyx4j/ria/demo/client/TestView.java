@@ -8,19 +8,18 @@
  */
 package com.pyx4j.ria.demo.client;
 
+import com.google.gwt.user.client.ui.MenuItem;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.menu.ActionMenuItem;
-import com.pyx4j.widgets.client.menu.Menu;
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
-import com.pyx4j.widgets.client.menu.SubMenuItem;
 
 public class TestView extends AbstractView {
 
@@ -69,45 +68,46 @@ public class TestView extends AbstractView {
     }
 
     @Override
-    public PopupMenuBar getMenu() {
-        PopupMenuBar menuBar = new PopupMenuBar();
+    public MenuBar getMenu() {
+        MenuBar menuBar = new MenuBar(true);
+        menuBar.setAnimationEnabled(true);
         menuBar.setAutoOpen(true);
-        ActionMenuItem item1 = new ActionMenuItem(getTitle() + "1", true, new Command() {
+        MenuItem item1 = new MenuItem(getTitle() + "1", true, new Command() {
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "1 clicked");
             }
         });
-        ActionMenuItem item2 = new ActionMenuItem(getTitle() + "2", true, new Command() {
+        MenuItem item2 = new MenuItem(getTitle() + "2", true, new Command() {
 
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "2 clicked");
             }
         });
-        ActionMenuItem item3 = new ActionMenuItem(getTitle() + "3", true, new Command() {
+        MenuItem item3 = new MenuItem(getTitle() + "3", true, new Command() {
 
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "3 clicked");
             }
         });
-        Menu subMenuBar = new Menu(true);
+        MenuBar subMenuBar = new MenuBar(true);
 
-        ActionMenuItem item11 = new ActionMenuItem(getTitle() + "11", true, new Command() {
+        MenuItem item11 = new MenuItem(getTitle() + "11", true, new Command() {
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "11 clicked");
             }
         });
-        ActionMenuItem item12 = new ActionMenuItem(getTitle() + "12", true, new Command() {
+        MenuItem item12 = new MenuItem(getTitle() + "12", true, new Command() {
 
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "12 clicked");
             }
         });
-        ActionMenuItem item13 = new ActionMenuItem(getTitle() + "13", true, new Command() {
+        MenuItem item13 = new MenuItem(getTitle() + "13", true, new Command() {
 
             @Override
             public void execute() {
@@ -121,7 +121,7 @@ public class TestView extends AbstractView {
         menuBar.addItem(item1);
         menuBar.addItem(item2);
         menuBar.addSeparator();
-        menuBar.addItem(new SubMenuItem("subMenu", subMenuBar));
+        menuBar.addItem(new MenuItem("subMenu", subMenuBar));
         menuBar.addSeparator();
         menuBar.addItem(item3);
 

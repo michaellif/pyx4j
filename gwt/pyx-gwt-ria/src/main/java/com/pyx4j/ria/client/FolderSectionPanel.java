@@ -19,15 +19,18 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
 import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
@@ -45,10 +48,6 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
     private final boolean closable = true;
 
     private final HorizontalPanel toolbarHolderPane;
-
-    private final Image menuButton;
-
-    private PopupMenuBar menu;
 
     public FolderSectionPanel() {
 
@@ -91,17 +90,17 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         DeckPanel contentDeck = tabPanel.getDeck();
         setContentPane(contentDeck);
 
-        menuButton = new Image(ImageFactory.getImages().viewMenu());
-
-        DOM.setStyleAttribute(menuButton.getElement(), "cursor", "pointer");
-        DOM.setStyleAttribute(menuButton.getElement(), "cursor", "hand");
-        DOM.setStyleAttribute(menuButton.getElement(), "margin", "3");
-        menuButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                menu.showRelativeTo(menuButton);
-            }
-        });
+        //        menuButton = new Image(ImageFactory.getImages().viewMenu());
+        //
+        //        DOM.setStyleAttribute(menuButton.getElement(), "cursor", "pointer");
+        //        DOM.setStyleAttribute(menuButton.getElement(), "cursor", "hand");
+        //        DOM.setStyleAttribute(menuButton.getElement(), "margin", "3");
+        //        menuButton.addClickHandler(new ClickHandler() {
+        //            @Override
+        //            public void onClick(ClickEvent event) {
+        //                menu.show(menuButton);
+        //            }
+        //        });
 
     }
 
@@ -140,10 +139,20 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
                 toolbarHolderPane.add(toolbar);
                 toolbarHolderPane.setCellHorizontalAlignment(toolbar, HasHorizontalAlignment.ALIGN_RIGHT);
             }
-            menu = view.getMenu();
+            MenuBar menu = view.getMenu();
             if (menu != null) {
-                toolbarHolderPane.add(menuButton);
-                toolbarHolderPane.setCellWidth(menuButton, "1px");
+                MenuBar menuButtonBar = new MenuBar();
+                menuButtonBar.setAnimationEnabled(true);
+
+                String imageURL = ImageFactory.getImages().viewMenu().getURL();
+                HTML imageHtml = new HTML();
+                imageHtml.setHTML("<img src=" + imageURL + "' alt=''>");
+
+                MenuItem menuButtonItem = new MenuItem(imageHtml.getHTML(), true, menu);
+                menuButtonBar.addItem(menuButtonItem);
+
+                toolbarHolderPane.add(menuButtonBar);
+                toolbarHolderPane.setCellWidth(menuButtonBar, "1px");
             }
         }
     }

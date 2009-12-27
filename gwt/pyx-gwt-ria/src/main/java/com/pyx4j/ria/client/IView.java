@@ -8,9 +8,9 @@
  */
 package com.pyx4j.ria.client;
 
+import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 
 public interface IView extends ITab {
@@ -25,6 +25,6 @@ public interface IView extends ITab {
 
     FolderSectionPanel getFolder();
 
-    PopupMenuBar getMenu();
+    MenuBar getMenu();
 
 }

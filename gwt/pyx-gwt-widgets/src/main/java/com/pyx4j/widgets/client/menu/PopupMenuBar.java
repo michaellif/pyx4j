@@ -12,10 +12,12 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
-public class PopupMenuBar extends Menu {
+public class PopupMenuBar extends MenuBar {
 
     private final PopupPanel popupPanel;
 
@@ -48,8 +50,7 @@ public class PopupMenuBar extends Menu {
         popupPanel.showRelativeTo(target);
     }
 
-    @Override
-    protected void position(PopupPanel popup, SubMenuItem item, int offsetWidth, int offsetHeight) {
+    protected void position(PopupPanel popup, MenuItem item, int offsetWidth, int offsetHeight) {
 
         Location ewLocation = Location.NONE;
         Location nsLocation = Location.NONE;

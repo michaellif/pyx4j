@@ -24,7 +24,7 @@ public class HeaderPanel extends TransparentDeckPanel {
 
     public HeaderPanel(String text) {
 
-        String imageURL = new Image(ImageFactory.getImages().headerBackground()).getUrl();
+        String imageURL = ImageFactory.getImages().headerBackground().getURL();
 
         HTML holder = new HTML();
         holder.setHTML("<img src=" + imageURL + " style='width:100%; height:" + HEADER_HEIGHT + "' alt=''>");
