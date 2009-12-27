@@ -166,8 +166,8 @@ public abstract class AbstarctTheme implements Theme {
         styles.add(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
-        styles.add(style);
         style.addProperty("padding", "4px 14px 4px 1px");
+        styles.add(style);
 
         style = new Style(".gwt-MenuBar-horizontal");
         styles.add(style);
