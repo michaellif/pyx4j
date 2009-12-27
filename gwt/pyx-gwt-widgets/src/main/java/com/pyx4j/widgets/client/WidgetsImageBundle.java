@@ -10,10 +10,9 @@ package com.pyx4j.widgets.client;
 
 import com.pyx4j.widgets.client.dialog.images.DialogImages;
 import com.pyx4j.widgets.client.images.WidgetsImages;
-import com.pyx4j.widgets.client.menu.images.MenuImages;
 import com.pyx4j.widgets.client.richtext.images.RichTextImages;
 import com.pyx4j.widgets.client.tabpanel.images.TabpanelImages;
 
-public interface WidgetsImageBundle extends WidgetsImages, DialogImages, RichTextImages, TabpanelImages, MenuImages {
+public interface WidgetsImageBundle extends WidgetsImages, DialogImages, RichTextImages, TabpanelImages {
 
 }

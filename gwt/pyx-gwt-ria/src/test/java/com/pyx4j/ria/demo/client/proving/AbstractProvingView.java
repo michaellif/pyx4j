@@ -16,13 +16,13 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.widgets.client.GroupBoxPanel;
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
 
 public abstract class AbstractProvingView extends AbstractView {
 
@@ -117,7 +117,7 @@ public abstract class AbstractProvingView extends AbstractView {
     }
 
     @Override
-    public PopupMenuBar getMenu() {
+    public MenuBar getMenu() {
         return null;
     }
 

@@ -12,11 +12,11 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.tabpanel.BasicTab;
 import com.pyx4j.widgets.client.tabpanel.TabPanelComposite;
 
@@ -69,7 +69,7 @@ public class TabPanelView extends AbstractView {
     }
 
     @Override
-    public PopupMenuBar getMenu() {
+    public MenuBar getMenu() {
         return null;
     }
 

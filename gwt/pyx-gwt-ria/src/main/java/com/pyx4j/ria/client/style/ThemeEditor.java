@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,7 +34,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupBoxPanel;
-import com.pyx4j.widgets.client.menu.PopupMenuBar;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
@@ -341,7 +341,7 @@ public class ThemeEditor extends AbstractView {
     }
 
     @Override
-    public PopupMenuBar getMenu() {
+    public MenuBar getMenu() {
         return null;
     }
 }
