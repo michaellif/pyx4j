@@ -3,6 +3,8 @@
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
   <inherits name='com.pyx4j.ria.Ria'/>
+  <inherits name="com.google.gwt.user.Debug"/>
+  
   <entry-point class='com.pyx4j.ria.demo.client.RiaClient'/>
 
   <source path='client'/>

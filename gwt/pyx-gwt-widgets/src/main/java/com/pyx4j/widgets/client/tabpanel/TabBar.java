@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
@@ -54,11 +55,15 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
      * Creates an empty tab bar.
      */
     public TabBar(TabPanelModel tabPanel) {
+
         this.tabPanel = tabPanel;
 
         tabBarPanel = new HorizontalPanel();
 
         initWidget(tabBarPanel);
+
+        this.ensureDebugId(this.getClass().getName());
+
         sinkEvents(Event.ONCLICK);
         setStyleName("gwt-TabBar");
 
@@ -96,7 +101,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         DOM.setStyleAttribute(scrollContainer.getElement(), "position", "relative");
         scrollContainer.setWidth("100%");
         scrollContainer.setHeight("100%");
-        scrollContainer.setHeight("1.6em");
+        scrollContainer.setHeight("2em");
 
         scrollContainer.add(scrollPanel);
 
