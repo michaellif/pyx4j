@@ -70,7 +70,6 @@ public class TestView extends AbstractView {
     @Override
     public MenuBar getMenu() {
         MenuBar menuBar = new MenuBar(true);
-        menuBar.setAnimationEnabled(true);
         menuBar.setAutoOpen(true);
         MenuItem item1 = new MenuItem(getTitle() + "1", true, new Command() {
             @Override

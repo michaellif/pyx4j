@@ -142,7 +142,6 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
             MenuBar menu = view.getMenu();
             if (menu != null) {
                 MenuBar menuButtonBar = new MenuBar();
-                menuButtonBar.setAnimationEnabled(true);
 
                 //TODO didn't find a proper way to create menu with icon
                 MenuItem menuButtonItem = new MenuItem("<img src=images/view-menu.png ' alt=''>", true, menu);
