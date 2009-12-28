@@ -112,8 +112,9 @@
         <module>entity/pyx-entity-gwt</module>
         <module>entity/pyx-entity-server</module>
         <module>entity/pyx-entity-tests</module>
-        
-        <module>site/pyx-site-admin</module>        
+
+        <module>site/pyx-site-shared</module>
+        <module>site/pyx-site-admin</module>
 
         <module>incubator/tester/tester-domain</module>
         <module>incubator/tester/tester-client</module>
@@ -247,11 +248,23 @@
                 <scope>test</scope>
             </dependency>
 
-		<dependency>
-			<groupId>com.googlecode.gwt-incubator</groupId>
-			<artifactId>gwt-incubator</artifactId>
-			<version>1.7.2009.06.22</version>
-		</dependency>
+		    <dependency>
+			    <groupId>com.googlecode.gwt-incubator</groupId>
+			    <artifactId>gwt-incubator</artifactId>
+			    <version>1.7.2009.06.22</version>
+		    </dependency>
+
+		    <dependency>
+			    <groupId>com.google.gwt.google-apis</groupId>
+			    <artifactId>gwt-maps</artifactId>
+			    <version>1.0.2</version>
+			    <exclusions>
+				    <exclusion>
+					    <groupId>com.google.gwt</groupId>
+					    <artifactId>gwt-user</artifactId>
+				    </exclusion>
+			    </exclusions>
+		    </dependency>
 
         </dependencies>
     </dependencyManagement>

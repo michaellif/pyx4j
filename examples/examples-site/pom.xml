@@ -14,17 +14,12 @@
 	<description>examples-site Implementations</description>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>com.google.gwt.google-apis</groupId>
 			<artifactId>gwt-maps</artifactId>
-			<version>1.0.2</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.gwt</groupId>
-					<artifactId>gwt-user</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.pyx4j</groupId>
 			<artifactId>pyx-site-admin</artifactId>
