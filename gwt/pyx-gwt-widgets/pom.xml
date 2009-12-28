@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-widgets</artifactId>
-    <name>pyx-entity-widgets</name>
-    <description>pyx-widgets Implementations</description>
+    <artifactId>pyx-gwt-widgets</artifactId>
+    <name>pyx-gwt-widgets</name>
+    <description>pyx-gwt-widgets Implementations</description>
 
 	<dependencies>
 		

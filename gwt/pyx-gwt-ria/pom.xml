@@ -9,9 +9,9 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>pyx-entity-ria</artifactId>
-	<name>pyx-entity-ria</name>
-	<description>pyx-ria Implementations</description>
+	<artifactId>pyx-gwt-ria</artifactId>
+	<name>pyx-gwt-ria</name>
+	<description>pyx-gwt-ria Implementations</description>
 
 	<dependencies>
 		<dependency>
@@ -22,6 +22,12 @@
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-widgets</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -2,17 +2,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.pyx4j</groupId>
-        <artifactId>pyx</artifactId>
-        <version>2.0.0-SNAPSHOT</version><!--pyx-version-->
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>com.pyx4j</groupId>
+		<artifactId>pyx</artifactId>
+		<version>2.0.0-SNAPSHOT</version><!--pyx-version-->
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
 
-    <artifactId>examples-site</artifactId>
-    <name>examples-site</name>
+	<artifactId>examples-site</artifactId>
+	<name>examples-site</name>
 	<packaging>war</packaging>
-    <description>examples-site Implementations</description>
+	<description>examples-site Implementations</description>
 
 	<dependencies>
 		<dependency>
@@ -27,9 +27,11 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.gwt-incubator</groupId>
-			<artifactId>gwt-incubator</artifactId>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-site-admin</artifactId>
+			<version>${project.version}</version>
 		</dependency>
+
 	</dependencies>
-	
+
 </project>

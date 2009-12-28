@@ -10,9 +10,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-admin</artifactId>
-    <name>pyx-entity-admin</name>
-    <description>pyx-admin Implementations</description>
+    <artifactId>pyx-site-admin</artifactId>
+    <name>pyx-site-admin</name>
+    <description>pyx-site-admin Implementations</description>
 
 	<dependencies>
 
@@ -29,99 +29,12 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--dependency>
+		<dependency>
 			<groupId>com.pyx4j</groupId>
-			<artifactId>pyx-gwt-widgets</artifactId>
+			<artifactId>pyx-gwt-ria</artifactId>
 			<version>${project.version}</version>
-		</dependency  -->
+		</dependency>
 
 	</dependencies>
 
-	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-
-		<sourceDirectory>src/main/java</sourceDirectory>
-
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-			</resource>
-			<resource>
-				<directory>.</directory>
-				<includes>
-					<include>CHANGES</include>
-					<include>COPYING</include>
-					<include>README</include>
-				</includes>
-			</resource>
-		</resources>
-
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.1</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
-		<plugins>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>src/assembly/src.xml</descriptor>
-						<descriptor>src/assembly/bin.xml</descriptor>
-					</descriptors>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<reportOutputDirectory>${project.build.directory}/apidocs</reportOutputDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>javadoc</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
-	</build>
-
-	<reporting>
-		<outputDirectory>${basedir}/target/docs</outputDirectory>
-	</reporting>
 </project>
