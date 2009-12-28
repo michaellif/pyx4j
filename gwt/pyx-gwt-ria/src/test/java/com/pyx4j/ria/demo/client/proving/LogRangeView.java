@@ -8,15 +8,24 @@
  */
 package com.pyx4j.ria.demo.client.proving;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.log4gwt.client.Appender;
+import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.ria.client.ImageFactory;
 
 public class LogRangeView extends AbstractProvingView {
+
+    final Logger log = LoggerFactory.getLogger(LogRangeView.class);
+
+    private int n = 1;
 
     public LogRangeView() {
         super("Log Range", ImageFactory.getImages().debugOn());
@@ -34,35 +43,35 @@ public class LogRangeView extends AbstractProvingView {
         debug.addAction("(s)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.debug(text.getValue());
+                log.debug(text.getValue());
             }
         });
 
         debug.addAction("(s, int)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.debug(text.getValue(), n++);
+                log.debug(text.getValue(), n++);
             }
         });
 
         debug.addAction("(s, int, int)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.debug(text.getValue(), 7, 49);
+                log.debug(text.getValue(), 7, 49);
             }
         });
 
         debug.addAction("(s, int, null)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.debug(text.getValue(), 11, null);
+                log.debug(text.getValue(), 11, null);
             }
         });
 
         debug.addAction("(s, s2)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.debug(text.getValue(), "Any second String");
+                log.debug(text.getValue(), "Any second String");
             }
         });
 
@@ -71,21 +80,21 @@ public class LogRangeView extends AbstractProvingView {
         other.addAction("info(s)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.info(text.getValue());
+                log.info(text.getValue());
             }
         });
 
         other.addAction("warn(s)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.warn(text.getValue());
+                log.warn(text.getValue());
             }
         });
 
         other.addAction("error(s, throwable)", new Runnable() {
             @Override
             public void run() {
-                //TODO Logger.error(text.getValue(), new Error("Try this one"));
+                log.error(text.getValue(), new Error("Try this one"));
             }
         });
 
@@ -96,7 +105,7 @@ public class LogRangeView extends AbstractProvingView {
                 try {
                     throw new Exception("a problem");
                 } catch (Exception e) {
-                    //TODO Logger.error("Got Exception", e);
+                    log.error("Got Exception", e);
                 }
             }
         });
@@ -109,7 +118,7 @@ public class LogRangeView extends AbstractProvingView {
                     ClickHandler obj = null;
                     obj.onClick(null);
                 } catch (Exception e) {
-                    //TODO Logger.error("Got NPE", e);
+                    log.error("Got NPE", e);
                 }
             }
         });
@@ -125,14 +134,13 @@ public class LogRangeView extends AbstractProvingView {
             public void onClick(ClickEvent event) {
                 StringBuilder info = new StringBuilder();
                 info.append("Current Logger appenders:");
-                //TODO
-                //                if (Logger.getAllAppenders() == null) {
-                //                    info.append("None");
-                //                } else {
-                //                    for (Appender a : Logger.getAllAppenders()) {
-                //                        info.append(a.getAppenderName()).append(' ');
-                //                    }
-                //                }
+                if (ClientLogger.getAllAppenders() == null) {
+                    info.append("None");
+                } else {
+                    for (Appender a : ClientLogger.getAllAppenders()) {
+                        info.append(a.getAppenderName()).append(' ');
+                    }
+                }
                 infoText.setText(info.toString());
             }
         }));
