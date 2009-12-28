@@ -96,6 +96,14 @@
 
     <modules>
         <module>pyx-commons</module>
+
+        <module>log/pyx-log-shared</module>
+
+        <module>gwt/pyx-gwt-server</module>
+
+        <module>log/pyx-slf4j-api-gwt</module>
+        <module>log/pyx-log-gwt</module>
+
         <module>gwt/pyx-gwt-unit</module>
 
         <module>entity/pyx-entity-shared</module>
@@ -108,11 +116,9 @@
         <module>incubator/tester/tester-gae-server</module>
 
 <!--
-        log\log-shared
         commons
         rpc\rpc-shared
 
-        log\log-gwt  (Impl logger for GWT)
         gwt\gwt-widgets
         gwt\gwt-unit
         gwt\gwt-forms
@@ -125,9 +131,6 @@
         entity\entity-shared
 
         entity\entity-gwt
-
-        log\log-server
-
 
         rpc\rpc-server
 
