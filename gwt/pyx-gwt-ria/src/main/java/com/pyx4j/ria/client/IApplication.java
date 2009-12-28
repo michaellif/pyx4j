@@ -14,5 +14,4 @@ public interface IApplication {
 
     public void onDiscard();
 
-    public void openView(IView view);
 }

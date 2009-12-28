@@ -12,11 +12,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.ria.client.IApplication;
+import com.pyx4j.ria.demo.client.DemoApplication;
 
 public class ProvingManager {
 
-    public static void createMenu(MenuBar provingMenuBar, final IApplication app) {
+    public static void createMenu(MenuBar provingMenuBar, final DemoApplication app) {
 
         provingMenuBar.addItem(new MenuItem("Logger", new Command() {
             @Override

@@ -60,7 +60,6 @@ public class DemoApplication implements IApplication {
 
     }
 
-    @Override
     public void openView(IView view) {
         mainPanel.getTopFolder().addView(view, true);
         mainPanel.getTopFolder().showView(view);
