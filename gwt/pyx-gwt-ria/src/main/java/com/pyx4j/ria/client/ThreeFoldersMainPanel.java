@@ -13,8 +13,6 @@ import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalSplitPanel;
 
-import com.pyx4j.ria.demo.client.ImageFactory;
-
 public class ThreeFoldersMainPanel extends SimplePanel {
 
     private final FolderSectionPanel leftFolder;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='test'>
   <inherits name='com.google.gwt.user.User'/>
-  <inherits name='com.pyx4j.ria.Ria'/>
   <inherits name="com.google.gwt.user.Debug"/>
+  <inherits name='com.pyx4j.ria.Ria'/>
   
   <entry-point class='com.pyx4j.ria.demo.client.RiaClient'/>
 

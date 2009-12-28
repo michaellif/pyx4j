@@ -100,11 +100,11 @@ public class Perspective {
         menuHolder.add(menuBar);
     }
 
-    public void setToolbarActions(Widget actions) {
+    public void setActionsToolbar(Widget actions) {
         toolbarActionsHolder.add(actions);
     }
 
-    public void setToolbarLinks(Widget links) {
+    public void setLinksToolbar(Widget links) {
         toolbarLinksHolder.add(links);
     }
 

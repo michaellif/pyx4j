@@ -45,8 +45,6 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
 
     private final TabPanelModel tabPanel;
 
-    private final boolean closable = true;
-
     private final HorizontalPanel toolbarHolderPane;
 
     public FolderSectionPanel() {
@@ -104,7 +102,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
 
     }
 
-    public void addView(IView view) {
+    public void addView(IView view, boolean closable) {
         views.add(view);
         view.setFolder(this);
         tabPanel.insert(view, tabPanel.size(), closable);

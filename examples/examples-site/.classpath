@@ -8,5 +8,6 @@
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pyx-site-admin"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pyx-gwt-widgets"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pyx-gwt-ria"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

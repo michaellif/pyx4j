@@ -15,13 +15,13 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.ria.client.ApplicationManager;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
-import com.pyx4j.widgets.client.richtext.RichTextToolbar;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Admin implements EntryPoint {
+public class Client implements EntryPoint {
 
     private final PageServiceAsync pageService = GWT.create(PageService.class);
 
@@ -30,6 +30,12 @@ public class Admin implements EntryPoint {
      */
     public void onModuleLoad() {
 
+        ApplicationManager.loadApplication(new AdminApplication());
+
+        //simple();
+    }
+
+    void simple() {
         VerticalPanel contentPanel = new VerticalPanel();
         RootPanel.get().add(contentPanel);
 
@@ -93,4 +99,5 @@ public class Admin implements EntryPoint {
         sendButton.addClickHandler(handler);
         pageNameTextBox.addKeyUpHandler(handler);
     }
+
 }

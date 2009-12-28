@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='site_admin'>
-  <inherits name='com.google.gwt.user.User'/>
-  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
-	<inherits name="com.google.gwt.i18n.I18N"/>
-	<inherits name="com.google.gwt.maps.GoogleMaps" />
-  <inherits name="com.pyx4j.site.SiteAdmin" />
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
 
-  <entry-point class='com.pyx4j.site.admin.Admin'/>
+<module rename-to='site_admin'>
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.maps.GoogleMaps" />
+	<inherits name="com.pyx4j.site.SiteAdmin" />
+
+	<entry-point class='com.pyx4j.site.admin.Client' />
 
 </module>

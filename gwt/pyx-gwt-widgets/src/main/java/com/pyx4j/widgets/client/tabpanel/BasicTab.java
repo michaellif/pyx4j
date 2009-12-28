@@ -20,7 +20,6 @@ public class BasicTab implements ITab {
     private final String title;
 
     public BasicTab(Widget contentPane, String title, ImageResource imageResource) {
-        super();
         this.contentPane = contentPane;
         this.imageResource = imageResource;
         this.title = title;

@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pyx-gwt-widgets"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/pyx-gwt-ria"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

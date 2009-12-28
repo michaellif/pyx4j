@@ -6,7 +6,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.demo.client;
+package com.pyx4j.site.admin;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,31 +24,17 @@ import com.pyx4j.ria.client.Perspective;
 import com.pyx4j.ria.client.StatusBar;
 import com.pyx4j.ria.client.ThreeFoldersMainPanel;
 
-public class DemoApplication implements IApplication {
+public class AdminApplication implements IApplication {
 
     private Perspective perspective;
 
     private StatusBar statusBar;
 
-    private Timer progressBarTimer;
-
-    private final Command openCommand;
-
     private final Command saveCommand;
 
     private ThreeFoldersMainPanel mainPanel;
 
-    public DemoApplication() {
-        openCommand = new Command() {
-            private int counter;
-
-            @Override
-            public void execute() {
-                TestView view = new TestView("Tab" + counter++);
-                mainPanel.getTopFolder().addView(view, true);
-                mainPanel.getTopFolder().showView(view);
-            }
-        };
+    public AdminApplication() {
         saveCommand = new Command() {
             @Override
             public void execute() {
@@ -62,7 +48,7 @@ public class DemoApplication implements IApplication {
 
     @Override
     public void openView(IView view) {
-        mainPanel.getTopFolder().addView(view, true);
+        mainPanel.getTopFolder().addView(view, false);
         mainPanel.getTopFolder().showView(view);
     }
 
@@ -71,7 +57,7 @@ public class DemoApplication implements IApplication {
 
         statusBar = new StatusBar();
 
-        perspective.setHeaderPanel(new HeaderPanel("Demo"));
+        perspective.setHeaderPanel(new HeaderPanel("Site Admin"));
         perspective.setMenuBar(new MainMenu(this));
 
         perspective.setActionsToolbar(new Toolbar(this));
@@ -91,12 +77,9 @@ public class DemoApplication implements IApplication {
 
         mainPanel = new ThreeFoldersMainPanel();
 
-        mainPanel.getLeftFolder().addView(new TestView("Long Tab1"), true);
-        mainPanel.getLeftFolder().addView(new TestView("Tab2"), true);
-        mainPanel.getLeftFolder().addView(new TestView("Tab3"), true);
+        mainPanel.getLeftFolder().addView(new SiteMapView(), false);
 
         //TODO mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));
-        mainPanel.getBottomFolder().addView(new TabPanelView("Tab Pane", null), true);
 
         perspective.setMainPanel(mainPanel);
 
@@ -105,35 +88,7 @@ public class DemoApplication implements IApplication {
         perspective.attachToParent(RootPanel.get());
     }
 
-    void runProgressBar() {
-        if (progressBarTimer != null) {
-            return;
-        }
-        progressBarTimer = new Timer() {
-            int counetr = 0;
-
-            @Override
-            public void run() {
-                statusBar.setProgress(counetr++);
-                if (counetr > 100) {
-                    this.cancel();
-                    progressBarTimer = null;
-                    statusBar.setProgressBarVisible(false);
-                    statusBar.setProgress(0);
-                }
-            }
-        };
-        statusBar.setProgressBarVisible(true);
-        progressBarTimer.scheduleRepeating(100);
-    }
-
     public void onDiscard() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public Command getOpenCommand() {
-        return openCommand;
     }
 
     public Command getSaveCommand() {
