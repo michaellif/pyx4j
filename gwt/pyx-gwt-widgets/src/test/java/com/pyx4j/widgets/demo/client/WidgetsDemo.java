@@ -8,6 +8,9 @@
  */
 package com.pyx4j.widgets.demo.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -31,6 +34,8 @@ import com.pyx4j.widgets.client.style.StyleManger;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class WidgetsDemo implements EntryPoint {
+
+    final Logger log = LoggerFactory.getLogger(WidgetsDemo.class);
 
     public void onModuleLoad() {
 
@@ -105,19 +110,19 @@ public class WidgetsDemo implements EntryPoint {
 
                 @Override
                 public boolean onClickCancel() {
-                    // TODO Auto-generated method stub
+                    log.info("onClickCancel");
                     return true;
                 }
 
                 @Override
                 public boolean onClickNo() {
-                    // TODO Auto-generated method stub
+                    log.info("onClickNo");
                     return true;
                 }
 
                 @Override
                 public boolean onClickYes() {
-                    // TODO Auto-generated method stub
+                    log.info("onClickYes");
                     return true;
                 }
 
@@ -128,6 +133,7 @@ public class WidgetsDemo implements EntryPoint {
 
                 @Override
                 public boolean onClickCustom1() {
+                    log.info("custom1Text");
                     return false;
                 }
 
@@ -138,6 +144,7 @@ public class WidgetsDemo implements EntryPoint {
 
                 @Override
                 public boolean onClickCustom2() {
+                    log.info("custom2Text");
                     return false;
                 }
             });
