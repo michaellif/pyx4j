@@ -15,5 +15,7 @@ TODO
     Module for ClientState class
 
  Vlad:
-   Ivestigate common logger!
+   DONE - Ivestigate common logger!
+   Send client log event to server over RPC
+   Better client log configuration. e.g. ability to create diferent Logger at least in development mode. Now we have one global flag debugOn
 
