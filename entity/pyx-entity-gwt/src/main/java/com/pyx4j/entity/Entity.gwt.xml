@@ -4,5 +4,10 @@
 <module>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.pyx4j.entity.EntityShared'/>
+    
+    <generate-with class="com.pyx4j.entity.rebind.EntityFactoryGenerator">
+        <when-type-assignable class="com.pyx4j.entity.shared.impl.IEntityFactoryImpl"/>
+    </generate-with>
+    
 	<source path="client"/>
 </module>

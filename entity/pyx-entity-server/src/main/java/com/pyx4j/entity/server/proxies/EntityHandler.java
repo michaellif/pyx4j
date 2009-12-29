@@ -10,6 +10,7 @@ package com.pyx4j.entity.server.proxies;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -35,11 +36,14 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityH
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
             return method.invoke(this, args);
-        } else if (!meta.containsKey(method.getName())) {
-            IObject<?, ?> entity = null;
+        }
+
+        IObject<?, ?> entity = meta.get(method.getName());
+        if (entity == null) {
             Class<?>[] interfaces = new Class[] { method.getReturnType() };
             if (IPrimitive.class.equals(method.getReturnType())) {
-                entity = new PrimitiveHandler((IEntity) proxy, method.getName());
+                Class primitiveValueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+                entity = new PrimitiveHandler((IEntity) proxy, method.getName(), primitiveValueClass);
             } else if (ISet.class.equals(method.getReturnType())) {
                 entity = new SetHandler((IEntity) proxy, method.getName());
 
@@ -49,7 +53,7 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityH
             }
             meta.put(method.getName(), entity);
         }
-        return meta.get(method.getName());
+        return entity;
 
     }
 

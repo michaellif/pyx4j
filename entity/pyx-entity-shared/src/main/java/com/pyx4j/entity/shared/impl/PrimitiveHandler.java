@@ -17,8 +17,11 @@ import com.pyx4j.entity.shared.Path;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE> implements IPrimitive<TYPE> {
 
-    public PrimitiveHandler(IEntity<?> parent, String fieldName) {
+    private final Class<TYPE> valueClass;
+
+    public PrimitiveHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
         super(IPrimitive.class, parent, fieldName);
+        this.valueClass = valueClass;
     }
 
     @SuppressWarnings("unchecked")
@@ -35,6 +38,10 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
             getParent().setValue(data);
         }
         data.put(getFieldName(), value);
+    }
+
+    public Class<TYPE> getValueClass() {
+        return valueClass;
     }
 
     @Override

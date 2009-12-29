@@ -60,6 +60,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     @Override
     public String toString() {
-        return getObjectClass().getSimpleName() + getValue();
+        return getObjectClass().getName() + getValue();
     }
 }

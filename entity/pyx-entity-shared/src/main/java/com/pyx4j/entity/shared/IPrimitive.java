@@ -10,4 +10,6 @@ package com.pyx4j.entity.shared;
 
 public interface IPrimitive<TYPE> extends IObject<IPrimitive<TYPE>, TYPE> {
 
+    Class<TYPE> getValueClass();
+
 }
