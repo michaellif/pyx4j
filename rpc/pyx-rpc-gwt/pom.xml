@@ -10,37 +10,40 @@
         <groupId>com.pyx4j</groupId>
         <artifactId>pyx</artifactId>
         <version>2.0.0-SNAPSHOT</version><!--pyx-version-->
-        <relativePath>../../../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>tester-client</artifactId>
-    <name>tester-client</name>
-    <description>tester-client implementations</description>
+    <artifactId>pyx-rpc-gwt</artifactId>
+    <name>pyx-rpc-gwt</name>
+    <description>pyx-rpc-gwt implementations</description>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-tests</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-rpc-gwt</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <optional>true</optional>
         </dependency>
         
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>tester-domain</artifactId>
+            <artifactId>pyx-rpc-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-unit</artifactId>
             <version>${project.version}</version>
+            <optional>true</optional>
+            <scope>test</scope>
         </dependency>
         
     </dependencies>

@@ -3,11 +3,5 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='com.pyx4j.entity.EntityShared'/>
-    <inherits name='com.pyx4j.tester.TesterDomain'/>
-    <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
-    <inherits name='com.pyx4j.rpc.test.RPCTests'/>
-	<source path="client"/>
-	
-	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>
+	<source path="shared"/>
 </module>

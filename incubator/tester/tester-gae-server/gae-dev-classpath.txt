@@ -1,0 +1,14 @@
+pyx-gwt-server
+pyx-rpc-server
+pyx-rpc-shared
+pyx-rpc-gwt
+pyx-entity-shared
+pyx-commons
+pyx-log-shared
+slf4j-api
+slf4j-jdk14
+-pyx-commons/target/test-classes
+-pyx-gwt-server.jar
+-pyx-entity-shared.jar
+-pyx-commons.jar
+-pyx-log-shared.jar

@@ -98,12 +98,15 @@
         <module>pyx-commons</module>
 
         <module>log/pyx-log-shared</module>
+        <module>rpc/pyx-rpc-shared</module>
 
         <module>gwt/pyx-gwt-server</module>
+        <module>rpc/pyx-rpc-server</module>
 
         <module>log/pyx-slf4j-api-gwt</module>
         <module>log/pyx-log-gwt</module>
 
+        <module>gwt/pyx-rpc-gwt</module>
         <module>gwt/pyx-gwt-unit</module>
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-ria</module>
@@ -122,28 +125,12 @@
 
         <module>examples/examples-site</module>
 
-
-
 <!--
-        commons
-        rpc\rpc-shared
 
-         gwt\gwt-forms
+        gwt\gwt-forms
 
-        rpc\rpc-gwt
-
-        gwt\gwt-ria
-
-        entity\entity-shared
-
-        entity\entity-gwt
-
-        rpc\rpc-server
-
-        entity\entity-persistence
         entity\entity-gae
         entity\entity-hibernate
-        entity\entity-persistence
 -->
     </modules>
 
@@ -233,6 +220,18 @@
                 <version>${gaeVersion}</version>
                 <scope>test</scope>
             </dependency>
+
+		    <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.5.8</version><!--Update with hibernate version-->
+            </dependency>
+
+            <dependency>
+		        <groupId>org.slf4j</groupId>
+		        <artifactId>slf4j-jdk14</artifactId>
+		        <version>1.5.8</version><!--Update with hibernate version-->
+	        </dependency>
 
             <dependency>
                 <groupId>javax.servlet</groupId>
