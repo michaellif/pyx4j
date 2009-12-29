@@ -16,10 +16,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
-public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends ObjectHandler<T> implements IPrimitive<Object, IEntity<?>> {
+public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE> implements IPrimitive<TYPE> {
 
-    PrimitiveHandler(Class<T> clazz, EntityHandler<?> parentHandler, IEntity<?> parent, String fieldName) {
-        super(clazz, parentHandler, parent, fieldName);
+    PrimitiveHandler(IEntity<?> parent, String fieldName) {
+        super(IPrimitive.class, parent, fieldName);
     }
 
     @Override
@@ -33,17 +33,18 @@ public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends ObjectHandler<
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object getValue() {
-        return getParentHandler().getValue().get(getFieldName());
+    public TYPE getValue() {
+        return (TYPE) getParent().getValue().get(getFieldName());
     }
 
     @Override
-    public void setValue(Object value) {
-        Map<String, Object> data = getParentHandler().getValue();
+    public void setValue(TYPE value) {
+        Map<String, Object> data = getParent().getValue();
         if (data == null) {
             data = new HashMap<String, Object>();
-            getParentHandler().setValue(data);
+            getParent().setValue(data);
         }
         data.put(getFieldName(), value);
     }
@@ -60,14 +61,14 @@ public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends ObjectHandler<
     }
 
     @Override
-    public void set(IPrimitive<Object, IEntity<?>> entity) {
+    public void set(IPrimitive<TYPE> entity) {
         setValue(entity.getValue());
 
     }
 
     @Override
     public String toString() {
-        return getEntityClass().getSimpleName() + getValue();
+        return getObjectClass().getSimpleName() + getValue();
     }
 
 }

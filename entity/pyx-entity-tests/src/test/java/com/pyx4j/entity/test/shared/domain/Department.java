@@ -14,8 +14,8 @@ import com.pyx4j.entity.shared.ISet;
 
 public interface Department extends IEntity<Department> {
 
-    IPrimitive<String, Department> name();
+    IPrimitive<String> name();
 
-    ISet<Employee, Department> employees();
+    ISet<Employee> employees();
 
 }

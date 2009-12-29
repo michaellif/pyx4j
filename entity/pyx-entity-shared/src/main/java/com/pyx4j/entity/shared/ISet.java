@@ -8,8 +8,9 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.util.Map;
 import java.util.Set;
 
-public interface ISet<TYPE extends IObject<?, ?>, PARENT extends IEntity<?>> extends IObject<Set<?>, ISet<TYPE, PARENT>>, Set<TYPE> {
+public interface ISet<TYPE extends IObject<?, ?>> extends IObject<ISet<TYPE>, Set<Map<String, ?>>>, Set<TYPE> {
 
 }

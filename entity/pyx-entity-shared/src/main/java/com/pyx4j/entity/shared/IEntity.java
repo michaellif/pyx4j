@@ -10,6 +10,6 @@ package com.pyx4j.entity.shared;
 
 import java.util.Map;
 
-public interface IEntity<E extends IObject<?, ?>> extends IObject<Map<String, Object>, E> {
+public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String, Object>> {
 
 }

@@ -14,12 +14,12 @@ import com.pyx4j.entity.shared.ISet;
 
 public interface Customer extends IEntity<Customer> {
 
-    IPrimitive<String, Customer> firstName();
+    IPrimitive<String> firstName();
 
     Address homeAddress();
 
     Address officeAddress();
 
-    ISet<Address, Customer> otherAdresses();
+    ISet<Address> otherAdresses();
 
 }

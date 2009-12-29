@@ -18,6 +18,6 @@ public interface Address extends IEntity<Address> {
 
     AddressCountry country();
 
-    IPrimitive<String, Address> streetName();
+    IPrimitive<String> streetName();
 
 }

@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implements IEntity<T> {
+public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T, Map<String, Object>> implements IEntity<T> {
 
     private Map<String, Object> data;
 
@@ -30,8 +30,8 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implem
         data = new HashMap<String, Object>();
     }
 
-    EntityHandler(Class<T> clazz, EntityHandler<?> parentHandler, IEntity<?> parent, String fieldName) {
-        super(clazz, parentHandler, parent, fieldName);
+    EntityHandler(Class<T> clazz, IEntity<?> parent, String fieldName) {
+        super(clazz, parent, fieldName);
     }
 
     @SuppressWarnings("unchecked")
@@ -44,17 +44,17 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implem
         } else if (!meta.containsKey(method.getName())) {
             IObject<?, ?> entity = null;
             Class<?>[] interfaces = new Class[] { method.getReturnType() };
-            if (method.getReturnType().isAssignableFrom(IPrimitive.class)) {
-                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new PrimitiveHandler(method
-                        .getReturnType(), this, (IEntity) proxy, method.getName()));
+            if (IPrimitive.class.equals(method.getReturnType())) {
+                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new PrimitiveHandler((IEntity) proxy,
+                        method.getName()));
 
-            } else if (method.getReturnType().isAssignableFrom(ISet.class)) {
-                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new SetHandler(method.getReturnType(),
-                        this, (IEntity) proxy, method.getName()));
+            } else if (ISet.class.equals(method.getReturnType())) {
+                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new SetHandler((IEntity) proxy, method
+                        .getName()));
 
             } else {
                 entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new EntityHandler(method.getReturnType(),
-                        this, (IEntity) proxy, method.getName()));
+                        (IEntity) proxy, method.getName()));
 
             }
             meta.put(method.getName(), entity);
@@ -71,7 +71,7 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implem
     @Override
     public void setValue(Map<String, Object> value) {
         this.data = value;
-        getParentHandler().getValue().put(getFieldName(), value);
+        getParent().getValue().put(getFieldName(), value);
     }
 
     @Override
@@ -92,6 +92,6 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implem
 
     @Override
     public String toString() {
-        return getEntityClass().getSimpleName() + getValue();
+        return getObjectClass().getSimpleName() + getValue();
     }
 }

@@ -13,6 +13,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Country extends IEntity<Country> {
 
-    IPrimitive<String, Country> name();
+    IPrimitive<String> name();
 
 }

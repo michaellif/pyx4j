@@ -15,9 +15,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Employee extends IEntity<Department> {
 
-    IPrimitive<String, Employee> firstName();
+    IPrimitive<String> firstName();
 
-    IPrimitive<Date, Employee> hiredate();
+    IPrimitive<Date> hiredate();
 
     Department department();
 

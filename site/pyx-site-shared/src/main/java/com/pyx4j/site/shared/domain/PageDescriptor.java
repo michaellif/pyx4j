@@ -13,8 +13,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PageDescriptor extends IEntity<PageDescriptor> {
 
-    IPrimitive<String, Page> name();
+    IPrimitive<String> name();
 
-    IPrimitive<String, Page> linkHtml();
+    IPrimitive<String> linkHtml();
 
 }

@@ -12,14 +12,14 @@ public class Path {
 
     private String path = "";
 
-    public Path(IEntityHandler<?> handler) {
-        while (handler != null) {
-            if (handler.getFieldName() == null) {
-                this.path = getSimpleName(handler.getEntityClass()) + "/" + this.path;
+    public Path(IObject<?, ?> object) {
+        while (object != null) {
+            if (object.getFieldName() == null) {
+                this.path = getSimpleName(object.getObjectClass()) + "/" + this.path;
             } else {
-                this.path = handler.getFieldName() + "/" + this.path;
+                this.path = object.getFieldName() + "/" + this.path;
             }
-            handler = handler.getParentHandler();
+            object = object.getParent();
         }
 
     }

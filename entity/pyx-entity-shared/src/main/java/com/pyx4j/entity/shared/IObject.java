@@ -8,17 +8,24 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IObject<TYPE, E extends IObject<?, ?>> {
+public interface IObject<OBJECT_CLASS extends IObject, VALUE_TYPE> {
 
     boolean isNull();
 
-    void set(E entity);
+    void set(OBJECT_CLASS entity);
 
-    void setValue(TYPE value);
+    void setValue(VALUE_TYPE value);
 
-    TYPE getValue();
+    VALUE_TYPE getValue();
 
     Path getPath();
 
+    Class<? extends IObject> getObjectClass();
+
+    //Owned by parent
     IEntity<?> getParent();
+
+    //In parent's map
+    String getFieldName();
+
 }

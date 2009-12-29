@@ -8,6 +8,6 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IPrimitive<TYPE, PARENT extends IEntity<?>> extends IObject<TYPE, IPrimitive<TYPE, PARENT>> {
+public interface IPrimitive<TYPE> extends IObject<IPrimitive<TYPE>, TYPE> {
 
 }

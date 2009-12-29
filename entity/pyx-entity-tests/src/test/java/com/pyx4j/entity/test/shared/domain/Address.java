@@ -15,5 +15,5 @@ public interface Address extends IEntity<Address> {
 
     Country country();
 
-    IPrimitive<String, Address> streetName();
+    IPrimitive<String> streetName();
 }

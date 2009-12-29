@@ -16,8 +16,8 @@ public interface Page extends IEntity<Page> {
 
     PageDescriptor descriptor();
 
-    IPrimitive<String, Page> content();
+    IPrimitive<String> content();
 
-    ISet<PageDescriptor, Page> navigation();
+    ISet<PageDescriptor> navigation();
 
 }

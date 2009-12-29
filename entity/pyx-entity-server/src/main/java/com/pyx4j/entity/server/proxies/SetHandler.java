@@ -21,10 +21,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implements ISet<IObject<T, ?>, IEntity<?>> {
+public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandler<ISet<OBJECT_CLASS>, Set<Map<String, ?>>> implements ISet<OBJECT_CLASS> {
 
-    SetHandler(Class<T> clazz, EntityHandler<?> parentHandler, IEntity<?> parent, String fieldName) {
-        super(clazz, parentHandler, parent, fieldName);
+    SetHandler(IEntity<?> parent, String fieldName) {
+        super(ISet.class, parent, fieldName);
     }
 
     @Override
@@ -50,38 +50,38 @@ public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implem
     }
 
     @Override
-    public void set(ISet<IObject<T, ?>, IEntity<?>> entity) {
+    public void set(ISet<OBJECT_CLASS> entity) {
         setValue(entity.getValue());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<?> getValue() {
-        Map<String, ?> data = getParentHandler().getValue();
+    public Set<Map<String, ?>> getValue() {
+        Map<String, ?> data = getParent().getValue();
         if (data == null) {
             return null;
         } else {
-            return (Set<IObject<?, ?>>) data.get(getFieldName());
+            return (Set<Map<String, ?>>) data.get(getFieldName());
         }
     }
 
     @Override
-    public void setValue(Set<?> value) {
-        Map<String, Object> data = getParentHandler().getValue();
+    public void setValue(Set<Map<String, ?>> value) {
+        Map<String, Object> data = getParent().getValue();
         if (data == null) {
             data = new HashMap<String, Object>();
-            getParentHandler().setValue(data);
+            getParent().setValue(data);
         }
         data.put(getFieldName(), value);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean add(IObject<T, ?> entity) {
-        Map<String, Object> data = getParentHandler().getValue();
+    public boolean add(OBJECT_CLASS entity) {
+        Map<String, Object> data = getParent().getValue();
         if (data == null) {
             data = new HashMap<String, Object>();
-            getParentHandler().setValue(data);
+            getParent().setValue(data);
         }
         if (!data.containsKey(getFieldName())) {
             data.put(getFieldName(), new HashSet<Object>());
@@ -90,7 +90,7 @@ public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implem
     }
 
     @Override
-    public boolean addAll(Collection<? extends IObject<T, ?>> c) {
+    public boolean addAll(Collection<? extends OBJECT_CLASS> c) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -127,7 +127,7 @@ public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implem
     }
 
     @Override
-    public Iterator<IObject<T, ?>> iterator() {
+    public Iterator<OBJECT_CLASS> iterator() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -170,7 +170,7 @@ public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implem
 
     @Override
     public String toString() {
-        return getEntityClass().getSimpleName() + getValue();
+        return getObjectClass().getSimpleName() + getValue();
     }
 
 }

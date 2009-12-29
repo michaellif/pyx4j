@@ -10,28 +10,24 @@ package com.pyx4j.entity.server.proxies;
 
 import java.lang.reflect.InvocationHandler;
 
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IEntityHandler;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 
-public abstract class ObjectHandler<T extends IObject<?, ?>> implements IEntityHandler<T>, InvocationHandler {
+public abstract class ObjectHandler<OBJECT_CLASS extends IObject, VALUE_TYPE> implements IObject<OBJECT_CLASS, VALUE_TYPE>, InvocationHandler {
 
-    private final Class<T> clazz;
+    private final Class<? extends IObject> clazz;
 
     private IEntity<?> parent;
 
-    private EntityHandler<?> parentHandler;
-
     private String fieldName;
 
-    public ObjectHandler(Class<T> clazz) {
+    public ObjectHandler(Class<OBJECT_CLASS> clazz) {
         this.clazz = clazz;
     }
 
-    public ObjectHandler(Class<T> clazz, EntityHandler<?> parentHandler, IEntity<?> parent, String fieldName) {
+    public ObjectHandler(Class<? extends IObject> clazz, IEntity<?> parent, String fieldName) {
         this.clazz = clazz;
         this.parent = parent;
-        this.parentHandler = parentHandler;
         this.fieldName = fieldName;
     }
 
@@ -39,16 +35,12 @@ public abstract class ObjectHandler<T extends IObject<?, ?>> implements IEntityH
         return parent;
     }
 
-    public EntityHandler<?> getParentHandler() {
-        return parentHandler;
-    }
-
-    public Class<T> getEntityClass() {
-        return clazz;
-    }
-
     public String getFieldName() {
         return fieldName;
+    }
+
+    public Class<? extends IObject> getObjectClass() {
+        return clazz;
     }
 
 }
