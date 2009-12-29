@@ -19,18 +19,18 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T, Map<String, Object>> implements IEntity<T> {
+public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements IEntity<OBJECT_TYPE> {
 
     private Map<String, Object> data;
 
     private final HashMap<String, IObject<?, ?>> meta = new HashMap<String, IObject<?, ?>>();
 
-    public EntityHandler(Class<T> clazz) {
+    public EntityHandler(Class<OBJECT_TYPE> clazz) {
         super(clazz);
         data = new HashMap<String, Object>();
     }
 
-    EntityHandler(Class<T> clazz, IEntity<?> parent, String fieldName) {
+    EntityHandler(Class<OBJECT_TYPE> clazz, IEntity<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
     }
 
@@ -39,8 +39,6 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T, Map<St
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
             return method.invoke(this, args);
-        } else if ("getParent".equals(method.getName())) {
-            return getParent();
         } else if (!meta.containsKey(method.getName())) {
             IObject<?, ?> entity = null;
             Class<?>[] interfaces = new Class[] { method.getReturnType() };
@@ -86,7 +84,7 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T, Map<St
     }
 
     @Override
-    public void set(T entity) {
+    public void set(OBJECT_TYPE entity) {
         setValue(entity.getValue());
     }
 

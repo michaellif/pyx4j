@@ -8,11 +8,11 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IObject<OBJECT_CLASS extends IObject, VALUE_TYPE> {
+public interface IObject<OBJECT_TYPE extends IObject, VALUE_TYPE> {
 
     boolean isNull();
 
-    void set(OBJECT_CLASS entity);
+    void set(OBJECT_TYPE entity);
 
     void setValue(VALUE_TYPE value);
 

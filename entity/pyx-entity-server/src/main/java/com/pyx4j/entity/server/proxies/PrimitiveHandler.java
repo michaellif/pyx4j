@@ -26,8 +26,6 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IPrimitive.class)) {
             return method.invoke(this, args);
-        } else if ("getParent".equals(method.getName())) {
-            return getParent();
         } else {
             return null;
         }

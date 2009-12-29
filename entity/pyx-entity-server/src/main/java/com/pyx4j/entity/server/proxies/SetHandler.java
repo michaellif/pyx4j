@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandler<ISet<OBJECT_CLASS>, Set<Map<String, ?>>> implements ISet<OBJECT_CLASS> {
+public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
 
     SetHandler(IEntity<?> parent, String fieldName) {
         super(ISet.class, parent, fieldName);
@@ -31,8 +31,6 @@ public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandle
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(ISet.class)) {
             return method.invoke(this, args);
-        } else if ("getParent".equals(method.getName())) {
-            return getParent();
         } else {
             return null;
         }
@@ -50,7 +48,7 @@ public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandle
     }
 
     @Override
-    public void set(ISet<OBJECT_CLASS> entity) {
+    public void set(ISet<OBJECT_TYPE> entity) {
         setValue(entity.getValue());
     }
 
@@ -77,7 +75,7 @@ public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandle
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean add(OBJECT_CLASS entity) {
+    public boolean add(OBJECT_TYPE entity) {
         Map<String, Object> data = getParent().getValue();
         if (data == null) {
             data = new HashMap<String, Object>();
@@ -90,7 +88,7 @@ public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandle
     }
 
     @Override
-    public boolean addAll(Collection<? extends OBJECT_CLASS> c) {
+    public boolean addAll(Collection<? extends OBJECT_TYPE> c) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -127,7 +125,7 @@ public class SetHandler<OBJECT_CLASS extends IObject<?, ?>> extends ObjectHandle
     }
 
     @Override
-    public Iterator<OBJECT_CLASS> iterator() {
+    public Iterator<OBJECT_TYPE> iterator() {
         // TODO Auto-generated method stub
         return null;
     }

@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-public abstract class ObjectHandler<OBJECT_CLASS extends IObject, VALUE_TYPE> implements IObject<OBJECT_CLASS, VALUE_TYPE>, InvocationHandler {
+public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, InvocationHandler {
 
     private final Class<? extends IObject> clazz;
 
@@ -21,7 +21,7 @@ public abstract class ObjectHandler<OBJECT_CLASS extends IObject, VALUE_TYPE> im
 
     private String fieldName;
 
-    public ObjectHandler(Class<OBJECT_CLASS> clazz) {
+    public ObjectHandler(Class<OBJECT_TYPE> clazz) {
         this.clazz = clazz;
     }
 
