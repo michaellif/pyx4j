@@ -38,7 +38,7 @@ import com.pyx4j.unit.client.TestAwareExceptionHandler;
 /**
  * Initial GUI for tests, require Additional GWT module 'com.pyx4j.Unit'.
  */
-public class TestRunnerDialog extends DialogBox {
+public class TestRunnerDialog_old extends DialogBox {
 
     private final FlexTable testsPanel;
 
@@ -56,7 +56,7 @@ public class TestRunnerDialog extends DialogBox {
 
     private final Label statusDuration;
 
-    public TestRunnerDialog() {
+    public TestRunnerDialog_old() {
         super.setText("Unit Tests");
 
         VerticalPanel dialogVPanel = new VerticalPanel();
@@ -165,7 +165,7 @@ public class TestRunnerDialog extends DialogBox {
 
             @Override
             public void onSuccess() {
-                TestRunnerDialog dialogBox = new TestRunnerDialog();
+                TestRunnerDialog_old dialogBox = new TestRunnerDialog_old();
                 dialogBox.center();
                 dialogBox.show();
             }

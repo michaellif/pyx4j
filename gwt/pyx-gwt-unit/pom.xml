@@ -1,91 +1,99 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0">
-<!-- @version $Revision$ ($Author$) $Date$ -->
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+	<!--
+		@version $Revision$ ($Author$) $Date: 2009-12-27
+		15:41:17 -0500 (Sun, 27 Dec 2009) $
+	-->
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.pyx4j</groupId>
-        <artifactId>pyx</artifactId>
-        <version>2.0.0-SNAPSHOT</version><!--pyx-version-->
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>com.pyx4j</groupId>
+		<artifactId>pyx</artifactId>
+		<version>2.0.0-SNAPSHOT</version><!--pyx-version-->
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
 
-    <artifactId>pyx-gwt-unit</artifactId>
-    <name>pyx-gwt-unit</name>
-    <description>Asynchronous Unit Tests for GWT</description>
+	<artifactId>pyx-gwt-unit</artifactId>
+	<name>pyx-gwt-unit</name>
+	<description>Asynchronous Unit Tests for GWT</description>
 
-    <dependencies>
+	<dependencies>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <optional>true</optional>
-        </dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<optional>true</optional>
+		</dependency>
 
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-        
-    </dependencies>
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-gwt-widgets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-    <build>
-        <!-- need this for GWT -->
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-            <!-- JUnit super-source -->
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-gwt-server</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+			<scope>test</scope>
+		</dependency>
 
-        <plugins>
+	</dependencies>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>com.google.gwt:gwt-dev</exclude>
-                    </excludes>
-                    <additionalProjectnatures>
-                        <projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
-                    </additionalProjectnatures>
-                    <classpathContainers>
-                        <classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
-                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                </configuration>
-            </plugin>
+	<build>
+		<!-- need this for GWT -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+			</resource>
+			<!-- JUnit super-source -->
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 
-        </plugins>
+		<plugins>
 
-    </build>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>com.google.gwt:gwt-dev</exclude>
+					</excludes>
+					<additionalProjectnatures>
+						<projectnature>com.google.gwt.eclipse.core.gwtNature</projectnature>
+					</additionalProjectnatures>
+					<classpathContainers>
+						<classpathContainer>com.google.gwt.eclipse.core.GWT_CONTAINER</classpathContainer>
+						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+					</classpathContainers>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
 
 </project>
