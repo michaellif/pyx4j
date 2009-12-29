@@ -7,6 +7,7 @@ pyx-commons
 pyx-log-shared
 slf4j-api
 slf4j-jdk14
+-pyx-slf4j-api-gwt
 -pyx-commons/target/test-classes
 -pyx-gwt-server.jar
 -pyx-entity-shared.jar
