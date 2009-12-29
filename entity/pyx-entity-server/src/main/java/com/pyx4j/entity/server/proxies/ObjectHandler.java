@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationHandler;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
+@SuppressWarnings("unchecked")
 public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, InvocationHandler {
 
     private final Class<? extends IObject> clazz;

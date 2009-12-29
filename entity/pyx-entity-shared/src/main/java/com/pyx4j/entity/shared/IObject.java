@@ -8,6 +8,7 @@
  */
 package com.pyx4j.entity.shared;
 
+@SuppressWarnings("unchecked")
 public interface IObject<OBJECT_TYPE extends IObject, VALUE_TYPE> {
 
     boolean isNull();
