@@ -9,12 +9,12 @@
 package com.pyx4j.entity.test.env;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.impl.EntityFactory;
+import com.pyx4j.entity.shared.ObjectFactory;
 
 public class ConfigureTestsEnv {
 
     public static void configure() {
-        EntityFactory.setImplementation(new ServerEntityFactory());
+        ObjectFactory.setImplementation(new ServerEntityFactory());
     }
 
 }
