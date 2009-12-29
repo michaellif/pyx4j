@@ -11,7 +11,7 @@ package com.pyx4j.entity.shared.impl;
 import com.pyx4j.entity.shared.IEntity;
 
 
-public interface IObjectFactoryImpl {
+public interface IEntityFactoryImpl {
 
     public <T extends IEntity<?>> T create(Class<T> clazz);
 

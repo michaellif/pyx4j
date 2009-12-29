@@ -8,7 +8,7 @@
  */
 package com.pyx4j.entity.test.shared;
 
-import com.pyx4j.entity.shared.ObjectFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -18,24 +18,24 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 public class FactoryTest extends InitializerTestCase {
 
     public void testObjectCreation() {
-        Country country = ObjectFactory.create(Country.class);
+        Country country = EntityFactory.create(Country.class);
         country.name().setValue("Canada");
 
         assertEquals("name Value", "Canada", country.name().getValue());
 
-        Address address = ObjectFactory.create(Address.class);
+        Address address = EntityFactory.create(Address.class);
         address.country().set(country);
 
         assertEquals("address.country Value", "Canada", address.country().name().getValue());
     }
 
     public void testSimpleManipulations() {
-        Employee employee = ObjectFactory.create(Employee.class);
+        Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("Firstname");
 
         assertTrue("firstName is wrong", "Firstname".equals(employee.firstName().getValue()));
 
-        Address address = ObjectFactory.create(Address.class);
+        Address address = EntityFactory.create(Address.class);
         employee.homeAddress().set(address);
         address = employee.homeAddress();
         address.streetName().setValue("Home Street");
@@ -47,18 +47,18 @@ public class FactoryTest extends InitializerTestCase {
     }
 
     public void testAutomaticMemberInstantiation() {
-        Employee employee = ObjectFactory.create(Employee.class);
+        Employee employee = EntityFactory.create(Employee.class);
         employee.homeAddress().streetName().setValue("Home Street");
 
         assertTrue("streetName is wrong", "Home Street".equals(employee.homeAddress().streetName().getValue()));
     }
 
     public void testSetManipulations() {
-        Department department = ObjectFactory.create(Department.class);
-        Employee employee = ObjectFactory.create(Employee.class);
+        Department department = EntityFactory.create(Department.class);
+        Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("Firstname");
         department.employees().add(employee);
-        employee = ObjectFactory.create(Employee.class);
+        employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("Firstname2");
         department.employees().add(employee);
 
@@ -68,11 +68,11 @@ public class FactoryTest extends InitializerTestCase {
     }
 
     public void testPathCalculation() {
-        Path path = ObjectFactory.create(Employee.class).firstName().getPath();
+        Path path = EntityFactory.create(Employee.class).firstName().getPath();
 
         assertTrue("path is wrong", "Employee/firstName/".equals(path.toString()));
 
-        path = ObjectFactory.create(Employee.class).homeAddress().streetName().getPath();
+        path = EntityFactory.create(Employee.class).homeAddress().streetName().getPath();
 
         assertTrue("path is wrong", "Employee/homeAddress/streetName/".equals(path.toString()));
 

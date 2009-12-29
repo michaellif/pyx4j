@@ -8,14 +8,14 @@
  */
 package com.pyx4j.entity.shared;
 
-import com.pyx4j.entity.shared.impl.IObjectFactoryImpl;
+import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 
-public class ObjectFactory {
+public class EntityFactory {
 
-    private static IObjectFactoryImpl impl;
+    private static IEntityFactoryImpl impl;
 
-    public static void setImplementation(IObjectFactoryImpl impl) {
-        ObjectFactory.impl = impl;
+    public static void setImplementation(IEntityFactoryImpl impl) {
+        EntityFactory.impl = impl;
     }
 
     public static <T extends IEntity<?>> T create(Class<T> clazz) {

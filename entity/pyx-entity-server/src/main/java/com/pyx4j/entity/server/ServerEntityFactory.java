@@ -12,9 +12,9 @@ import java.lang.reflect.Proxy;
 
 import com.pyx4j.entity.server.proxies.EntityHandler;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.impl.IObjectFactoryImpl;
+import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 
-public class ServerEntityFactory implements IObjectFactoryImpl {
+public class ServerEntityFactory implements IEntityFactoryImpl {
 
     @SuppressWarnings("unchecked")
     public <T extends IEntity<?>> T create(Class<T> clazz) {

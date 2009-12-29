@@ -56,7 +56,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
 
     @Override
     public String toString() {
-        return getObjectClass().getSimpleName() + getValue();
+        return getObjectClass().getName() + getValue();
     }
 
 }

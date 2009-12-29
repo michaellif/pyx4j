@@ -158,7 +158,7 @@ public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler
 
     @Override
     public String toString() {
-        return getObjectClass().getSimpleName() + getValue();
+        return getObjectClass().getName() + getValue();
     }
 
 }
