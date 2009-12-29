@@ -1,0 +1,7 @@
+pyx-gwt-server
+pyx-site-admin
+pyx-site-shared
+pyx-entity-shared
+pyx-commons
+pyx-log-shared
+-pyx-commons/target/test-classes
