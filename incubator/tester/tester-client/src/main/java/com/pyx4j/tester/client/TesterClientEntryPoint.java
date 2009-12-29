@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.pyx4j.unit.client.ui.TestRunner;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 
 public class TesterClientEntryPoint implements EntryPoint {
@@ -24,7 +25,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         startButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                TestRunnerDialog d = new TestRunnerDialog();
+                TestRunnerDialog d = new TestRunnerDialog(new TestRunner());
                 d.center();
             }
         });
