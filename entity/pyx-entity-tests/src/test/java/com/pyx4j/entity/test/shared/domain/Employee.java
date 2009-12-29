@@ -15,9 +15,23 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Employee extends IEntity<Department> {
 
+    public static enum EmploymentStatus {
+        DISMISSED, FULL_TIME, PART_TIME, CONTRACT
+    }
+
     IPrimitive<String> firstName();
 
     IPrimitive<Date> hiredate();
+
+    IPrimitive<Boolean> reliable();
+
+    IPrimitive<Integer> rating();
+
+    IPrimitive<Double> salary();
+
+    IPrimitive<EmploymentStatus> employmentStatus();
+
+    IPrimitive<Status> accessStatus();
 
     Department department();
 
