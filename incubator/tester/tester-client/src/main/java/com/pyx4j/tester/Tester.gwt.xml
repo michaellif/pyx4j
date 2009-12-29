@@ -10,4 +10,9 @@
 	<source path="client"/>
 	
 	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>
+	
+	<extend-configuration-property name="rpc.blacklist" value="java.util.Stack" />
+	<extend-configuration-property name="rpc.blacklist" value="java.util.Linked*" />
+	<extend-configuration-property name="rpc.blacklist" value="java.util.Tree*" />
+	<extend-configuration-property name="rpc.blacklist" value="java.lang.Object" />
 </module>
