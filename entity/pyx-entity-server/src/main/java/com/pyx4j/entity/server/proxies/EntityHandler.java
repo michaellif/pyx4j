@@ -49,18 +49,16 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implem
 
         } else if (!meta.containsKey(method.getName())) {
             IObject<?, ?> entity = null;
+            Class<?>[] interfaces = new Class[] { method.getReturnType() };
             if (method.getReturnType().isAssignableFrom(IPrimitive.class)) {
-                Class<?>[] interfaces = new Class[] { method.getReturnType() };
                 entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new PrimitiveHandler(method
                         .getReturnType(), this, (IEntity) proxy, method.getName()));
 
             } else if (method.getReturnType().isAssignableFrom(ISet.class)) {
-                Class<?>[] interfaces = new Class[] { method.getReturnType() };
                 entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new SetHandler(method.getReturnType(),
                         this, (IEntity) proxy, method.getName()));
 
             } else {
-                Class<?>[] interfaces = new Class[] { method.getReturnType() };
                 entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new EntityHandler(method.getReturnType(),
                         this, (IEntity) proxy, method.getName()));
 
