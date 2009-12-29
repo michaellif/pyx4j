@@ -8,6 +8,7 @@
  */
 package com.pyx4j.entity.server.proxies;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
@@ -18,8 +19,12 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.impl.ObjectHandler;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
+import com.pyx4j.entity.shared.impl.SetHandler;
 
-public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements IEntity<OBJECT_TYPE> {
+public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements IEntity<OBJECT_TYPE>,
+        InvocationHandler {
 
     private Map<String, Object> data;
 
@@ -43,12 +48,9 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler
             IObject<?, ?> entity = null;
             Class<?>[] interfaces = new Class[] { method.getReturnType() };
             if (IPrimitive.class.equals(method.getReturnType())) {
-                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new PrimitiveHandler((IEntity) proxy,
-                        method.getName()));
-
+                entity = new PrimitiveHandler((IEntity) proxy, method.getName());
             } else if (ISet.class.equals(method.getReturnType())) {
-                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new SetHandler((IEntity) proxy, method
-                        .getName()));
+                entity = new SetHandler((IEntity) proxy, method.getName());
 
             } else {
                 entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new EntityHandler(method.getReturnType(),

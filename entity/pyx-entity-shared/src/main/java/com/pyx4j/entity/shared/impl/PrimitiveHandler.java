@@ -6,9 +6,8 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.server.proxies;
+package com.pyx4j.entity.shared.impl;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,17 +17,8 @@ import com.pyx4j.entity.shared.Path;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE> implements IPrimitive<TYPE> {
 
-    PrimitiveHandler(IEntity<?> parent, String fieldName) {
+    public PrimitiveHandler(IEntity<?> parent, String fieldName) {
         super(IPrimitive.class, parent, fieldName);
-    }
-
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IPrimitive.class)) {
-            return method.invoke(this, args);
-        } else {
-            return null;
-        }
     }
 
     @SuppressWarnings("unchecked")

@@ -6,9 +6,8 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.server.proxies;
+package com.pyx4j.entity.shared.impl;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,17 +22,8 @@ import com.pyx4j.entity.shared.Path;
 
 public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
 
-    SetHandler(IEntity<?> parent, String fieldName) {
+    public SetHandler(IEntity<?> parent, String fieldName) {
         super(ISet.class, parent, fieldName);
-    }
-
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(ISet.class)) {
-            return method.invoke(this, args);
-        } else {
-            return null;
-        }
     }
 
     @Override

@@ -6,15 +6,13 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.server.proxies;
-
-import java.lang.reflect.InvocationHandler;
+package com.pyx4j.entity.shared.impl;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
 @SuppressWarnings("unchecked")
-public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, InvocationHandler {
+public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE> {
 
     private final Class<? extends IObject> clazz;
 
