@@ -29,7 +29,6 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <optional>true</optional>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -37,7 +36,6 @@
             <artifactId>pyx-gwt-unit</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -45,7 +43,6 @@
             <artifactId>pyx-entity-server</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>
-            <scope>test</scope>
         </dependency>
 
         <dependency>

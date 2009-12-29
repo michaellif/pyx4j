@@ -15,6 +15,10 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 
 public class TestRunnerDialog extends Dialog {
 
+    public TestRunnerDialog() {
+        this(new TestRunner());
+    }
+
     public TestRunnerDialog(TestRunner runner) {
         super("JUnit", runner, runner);
     }
@@ -30,7 +34,7 @@ public class TestRunnerDialog extends Dialog {
 
             @Override
             public void onSuccess() {
-                TestRunnerDialog dialogBox = new TestRunnerDialog(new TestRunner());
+                TestRunnerDialog dialogBox = new TestRunnerDialog();
                 dialogBox.show();
             }
 
