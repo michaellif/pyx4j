@@ -8,16 +8,12 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
-import com.pyx4j.entity.shared.IMember;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Address extends IEntity<Address> {
 
-    interface AddressCountry extends Country, IMember<Address> {
-    }
-
-    AddressCountry country();
+    Country country();
 
     IPrimitive<String, Address> streetName();
 }

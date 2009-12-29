@@ -20,4 +20,5 @@ public interface IObject<TYPE, E extends IObject<?, ?>> {
 
     Path getPath();
 
+    IEntity<?> getParent();
 }

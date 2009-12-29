@@ -10,9 +10,7 @@ package com.pyx4j.entity.test.shared.domain;
 
 import java.util.Date;
 
-import com.pyx4j.entity.shared.IMember;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IOwnedMember;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Employee extends IEntity<Department> {
@@ -21,15 +19,10 @@ public interface Employee extends IEntity<Department> {
 
     IPrimitive<Date, Employee> hiredate();
 
-    interface EmpDepartment extends Department, IMember<Employee> {
-    }
-
-    EmpDepartment department();
+    Department department();
 
     Employee manager();
 
-    interface HomeAddress extends Address, IOwnedMember<Employee> {
-    }
+    Address homeAddress();
 
-    HomeAddress homeAddress();
 }

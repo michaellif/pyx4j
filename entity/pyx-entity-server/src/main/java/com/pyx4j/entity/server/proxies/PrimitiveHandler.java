@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IOwnedMember;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
@@ -27,13 +26,8 @@ public class PrimitiveHandler<T extends IPrimitive<?, ?>> extends ObjectHandler<
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IPrimitive.class)) {
             return method.invoke(this, args);
-        } else if (method.getDeclaringClass().equals(IOwnedMember.class)) {
-            if ("getParent".equals(method.getName())) {
-                return getParent();
-            } else {
-                return null;
-            }
-
+        } else if ("getParent".equals(method.getName())) {
+            return getParent();
         } else {
             return null;
         }

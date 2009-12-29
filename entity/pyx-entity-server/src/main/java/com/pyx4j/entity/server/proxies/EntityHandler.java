@@ -13,9 +13,8 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IOwnedMember;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
@@ -40,13 +39,8 @@ public class EntityHandler<T extends IEntity<?>> extends ObjectHandler<T> implem
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
             return method.invoke(this, args);
-        } else if (method.getDeclaringClass().equals(IOwnedMember.class)) {
-            if ("getParent".equals(method.getName())) {
-                return getParent();
-            } else {
-                return null;
-            }
-
+        } else if ("getParent".equals(method.getName())) {
+            return getParent();
         } else if (!meta.containsKey(method.getName())) {
             IObject<?, ?> entity = null;
             Class<?>[] interfaces = new Class[] { method.getReturnType() };

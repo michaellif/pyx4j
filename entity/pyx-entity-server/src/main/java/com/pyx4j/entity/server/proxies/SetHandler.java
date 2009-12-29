@@ -18,7 +18,6 @@ import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IOwnedMember;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
@@ -32,13 +31,8 @@ public class SetHandler<T extends IObject<?, ?>> extends ObjectHandler<T> implem
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(ISet.class)) {
             return method.invoke(this, args);
-        } else if (method.getDeclaringClass().equals(IOwnedMember.class)) {
-            if ("getParent".equals(method.getName())) {
-                return getParent();
-            } else {
-                return null;
-            }
-
+        } else if ("getParent".equals(method.getName())) {
+            return getParent();
         } else {
             return null;
         }
