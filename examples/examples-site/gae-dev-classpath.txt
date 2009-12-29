@@ -5,3 +5,9 @@ pyx-entity-shared
 pyx-commons
 pyx-log-shared
 -pyx-commons/target/test-classes
+-pyx-gwt-server.jar
+-pyx-site-admin.jar
+-pyx-site-shared.jar
+-pyx-entity-shared.jar
+-pyx-commons.jar
+-pyx-log-shared.jar
