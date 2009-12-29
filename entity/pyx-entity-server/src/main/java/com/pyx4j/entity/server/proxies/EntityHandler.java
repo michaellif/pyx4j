@@ -11,28 +11,19 @@ package com.pyx4j.entity.server.proxies;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.impl.ObjectHandler;
 import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.impl.SetHandler;
+import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
-public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements IEntity<OBJECT_TYPE>,
-        InvocationHandler {
-
-    private Map<String, Object> data;
-
-    private final HashMap<String, IObject<?, ?>> meta = new HashMap<String, IObject<?, ?>>();
+public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityHandler<OBJECT_TYPE> implements IEntity<OBJECT_TYPE>, InvocationHandler {
 
     public EntityHandler(Class<OBJECT_TYPE> clazz) {
         super(clazz);
-        data = new HashMap<String, Object>();
     }
 
     EntityHandler(Class<OBJECT_TYPE> clazz, IEntity<?> parent, String fieldName) {
@@ -55,7 +46,6 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler
             } else {
                 entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new EntityHandler(method.getReturnType(),
                         (IEntity) proxy, method.getName()));
-
             }
             meta.put(method.getName(), entity);
         }
@@ -63,35 +53,4 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler
 
     }
 
-    @Override
-    public Map<String, Object> getValue() {
-        return data;
-    }
-
-    @Override
-    public void setValue(Map<String, Object> value) {
-        this.data = value;
-        getParent().getValue().put(getFieldName(), value);
-    }
-
-    @Override
-    public Path getPath() {
-        return new Path(this);
-    }
-
-    @Override
-    public boolean isNull() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void set(OBJECT_TYPE entity) {
-        setValue(entity.getValue());
-    }
-
-    @Override
-    public String toString() {
-        return getObjectClass().getSimpleName() + getValue();
-    }
 }
