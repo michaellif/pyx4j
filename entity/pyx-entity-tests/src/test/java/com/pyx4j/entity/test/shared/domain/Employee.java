@@ -13,7 +13,7 @@ import java.util.Date;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Employee extends IEntity<Department> {
+public interface Employee extends IEntity<Employee> {
 
     public static enum EmploymentStatus {
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT
