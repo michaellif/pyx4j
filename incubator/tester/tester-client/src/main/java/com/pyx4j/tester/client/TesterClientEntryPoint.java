@@ -13,7 +13,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
-
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -24,7 +23,7 @@ public class TesterClientEntryPoint implements EntryPoint {
 
         StyleManger.installDefaultTheme();
 
-        final Button startButton = new Button("Start Tests");
+        final Button startButton = new Button("Start Client Side (GWT) Tests");
         RootPanel.get().add(startButton, 0, 0);
         startButton.addClickHandler(new ClickHandler() {
             @Override
