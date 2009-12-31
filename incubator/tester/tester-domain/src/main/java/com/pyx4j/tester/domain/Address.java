@@ -13,10 +13,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Address extends IEntity<Address> {
 
-    interface AddressCountry extends Country {
-    }
-
-    AddressCountry country();
+    Country country();
 
     IPrimitive<String> streetName();
 

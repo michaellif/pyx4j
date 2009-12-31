@@ -9,7 +9,15 @@
 package com.pyx4j.entity.shared;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String, Object>> {
 
+    public Set<String> getMemberNames();
+
+    public IObject<?, ?> getMember(String name);
+
+    public Object getMemberValue(String name);
+
+    public void setMemberValue(String name, Object value);
 }

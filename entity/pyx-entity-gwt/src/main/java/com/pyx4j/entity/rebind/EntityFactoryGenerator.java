@@ -18,16 +18,28 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
 public class EntityFactoryGenerator extends Generator {
+
+    private static String IMPL = "_Impl";
+
+    private JClassType iPrimitiveInterfaceType;
+
+    private JClassType iSetInterfaceType;
+
+    private JClassType iEnentityInterfaceType;
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
@@ -35,27 +47,29 @@ public class EntityFactoryGenerator extends Generator {
         try {
             JClassType interfaceType = oracle.getType(typeName);
             String packageName = interfaceType.getPackage().getName();
-            String simpleName = interfaceType.getSimpleSourceName() + "_Impl";
+            String simpleName = interfaceType.getSimpleSourceName() + IMPL;
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
             composer.setSuperclass(AbstractClientEntityFactoryImpl.class.getName());
-            //composer.addImport(BASE_TEST_CLASS_NAME);
-            //composer.addImport(AbstractGCaseMeta.class.getName());
+            composer.addImport(IEntity.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
                 // the generated type already exists
-                return interfaceType.getParameterizedQualifiedSourceName() + "_Impl";
+                return interfaceType.getParameterizedQualifiedSourceName() + IMPL;
             }
 
-            JClassType caseType = oracle.getType(IEntity.class.getName());
+            iEnentityInterfaceType = oracle.getType(IEntity.class.getName());
+            iPrimitiveInterfaceType = oracle.getType(IPrimitive.class.getName());
+            iSetInterfaceType = oracle.getType(ISet.class.getName());
 
             List<JClassType> cases = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
-                if (type.isAssignableTo(caseType) && type.isInterface() != null) {
+                if (type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type) {
                     cases.add(type);
-                    logger.log(TreeLogger.Type.DEBUG, "IEntity:" + type.getName());
+                    logger.log(TreeLogger.Type.DEBUG, "Creating IEntity:" + type.getName());
+                    createEntityHandlerImpl(logger, context, type);
                 }
             }
 
@@ -71,38 +85,36 @@ public class EntityFactoryGenerator extends Generator {
         }
     }
 
-    private void writeEntityFactoryImplImpl(SourceWriter writer, String simpleName, List<JClassType> cases) {
+    private void writeEntityFactoryImplImpl(SourceWriter writer, String simpleName, List<JClassType> interfaceClasses) {
         writer.println();
         writer.indent();
         writer.println("public " + simpleName + "() { ");
         writer.indent();
         writer.println("super();");
 
-        for (JClassType c : cases) {
+        for (JClassType interfaceType : interfaceClasses) {
             writer.println();
-            StringBuilder caseClass = new StringBuilder();
-            caseClass.append(c.getPackage().getName()).append('.');
-            caseClass.append(c.getName());
 
             writer.print("addClassFactory(");
-            writer.print(caseClass.toString());
-            writer.print("Impl.class, ");
+            writer.print(interfaceType.getQualifiedSourceName());
+            writer.print(".class, ");
             writer.println("new IEntityFactoryImpl() {");
 
-            writer.println();
             writer.indent();
+            writer.println("@SuppressWarnings(\"unchecked\")");
+            writer.println("@Override");
             writer.println("public <T extends IEntity<?>> T create(Class<T> clazz){");
 
             writer.indent();
-            writer.print("return new ");
-            writer.print(caseClass.toString());
-            writer.println("Impl();");
+            writer.print("return (T)new ");
+            writer.print(interfaceType.getQualifiedSourceName());
+            writer.println(IMPL + "();");
             writer.outdent();
 
             writer.println("}");
             writer.outdent();
 
-            writer.println("};");
+            writer.println("});");
         }
 
         writer.outdent();
@@ -110,72 +122,113 @@ public class EntityFactoryGenerator extends Generator {
         writer.outdent();
     }
 
-    private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, List<JClassType> cases) {
+    private void createEntityHandlerImpl(TreeLogger logger, GeneratorContext context, JClassType interfaceType) {
+        String packageName = interfaceType.getPackage().getName();
+        String simpleName = interfaceType.getSimpleSourceName() + IMPL;
+        ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
+
+        composer.addImport(interfaceType.getQualifiedSourceName());
+        composer.addImport(IObject.class.getName());
+        composer.addImport(IEntity.class.getName());
+        composer.setSuperclass(SharedEntityHandler.class.getName() + "<" + interfaceType.getName() + ">");
+        composer.addImplementedInterface(interfaceType.getName());
+
+        PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
+        if (printWriter == null) {
+            // the generated type already exists
+            return;
+        }
+        SourceWriter writer = composer.createSourceWriter(context, printWriter);
+        writeEntityHandlerImpl(writer, simpleName, interfaceType);
+        writer.commit(logger);
+    }
+
+    private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
         writer.println();
         writer.indent();
         writer.println("public " + simpleName + "() { ");
         writer.indent();
-        writer.println("super();");
+        writer.print("super(");
+        writer.print(interfaceType.getName());
+        writer.println(".class);");
+        writer.outdent();
+        writer.println("}");
 
-        for (JClassType c : cases) {
-            writer.println();
-            StringBuilder caseClass = new StringBuilder();
-            caseClass.append(c.getPackage().getName()).append('.');
-            caseClass.append(c.getName());
+        writer.println();
+        writer.println("public " + simpleName + "(IEntity<?> parent, String fieldName) { ");
+        writer.indent();
+        writer.print("super(");
+        writer.print(interfaceType.getName());
+        writer.println(".class, parent, fieldName);");
+        writer.outdent();
+        writer.println("}");
 
-            for (JMethod method : c.getMethods()) {
-                if (method.getReturnType() != JPrimitiveType.VOID) {
-                    continue;
-                } else if (method.getParameters().length != 0) {
-                    continue;
-                } else if (!method.getName().startsWith("test")) {
-                    continue;
-                }
-
-                writer.print("addCase(");
-                writer.print(caseClass.toString());
-                writer.print(".class, ");
-                writer.println("new  AbstractGCaseMeta(\"" + method.getName() + "\") {");
-
-                //protected GCase setUp() throws Exception;
-                writer.println();
-                writer.indent();
-                writer.println("protected TestCase setUp() throws Exception {");
-
-                writer.indent();
-                writer.print("return new ");
-                writer.print(caseClass.toString());
-                writer.println("();");
-                writer.outdent();
-
-                writer.println("}");
-                writer.outdent();
-
-                //protected void run(GCase instance) throws Exception;
-
-                writer.println();
-                writer.indent();
-                writer.println("protected void run(TestCase instance) throws Exception {");
-
-                writer.indent();
-                writer.print("((");
-                writer.print(caseClass.toString());
-                writer.print(")instance).");
-                writer.print(method.getName());
-                writer.println("();");
-                writer.outdent();
-
-                writer.println("}");
-                writer.outdent();
-
-                writer.println("});");
-                writer.println();
+        writer.println();
+        writer.println("@Override");
+        writer.println("protected void lazyCreateMembersNamesList() {");
+        writer.indent();
+        for (JMethod method : interfaceType.getMethods()) {
+            if ((method.getReturnType() == JPrimitiveType.VOID) || (method.getParameters().length != 0)) {
+                continue;
             }
+            writer.println("createMemeber(\"" + method.getName() + "\");");
         }
+        writer.outdent();
+        writer.println("}");
+
+        // Create all members
+
+        writer.println();
+        writer.println("@Override");
+        writer.println("protected IObject<?, ?> lazyCreateMember(String name) {");
+        writer.indent();
+        for (JMethod method : interfaceType.getMethods()) {
+            if ((method.getReturnType() == JPrimitiveType.VOID) || (method.getParameters().length != 0)) {
+                continue;
+            }
+            JClassType type = (JClassType) method.getReturnType();
+            writer.println("if (\"" + method.getName() + "\".equals(name)) {");
+            writer.indent();
+            if (type.isAssignableTo(iPrimitiveInterfaceType)) {
+                if (!(type instanceof JParameterizedType)) {
+                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType");
+                }
+                writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", "
+                        + ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class);");
+            } else if (type.isAssignableTo(iSetInterfaceType)) {
+                writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\");");
+            } else if (type.isAssignableTo(iEnentityInterfaceType)) {
+                writer.println("return new " + type.getQualifiedSourceName() + IMPL + "(this, \"" + method.getName() + "\");");
+            } else {
+                throw new RuntimeException("Unknown member type" + method.getReturnType());
+            }
+            writer.outdent();
+            writer.println("}");
+        }
+        writer.println("throw new RuntimeException(\"Unknown member \" + name);");
 
         writer.outdent();
         writer.println("}");
-        writer.outdent();
+
+        // Members access
+        for (JMethod method : interfaceType.getMethods()) {
+            if ((method.getReturnType() == JPrimitiveType.VOID) || (method.getParameters().length != 0)) {
+                continue;
+            }
+            writer.println();
+            writer.println("@Override");
+            writer.println("@SuppressWarnings(\"unchecked\")");
+            writer.print("public ");
+            writer.print(method.getReturnType().getParameterizedQualifiedSourceName());
+            writer.println(" " + method.getName() + "() {");
+            writer.indent();
+
+            //TODO
+            writer.println("return (" + method.getReturnType().getParameterizedQualifiedSourceName() + ") getMember(\"" + method.getName() + "\");");
+
+            writer.outdent();
+            writer.println("}");
+        }
 
     }
 }

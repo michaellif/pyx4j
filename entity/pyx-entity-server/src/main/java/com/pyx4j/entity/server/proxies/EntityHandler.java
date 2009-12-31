@@ -17,8 +17,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.impl.PrimitiveHandler;
-import com.pyx4j.entity.shared.impl.SetHandler;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
 public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityHandler<OBJECT_TYPE> implements IEntity<OBJECT_TYPE>, InvocationHandler {
@@ -31,29 +29,55 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityH
         super(clazz, parent, fieldName);
     }
 
+    @Override
+    protected void lazyCreateMembersNamesList() {
+        for (Method method : getObjectClass().getMethods()) {
+            if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
+                continue;
+            }
+            createMemeber(method.getName());
+        }
+    }
+
+    @Override
+    protected IObject<?, ?> lazyCreateMember(String name) {
+        try {
+            return lazyCreateMember(getObjectClass().getMethod(name, (Class[]) null));
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Unknown member " + name);
+        }
+    }
+
+    private IObject<?, ?> lazyCreateMember(Method method) {
+        if (IPrimitive.class.equals(method.getReturnType())) {
+            return lazyCreateMemberIPrimitive(method.getName(), (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
+        } else if (ISet.class.equals(method.getReturnType())) {
+            return lazyCreateMemberISet(method.getName());
+        } else if (IEntity.class.isAssignableFrom(method.getReturnType())) {
+            return lazyCreateMemberIEntity(method.getName(), method.getReturnType());
+        } else {
+            throw new RuntimeException("Unknown member type" + method.getReturnType());
+        }
+    }
+
     @SuppressWarnings("unchecked")
+    private <T extends IObject<?, ?>> IEntity<T> lazyCreateMemberIEntity(String name, Class<?> valueClass) {
+        Class<?>[] interfaces = new Class[] { valueClass };
+        return (IEntity<T>) Proxy.newProxyInstance(valueClass.getClassLoader(), interfaces, new EntityHandler(valueClass, this, name));
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
             return method.invoke(this, args);
         }
 
-        IObject<?, ?> entity = meta.get(method.getName());
-        if (entity == null) {
-            Class<?>[] interfaces = new Class[] { method.getReturnType() };
-            if (IPrimitive.class.equals(method.getReturnType())) {
-                Class primitiveValueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-                entity = new PrimitiveHandler((IEntity) proxy, method.getName(), primitiveValueClass);
-            } else if (ISet.class.equals(method.getReturnType())) {
-                entity = new SetHandler((IEntity) proxy, method.getName());
-
-            } else {
-                entity = (IObject<?, ?>) Proxy.newProxyInstance(method.getReturnType().getClassLoader(), interfaces, new EntityHandler(method.getReturnType(),
-                        (IEntity) proxy, method.getName()));
-            }
-            meta.put(method.getName(), entity);
+        IObject<?, ?> member = meta.get(method.getName());
+        if (member == null) {
+            member = lazyCreateMember(method);
+            meta.put(method.getName(), member);
         }
-        return entity;
+        return member;
 
     }
 

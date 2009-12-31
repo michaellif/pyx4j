@@ -19,6 +19,8 @@ public class FactoryTest extends InitializerTestCase {
 
     public void testObjectCreation() {
         Country country = EntityFactory.create(Country.class);
+        assertNotNull("EntityFactory create", country);
+
         country.name().setValue("Canada");
 
         assertEquals("name Value", "Canada", country.name().getValue());
@@ -40,7 +42,7 @@ public class FactoryTest extends InitializerTestCase {
         address = employee.homeAddress();
         address.streetName().setValue("Home Street");
 
-        assertTrue("streetName is wrong", "Home Street".equals(employee.homeAddress().streetName().getValue()));
+        assertEquals("streetName is wrong", "Home Street", employee.homeAddress().streetName().getValue());
         assertTrue("path is wrong", "Employee/".equals(address.getParent().getPath().toString()));
         assertTrue("path is " + address.getPath(), "Employee/homeAddress/".equals(address.getPath().toString()));
 
