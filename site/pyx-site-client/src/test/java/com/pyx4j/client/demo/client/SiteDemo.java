@@ -12,14 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.layout.client.Layout.Alignment;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -30,39 +27,26 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        SiteSection leftBorder = new SiteSection("Left", "green");
+        HorizontalPanel rootPanel = new HorizontalPanel();
+        rootPanel.setBorderWidth(0);
+        rootPanel.setSize("100%", "100%");
 
-        LayoutPanel contentPanel = new LayoutPanel();
-        contentPanel.setWidth("400px");
+        {
+            SiteSection centerPanel = new SiteSection("Center", "red");
+            centerPanel.setSize("500px", "1000px");
+            rootPanel.add(centerPanel);
+            rootPanel.setCellWidth(centerPanel, "500px");
+            rootPanel.setCellHorizontalAlignment(centerPanel, HasHorizontalAlignment.ALIGN_CENTER);
+        }
 
-        SiteSection rightBorder = new SiteSection("Right", "green");
-
-        SiteSection center = new SiteSection("Center", "red");
-        contentPanel.add(center);
-        contentPanel.setWidgetHorizontalPosition(center, Alignment.STRETCH);
-
-        //        rootPanel.add(new SiteSection("West", "green"));
-        //        rootPanel.add(new SiteSection("East", "green"));
-        //
-        //        rootPanel.add(new SiteSection("South", "blue"));
-        //        rootPanel.add(new SiteSection("North", "blue"));
-
-        FlowPanel rootPanel = new FlowPanel();
-        rootPanel.add(leftBorder);
-        DOM.setStyleAttribute(leftBorder.getElement(), "cssFloat", "left");
-        rootPanel.add(contentPanel);
-        DOM.setStyleAttribute(contentPanel.getElement(), "cssFloat", "left");
-        rootPanel.add(rightBorder);
-        DOM.setStyleAttribute(rightBorder.getElement(), "cssFloat", "left");
-
-        RootLayoutPanel.get().add(rootPanel);
+        RootPanel.get().add(rootPanel);
 
     }
 
     class SiteSection extends HTML {
         SiteSection(String capture, String color) {
             super(capture);
-            DOM.setStyleAttribute(getElement(), "border", "1px solid " + color);
+            DOM.setStyleAttribute(getElement(), "background", color);
         }
     }
 
