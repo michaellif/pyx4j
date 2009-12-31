@@ -11,9 +11,13 @@ package com.pyx4j.unit.test.client;
 import junit.framework.TestCase;
 
 import com.google.gwt.user.client.Timer;
-
 import com.pyx4j.unit.client.GUnitTester;
 
+/**
+ * We only test Failure scenarios here, We have tones of other working cases to test
+ * successful results.
+ * 
+ */
 public class UnitFailureGWTTest extends TestCase {
 
     static final int TIME_OUT = 10 * 1000;
@@ -30,6 +34,18 @@ public class UnitFailureGWTTest extends TestCase {
             @Override
             public void run() {
                 fail("Expected, Failed");
+            }
+        }.schedule(50);
+    }
+
+    public void testDelayedFailure() {
+
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+
+        new Timer() {
+            @Override
+            public void run() {
+                throw new IllegalArgumentException("Expected, Delayed Failed");
             }
         }.schedule(50);
     }

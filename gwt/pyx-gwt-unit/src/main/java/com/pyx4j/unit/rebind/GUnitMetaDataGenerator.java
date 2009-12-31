@@ -23,7 +23,6 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-
 import com.pyx4j.unit.client.impl.AbstractGCaseMeta;
 import com.pyx4j.unit.client.impl.AbstractGUnitMetaData;
 
@@ -122,7 +121,7 @@ public class GUnitMetaDataGenerator extends Generator {
                 //protected GCase setUp() throws Exception;
                 writer.println();
                 writer.indent();
-                writer.println("protected TestCase setUp() throws Exception {");
+                writer.println("protected TestCase createTestCase() throws Exception {");
 
                 writer.indent();
                 writer.print("return new ");

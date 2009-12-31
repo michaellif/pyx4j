@@ -16,7 +16,6 @@ import junit.framework.TestCase;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.user.client.Timer;
-
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
@@ -58,6 +57,12 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         }
 
         void dispose() {
+            if (instance instanceof TestCaseAccessProtected) {
+                try {
+                    ((TestCaseAccessProtected) instance).accessProtectedTearDown();
+                } catch (Throwable ignore) {
+                }
+            }
             if (oldHandler != null) {
                 GWT.setUncaughtExceptionHandler(oldHandler);
                 oldHandler = null;
@@ -77,9 +82,9 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
 
         @Override
         public void onUncaughtException(Throwable t) {
-            String exceptionMessage = t.getMessage();
-            if (exceptionMessage == null) {
-                exceptionMessage = t.getClass().getName();
+            String exceptionMessage = t.getClass().getName();
+            if (t.getMessage() != null) {
+                exceptionMessage += " [" + t.getMessage() + "]";
             }
             dispose();
             long duration = (startTime == 0) ? 0 : System.currentTimeMillis() - startTime;
@@ -99,16 +104,21 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         RunningCase rc = new RunningCase();
         rc.callback = callback;
         try {
-            rc.instance = setUp();
+            rc.instance = createTestCase();
+            rc.instance.setName(getName());
             running.put(rc.instance, rc);
+            if (rc.instance instanceof TestCaseAccessProtected) {
+                ((TestCaseAccessProtected) rc.instance).accessProtectedSetUp();
+            }
             rc.startTime = System.currentTimeMillis();
             run(rc.instance);
         } catch (Throwable t) {
-            exceptionMessage = t.getMessage();
-            if (exceptionMessage == null) {
-                exceptionMessage = t.getClass().getName();
+            exceptionMessage = t.getClass().getName();
+            if (t.getMessage() != null) {
+                exceptionMessage += " [" + t.getMessage() + "]";
             }
         }
+        // delayTestFinish was not called
         if ((rc.timeoutTimer == null) || (exceptionMessage != null)) {
             rc.dispose();
             long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
@@ -133,15 +143,18 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
 
     public static void finishTest(TestCase testInstance) {
         RunningCase rc = running.get(testInstance);
-        if ((rc == null) || (rc.timeoutTimer == null)) {
+        if (rc == null) {
             throw new Error("Not running Case");
+        }
+        if (rc.timeoutTimer == null) {
+            throw new Error("Not delayed Case");
         }
         rc.dispose();
         long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
         rc.callback.onComplete(new GResult(true, null, duration));
     }
 
-    protected abstract TestCase setUp() throws Exception;
+    protected abstract TestCase createTestCase() throws Exception;
 
     protected abstract void run(TestCase instance) throws Exception;
 }

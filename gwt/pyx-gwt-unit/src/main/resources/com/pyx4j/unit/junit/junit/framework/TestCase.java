@@ -67,7 +67,7 @@ package junit.framework;
  * @see TestSuite
  */
 
-public abstract class TestCase extends Assert implements Test {
+public abstract class TestCase extends Assert implements Test, com.pyx4j.unit.client.impl.TestCaseAccessProtected {
 	/**
 	 * the name of the test case
 	 */
@@ -130,6 +130,15 @@ public abstract class TestCase extends Assert implements Test {
 			tearDown();
 		}
 	}
+	
+    public void accessProtectedSetUp() throws Exception {
+        setUp();
+    }
+
+    public void accessProtectedTearDown() throws Exception {
+        tearDown();
+    }
+    
 	/**
 	 * Override to run the test and assert its state.
 	 * @exception Throwable if any exception is thrown
