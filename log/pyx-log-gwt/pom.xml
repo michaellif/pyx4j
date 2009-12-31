@@ -30,7 +30,7 @@
             <artifactId>pyx-log-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-server</artifactId>
@@ -40,5 +40,13 @@
         </dependency>
 
 	</dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+        </resources>
+    </build>
 
 </project>

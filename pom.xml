@@ -287,11 +287,11 @@
                 <configuration>
                     <testFailureIgnore>false</testFailureIgnore>
                     <excludes>
-                        <exclude>**/*GWTTest.*</exclude>
+                        <exclude>**/*GWTTest.java</exclude>
                     </excludes>
                     <includes>
-                        <include>**/*Test.*</include>
-                        <include>**/*Tests.*</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
                     </includes>
                 </configuration>
             </plugin>

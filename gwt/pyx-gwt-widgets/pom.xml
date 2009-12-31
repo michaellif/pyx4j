@@ -18,7 +18,7 @@
     <description>pyx-gwt-widgets Implementations</description>
 
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>com.googlecode.gwt-incubator</groupId>
 			<artifactId>gwt-incubator</artifactId>
@@ -31,13 +31,21 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        		
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
-        		
+
 	</dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+        </resources>
+    </build>
 
 </project>
