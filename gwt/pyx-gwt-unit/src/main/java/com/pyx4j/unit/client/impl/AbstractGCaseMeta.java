@@ -16,6 +16,7 @@ import junit.framework.TestCase;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.user.client.Timer;
+
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
@@ -23,16 +24,24 @@ import com.pyx4j.unit.client.TestAwareExceptionHandler;
 
 public abstract class AbstractGCaseMeta implements GCaseMeta {
 
+    private final Class<? extends TestCase> caseClass;
+
     private final String name;
 
     private static TestAwareExceptionHandler testAwareExceptionHandler;
 
-    public AbstractGCaseMeta(String name) {
+    public AbstractGCaseMeta(Class<? extends TestCase> caseClass, String name) {
+        this.caseClass = caseClass;
         this.name = name;
     }
 
     @Override
-    public String getName() {
+    public String getTestClassName() {
+        return caseClass.getName();
+    }
+
+    @Override
+    public String getTestName() {
         return name;
     }
 
@@ -105,7 +114,7 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         rc.callback = callback;
         try {
             rc.instance = createTestCase();
-            rc.instance.setName(getName());
+            rc.instance.setName(getTestName());
             running.put(rc.instance, rc);
             if (rc.instance instanceof TestCaseAccessProtected) {
                 ((TestCaseAccessProtected) rc.instance).accessProtectedSetUp();

@@ -45,7 +45,7 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-unit-shared</artifactId>
+            <artifactId>pyx-unit-runner</artifactId>
             <version>${project.version}</version>
         </dependency>
                 

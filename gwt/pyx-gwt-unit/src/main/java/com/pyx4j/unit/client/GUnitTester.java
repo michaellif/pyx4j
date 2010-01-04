@@ -8,6 +8,7 @@
  */
 package com.pyx4j.unit.client;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -18,16 +19,15 @@ import junit.framework.TestCase;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.unit.client.impl.AbstractGCaseMeta;
-import com.pyx4j.unit.client.impl.GUnitMetaData;
-
+import com.pyx4j.unit.client.impl.TestSuiteMetaData;
 
 public class GUnitTester {
 
-    private static GUnitMetaData meta;
+    private static TestSuiteMetaData meta;
 
-    public static GUnitMetaData getMeta() {
+    public static TestSuiteMetaData getMeta() {
         if (meta == null) {
-            meta = GWT.create(GUnitMetaData.class);
+            meta = GWT.create(TestSuiteMetaData.class);
         }
         return meta;
     }
@@ -39,6 +39,18 @@ public class GUnitTester {
             @Override
             public int compare(Class<? extends TestCase> o1, Class<? extends TestCase> o2) {
                 return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return sortedList;
+    }
+
+    public static Collection<List<GCaseMeta>> getAllGCaseMeta() {
+        List<List<GCaseMeta>> sortedList = new Vector<List<GCaseMeta>>();
+        sortedList.addAll(getMeta().getAllGCaseMeta());
+        Collections.sort(sortedList, new Comparator<List<GCaseMeta>>() {
+            @Override
+            public int compare(List<GCaseMeta> o1, List<GCaseMeta> o2) {
+                return o1.get(0).getTestClassName().compareTo(o2.get(0).getTestClassName());
             }
         });
         return sortedList;

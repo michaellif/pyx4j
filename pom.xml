@@ -118,6 +118,7 @@
 
         <module>unit/pyx-unit-shared</module>
         <module>unit/pyx-unit-server</module>
+        <module>unit/pyx-unit-runner</module>
 
 
         <module>site/pyx-site-shared</module>

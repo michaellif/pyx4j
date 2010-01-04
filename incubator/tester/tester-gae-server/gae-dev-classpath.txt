@@ -16,3 +16,5 @@ slf4j-jdk14
 -pyx-entity-shared.jar
 -pyx-commons.jar
 -pyx-log-shared.jar
+-pyx-unit-shared.jar
+-pyx-unit-server.jar

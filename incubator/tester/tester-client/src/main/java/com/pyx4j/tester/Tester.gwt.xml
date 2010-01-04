@@ -13,7 +13,7 @@
     <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
     <inherits name='com.pyx4j.rpc.test.RPCTests'/>
 	
-	<inherits name='com.pyx4j.unit.ServerSideUnit'/>
+	<inherits name='com.pyx4j.unit.ServerSideUnitRunner'/>
 	
 	<source path="client"/>
 	

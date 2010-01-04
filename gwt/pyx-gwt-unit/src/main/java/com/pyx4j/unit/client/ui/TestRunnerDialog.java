@@ -8,15 +8,24 @@
  */
 package com.pyx4j.unit.client.ui;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 
+import com.pyx4j.unit.client.GCaseMeta;
+import com.pyx4j.unit.client.GUnitTester;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 public class TestRunnerDialog extends Dialog {
 
     public TestRunnerDialog() {
-        this(new TestRunner());
+        this(GUnitTester.getAllGCaseMeta());
+    }
+
+    public TestRunnerDialog(Collection<List<GCaseMeta>> testCases) {
+        this(new TestRunner(testCases));
     }
 
     public TestRunnerDialog(TestRunner runner) {

@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestFailure;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 
@@ -26,7 +27,7 @@ import com.pyx4j.unit.shared.UnitTestResult;
 import com.pyx4j.unit.shared.UnitTestsServices.ExectuteTest;
 import com.pyx4j.unit.shared.UnitTestsServices.GetTestsList;
 
-public class UnitTestsServicesImpl {
+public abstract class UnitTestsServicesImpl {
 
     private static final Logger log = LoggerFactory.getLogger(UnitTestsServicesImpl.class);
 
@@ -55,7 +56,7 @@ public class UnitTestsServicesImpl {
                 TestSuite ts = new TestSuite((Class<TestCase>) c);
                 if (ts.countTestCases() != 0) {
                     UnitTestInfo ti = new UnitTestInfo();
-                    ti.setClassName(className);
+                    ti.setTestClassName(className);
                     Enumeration<Test> iter = ts.tests();
                     while (iter.hasMoreElements()) {
                         Test t = iter.nextElement();
@@ -65,7 +66,9 @@ public class UnitTestsServicesImpl {
                             log.warn("Not a TestCase {}", t);
                         }
                     }
-                    tests.add(ti);
+                    if (ti.getTestNames() != null) {
+                        tests.add(ti);
+                    }
                 }
             }
 
@@ -74,7 +77,7 @@ public class UnitTestsServicesImpl {
 
     };
 
-    public class ExectuteTestImpl implements ExectuteTest {
+    public static class ExectuteTestImpl implements ExectuteTest {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -91,16 +94,34 @@ public class UnitTestsServicesImpl {
                 log.warn("Not a TestCase class {}", request.getClassName());
                 return new UnitTestResult("Not a TestCase class");
             }
-            TestSuite ts = new TestSuite((Class<TestCase>) c, request.getTestName());
-            if (ts.countTestCases() != 1) {
-                return new UnitTestResult("Invalid test name");
+            TestSuite ts = new TestSuite((Class<TestCase>) c);
+            TestCase tc = null;
+            Enumeration<Test> iter = ts.tests();
+            while (iter.hasMoreElements()) {
+                Test t = iter.nextElement();
+                if ((t instanceof TestCase) && ((TestCase) t).getName().equals(request.getTestName())) {
+                    tc = (TestCase) t;
+                }
             }
-            TestResult result = new TestResult();
-            ts.run(result);
-            if (result.runCount() != 1) {
+            if (tc == null) {
+                return new UnitTestResult("Test " + request.toString() + " not found");
+            }
+            TestResult testResult = new TestResult();
+            long start = System.currentTimeMillis();
+            tc.run(testResult);
+            long duration = System.currentTimeMillis() - start;
+            if (testResult.runCount() != 1) {
                 return new UnitTestResult("Can't run test");
             }
-            return new UnitTestResult("TODO");
+            if (testResult.errorCount() > 0) {
+                TestFailure failure = testResult.errors().nextElement();
+                return new UnitTestResult(false, failure.exceptionMessage(), duration);
+            } else if (testResult.failureCount() > 0) {
+                TestFailure failure = testResult.failures().nextElement();
+                return new UnitTestResult(false, failure.exceptionMessage(), duration);
+            } else {
+                return new UnitTestResult(true, null, duration);
+            }
         }
     }
 

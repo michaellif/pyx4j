@@ -8,16 +8,14 @@
  */
 package com.pyx4j.unit.client.ui;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
-
-import junit.framework.TestCase;
 
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -25,7 +23,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
@@ -33,7 +30,6 @@ import com.pyx4j.unit.client.GUnitTester;
 import com.pyx4j.unit.client.TestAwareExceptionHandler;
 import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
-import com.pyx4j.widgets.client.dialog.DialogOptions;
 
 public class TestRunner extends VerticalPanel implements Custom1Option, CloseOption {
 
@@ -53,7 +49,7 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
 
     private final Label statusDuration;
 
-    public TestRunner() {
+    public TestRunner(Collection<List<GCaseMeta>> testCases) {
 
         testsPanel = new FlexTable();
         testsPanel.setCellSpacing(5);
@@ -64,7 +60,11 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
         testsPanel.setWidget(0, 3, new Label("Result"));
         testsPanel.setWidget(0, 4, new Label("Duration (Millis)"));
 
-        buildTestList();
+        for (List<GCaseMeta> caseGroup : testCases) {
+            for (GCaseMeta meta : caseGroup) {
+                testInfo.add(new TestInfo(meta));
+            }
+        }
         add(testsPanel);
 
         //TODO
@@ -231,9 +231,17 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
         });
     }
 
-    private class TestInfo {
+    /**
+     * Strip the package name
+     * 
+     * @param className
+     * @return
+     */
+    private static String getSimpleClassName(String className) {
+        return className.substring(className.lastIndexOf(".") + 1);
+    }
 
-        Class<? extends TestCase> gCase;
+    private class TestInfo {
 
         GCaseMeta meta;
 
@@ -245,14 +253,13 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
 
         Label message;
 
-        TestInfo(Class<? extends TestCase> c, GCaseMeta meta) {
-            this.gCase = c;
+        TestInfo(GCaseMeta meta) {
             this.meta = meta;
             int numRows = testsPanel.getRowCount();
             checkBox = new CheckBox();
             testsPanel.setWidget(numRows, 0, checkBox);
-            testsPanel.setWidget(numRows, 1, new Label(GWTJava5Helper.getSimpleName(c)));
-            testsPanel.setWidget(numRows, 2, new Label(meta.getName()));
+            testsPanel.setWidget(numRows, 1, new Label(getSimpleClassName(meta.getTestClassName())));
+            testsPanel.setWidget(numRows, 2, new Label(meta.getTestName()));
             testsPanel.setWidget(numRows, 3, result = new Label(""));
             testsPanel.setWidget(numRows, 4, time = new Label(""));
             DOM.setStyleAttribute(result.getElement(), "cursor", "hand");
@@ -271,7 +278,7 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
         }
 
         String getFullName() {
-            return gCase.getName() + "#" + meta.getName();
+            return meta.getTestClassName() + "#" + meta.getTestName();
         }
 
         void reset() {
@@ -282,14 +289,6 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
             message.setVisible(false);
         }
 
-    }
-
-    public void buildTestList() {
-        for (Class<? extends TestCase> c : GUnitTester.getAllCases()) {
-            for (GCaseMeta meta : GUnitTester.getClassMeta(c)) {
-                testInfo.add(new TestInfo(c, meta));
-            }
-        }
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.Vector;
 @SuppressWarnings("serial")
 public class UnitTestInfo implements Serializable {
 
-    private String className;
+    private String testClassName;
 
     private List<String> testNames;
 
@@ -23,12 +23,12 @@ public class UnitTestInfo implements Serializable {
 
     }
 
-    public String getClassName() {
-        return className;
+    public String getTestClassName() {
+        return testClassName;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setTestClassName(String className) {
+        this.testClassName = className;
     }
 
     public List<String> getTestNames() {

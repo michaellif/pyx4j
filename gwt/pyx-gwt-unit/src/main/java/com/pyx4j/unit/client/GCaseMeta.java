@@ -10,8 +10,10 @@ package com.pyx4j.unit.client;
 
 public interface GCaseMeta {
 
-    public String getName();
-    
+    public String getTestClassName();
+
+    public String getTestName();
+
     public void execute(GCaseResultAsyncCallback callback);
-    
+
 }

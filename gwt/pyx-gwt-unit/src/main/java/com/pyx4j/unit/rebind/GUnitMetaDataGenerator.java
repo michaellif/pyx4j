@@ -23,8 +23,9 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+
 import com.pyx4j.unit.client.impl.AbstractGCaseMeta;
-import com.pyx4j.unit.client.impl.AbstractGUnitMetaData;
+import com.pyx4j.unit.client.impl.AbstractTestSuiteMetaData;
 
 public class GUnitMetaDataGenerator extends Generator {
 
@@ -38,7 +39,7 @@ public class GUnitMetaDataGenerator extends Generator {
             String packageName = interfaceType.getPackage().getName();
             String simpleName = interfaceType.getSimpleSourceName() + "_Impl";
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
-            composer.setSuperclass(AbstractGUnitMetaData.class.getName());
+            composer.setSuperclass(AbstractTestSuiteMetaData.class.getName());
             composer.addImport(BASE_TEST_CLASS_NAME);
             composer.addImport(AbstractGCaseMeta.class.getName());
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
@@ -72,19 +73,19 @@ public class GUnitMetaDataGenerator extends Generator {
 
     // Example of created code
 
-    //    public class GUnitMetaData_Impl extends com.pyx4j.gunit.impl.AbstractGUnitMetaData {
+    //    public class MyGUnitMetaData_Impl extends com.pyx4j.gunit.impl.AbstractTestSuiteMetaData {
     //        
-    //        public GUnitMetaData_Impl() { 
+    //        public MyGUnitMetaData_Impl() { 
     //          super();
     //          
-    //          addCase(com.pyx4j.tester.client.tests.GUnitTest.class, new  AbstractGCaseMeta("testServiceEcho") {
+    //          addCase(com.pyx4j.tester.client.tests.MyGUnitTest.class, new  AbstractGCaseMeta(MyGUnitTest.class, "testServiceEcho") {
     //    
     //              protected TestCase setUp() throws Exception {
-    //                 return new com.pyx4j.tester.client.tests.GUnitTest();
+    //                 return new com.pyx4j.tester.client.tests.MyGUnitTest();
     //              }
     //    
     //              protected void run(TestCase instance) throws Exception {
-    //                  ((com.pyx4j.tester.client.tests.GUnitTest)instance).testServiceEcho();
+    //                  ((com.pyx4j.tester.client.tests.MyGUnitTest)instance).testServiceEcho();
     //              }
     //          });    
     //    
@@ -115,8 +116,10 @@ public class GUnitMetaDataGenerator extends Generator {
 
                 writer.print("addCase(");
                 writer.print(caseClass.toString());
-                writer.print(".class, ");
-                writer.println("new  AbstractGCaseMeta(\"" + method.getName() + "\") {");
+                writer.print(".class, new ");
+                writer.print(AbstractGCaseMeta.class.getSimpleName());
+                writer.print("(" + caseClass.toString() + ".class , ");
+                writer.println("\"" + method.getName() + "\") {");
 
                 //protected GCase setUp() throws Exception;
                 writer.println();

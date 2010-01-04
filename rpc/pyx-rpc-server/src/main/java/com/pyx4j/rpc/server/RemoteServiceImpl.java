@@ -43,9 +43,11 @@ public class RemoteServiceImpl implements RemoteService {
             serviceInstance = clazz.newInstance();
         } catch (Throwable e) {
             log.error("Fatal system error", e);
+            if ((e.getCause() != null) && (e.getCause() != e)) {
+                log.error("Fatal system error cause", e.getCause());
+            }
             throw new RuntimeException("Fatal system error: " + e.getMessage());
         }
         return serviceInstance.execute(serviceRequest);
     }
-
 }

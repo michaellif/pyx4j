@@ -42,4 +42,9 @@ public class UnitTestExecuteRequest implements Serializable {
         this.testName = testName;
     }
 
+    @Override
+    public String toString() {
+        return getClassName() + "#" + getTestName();
+    }
+
 }

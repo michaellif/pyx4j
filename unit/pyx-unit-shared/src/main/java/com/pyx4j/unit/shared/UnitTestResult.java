@@ -40,10 +40,6 @@ public class UnitTestResult implements Serializable {
         return success;
     }
 
-    public String getMessage() {
-        return exceptionMessage;
-    }
-
     public String getExceptionMessage() {
         return exceptionMessage;
     }

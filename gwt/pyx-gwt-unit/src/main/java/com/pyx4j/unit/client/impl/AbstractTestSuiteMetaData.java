@@ -8,6 +8,7 @@
  */
 package com.pyx4j.unit.client.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,11 @@ import junit.framework.TestCase;
 
 import com.pyx4j.unit.client.GCaseMeta;
 
-
-public abstract class AbstractGUnitMetaData implements GUnitMetaData {
+public abstract class AbstractTestSuiteMetaData implements TestSuiteMetaData {
 
     private final Map<Class<? extends TestCase>, List<GCaseMeta>> metaMap;
 
-    protected AbstractGUnitMetaData() {
+    protected AbstractTestSuiteMetaData() {
         metaMap = new HashMap<Class<? extends TestCase>, List<GCaseMeta>>();
     }
 
@@ -36,10 +36,17 @@ public abstract class AbstractGUnitMetaData implements GUnitMetaData {
         l.add(caseMeta);
     }
 
+    @Override
     public Set<Class<? extends TestCase>> getAllCases() {
         return metaMap.keySet();
     }
 
+    @Override
+    public Collection<List<GCaseMeta>> getAllGCaseMeta() {
+        return metaMap.values();
+    }
+
+    @Override
     public List<GCaseMeta> getClassMeta(Class<? extends TestCase> caseClass) {
         return metaMap.get(caseClass);
     }
