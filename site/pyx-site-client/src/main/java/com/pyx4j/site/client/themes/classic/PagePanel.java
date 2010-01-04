@@ -14,8 +14,11 @@ public class PagePanel extends SimplePanel {
 
     public PagePanel() {
         add(new ContentPanel());
-        getElement().getStyle().setBackgroundColor("#21262C");
-        getElement().getStyle().setBackgroundImage("url('images/background.jpg')");
-        getElement().getStyle().setProperty("backgroundRepeat", "repeat-x");
+
+        getElement().getStyle().setBackgroundColor("#F8F8F8");
+
+        //        getElement().getStyle().setBackgroundColor("#21262C");
+        //        getElement().getStyle().setBackgroundImage("url('images/background.jpg')");
+        //        getElement().getStyle().setProperty("backgroundRepeat", "repeat-x");
     }
 }

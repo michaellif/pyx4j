@@ -8,6 +8,7 @@
  */
 package com.pyx4j.site.client.themes.classic;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 public class ContentPanel extends FlowPanel {
@@ -15,10 +16,10 @@ public class ContentPanel extends FlowPanel {
     public ContentPanel() {
         getElement().getStyle().setProperty("marginLeft", "auto");
         getElement().getStyle().setProperty("marginRight", "auto");
-        getElement().getStyle().setProperty("paddingTop", "20px");
-        getElement().getStyle().setProperty("paddingBottom", "20px");
+        getElement().getStyle().setPaddingTop(20, Unit.PX);
+        getElement().getStyle().setPaddingBottom(20, Unit.PX);
 
-        setWidth("700px");
+        setWidth("968px");
 
         add(new HeaderPanel());
         add(new MainPanel());
