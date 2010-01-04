@@ -8,7 +8,7 @@
  */
 package com.pyx4j.site.client.themes.classic;
 
-public class ClassicThemeMeta {
+public class ClassicThemeProperties {
 
     
     

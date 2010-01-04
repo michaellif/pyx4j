@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.themes.classic.AnchorNavigationBar;
+import com.pyx4j.site.client.themes.classic.ContentPanel;
+import com.pyx4j.site.client.themes.classic.PagePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -29,9 +31,7 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        HorizontalPanel rootPanel = new HorizontalPanel();
-        rootPanel.setBorderWidth(0);
-        rootPanel.setSize("100%", "100%");
+        PagePanel pagePanel = new PagePanel();
 
         {
             //            SiteSection centerPanel = new SiteSection("Center", "red");
@@ -40,23 +40,23 @@ public class SiteDemo implements EntryPoint {
             //            rootPanel.setCellWidth(centerPanel, "500px");
             //            rootPanel.setCellHorizontalAlignment(centerPanel, HasHorizontalAlignment.ALIGN_CENTER);
 
-            AnchorNavigationBar navig = new AnchorNavigationBar();
-            {
-                Anchor anchor = new Anchor("aaaa1", "aaaa1");
-                navig.add(anchor);
-            }
-            {
-                Anchor anchor = new Anchor("bbbb", "bbbb");
-                navig.add(anchor);
-            }
-            {
-                Anchor anchor = new Anchor("cccc", "cccc");
-                navig.add(anchor);
-            }
-            rootPanel.add(navig);
+            //            AnchorNavigationBar navig = new AnchorNavigationBar();
+            //            {
+            //                Anchor anchor = new Anchor("aaaa1", "aaaa1");
+            //                navig.add(anchor);
+            //            }
+            //            {
+            //                Anchor anchor = new Anchor("bbbb", "bbbb");
+            //                navig.add(anchor);
+            //            }
+            //            {
+            //                Anchor anchor = new Anchor("cccc", "cccc");
+            //                navig.add(anchor);
+            //            }
+            //            rootPanel.add(navig);
         }
 
-        RootPanel.get().add(rootPanel);
+        RootPanel.get().add(pagePanel);
 
     }
 

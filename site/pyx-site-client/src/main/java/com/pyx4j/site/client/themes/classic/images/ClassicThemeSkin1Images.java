@@ -13,6 +13,9 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface ClassicThemeSkin1Images extends ClientBundle {
 
+    @Source("mainRightOn.gif")
+    ImageResource background();
+
     @Source("main.gif")
     ImageResource main();
 
