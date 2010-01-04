@@ -18,4 +18,7 @@ public interface UnitTestsServices {
 
     };
 
+    public interface ExectuteTest extends Service<UnitTestExecuteRequest, UnitTestResult> {
+
+    };
 }

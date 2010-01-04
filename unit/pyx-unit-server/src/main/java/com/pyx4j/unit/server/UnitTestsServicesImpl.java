@@ -14,12 +14,16 @@ import java.util.Vector;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestResult;
 import junit.framework.TestSuite;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.unit.shared.UnitTestExecuteRequest;
 import com.pyx4j.unit.shared.UnitTestInfo;
+import com.pyx4j.unit.shared.UnitTestResult;
+import com.pyx4j.unit.shared.UnitTestsServices.ExectuteTest;
 import com.pyx4j.unit.shared.UnitTestsServices.GetTestsList;
 
 public class UnitTestsServicesImpl {
@@ -69,5 +73,35 @@ public class UnitTestsServicesImpl {
         }
 
     };
+
+    public class ExectuteTestImpl implements ExectuteTest {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public UnitTestResult execute(UnitTestExecuteRequest request) {
+            ClassLoader cld = Thread.currentThread().getContextClassLoader();
+            Class<?> c;
+            try {
+                c = cld.loadClass(request.getClassName());
+            } catch (ClassNotFoundException e) {
+                log.warn("Can't load class {}", request.getClassName());
+                return new UnitTestResult("Can't load test class");
+            }
+            if (!TestCase.class.isAssignableFrom(c)) {
+                log.warn("Not a TestCase class {}", request.getClassName());
+                return new UnitTestResult("Not a TestCase class");
+            }
+            TestSuite ts = new TestSuite((Class<TestCase>) c, request.getTestName());
+            if (ts.countTestCases() != 1) {
+                return new UnitTestResult("Invalid test name");
+            }
+            TestResult result = new TestResult();
+            ts.run(result);
+            if (result.runCount() != 1) {
+                return new UnitTestResult("Can't run test");
+            }
+            return new UnitTestResult("TODO");
+        }
+    }
 
 }
