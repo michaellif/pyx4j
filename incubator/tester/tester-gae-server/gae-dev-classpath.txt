@@ -3,12 +3,15 @@ pyx-rpc-server
 pyx-rpc-shared
 pyx-rpc-gwt
 pyx-entity-shared
+tester-client
+pyx-entity-tests
 pyx-commons
 pyx-log-shared
+pyx-unit-shared
+pyx-unit-server
 slf4j-api
 slf4j-jdk14
 -pyx-slf4j-api-gwt
--pyx-commons/target/test-classes
 -pyx-gwt-server.jar
 -pyx-entity-shared.jar
 -pyx-commons.jar

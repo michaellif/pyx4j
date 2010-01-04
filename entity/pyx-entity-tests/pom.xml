@@ -69,11 +69,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/test/java</directory>
-            </resource>
-        </resources>
         <testResources>
             <testResource>
                 <directory>src/test/java</directory>

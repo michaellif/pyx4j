@@ -22,12 +22,12 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 
 public class LogEventsPanel extends VerticalPanel {
 
-    final Logger log = LoggerFactory.getLogger(LogEventsPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(LogEventsPanel.class);
 
     public LogEventsPanel() {
 
         final TextBox text = new TextBox();
-        text.setValue("A log message");
+        text.setValue("A log message with data {} and {} (if any)");
         this.add(text);
 
         final CheckBox checkDebug = new CheckBox("Debug On");

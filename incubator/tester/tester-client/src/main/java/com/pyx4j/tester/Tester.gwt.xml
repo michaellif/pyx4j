@@ -13,6 +13,8 @@
     <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
     <inherits name='com.pyx4j.rpc.test.RPCTests'/>
 	
+	<inherits name='com.pyx4j.unit.ServerSideUnit'/>
+	
 	<source path="client"/>
 	
 	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>

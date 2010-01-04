@@ -42,7 +42,13 @@
             <artifactId>pyx-gwt-unit</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+                
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

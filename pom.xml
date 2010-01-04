@@ -116,6 +116,10 @@
         <module>entity/pyx-entity-server</module>
         <module>entity/pyx-entity-tests</module>
 
+        <module>unit/pyx-unit-shared</module>
+        <module>unit/pyx-unit-server</module>
+
+
         <module>site/pyx-site-shared</module>
         <module>site/pyx-site-admin</module>
 

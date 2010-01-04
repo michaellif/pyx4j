@@ -16,14 +16,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-
 import com.pyx4j.log4gwt.client.Appender;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.ria.client.ImageFactory;
 
 public class LogRangeView extends AbstractProvingView {
 
-    final Logger log = LoggerFactory.getLogger(LogRangeView.class);
+    private static final Logger log = LoggerFactory.getLogger(LogRangeView.class);
 
     private int n = 1;
 

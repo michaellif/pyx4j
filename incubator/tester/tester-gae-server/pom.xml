@@ -27,11 +27,31 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-gwt</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
                 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-commons</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-tests</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-server</artifactId>
@@ -42,7 +62,7 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>tester-client</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <!-- scope>provided</scope-->
         </dependency>
         
         <dependency>
@@ -65,6 +85,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -84,6 +105,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
+                            <overWriteSnapshots>true</overWriteSnapshots>
                         	<stripVersion>true</stripVersion>
                         	<excludeScope>provided</excludeScope>
                             <outputDirectory>war/WEB-INF/lib</outputDirectory>
