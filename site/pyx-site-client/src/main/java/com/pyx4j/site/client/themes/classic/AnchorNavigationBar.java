@@ -24,7 +24,8 @@ public class AnchorNavigationBar extends BaseNavigationBar {
 
     public void add(final Anchor anchor) {
         anchor.getElement().getStyle().setProperty("margin", "6px");
-        anchor.getElement().getStyle().setProperty("color", "green");
+        anchor.getElement().getStyle().setColor("green");
+        anchor.getElement().getStyle().setBackgroundImage(ImageFactory.getImages().divider().getURL());
         anchor.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
         anchor.addMouseOverHandler(new MouseOverHandler() {
             @Override
