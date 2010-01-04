@@ -23,12 +23,16 @@ public class UnitTestInfo implements Serializable {
 
     }
 
+    public UnitTestInfo(String testClassName) {
+        this.testClassName = testClassName;
+    }
+
     public String getTestClassName() {
         return testClassName;
     }
 
-    public void setTestClassName(String className) {
-        this.testClassName = className;
+    public void setTestClassName(String testClassName) {
+        this.testClassName = testClassName;
     }
 
     public List<String> getTestNames() {
@@ -46,4 +50,8 @@ public class UnitTestInfo implements Serializable {
         this.testNames.add(testName);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return testClassName.equals(((UnitTestInfo) obj).getTestClassName());
+    }
 }

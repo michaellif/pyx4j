@@ -55,8 +55,10 @@ public abstract class UnitTestsServicesImpl {
                 //Use jUnit 'API' to get lists of tests
                 TestSuite ts = new TestSuite((Class<TestCase>) c);
                 if (ts.countTestCases() != 0) {
-                    UnitTestInfo ti = new UnitTestInfo();
-                    ti.setTestClassName(className);
+                    UnitTestInfo ti = new UnitTestInfo(className);
+                    if (tests.contains(ti)) {
+                        continue;
+                    }
                     Enumeration<Test> iter = ts.tests();
                     while (iter.hasMoreElements()) {
                         Test t = iter.nextElement();
