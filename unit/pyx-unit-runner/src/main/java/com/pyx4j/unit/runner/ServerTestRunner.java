@@ -68,6 +68,7 @@ public class ServerTestRunner {
                     testCasesGroups.add(testCases);
                 }
                 TestRunnerDialog dialogBox = new TestRunnerDialog(testCasesGroups);
+                dialogBox.setCaption("JUnit Server Side");
                 dialogBox.show();
             }
         };
