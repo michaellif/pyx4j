@@ -13,36 +13,39 @@ import com.pyx4j.site.client.themes.classic.ClassicThemeProperty;
 public class ClassicThemePropertyFactory {
 
     public static ClassicThemeProperty getProperty() {
-        //return getLightSkin();
-        return getDarkSkin();
+        return getLightSkin();
+        //return getDarkSkin();
     }
 
     static ClassicThemeProperty getLightSkin() {
         ClassicThemeProperty property = new ClassicThemeProperty();
-        property.setBackground("#F8F8F8");
-        property.setContentPanelWidth(968);
-        property.setContentPanelTopMargin(20);
-        property.setContentPanelBottomMargin(20);
-        property.setHeaderHeight(200);
-        property.setFooterHeight(100);
-        property.setHeaderBackground("url('images/container-header.gif') no-repeat");
-        property.setFooterBackground("url('images/container-footer.gif') no-repeat 50% 100%");
-        property.setMainPanelBackground("url('images/container-main.gif') repeat-y");
+        property.background = "#F8F8F8";
+        property.contentPanelWidth = 968;
+        property.contentPanelTopMargin = 20;
+        property.contentPanelBottomMargin = 20;
+        property.headerHeight = 200;
+        property.footerHeight = 100;
+        property.headerBackground = "url('images/container-header.gif') no-repeat";
+        property.footerBackground = "url('images/container-footer.gif') no-repeat 50% 100%";
+        property.mainPanelBackground = "url('images/container-main.gif') repeat-y";
+        property.headerCaptionsLeft = 60;
+        property.headerCaptionsTop = 167;
+        property.headerCaptionsColor = "#ff6600";
 
         return property;
     }
 
     static ClassicThemeProperty getDarkSkin() {
         ClassicThemeProperty property = new ClassicThemeProperty();
-        property.setBackground("#21262C url('images/background.jpg') repeat-x");
-        property.setHeaderBackground("url('images/topHdr_ecommerce.jpg') no-repeat 50% 100%");
-        property.setFooterBackground("url('images/topHdr_ecommerce.jpg') no-repeat 50% 100%");
-        property.setContentPanelWidth(924);
-        property.setHeaderHeight(250);
-        property.setFooterHeight(40);
-        property.setHeaderCaptionsLeft(260);
-        property.setHeaderCaptionsTop(167);
+        property.background = "#21262C url('images/background.jpg') repeat-x";
+        property.headerBackground = "url('images/topHdr_ecommerce.jpg') no-repeat";
+        property.footerBackground = "url('images/topHdr_ecommerce.jpg') no-repeat 50% 100%";
+        property.contentPanelWidth = 924;
+        property.headerHeight = 250;
+        property.footerHeight = 40;
+        property.headerCaptionsLeft = 260;
+        property.headerCaptionsTop = 167;
+        property.headerCaptionsColor = "#ff6600";
         return property;
     }
-
 }

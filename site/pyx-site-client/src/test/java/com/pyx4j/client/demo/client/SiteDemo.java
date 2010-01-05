@@ -35,6 +35,8 @@ public class SiteDemo implements EntryPoint {
 
         pagePanel.setHeaderCaptions("header captions");
 
+        pagePanel.setLogoImage("images/logo.png");
+
         pagePanel.addToFooterPanel(new Label("FooterPanel"), 10, 10);
 
         {

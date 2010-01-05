@@ -10,113 +10,30 @@ package com.pyx4j.site.client.themes.classic;
 
 public class ClassicThemeProperty {
 
-    private String background;
+    public String background;
 
-    private int contentPanelWidth = 600;
+    public int contentPanelWidth = 600;
 
-    private int contentPanelTopMargin = 0;
+    public int contentPanelTopMargin = 0;
 
-    private int contentPanelBottomMargin = 0;
+    public int contentPanelBottomMargin = 0;
 
-    private int headerHeight = 200;
+    public int headerHeight = 200;
 
-    private int footerHeight = 100;
+    public int footerHeight = 100;
 
-    private String headerBackground = "white";
+    public String headerBackground = "white";
 
-    private String footerBackground = "white";
+    public String footerBackground = "white";
 
-    private String mainPanelBackground = "white";
+    public String mainPanelBackground = "white";
 
-    private int headerCaptionsTop = 0;
+    public int headerCaptionsTop = 0;
 
-    private int headerCaptionsLeft = 0;
+    public int headerCaptionsLeft = 0;
 
-    public int getContentPanelWidth() {
-        return contentPanelWidth;
-    }
+    public String headerCaptionsColor = "white";
 
-    public void setContentPanelWidth(int width) {
-        this.contentPanelWidth = width;
-    }
+    public int headerCaptionsFontSize = 28;
 
-    public String getBackground() {
-        return background;
-    }
-
-    public void setBackground(String background) {
-        this.background = background;
-    }
-
-    public int getContentPanelTopMargin() {
-        return contentPanelTopMargin;
-    }
-
-    public void setContentPanelTopMargin(int contentPanelTopMargin) {
-        this.contentPanelTopMargin = contentPanelTopMargin;
-    }
-
-    public int getContentPanelBottomMargin() {
-        return contentPanelBottomMargin;
-    }
-
-    public void setContentPanelBottomMargin(int contentPanelBottomMargin) {
-        this.contentPanelBottomMargin = contentPanelBottomMargin;
-    }
-
-    public int getHeaderHeight() {
-        return headerHeight;
-    }
-
-    public void setHeaderHeight(int headerHeight) {
-        this.headerHeight = headerHeight;
-    }
-
-    public int getFooterHeight() {
-        return footerHeight;
-    }
-
-    public void setFooterHeight(int footerHeight) {
-        this.footerHeight = footerHeight;
-    }
-
-    public String getHeaderBackground() {
-        return headerBackground;
-    }
-
-    public void setHeaderBackground(String headerBackground) {
-        this.headerBackground = headerBackground;
-    }
-
-    public String getFooterBackground() {
-        return footerBackground;
-    }
-
-    public void setFooterBackground(String footerBackground) {
-        this.footerBackground = footerBackground;
-    }
-
-    public String getMainPanelBackground() {
-        return mainPanelBackground;
-    }
-
-    public void setMainPanelBackground(String mainPanelBackground) {
-        this.mainPanelBackground = mainPanelBackground;
-    }
-
-    public int getHeaderCaptionsTop() {
-        return headerCaptionsTop;
-    }
-
-    public void setHeaderCaptionsTop(int headerCaptionsTop) {
-        this.headerCaptionsTop = headerCaptionsTop;
-    }
-
-    public int getHeaderCaptionsLeft() {
-        return headerCaptionsLeft;
-    }
-
-    public void setHeaderCaptionsLeft(int headerCaptionsLeft) {
-        this.headerCaptionsLeft = headerCaptionsLeft;
-    }
 }

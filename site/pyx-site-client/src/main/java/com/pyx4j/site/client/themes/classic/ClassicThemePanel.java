@@ -13,6 +13,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -28,12 +29,16 @@ public class ClassicThemePanel extends SimplePanel {
 
     private Label headerCaptions;
 
+    private Image logoImage;
+
     public ClassicThemePanel(ClassicThemeProperty property) {
         this.property = property;
         add(createContentPanel());
-        getElement().getStyle().setProperty("background", property.getBackground());
+        getElement().getStyle().setProperty("background", property.background);
 
         createHeaderCaptions();
+
+        createLogoImage();
 
     }
 
@@ -44,10 +49,10 @@ public class ClassicThemePanel extends SimplePanel {
 
         style.setProperty("marginLeft", "auto");
         style.setProperty("marginRight", "auto");
-        style.setPaddingTop(property.getContentPanelTopMargin(), Unit.PX);
-        style.setPaddingBottom(property.getContentPanelBottomMargin(), Unit.PX);
+        style.setPaddingTop(property.contentPanelTopMargin, Unit.PX);
+        style.setPaddingBottom(property.contentPanelBottomMargin, Unit.PX);
 
-        contentPanel.setWidth(property.getContentPanelWidth() + "px");
+        contentPanel.setWidth(property.contentPanelWidth + "px");
 
         headerPanel = createHeaderPanel();
         contentPanel.add(headerPanel);
@@ -63,21 +68,22 @@ public class ClassicThemePanel extends SimplePanel {
     protected AbsolutePanel createHeaderPanel() {
         AbsolutePanel headerPanel = new AbsolutePanel();
 
-        headerPanel.getElement().getStyle().setProperty("background", property.getHeaderBackground());
-        headerPanel.setHeight(property.getHeaderHeight() + "px");
+        headerPanel.getElement().getStyle().setProperty("background", property.headerBackground);
+        headerPanel.setHeight(property.headerHeight + "px");
 
         return headerPanel;
     }
 
     public void addToHeaderPanel(Widget w, int left, int top) {
+        headerPanel.remove(w);
         headerPanel.add(w, left, top);
     }
 
     protected AbsolutePanel createFooterPanel() {
         AbsolutePanel footerPanel = new AbsolutePanel();
 
-        footerPanel.getElement().getStyle().setProperty("background", property.getFooterBackground());
-        footerPanel.setHeight(property.getFooterHeight() + "px");
+        footerPanel.getElement().getStyle().setProperty("background", property.footerBackground);
+        footerPanel.setHeight(property.footerHeight + "px");
 
         return footerPanel;
     }
@@ -93,7 +99,7 @@ public class ClassicThemePanel extends SimplePanel {
 
         style.setPadding(20, Unit.PX);
 
-        style.setProperty("background", property.getMainPanelBackground());
+        style.setProperty("background", property.mainPanelBackground);
 
         mainPanel
                 .setWidget(new HTML(
@@ -105,13 +111,24 @@ public class ClassicThemePanel extends SimplePanel {
 
     protected void createHeaderCaptions() {
         headerCaptions = new Label();
-        headerCaptions.getElement().getStyle().setColor("yellow");
-        headerCaptions.getElement().getStyle().setFontSize(28, Unit.PX);
-        addToHeaderPanel(headerCaptions, property.getHeaderCaptionsLeft(), property.getHeaderCaptionsTop());
+
+        headerCaptions.getElement().getStyle().setColor(property.headerCaptionsColor);
+        headerCaptions.getElement().getStyle().setFontSize(property.headerCaptionsFontSize, Unit.PX);
     }
 
     public void setHeaderCaptions(String captions) {
         headerCaptions.setText(captions);
+        addToHeaderPanel(headerCaptions, property.headerCaptionsLeft, property.headerCaptionsTop);
+    }
+
+    protected void createLogoImage() {
+        logoImage = new Image();
+    }
+
+    public void setLogoImage(String url) {
+        logoImage.setUrl(url);
+        addToHeaderPanel(logoImage, 20, 20);
+
     }
 
 }
