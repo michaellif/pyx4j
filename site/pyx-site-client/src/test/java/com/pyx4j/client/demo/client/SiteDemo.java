@@ -13,13 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.site.client.themes.classic.AnchorNavigationBar;
-import com.pyx4j.site.client.themes.classic.ContentPanel;
 import com.pyx4j.site.client.themes.classic.PagePanel;
 
 /**
