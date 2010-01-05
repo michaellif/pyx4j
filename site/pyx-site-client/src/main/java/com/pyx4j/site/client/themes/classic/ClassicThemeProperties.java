@@ -8,7 +8,7 @@
  */
 package com.pyx4j.site.client.themes.classic;
 
-public class ClassicThemeProperty {
+public class ClassicThemeProperties {
 
     public String background;
 
