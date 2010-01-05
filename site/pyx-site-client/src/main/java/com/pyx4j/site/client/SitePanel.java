@@ -185,11 +185,11 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         int winWidth = Window.getClientWidth();
         int winHeight = Window.getClientHeight();
 
-        int width = mainPanel.getOffsetWidth();
-        int height = Document.get().getScrollHeight();
+        int mainPanelWidth = mainPanel.getOffsetWidth();
+        int mainPanelHeight = mainPanel.getOffsetHeight() + headerPanel.getOffsetHeight() + footerPanel.getOffsetHeight();
 
-        style.setWidth(Math.max(width, winWidth), Unit.PX);
-        style.setHeight(Math.max(height, winHeight), Unit.PX);
+        style.setWidth(Math.max(mainPanelWidth, winWidth), Unit.PX);
+        style.setHeight(Math.max(mainPanelHeight, winHeight), Unit.PX);
 
     }
 
