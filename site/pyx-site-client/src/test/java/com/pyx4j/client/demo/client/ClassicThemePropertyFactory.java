@@ -13,8 +13,8 @@ import com.pyx4j.site.client.themes.classic.ClassicThemeProperty;
 public class ClassicThemePropertyFactory {
 
     public static ClassicThemeProperty getProperty() {
-        return getLightSkin();
-        //return getDarkSkin();
+        //return getLightSkin();
+        return getDarkSkin();
     }
 
     static ClassicThemeProperty getLightSkin() {
@@ -35,9 +35,13 @@ public class ClassicThemePropertyFactory {
     static ClassicThemeProperty getDarkSkin() {
         ClassicThemeProperty property = new ClassicThemeProperty();
         property.setBackground("#21262C url('images/background.jpg') repeat-x");
+        property.setHeaderBackground("url('images/topHdr_ecommerce.jpg') no-repeat 50% 100%");
+        property.setFooterBackground("url('images/topHdr_ecommerce.jpg') no-repeat 50% 100%");
         property.setContentPanelWidth(924);
-        property.setHeaderHeight(400);
-        property.setFooterHeight(50);
+        property.setHeaderHeight(250);
+        property.setFooterHeight(40);
+        property.setHeaderCaptionsLeft(260);
+        property.setHeaderCaptionsTop(167);
         return property;
     }
 

@@ -28,6 +28,10 @@ public class ClassicThemeProperty {
 
     private String mainPanelBackground = "white";
 
+    private int headerCaptionsTop = 0;
+
+    private int headerCaptionsLeft = 0;
+
     public int getContentPanelWidth() {
         return contentPanelWidth;
     }
@@ -100,4 +104,19 @@ public class ClassicThemeProperty {
         this.mainPanelBackground = mainPanelBackground;
     }
 
+    public int getHeaderCaptionsTop() {
+        return headerCaptionsTop;
+    }
+
+    public void setHeaderCaptionsTop(int headerCaptionsTop) {
+        this.headerCaptionsTop = headerCaptionsTop;
+    }
+
+    public int getHeaderCaptionsLeft() {
+        return headerCaptionsLeft;
+    }
+
+    public void setHeaderCaptionsLeft(int headerCaptionsLeft) {
+        this.headerCaptionsLeft = headerCaptionsLeft;
+    }
 }

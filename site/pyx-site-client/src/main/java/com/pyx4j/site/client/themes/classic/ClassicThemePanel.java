@@ -26,10 +26,15 @@ public class ClassicThemePanel extends SimplePanel {
 
     private AbsolutePanel footerPanel;
 
+    private Label headerCaptions;
+
     public ClassicThemePanel(ClassicThemeProperty property) {
         this.property = property;
         add(createContentPanel());
         getElement().getStyle().setProperty("background", property.getBackground());
+
+        createHeaderCaptions();
+
     }
 
     protected Panel createContentPanel() {
@@ -97,4 +102,16 @@ public class ClassicThemePanel extends SimplePanel {
 
         return mainPanel;
     }
+
+    protected void createHeaderCaptions() {
+        headerCaptions = new Label();
+        headerCaptions.getElement().getStyle().setColor("yellow");
+        headerCaptions.getElement().getStyle().setFontSize(28, Unit.PX);
+        addToHeaderPanel(headerCaptions, property.getHeaderCaptionsLeft(), property.getHeaderCaptionsTop());
+    }
+
+    public void setHeaderCaptions(String captions) {
+        headerCaptions.setText(captions);
+    }
+
 }

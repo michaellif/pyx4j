@@ -33,12 +33,7 @@ public class SiteDemo implements EntryPoint {
 
         ClassicThemePanel pagePanel = new ClassicThemePanel(ClassicThemePropertyFactory.getProperty());
 
-        pagePanel.addToHeaderPanel(new Image("images/topHdr_ecommerce.jpg"), 0, 45);
-
-        HTML label = new HTML("header captions");
-        label.getElement().getStyle().setColor("yellow");
-        label.getElement().getStyle().setFontSize(28, Unit.PX);
-        pagePanel.addToHeaderPanel(label, 260, 83);
+        pagePanel.setHeaderCaptions("header captions");
 
         pagePanel.addToFooterPanel(new Label("FooterPanel"), 10, 10);
 
