@@ -8,6 +8,18 @@
  */
 package com.pyx4j.site.client.domain;
 
-public class Page {
+public class Page extends PageContainer {
 
+    public PageContainer parent;
+
+    public PageData data;
+
+    public String name;
+
+    public String caption;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -12,15 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.dom.client.Style.FontStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.SitePanel;
+import com.pyx4j.site.client.domain.Site;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -31,11 +30,21 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        SitePanel pagePanel = new SitePanel(ClassicThemePropertyFactory.getProperty());
+        String initToken = History.getToken();
+
+        Site site = new Site();
+
+        site.logoUrl = "images/logo.png";
+
+        if ("1".equals(initToken)) {
+            site.properties = SitePropertiesFactory.getLightSkin();
+        } else {
+            site.properties = SitePropertiesFactory.getDarkSkin();
+        }
+
+        SitePanel pagePanel = new SitePanel(site);
 
         pagePanel.setHeaderCaptions("header captions");
-
-        pagePanel.setLogoImage("images/logo.png");
 
         pagePanel.addToFooterPanel(new Label("FooterPanel"), 10, 10);
 

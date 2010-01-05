@@ -10,14 +10,9 @@ package com.pyx4j.client.demo.client;
 
 import com.pyx4j.site.client.domain.SiteProperties;
 
-public class ClassicThemePropertyFactory {
+public class SitePropertiesFactory {
 
-    public static SiteProperties getProperty() {
-        //return getLightSkin();
-        return getDarkSkin();
-    }
-
-    static SiteProperties getLightSkin() {
+    public static SiteProperties getLightSkin() {
         SiteProperties property = new SiteProperties();
         property.background = "#F8F8F8";
         property.contentPanelWidth = 968;
@@ -35,7 +30,7 @@ public class ClassicThemePropertyFactory {
         return property;
     }
 
-    static SiteProperties getDarkSkin() {
+    public static SiteProperties getDarkSkin() {
         SiteProperties property = new SiteProperties();
         property.background = "#21262C url('images/background.jpg') repeat-x";
         property.headerBackground = "url('images/topHdr_ecommerce.jpg') no-repeat";

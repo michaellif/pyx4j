@@ -13,7 +13,7 @@ import java.util.List;
 
 public class PageContainer {
 
-    private final List<Page> pages = new ArrayList<Page>();
+    public final List<Page> pages = new ArrayList<Page>();
 
     public PageContainer() {
 
@@ -21,6 +21,7 @@ public class PageContainer {
 
     public void addPage(Page page) {
         pages.add(page);
+        page.parent = this;
     }
 
 }
