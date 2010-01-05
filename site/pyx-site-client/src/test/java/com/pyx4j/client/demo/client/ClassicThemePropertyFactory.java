@@ -8,7 +8,7 @@
  */
 package com.pyx4j.client.demo.client;
 
-import com.pyx4j.site.client.SiteProperties;
+import com.pyx4j.site.client.domain.SiteProperties;
 
 public class ClassicThemePropertyFactory {
 

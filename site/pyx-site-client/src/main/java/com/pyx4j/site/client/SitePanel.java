@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.domain.SiteProperties;
+
 public class SitePanel extends SimplePanel {
 
     private final SiteProperties property;

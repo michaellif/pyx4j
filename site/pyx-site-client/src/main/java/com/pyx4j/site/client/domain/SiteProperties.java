@@ -6,7 +6,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.client;
+package com.pyx4j.site.client.domain;
 
 public class SiteProperties {
 
