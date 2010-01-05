@@ -8,17 +8,17 @@
  */
 package com.pyx4j.client.demo.client;
 
-import com.pyx4j.site.client.ClassicThemeProperties;
+import com.pyx4j.site.client.SiteProperties;
 
 public class ClassicThemePropertyFactory {
 
-    public static ClassicThemeProperties getProperty() {
+    public static SiteProperties getProperty() {
         //return getLightSkin();
         return getDarkSkin();
     }
 
-    static ClassicThemeProperties getLightSkin() {
-        ClassicThemeProperties property = new ClassicThemeProperties();
+    static SiteProperties getLightSkin() {
+        SiteProperties property = new SiteProperties();
         property.background = "#F8F8F8";
         property.contentPanelWidth = 968;
         property.contentPanelTopMargin = 20;
@@ -35,8 +35,8 @@ public class ClassicThemePropertyFactory {
         return property;
     }
 
-    static ClassicThemeProperties getDarkSkin() {
-        ClassicThemeProperties property = new ClassicThemeProperties();
+    static SiteProperties getDarkSkin() {
+        SiteProperties property = new SiteProperties();
         property.background = "#21262C url('images/background.jpg') repeat-x";
         property.headerBackground = "url('images/topHdr_ecommerce.jpg') no-repeat";
         property.footerBackground = "url('images/topHdr_ecommerce.jpg') no-repeat 50% 100%";

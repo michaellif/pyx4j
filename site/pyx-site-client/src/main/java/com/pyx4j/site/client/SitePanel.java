@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ClassicThemePanel extends SimplePanel {
+public class SitePanel extends SimplePanel {
 
-    private final ClassicThemeProperties property;
+    private final SiteProperties property;
 
     private AbsolutePanel headerPanel;
 
@@ -31,7 +31,7 @@ public class ClassicThemePanel extends SimplePanel {
 
     private Image logoImage;
 
-    public ClassicThemePanel(ClassicThemeProperties property) {
+    public SitePanel(SiteProperties property) {
         this.property = property;
         add(createContentPanel());
         getElement().getStyle().setProperty("background", property.background);

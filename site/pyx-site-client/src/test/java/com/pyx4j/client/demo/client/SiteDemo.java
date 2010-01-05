@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.site.client.ClassicThemePanel;
+import com.pyx4j.site.client.SitePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -31,7 +31,7 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        ClassicThemePanel pagePanel = new ClassicThemePanel(ClassicThemePropertyFactory.getProperty());
+        SitePanel pagePanel = new SitePanel(ClassicThemePropertyFactory.getProperty());
 
         pagePanel.setHeaderCaptions("header captions");
 
