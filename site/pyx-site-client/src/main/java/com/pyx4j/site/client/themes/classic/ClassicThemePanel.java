@@ -16,61 +16,69 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class PagePanel extends SimplePanel {
+public class ClassicThemePanel extends SimplePanel {
 
-    public PagePanel() {
+    private final ClassicThemeProperty property;
 
+    private AbsolutePanel headerPanel;
+
+    private AbsolutePanel footerPanel;
+
+    public ClassicThemePanel(ClassicThemeProperty property) {
+        this.property = property;
         add(createContentPanel());
-
-        getElement().getStyle().setBackgroundColor("#F8F8F8");
-
-        //        getElement().getStyle().setBackgroundColor("#21262C");
-        //        getElement().getStyle().setBackgroundImage("url('images/background.jpg')");
-        //        getElement().getStyle().setProperty("backgroundRepeat", "repeat-x");
+        getElement().getStyle().setProperty("background", property.getBackground());
     }
 
-    Panel createContentPanel() {
+    protected Panel createContentPanel() {
         FlowPanel contentPanel = new FlowPanel();
 
         Style style = contentPanel.getElement().getStyle();
 
         style.setProperty("marginLeft", "auto");
         style.setProperty("marginRight", "auto");
-        style.setPaddingTop(20, Unit.PX);
-        style.setPaddingBottom(20, Unit.PX);
+        style.setPaddingTop(property.getContentPanelTopMargin(), Unit.PX);
+        style.setPaddingBottom(property.getContentPanelBottomMargin(), Unit.PX);
 
-        contentPanel.setWidth("968px");
+        contentPanel.setWidth(property.getContentPanelWidth() + "px");
 
-        contentPanel.add(createHeaderPanel());
+        headerPanel = createHeaderPanel();
+        contentPanel.add(headerPanel);
+
         contentPanel.add(createMainPanel());
-        contentPanel.add(createFooterPanel());
+
+        footerPanel = createFooterPanel();
+        contentPanel.add(footerPanel);
 
         return contentPanel;
     }
 
-    Panel createHeaderPanel() {
+    protected AbsolutePanel createHeaderPanel() {
         AbsolutePanel headerPanel = new AbsolutePanel();
-        headerPanel.add(new Label("HeaderPanel"), 40, 40);
-        headerPanel.add(new Label("HeaderPanel"), 45, 45);
 
-        headerPanel.getElement().getStyle().setBackgroundImage("url('images/container-header.gif')");
-        headerPanel.getElement().getStyle().setProperty("backgroundRepeat", "no-repeat");
-
-        headerPanel.setHeight("200px");
+        headerPanel.getElement().getStyle().setProperty("background", property.getHeaderBackground());
+        headerPanel.setHeight(property.getHeaderHeight() + "px");
 
         return headerPanel;
     }
 
-    Panel createFooterPanel() {
+    public void addToHeaderPanel(Widget w, int left, int top) {
+        headerPanel.add(w, left, top);
+    }
+
+    protected AbsolutePanel createFooterPanel() {
         AbsolutePanel footerPanel = new AbsolutePanel();
-        footerPanel.add(new Label("FooterPanel"), 40, 40);
 
-        footerPanel.getElement().getStyle().setProperty("background", "url('images/container-footer.gif') no-repeat 50% 100%");
-
-        footerPanel.setHeight("100px");
+        footerPanel.getElement().getStyle().setProperty("background", property.getFooterBackground());
+        footerPanel.setHeight(property.getFooterHeight() + "px");
 
         return footerPanel;
+    }
+
+    public void addToFooterPanel(Widget w, int left, int top) {
+        footerPanel.add(w, left, top);
     }
 
     Panel createMainPanel() {
@@ -80,8 +88,7 @@ public class PagePanel extends SimplePanel {
 
         style.setPadding(20, Unit.PX);
 
-        style.setBackgroundImage("url('images/container-main.gif')");
-        style.setProperty("backgroundRepeat", "repeat-y");
+        style.setProperty("background", property.getMainPanelBackground());
 
         mainPanel
                 .setWidget(new HTML(
