@@ -18,6 +18,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.dev.LocalDatastoreService;
 import com.google.appengine.tools.development.ApiProxyLocalImpl;
 import com.google.apphosting.api.ApiProxy;
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 
 public abstract class LocalDatastoreTest {
 
@@ -34,6 +36,7 @@ public abstract class LocalDatastoreTest {
         impl.setProperty(LocalDatastoreService.NO_STORAGE_PROPERTY, Boolean.toString(!storeChanges));
         ApiProxy.setDelegate(impl);
         datastoreService = DatastoreServiceFactory.getDatastoreService();
+        EntityFactory.setImplementation(new ServerEntityFactory());
     }
 
     @After

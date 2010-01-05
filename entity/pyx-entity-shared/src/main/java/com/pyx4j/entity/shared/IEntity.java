@@ -13,6 +13,10 @@ import java.util.Set;
 
 public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String, Object>> {
 
+    public String getPrimaryKey();
+
+    public void setPrimaryKey(String pk);
+
     public Set<String> getMemberNames();
 
     public IObject<?, ?> getMember(String name);

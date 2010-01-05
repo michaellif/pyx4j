@@ -13,11 +13,18 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-server</artifactId>
-    <name>pyx-entity-server</name>
-    <description>pyx-entity Server Side Implementations</description>
+    <artifactId>pyx-entity-rpc</artifactId>
+    <name>pyx-entity-rpc</name>
+    <description>pyx-entity-rpc interfaces</description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -25,11 +32,20 @@
             <version>${project.version}</version>
         </dependency>
 
-		<dependency>
-        	<groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-shared</artifactId>
+            <version>${project.version}</version>
         </dependency>
-            
+
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+        </resources>
+    </build>
 
 </project>

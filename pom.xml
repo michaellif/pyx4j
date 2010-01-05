@@ -112,6 +112,7 @@
         <module>gwt/pyx-gwt-ria</module>
 
         <module>entity/pyx-entity-shared</module>
+        <module>entity/pyx-entity-rpc</module>
         <module>entity/pyx-entity-gwt</module>
         <module>entity/pyx-entity-server</module>
         <module>entity/pyx-entity-tests</module>

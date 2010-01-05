@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.Path;
 public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements
         IEntity<OBJECT_TYPE> {
 
+    private String primaryKey;
+
     private Map<String, Object> data;
 
     private transient boolean membersListCreated;
@@ -61,6 +63,14 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new SetHandler(this, name);
     }
 
+    public String getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(String pk) {
+        primaryKey = pk;
+    }
+
     @Override
     public Map<String, Object> getValue() {
         return data;
@@ -69,7 +79,9 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @Override
     public void setValue(Map<String, Object> value) {
         this.data = value;
-        getParent().getValue().put(getFieldName(), value);
+        if (getParent() != null) {
+            getParent().getValue().put(getFieldName(), value);
+        }
     }
 
     @Override
