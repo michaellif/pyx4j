@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.site.client.themes.classic.ClassicThemePanel;
+import com.pyx4j.site.client.ClassicThemePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

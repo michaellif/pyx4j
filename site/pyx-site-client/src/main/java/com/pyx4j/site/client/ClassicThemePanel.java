@@ -6,7 +6,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.themes.classic;
+package com.pyx4j.site.client;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;

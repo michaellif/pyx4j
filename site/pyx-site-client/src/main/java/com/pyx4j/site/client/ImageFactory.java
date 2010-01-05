@@ -6,7 +6,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.client.themes.classic;
+package com.pyx4j.site.client;
 
 import com.google.gwt.core.client.GWT;
 
