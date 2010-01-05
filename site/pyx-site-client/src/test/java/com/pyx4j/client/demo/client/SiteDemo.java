@@ -32,9 +32,7 @@ public class SiteDemo implements EntryPoint {
 
         String initToken = History.getToken();
 
-        Site site = new Site();
-
-        site.logoUrl = "images/logo.png";
+        Site site = new EasySite();
 
         if ("1".equals(initToken)) {
             site.properties = SitePropertiesFactory.getLightSkin();

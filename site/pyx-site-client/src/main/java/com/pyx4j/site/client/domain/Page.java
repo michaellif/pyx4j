@@ -12,7 +12,7 @@ public class Page extends PageContainer {
 
     public PageContainer parent;
 
-    public PageData data;
+    public PageData data = new PageData();
 
     public String name;
 

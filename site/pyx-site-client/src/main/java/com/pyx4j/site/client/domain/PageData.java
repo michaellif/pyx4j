@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PageData {
 
-    String html;
+    public String html;
 
-    List<Portlet> portlets;
+    public List<Portlet> portlets;
 }
