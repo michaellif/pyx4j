@@ -45,7 +45,7 @@ public abstract class UnitTestsServicesImpl {
                 Class<?> c;
                 try {
                     c = cld.loadClass(className);
-                } catch (ClassNotFoundException e) {
+                } catch (Throwable e) {
                     log.warn("Can't load class {}", className);
                     continue;
                 }
