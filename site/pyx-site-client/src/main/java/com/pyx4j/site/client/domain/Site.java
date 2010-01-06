@@ -12,19 +12,25 @@ public class Site extends PageContainer {
 
     public SiteProperties properties;
 
+    public String homePageName;
+
     public String logoUrl;
 
     public Site() {
 
     }
 
-    //TODO
+    public void addHomePage(Page page) {
+        homePageName = page.name;
+        addPage(page);
+    }
+
     public Page getPage(String pageBreadcrumb) {
-        return pages.size() > 1 ? pages.get(1) : null;
+        return pages.get(pageBreadcrumb);
     }
 
     public Page getHomePage() {
-        return pages.size() > 0 ? pages.get(0) : null;
+        return pages.get(homePageName);
     }
 
 }

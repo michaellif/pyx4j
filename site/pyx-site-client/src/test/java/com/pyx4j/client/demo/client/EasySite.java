@@ -21,8 +21,25 @@ public class EasySite extends Site {
             Page page = new Page();
             page.caption = "Home";
             page.name = "home";
-            page.data.html = "aaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaa <p> aaaaaaaaaaaaa <p> aaaaaaaaaaaaa <p> aaaaaaaaaaaaa <p>";
+            page.data.html = "Home";
+            addHomePage(page);
+        }
+
+        {
+            Page page = new Page();
+            page.caption = "About Us";
+            page.name = "aboutUs";
+            page.data.html = "About Us";
             addPage(page);
         }
+
+        {
+            Page page = new Page();
+            page.caption = "Contact Us";
+            page.name = "contactUs";
+            page.data.html = "Contact Us";
+            addPage(page);
+        }
+
     }
 }

@@ -43,29 +43,6 @@ public class SiteDemo implements EntryPoint {
         SitePanel pagePanel = new SitePanel(site);
         RootPanel.get().add(pagePanel);
 
-        {
-            //            SiteSection centerPanel = new SiteSection("Center", "red");
-            //            centerPanel.setSize("500px", "1000px");
-            //            rootPanel.add(centerPanel);
-            //            rootPanel.setCellWidth(centerPanel, "500px");
-            //            rootPanel.setCellHorizontalAlignment(centerPanel, HasHorizontalAlignment.ALIGN_CENTER);
-
-            //            AnchorNavigationBar navig = new AnchorNavigationBar();
-            //            {
-            //                Anchor anchor = new Anchor("aaaa1", "aaaa1");
-            //                navig.add(anchor);
-            //            }
-            //            {
-            //                Anchor anchor = new Anchor("bbbb", "bbbb");
-            //                navig.add(anchor);
-            //            }
-            //            {
-            //                Anchor anchor = new Anchor("cccc", "cccc");
-            //                navig.add(anchor);
-            //            }
-            //            rootPanel.add(navig);
-        }
-
     }
 
     class SiteSection extends HTML {

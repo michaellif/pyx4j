@@ -8,7 +8,8 @@
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.dom.client.Document;
+import java.util.List;
+
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -28,6 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.Site;
+import com.pyx4j.site.client.domain.SiteProperties;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String>, ResizeHandler {
 
@@ -43,6 +45,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private Image logoImage;
 
+    private NavigationBar mainNavigationBar;
+
     public SitePanel(Site site) {
         this.site = site;
 
@@ -55,6 +59,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         createHeaderCaptions();
 
         createLogoImage(site.logoUrl);
+
+        createMainNavigation(site.properties);
 
         History.addValueChangeHandler(this);
 
@@ -85,6 +91,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         mainPanel.setWidget(new HTML(page.data.html, true));
 
         setHeaderCaptions(page.caption);
+
+        mainNavigationBar.setSelected(page.name);
 
     }
 
@@ -167,6 +175,14 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         logoImage = new Image();
         logoImage.setUrl(url);
         addToHeaderPanel(logoImage, 20, 20);
+    }
+
+    protected void createMainNavigation(SiteProperties properties) {
+        mainNavigationBar = new NavigationBar(properties);
+        for (Page page : site.pages.values()) {
+            mainNavigationBar.add(page.caption, page.name);
+        }
+        addToHeaderPanel(mainNavigationBar, 0, 100);
     }
 
     @Override

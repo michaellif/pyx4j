@@ -8,19 +8,19 @@
  */
 package com.pyx4j.site.client.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PageContainer {
 
-    public final List<Page> pages = new ArrayList<Page>();
+    public final Map<String, Page> pages = new HashMap<String, Page>();
 
     public PageContainer() {
 
     }
 
     public void addPage(Page page) {
-        pages.add(page);
+        pages.put(page.name, page);
         page.parent = this;
     }
 
