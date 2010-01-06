@@ -27,7 +27,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
     @SuppressWarnings("unchecked")
     @Override
     public TYPE getValue() {
-        return (TYPE) getParent().getValue().get(getFieldName());
+        return (TYPE) getParent().getMemberValue(getFieldName());
     }
 
     @Override
@@ -61,6 +61,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
 
     }
 
+    //TODO
     @Override
     public String toString() {
         return getObjectClass().getName() + getValue();

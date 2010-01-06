@@ -24,12 +24,14 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityFactoryGenerator extends Generator {
 
@@ -130,6 +132,7 @@ public class EntityFactoryGenerator extends Generator {
         composer.addImport(interfaceType.getQualifiedSourceName());
         composer.addImport(IObject.class.getName());
         composer.addImport(IEntity.class.getName());
+        composer.addImport(MemberMeta.class.getName());
         composer.setSuperclass(SharedEntityHandler.class.getName() + "<" + interfaceType.getName() + ">");
         composer.addImplementedInterface(interfaceType.getName());
 
@@ -160,6 +163,15 @@ public class EntityFactoryGenerator extends Generator {
         writer.print("super(");
         writer.print(interfaceType.getName());
         writer.println(".class, parent, fieldName);");
+        writer.outdent();
+        writer.println("}");
+
+        writer.println();
+        writer.println("@Override");
+        writer.println("public MemberMeta getMemberMeta(String memberName) {");
+        writer.indent();
+        //TODO
+        writer.println("throw new RuntimeException(\"GWT Side TODO\");");
         writer.outdent();
         writer.println("}");
 

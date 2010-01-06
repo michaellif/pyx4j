@@ -9,6 +9,7 @@
 package com.pyx4j.entity.shared.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,17 +18,16 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.validator.Validator;
 
 public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements
         IEntity<OBJECT_TYPE> {
-
-    private String primaryKey;
 
     private Map<String, Object> data;
 
     private transient boolean membersListCreated;
 
-    protected transient final HashMap<String, IObject<?, ?>> meta = new HashMap<String, IObject<?, ?>>();
+    protected transient final HashMap<String, IObject<?, ?>> members = new HashMap<String, IObject<?, ?>>();
 
     public SharedEntityHandler(Class<OBJECT_TYPE> clazz) {
         super(clazz);
@@ -48,8 +48,8 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     protected abstract void lazyCreateMembersNamesList();
 
     protected void createMemeber(String name) {
-        if (!meta.containsKey(name)) {
-            meta.put(name, null);
+        if (!members.containsKey(name)) {
+            members.put(name, null);
         }
     }
 
@@ -63,12 +63,22 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new SetHandler(this, name);
     }
 
+    private void ensureData() {
+        if (data == null) {
+            setValue(new HashMap<String, Object>());
+        }
+    }
+
     public String getPrimaryKey() {
-        return primaryKey;
+        if (data == null) {
+            return null;
+        }
+        return (String) data.get(PRIMARY_KEY);
     }
 
     public void setPrimaryKey(String pk) {
-        primaryKey = pk;
+        ensureData();
+        data.put(PRIMARY_KEY, pk);
     }
 
     @Override
@@ -106,36 +116,48 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
             lazyCreateMembersNamesList();
             membersListCreated = true;
         }
-        return meta.keySet();
+        return members.keySet();
     }
 
     @Override
-    public IObject<?, ?> getMember(String name) {
-        IObject<?, ?> member = meta.get(name);
+    public IObject<?, ?> getMember(String memberName) {
+        IObject<?, ?> member = members.get(memberName);
         if (member == null) {
-            member = lazyCreateMember(name);
-            meta.put(name, member);
+            member = lazyCreateMember(memberName);
+            members.put(memberName, member);
         }
         return member;
     }
 
     /**
-     * TODO use data map directly. No need to create Member
+     * Use data map directly. No need to create Member
      */
     @Override
-    public Object getMemberValue(String name) {
-        IObject<?, ?> i = getMember(name);
-        return i.getValue();
+    public Object getMemberValue(String memberName) {
+        //IObject<?, ?> i = getMember(memberName);
+        //return i.getValue();
+        // Like Elvis operator
+        if (data == null) {
+            return null;
+        }
+        return data.get(memberName);
     }
 
     /**
-     * TODO use data map directly. No need to create Member
+     * Use data map directly. No need to create Member
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public void setMemberValue(String name, Object value) {
-        IObject<?, Object> i = (IObject<?, Object>) getMember(name);
-        i.setValue(value);
+    public void setMemberValue(String memberName, Object value) {
+        //        IObject<?, Object> i = (IObject<?, Object>) getMember(memberName);
+        //        i.setValue(value);
+        ensureData();
+        data.put(memberName, value);
+    }
+
+    //TODO
+    @Override
+    public List<Validator> getValidators(Path memberPath) {
+        return null;
     }
 
     @Override

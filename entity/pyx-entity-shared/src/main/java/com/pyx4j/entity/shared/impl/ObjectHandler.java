@@ -10,6 +10,7 @@ package com.pyx4j.entity.shared.impl;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 @SuppressWarnings("unchecked")
 public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE> {
@@ -32,6 +33,11 @@ public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> imp
 
     public IEntity<?> getParent() {
         return parent;
+    }
+
+    @Override
+    public MemberMeta getMeta() {
+        return getParent().getMemberMeta(getFieldName());
     }
 
     public String getFieldName() {

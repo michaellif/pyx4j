@@ -18,6 +18,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.dev.LocalDatastoreService;
 import com.google.appengine.tools.development.ApiProxyLocalImpl;
 import com.google.apphosting.api.ApiProxy;
+
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -27,6 +28,8 @@ public abstract class LocalDatastoreTest {
 
     /** true to store saved changes, default to false */
     protected boolean storeChanges = false;
+
+    private static int uniqueCount = 0;
 
     @Before
     public void setupDatastore() {
@@ -46,5 +49,9 @@ public abstract class LocalDatastoreTest {
         datastoreService.clearProfiles();
         ApiProxy.setDelegate(null);
         ApiProxy.setEnvironmentForCurrentThread(null);
+    }
+
+    protected synchronized String uniqueString() {
+        return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis());
     }
 }

@@ -55,6 +55,12 @@ public class FactoryTest extends InitializerTestCase {
         assertTrue("streetName is wrong", "Home Street".equals(employee.homeAddress().streetName().getValue()));
     }
 
+    public void testElvisMemberAccess() {
+        Employee employee = EntityFactory.create(Employee.class);
+        assertNotNull("Memeber Descriptor", employee.homeAddress().streetName());
+        assertNull("Memeber value", employee.homeAddress().streetName().getValue());
+    }
+
     public void testSetManipulations() {
         Department department = EntityFactory.create(Department.class);
         Employee employee = EntityFactory.create(Employee.class);

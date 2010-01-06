@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityHandler<OBJECT_TYPE> implements IEntity<OBJECT_TYPE>, InvocationHandler {
 
@@ -27,6 +28,16 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityH
 
     EntityHandler(Class<OBJECT_TYPE> clazz, IEntity<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
+    }
+
+    @Override
+    public MemberMeta getMemberMeta(String memberName) {
+        // TODO Use single instance per  IEntity/Member
+        try {
+            return new MemberMetaImpl(getObjectClass().getMethod(memberName, (Class[]) null));
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Unknown member " + memberName);
+        }
     }
 
     @Override
@@ -40,11 +51,11 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityH
     }
 
     @Override
-    protected IObject<?, ?> lazyCreateMember(String name) {
+    protected IObject<?, ?> lazyCreateMember(String memberName) {
         try {
-            return lazyCreateMember(getObjectClass().getMethod(name, (Class[]) null));
+            return lazyCreateMember(getObjectClass().getMethod(memberName, (Class[]) null));
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Unknown member " + name);
+            throw new RuntimeException("Unknown member " + memberName);
         }
     }
 
@@ -72,10 +83,10 @@ public class EntityHandler<OBJECT_TYPE extends IEntity<?>> extends SharedEntityH
             return method.invoke(this, args);
         }
 
-        IObject<?, ?> member = meta.get(method.getName());
+        IObject<?, ?> member = members.get(method.getName());
         if (member == null) {
             member = lazyCreateMember(method);
-            meta.put(method.getName(), member);
+            members.put(method.getName(), member);
         }
         return member;
 

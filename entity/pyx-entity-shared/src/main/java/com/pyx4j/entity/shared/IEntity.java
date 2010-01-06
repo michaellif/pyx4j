@@ -8,10 +8,16 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.shared.validator.Validator;
+
 public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String, Object>> {
+
+    public static String PRIMARY_KEY = "id";
 
     public String getPrimaryKey();
 
@@ -19,9 +25,16 @@ public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String,
 
     public Set<String> getMemberNames();
 
-    public IObject<?, ?> getMember(String name);
+    public IObject<?, ?> getMember(String memberName);
 
-    public Object getMemberValue(String name);
+    public Object getMemberValue(String memberName);
 
-    public void setMemberValue(String name, Object value);
+    public void setMemberValue(String memberName, Object value);
+
+    /**
+     * A single instance of MemeberMeta is shared between all instances of the IEntity.
+     */
+    public MemberMeta getMemberMeta(String memberName);
+
+    public List<Validator> getValidators(Path memberPath);
 }

@@ -10,6 +10,8 @@ package com.pyx4j.entity.test.shared.domain;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -37,6 +39,11 @@ public interface Employee extends IEntity<Employee> {
 
     Employee manager();
 
+    @Owned
+    @NotNull
     Address homeAddress();
+
+    @Owned
+    Address workAddress();
 
 }

@@ -19,7 +19,7 @@ public class PersistenceServicesFactory {
 
     public final static String GAE_IMPL_CLASS = "com.pyx4j.entity.gae.EntityPersistenceServiceGAE";
 
-    public final static String SQL_IMPL_CLASS = "com.pyx4j.entity.hibernate.EntityPersistenceServiceHibernate";
+    public final static String RDBMS_IMPL_CLASS = "com.pyx4j.entity.hibernate.EntityPersistenceServiceHibernate";
 
     @SuppressWarnings("unchecked")
     public static synchronized IEntityPersistenceService getPersistenceService() {
@@ -29,7 +29,7 @@ public class PersistenceServicesFactory {
                 serviceClass = (Class<? extends IEntityPersistenceService>) Class.forName(GAE_IMPL_CLASS);
             } catch (ClassNotFoundException e) {
                 try {
-                    serviceClass = (Class<? extends IEntityPersistenceService>) Class.forName(SQL_IMPL_CLASS);
+                    serviceClass = (Class<? extends IEntityPersistenceService>) Class.forName(RDBMS_IMPL_CLASS);
                 } catch (ClassNotFoundException e2) {
                     throw new RuntimeException("PersistenceService not avalable");
                 }
