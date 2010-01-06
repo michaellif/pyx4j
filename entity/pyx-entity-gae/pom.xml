@@ -50,6 +50,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-labs</artifactId>
+            <optional>true</optional>
+            <scope>tests</scope>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <optional>true</optional>
@@ -63,14 +70,14 @@
             <scope>tests</scope>
             <optional>true</optional>
         </dependency>
-        
+
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>
 			<scope>tests</scope>
             <optional>true</optional>
 		</dependency>
-        
+
     </dependencies>
 
 

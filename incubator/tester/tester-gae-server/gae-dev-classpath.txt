@@ -5,6 +5,8 @@ pyx-rpc-gwt
 pyx-entity-shared
 tester-client
 pyx-entity-tests
+pyx-entity-server
+pyx-entity-gae
 pyx-commons
 pyx-log-shared
 pyx-unit-shared
@@ -18,3 +20,6 @@ slf4j-jdk14
 -pyx-log-shared.jar
 -pyx-unit-shared.jar
 -pyx-unit-server.jar
+-pyx-entity-server.jar
+-pyx-entity-gae.jar
+-slf4j-jdk14.jar

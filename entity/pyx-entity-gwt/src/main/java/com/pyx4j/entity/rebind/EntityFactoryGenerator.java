@@ -22,6 +22,7 @@ import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
@@ -34,7 +35,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityFactoryGenerator extends Generator {
 
-    private static String IMPL = "_Impl";
+    private static String IMPL = IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
 
     private JClassType iPrimitiveInterfaceType;
 
@@ -58,6 +59,12 @@ public class EntityFactoryGenerator extends Generator {
             if (printWriter == null) {
                 // the generated type already exists
                 return interfaceType.getParameterizedQualifiedSourceName() + IMPL;
+            }
+
+            //TODO, this does not work!
+            if (oracle.findType(RemoteService.class.getName() + "_TypeSerializer") != null) {
+                logger.log(TreeLogger.Type.WARN, "RemoteService serializer already created! IEntity generated implementations would not be serializable. "
+                        + "Call ClientEntityFactory.ensureIEntityImplementations(); in your code first");
             }
 
             iEnentityInterfaceType = oracle.getType(IEntity.class.getName());

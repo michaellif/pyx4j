@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-class MemberMetaImpl implements MemberMeta {
+public class MemberMetaImpl implements MemberMeta {
 
     private final String fieldName;
 
@@ -45,7 +45,7 @@ class MemberMetaImpl implements MemberMeta {
      */
     private final int stringLength;
 
-    MemberMetaImpl(Method method) {
+    public MemberMetaImpl(Method method) {
         objectClass = (Class<? extends IObject<?, ?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];

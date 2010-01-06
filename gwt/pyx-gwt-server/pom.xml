@@ -18,17 +18,22 @@
     <description>pyx-entity Server Side Implementations</description>
 
     <dependencies>
-
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-            </dependency>
-
+            
             <dependency>
             	<groupId>com.pyx4j</groupId>
             	<artifactId>pyx-commons</artifactId>
             	<version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+            </dependency>
+            
+            <dependency>
+            	<groupId>org.slf4j</groupId>
+            	<artifactId>slf4j-api</artifactId>
+        	</dependency>
             
     </dependencies>
 

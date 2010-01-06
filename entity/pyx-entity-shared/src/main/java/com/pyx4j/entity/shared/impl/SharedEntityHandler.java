@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.validator.Validator;
 
+@SuppressWarnings("serial")
 public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements
         IEntity<OBJECT_TYPE> {
 
@@ -41,7 +42,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      * @param parent
      * @param fieldName
      */
-    public SharedEntityHandler(Class<? extends IObject> clazz, IEntity<?> parent, String fieldName) {
+    public SharedEntityHandler(Class<? extends IObject<?, ?>> clazz, IEntity<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
     }
 
@@ -55,11 +56,12 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     protected abstract IObject<?, ?> lazyCreateMember(String name);
 
-    protected <T> IPrimitive<T> lazyCreateMemberIPrimitive(String name, Class<T> primitiveValueClass) {
+    public <T> IPrimitive<T> lazyCreateMemberIPrimitive(String name, Class<T> primitiveValueClass) {
         return new PrimitiveHandler<T>(this, name, primitiveValueClass);
     }
 
-    protected ISet<?> lazyCreateMemberISet(String name) {
+    @SuppressWarnings("unchecked")
+    public ISet<?> lazyCreateMemberISet(String name) {
         return new SetHandler(this, name);
     }
 
@@ -134,8 +136,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      */
     @Override
     public Object getMemberValue(String memberName) {
-        //IObject<?, ?> i = getMember(memberName);
-        //return i.getValue();
         // Like Elvis operator
         if (data == null) {
             return null;
@@ -148,8 +148,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      */
     @Override
     public void setMemberValue(String memberName, Object value) {
-        //        IObject<?, Object> i = (IObject<?, Object>) getMember(memberName);
-        //        i.setValue(value);
         ensureData();
         data.put(memberName, value);
     }

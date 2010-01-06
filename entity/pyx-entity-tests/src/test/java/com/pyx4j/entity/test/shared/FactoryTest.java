@@ -20,6 +20,7 @@ public class FactoryTest extends InitializerTestCase {
     public void testObjectCreation() {
         Country country = EntityFactory.create(Country.class);
         assertNotNull("EntityFactory create", country);
+        System.out.println("Country ProxyClass:" + country.getClass().getName());
 
         country.name().setValue("Canada");
 

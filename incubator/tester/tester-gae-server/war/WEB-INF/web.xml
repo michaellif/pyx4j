@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 
+    <listener>
+        <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
+    </listener>
+    
 	<filter>
 		<filter-name>GWTCacheFilter</filter-name>
 		<filter-class>com.pyx4j.gwt.server.GWTCacheFilter</filter-class>

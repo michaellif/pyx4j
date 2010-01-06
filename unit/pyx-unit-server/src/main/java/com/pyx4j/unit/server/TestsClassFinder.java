@@ -20,14 +20,16 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.gwt.server.ClassFinder;
+
 public class TestsClassFinder extends ClassFinder {
 
     private static final Logger log = LoggerFactory.getLogger(TestsClassFinder.class);
 
-    public static final String TESTS_MARKER_RESOURCE_NAME = "server-side-tests.marker";
+    public static final String TESTS_MARKER_RESOURCE_NAME = "META-INF/server-side-tests.marker";
 
     public TestsClassFinder(String urlExternalForm) {
-        super(urlExternalForm);
+        super(urlExternalForm.subSequence(0, urlExternalForm.lastIndexOf(TESTS_MARKER_RESOURCE_NAME)).toString());
         include(".*Test\\.class");
         exclude(".*GWTTest\\.class");
     }

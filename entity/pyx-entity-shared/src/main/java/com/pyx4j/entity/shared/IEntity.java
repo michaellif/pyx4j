@@ -8,6 +8,7 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,9 +16,11 @@ import java.util.Set;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String, Object>> {
+public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String, Object>>, Serializable {
 
     public static String PRIMARY_KEY = "id";
+
+    public static String SERIALIZABLE_IMPL_CLASS_SUFIX = "_Impl";
 
     public String getPrimaryKey();
 

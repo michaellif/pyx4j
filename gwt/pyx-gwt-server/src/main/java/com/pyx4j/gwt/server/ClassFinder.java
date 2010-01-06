@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.unit.server;
+package com.pyx4j.gwt.server;
 
 import java.io.File;
 import java.net.JarURLConnection;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public class ClassFinder {
 
-    private static final Logger log = LoggerFactory.getLogger(UnitTestsServicesImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ClassFinder.class);
 
     private final List<Pattern> includePatterns = new Vector<Pattern>();
 
@@ -120,22 +120,34 @@ public class ClassFinder {
         }
     }
 
-    private void processEntry(String entryName) {
-        for (Pattern inc : includePatterns) {
-            if (inc.matcher(entryName).matches()) {
-                processMatches(entryName);
-                return;
+    protected void processEntry(String entryName) {
+        if (includePatterns.size() == 0) {
+            processMatches(entryName);
+            return;
+        } else {
+            for (Pattern inc : includePatterns) {
+                if (inc.matcher(entryName).matches()) {
+                    processMatches(entryName);
+                    return;
+                }
             }
         }
     }
 
-    private void processMatches(String entryName) {
+    protected void processMatches(String entryName) {
         for (Pattern exc : excludePatterns) {
             if (exc.matcher(entryName).matches()) {
                 return;
             }
         }
-        classes.add(getClassName(entryName));
+        String name = getClassName(entryName);
+        if (acceptClass(name)) {
+            classes.add(name);
+        }
+    }
+
+    protected boolean acceptClass(String className) {
+        return true;
     }
 
     public static String getClassName(String name) {
