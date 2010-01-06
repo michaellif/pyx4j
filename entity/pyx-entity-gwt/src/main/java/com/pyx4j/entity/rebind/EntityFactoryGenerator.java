@@ -24,7 +24,6 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -77,6 +76,8 @@ public class EntityFactoryGenerator extends Generator {
 
             if (cases.size() == 0) {
                 logger.log(TreeLogger.Type.WARN, "No IEntity implementations found");
+            } else {
+                logger.log(TreeLogger.Type.INFO, "Adding " + cases.size() + " IEntity generated implementations");
             }
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
             writeEntityFactoryImplImpl(writer, simpleName, cases);
