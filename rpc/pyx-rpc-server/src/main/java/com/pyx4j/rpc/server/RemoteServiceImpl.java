@@ -48,6 +48,11 @@ public class RemoteServiceImpl implements RemoteService {
             }
             throw new RuntimeException("Fatal system error: " + e.getMessage());
         }
-        return serviceInstance.execute(serviceRequest);
+        try {
+            return serviceInstance.execute(serviceRequest);
+        } catch (RuntimeException e) {
+            log.error("Service call error", e);
+            throw e;
+        }
     }
 }
