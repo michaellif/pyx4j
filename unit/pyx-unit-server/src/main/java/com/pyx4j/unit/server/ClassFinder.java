@@ -8,7 +8,10 @@
  */
 package com.pyx4j.unit.server;
 
+import java.io.File;
 import java.net.JarURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
@@ -53,6 +56,8 @@ public class ClassFinder {
             classes = new Vector<String>();
             if (baseURL.startsWith("jar:")) {
                 readJarLocation();
+            } else if (baseURL.startsWith("file:")) {
+                readFileLocation();
             } else {
                 log.error("unsupporte URL {}", baseURL);
             }
@@ -82,11 +87,44 @@ public class ClassFinder {
             if (entry.isDirectory() || (!entry.getName().endsWith(".class"))) {
                 continue;
             }
-            for (Pattern inc : includePatterns) {
-                if (inc.matcher(entry.getName()).matches()) {
-                    processMatches(entry.getName());
-                    continue;
+            processEntry(entry.getName());
+        }
+    }
+
+    private void readFileLocation() {
+        File root;
+        try {
+            root = new File(new URI(baseURL));
+        } catch (URISyntaxException e) {
+            log.error("Can't open File URL [" + baseURL + "]", e);
+            return;
+        }
+        processFiles(root, root);
+    }
+
+    private String relativeUnixFileName(File root, File file) {
+        String relative = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1);
+        return relative.replace(File.separatorChar, '/');
+    }
+
+    private void processFiles(File root, File file) {
+        if (file.getName().endsWith(".class")) {
+            processEntry(relativeUnixFileName(root, file));
+        } else {
+            File[] list = file.listFiles();
+            if (list != null) {
+                for (File f : list) {
+                    processFiles(root, f);
                 }
+            }
+        }
+    }
+
+    private void processEntry(String entryName) {
+        for (Pattern inc : includePatterns) {
+            if (inc.matcher(entryName).matches()) {
+                processMatches(entryName);
+                return;
             }
         }
     }
