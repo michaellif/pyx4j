@@ -84,6 +84,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         mainPanel.setWidget(new HTML(page.data.html, true));
 
+        setHeaderCaptions(page.caption);
+
     }
 
     protected Panel createContentPanel() {

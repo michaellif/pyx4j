@@ -41,10 +41,7 @@ public class SiteDemo implements EntryPoint {
         }
 
         SitePanel pagePanel = new SitePanel(site);
-
-        pagePanel.setHeaderCaptions("header captions");
-
-        pagePanel.addToFooterPanel(new Label("FooterPanel"), 10, 10);
+        RootPanel.get().add(pagePanel);
 
         {
             //            SiteSection centerPanel = new SiteSection("Center", "red");
@@ -68,8 +65,6 @@ public class SiteDemo implements EntryPoint {
             //            }
             //            rootPanel.add(navig);
         }
-
-        RootPanel.get().add(pagePanel);
 
     }
 
