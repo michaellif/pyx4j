@@ -9,4 +9,6 @@
     <define-configuration-property name="org.slf4j.ILoggerFactory" is-multi-valued="false" />
     
 	<source path="slf4j"/>
+	
+	<extend-configuration-property name="rpc.blacklist" value="org.slf4j.helpers.*" />
 </module>

@@ -3,4 +3,5 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
 	<source path="commons"/> 
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.commons.*" />
 </module>

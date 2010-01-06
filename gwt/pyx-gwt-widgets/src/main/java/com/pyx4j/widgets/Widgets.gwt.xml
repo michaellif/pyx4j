@@ -8,4 +8,7 @@
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     
 	<source path="client" />
+	
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.widgets.client.dialog.*" />
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.widgets.client.style.*" />
 </module>

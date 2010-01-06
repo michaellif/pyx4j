@@ -35,4 +35,6 @@
         <when-property-is name="user.agent" value="opera"/>
     </replace-with>
 
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.widgets.client.util.BrowserType.*" />
+
 </module>  
