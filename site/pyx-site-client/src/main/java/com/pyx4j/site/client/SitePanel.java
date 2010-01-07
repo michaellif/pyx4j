@@ -10,6 +10,8 @@ package com.pyx4j.site.client;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -27,7 +29,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.Site;
-import com.pyx4j.site.client.domain.SiteProperties;
+import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.client.themes.dark.DarkTheme;
+import com.pyx4j.site.client.themes.light.LightTheme;
+import com.pyx4j.widgets.client.style.StyleManger;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String>, ResizeHandler {
 
@@ -45,6 +50,10 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private NavigationBar mainNavigationBar;
 
+    private static LightTheme lightTheme = new LightTheme();
+
+    private static DarkTheme darkTheme = new DarkTheme();
+
     public SitePanel(Site site) {
         this.site = site;
 
@@ -52,13 +61,15 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         Window.addResizeHandler(this);
 
         add(createContentPanel());
-        getElement().getStyle().setProperty("background", site.properties.background);
+        setStyleName(SiteCSSClass.pyx4j_Site_SitePanel.name());
 
         createHeaderCaptions();
 
+        createMainNavigation();
+
         createLogoImage(site.logoUrl);
 
-        createMainNavigation(site.properties);
+        StyleManger.installTheme(lightTheme);
 
         History.addValueChangeHandler(this);
 
@@ -101,10 +112,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         style.setProperty("marginLeft", "auto");
         style.setProperty("marginRight", "auto");
-        style.setPaddingTop(site.properties.contentPanelTopMargin, Unit.PX);
-        style.setPaddingBottom(site.properties.contentPanelBottomMargin, Unit.PX);
 
-        contentPanel.setWidth(site.properties.contentPanelWidth + "px");
+        contentPanel.setStyleName(SiteCSSClass.pyx4j_Site_ContentPanel.name());
 
         headerPanel = createHeaderPanel();
         contentPanel.add(headerPanel);
@@ -121,22 +130,20 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     protected AbsolutePanel createHeaderPanel() {
         AbsolutePanel headerPanel = new AbsolutePanel();
 
-        headerPanel.getElement().getStyle().setProperty("background", site.properties.headerBackground);
-        headerPanel.setHeight(site.properties.headerHeight + "px");
+        headerPanel.setStyleName(SiteCSSClass.pyx4j_Site_Header.name());
 
         return headerPanel;
     }
 
-    public void addToHeaderPanel(Widget w, int left, int top) {
+    public void addToHeaderPanel(Widget w) {
         headerPanel.remove(w);
-        headerPanel.add(w, left, top);
+        headerPanel.add(w, 0, 0);
     }
 
     protected AbsolutePanel createFooterPanel() {
         AbsolutePanel footerPanel = new AbsolutePanel();
 
-        footerPanel.getElement().getStyle().setProperty("background", site.properties.footerBackground);
-        footerPanel.setHeight(site.properties.footerHeight + "px");
+        footerPanel.setStyleName(SiteCSSClass.pyx4j_Site_Footer.name());
 
         return footerPanel;
     }
@@ -152,35 +159,49 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         style.setPadding(20, Unit.PX);
 
-        style.setProperty("background", site.properties.mainPanelBackground);
+        mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
 
         return mainPanel;
     }
 
     protected void createHeaderCaptions() {
         headerCaptions = new Label();
+        headerCaptions.setStyleName(SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
 
-        headerCaptions.getElement().getStyle().setColor(site.properties.headerCaptionsColor);
-        headerCaptions.getElement().getStyle().setFontSize(site.properties.headerCaptionsFontSize, Unit.PX);
     }
 
     public void setHeaderCaptions(String captions) {
         headerCaptions.setText(captions);
-        addToHeaderPanel(headerCaptions, site.properties.headerCaptionsLeft, site.properties.headerCaptionsTop);
+        addToHeaderPanel(headerCaptions);
     }
 
     protected void createLogoImage(String url) {
         logoImage = new Image();
+        logoImage.setStyleName(SiteCSSClass.pyx4j_Site_Logo.name());
+
         logoImage.setUrl(url);
-        addToHeaderPanel(logoImage, 20, 20);
+        addToHeaderPanel(logoImage);
+        logoImage.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                System.out.println("Click");
+                if (lightTheme.equals(StyleManger.getTheme())) {
+                    StyleManger.installTheme(darkTheme);
+                } else {
+                    StyleManger.installTheme(lightTheme);
+                }
+            }
+        });
     }
 
-    protected void createMainNavigation(SiteProperties properties) {
-        mainNavigationBar = new NavigationBar(properties);
+    protected void createMainNavigation() {
+        mainNavigationBar = new NavigationBar();
+        mainNavigationBar.setStyleName(SiteCSSClass.pyx4j_Site_MainNavig.name());
+
         for (Page page : site.pages.values()) {
             mainNavigationBar.add(page.caption, page.name);
         }
-        addToHeaderPanel(mainNavigationBar, 0, 100);
+        addToHeaderPanel(mainNavigationBar);
     }
 
     @Override

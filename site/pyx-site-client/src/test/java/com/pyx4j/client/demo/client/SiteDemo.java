@@ -13,9 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.SitePanel;
@@ -30,15 +28,7 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        String initToken = History.getToken();
-
         Site site = new EasySite();
-
-        if ("1".equals(initToken)) {
-            site.properties = SitePropertiesFactory.getLightSkin();
-        } else {
-            site.properties = SitePropertiesFactory.getDarkSkin();
-        }
 
         SitePanel pagePanel = new SitePanel(site);
         RootPanel.get().add(pagePanel);

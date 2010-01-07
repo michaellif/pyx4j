@@ -10,8 +10,6 @@ package com.pyx4j.site.client.domain;
 
 public class Site extends PageContainer {
 
-    public SiteProperties properties;
-
     public String homePageName;
 
     public String logoUrl;

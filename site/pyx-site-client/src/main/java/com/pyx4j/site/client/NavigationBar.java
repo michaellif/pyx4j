@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.TextDecoration;
@@ -24,19 +23,14 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 
-import com.pyx4j.site.client.domain.SiteProperties;
-
 public class NavigationBar extends ComplexPanel {
-
-    private final SiteProperties properties;
 
     private final UListElement ul;
 
     private final Map<String, NavigationTab> tabs = new HashMap<String, NavigationTab>();
 
-    public NavigationBar(SiteProperties properties) {
+    public NavigationBar() {
         super();
-        this.properties = properties;
         ul = Document.get().createULElement();
         ul.getStyle().setProperty("listStyleType", "none");
         setElement(ul);
