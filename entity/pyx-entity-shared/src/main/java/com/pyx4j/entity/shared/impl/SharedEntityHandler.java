@@ -46,6 +46,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         super(clazz, parent, fieldName);
     }
 
+    //TODO Use IEntityMeta
     protected abstract void lazyCreateMembersNamesList();
 
     protected void createMemeber(String name) {

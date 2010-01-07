@@ -8,18 +8,32 @@
  */
 package com.pyx4j.entity.server;
 
-import java.lang.reflect.Proxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.proxies.EntityHandler;
+import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 
 public class ServerEntityFactory implements IEntityFactoryImpl {
 
+    private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
+
     @SuppressWarnings("unchecked")
     public <T extends IEntity<?>> T create(Class<T> clazz) {
-        Class<?>[] interfaces = new Class[] { clazz };
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new EntityHandler(clazz));
+        String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+        Class<?> handlerClass;
+        try {
+            handlerClass = Class.forName(handlerClassName, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            handlerClass = EntityImplGenerator.instance().generateImplementation(clazz.getName());
+        }
+        try {
+            return (T) handlerClass.newInstance();
+        } catch (Throwable e) {
+            log.error(handlerClassName + " instantiation error", e);
+            throw new Error(e.getMessage());
+        }
     }
 
 }

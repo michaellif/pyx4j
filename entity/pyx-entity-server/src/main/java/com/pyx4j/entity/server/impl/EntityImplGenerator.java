@@ -9,9 +9,11 @@
 package com.pyx4j.entity.server.impl;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -28,24 +30,38 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public abstract class EntityImplGenerator {
+public class EntityImplGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(EntityImplGenerator.class);
 
     public static final String MARKER_RESOURCE_NAME = "META-INF/MANIFEST.MF";
 
-    public static void generate() {
-        List<String> classes = EntityClassFinder.findEntityClasses();
-        log.debug("found IEntity {} ", classes);
+    private static EntityImplGenerator instance;
 
-        ClassPool pool = ClassPool.getDefault();
-        //GAE hack start
+    private final ClassPool pool;
+
+    private EntityImplGenerator() {
+        pool = ClassPool.getDefault();
+        appendGaeClassPath();
+    }
+
+    public static synchronized EntityImplGenerator instance() {
+        if (instance == null) {
+            instance = new EntityImplGenerator();
+        }
+        return instance;
+    }
+
+    /**
+     * Required only to work on GAE
+     */
+    private void appendGaeClassPath() {
         ClassLoader cld = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> urls;
         try {
             urls = cld.getResources(MARKER_RESOURCE_NAME);
         } catch (IOException e) {
-            log.error("unable to find jar markers", e);
+            log.error("Unable to find jar markers", e);
             return;
         }
         while (urls.hasMoreElements()) {
@@ -63,46 +79,89 @@ public abstract class EntityImplGenerator {
                 log.error("Can't append path", e);
             }
         }
-        //GAE Hack end
+    }
 
+    public static void generate() {
+        List<String> classes = EntityClassFinder.findEntityClasses();
+        log.debug("found IEntity {} ", classes);
         for (String c : classes) {
-            String name = c + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
-            try {
-                CtClass cc = pool.makeClass(name);
-                cc.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
-                // Constructors
-                CtConstructor defaultConstructor = new CtConstructor(null, cc);
-                defaultConstructor.setBody("super(" + c + ".class);");
-                cc.addConstructor(defaultConstructor);
-
-                CtClass ctStringClass = pool.get(String.class.getName());
-
-                CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IEntity.class.getName()), ctStringClass }, cc);
-                memberConstructor.setBody("super(" + c + ".class, $1, $2);");
-                cc.addConstructor(memberConstructor);
-
-                // Abstract methods
-                CtMethod getMemberMeta = new CtMethod(pool.get(MemberMeta.class.getName()), "getMemberMeta", new CtClass[] { ctStringClass }, cc);
-                getMemberMeta.setBody("return " + EntityImplReflectionHelper.class.getName() + ".getMemberMeta(this, $1);");
-                cc.addMethod(getMemberMeta);
-
-                CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);
-                lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(this, $1);");
-                cc.addMethod(lazyCreateMember);
-
-                // Members access
-
-                cc.toClass();
-            } catch (CannotCompileException e) {
-                log.error("Impl compile error", e);
-                throw new Error("Can't create class " + name);
-            } catch (NotFoundException e) {
-                log.error("Impl  construction error", e);
-                throw new Error("Can't create class " + name);
-            }
-
+            EntityImplGenerator.instance().generateImplementation(c);
         }
         log.info("Created {} IEntity implementations", classes.size());
 
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<IEntity<?>> generateImplementation(String interfaceName) {
+        Class<IEntity<?>> interfaceClass;
+        try {
+            interfaceClass = (Class<IEntity<?>>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new Error(interfaceName + " not available");
+        }
+        return generateImplementation(interfaceClass);
+    }
+
+    public <T extends IEntity<?>> Class<T> generateImplementation(Class<T> interfaceClass) {
+        String interfaceName = interfaceClass.getName();
+        String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+        try {
+            CtClass cc = pool.makeClass(name);
+            cc.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
+            cc.addInterface(pool.get(interfaceName));
+            // Constructors
+            CtConstructor defaultConstructor = new CtConstructor(null, cc);
+            defaultConstructor.setBody("super(" + interfaceName + ".class);");
+            cc.addConstructor(defaultConstructor);
+
+            CtClass ctStringClass = pool.get(String.class.getName());
+
+            CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IEntity.class.getName()), ctStringClass }, cc);
+            memberConstructor.setBody("super(" + interfaceName + ".class, $1, $2);");
+            cc.addConstructor(memberConstructor);
+
+            // Abstract methods
+            CtMethod getMemberMeta = new CtMethod(pool.get(MemberMeta.class.getName()), "getMemberMeta", new CtClass[] { ctStringClass }, cc);
+            getMemberMeta.setBody("return " + EntityImplReflectionHelper.class.getName() + ".getMemberMeta(this, $1);");
+            cc.addMethod(getMemberMeta);
+
+            CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);
+            lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(this, $1);");
+            cc.addMethod(lazyCreateMember);
+
+            // Members access
+            List<String> memebers = new Vector<String>();
+            for (Method method : interfaceClass.getMethods()) {
+                if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
+                    continue;
+                }
+                Class<?> type = method.getReturnType();
+                if (type == Void.class) {
+                    continue;
+                }
+                CtMethod member = new CtMethod(pool.get(type.getName()), method.getName(), null, cc);
+                member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
+                cc.addMethod(member);
+                memebers.add(method.getName());
+            }
+
+            //TODO Use IEntityMeta
+            CtMethod lazyCreateMembersNamesList = new CtMethod(CtClass.voidType, "lazyCreateMembersNamesList", null, cc);
+            StringBuilder b = new StringBuilder("{");
+            for (String memeber : memebers) {
+                b.append("createMemeber(\"").append(memeber).append("\");");
+            }
+            b.append("}");
+            lazyCreateMembersNamesList.setBody(b.toString());
+            cc.addMethod(lazyCreateMembersNamesList);
+
+            return cc.toClass();
+        } catch (CannotCompileException e) {
+            log.error("Impl compile error", e);
+            throw new Error("Can't create class " + name);
+        } catch (NotFoundException e) {
+            log.error("Impl  construction error", e);
+            throw new Error("Can't create class " + name);
+        }
     }
 }

@@ -12,7 +12,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 
-import com.pyx4j.entity.server.proxies.MemberMetaImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -55,8 +54,13 @@ public class EntityImplReflectionHelper {
     @SuppressWarnings("unchecked")
     private static <T extends IObject<?, ?>> IEntity<T> lazyCreateMemberIEntity(SharedEntityHandler<?> implHandler, String name, Class<?> valueClass) {
         String handlerClassName = valueClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
+        Class<?> handlerClass;
         try {
-            Class<?> handlerClass = Class.forName(handlerClassName, true, Thread.currentThread().getContextClassLoader());
+            handlerClass = Class.forName(handlerClassName, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e1) {
+            handlerClass = EntityImplGenerator.instance().generateImplementation((Class<IEntity>) valueClass);
+        }
+        try {
             Constructor childConstructor = handlerClass.getConstructor(IEntity.class, String.class);
             return (IEntity<T>) childConstructor.newInstance(implHandler, name);
         } catch (Throwable e) {

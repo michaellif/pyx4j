@@ -20,6 +20,13 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-shared</artifactId>
             <version>${project.version}</version>

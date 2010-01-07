@@ -6,7 +6,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.server.proxies;
+package com.pyx4j.entity.server.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
