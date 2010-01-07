@@ -2,8 +2,9 @@ pyx-gwt-server
 pyx-rpc-server
 pyx-rpc-shared
 pyx-rpc-gwt
-pyx-entity-shared
 tester-client
+pyx-entity-shared
+pyx-entity-rpc
 pyx-entity-tests
 pyx-entity-server
 pyx-entity-gae

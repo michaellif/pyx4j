@@ -9,8 +9,8 @@
 package com.pyx4j.entity.server;
 
 import java.util.List;
-import java.util.Map;
 
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface IEntityPersistenceService {
@@ -19,7 +19,7 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity<?>> T retrieve(Class<T> entityClass, String primaryKey);
 
-    public <T extends IEntity<?>> List<T> query(Class<T> entityClass, Map<String, Object> simpleCriteria);
+    public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria);
 
     public void delete(IEntity<?> entity);
 

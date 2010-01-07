@@ -10,6 +10,10 @@ package com.pyx4j.entity.gae;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -17,12 +21,17 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 /**
  * 
@@ -30,6 +39,8 @@ import com.pyx4j.entity.shared.IEntity;
  * 
  */
 public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
+
+    private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceGAE.class);
 
     private final int ORDINARY_STRING_LENGHT_MAX = 500;
 
@@ -108,7 +119,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             iEntity.setMemberValue(me.getKey(), value);
         }
-        //iEntity.setValue(entity.getProperties());
     }
 
     private void retrieveEntity(IEntity<?> iEntity, Key key) {
@@ -142,10 +152,57 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return iEntity;
     }
 
-    @Override
-    public <T extends IEntity<?>> List<T> query(Class<T> entityClass, Map<String, Object> simpleCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public static Query.FilterOperator operator(PropertyCriterion.Restriction restriction) {
+        switch (restriction) {
+        case LESS_THAN:
+            return Query.FilterOperator.LESS_THAN;
+        case LESS_THAN_OR_EQUAL:
+            return Query.FilterOperator.LESS_THAN_OR_EQUAL;
+        case GREATER_THAN:
+            return Query.FilterOperator.GREATER_THAN;
+        case GREATER_THAN_OR_EQUAL:
+            return Query.FilterOperator.GREATER_THAN_OR_EQUAL;
+        case EQUAL:
+            return Query.FilterOperator.EQUAL;
+        case NOT_EQUAL:
+            return Query.FilterOperator.NOT_EQUAL;
+        case IN:
+            return Query.FilterOperator.IN;
+        default:
+            throw new RuntimeException("Unsupported Operator " + restriction);
+        }
     }
 
+    private void addFilter(Query query, PropertyCriterion propertyCriterion) {
+        query.addFilter(propertyCriterion.getPropertyName(), operator(propertyCriterion.getRestriction()), propertyCriterion.getValue());
+    }
+
+    @Override
+    public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria) {
+        Class<T> entityClass;
+        try {
+            entityClass = (Class<T>) Class.forName(criteria.getDomainName(), true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Not an Entity");
+        }
+        Query query = new Query(getIEntityKind(entityClass));
+
+        if (criteria.getFilters() != null) {
+            for (Criterion cr : criteria.getFilters()) {
+                if (cr instanceof PropertyCriterion) {
+                    addFilter(query, (PropertyCriterion) cr);
+                }
+            }
+        }
+
+        PreparedQuery pq = datastore.prepare(query);
+
+        List<T> rc = new Vector<T>();
+        for (Entity entity : pq.asIterable()) {
+            T iEntity = EntityFactory.create(entityClass);
+            updateIEntity(iEntity, entity);
+            rc.add(iEntity);
+        }
+        return rc;
+    }
 }
