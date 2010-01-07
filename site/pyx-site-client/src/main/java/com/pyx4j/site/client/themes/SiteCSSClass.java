@@ -24,5 +24,14 @@ public enum SiteCSSClass {
 
     pyx4j_Site_Logo,
 
-    pyx4j_Site_MainNavig
+    //Navigation 
+
+    pyx4j_Site_PrimaryNavig,
+
+    pyx4j_Site_PrimaryNavigTabUl,
+
+    pyx4j_Site_PrimaryNavigTabAnchor,
+
+    pyx4j_Site_PrimaryNavigTabLi,
+
 }

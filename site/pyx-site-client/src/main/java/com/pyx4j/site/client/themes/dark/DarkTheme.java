@@ -10,9 +10,10 @@ package com.pyx4j.site.client.themes.dark;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.style.Style;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
+import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.gray.GrayTheme;
 
-public class DarkTheme extends WindowsTheme {
+public class DarkTheme extends GrayTheme {
 
     @Override
     protected void initStyles() {
@@ -24,7 +25,8 @@ public class DarkTheme extends WindowsTheme {
         initFooterStyles();
         initHeaderCaptionsStyles();
         initLogoStyles();
-        initMainNavigStyles();
+        initPrimaryNavigStyles();
+
     }
 
     private void initSitePanelStyles() {
@@ -51,6 +53,7 @@ public class DarkTheme extends WindowsTheme {
     protected void initMainPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainPanel.name());
         style.addProperty("background", "white");
+        style.addProperty("color", "gray");
         addStyle(style);
     }
 
@@ -77,10 +80,27 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
-    protected void initMainNavigStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainNavig.name());
+    protected void initPrimaryNavigStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
+        style.addProperty("margin-left", "0px");
+        style.addProperty("margin-top", "104px");
+        style.addProperty("background", "url(images/menubkg2.gif) repeat-x");
+        style.addProperty("width", "100%");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabUl.name());
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabLi.name());
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
+        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "100px");
+        style.addProperty("margin-right", "20px");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-selected");
+        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-mouseOver");
+        style.addProperty("color", "#ff6600");
         addStyle(style);
     }
 

@@ -10,6 +10,7 @@ package com.pyx4j.site.client.themes.light;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ThemeColor;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
 public class LightTheme extends WindowsTheme {
@@ -24,7 +25,7 @@ public class LightTheme extends WindowsTheme {
         initFooterStyles();
         initHeaderCaptionsStyles();
         initLogoStyles();
-        initMainNavigStyles();
+        initPrimaryNavigStyles();
 
     }
 
@@ -79,10 +80,20 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
-    protected void initMainNavigStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainNavig.name());
+    protected void initPrimaryNavigStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "20px");
         style.addProperty("margin-top", "120px");
+        style.addProperty("background", "green");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
+        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-selected");
+        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-mouseOver");
+        style.addProperty("color", "#ff6600");
         addStyle(style);
     }
 
