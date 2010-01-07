@@ -86,10 +86,11 @@ public class NavigationBar extends ComplexPanel {
             anchor.getElement().getStyle().setCursor(Cursor.POINTER);
 
             li = Document.get().createLIElement().cast();
-            //        li.getStyle().setProperty("float", "left");
-            //        li.getStyle().setProperty("cssFloat", "left");
-            li.getStyle().setProperty("display", "inline");
-            //li.getStyle().setProperty("display", "block");
+            if (true) {
+                li.getStyle().setProperty("display", "inline");
+            } else {
+                //vertical - li.getStyle().setProperty("display", "block");
+            }
             add(anchor, li);
         }
 
