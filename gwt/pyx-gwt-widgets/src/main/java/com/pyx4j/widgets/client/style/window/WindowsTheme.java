@@ -57,39 +57,39 @@ public class WindowsTheme extends Theme {
         Style style = new Style("body");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("color", ThemeColor.TEXT);
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initSectionStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Section_Border.name());
         style.addProperty("background-color", ThemeColor.BORDER);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Section_SelectionBorder.name());
         style.addProperty("background-color", ThemeColor.SELECTION);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Section_Background.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Section_Content.name());
         style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initToolbarStyle() {
         Style style = new Style("." + CSSClass.pyx4j_Toolbar.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initStatusBarStyle() {
         Style style = new Style("." + CSSClass.pyx4j_StatusBar.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initBarSeparatorStyle() {
@@ -102,7 +102,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("margin-left", "3px");
         style.addProperty("margin-top", "2px");
         style.addProperty("margin-bottom", "2px");
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initProgressBarStyles() {
@@ -120,22 +120,22 @@ public class WindowsTheme extends Theme {
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         styles.add(style);
 
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initMenuBarStyles() {
         Style style = new Style(".gwt-MenuBar");
         style.addProperty("cursor", "default");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-MenuBar .gwt-MenuItem");
         style.addProperty("cursor", "default");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-MenuBar .gwt-MenuItem-selected");
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
@@ -144,19 +144,19 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.SELECTION);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
         style.addProperty("padding", "4px 14px 4px 1px");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-MenuBar-horizontal");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-MenuBar-horizontal .gwt-MenuItem");
         style.addProperty("padding", "0px 10px");
         style.addProperty("vertical-align", "bottom");
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initDialogBoxStyles() {
@@ -166,17 +166,17 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-style", "outset");
         style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-DialogBox .Caption");
         style.addProperty("background-color", ThemeColor.SELECTION);
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initDialogPanelStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Dialog.name());
         style.addProperty("border-color", ThemeColor.SELECTION);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Caption.name());
         style.addProperty("background", ThemeColor.SELECTION);
@@ -184,35 +184,35 @@ public class WindowsTheme extends Theme {
         style.addProperty("opacity", "0.8");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         style.addProperty("font-weight", "bold");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Resizer.name());
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("filter", "alpha(opacity=80)");
         style.addProperty("opacity", "0.8");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Content.name());
         style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
-        putStyle(style);
+        addStyle(style);
     }
 
     public void initTabPanelStyles() {
         Style style = new Style(".gwt-TabPanel");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabPanelBottom");
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabBarMoveLeft");
         style.addProperty("margin", "3px");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabBarMoveRight");
         style.addProperty("margin", "3px");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabBarItem");
         style.addProperty("cursor", "pointer");
@@ -222,22 +222,22 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-right-style", "solid");
         style.addProperty("border-right-color", ThemeColor.BORDER);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabBarItem-first");
         style.addProperty("border-left-width", "1px");
         style.addProperty("border-left-style", "solid");
         style.addProperty("border-left-color", ThemeColor.BORDER);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabBarItem-selected");
         style.addProperty("cursor", "default");
         style.addProperty("background-color", ThemeColor.SELECTION);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style(".gwt-TabBarItem-selected .gwt-TabBarItemLabel");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        putStyle(style);
+        addStyle(style);
 
     }
 
@@ -249,26 +249,26 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button.name() + "-hover");
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "outset");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button.name() + "-pushed");
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "ridge");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
-        putStyle(style);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button.name() + "-checked");
         style.addProperty("background", ThemeColor.OBJECT_TONE2);
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "inset");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
-        putStyle(style);
+        addStyle(style);
 
     }
 
@@ -279,7 +279,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("padding", "1px 3px 1px 3px");
         style.addProperty("color", "#000000");
         style.addProperty("font-size", "16px");
-        putStyle(style);
+        addStyle(style);
     }
 
 }

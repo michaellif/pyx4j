@@ -8,32 +8,33 @@
  */
 package com.pyx4j.widgets.client.style;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Theme {
 
-    private final Map<String, Style> styles;
+    private final List<Style> styles;
 
     private final Map<ThemeColor, String> themeColors;
 
     public Theme() {
-        styles = new HashMap<String, Style>();
+        styles = new ArrayList<Style>();
         themeColors = new HashMap<ThemeColor, String>();
     }
 
     protected Theme(Theme other) {
-        styles = new HashMap<String, Style>(other.styles);
+        styles = new ArrayList<Style>(other.styles);
         themeColors = new HashMap<ThemeColor, String>(other.themeColors);
     }
 
-    public Collection<Style> getAllStyles() {
-        return styles.values();
+    public List<Style> getAllStyles() {
+        return styles;
     }
 
-    public void putStyle(Style style) {
-        styles.put(style.getSelector(), style);
+    public void addStyle(Style style) {
+        styles.add(style);
     }
 
     public String getThemeColor(ThemeColor color) {
