@@ -11,13 +11,21 @@ package com.pyx4j.entity.server.servlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 
 public class InitializationServletContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        EntityImplGenerator.generate();
+        try {
+            EntityImplGenerator.generate();
+        } catch (Throwable e) {
+            Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
+            log.error("initialization error", e);
+        }
     }
 
     @Override

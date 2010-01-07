@@ -27,7 +27,8 @@ public class EntityClassFinder extends ClassFinder {
     public static final String MARKER_RESOURCE_NAME = "META-INF/persistence-domain.marker";
 
     protected EntityClassFinder(String urlExternalForm) {
-        super(urlExternalForm.subSequence(0, urlExternalForm.lastIndexOf(MARKER_RESOURCE_NAME)).toString());
+        super(urlExternalForm.substring(0, urlExternalForm.lastIndexOf(MARKER_RESOURCE_NAME)));
+        log.debug("domain path {}", getBaseURL());
     }
 
     public static List<String> findEntityClasses() {

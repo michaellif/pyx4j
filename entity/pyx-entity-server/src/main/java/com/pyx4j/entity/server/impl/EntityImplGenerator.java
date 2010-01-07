@@ -8,6 +8,9 @@
  */
 package com.pyx4j.entity.server.impl;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.List;
 
 import javassist.CannotCompileException;
@@ -29,11 +32,39 @@ public abstract class EntityImplGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(EntityImplGenerator.class);
 
+    public static final String MARKER_RESOURCE_NAME = "META-INF/MANIFEST.MF";
+
     public static void generate() {
         List<String> classes = EntityClassFinder.findEntityClasses();
         log.debug("found IEntity {} ", classes);
 
         ClassPool pool = ClassPool.getDefault();
+        //GAE hack start
+        ClassLoader cld = Thread.currentThread().getContextClassLoader();
+        Enumeration<URL> urls;
+        try {
+            urls = cld.getResources(MARKER_RESOURCE_NAME);
+        } catch (IOException e) {
+            log.error("unable to find jar markers", e);
+            return;
+        }
+        while (urls.hasMoreElements()) {
+            String u = urls.nextElement().toExternalForm();
+            String pathname = u.substring(0, u.lastIndexOf(MARKER_RESOURCE_NAME) - 2);
+            String prefix = "jar:file:";
+            if (!pathname.startsWith(prefix)) {
+                continue;
+            }
+            pathname = pathname.substring(prefix.length());
+            try {
+                log.debug("ClassPool append path {}", pathname);
+                pool.appendClassPath(pathname);
+            } catch (NotFoundException e) {
+                log.error("Can't append path", e);
+            }
+        }
+        //GAE Hack end
+
         for (String c : classes) {
             String name = c + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
             try {
@@ -71,6 +102,7 @@ public abstract class EntityImplGenerator {
             }
 
         }
+        log.info("Created {} IEntity implementations", classes.size());
 
     }
 }

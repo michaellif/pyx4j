@@ -43,6 +43,10 @@ public class ClassFinder {
         }
     }
 
+    public String getBaseURL() {
+        return baseURL;
+    }
+
     public void include(String regex) {
         includePatterns.add(Pattern.compile(regex));
     }
@@ -154,4 +158,5 @@ public class ClassFinder {
         String className = name.replace('/', '.');
         return className.substring(0, className.lastIndexOf('.'));
     }
+
 }
