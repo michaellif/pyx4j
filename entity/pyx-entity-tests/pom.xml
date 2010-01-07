@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-unit</artifactId>
+            <artifactId>pyx-unit-gwt</artifactId>
             <version>${project.version}</version>
             <optional>true</optional>
         </dependency>

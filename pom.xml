@@ -107,7 +107,7 @@
         <module>log/pyx-log-gwt</module>
 
         <module>rpc/pyx-rpc-gwt</module>
-        <module>gwt/pyx-gwt-unit</module>
+        <module>unit/pyx-unit-gwt</module>
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-ria</module>
 

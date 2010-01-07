@@ -31,7 +31,7 @@
             <artifactId>pyx-rpc-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>tester-domain</artifactId>
@@ -40,7 +40,7 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-unit</artifactId>
+            <artifactId>pyx-unit-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -49,14 +49,14 @@
             <artifactId>pyx-unit-runner</artifactId>
             <version>${project.version}</version>
         </dependency>
-                
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
     <build>

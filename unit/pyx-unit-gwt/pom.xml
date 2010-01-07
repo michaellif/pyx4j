@@ -15,8 +15,8 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>pyx-gwt-unit</artifactId>
-	<name>pyx-gwt-unit</name>
+	<artifactId>pyx-unit-gwt</artifactId>
+	<name>pyx-unit-gwt</name>
 	<description>Asynchronous Unit Tests for GWT</description>
 
 	<dependencies>
