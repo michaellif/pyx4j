@@ -17,7 +17,7 @@ import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
 import com.pyx4j.widgets.client.DecoratorPanel;
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class SectionPanel extends DecoratorPanel implements ResizableWidget {
 

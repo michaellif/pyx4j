@@ -29,6 +29,7 @@ import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,7 +40,7 @@ public class WidgetsDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        StyleManger.installDefaultTheme();
+        StyleManger.installTheme(new WindowsTheme());
 
         VerticalPanel contentPanel = new VerticalPanel();
         RootPanel.get().add(contentPanel);

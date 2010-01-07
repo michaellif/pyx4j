@@ -45,7 +45,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class DialogPanel extends PopupPanel {
 

@@ -11,10 +11,6 @@ package com.pyx4j.widgets.client.style;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.user.client.Cookies;
 
-import com.pyx4j.widgets.client.style.classic.ClassicTheme;
-import com.pyx4j.widgets.client.style.gray.GrayTheme;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
-
 public class StyleManger {
 
     public static String STYLE_COOKIE = "AppStyle";
@@ -35,25 +31,11 @@ public class StyleManger {
 
     public static void installTheme(Theme theme) {
         instance().theme = theme;
-        instance().theme.compileStyles();
         StringBuilder stylesString = new StringBuilder();
-        for (Style style : theme.getStyles()) {
+        for (Style style : theme.getAllStyles()) {
             stylesString.append(style.toString(theme));
         }
-
         StyleInjector.inject(stylesString.toString());
-        Cookies.setCookie(STYLE_COOKIE, theme.getClass().getName());
-    }
-
-    public static void installDefaultTheme() {
-        String styleCookie = Cookies.getCookie(STYLE_COOKIE);
-        if (ClassicTheme.class.getName().equals(styleCookie)) {
-            StyleManger.installTheme(new ClassicTheme());
-        } else if (GrayTheme.class.getName().equals(styleCookie)) {
-            StyleManger.installTheme(new GrayTheme());
-        } else {
-            StyleManger.installTheme(new WindowsTheme());
-        }
     }
 
     public static Theme getTheme() {

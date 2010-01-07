@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHandler {
 

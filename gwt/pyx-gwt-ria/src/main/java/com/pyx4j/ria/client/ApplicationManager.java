@@ -9,6 +9,7 @@
 package com.pyx4j.ria.client;
 
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
 public class ApplicationManager {
 
@@ -17,7 +18,7 @@ public class ApplicationManager {
     private IApplication currentApplication;
 
     private ApplicationManager() {
-        StyleManger.installDefaultTheme();
+        StyleManger.installTheme(new WindowsTheme());
     }
 
     public static ApplicationManager instance() {

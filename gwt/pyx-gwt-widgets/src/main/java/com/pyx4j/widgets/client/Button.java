@@ -22,7 +22,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ButtonBase;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Button extends ButtonBase {
 

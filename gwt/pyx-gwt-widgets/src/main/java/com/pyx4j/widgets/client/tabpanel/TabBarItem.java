@@ -144,13 +144,13 @@ public class TabBarItem extends HorizontalPanel {
     void setSelected(boolean selected) {
         this.isSelected = selected;
         if (selected) {
-            addStyleName("gwt-TabBarItem-selected");
-            getWidget(0).addStyleName("gwt-TabBarItemLeft-selected");
-            getWidget(1).addStyleName("gwt-TabBarItemRight-selected");
+            addStyleDependentName("selected");
+            getWidget(0).addStyleDependentName("selected");
+            getWidget(1).addStyleDependentName("selected");
         } else {
-            removeStyleName("gwt-TabBarItem-selected");
-            getWidget(0).removeStyleName("gwt-TabBarItemLeft-selected");
-            getWidget(1).removeStyleName("gwt-TabBarItemRight-selected");
+            removeStyleDependentName("selected");
+            getWidget(0).removeStyleDependentName("selected");
+            getWidget(1).removeStyleDependentName("selected");
         }
     }
 

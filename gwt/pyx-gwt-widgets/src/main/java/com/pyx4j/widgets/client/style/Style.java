@@ -11,8 +11,6 @@ package com.pyx4j.widgets.client.style;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.widgets.client.style.Theme.ThemeColorProperty;
-
 public class Style {
 
     private final String selector;
@@ -35,7 +33,7 @@ public class Style {
         properties.add(new Property(name, value));
     }
 
-    public void addProperty(String name, ThemeColorProperty color) {
+    public void addProperty(String name, ThemeColor color) {
         properties.add(new Property(name, color));
     }
 

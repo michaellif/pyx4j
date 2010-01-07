@@ -8,88 +8,44 @@
  */
 package com.pyx4j.widgets.client.style;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface Theme {
+public class Theme {
 
-    public enum ThemeColorProperty {
+    private final Map<String, Style> styles;
 
-        OBJECT_TONE1,
+    private final Map<ThemeColor, String> themeColors;
 
-        OBJECT_TONE2,
-
-        OBJECT_TONE3,
-
-        BORDER,
-
-        SELECTION,
-
-        SELECTION_TEXT,
-
-        SEPARATOR,
-
-        TEXT,
-
-        TEXT_BACKGROUND,
-
-        DISABLED_TEXT_BACKGROUND,
-
-        MANDATORY_TEXT_BACKGROUND,
-
-        READ_ONLY_TEXT_BACKGROUND
+    public Theme() {
+        styles = new HashMap<String, Style>();
+        themeColors = new HashMap<ThemeColor, String>();
     }
 
-    public enum CSSClass {
-        pyx4j_Toolbar,
-
-        pyx4j_StatusBar,
-
-        pyx4j_BarSeparator,
-
-        //Section Panel
-        pyx4j_Section, pyx4j_Section_Border, pyx4j_Section_SelectionBorder, pyx4j_Section_Background, pyx4j_Section_Content, pyx4j_Section_ContentBorder, pyx4j_Section_header2Holder,
-
-        //Folder Panel
-        pyx4j_Folder,
-
-        //Button
-        pyx4j_Button,
-
-        //Tooltip
-        pyx4j_Tooltip,
-
-        //Dialog
-        pyx4j_Dialog, pyx4j_Dialog_Caption, pyx4j_Dialog_Resizer, pyx4j_Dialog_Content
-
+    protected Theme(Theme other) {
+        styles = new HashMap<String, Style>(other.styles);
+        themeColors = new HashMap<ThemeColor, String>(other.themeColors);
     }
 
-    public String getProperty(ThemeColorProperty name);
+    public Collection<Style> getAllStyles() {
+        return styles.values();
+    }
 
-    public List<Style> getStyles();
+    public void putStyle(Style style) {
+        styles.put(style.getSelector(), style);
+    }
 
-    public void compileStyles();
+    public String getThemeColor(ThemeColor color) {
+        return themeColors.get(color);
+    }
 
-    public Style getBodyStyle();
+    public void putThemeColor(ThemeColor color, String value) {
+        themeColors.put(color, value);
+    }
 
-    public List<Style> getSectionStyles();
+    public Theme duplicate() {
+        return new Theme(this);
+    }
 
-    public Style getToolbarStyle();
-
-    public Style getStatusBarStyle();
-
-    public Style getBarSeparatorStyle();
-
-    public List<Style> getProgressBarStyles();
-
-    public List<Style> getMenuBarStyles();
-
-    public List<Style> getTabPanelStyles();
-
-    public List<Style> getDialogBoxStyles();
-
-    public List<Style> getDialogPanelStyles();
-
-    public List<Style> getButtonStyles();
-
-    public Style getTooltipStyle();
 }

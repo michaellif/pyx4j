@@ -10,8 +10,6 @@ package com.pyx4j.widgets.client.style;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.widgets.client.style.Theme.ThemeColorProperty;
-
 public class Property {
 
     public static final String COLOR_REF_PREFIX = "$";
@@ -20,17 +18,17 @@ public class Property {
 
     private final String value;
 
-    private final ThemeColorProperty color;
+    private final ThemeColor color;
 
     public Property(String name, String value) {
         this(name, value, null);
     }
 
-    public Property(String name, ThemeColorProperty color) {
+    public Property(String name, ThemeColor color) {
         this(name, null, color);
     }
 
-    public Property(String name, String value, ThemeColorProperty color) {
+    public Property(String name, String value, ThemeColor color) {
         this.name = name;
         this.value = value;
         this.color = color;
@@ -44,7 +42,7 @@ public class Property {
         name = nameValue[0].trim();
         String v = nameValue[1].trim();
         if (v.startsWith(COLOR_REF_PREFIX)) {
-            color = ThemeColorProperty.valueOf(v.substring(1));
+            color = ThemeColor.valueOf(v.substring(1));
             value = null;
         } else {
             value = v;
@@ -60,7 +58,7 @@ public class Property {
         return value;
     }
 
-    public ThemeColorProperty getColor() {
+    public ThemeColor getColor() {
         return color;
     }
 
@@ -75,7 +73,7 @@ public class Property {
 
     public String toString(Theme theme) {
         if (value == null) {
-            return name + ": " + theme.getProperty(color) + ";";
+            return name + ": " + theme.getThemeColor(color) + ";";
         }
         int urlIdx = value.indexOf("url(");
         if (urlIdx != -1) {

@@ -8,8 +8,6 @@
  */
 package com.pyx4j.site.client;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;

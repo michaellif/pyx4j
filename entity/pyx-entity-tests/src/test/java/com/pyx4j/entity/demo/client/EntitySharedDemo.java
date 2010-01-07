@@ -16,13 +16,14 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
 public class EntitySharedDemo implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
 
-        StyleManger.installDefaultTheme();
+        StyleManger.installTheme(new WindowsTheme());
 
         final Button startButton = new Button("Start Tests");
         RootPanel.get().add(startButton, 0, 0);

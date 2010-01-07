@@ -12,7 +12,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.ria.client.style.ThemeEditor;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.classic.ClassicTheme;
 import com.pyx4j.widgets.client.style.gray.GrayTheme;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
@@ -41,13 +40,6 @@ public class Toolbar extends com.pyx4j.ria.client.Toolbar {
             @Override
             public void execute() {
                 StyleManger.installTheme(new GrayTheme());
-            }
-        });
-
-        addItem("L&F Classic", new Command() {
-            @Override
-            public void execute() {
-                StyleManger.installTheme(new ClassicTheme());
             }
         });
 

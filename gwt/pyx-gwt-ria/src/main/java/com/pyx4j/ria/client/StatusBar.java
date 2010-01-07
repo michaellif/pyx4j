@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widgetideas.client.ProgressBar;
 
-import com.pyx4j.widgets.client.style.Theme.CSSClass;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 /**
  * @author michaellif

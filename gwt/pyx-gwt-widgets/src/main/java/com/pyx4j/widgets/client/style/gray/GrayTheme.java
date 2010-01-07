@@ -8,23 +8,29 @@
  */
 package com.pyx4j.widgets.client.style.gray;
 
-import com.pyx4j.widgets.client.style.AbstarctTheme;
+import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
-public class GrayTheme extends AbstarctTheme {
+public class GrayTheme extends WindowsTheme {
 
     public GrayTheme() {
-        setProperty(ThemeColorProperty.OBJECT_TONE1, "#404040");
-        setProperty(ThemeColorProperty.OBJECT_TONE2, "#303030");
-        setProperty(ThemeColorProperty.OBJECT_TONE3, "#505050");
-        setProperty(ThemeColorProperty.BORDER, "white");
-        setProperty(ThemeColorProperty.SELECTION, "orange");
-        setProperty(ThemeColorProperty.SELECTION_TEXT, "#000000");
-        setProperty(ThemeColorProperty.TEXT_BACKGROUND, "#000000");
-        setProperty(ThemeColorProperty.TEXT, "#ffffff");
-        setProperty(ThemeColorProperty.DISABLED_TEXT_BACKGROUND, "#fafafa");
-        setProperty(ThemeColorProperty.MANDATORY_TEXT_BACKGROUND, "#fcba84");
-        setProperty(ThemeColorProperty.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
-        setProperty(ThemeColorProperty.SEPARATOR, "#999999");
+        super();
+    }
+
+    @Override
+    protected void initThemeColors() {
+        putThemeColor(ThemeColor.OBJECT_TONE1, "#404040");
+        putThemeColor(ThemeColor.OBJECT_TONE2, "#303030");
+        putThemeColor(ThemeColor.OBJECT_TONE3, "#505050");
+        putThemeColor(ThemeColor.BORDER, "white");
+        putThemeColor(ThemeColor.SELECTION, "orange");
+        putThemeColor(ThemeColor.SELECTION_TEXT, "#000000");
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, "#000000");
+        putThemeColor(ThemeColor.TEXT, "#ffffff");
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, "#fafafa");
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
+        putThemeColor(ThemeColor.SEPARATOR, "#999999");
     }
 
 }
