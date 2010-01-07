@@ -10,14 +10,11 @@ package com.pyx4j.site.shared.domain;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 public interface Page extends IEntity<Page> {
 
     PageDescriptor descriptor();
 
     IPrimitive<String> content();
-
-    ISet<PageDescriptor> navigation();
 
 }
