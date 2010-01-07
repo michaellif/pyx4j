@@ -15,11 +15,14 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.TextDecoration;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 
@@ -53,12 +56,11 @@ public class NavigationBar extends ComplexPanel {
 
         Anchor anchor;
 
-        NavigationTab(String text, String pageName) {
-            anchor = new Anchor(text, "#" + pageName);
+        NavigationTab(String text, final String pageName) {
+            anchor = new Anchor(text);
             anchor.getElement().getStyle().setProperty("margin", "6px");
             anchor.getElement().getStyle().setColor("green");
             anchor.getElement().getStyle().setProperty("outline", "0px");
-            anchor.getElement().getStyle().setBackgroundImage(ImageFactory.getImages().divider().getURL());
             anchor.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             anchor.addMouseOverHandler(new MouseOverHandler() {
                 @Override
@@ -68,10 +70,16 @@ public class NavigationBar extends ComplexPanel {
                 }
             });
             anchor.addMouseOutHandler(new MouseOutHandler() {
-
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
                     anchor.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
+                }
+            });
+
+            anchor.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    History.newItem(pageName, true);
                 }
             });
 
