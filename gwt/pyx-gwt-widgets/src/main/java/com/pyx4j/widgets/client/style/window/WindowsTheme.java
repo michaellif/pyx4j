@@ -53,14 +53,14 @@ public class WindowsTheme extends Theme {
         putThemeColor(ThemeColor.SEPARATOR, "#eeeeee");
     }
 
-    public void initBodyStyles() {
+    protected void initBodyStyles() {
         Style style = new Style("body");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("color", ThemeColor.TEXT);
         addStyle(style);
     }
 
-    public void initSectionStyles() {
+    protected void initSectionStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Section_Border.name());
         style.addProperty("background-color", ThemeColor.BORDER);
         addStyle(style);
@@ -78,21 +78,21 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    public void initToolbarStyle() {
+    protected void initToolbarStyle() {
         Style style = new Style("." + CSSClass.pyx4j_Toolbar.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
 
-    public void initStatusBarStyle() {
+    protected void initStatusBarStyle() {
         Style style = new Style("." + CSSClass.pyx4j_StatusBar.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
 
-    public void initBarSeparatorStyle() {
+    protected void initBarSeparatorStyle() {
         Style style = new Style("." + CSSClass.pyx4j_BarSeparator.name());
         style.addProperty("border-left-width", "2px");
         style.addProperty("border-left-style", "ridge");
@@ -105,7 +105,7 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    public void initProgressBarStyles() {
+    protected void initProgressBarStyles() {
         List<Style> styles = new ArrayList<Style>();
 
         Style style = new Style(".gwt-ProgressBar-shell");
@@ -123,7 +123,7 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    public void initMenuBarStyles() {
+    protected void initMenuBarStyles() {
         Style style = new Style(".gwt-MenuBar");
         style.addProperty("cursor", "default");
         addStyle(style);
@@ -159,7 +159,7 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    public void initDialogBoxStyles() {
+    protected void initDialogBoxStyles() {
 
         Style style = new Style(".gwt-DialogBox");
         style.addProperty("border-width", "2px");
@@ -173,7 +173,7 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    public void initDialogPanelStyles() {
+    protected void initDialogPanelStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Dialog.name());
         style.addProperty("border-color", ThemeColor.SELECTION);
         addStyle(style);
@@ -197,7 +197,7 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
-    public void initTabPanelStyles() {
+    protected void initTabPanelStyles() {
         Style style = new Style(".gwt-TabPanel");
         addStyle(style);
 
@@ -241,7 +241,7 @@ public class WindowsTheme extends Theme {
 
     }
 
-    public void initButtonStyles() {
+    protected void initButtonStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Button.name());
         style.addProperty("padding", "3px");
         style.addProperty("margin", "1px");
@@ -272,7 +272,7 @@ public class WindowsTheme extends Theme {
 
     }
 
-    public void initTooltipStyle() {
+    protected void initTooltipStyle() {
         Style style = new Style("." + CSSClass.pyx4j_Tooltip.name());
         style.addProperty("border", "1px solid #000000");
         style.addProperty("background-color", "#FFFFCC");

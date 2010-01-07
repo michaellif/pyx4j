@@ -9,11 +9,8 @@
 package com.pyx4j.widgets.client.style;
 
 import com.google.gwt.dom.client.StyleInjector;
-import com.google.gwt.user.client.Cookies;
 
 public class StyleManger {
-
-    public static String STYLE_COOKIE = "AppStyle";
 
     private static StyleManger instance;
 
