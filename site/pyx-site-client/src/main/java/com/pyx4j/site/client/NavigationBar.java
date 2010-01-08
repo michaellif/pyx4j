@@ -37,6 +37,10 @@ public class NavigationBar extends ComplexPanel {
 
     private final List<NavigationTab> tabs = new ArrayList<NavigationTab>();
 
+    private NavigationTab firstTab;
+
+    private NavigationTab lastTab;
+
     public NavigationBar(NavigationBarType type) {
         super();
         this.type = type;
@@ -46,7 +50,6 @@ public class NavigationBar extends ComplexPanel {
         ul.getStyle().setProperty("listStyleType", "none");
         ul.getStyle().setProperty("height", "100%");
         ul.getStyle().setProperty("margin", "0");
-        ul.getStyle().setProperty("paddingTop", "4px");
 
         if (BrowserType.isFirefox()) {
             ul.getStyle().setProperty("cssFloat", "left");
@@ -61,6 +64,10 @@ public class NavigationBar extends ComplexPanel {
 
     public void add(String text, String pageName) {
         NavigationTab tab = new NavigationTab(text, pageName);
+        if (firstTab == null) {
+            firstTab = tab;
+        }
+        lastTab = tab;
         tabs.add(tab);
         ul.appendChild(tab.getLiElement());
     }
@@ -130,6 +137,15 @@ public class NavigationBar extends ComplexPanel {
                 anchor.addStyleDependentName("selected");
             } else {
                 anchor.removeStyleDependentName("selected");
+
+            }
+        }
+
+        void setFirst(boolean flag) {
+            if (flag) {
+                anchor.addStyleDependentName("first");
+            } else {
+                anchor.removeStyleDependentName("first");
 
             }
         }

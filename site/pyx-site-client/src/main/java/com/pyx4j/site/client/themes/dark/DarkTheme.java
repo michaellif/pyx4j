@@ -87,6 +87,12 @@ public class DarkTheme extends GrayTheme {
         style.addProperty("background", "url(images/menubkg2.gif) repeat-x");
         style.addProperty("width", "100%");
         style.addProperty("height", "32px");
+        style.addProperty("padding-top", "4px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+        style.addProperty("background", "url(images/menusep.gif) no-repeat 100% 10px");
+        style.addProperty("padding", "4px 0");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
@@ -97,11 +103,10 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-selected");
-        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        style.addProperty("color", "#ff6600");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-mouseOver");
-        style.addProperty("color", "#ff6600");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
