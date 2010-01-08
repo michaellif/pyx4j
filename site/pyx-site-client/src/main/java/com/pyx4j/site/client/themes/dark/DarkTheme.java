@@ -93,6 +93,7 @@ public class DarkTheme extends GrayTheme {
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
         style.addProperty("margin-left", "20px");
         style.addProperty("margin-right", "20px");
+        style.addProperty("text-decoration", "none");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-selected");
@@ -101,6 +102,7 @@ public class DarkTheme extends GrayTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-mouseOver");
         style.addProperty("color", "#ff6600");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
 

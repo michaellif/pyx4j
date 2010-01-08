@@ -14,7 +14,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.TextDecoration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -74,21 +73,17 @@ public class NavigationBar extends ComplexPanel {
 
     class NavigationTab {
 
-        String text;
+        private final Element li;
 
-        Element li;
+        private final Anchor anchor;
 
-        Anchor anchor;
-
-        String pageName;
+        private final String pageName;
 
         NavigationTab(String text, final String pageName) {
-            this.text = text;
             this.pageName = pageName;
             anchor = new Anchor(text);
 
             anchor.getElement().getStyle().setProperty("outline", "0px");
-            anchor.getElement().getStyle().setTextDecoration(TextDecoration.NONE);
             anchor.addMouseOverHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
