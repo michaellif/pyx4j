@@ -86,9 +86,6 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("margin-top", "120px");
         style.addProperty("background", "green");
         addStyle(style);
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-        style.addProperty("height", "32px");
-        addStyle(style);
     }
 
 }

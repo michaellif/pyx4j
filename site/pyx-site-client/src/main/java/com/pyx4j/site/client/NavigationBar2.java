@@ -13,7 +13,6 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.TextDecoration;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -22,11 +21,12 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NavigationBar2 extends FlowPanel {
 
@@ -54,7 +54,7 @@ public class NavigationBar2 extends FlowPanel {
         }
     }
 
-    class NavigationTab extends DockLayoutPanel {
+    class NavigationTab extends HorizontalPanel {
 
         String text;
 
@@ -63,11 +63,9 @@ public class NavigationBar2 extends FlowPanel {
         String pageName;
 
         NavigationTab(String text, final String pageName) {
-            super(Unit.PX);
+            super();
             this.text = text;
             this.pageName = pageName;
-
-            setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
 
             anchor = new Anchor(text);
 
@@ -97,8 +95,14 @@ public class NavigationBar2 extends FlowPanel {
 
             switch (type) {
             case Primary:
-                anchor.setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
+                //anchor.setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
                 getElement().getStyle().setProperty("float", "left");
+                if (BrowserType.isFirefox()) {
+                    getElement().getStyle().setProperty("cssFloat", "left");
+                }
+                if (BrowserType.isIE()) {
+                    getElement().getStyle().setProperty("display", "inline");
+                }
                 break;
             case Secondary:
                 break;
@@ -107,6 +111,7 @@ public class NavigationBar2 extends FlowPanel {
             }
 
             add(anchor);
+            setCellVerticalAlignment(anchor, HasVerticalAlignment.ALIGN_MIDDLE);
         }
 
         void setSelected(boolean flag) {

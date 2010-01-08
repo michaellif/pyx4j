@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NavigationBar extends ComplexPanel {
 
@@ -44,11 +45,19 @@ public class NavigationBar extends ComplexPanel {
         Element div = Document.get().createDivElement().cast();
         ul = Document.get().createULElement();
         ul.getStyle().setProperty("listStyleType", "none");
+        ul.getStyle().setProperty("height", "100%");
+        ul.getStyle().setProperty("margin", "0");
+        ul.getStyle().setProperty("paddingTop", "4px");
+
+        if (BrowserType.isFirefox()) {
+            ul.getStyle().setProperty("cssFloat", "left");
+        } else {
+            ul.getStyle().setProperty("float", "left");
+        }
+
         div.appendChild(ul);
         setElement(div);
         setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
-        //UIObject.setStyleName(ul, SiteCSSClass.pyx4j_Site_PrimaryNavigTabUl.name());
-
     }
 
     public void add(String text, String pageName) {
@@ -104,12 +113,12 @@ public class NavigationBar extends ComplexPanel {
 
             li = Document.get().createLIElement().cast();
 
+            anchor.setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
+            UIObject.setStyleName(li, SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+
             switch (type) {
             case Primary:
-                li.getStyle().setProperty("display", "block");
-                li.getStyle().setProperty("float", "left");
-                anchor.setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
-                //UIObject.setStyleName(li, SiteCSSClass.pyx4j_Site_PrimaryNavigTabLi.name());
+                li.getStyle().setProperty("display", "inline");
                 break;
             case Secondary:
                 li.getStyle().setProperty("display", "block");
