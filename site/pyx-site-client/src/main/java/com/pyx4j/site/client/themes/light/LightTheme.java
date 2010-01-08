@@ -86,14 +86,8 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("margin-top", "120px");
         style.addProperty("background", "green");
         addStyle(style);
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
-        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        addStyle(style);
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-selected");
-        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        addStyle(style);
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-mouseOver");
-        style.addProperty("color", "#ff6600");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+        style.addProperty("height", "32px");
         addStyle(style);
     }
 

@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -49,7 +48,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private Image logoImage;
 
-    private NavigationBar primaryNavigationBar;
+    private NavigationBar2 primaryNavigationBar;
 
     private static LightTheme lightTheme = new LightTheme();
 
@@ -196,7 +195,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     protected void createPrimaryNavigation() {
-        primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
+        primaryNavigationBar = new NavigationBar2(NavigationBarType.Primary);
 
         for (Page page : site.pages.values()) {
             primaryNavigationBar.add(page.caption, page.name);
