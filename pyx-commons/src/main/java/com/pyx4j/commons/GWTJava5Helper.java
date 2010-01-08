@@ -1,6 +1,6 @@
 /**
  * Pyx4j framework
- * Copyright (C) 2006-2008 pyx4j.com.
+ * Copyright (C) 2006-2010 pyx4j.com.
  *
  * @author vlads
  * @version $Id$

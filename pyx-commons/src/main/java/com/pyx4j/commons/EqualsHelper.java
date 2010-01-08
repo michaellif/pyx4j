@@ -1,7 +1,7 @@
 /**
  * Pyx4j framework
- * Copyright (C) 2006-2008 pyx4j.com.
- * 
+ * Copyright (C) 2006-2010 pyx4j.com.
+ *
  * Created on 15-Oct-06
  * @author vlads
  * @version $Id$
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
+ *
  */
 public abstract class EqualsHelper {
 
