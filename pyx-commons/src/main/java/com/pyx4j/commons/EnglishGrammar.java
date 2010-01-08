@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Created on Nov 26, 2008
  * @author vlads

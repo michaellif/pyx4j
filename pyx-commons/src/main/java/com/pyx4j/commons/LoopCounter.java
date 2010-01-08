@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2009 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Created on May 7, 2009
  * @author vlads
@@ -14,7 +14,7 @@ import java.util.Collection;
  * Used for keeping track of where you are in a collection/array being iterated over. Use
  * by initializing with the collection/array before the loop and embedding a switch on the
  * next() Mode value into the loop.
- * 
+ *
  * @author David Stark, http://www.zarkonnen.com
  */
 public class LoopCounter {
