@@ -111,6 +111,8 @@
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-ria</module>
 
+        <module>gwt/pyx-gwt-serialization</module>
+
         <module>entity/pyx-entity-shared</module>
         <module>entity/pyx-entity-rpc</module>
         <module>entity/pyx-entity-gwt</module>

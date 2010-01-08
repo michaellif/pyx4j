@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+
+    <generate-with class="com.pyx4j.serialization.rebind.TypeSerializerGenerator">
+        <when-type-assignable class="com.pyx4j.serialization.client.RemoteServiceSerializer"/>
+    </generate-with>
+    
+    <source path="client" />
+</module>
