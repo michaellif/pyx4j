@@ -84,22 +84,28 @@ public class DarkTheme extends GrayTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "0px");
         style.addProperty("margin-top", "100px");
-        style.addProperty("background", "transparent url(images/menubkg2.gif) repeat-x");
         style.addProperty("width", "100%");
         style.addProperty("height", "32px");
-        style.addProperty("padding-top", "6px");
         style.addProperty("padding-left", "0px");
+        style.addProperty("background", "transparent url(images/menubkg2.gif) repeat-x");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+        style.addProperty("padding", "0px");
         style.addProperty("background", "transparent url(images/menusep.gif) no-repeat 100%");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        style.addProperty("padding", "6px 20px 6px 20px");
+        style.addProperty("padding", "0px 20px 0px 20px");
+        style.addProperty("height", "32px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a span");
+        style.addProperty("padding-top", "6px");
+        style.addProperty("display", "block");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");

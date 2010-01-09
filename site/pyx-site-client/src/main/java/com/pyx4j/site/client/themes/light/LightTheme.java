@@ -83,17 +83,16 @@ public class LightTheme extends WindowsTheme {
     protected void initPrimaryNavigStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "100px");
-        style.addProperty("background", "transparent");
-        style.addProperty("width", "900px");
-        style.addProperty("height", "23px");
-        style.addProperty("padding-top", "5px");
+        style.addProperty("margin-top", "120px");
+        style.addProperty("width", "800px");
+        style.addProperty("height", "32px");
         style.addProperty("padding-left", "50px");
+        style.addProperty("background", "transparent url(images/primaryNav-underline.gif) repeat-x 100% 100%");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-        style.addProperty("background", "transparent url(images/primaryNav-underline.gif) repeat-x 100% 100%");
-        style.addProperty("padding", "6px 6px 6px 0px");
+        style.addProperty("padding", "0px 4px 0px 0px");
+        style.addProperty("background", "transparent");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected");
@@ -102,9 +101,15 @@ public class LightTheme extends WindowsTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        style.addProperty("padding", "6px 16px 6px 20px");
+        style.addProperty("padding", "0px 16px 0px 20px");
+        style.addProperty("height", "32px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a span");
+        style.addProperty("padding-top", "6px");
+        style.addProperty("display", "block");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");

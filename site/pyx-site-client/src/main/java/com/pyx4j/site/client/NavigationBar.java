@@ -55,6 +55,7 @@ public class NavigationBar extends ComplexPanel {
         ul.getStyle().setProperty("height", "100%");
         ul.getStyle().setProperty("margin", "0");
         ul.getStyle().setProperty("padding", "0");
+        ul.getStyle().setProperty("display", "inline");
 
         if (BrowserType.isFirefox()) {
             ul.getStyle().setProperty("cssFloat", "left");
@@ -87,7 +88,7 @@ public class NavigationBar extends ComplexPanel {
 
     class NavigationTabAnchor extends Anchor {
         NavigationTabAnchor(String text, final String pageName) {
-            super(text, true);
+            super("<span>" + text + "</span>", true);
 
             getElement().getStyle().setProperty("outline", "0px");
             getElement().getStyle().setCursor(Cursor.POINTER);
@@ -117,7 +118,7 @@ public class NavigationBar extends ComplexPanel {
 
     class NavigationTab extends Panel {
 
-        private final Anchor anchor;
+        private final NavigationTabAnchor anchor;
 
         private final String pageName;
 
@@ -127,9 +128,17 @@ public class NavigationBar extends ComplexPanel {
             setElement(Document.get().createLIElement());
             UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
 
+            anchor = new NavigationTabAnchor(text, pageName);
+
             switch (type) {
             case Primary:
-                getElement().getStyle().setProperty("display", "inline");
+                getElement().getStyle().setProperty("display", "inline-block");
+                anchor.getElement().getStyle().setProperty("display", "block");
+                if (BrowserType.isFirefox()) {
+                    anchor.getElement().getStyle().setProperty("cssFloat", "left");
+                } else {
+                    anchor.getElement().getStyle().setProperty("float", "left");
+                }
                 break;
             case Secondary:
                 getElement().getStyle().setProperty("display", "block");
@@ -138,8 +147,6 @@ public class NavigationBar extends ComplexPanel {
                 getElement().getStyle().setProperty("display", "block");
                 break;
             }
-
-            anchor = new NavigationTabAnchor(text, pageName);
 
             DOM.appendChild(getElement(), anchor.getElement());
             adopt(anchor);
