@@ -45,20 +45,20 @@ public class LightTheme extends WindowsTheme {
 
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
-        style.addProperty("background", "url(images/container-header.gif) no-repeat");
+        style.addProperty("background", "transparent url(images/container-header.gif) no-repeat");
         style.addProperty("height", "200px");
         addStyle(style);
     }
 
     protected void initMainPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainPanel.name());
-        style.addProperty("background", "url(images/container-main.gif) repeat-y");
+        style.addProperty("background", "transparent url(images/container-main.gif) repeat-y");
         addStyle(style);
     }
 
     private void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
-        style.addProperty("background", "url(images/container-footer.gif) no-repeat 50% 100%");
+        style.addProperty("background", "transparent url(images/container-footer.gif) no-repeat 50% 100%");
         style.addProperty("height", "30px");
         addStyle(style);
     }
