@@ -91,8 +91,8 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-        style.addProperty("background", "url(images/menusep.gif) no-repeat 100% 10px");
-        style.addProperty("padding", "4px 0");
+        style.addProperty("background", "url(images/menusep.gif) no-repeat 100%");
+        style.addProperty("padding", "4px 0 8px 0");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
