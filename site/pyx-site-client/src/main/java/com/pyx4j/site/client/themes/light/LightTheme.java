@@ -103,7 +103,7 @@ public class LightTheme extends WindowsTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        style.addProperty("padding", "6px 17px 6px 20px");
+        style.addProperty("padding", "6px 20px 6px 20px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
         addStyle(style);
