@@ -50,6 +50,7 @@ public class NavigationBar extends ComplexPanel {
         ul.getStyle().setProperty("listStyleType", "none");
         ul.getStyle().setProperty("height", "100%");
         ul.getStyle().setProperty("margin", "0");
+        ul.getStyle().setProperty("padding", "0");
 
         if (BrowserType.isFirefox()) {
             ul.getStyle().setProperty("cssFloat", "left");
