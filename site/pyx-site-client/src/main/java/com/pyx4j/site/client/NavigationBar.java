@@ -9,7 +9,9 @@
 package com.pyx4j.site.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.UListElement;
@@ -20,11 +22,14 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -61,6 +66,7 @@ public class NavigationBar extends ComplexPanel {
         div.appendChild(ul);
         setElement(div);
         setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
+
     }
 
     public void add(String text, String pageName) {
@@ -70,7 +76,9 @@ public class NavigationBar extends ComplexPanel {
         }
         lastTab = tab;
         tabs.add(tab);
-        ul.appendChild(tab.getLiElement());
+        ul.appendChild(tab.getElement());
+        add(tab, getElement());
+
     }
 
     public void setSelected(String pageName) {
@@ -79,9 +87,41 @@ public class NavigationBar extends ComplexPanel {
         }
     }
 
-    class NavigationTab {
+    class NavigationTabAnchor extends Anchor {
+        NavigationTabAnchor(String text, final String pageName) {
+            super(text);
 
-        private final Element li;
+            getElement().getStyle().setProperty("outline", "0px");
+            getElement().getStyle().setCursor(Cursor.POINTER);
+            setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
+
+            addMouseOverHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    addStyleDependentName("mouseOver");
+                    System.out.println("mouseOver");
+                }
+            });
+            addMouseOutHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    removeStyleDependentName("mouseOver");
+                    System.out.println("remove mouseOver");
+                }
+            });
+
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    History.newItem(pageName, true);
+                    System.out.println("onClick");
+                }
+            });
+
+        }
+    }
+
+    class NavigationTab extends Panel {
 
         private final Anchor anchor;
 
@@ -89,48 +129,27 @@ public class NavigationBar extends ComplexPanel {
 
         NavigationTab(String text, final String pageName) {
             this.pageName = pageName;
-            anchor = new Anchor(text);
 
-            anchor.getElement().getStyle().setProperty("outline", "0px");
-            anchor.addMouseOverHandler(new MouseOverHandler() {
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    anchor.addStyleDependentName("mouseOver");
-                }
-            });
-            anchor.addMouseOutHandler(new MouseOutHandler() {
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    anchor.removeStyleDependentName("mouseOver");
-                }
-            });
-
-            anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    History.newItem(pageName, true);
-                }
-            });
-
-            anchor.getElement().getStyle().setCursor(Cursor.POINTER);
-
-            li = Document.get().createLIElement().cast();
-
-            anchor.setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
-            UIObject.setStyleName(li, SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+            setElement(Document.get().createLIElement());
+            UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
 
             switch (type) {
             case Primary:
-                li.getStyle().setProperty("display", "inline");
+                getElement().getStyle().setProperty("display", "inline");
                 break;
             case Secondary:
-                li.getStyle().setProperty("display", "block");
+                getElement().getStyle().setProperty("display", "block");
                 break;
             default:
-                li.getStyle().setProperty("display", "block");
+                getElement().getStyle().setProperty("display", "block");
                 break;
             }
-            add(anchor, li);
+
+            anchor = new NavigationTabAnchor(text, pageName);
+
+            DOM.appendChild(getElement(), anchor.getElement());
+            adopt(anchor);
+
         }
 
         void setSelected(boolean flag) {
@@ -151,12 +170,35 @@ public class NavigationBar extends ComplexPanel {
             }
         }
 
-        Element getLiElement() {
-            return li;
-        }
-
         Anchor getAnchor() {
             return anchor;
+        }
+
+        @Override
+        public boolean remove(Widget child) {
+            return false;
+        }
+
+        @Override
+        public Iterator<Widget> iterator() {
+            return new Iterator<Widget>() {
+                boolean hasElement = anchor != null;
+
+                public boolean hasNext() {
+                    return hasElement;
+                }
+
+                public Widget next() {
+                    if (!hasElement || (anchor == null)) {
+                        throw new NoSuchElementException();
+                    }
+                    hasElement = false;
+                    return anchor;
+                }
+
+                public void remove() {
+                }
+            };
         }
 
     }

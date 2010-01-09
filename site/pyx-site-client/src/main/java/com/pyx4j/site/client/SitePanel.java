@@ -136,8 +136,12 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     public void addToHeaderPanel(Widget w) {
+        addToHeaderPanel(w, 0, 0);
+    }
+
+    public void addToHeaderPanel(Widget w, int left, int top) {
         headerPanel.remove(w);
-        headerPanel.add(w, 0, 0);
+        headerPanel.add(w, left, top);
     }
 
     protected AbsolutePanel createFooterPanel() {
@@ -201,6 +205,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
             primaryNavigationBar.add(page.caption, page.name);
         }
         addToHeaderPanel(primaryNavigationBar);
+
     }
 
     @Override
