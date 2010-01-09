@@ -95,8 +95,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     private void show(Page page) {
-        System.out.println("Show page " + page);
-
         mainPanel.setWidget(new HTML(page.data.html, true));
 
         setHeaderCaptions(page.caption);
@@ -188,7 +186,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         logoImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                System.out.println("Click");
                 if (lightTheme.equals(StyleManger.getTheme())) {
                     StyleManger.installTheme(darkTheme);
                 } else {

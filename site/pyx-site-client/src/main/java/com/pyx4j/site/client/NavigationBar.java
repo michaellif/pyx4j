@@ -38,7 +38,7 @@ public class NavigationBar extends ComplexPanel {
 
     private final NavigationBarType type;
 
-    private final UListElement ul;
+    private final Element ul;
 
     private final List<NavigationTab> tabs = new ArrayList<NavigationTab>();
 
@@ -51,7 +51,7 @@ public class NavigationBar extends ComplexPanel {
         this.type = type;
 
         Element div = Document.get().createDivElement().cast();
-        ul = Document.get().createULElement();
+        ul = Document.get().createULElement().cast();
         ul.getStyle().setProperty("listStyleType", "none");
         ul.getStyle().setProperty("height", "100%");
         ul.getStyle().setProperty("margin", "0");
@@ -77,8 +77,7 @@ public class NavigationBar extends ComplexPanel {
         lastTab = tab;
         tabs.add(tab);
         ul.appendChild(tab.getElement());
-        add(tab, getElement());
-
+        add(tab, ul);
     }
 
     public void setSelected(String pageName) {
