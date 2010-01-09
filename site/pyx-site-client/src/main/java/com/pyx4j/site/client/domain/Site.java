@@ -24,11 +24,16 @@ public class Site extends PageContainer {
     }
 
     public Page getPage(String pageBreadcrumb) {
-        return pages.get(pageBreadcrumb);
+        for (Page page : pages) {
+            if (page.name == pageBreadcrumb) {
+                return page;
+            }
+        }
+        return null;
     }
 
     public Page getHomePage() {
-        return pages.get(homePageName);
+        return pages.get(0);
     }
 
 }

@@ -198,7 +198,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     protected void createPrimaryNavigation() {
         primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
 
-        for (Page page : site.pages.values()) {
+        for (Page page : site.pages) {
             primaryNavigationBar.add(page.caption, page.name);
         }
         addToHeaderPanel(primaryNavigationBar);

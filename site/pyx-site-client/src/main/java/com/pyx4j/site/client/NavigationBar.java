@@ -87,7 +87,7 @@ public class NavigationBar extends ComplexPanel {
 
     class NavigationTabAnchor extends Anchor {
         NavigationTabAnchor(String text, final String pageName) {
-            super(text);
+            super(text, true);
 
             getElement().getStyle().setProperty("outline", "0px");
             getElement().getStyle().setCursor(Cursor.POINTER);
