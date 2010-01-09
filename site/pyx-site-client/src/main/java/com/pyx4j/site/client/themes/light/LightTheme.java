@@ -83,8 +83,37 @@ public class LightTheme extends WindowsTheme {
     protected void initPrimaryNavigStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "120px");
-        style.addProperty("background", "green");
+        style.addProperty("margin-top", "100px");
+        style.addProperty("background", "transparent");
+        style.addProperty("width", "900px");
+        style.addProperty("height", "23px");
+        style.addProperty("padding-top", "6px");
+        style.addProperty("padding-left", "10px");
+        style.addProperty("border-bottom", "solid #D0CAC4 1px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+        style.addProperty("background", "transparent");
+        style.addProperty("padding", "6px 4px 6px 0px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected");
+        style.addProperty("background", "transparent url(images/primaryNav-right.gif) no-repeat 100%");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
+        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        style.addProperty("padding", "6px 20px 6px 20px");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");
+        style.addProperty("background", "transparent url(images/primaryNav-bg.gif) no-repeat");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
 

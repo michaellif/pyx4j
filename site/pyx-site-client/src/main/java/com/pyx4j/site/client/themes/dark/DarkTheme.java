@@ -84,29 +84,30 @@ public class DarkTheme extends GrayTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "0px");
         style.addProperty("margin-top", "100px");
-        style.addProperty("background", "url(images/menubkg2.gif) repeat-x");
+        style.addProperty("background", "transparent url(images/menubkg2.gif) repeat-x");
         style.addProperty("width", "100%");
         style.addProperty("height", "32px");
         style.addProperty("padding-top", "6px");
+        style.addProperty("padding-left", "0px");
+        style.addProperty("border", "none");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-        style.addProperty("background", "url(images/menusep.gif) no-repeat 100%");
-        style.addProperty("padding", "6px 0 6px 0");
+        style.addProperty("background", "transparent url(images/menusep.gif) no-repeat 100%");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        style.addProperty("margin-left", "20px");
-        style.addProperty("margin-right", "20px");
+        style.addProperty("padding", "6px 20px 6px 20px");
         style.addProperty("text-decoration", "none");
+        style.addProperty("background", "transparent");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-selected");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");
         style.addProperty("color", "#ff6600");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name() + "-mouseOver");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
     }

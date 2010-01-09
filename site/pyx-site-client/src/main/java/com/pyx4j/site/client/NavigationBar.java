@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.UListElement;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -92,20 +91,17 @@ public class NavigationBar extends ComplexPanel {
 
             getElement().getStyle().setProperty("outline", "0px");
             getElement().getStyle().setCursor(Cursor.POINTER);
-            setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavigTabAnchor.name());
 
             addMouseOverHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    addStyleDependentName("mouseOver");
-                    System.out.println("mouseOver");
+                    getParent().addStyleDependentName("mouseOver");
                 }
             });
             addMouseOutHandler(new MouseOutHandler() {
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    removeStyleDependentName("mouseOver");
-                    System.out.println("remove mouseOver");
+                    getParent().removeStyleDependentName("mouseOver");
                 }
             });
 
@@ -113,7 +109,6 @@ public class NavigationBar extends ComplexPanel {
                 @Override
                 public void onClick(ClickEvent event) {
                     History.newItem(pageName, true);
-                    System.out.println("onClick");
                 }
             });
 
@@ -153,18 +148,18 @@ public class NavigationBar extends ComplexPanel {
 
         void setSelected(boolean flag) {
             if (flag) {
-                anchor.addStyleDependentName("selected");
+                addStyleDependentName("selected");
             } else {
-                anchor.removeStyleDependentName("selected");
+                removeStyleDependentName("selected");
 
             }
         }
 
         void setFirst(boolean flag) {
             if (flag) {
-                anchor.addStyleDependentName("first");
+                addStyleDependentName("first");
             } else {
-                anchor.removeStyleDependentName("first");
+                removeStyleDependentName("first");
 
             }
         }
