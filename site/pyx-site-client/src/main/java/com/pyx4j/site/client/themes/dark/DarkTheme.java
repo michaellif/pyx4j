@@ -91,14 +91,12 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-        style.addProperty("padding", "0px");
         style.addProperty("background", "transparent url(images/menusep.gif) no-repeat 100%");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
         style.addProperty("padding", "0px 20px 0px 20px");
-        style.addProperty("height", "32px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
         addStyle(style);
