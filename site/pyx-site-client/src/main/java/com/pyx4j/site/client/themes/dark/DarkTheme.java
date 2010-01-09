@@ -89,7 +89,6 @@ public class DarkTheme extends GrayTheme {
         style.addProperty("height", "32px");
         style.addProperty("padding-top", "6px");
         style.addProperty("padding-left", "0px");
-        style.addProperty("border", "none");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());

@@ -89,7 +89,7 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("height", "23px");
         style.addProperty("padding-top", "6px");
         style.addProperty("padding-left", "10px");
-        style.addProperty("border-bottom", "solid #D0CAC4 1px");
+        style.addProperty("background", "transparent url(images/primaryNav-underline.gif) repeat-x 100% 100%");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
@@ -103,7 +103,7 @@ public class LightTheme extends WindowsTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
-        style.addProperty("padding", "6px 20px 6px 20px");
+        style.addProperty("padding", "6px 16px 6px 20px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
         addStyle(style);
