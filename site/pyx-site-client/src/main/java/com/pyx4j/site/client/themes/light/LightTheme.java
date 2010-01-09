@@ -88,7 +88,7 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("width", "900px");
         style.addProperty("height", "23px");
         style.addProperty("padding-top", "5px");
-        style.addProperty("padding-left", "10px");
+        style.addProperty("padding-left", "50px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
