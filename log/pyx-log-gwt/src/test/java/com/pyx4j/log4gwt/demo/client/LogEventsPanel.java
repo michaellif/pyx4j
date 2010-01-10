@@ -39,6 +39,7 @@ public class LogEventsPanel extends VerticalPanel {
     public LogEventsPanel() {
 
         final TextBox text = new TextBox();
+        text.setVisibleLength(70);
         text.setValue("A log message with data {} and {} (if any)");
         this.add(text);
 

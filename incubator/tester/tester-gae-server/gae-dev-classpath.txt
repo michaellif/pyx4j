@@ -10,6 +10,7 @@ pyx-entity-server
 pyx-entity-gae
 pyx-commons
 pyx-log-shared
+pyx-log-server
 pyx-unit-shared
 pyx-unit-server
 slf4j-api
@@ -19,6 +20,7 @@ slf4j-jdk14
 -pyx-entity-shared.jar
 -pyx-commons.jar
 -pyx-log-shared.jar
+-pyx-log-server.jar
 -pyx-unit-shared.jar
 -pyx-unit-server.jar
 -pyx-entity-server.jar

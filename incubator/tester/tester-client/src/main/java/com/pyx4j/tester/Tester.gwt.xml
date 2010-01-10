@@ -11,6 +11,8 @@
     <inherits name='com.pyx4j.rpc.test.RPCTests'/>
 	<inherits name='com.pyx4j.unit.ServerSideUnitRunner'/>
 	
+	<inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
+	
 	<source path="client"/>
 	
 	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>

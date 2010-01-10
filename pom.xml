@@ -108,6 +108,7 @@
 
         <module>rpc/pyx-rpc-gwt</module>
         <module>log/pyx-log-gwt-rpcappender</module>
+        <module>log/pyx-log-server</module>
         <module>unit/pyx-unit-gwt</module>
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-ria</module>

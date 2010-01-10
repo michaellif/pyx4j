@@ -48,6 +48,6 @@ class ClientLog4j {
 
     static void log(LogEvent event) {
         log.callAppenders(new org.apache.log4j.spi.LoggingEvent(log.getName(), log, event.getEventTime(), toLog4jLevel(event.getLevel()), event
-                .getFormatedMessage(), event.getThrowable()));
+                .getFormatedMessageWithThrowable(), event.getThrowable()));
     }
 }

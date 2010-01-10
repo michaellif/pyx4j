@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.runner.ServerTestRunner;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -38,6 +40,9 @@ public class TesterClientEntryPoint implements EntryPoint {
     public void onModuleLoad() {
         ClientEntityFactory.ensureIEntityImplementations();
         StyleManger.installTheme(new WindowsTheme());
+
+        ClientLogger.addAppender(new RPCAppender());
+        ClientLogger.setDebugOn(true);
 
         VerticalPanel menu = new VerticalPanel();
         RootPanel.get().add(menu, 0, 0);

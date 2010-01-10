@@ -8,5 +8,4 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gwt.eclipse.core.moduleClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="pyx-unit-gwt"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="/pyx-gwt-unit/war"/>
 </launchConfiguration>

@@ -94,7 +94,8 @@ public class RPCAppender implements Appender {
 
     @Override
     public void doAppend(LogEvent event) {
-        if (this.level.ordinal() > event.getLevel().ordinal()) {
+        if (event.getLevel().ordinal() > this.level.ordinal()) {
+            //log.debug("ignore log {} event", event.getLevel());
             return;
         }
         if (buffer.size() > BUFFER_MAX) {
@@ -113,6 +114,7 @@ public class RPCAppender implements Appender {
                 return;
             }
             if (buffer.size() > 0) {
+                //log.debug("send log events to server");
                 Vector<LogEvent> sendBuffer = buffer;
                 buffer = new Vector<LogEvent>();
 

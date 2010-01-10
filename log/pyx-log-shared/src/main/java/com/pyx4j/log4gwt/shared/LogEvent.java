@@ -36,19 +36,20 @@ public class LogEvent implements Serializable {
 
     transient private String message;
 
-    transient private Throwable throwable;
-
     transient private Object data1;
 
     transient private Object data2;
 
     transient private Object[] dataArray;
 
+    transient private Throwable throwable;
+
+    private String throwableMessage;
+
     public LogEvent() {
     }
 
     public LogEvent(Level level, String message, Throwable throwable, Object data1) {
-        super();
         this.eventTime = System.currentTimeMillis();
         this.level = level;
         this.message = message;
@@ -57,7 +58,6 @@ public class LogEvent implements Serializable {
     }
 
     public LogEvent(Level level, String message, Throwable throwable, Object data1, Object data2) {
-        super();
         this.eventTime = System.currentTimeMillis();
         this.level = level;
         this.message = message;
@@ -67,7 +67,6 @@ public class LogEvent implements Serializable {
     }
 
     public LogEvent(Level level, String message, Throwable throwable, Object... data) {
-        super();
         this.eventTime = System.currentTimeMillis();
         this.level = level;
         this.message = message;
@@ -112,5 +111,31 @@ public class LogEvent implements Serializable {
 
     public void setFormatedMessage(String formatedMessage) {
         this.formatedMessage = formatedMessage;
+    }
+
+    private void prepareThrowableMessage() {
+        this.throwableMessage = throwable.toString();
+        Throwable cause = throwable.getCause();
+        if ((cause != null) && (cause != throwable)) {
+            StringBuffer b = new StringBuffer();
+            b.append(throwable.toString());
+            b.append("\ncause: ").append(cause.toString());
+            this.throwableMessage = b.toString();
+        }
+    }
+
+    public String getThrowableMessage() {
+        if ((throwable != null) && (throwableMessage == null)) {
+            prepareThrowableMessage();
+        }
+        return throwableMessage;
+    }
+
+    public String getFormatedMessageWithThrowable() {
+        if (getThrowableMessage() == null) {
+            return getFormatedMessage();
+        } else {
+            return getFormatedMessage() + " " + getThrowableMessage();
+        }
     }
 }

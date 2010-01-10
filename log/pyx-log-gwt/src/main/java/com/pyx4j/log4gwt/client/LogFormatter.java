@@ -84,7 +84,7 @@ public class LogFormatter {
         b.append(event.getFormatedMessage());
         if ((style != FormatStyle.FULL_HOSTED) && (event.getThrowable() != null)) {
             b.append(space);
-            b.append(event.getThrowable());
+            b.append(event.getThrowableMessage());
         }
         //TODO
         switch (style) {

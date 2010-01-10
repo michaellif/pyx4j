@@ -24,6 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,7 +37,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
@@ -44,6 +46,8 @@ import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 
 public class TestRunner extends VerticalPanel implements Custom1Option, CloseOption {
+
+    private static final Logger log = LoggerFactory.getLogger(TestRunner.class);
 
     private final FlexTable testsPanel;
 
@@ -166,8 +170,6 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
     private int totalTestsError;
 
     public void runSelectedTests() {
-        //TODO
-        //Message.info("Starting tests...");
         List<TestInfo> testQueue = new Vector<TestInfo>();
         for (final TestInfo t : testInfo) {
             if (!t.checkBox.getValue()) {
@@ -177,6 +179,7 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
             testQueue.add(t);
         }
         totalTestsSelected = testQueue.size();
+        log.info("Starting {} test(s) ...", totalTestsSelected);
         runStart = System.currentTimeMillis();
         runningCount = 0;
         totalTestsSuccess = 0;
@@ -197,10 +200,12 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
     private void onCompleted() {
         statusRun.setText("Completed");
         if (totalTestsError == 0) {
+            log.info("Completed {} test(s)", totalTestsSuccess);
             if (totalTestsSuccess > 0) {
                 setColor(statusRun, colorOk);
             }
         } else {
+            log.warn("Completed {} test(s), {} error(s)", totalTestsSuccess, totalTestsError);
             setColor(statusRun, colorError);
         }
     }
@@ -208,8 +213,6 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
     private void runNextTest(final List<TestInfo> testQueue) {
         statusDuration.setText(String.valueOf(System.currentTimeMillis() - runStart));
         if (testQueue.size() == 0) {
-            //TODO
-            //Logger.info("Tests completed");
             onCompleted();
             return;
         }
@@ -229,6 +232,7 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
                     totalTestsSuccess++;
                     statusSuccess.setText(String.valueOf(totalTestsSuccess));
                 } else {
+                    log.error("Test {} failed [{}]", t.getFullName(), result.getMessage());
                     t.message.setText(result.getMessage());
                     t.result.setText("Failed");
                     setColor(t.result, colorError);

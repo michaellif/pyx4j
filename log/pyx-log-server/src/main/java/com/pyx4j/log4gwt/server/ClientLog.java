@@ -47,7 +47,7 @@ class ClientLog {
     }
 
     static void log(LogEvent event) {
-        java.util.logging.LogRecord record = new java.util.logging.LogRecord(toLogLevel(event.getLevel()), event.getFormatedMessage());
+        java.util.logging.LogRecord record = new java.util.logging.LogRecord(toLogLevel(event.getLevel()), event.getFormatedMessageWithThrowable());
         record.setMillis(event.getEventTime());
         log.log(record);
     }
