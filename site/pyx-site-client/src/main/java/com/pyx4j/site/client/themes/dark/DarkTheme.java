@@ -46,7 +46,12 @@ public class DarkTheme extends GrayTheme {
 
     private void initSitePanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
-        style.addProperty("background", "#21262C url(images/background.jpg) repeat-x");
+        style.addProperty("background", "url(images/background.jpg) repeat-x");
+        addStyle(style);
+        style = new Style("body");
+        style.addProperty("background", "#21262C");
+        style.addProperty("overflow-y", "scroll");
+
         addStyle(style);
     }
 

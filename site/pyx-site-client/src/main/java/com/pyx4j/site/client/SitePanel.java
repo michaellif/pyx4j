@@ -51,7 +51,7 @@ import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-public class SitePanel extends SimplePanel implements ValueChangeHandler<String>, ResizeHandler {
+public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
 
     private final Site site;
 
@@ -85,7 +85,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         this.site = site;
 
         setSize("100%", "100%");
-        Window.addResizeHandler(this);
 
         add(createContentPanel());
         setStyleName(SiteCSSClass.pyx4j_Site_SitePanel.name());
@@ -119,12 +118,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
             show(site.getHomePage());
         }
 
-    }
-
-    @Override
-    protected void onAttach() {
-        super.onAttach();
-        onResize(null);
     }
 
     private void show(Page page) {
@@ -299,22 +292,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
             return;
         }
         show(page);
-    }
-
-    @Override
-    public void onResize(ResizeEvent event) {
-
-        Style style = getElement().getStyle();
-
-        int winWidth = Window.getClientWidth();
-        int winHeight = Window.getClientHeight();
-
-        int mainPanelWidth = mainPanel.getOffsetWidth();
-        int mainPanelHeight = mainPanel.getOffsetHeight() + headerPanel.getOffsetHeight() + footerPanel.getOffsetHeight();
-
-        style.setWidth(Math.max(mainPanelWidth, winWidth), Unit.PX);
-        style.setHeight(Math.max(mainPanelHeight, winHeight), Unit.PX);
-
     }
 
 }

@@ -46,7 +46,11 @@ public class LightTheme extends WindowsTheme {
 
     private void initSitePanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
+        style.addProperty("background", "transparent");
+        addStyle(style);
+        style = new Style("body");
         style.addProperty("background", "#F8F8F8");
+        style.addProperty("overflow-y", "scroll");
         addStyle(style);
     }
 
