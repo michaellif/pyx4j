@@ -40,6 +40,7 @@ public class LightTheme extends WindowsTheme {
         initPrimaryNavigStyles();
         initHeaderLinksStyles();
         initFooterLinksStyles();
+        initFooterCopyrightStyles();
 
     }
 
@@ -171,4 +172,11 @@ public class LightTheme extends WindowsTheme {
 
     }
 
+    protected void initFooterCopyrightStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
+        style.addProperty("margin-left", "20px");
+        style.addProperty("margin-top", "1px");
+        style.addProperty("color", "gray");
+        addStyle(style);
+    }
 }

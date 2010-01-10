@@ -41,7 +41,7 @@ public class EasySite extends Site {
         footerLinks.add(new Link("Privacy policy", "", true));
         footerLinks.add(new Link("Terms of Use", "", true));
 
-        footerCopiright = "© 2010 EasySite. All rights reserved.";
+        footerCopiright = "&copy; 2010 EasySite. All rights reserved.";
 
         {
             Page page = new Page();

@@ -40,6 +40,7 @@ public class DarkTheme extends GrayTheme {
         initPrimaryNavigStyles();
         initHeaderLinksStyles();
         initFooterLinksStyles();
+        initFooterCopyrightStyles();
 
     }
 
@@ -163,6 +164,14 @@ public class DarkTheme extends GrayTheme {
         style.addProperty("color", "white");
         addStyle(style);
 
+    }
+
+    protected void initFooterCopyrightStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
+        style.addProperty("margin-left", "20px");
+        style.addProperty("margin-top", "6px");
+        style.addProperty("color", "lightGray");
+        addStyle(style);
     }
 
 }

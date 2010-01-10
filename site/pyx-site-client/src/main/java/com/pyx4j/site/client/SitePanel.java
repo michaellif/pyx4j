@@ -237,8 +237,9 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     protected void createFooterCopiright(String footerCopiright) {
-        // TODO Auto-generated method stub
-
+        HTML html = new HTML(footerCopiright, false);
+        html.setStyleName(SiteCSSClass.pyx4j_Site_FooterCopiright.name());
+        addToFooterPanel(html);
     }
 
     protected void createFooterLinks(List<Link> footerLinks) {
