@@ -38,6 +38,8 @@ public class LightTheme extends WindowsTheme {
         initHeaderCaptionsStyles();
         initLogoStyles();
         initPrimaryNavigStyles();
+        initHeaderLinksStyles();
+        initFooterLinksStyles();
 
     }
 
@@ -131,6 +133,42 @@ public class LightTheme extends WindowsTheme {
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
+    }
+
+    protected void initHeaderLinksStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
+        style.addProperty("margin-left", "700px");
+        style.addProperty("margin-top", "10px");
+        style.addProperty("color", "gray");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");
+        style.addProperty("padding", "3px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("color", "black");
+        addStyle(style);
+
+    }
+
+    protected void initFooterLinksStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
+        style.addProperty("margin-left", "600px");
+        style.addProperty("margin-top", "1px");
+        style.addProperty("color", "gray");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " li");
+        style.addProperty("padding", "3px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("color", "black");
+        addStyle(style);
+
     }
 
 }

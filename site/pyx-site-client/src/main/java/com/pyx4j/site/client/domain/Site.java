@@ -20,11 +20,19 @@
  */
 package com.pyx4j.site.client.domain;
 
+import java.util.List;
+
 public class Site extends PageContainer {
 
     public String homePageName;
 
     public String logoUrl;
+
+    public List<Link> headerLinks;
+
+    public List<Link> footerLinks;
+
+    public String footerCopiright;
 
     public Site() {
 

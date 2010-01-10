@@ -1,28 +1,14 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2009 pyx4j.com.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- *
- * Created on Jan 3, 2010
- * @author Michael
+ * Created on Jan 10, 2010
+ * @author Misha
  * @version $Id$
  */
 package com.pyx4j.site.client;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.google.gwt.dom.client.Document;
@@ -45,23 +31,19 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
-public class NavigationBar extends ComplexPanel {
+public class LinkBar extends ComplexPanel {
 
-    public static enum NavigationBarType {
-        Primary, Secondary
+    public static enum LinkBarType {
+        Header, Footer
     }
 
-    private final NavigationBarType type;
+    private final LinkBarType type;
 
     private final Element ul;
 
-    private final List<NavigationTab> tabs = new ArrayList<NavigationTab>();
+    private boolean empty = true;
 
-    private NavigationTab firstTab;
-
-    private NavigationTab lastTab;
-
-    public NavigationBar(NavigationBarType type) {
+    public LinkBar(LinkBarType type) {
         super();
         this.type = type;
 
@@ -81,33 +63,38 @@ public class NavigationBar extends ComplexPanel {
 
         div.appendChild(ul);
         setElement(div);
-        setStyleName(SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
+        switch (type) {
+        case Header:
+            setStyleName(SiteCSSClass.pyx4j_Site_HeaderLinks.name());
+            break;
+        case Footer:
+            setStyleName(SiteCSSClass.pyx4j_Site_FooterLinks.name());
+            break;
+        default:
+            break;
+        }
 
     }
 
-    public void add(String text, String pageName) {
-        NavigationTab tab = new NavigationTab(text, pageName);
-        if (firstTab == null) {
-            firstTab = tab;
-        }
-        lastTab = tab;
-        tabs.add(tab);
+    public void add(String html, String href, boolean internal) {
+        LinkItem tab = new LinkItem(html, href, internal);
         ul.appendChild(tab.getElement());
         add(tab, ul);
     }
 
-    public void setSelected(String pageName) {
-        for (NavigationTab tab : tabs) {
-            tab.setSelected(tab.pageName == pageName);
-        }
-    }
-
-    class NavigationTabAnchor extends Anchor {
-        NavigationTabAnchor(String text, final String pageName) {
-            super("<span>" + text + "</span>", true);
+    class LinkItemAnchor extends Anchor {
+        LinkItemAnchor(String html, final String href, boolean internal) {
+            super(html, true, internal ? null : href);
 
             getElement().getStyle().setProperty("outline", "0px");
             getElement().getStyle().setCursor(Cursor.POINTER);
+
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    History.newItem(href, true);
+                }
+            });
 
             addMouseOverHandler(new MouseOverHandler() {
                 @Override
@@ -122,69 +109,50 @@ public class NavigationBar extends ComplexPanel {
                 }
             });
 
-            addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    History.newItem(pageName, true);
-                }
-            });
-
         }
+
     }
 
-    class NavigationTab extends Panel {
+    class LinkItem extends Panel {
 
-        private final NavigationTabAnchor anchor;
+        private final LinkItemAnchor anchor;
 
-        private final String pageName;
-
-        NavigationTab(String text, final String pageName) {
-            this.pageName = pageName;
-
+        LinkItem(String html, String href, boolean internal) {
             setElement(Document.get().createLIElement());
-            UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-
-            anchor = new NavigationTabAnchor(text, pageName);
-
             switch (type) {
-            case Primary:
-                getElement().getStyle().setProperty("display", "inline-block");
-                anchor.getElement().getStyle().setProperty("display", "block");
-                if (BrowserType.isFirefox()) {
-                    anchor.getElement().getStyle().setProperty("cssFloat", "left");
-                } else {
-                    anchor.getElement().getStyle().setProperty("float", "left");
-                }
+            case Header:
+                UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_HeaderLink.name());
                 break;
-            case Secondary:
-                getElement().getStyle().setProperty("display", "block");
+            case Footer:
+                UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_FooterLink.name());
                 break;
             default:
-                getElement().getStyle().setProperty("display", "block");
                 break;
             }
+
+            getElement().getStyle().setProperty("display", "list-item");
+            if (BrowserType.isFirefox()) {
+                getElement().getStyle().setProperty("cssFloat", "left");
+            } else {
+                getElement().getStyle().setProperty("float", "left");
+            }
+
+            if (empty) {
+                empty = false;
+            } else {
+                Element separator = Document.get().createSpanElement().cast();
+                separator.getStyle().setProperty("display", "inline");
+                separator.setInnerText("| ");
+                DOM.appendChild(getElement(), separator);
+            }
+
+            anchor = new LinkItemAnchor(html, href, internal);
+
+            anchor.getElement().getStyle().setProperty("display", "inline");
 
             DOM.appendChild(getElement(), anchor.getElement());
             adopt(anchor);
 
-        }
-
-        void setSelected(boolean flag) {
-            if (flag) {
-                addStyleDependentName("selected");
-            } else {
-                removeStyleDependentName("selected");
-
-            }
-        }
-
-        void setFirst(boolean flag) {
-            if (flag) {
-                addStyleDependentName("first");
-            } else {
-                removeStyleDependentName("first");
-
-            }
         }
 
         Anchor getAnchor() {

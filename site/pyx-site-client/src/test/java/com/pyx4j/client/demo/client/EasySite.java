@@ -20,6 +20,9 @@
  */
 package com.pyx4j.client.demo.client;
 
+import java.util.ArrayList;
+
+import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.Site;
 
@@ -28,6 +31,17 @@ public class EasySite extends Site {
     public EasySite() {
 
         logoUrl = "images/logo.png";
+
+        headerLinks = new ArrayList<Link>();
+        headerLinks.add(new Link("Sign Up", "", true));
+        headerLinks.add(new Link("Log In", "", true));
+
+        footerLinks = new ArrayList<Link>();
+        footerLinks.add(new Link("Technical Support", "", true));
+        footerLinks.add(new Link("Privacy policy", "", true));
+        footerLinks.add(new Link("Terms of Use", "", true));
+
+        footerCopiright = "© 2010 EasySite. All rights reserved.";
 
         {
             Page page = new Page();

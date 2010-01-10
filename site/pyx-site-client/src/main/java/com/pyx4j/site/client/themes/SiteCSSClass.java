@@ -41,4 +41,17 @@ public enum SiteCSSClass {
     pyx4j_Site_PrimaryNavig,
 
     pyx4j_Site_PrimaryNavigTab,
+
+    //Header Links 
+
+    pyx4j_Site_HeaderLinks,
+
+    pyx4j_Site_HeaderLink,
+
+    //Footer Links 
+
+    pyx4j_Site_FooterLinks,
+
+    pyx4j_Site_FooterLink,
+
 }

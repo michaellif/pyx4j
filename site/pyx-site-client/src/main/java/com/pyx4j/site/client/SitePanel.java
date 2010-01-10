@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -39,6 +41,9 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.LinkBar.LinkBarType;
+import com.pyx4j.site.client.NavigationBar.NavigationBarType;
+import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -62,6 +67,10 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private NavigationBar primaryNavigationBar;
 
+    private LinkBar headerLinkBar;
+
+    private LinkBar footerLinkBar;
+
     private static LightTheme lightTheme = new LightTheme();
 
     private static DarkTheme darkTheme = new DarkTheme();
@@ -80,6 +89,12 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         createPrimaryNavigation();
 
         createLogoImage(site.logoUrl);
+
+        createHeaderLinks(site.headerLinks);
+
+        createFooterLinks(site.footerLinks);
+
+        createFooterCopiright(site.footerCopiright);
 
         StyleManger.installTheme(lightTheme);
 
@@ -162,6 +177,10 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         return footerPanel;
     }
 
+    public void addToFooterPanel(Widget w) {
+        addToFooterPanel(w, 0, 0);
+    }
+
     public void addToFooterPanel(Widget w, int left, int top) {
         footerPanel.add(w, left, top);
     }
@@ -215,6 +234,29 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         }
         addToHeaderPanel(primaryNavigationBar);
 
+    }
+
+    protected void createFooterCopiright(String footerCopiright) {
+        // TODO Auto-generated method stub
+
+    }
+
+    protected void createFooterLinks(List<Link> footerLinks) {
+        footerLinkBar = new LinkBar(LinkBarType.Footer);
+
+        for (Link link : site.footerLinks) {
+            footerLinkBar.add(link.html, link.href, link.internal);
+        }
+        addToFooterPanel(footerLinkBar);
+    }
+
+    protected void createHeaderLinks(List<Link> headerLinks) {
+        headerLinkBar = new LinkBar(LinkBarType.Header);
+
+        for (Link link : site.headerLinks) {
+            headerLinkBar.add(link.html, link.href, link.internal);
+        }
+        addToHeaderPanel(headerLinkBar);
     }
 
     @Override
