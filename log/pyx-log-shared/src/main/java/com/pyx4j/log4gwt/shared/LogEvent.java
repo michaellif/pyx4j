@@ -17,7 +17,12 @@ public class LogEvent implements Serializable {
 
     private long eventTime;
 
-    private String message;
+    /**
+     * Formated Serializable Message
+     */
+    private String formatedMessage;
+
+    transient private String message;
 
     transient private Throwable throwable;
 
@@ -84,5 +89,16 @@ public class LogEvent implements Serializable {
 
     public Object[] getDataArray() {
         return dataArray;
+    }
+
+    /**
+     * Formated Serializable Message
+     */
+    public String getFormatedMessage() {
+        return formatedMessage;
+    }
+
+    public void setFormatedMessage(String formatedMessage) {
+        this.formatedMessage = formatedMessage;
     }
 }

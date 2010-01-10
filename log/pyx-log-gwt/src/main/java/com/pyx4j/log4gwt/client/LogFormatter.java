@@ -62,12 +62,14 @@ public class LogFormatter {
         if ((style == FormatStyle.HTML) && (closeFontTag)) {
             b.append("</font>");
         }
-        if (event.getDataArray() != null) {
-            b.append(MessageFormatter.arrayFormat(event.getMessage(), event.getDataArray()));
-        } else {
-            b.append(MessageFormatter.format(event.getMessage(), event.getData1(), event.getData2()));
-            //b.append(event.getMessage(), event.getData1(), event.getData2());
+        if (event.getFormatedMessage() == null) {
+            if (event.getDataArray() != null) {
+                event.setFormatedMessage(MessageFormatter.arrayFormat(event.getMessage(), event.getDataArray()));
+            } else {
+                event.setFormatedMessage(MessageFormatter.format(event.getMessage(), event.getData1(), event.getData2()));
+            }
         }
+        b.append(event.getFormatedMessage());
         if ((style != FormatStyle.FULL_HOSTED) && (event.getThrowable() != null)) {
             b.append(space);
             b.append(event.getThrowable());

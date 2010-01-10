@@ -97,8 +97,8 @@
     <modules>
         <module>pyx-commons</module>
 
-        <module>log/pyx-log-shared</module>
         <module>rpc/pyx-rpc-shared</module>
+        <module>log/pyx-log-shared</module>
 
         <module>gwt/pyx-gwt-server</module>
         <module>rpc/pyx-rpc-server</module>
@@ -107,6 +107,7 @@
         <module>log/pyx-log-gwt</module>
 
         <module>rpc/pyx-rpc-gwt</module>
+        <module>log/pyx-log-gwt-rpcappender</module>
         <module>unit/pyx-unit-gwt</module>
         <module>gwt/pyx-gwt-widgets</module>
         <module>gwt/pyx-gwt-ria</module>
@@ -248,6 +249,18 @@
 		        <artifactId>slf4j-jdk14</artifactId>
 		        <version>1.5.8</version><!--Update with hibernate version-->
 	        </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.8</version><!--Update with hibernate version-->
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.14</version>
+            </dependency>
 
             <dependency>
                 <groupId>javax.servlet</groupId>

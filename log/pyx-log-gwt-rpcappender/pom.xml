@@ -13,21 +13,32 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-log-shared</artifactId>
-    <name>pyx-log-shared</name>
-    <description>pyx-log-shared client and server classes</description>
+    <artifactId>pyx-log-gwt-rpcappender</artifactId>
+    <name>pyx-log-gwt-rpcappender</name>
+    <description>pyx-log GWT RPCAppender</description>
 
     <dependencies>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-rpc-shared</artifactId>
+            <artifactId>pyx-rpc-gwt</artifactId>
             <version>${project.version}</version>
-            <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-log-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
     </dependencies>
-    
+
     <build>
         <resources>
             <resource>
