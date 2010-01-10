@@ -86,7 +86,7 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("margin-top", "120px");
         style.addProperty("width", "800px");
         style.addProperty("height", "32px");
-        style.addProperty("padding-left", "50px");
+        style.addProperty("padding-left", "20px");
         style.addProperty("background", "transparent url(images/primaryNav-underline.gif) repeat-x 100% 100%");
         addStyle(style);
 

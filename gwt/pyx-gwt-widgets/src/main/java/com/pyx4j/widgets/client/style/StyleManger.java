@@ -32,6 +32,9 @@ public class StyleManger {
         for (Style style : theme.getAllStyles()) {
             stylesString.append(style.toString(theme));
         }
+
+        System.out.println(stylesString.toString());
+
         StyleInjector.inject(stylesString.toString());
     }
 
