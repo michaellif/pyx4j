@@ -15,8 +15,6 @@
  */
 package com.pyx4j.examples.site.client.pages;
 
-
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -29,32 +27,31 @@ import com.pyx4j.examples.site.client.Page;
  */
 public class AboutUs extends Page {
 
-	public static PageInfo init() {
-		return new PageInfo("About Us") {
+    public static PageInfo init() {
+        return new PageInfo("About Us") {
 
-			public Page createInstance() {
-				return new AboutUs();
-			}
-		};
-	}
+            public Page createInstance() {
+                return new AboutUs();
+            }
+        };
+    }
 
-	public AboutUs() {
-	}
+    public AboutUs() {
+    }
 
-	public Widget getContent() {		
-		HTML html = new HTML(StringUtils.unescapeHTML(DOM.getInnerHTML(RootPanel.get("AboutUs").getElement()), 0));
-		DOM.setStyleAttribute(html.getElement(), "padding",
-		"20px");
-		html.setStyleName("site-content");
-		return html;
-	}
+    public Widget getContent() {
+        HTML html = new HTML(StringUtils.unescapeHTML(DOM.getInnerHTML(RootPanel.get("AboutUs").getElement()), 0));
+        DOM.setStyleAttribute(html.getElement(), "padding", "20px");
+        html.setStyleName("site-content");
+        return html;
+    }
 
-	public Widget getContentAdditions() {
-		return new HTML("");
-	}
+    public Widget getContentAdditions() {
+        return new HTML("");
+    }
 
-	public Widget getNavigPanel() {
-		return new HTML("");
-	}
+    public Widget getNavigPanel() {
+        return new HTML("");
+    }
 
 }

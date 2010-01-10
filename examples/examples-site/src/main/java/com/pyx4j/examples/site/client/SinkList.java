@@ -17,7 +17,6 @@ package com.pyx4j.examples.site.client;
 
 import java.util.ArrayList;
 
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;

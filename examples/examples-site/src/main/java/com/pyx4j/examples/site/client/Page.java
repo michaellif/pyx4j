@@ -19,54 +19,53 @@ import com.google.gwt.user.client.ui.Widget;
 
 public abstract class Page {
 
-	public abstract static class PageInfo {
-		private Page instance;
+    public abstract static class PageInfo {
+        private Page instance;
 
-		private String tabName;
+        private String tabName;
 
-		private String navigLinkName;
+        private String navigLinkName;
 
-		public PageInfo(String tabName) {
-			this.tabName = tabName;
-		}
+        public PageInfo(String tabName) {
+            this.tabName = tabName;
+        }
 
-		public PageInfo(String tabName, String navigLinkName) {
-			this.tabName = tabName;
-			this.navigLinkName = navigLinkName;
-		}
+        public PageInfo(String tabName, String navigLinkName) {
+            this.tabName = tabName;
+            this.navigLinkName = navigLinkName;
+        }
 
-		public abstract Page createInstance();
+        public abstract Page createInstance();
 
-		public final Page getInstance() {
-			if (instance == null) {
-				instance = createInstance();
-			}
-			return instance;
-		}
+        public final Page getInstance() {
+            if (instance == null) {
+                instance = createInstance();
+            }
+            return instance;
+        }
 
-		public String getTabName() {
-			return tabName;
-		}
+        public String getTabName() {
+            return tabName;
+        }
 
-		public String getNavigLinkName() {
-			return navigLinkName;
-		}
+        public String getNavigLinkName() {
+            return navigLinkName;
+        }
 
+    }
 
-	}
+    public abstract Widget getContent();
 
-	public abstract Widget getContent();
+    public abstract Widget getContentAdditions();
 
-	public abstract Widget getContentAdditions();
+    public abstract Widget getNavigPanel();
 
-	public abstract Widget getNavigPanel();
+    public void onHide() {
 
-	public void onHide() {
-		
-	}
-	
-	public void onShow() {
-		
-	}
-	
+    }
+
+    public void onShow() {
+
+    }
+
 }

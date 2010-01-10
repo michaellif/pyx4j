@@ -15,7 +15,6 @@
  */
 package com.pyx4j.examples.site.client.pages;
 
-
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.SmallMapControl;
