@@ -85,7 +85,7 @@ public class EntityImplGenerator {
             }
             pathname = pathname.substring(prefix.length());
             try {
-                log.debug("ClassPool append path {}", pathname);
+                log.trace("ClassPool append path {}", pathname);
                 pool.appendClassPath(pathname);
             } catch (NotFoundException e) {
                 log.error("Can't append path", e);
