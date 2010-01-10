@@ -57,7 +57,13 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private AbsolutePanel headerPanel;
 
-    private SimplePanel mainPanel;
+    private FlowPanel mainPanel;
+
+    private SimplePanel leftSectionPanel;
+
+    private SimplePanel mainSectionPanel;
+
+    private SimplePanel rightSectionPanel;
 
     private AbsolutePanel footerPanel;
 
@@ -122,7 +128,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     private void show(Page page) {
-        mainPanel.setWidget(new HTML(page.data.html, true));
+        mainSectionPanel.setWidget(new HTML(page.data.html, true));
 
         setHeaderCaptions(page.caption);
 
@@ -145,6 +151,15 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         mainPanel = createMainPanel();
         contentPanel.add(mainPanel);
+
+        leftSectionPanel = createLeftSectionPanel();
+        mainPanel.add(leftSectionPanel);
+
+        mainSectionPanel = createMainSectionPanel();
+        mainPanel.add(mainSectionPanel);
+
+        rightSectionPanel = createRightSectionPanel();
+        mainPanel.add(rightSectionPanel);
 
         footerPanel = createFooterPanel();
         contentPanel.add(footerPanel);
@@ -185,8 +200,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         footerPanel.add(w, left, top);
     }
 
-    SimplePanel createMainPanel() {
-        SimplePanel mainPanel = new SimplePanel();
+    protected FlowPanel createMainPanel() {
+        FlowPanel mainPanel = new FlowPanel();
 
         Style style = mainPanel.getElement().getStyle();
 
@@ -195,6 +210,22 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
 
         return mainPanel;
+    }
+
+    protected SimplePanel createRightSectionPanel() {
+        SimplePanel panel = new SimplePanel();
+        return panel;
+    }
+
+    protected SimplePanel createMainSectionPanel() {
+        SimplePanel panel = new SimplePanel();
+        panel.setWidth("100%");
+        return panel;
+    }
+
+    protected SimplePanel createLeftSectionPanel() {
+        SimplePanel panel = new SimplePanel();
+        return panel;
     }
 
     protected void createHeaderCaptions() {

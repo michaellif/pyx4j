@@ -55,7 +55,7 @@ public class EasySite extends Site {
             Page page = new Page();
             page.caption = "Services";
             page.name = "services";
-            page.data.html = "Services";
+            page.data.html = "Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>";
             addPage(page);
         }
 
