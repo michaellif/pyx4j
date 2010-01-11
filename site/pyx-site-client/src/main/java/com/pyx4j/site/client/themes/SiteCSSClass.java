@@ -57,4 +57,6 @@ public enum SiteCSSClass {
     //Footer Copiright
     pyx4j_Site_FooterCopiright,
 
+    //Html Portlet
+    pyx4j_Site_HtmlPortlet,
 }

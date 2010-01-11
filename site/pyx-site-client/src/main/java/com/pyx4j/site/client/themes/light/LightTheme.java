@@ -41,6 +41,7 @@ public class LightTheme extends WindowsTheme {
         initHeaderLinksStyles();
         initFooterLinksStyles();
         initFooterCopyrightStyles();
+        initHtmlPortletStyles();
 
     }
 
@@ -191,4 +192,15 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("color", "gray");
         addStyle(style);
     }
+
+    protected void initHtmlPortletStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
+        style.addProperty("margin", "20px");
+        style.addProperty("width", "180px");
+        style.addProperty("padding", "20px");
+        style.addProperty("border", "1px solid #ff6600");
+        style.addProperty("color", "black");
+        addStyle(style);
+    }
+
 }

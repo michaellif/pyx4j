@@ -149,7 +149,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         contentPanel.add(mainPanel);
 
         leftSectionPanel = createLeftSectionPanel();
-        mainPanel.add(leftSectionPanel, DockPanel.EAST);
+        mainPanel.add(leftSectionPanel, DockPanel.WEST);
 
         mainSectionPanel = createMainSectionPanel();
         mainPanel.add(mainSectionPanel, DockPanel.CENTER);
@@ -157,7 +157,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         mainPanel.setCellHeight(mainSectionPanel, "100%");
 
         rightSectionPanel = createRightSectionPanel();
-        mainPanel.add(rightSectionPanel, DockPanel.WEST);
+        mainPanel.add(rightSectionPanel, DockPanel.EAST);
 
         footerPanel = createFooterPanel();
         contentPanel.add(footerPanel);
@@ -212,15 +212,9 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createLeftSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        panel.getElement().getStyle().setProperty("padding", "20px");
-
-        panel.getElement().getStyle().setProperty("width", "150px");
-
-        HTML portlet1 = new HTML("portlet1", true);
-        portlet1.setWidth("100px");
+        HtmlPortlet portlet1 = new HtmlPortlet("portlet1");
         panel.add(portlet1);
-        HTML portlet2 = new HTML("portlet2", true);
-        portlet2.setWidth("100px");
+        HtmlPortlet portlet2 = new HtmlPortlet("portlet2 portlet2 portlet2 portlet2");
         panel.add(portlet2);
 
         return panel;
@@ -228,16 +222,12 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createRightSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        panel.getElement().getStyle().setProperty("padding", "20px");
-
-        panel.getElement().getStyle().setProperty("width", "150px");
-
-        HTML portlet3 = new HTML("portlet3", true);
-        portlet3.setWidth("100px");
+        HtmlPortlet portlet3 = new HtmlPortlet("portlet3<p>portlet3<p>");
         panel.add(portlet3);
-        HTML portlet4 = new HTML("portlet4", true);
-        portlet4.setWidth("100px");
+        HtmlPortlet portlet4 = new HtmlPortlet("portlet4<p>portlet4<p>");
         panel.add(portlet4);
+        HtmlPortlet portlet5 = new HtmlPortlet("portlet5<p>portlet5<p>portlet5<p>");
+        panel.add(portlet5);
 
         return panel;
     }
