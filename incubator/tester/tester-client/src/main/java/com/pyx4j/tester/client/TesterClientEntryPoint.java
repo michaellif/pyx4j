@@ -24,6 +24,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.client.ClientEntityFactory;
@@ -64,6 +65,8 @@ public class TesterClientEntryPoint implements EntryPoint {
                 ServerTestRunner.createAsync();
             }
         });
+
+        menu.add(new Image("http://code.google.com/appengine/images/appengine-noborder-120x30.gif"));
     }
 
 }
