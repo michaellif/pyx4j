@@ -50,6 +50,7 @@ import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
 
@@ -59,11 +60,11 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private FlowPanel mainPanel;
 
-    private SimplePanel leftSectionPanel;
+    private FlowPanel leftSectionPanel;
 
     private SimplePanel mainSectionPanel;
 
-    private SimplePanel rightSectionPanel;
+    private FlowPanel rightSectionPanel;
 
     private AbsolutePanel footerPanel;
 
@@ -197,27 +198,56 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         FlowPanel mainPanel = new FlowPanel();
 
         Style style = mainPanel.getElement().getStyle();
-
-        style.setPadding(20, Unit.PX);
+        style.setProperty("display", "inline-block");
+        style.setProperty("width", "100%");
 
         mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
 
         return mainPanel;
     }
 
-    protected SimplePanel createRightSectionPanel() {
-        SimplePanel panel = new SimplePanel();
+    protected FlowPanel createRightSectionPanel() {
+        FlowPanel panel = new FlowPanel();
+        if (BrowserType.isFirefox()) {
+            panel.getElement().getStyle().setProperty("cssFloat", "right");
+        } else {
+            panel.getElement().getStyle().setProperty("float", "right");
+        }
+
+        panel.getElement().getStyle().setProperty("padding", "20px");
+
+        HTML portlet1 = new HTML("portlet3", true);
+        portlet1.setWidth("100px");
+        panel.add(portlet1);
+        HTML portlet2 = new HTML("portlet4", true);
+        panel.add(portlet2);
+
         return panel;
     }
 
     protected SimplePanel createMainSectionPanel() {
         SimplePanel panel = new SimplePanel();
-        panel.setWidth("100%");
+        panel.getElement().getStyle().setProperty("display", "inline-block");
         return panel;
     }
 
-    protected SimplePanel createLeftSectionPanel() {
-        SimplePanel panel = new SimplePanel();
+    protected FlowPanel createLeftSectionPanel() {
+        FlowPanel panel = new FlowPanel();
+
+        if (BrowserType.isFirefox()) {
+            panel.getElement().getStyle().setProperty("cssFloat", "left");
+        } else {
+            panel.getElement().getStyle().setProperty("float", "left");
+        }
+
+        panel.getElement().getStyle().setProperty("padding", "20px");
+
+        HTML portlet1 = new HTML("portlet1", true);
+        portlet1.setWidth("100px");
+        panel.add(portlet1);
+        HTML portlet2 = new HTML("portlet2", true);
+        panel.add(portlet2);
+
         return panel;
     }
 
