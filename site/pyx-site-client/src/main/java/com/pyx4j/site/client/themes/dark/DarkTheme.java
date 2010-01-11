@@ -50,7 +50,6 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
         style = new Style("html");
         style.addProperty("overflow-y", "scroll");
-        style.addProperty("background", "#21262C");
         addStyle(style);
         style = new Style("body");
         style.addProperty("background", "#21262C");
@@ -61,7 +60,7 @@ public class DarkTheme extends GrayTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_ContentPanel.name());
         style.addProperty("width", "924px");
         style.addProperty("padding-top", "0px");
-        style.addProperty("padding-bottom", "0px");
+        style.addProperty("padding-bottom", "50px");
         addStyle(style);
     }
 
@@ -141,6 +140,7 @@ public class DarkTheme extends GrayTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "700px");
         style.addProperty("margin-top", "10px");
+        style.addProperty("color", "black");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");
@@ -163,6 +163,7 @@ public class DarkTheme extends GrayTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
         style.addProperty("margin-left", "600px");
         style.addProperty("margin-top", "6px");
+        style.addProperty("color", "lightGrey");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " li");
@@ -170,13 +171,13 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a");
-        style.addProperty("color", "lightGray");
         style.addProperty("text-decoration", "none");
+        style.addProperty("color", "lightGrey");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
-        style.addProperty("color", "white");
         style.addProperty("text-decoration", "underline");
+        style.addProperty("color", "white");
         addStyle(style);
 
     }

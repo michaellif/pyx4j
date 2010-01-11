@@ -103,7 +103,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         createFooterCopiright(site.footerCopiright);
 
-        StyleManger.installTheme(lightTheme);
+        StyleManger.installTheme(darkTheme);
 
         History.addValueChangeHandler(this);
 
