@@ -71,7 +71,7 @@ public class NavigationBar extends ComplexPanel {
         ul.getStyle().setProperty("height", "100%");
         ul.getStyle().setProperty("margin", "0");
         ul.getStyle().setProperty("padding", "0");
-        ul.getStyle().setProperty("display", "inline");
+        ul.getStyle().setProperty("display", "inline-block");
 
         if (BrowserType.isFirefox()) {
             ul.getStyle().setProperty("cssFloat", "left");
@@ -148,12 +148,12 @@ public class NavigationBar extends ComplexPanel {
 
             switch (type) {
             case Primary:
-                getElement().getStyle().setProperty("display", "inline-block");
-                anchor.getElement().getStyle().setProperty("display", "block");
+                getElement().getStyle().setProperty("display", "inline");
+                anchor.getElement().getStyle().setProperty("display", "inline-block");
                 if (BrowserType.isFirefox()) {
-                    anchor.getElement().getStyle().setProperty("cssFloat", "left");
+                    getElement().getStyle().setProperty("cssFloat", "left");
                 } else {
-                    anchor.getElement().getStyle().setProperty("float", "left");
+                    getElement().getStyle().setProperty("float", "left");
                 }
                 break;
             case Secondary:
