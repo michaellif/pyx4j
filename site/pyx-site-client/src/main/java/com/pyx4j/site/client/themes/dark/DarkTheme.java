@@ -146,7 +146,7 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a");
-        style.addProperty("text-decoration", "underline");
+        style.addProperty("text-decoration", "none");
         style.addProperty("color", "black");
         addStyle(style);
 
