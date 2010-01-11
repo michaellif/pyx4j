@@ -199,7 +199,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         Style style = mainPanel.getElement().getStyle();
 
-        style.setProperty("display", "inline-block");
+        style.setProperty("display", "block");
+        style.setProperty("background", "yellow");
         style.setProperty("width", "100%");
 
         mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
@@ -215,7 +216,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         } else {
             panel.getElement().getStyle().setProperty("float", "left");
         }
-        panel.getElement().getStyle().setProperty("display", "block");
+        panel.getElement().getStyle().setProperty("display", "inline-block");
 
         panel.getElement().getStyle().setProperty("padding", "20px");
         panel.getElement().getStyle().setProperty("background", "red");
@@ -239,7 +240,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         } else {
             panel.getElement().getStyle().setProperty("float", "right");
         }
-        panel.getElement().getStyle().setProperty("display", "block");
+        panel.getElement().getStyle().setProperty("display", "inline-block");
 
         panel.getElement().getStyle().setProperty("padding", "20px");
         panel.getElement().getStyle().setProperty("background", "red");
@@ -258,6 +259,11 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected SimplePanel createMainSectionPanel() {
         SimplePanel panel = new SimplePanel();
+        if (BrowserType.isFirefox()) {
+            panel.getElement().getStyle().setProperty("cssFloat", "left");
+        } else {
+            panel.getElement().getStyle().setProperty("float", "left");
+        }
         panel.getElement().getStyle().setProperty("display", "inline-block");
         panel.getElement().getStyle().setProperty("background", "green");
         panel.getElement().getStyle().setProperty("width", "500px");
