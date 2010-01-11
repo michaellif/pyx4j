@@ -198,37 +198,13 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         FlowPanel mainPanel = new FlowPanel();
 
         Style style = mainPanel.getElement().getStyle();
+
         style.setProperty("display", "inline-block");
         style.setProperty("width", "100%");
 
         mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
 
         return mainPanel;
-    }
-
-    protected FlowPanel createRightSectionPanel() {
-        FlowPanel panel = new FlowPanel();
-        if (BrowserType.isFirefox()) {
-            panel.getElement().getStyle().setProperty("cssFloat", "right");
-        } else {
-            panel.getElement().getStyle().setProperty("float", "right");
-        }
-
-        panel.getElement().getStyle().setProperty("padding", "20px");
-
-        HTML portlet1 = new HTML("portlet3", true);
-        portlet1.setWidth("100px");
-        panel.add(portlet1);
-        HTML portlet2 = new HTML("portlet4", true);
-        panel.add(portlet2);
-
-        return panel;
-    }
-
-    protected SimplePanel createMainSectionPanel() {
-        SimplePanel panel = new SimplePanel();
-        panel.getElement().getStyle().setProperty("display", "inline-block");
-        return panel;
     }
 
     protected FlowPanel createLeftSectionPanel() {
@@ -239,8 +215,10 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         } else {
             panel.getElement().getStyle().setProperty("float", "left");
         }
+        panel.getElement().getStyle().setProperty("display", "inline-block");
 
         panel.getElement().getStyle().setProperty("padding", "20px");
+        panel.getElement().getStyle().setProperty("background", "red");
 
         HTML portlet1 = new HTML("portlet1", true);
         portlet1.setWidth("100px");
@@ -248,6 +226,34 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         HTML portlet2 = new HTML("portlet2", true);
         panel.add(portlet2);
 
+        return panel;
+    }
+
+    protected FlowPanel createRightSectionPanel() {
+        FlowPanel panel = new FlowPanel();
+        if (BrowserType.isFirefox()) {
+            panel.getElement().getStyle().setProperty("cssFloat", "right");
+        } else {
+            panel.getElement().getStyle().setProperty("float", "right");
+        }
+        panel.getElement().getStyle().setProperty("display", "inline-block");
+
+        panel.getElement().getStyle().setProperty("padding", "20px");
+        panel.getElement().getStyle().setProperty("background", "red");
+
+        HTML portlet3 = new HTML("portlet3", true);
+        portlet3.setWidth("100px");
+        panel.add(portlet3);
+        HTML portlet4 = new HTML("portlet4", true);
+        panel.add(portlet4);
+
+        return panel;
+    }
+
+    protected SimplePanel createMainSectionPanel() {
+        SimplePanel panel = new SimplePanel();
+        panel.getElement().getStyle().setProperty("display", "inline-block");
+        panel.getElement().getStyle().setProperty("background", "green");
         return panel;
     }
 

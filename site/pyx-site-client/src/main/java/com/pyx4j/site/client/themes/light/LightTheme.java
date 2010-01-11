@@ -163,6 +163,8 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("margin-left", "600px");
         style.addProperty("margin-top", "1px");
         style.addProperty("color", "gray");
+        style.addProperty("text-decoration", "none");
+
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " li");
