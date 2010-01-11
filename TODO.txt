@@ -16,6 +16,8 @@ TODO
 
  Vlad:
    DONE - Ivestigate common logger!
-   Send client log event to server over RPC
+   DONE - Send client log event to server over RPC
    Better client log configuration. e.g. ability to create diferent Logger at least in development mode. Now we have one global flag debugOn
 
+   GWT side EntityMeta and MemberMeta
+   Persistence tests Commons for Maven/Server side * GAE/RDBMS. How to run the same abstract tests in GAE and in Hibernate.

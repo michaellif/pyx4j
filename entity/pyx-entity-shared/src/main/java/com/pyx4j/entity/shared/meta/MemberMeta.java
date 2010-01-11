@@ -25,6 +25,11 @@ import java.util.List;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.validator.Validator;
 
+/**
+ * Represent the Meta data denoted using annotation. For consistency it is better to use
+ * this class instead of using annotations directly. Implementation of this class is
+ * generated for GWT runtime.
+ */
 public interface MemberMeta {
 
     public String getFieldName();

@@ -22,6 +22,10 @@ package com.pyx4j.entity.shared.meta;
 
 /**
  * TODO Implement this
+ * 
+ * Represent the Meta data denoted using annotation. For consistency it is better to use
+ * this class instead of using annotations directly. Implementation of this class is
+ * generated for GWT runtime.
  */
 public interface EntityMeta {
 
