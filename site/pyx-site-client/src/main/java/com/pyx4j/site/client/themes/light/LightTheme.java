@@ -50,7 +50,6 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
         style = new Style("body");
         style.addProperty("background", "#F8F8F8");
-        style.addProperty("overflow-y", "scroll");
         addStyle(style);
     }
 

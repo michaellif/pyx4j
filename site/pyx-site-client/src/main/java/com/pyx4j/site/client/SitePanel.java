@@ -30,6 +30,7 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -202,6 +203,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         style.setProperty("display", "inline-block");
         style.setProperty("background", "yellow");
         style.setProperty("width", "100%");
+        style.setProperty("position", "relative");
 
         mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
 
@@ -240,7 +242,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         } else {
             panel.getElement().getStyle().setProperty("float", "right");
         }
-        panel.getElement().getStyle().setProperty("display", "inline-block");
+        panel.getElement().getStyle().setProperty("display", "block");
 
         panel.getElement().getStyle().setProperty("padding", "20px");
         panel.getElement().getStyle().setProperty("background", "red");

@@ -50,7 +50,6 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
         style = new Style("body");
         style.addProperty("background", "#21262C");
-        style.addProperty("overflow-y", "scroll");
 
         addStyle(style);
     }
