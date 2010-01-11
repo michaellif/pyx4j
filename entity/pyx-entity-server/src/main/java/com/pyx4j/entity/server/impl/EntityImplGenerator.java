@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -40,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityImplGenerator {
 
@@ -133,16 +131,11 @@ public class EntityImplGenerator {
             cc.addConstructor(memberConstructor);
 
             // Abstract methods
-            CtMethod getMemberMeta = new CtMethod(pool.get(MemberMeta.class.getName()), "getMemberMeta", new CtClass[] { ctStringClass }, cc);
-            getMemberMeta.setBody("return " + EntityImplReflectionHelper.class.getName() + ".getMemberMeta(this, $1);");
-            cc.addMethod(getMemberMeta);
-
             CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);
             lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(this, $1);");
             cc.addMethod(lazyCreateMember);
 
             // Members access
-            List<String> memebers = new Vector<String>();
             for (Method method : interfaceClass.getMethods()) {
                 if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
                     continue;
@@ -154,18 +147,7 @@ public class EntityImplGenerator {
                 CtMethod member = new CtMethod(pool.get(type.getName()), method.getName(), null, cc);
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
                 cc.addMethod(member);
-                memebers.add(method.getName());
             }
-
-            //TODO Use IEntityMeta
-            CtMethod lazyCreateMembersNamesList = new CtMethod(CtClass.voidType, "lazyCreateMembersNamesList", null, cc);
-            StringBuilder b = new StringBuilder("{");
-            for (String memeber : memebers) {
-                b.append("createMemeber(\"").append(memeber).append("\");");
-            }
-            b.append("}");
-            lazyCreateMembersNamesList.setBody(b.toString());
-            cc.addMethod(lazyCreateMembersNamesList);
 
             return cc.toClass();
         } catch (CannotCompileException e) {

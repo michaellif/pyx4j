@@ -25,7 +25,11 @@ import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
+/**
+ * Base implementation for generated classes by GWT rebind.
+ */
 public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryImpl {
 
     private final Map<Class<? extends IEntity<?>>, IEntityFactoryImpl> implementationsMap;
@@ -41,6 +45,15 @@ public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryI
             throw new Error("Class " + clazz.getName() + " implementation not found");
         }
         return implCreator.create(clazz);
+    }
+
+    @Override
+    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz) {
+        IEntityFactoryImpl implCreator = implementationsMap.get(clazz);
+        if (implCreator == null) {
+            throw new Error("Class " + clazz.getName() + " implementation not found");
+        }
+        return implCreator.createEntityMeta(clazz);
     }
 
     protected void addClassFactory(Class<? extends IEntity<?>> clazz, IEntityFactoryImpl implCreator) {

@@ -22,11 +22,13 @@ package com.pyx4j.entity.test.shared.domain;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Caption(name = "Laborer")
 public interface Employee extends IEntity<Employee> {
 
     public static enum EmploymentStatus {
@@ -53,6 +55,7 @@ public interface Employee extends IEntity<Employee> {
 
     @Owned
     @NotNull
+    @Caption(name = "Home address")
     Address homeAddress();
 
     @Owned

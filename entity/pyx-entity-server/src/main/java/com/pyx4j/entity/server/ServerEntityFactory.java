@@ -24,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
+import com.pyx4j.entity.server.impl.EntityMetaImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class ServerEntityFactory implements IEntityFactoryImpl {
 
@@ -46,6 +48,11 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
             log.error(handlerClassName + " instantiation error", e);
             throw new Error(e.getMessage());
         }
+    }
+
+    @Override
+    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz) {
+        return new EntityMetaImpl(clazz);
     }
 
 }

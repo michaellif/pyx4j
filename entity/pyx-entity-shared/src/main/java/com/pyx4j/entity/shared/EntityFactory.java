@@ -20,11 +20,17 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityFactory {
 
     private static IEntityFactoryImpl impl;
+
+    private static final Map<Class<?>, EntityMeta> entityMetaCache = new HashMap<Class<?>, EntityMeta>();
 
     public static void setImplementation(IEntityFactoryImpl impl) {
         EntityFactory.impl = impl;
@@ -32,5 +38,14 @@ public class EntityFactory {
 
     public static <T extends IEntity<?>> T create(Class<T> clazz) {
         return impl.create(clazz);
+    }
+
+    public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity<?>> clazz) {
+        EntityMeta meta = entityMetaCache.get(clazz);
+        if (meta == null) {
+            meta = impl.createEntityMeta(clazz);
+            entityMetaCache.put(clazz, meta);
+        }
+        return meta;
     }
 }

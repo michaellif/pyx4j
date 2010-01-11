@@ -21,8 +21,10 @@
 package com.pyx4j.entity.client;
 
 import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class ClientEntityFactory implements IEntityFactoryImpl {
 
@@ -30,7 +32,7 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
 
     /**
      * Call this function in client code before compiler reached RPC RemoteService to
-     * ensure IEntityImplementations are serialized.
+     * ensure IEntityImplementations are serialized by RPC.
      */
     public static void ensureIEntityImplementations() {
     }
@@ -42,5 +44,15 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
             }
         }
         return singleFactory.create(clazz);
+    }
+
+    @Override
+    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz) {
+        if (singleFactory == null) {
+            synchronized (ClientEntityFactory.class) {
+                singleFactory = GWT.create(IEntityFactoryImpl.class);
+            }
+        }
+        return singleFactory.createEntityMeta(clazz);
     }
 }

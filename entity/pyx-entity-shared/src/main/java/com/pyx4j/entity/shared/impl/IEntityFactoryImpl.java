@@ -21,9 +21,11 @@
 package com.pyx4j.entity.shared.impl;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public interface IEntityFactoryImpl {
 
     public <T extends IEntity<?>> T create(Class<T> clazz);
 
+    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz);
 }

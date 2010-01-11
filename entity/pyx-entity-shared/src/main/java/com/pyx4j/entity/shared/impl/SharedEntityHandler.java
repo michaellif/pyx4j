@@ -25,11 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
 @SuppressWarnings("serial")
@@ -37,8 +39,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         IEntity<OBJECT_TYPE> {
 
     private Map<String, Object> data;
-
-    private transient boolean membersListCreated;
 
     protected transient final HashMap<String, IObject<?, ?>> members = new HashMap<String, IObject<?, ?>>();
 
@@ -56,15 +56,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      */
     public SharedEntityHandler(Class<? extends IObject<?, ?>> clazz, IEntity<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
-    }
-
-    //TODO Use IEntityMeta
-    protected abstract void lazyCreateMembersNamesList();
-
-    protected void createMemeber(String name) {
-        if (!members.containsKey(name)) {
-            members.put(name, null);
-        }
     }
 
     protected abstract IObject<?, ?> lazyCreateMember(String name);
@@ -125,13 +116,16 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         setValue(entity.getValue());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public synchronized Set<String> getMemberNames() {
-        if (!membersListCreated) {
-            lazyCreateMembersNamesList();
-            membersListCreated = true;
-        }
-        return members.keySet();
+        return EntityFactory.getEntityMeta((Class<IEntity<?>>) getObjectClass()).getMemberNames();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MemberMeta getMemberMeta(String memberName) {
+        return EntityFactory.getEntityMeta((Class<IEntity<?>>) getObjectClass()).getMemberMeta(memberName);
     }
 
     @Override

@@ -29,28 +29,16 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityImplReflectionHelper {
 
-    public static MemberMeta getMemberMeta(SharedEntityHandler<?> implHandler, String memberName) {
-        // TODO Use single instance per  IEntity/Member
-        try {
-            return new MemberMetaImpl(implHandler.getObjectClass().getMethod(memberName, (Class[]) null));
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Unknown member " + memberName);
-        }
-    }
-
     public static IObject<?, ?> lazyCreateMember(SharedEntityHandler<?> implHandler, String memberName) {
+        Method method;
         try {
-            return lazyCreateMember(implHandler, implHandler.getObjectClass().getMethod(memberName, (Class[]) null));
+            method = implHandler.getObjectClass().getMethod(memberName, (Class[]) null);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Unknown member " + memberName);
         }
-    }
-
-    private static IObject<?, ?> lazyCreateMember(SharedEntityHandler<?> implHandler, Method method) {
         if (IPrimitive.class.equals(method.getReturnType())) {
             return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) ((ParameterizedType) method.getGenericReturnType())
                     .getActualTypeArguments()[0]);

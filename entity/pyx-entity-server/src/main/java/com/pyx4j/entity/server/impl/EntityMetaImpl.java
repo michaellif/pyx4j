@@ -1,0 +1,118 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2010 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on Jan 11, 2010
+ * @author vlads
+ * @version $Id$
+ */
+package com.pyx4j.entity.server.impl;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Set;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+
+public class EntityMetaImpl implements EntityMeta {
+
+    private final Class<? extends IEntity<?>> entityClass;
+
+    private final String caption;
+
+    private final String description;
+
+    private final boolean persistenceTransient;
+
+    private boolean membersListCreated;
+
+    protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
+
+    public EntityMetaImpl(Class<? extends IEntity<?>> clazz) {
+        entityClass = clazz;
+        Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
+        if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
+            caption = captionAnnotation.name();
+        } else {
+            caption = EnglishGrammar.capitalize(entityClass.getSimpleName());
+        }
+        if (captionAnnotation != null) {
+            description = captionAnnotation.description();
+        } else {
+            description = null;
+        }
+        persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
+    }
+
+    @Override
+    public String getCaption() {
+        return caption;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public boolean isTransient() {
+        return persistenceTransient;
+    }
+
+    @Override
+    public MemberMeta getMemberMeta(String memberName) {
+        MemberMeta memberMeta = membersMeta.get(memberName);
+        if (memberMeta == null) {
+            try {
+                memberMeta = new MemberMetaImpl(entityClass.getMethod(memberName, (Class[]) null));
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException("Unknown member " + memberName);
+            }
+            membersMeta.put(memberName, memberMeta);
+        }
+        return memberMeta;
+    }
+
+    private void lazyCreateMembersNamesList() {
+        for (Method method : entityClass.getMethods()) {
+            if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
+                continue;
+            }
+            Class<?> type = method.getReturnType();
+            if (type == Void.class) {
+                continue;
+            }
+            if (!membersMeta.containsKey(method.getName())) {
+                membersMeta.put(method.getName(), null);
+            }
+        }
+    }
+
+    @Override
+    public Set<String> getMemberNames() {
+        if (!membersListCreated) {
+            lazyCreateMembersNamesList();
+            membersListCreated = true;
+        }
+        return membersMeta.keySet();
+    }
+
+}

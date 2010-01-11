@@ -25,6 +25,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
@@ -63,6 +64,7 @@ public class MemberMetaImpl implements MemberMeta {
      */
     private final int stringLength;
 
+    @SuppressWarnings("unchecked")
     public MemberMetaImpl(Method method) {
         objectClass = (Class<? extends IObject<?, ?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
@@ -94,7 +96,7 @@ public class MemberMetaImpl implements MemberMeta {
         if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
             caption = captionAnnotation.name();
         } else {
-            caption = fieldName;
+            caption = EnglishGrammar.capitalize(fieldName);
         }
         if (captionAnnotation != null) {
             description = captionAnnotation.description();

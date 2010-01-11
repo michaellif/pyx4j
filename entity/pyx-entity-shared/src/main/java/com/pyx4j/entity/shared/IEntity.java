@@ -47,7 +47,8 @@ public interface IEntity<E extends IObject<?, ?>> extends IObject<E, Map<String,
     public void setMemberValue(String memberName, Object value);
 
     /**
-     * A single instance of MemeberMeta is shared between all instances of the IEntity.
+     * A single instance of MemeberMeta is shared between all instances of the IEntity
+     * inside EntityMeta.
      */
     public MemberMeta getMemberMeta(String memberName);
 

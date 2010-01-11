@@ -61,4 +61,18 @@ public class EnglishGrammar {
             }
         }
     }
+
+    public static String capitalize(String word) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < word.length(); i++) {
+            Character c = word.charAt(i);
+            if (i == 0) {
+                c = Character.toUpperCase(c);
+            } else if (Character.isUpperCase(c)) {
+                b.append(" ");
+            }
+            b.append(c);
+        }
+        return b.toString();
+    }
 }

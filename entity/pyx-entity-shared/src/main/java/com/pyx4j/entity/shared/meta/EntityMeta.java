@@ -20,12 +20,14 @@
  */
 package com.pyx4j.entity.shared.meta;
 
+import java.util.Set;
+
 /**
- * TODO Implement this
- * 
  * Represent the Meta data denoted using annotation. For consistency it is better to use
- * this class instead of using annotations directly. Implementation of this class is
- * generated for GWT runtime.
+ * this class instead of using annotations directly. In GWT mode we have no other choice
+ * but to use this class. Implementation of this class is generated for GWT runtime.
+ * 
+ * Use EntityFactory.getEntityMeta(Class) to get instances.
  */
 public interface EntityMeta {
 
@@ -43,4 +45,8 @@ public interface EntityMeta {
      * See com.pyx4j.entity.annotations.Transient
      */
     public boolean isTransient();
+
+    public Set<String> getMemberNames();
+
+    public MemberMeta getMemberMeta(String memberName);
 }
