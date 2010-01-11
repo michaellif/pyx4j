@@ -151,6 +151,11 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("padding", "3px");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("color", "gray");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
         style.addProperty("text-decoration", "underline");
         style.addProperty("color", "black");
@@ -163,17 +168,20 @@ public class LightTheme extends WindowsTheme {
         style.addProperty("margin-left", "600px");
         style.addProperty("margin-top", "1px");
         style.addProperty("color", "gray");
-        style.addProperty("text-decoration", "none");
-
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " li");
         style.addProperty("padding", "3px");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a");
+        style.addProperty("color", "gray");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
-        style.addProperty("text-decoration", "underline");
         style.addProperty("color", "black");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
 
     }
