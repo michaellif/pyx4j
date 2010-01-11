@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.style;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.StyleInjector;
 
 public class StyleManger {
@@ -47,7 +50,22 @@ public class StyleManger {
 
         System.out.println(stylesString.toString());
 
+        cleanUpInjectedStyles();
         StyleInjector.inject(stylesString.toString());
+    }
+
+    private static void cleanUpInjectedStyles() {
+        Element head = Document.get().getElementsByTagName("head").getItem(0);
+        if (head == null) {
+            // Let GWT StyleInjector throw exception 
+            return;
+        }
+        NodeList<Element> styleElements = head.getElementsByTagName("style");
+        if (styleElements != null) {
+            for (int i = 0; i < styleElements.getLength(); i++) {
+                styleElements.getItem(i).removeFromParent();
+            }
+        }
     }
 
     public static Theme getTheme() {
