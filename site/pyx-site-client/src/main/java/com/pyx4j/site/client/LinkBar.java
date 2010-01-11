@@ -130,7 +130,7 @@ public class LinkBar extends ComplexPanel {
                 break;
             }
 
-            getElement().getStyle().setProperty("display", "list-item");
+            getElement().getStyle().setProperty("display", "inline");
             if (BrowserType.isFirefox()) {
                 getElement().getStyle().setProperty("cssFloat", "left");
             } else {
