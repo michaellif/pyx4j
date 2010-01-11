@@ -34,6 +34,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -59,7 +60,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private AbsolutePanel headerPanel;
 
-    private FlowPanel mainPanel;
+    private DockPanel mainPanel;
 
     private FlowPanel leftSectionPanel;
 
@@ -148,13 +149,15 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         contentPanel.add(mainPanel);
 
         leftSectionPanel = createLeftSectionPanel();
-        mainPanel.add(leftSectionPanel);
+        mainPanel.add(leftSectionPanel, DockPanel.EAST);
 
         mainSectionPanel = createMainSectionPanel();
-        mainPanel.add(mainSectionPanel);
+        mainPanel.add(mainSectionPanel, DockPanel.CENTER);
+        mainPanel.setCellWidth(mainSectionPanel, "100%");
+        mainPanel.setCellHeight(mainSectionPanel, "100%");
 
         rightSectionPanel = createRightSectionPanel();
-        mainPanel.add(rightSectionPanel);
+        mainPanel.add(rightSectionPanel, DockPanel.WEST);
 
         footerPanel = createFooterPanel();
         contentPanel.add(footerPanel);
@@ -195,15 +198,12 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         footerPanel.add(w, left, top);
     }
 
-    protected FlowPanel createMainPanel() {
-        FlowPanel mainPanel = new FlowPanel();
+    protected DockPanel createMainPanel() {
+        DockPanel mainPanel = new DockPanel();
 
         Style style = mainPanel.getElement().getStyle();
 
-        style.setProperty("display", "inline-block");
-        style.setProperty("background", "yellow");
         style.setProperty("width", "100%");
-        style.setProperty("position", "relative");
 
         mainPanel.setStyleName(SiteCSSClass.pyx4j_Site_MainPanel.name());
 
@@ -212,16 +212,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createLeftSectionPanel() {
         FlowPanel panel = new FlowPanel();
-
-        if (BrowserType.isFirefox()) {
-            panel.getElement().getStyle().setProperty("cssFloat", "left");
-        } else {
-            panel.getElement().getStyle().setProperty("float", "left");
-        }
-        panel.getElement().getStyle().setProperty("display", "block");
-
         panel.getElement().getStyle().setProperty("padding", "20px");
-        panel.getElement().getStyle().setProperty("background", "red");
 
         panel.getElement().getStyle().setProperty("width", "150px");
 
@@ -237,15 +228,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createRightSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        if (BrowserType.isFirefox()) {
-            panel.getElement().getStyle().setProperty("cssFloat", "right");
-        } else {
-            panel.getElement().getStyle().setProperty("float", "right");
-        }
-        panel.getElement().getStyle().setProperty("display", "block");
-
         panel.getElement().getStyle().setProperty("padding", "20px");
-        panel.getElement().getStyle().setProperty("background", "red");
 
         panel.getElement().getStyle().setProperty("width", "150px");
 
@@ -261,9 +244,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected SimplePanel createMainSectionPanel() {
         SimplePanel panel = new SimplePanel();
-        panel.getElement().getStyle().setProperty("display", "inline-block");
-        panel.getElement().getStyle().setProperty("background", "green");
-        panel.getElement().getStyle().setProperty("width", "500px");
         return panel;
     }
 

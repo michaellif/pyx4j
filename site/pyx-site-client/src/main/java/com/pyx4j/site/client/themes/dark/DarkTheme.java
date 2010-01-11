@@ -78,7 +78,7 @@ public class DarkTheme extends GrayTheme {
     private void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
         style.addProperty("background", "url(images/topHdr_ecommerce.jpg) no-repeat 50% 100%");
-        style.addProperty("height", "40px");
+        style.addProperty("height", "35px");
         addStyle(style);
     }
 
@@ -158,8 +158,8 @@ public class DarkTheme extends GrayTheme {
 
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
-        style.addProperty("margin-left", "600px");
-        style.addProperty("margin-top", "6px");
+        style.addProperty("margin-left", "550px");
+        style.addProperty("margin-top", "5px");
         style.addProperty("color", "lightGrey");
         addStyle(style);
 
@@ -182,7 +182,7 @@ public class DarkTheme extends GrayTheme {
     protected void initFooterCopyrightStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "6px");
+        style.addProperty("margin-top", "5px");
         style.addProperty("color", "lightGray");
         addStyle(style);
     }

@@ -163,7 +163,7 @@ public class LightTheme extends WindowsTheme {
 
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
-        style.addProperty("margin-left", "600px");
+        style.addProperty("margin-left", "550px");
         style.addProperty("margin-top", "1px");
         style.addProperty("color", "gray");
         addStyle(style);
