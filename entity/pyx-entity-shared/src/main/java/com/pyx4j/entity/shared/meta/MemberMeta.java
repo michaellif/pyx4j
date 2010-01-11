@@ -29,6 +29,16 @@ public interface MemberMeta {
 
     public String getFieldName();
 
+    /**
+     * See com.pyx4j.entity.annotations.Transient
+     */
+    public boolean isTransient();
+
+    /**
+     * See com.pyx4j.entity.annotations.Detached
+     */
+    public boolean isDetached();
+
     public boolean isOwnedRelationships();
 
     public Class<?> getValueClass();

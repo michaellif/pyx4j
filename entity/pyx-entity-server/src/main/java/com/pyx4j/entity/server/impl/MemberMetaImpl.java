@@ -26,8 +26,10 @@ import java.util.List;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -38,6 +40,10 @@ import com.pyx4j.entity.shared.validator.Validator;
 public class MemberMetaImpl implements MemberMeta {
 
     private final String fieldName;
+
+    private final boolean persistenceTransient;
+
+    private final boolean detached;
 
     private final boolean ownedRelationships;
 
@@ -96,7 +102,9 @@ public class MemberMetaImpl implements MemberMeta {
             description = null;
         }
 
+        persistenceTransient = (method.getAnnotation(Transient.class) != null);
         ownedRelationships = (method.getAnnotation(Owned.class) != null);
+        detached = (method.getAnnotation(Detached.class) != null);
     }
 
     @Override
@@ -112,6 +120,16 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean isTransient() {
+        return persistenceTransient;
+    }
+
+    @Override
+    public boolean isDetached() {
+        return detached;
     }
 
     @Override

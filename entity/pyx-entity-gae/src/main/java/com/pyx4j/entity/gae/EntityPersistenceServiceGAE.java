@@ -36,7 +36,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
@@ -44,6 +43,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 /**
  * 
@@ -67,10 +67,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue;
             }
+            MemberMeta meta = iEntity.getMemberMeta(me.getKey());
+            if (meta.isTransient()) {
+                continue;
+            }
             Object value = me.getValue();
             if (value instanceof Map<?, ?>) {
                 String childKey;
-                if (iEntity.getMemberMeta(me.getKey()).isOwnedRelationships()) {
+                if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
                     persist(childIEntity);
@@ -83,7 +87,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 value = KeyFactory.stringToKey(childKey);
             } else if (value instanceof String) {
-                if (iEntity.getMemberMeta(me.getKey()).getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
+                if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                     value = new Text((String) value);
                 }
             }
@@ -126,7 +130,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = ((Text) value).getValue();
             } else if (value instanceof Key) {
                 IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
-                retrieveEntity(childIEntity, (Key) value);
+                if (childIEntity.getMeta().isDetached()) {
+                    childIEntity.setPrimaryKey(KeyFactory.keyToString((Key) value));
+                } else {
+                    retrieveEntity(childIEntity, (Key) value);
+                }
                 continue;
             }
             iEntity.setMemberValue(me.getKey(), value);
