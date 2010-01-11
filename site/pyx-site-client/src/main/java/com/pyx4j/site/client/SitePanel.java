@@ -215,15 +215,18 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         } else {
             panel.getElement().getStyle().setProperty("float", "left");
         }
-        panel.getElement().getStyle().setProperty("display", "inline-block");
+        //panel.getElement().getStyle().setProperty("display", "block");
 
         panel.getElement().getStyle().setProperty("padding", "20px");
         panel.getElement().getStyle().setProperty("background", "red");
+
+        panel.setWidth("150px");
 
         HTML portlet1 = new HTML("portlet1", true);
         portlet1.setWidth("100px");
         panel.add(portlet1);
         HTML portlet2 = new HTML("portlet2", true);
+        portlet2.setWidth("100px");
         panel.add(portlet2);
 
         return panel;
@@ -236,15 +239,18 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         } else {
             panel.getElement().getStyle().setProperty("float", "right");
         }
-        panel.getElement().getStyle().setProperty("display", "inline-block");
+        //panel.getElement().getStyle().setProperty("display", "block");
 
         panel.getElement().getStyle().setProperty("padding", "20px");
         panel.getElement().getStyle().setProperty("background", "red");
+
+        panel.setWidth("150px");
 
         HTML portlet3 = new HTML("portlet3", true);
         portlet3.setWidth("100px");
         panel.add(portlet3);
         HTML portlet4 = new HTML("portlet4", true);
+        portlet4.setWidth("100px");
         panel.add(portlet4);
 
         return panel;
@@ -254,6 +260,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         SimplePanel panel = new SimplePanel();
         panel.getElement().getStyle().setProperty("display", "inline-block");
         panel.getElement().getStyle().setProperty("background", "green");
+        panel.getElement().getStyle().setProperty("width", "500px");
         return panel;
     }
 
