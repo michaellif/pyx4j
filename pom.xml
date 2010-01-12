@@ -99,13 +99,16 @@
 
         <module>rpc/pyx-rpc-shared</module>
         <module>log/pyx-log-shared</module>
+        <module>security/pyx-security-shared</module>
 
         <module>gwt/pyx-gwt-server</module>
+        <module>security/pyx-security-server</module>
         <module>rpc/pyx-rpc-server</module>
 
         <module>log/pyx-slf4j-api-gwt</module>
         <module>log/pyx-log-gwt</module>
 
+        <module>security/pyx-security-gwt</module>
         <module>rpc/pyx-rpc-gwt</module>
         <module>log/pyx-log-gwt-rpcappender</module>
         <module>log/pyx-log-server</module>

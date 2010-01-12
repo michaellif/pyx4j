@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-rpc-shared</artifactId>
-    <name>pyx-rpc-shared</name>
-    <description>pyx-rpc-shared implementations</description>
+    <artifactId>pyx-security-gwt</artifactId>
+    <name>pyx-security-gwt</name>
+    <description>pyx-security-gwt implementations</description>
 
     <dependencies>
 
@@ -26,13 +26,13 @@
         </dependency>
 
         <dependency>
-        	<groupId>com.pyx4j</groupId>
-        	<artifactId>pyx-security-shared</artifactId>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
     </dependencies>
-    
+
     <build>
         <resources>
             <resource>
