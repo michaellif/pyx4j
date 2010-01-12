@@ -40,7 +40,7 @@ public abstract class CContainer extends CComponent<INativeComponent> {
     public abstract void addComponent(CComponent<?> component);
 
     public boolean isValid() {
-        if (isReadOnly() || !isEnabled()) {
+        if (!isEditable() || !isEnabled()) {
             return true;
         }
         for (CComponent<?> ccomponent : getComponents()) {
@@ -88,17 +88,17 @@ public abstract class CContainer extends CComponent<INativeComponent> {
         return aggregatingAccessAdapter;
     }
 
-    public boolean isReadOnly() {
+    public boolean isEditable() {
         for (IAccessAdapter adapter : getAccessAdapters()) {
-            if (adapter.isReadOnly(this)) {
-                return true;
+            if (!adapter.isEditable(this)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        defaultAccessAdapter.setReadOnly(readOnly);
+    public void setEditable(boolean editable) {
+        defaultAccessAdapter.setEditable(editable);
         applyEditabilityRules();
     }
 

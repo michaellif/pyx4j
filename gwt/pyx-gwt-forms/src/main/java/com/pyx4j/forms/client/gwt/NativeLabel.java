@@ -50,8 +50,12 @@ public class NativeLabel extends Label implements INativeEditableComponent<Strin
     public void updateLookAndFeel() {
     }
 
-    public boolean isReadOnly() {
-        return true;
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
     }
 
     public void setNativeValue(String value) {

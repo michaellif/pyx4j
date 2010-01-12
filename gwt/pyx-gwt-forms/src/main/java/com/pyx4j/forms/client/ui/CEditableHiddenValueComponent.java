@@ -54,20 +54,20 @@ public class CEditableHiddenValueComponent<E> extends CEditableComponent<E> {
 
         private final CEditableComponent<E> owner;
 
-        boolean readOnly;
+        boolean editable;
 
         HiddenNativeEditableComponent(CEditableComponent<E> owner) {
             this.owner = owner;
         }
 
         @Override
-        public void setReadOnly(boolean readOnly) {
-            this.readOnly = readOnly;
+        public void setEditable(boolean editable) {
+            this.editable = editable;
         }
 
         @Override
-        public boolean isReadOnly() {
-            return readOnly;
+        public boolean isEditable() {
+            return editable;
         }
 
         @Override

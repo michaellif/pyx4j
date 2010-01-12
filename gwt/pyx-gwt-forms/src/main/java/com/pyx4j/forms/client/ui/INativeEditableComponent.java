@@ -22,9 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 public interface INativeEditableComponent<E> extends INativeFocusComponent {
 
-    public void setReadOnly(boolean readOnly);
+    public void setEditable(boolean editable);
 
-    public boolean isReadOnly();
+    public boolean isEditable();
 
     void setNativeValue(E value);
 }

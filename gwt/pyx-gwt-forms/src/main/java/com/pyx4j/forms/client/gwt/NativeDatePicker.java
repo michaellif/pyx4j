@@ -77,9 +77,14 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
-        super.setReadOnly(readOnly);
-        textBox.setReadOnly(readOnly);
+    public void setEditable(boolean editable) {
+        super.setReadOnly(!editable);
+        textBox.setReadOnly(!editable);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return !super.isReadOnly();
     }
 
     public NativeTextBox<Date> getTextBox() {

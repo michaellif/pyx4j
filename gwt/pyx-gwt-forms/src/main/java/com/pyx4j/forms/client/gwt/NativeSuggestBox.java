@@ -60,9 +60,9 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
-        super.setEnabled(!readOnly);
-        suggestTextBox.setReadOnly(readOnly);
+    public void setEditable(boolean editable) {
+        super.setEnabled(editable);
+        suggestTextBox.setReadOnly(!editable);
     }
 
     @Override
@@ -93,8 +93,8 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
     }
 
     @Override
-    public boolean isReadOnly() {
-        return suggestTextBox.isReadOnly();
+    public boolean isEditable() {
+        return !suggestTextBox.isReadOnly();
     }
 
 }
@@ -113,9 +113,8 @@ class SuggestTextBox extends com.google.gwt.user.client.ui.TextBox {
         super.setEnabled(enabled);
     }
 
-    @Override
-    public void setReadOnly(boolean readOnly) {
-        super.setReadOnly(readOnly);
+    public void setEditable(boolean editable) {
+        super.setReadOnly(!editable);
     }
 
 }

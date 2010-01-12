@@ -53,7 +53,7 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
 
     private boolean enabled = true;
 
-    private boolean readOnly = false;
+    private boolean editable = true;
 
     public NativeComboBox(final CComboBox<E> comboBox) {
         super();
@@ -184,7 +184,7 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        super.setEnabled(enabled && !this.isReadOnly());
+        super.setEnabled(enabled && this.isEditable());
     }
 
     @Override
@@ -192,13 +192,13 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
         return enabled;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-        super.setEnabled(!readOnly && this.isEnabled());
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        super.setEnabled(editable && this.isEnabled());
     }
 
-    public boolean isReadOnly() {
-        return readOnly;
+    public boolean isEditable() {
+        return editable;
     }
 
     public void setNativeValue(E value) {

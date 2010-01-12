@@ -33,7 +33,7 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
 
     private boolean enabled = true;
 
-    private boolean readOnly = false;
+    private boolean editable = true;
 
     public NativeCheckBox(final CCheckBox checkBox) {
         super();
@@ -52,7 +52,7 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        super.setEnabled(enabled && !this.isReadOnly());
+        super.setEnabled(enabled && this.isEditable());
     }
 
     @Override
@@ -60,13 +60,13 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
         return enabled;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-        super.setEnabled(!readOnly && this.isEnabled());
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        super.setEnabled(editable && this.isEnabled());
     }
 
-    public boolean isReadOnly() {
-        return readOnly;
+    public boolean isEditable() {
+        return editable;
     }
 
     public void setNativeValue(Boolean value) {

@@ -24,7 +24,7 @@ public interface IAccessAdapter {
 
     public boolean isEnabled(CComponent<?> component);
 
-    public boolean isReadOnly(CComponent<?> component);
+    public boolean isEditable(CComponent<?> component);
 
     public boolean isVisible(CComponent<?> component);
 

@@ -26,7 +26,7 @@ class ComponentAccessAdapter implements IAccessAdapter {
 
     private boolean visible = true;
 
-    private boolean readOnly = false;
+    private boolean editable = true;
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -36,12 +36,12 @@ class ComponentAccessAdapter implements IAccessAdapter {
         return enabled;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
-    public boolean isReadOnly(CComponent<?> component) {
-        return readOnly;
+    public boolean isEditable(CComponent<?> component) {
+        return editable;
     }
 
     public void setVisible(boolean visible) {

@@ -52,8 +52,13 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
-        super.setReadOnly(readOnly);
+    public void setEditable(boolean editable) {
+        super.setReadOnly(!editable);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return !super.isReadOnly();
     }
 
     public void scrollToBottom() {

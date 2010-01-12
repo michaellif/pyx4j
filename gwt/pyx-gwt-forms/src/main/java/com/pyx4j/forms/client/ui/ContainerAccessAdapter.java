@@ -30,14 +30,14 @@ public class ContainerAccessAdapter implements IAccessAdapter {
 
     public boolean isEnabled(CComponent<?> component) {
         if (component instanceof CButton) {
-            return !container.isReadOnly() && container.isEnabled();
+            return container.isEditable() && container.isEnabled();
         } else {
             return container.isEnabled();
         }
     }
 
-    public boolean isReadOnly(CComponent<?> component) {
-        return container.isReadOnly();
+    public boolean isEditable(CComponent<?> component) {
+        return container.isEditable();
     }
 
     public boolean isVisible(CComponent<?> component) {

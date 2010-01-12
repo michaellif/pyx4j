@@ -51,7 +51,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     }
 
     public boolean isValid() {
-        return !isVisible() || isReadOnly() || !isEnabled() || (isMandatoryConditionMet() && isValidationConditionMet());
+        return !isVisible() || !isEditable() || !isEnabled() || (isMandatoryConditionMet() && isValidationConditionMet());
     }
 
     public E getValue() {
@@ -83,17 +83,17 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         return (getValue() == null);
     }
 
-    public boolean isReadOnly() {
+    public boolean isEditable() {
         for (IAccessAdapter adapter : getAccessAdapters()) {
-            if (adapter.isReadOnly(this)) {
-                return true;
+            if (!adapter.isEditable(this)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
-    public void setReadOnly(boolean readOnly) {
-        defaultAccessAdapter.setReadOnly(readOnly);
+    public void setEditable(boolean editable) {
+        defaultAccessAdapter.setEditable(editable);
         applyEditabilityRules();
     }
 
@@ -190,11 +190,11 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         for (IAccessAdapter adapter : getAccessAdapters()) {
             adaptersReport.append(adapter.getClass().getName()).append(" ");
             adaptersReport.append("isEnabled ").append(adapter.isEnabled(this)).append(" ");
-            adaptersReport.append("isReadOnly ").append(adapter.isReadOnly(this)).append(" ");
+            adaptersReport.append("isEditable ").append(adapter.isEditable(this)).append(" ");
         }
 
-        return "Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled=" + isEnabled() + "; isReadOnly="
-                + isReadOnly() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip() + "; size=" + getWidth() + ":"
+        return "Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled=" + isEnabled() + "; isEditable="
+                + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip() + "; size=" + getWidth() + ":"
                 + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
@@ -209,9 +209,9 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     }
 
     protected void applyEditabilityRules() {
-        boolean readOnly = isReadOnly();
-        if (getNativeComponent() != null && getNativeComponent().isReadOnly() != readOnly) {
-            getNativeComponent().setReadOnly(readOnly);
+        boolean editable = isEditable();
+        if (getNativeComponent() != null && getNativeComponent().isEditable() != editable) {
+            getNativeComponent().setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.READONLY_PROPERTY);
         }
     }

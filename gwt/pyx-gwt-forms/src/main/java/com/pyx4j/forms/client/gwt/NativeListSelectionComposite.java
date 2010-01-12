@@ -67,7 +67,7 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
 
     private boolean enabled = true;
 
-    private boolean readOnly = false;
+    private boolean editable = true;
 
     private Comparator<E> comparator = null;
 
@@ -415,15 +415,15 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
-        this.readOnly = readOnly;
-        setEnabledComponents(!readOnly && this.isEnabled());
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+        setEnabledComponents(editable && this.isEnabled());
     }
 
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        setEnabledComponents(enabled && !this.isReadOnly());
+        setEnabledComponents(enabled && this.isEditable());
     }
 
     @Override
@@ -432,8 +432,8 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
     }
 
     @Override
-    public boolean isReadOnly() {
-        return this.readOnly;
+    public boolean isEditable() {
+        return this.editable;
     }
 
     private void setEnabledComponents(boolean enabled) {
