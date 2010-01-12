@@ -93,6 +93,10 @@ public class EntityImplGenerator {
 
     public static void generate() {
         List<String> classes = EntityClassFinder.findEntityClasses();
+        if (classes.size() == 0) {
+            log.warn("IEntity classes not found");
+            return;
+        }
         log.debug("found IEntity {} ", classes);
         for (String c : classes) {
             EntityImplGenerator.instance().generateImplementation(c);
