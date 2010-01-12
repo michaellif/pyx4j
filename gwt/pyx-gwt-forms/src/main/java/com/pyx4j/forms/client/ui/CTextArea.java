@@ -61,13 +61,6 @@ public class CTextArea extends CEditableComponent<String> {
         }
     }
 
-    @Override
-    public boolean isDirty() {
-        String current = getValue() == null ? "" : getValue().replaceAll("\r", "");
-        String init = getInitValue() == null ? "" : getInitValue().replaceAll("\r", "");
-        return !init.equals(current);
-    }
-
     public void setColumns(int columns) {
         this.columns = columns;
         if (nativeTextArea != null) {

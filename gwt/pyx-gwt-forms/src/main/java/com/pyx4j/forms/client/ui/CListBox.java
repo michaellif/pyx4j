@@ -138,10 +138,6 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
             }
         }
         super.populate(value);
-        // clone
-        if (value != null) {
-            initValue = new ArrayList<E>(value);
-        }
     }
 
     /**

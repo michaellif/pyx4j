@@ -113,15 +113,6 @@ public abstract class CTextBox<E> extends CEditableComponent<E> {
         return super.isValueEmpty() || ((getValue() instanceof String) && CommonsStringUtils.isEmpty((String) getValue()));
     }
 
-    @Override
-    public boolean isDirty() {
-        if ((getValue() instanceof String) || (getInitValue() instanceof String)) {
-            return !CommonsStringUtils.equals((String) getInitValue(), (String) getValue());
-        } else {
-            return super.isDirty();
-        }
-    }
-
     public boolean isParsedSuccesfully() {
         if (nativeTextField != null) {
             String text = nativeTextField.getNativeText();

@@ -22,12 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public abstract class CContainer extends CComponent<INativeComponent> {
-
-    private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 
     private final IAccessAdapter aggregatingAccessAdapter;
 
@@ -71,23 +66,6 @@ public abstract class CContainer extends CComponent<INativeComponent> {
             }
         }
         return validationResults;
-    }
-
-    public boolean isDirty() {
-        if (isReadOnly() || !isEnabled()) {
-            return false;
-        }
-        for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?> && ((CEditableComponent<?>) ccomponent).isDirty()) {
-                log.debug("'" + ccomponent.getTitle() + "' field is chnaged. Init value is " + ((CEditableComponent<?>) ccomponent).getInitValue()
-                        + ". Current value is " + ((CEditableComponent<?>) ccomponent).getValue() + ".");
-                return true;
-            }
-            if (ccomponent instanceof CContainer && ((CContainer) ccomponent).isDirty()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean isValuesEmpty() {

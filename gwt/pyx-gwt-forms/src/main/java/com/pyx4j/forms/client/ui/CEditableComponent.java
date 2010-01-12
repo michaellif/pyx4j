@@ -28,9 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ICloneable;
-import com.pyx4j.commons.IEqual;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
@@ -40,9 +38,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
 
     private String mandatoryValidationMessage = "This field is Mandatory";
 
-    protected E initValue = null;
-
-    private E currentValue = null;
+    private E value = null;
 
     private List<EditableValueValidator<E>> validators;
 
@@ -59,26 +55,21 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     }
 
     public E getValue() {
-        return currentValue;
-    }
-
-    public E getInitValue() {
-        return initValue;
+        return value;
     }
 
     public void setValue(E value) {
         if (getValue() == null ? value == null : getValue().equals(value)) {
             return;
         }
-        currentValue = value;
+        this.value = value;
         setNativeComponentValue(value);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
-        ValueChangeEvent.fire(this, currentValue);
+        ValueChangeEvent.fire(this, value);
     }
 
     public void populate(E value) {
-        initValue = value;
-        currentValue = value;
+        this.value = value;
         setNativeComponentValue(value);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
@@ -86,20 +77,6 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     @SuppressWarnings("unchecked")
     public void populateMutable(ICloneable<E> value) {
         populate((E) value);
-        if (value != null) {
-            initValue = value.iclone();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public boolean isDirty() {
-        if (initValue instanceof IEqual) {
-            return !EqualsHelper.iequals((IEqual<E>) initValue, getValue());
-        } else {
-            // We have more control over initValue, so equals of initValue should be used.
-            // Example is the Mutable List, initValue is FullyEqualArrayList, and the Value can be any Vector constructed by Editor.
-            return !EqualsHelper.equals(initValue, getValue());
-        }
     }
 
     public boolean isValueEmpty() {
@@ -139,10 +116,6 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         } else {
             return getValidationMessage() + ((tooltip == null) || tooltip.trim().equals("") ? "" : "<p>" + tooltip);
         }
-    }
-
-    public void fireValidation() {
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TITLE_PROPERTY);
     }
 
     protected boolean isMandatoryConditionMet() {
@@ -221,8 +194,8 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         }
 
         return "Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled=" + isEnabled() + "; isReadOnly="
-                + isReadOnly() + "; isVisible=" + isVisible() + "; isDirty=" + isDirty() + "; isValid=" + isValid() + "; toolTip=" + getToolTip() + "; size="
-                + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
+                + isReadOnly() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip() + "; size=" + getWidth() + ":"
+                + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
     protected void setNativeComponentValue(E value) {

@@ -55,33 +55,8 @@ public class CDatePicker extends CTextBox<Date> {
         return nativeTextField;
     }
 
-    @Override
-    public boolean isDirty() {
-        return !isSameDay(getValue(), getInitValue());
-    }
-
     public void setDateConditionValidationMessage(String dateConditionValidationMessage) {
         this.dateConditionValidationMessage = dateConditionValidationMessage;
-    }
-
-    @SuppressWarnings("deprecation")
-    private boolean isSameDay(Date first, Date second) {
-        if (first == null && second == null) {
-            return true;
-        } else if (first == null ^ second == null) {
-            return false;
-        }
-        if (first.getYear() != second.getYear()) {
-            return false;
-        }
-        if (first.getMonth() != second.getMonth()) {
-            return false;
-        }
-        if (first.getDate() != second.getDate()) {
-            return false;
-        }
-
-        return true;
     }
 
     public boolean isPastDateSelectionAllowed() {
@@ -111,7 +86,7 @@ public class CDatePicker extends CTextBox<Date> {
         @SuppressWarnings("deprecation")
         public boolean isValid(CEditableComponent<Date> component, Date value) {
             Date selectedDate = getValue();
-            if (selectedDate != null && !pastDateSelectionAllowed && isDirty()) {
+            if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();
                 Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
                 return selectedDate.compareTo(today) >= 0;

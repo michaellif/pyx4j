@@ -20,10 +20,32 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.Date;
+
 public class Utils {
 
     static boolean equals(Object a, Object b) {
         return ((a == b) || ((a != null) && a.equals(b)));
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean isSameDay(Date first, Date second) {
+        if (first == null && second == null) {
+            return true;
+        } else if (first == null ^ second == null) {
+            return false;
+        }
+        if (first.getYear() != second.getYear()) {
+            return false;
+        }
+        if (first.getMonth() != second.getMonth()) {
+            return false;
+        }
+        if (first.getDate() != second.getDate()) {
+            return false;
+        }
+
+        return true;
     }
 
 }

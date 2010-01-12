@@ -49,11 +49,6 @@ public class CTextField extends CTextBox<String> {
         return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
     }
 
-    @Override
-    public boolean isDirty() {
-        return !CommonsStringUtils.equals(getInitValue(), getValue());
-    }
-
     static class StringFormat implements IFormat<String> {
 
         public String format(String value) {
