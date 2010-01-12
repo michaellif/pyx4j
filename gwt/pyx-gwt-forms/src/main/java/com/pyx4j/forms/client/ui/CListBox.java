@@ -153,9 +153,10 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
     @SuppressWarnings("unchecked")
     public <T extends ICloneable<E>> void populateMutable(List<T> value) {
         populate((List<E>) value);
-        if (value != null) {
-            initValue = new FullyEqualArrayList(value);
-        }
+        //        if (value != null) {
+        //            initValue = new FullyEqualArrayList(value);
+        //        }
+        throw new RuntimeException("TODO!!!!!!!!!!!!!!!");
     }
 
     @Override
@@ -242,7 +243,20 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
             }
             return;
         }
-        pop = new ListSelectionPopup<E>(CommonsStringUtils.nvl_concat(getTitle(), "Selection Dialog", " ")) {
+        OkCancelOption callback = new OkCancelOption() {
+            public boolean onClickOk() {
+                CListBox.this.setValue(pop.getSelectedItems());
+                pop = null;
+                return true;
+            }
+
+            public boolean onClickCancel() {
+                pop = null;
+                return true;
+            }
+        };
+
+        pop = new ListSelectionPopup<E>(CommonsStringUtils.nvl_concat(getTitle(), "Selection Dialog", " "), callback) {
             @Override
             public String getItemName(E item) {
                 return CListBox.this.getItemName(item);
@@ -260,20 +274,7 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
         });
         pop.setSelectedItems(this.getValue());
 
-        OkCancelOption callback = new OkCancelOption() {
-            public boolean onClickOk() {
-                CListBox.this.setValue(pop.getSelectedItems());
-                pop = null;
-                return true;
-            }
-
-            public boolean onClickCancel() {
-                pop = null;
-                return true;
-            }
-        };
-        pop.build(callback);
-        pop.popup((Widget) nativeListBox);
+        pop.setBody((Widget) nativeListBox);
     }
 
     public E getSelected() {

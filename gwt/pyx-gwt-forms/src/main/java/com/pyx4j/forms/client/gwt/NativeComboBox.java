@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.gwt;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.ListBox;
@@ -56,9 +58,10 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
     public NativeComboBox(final CComboBox<E> comboBox) {
         super();
         this.comboBox = comboBox;
-        addChangeHandler(new SafeChangeListener() {
+        addChangeHandler(new ChangeHandler() {
+
             @Override
-            public void onChange() {
+            public void onChange(ChangeEvent event) {
                 CComboBox<E> comboBox = NativeComboBox.this.comboBox;
                 comboBox.setValue(getValueByNativeOptionIndex(getSelectedIndex()));
             }

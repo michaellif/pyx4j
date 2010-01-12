@@ -40,7 +40,6 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
     public CButton(String label, Command command) {
         this.label = label;
         this.command = command;
-        addAccessAdapter(new CommandAccessAdapter(command));
     }
 
     @Override
@@ -69,14 +68,6 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
 
     public String getLabel() {
         return label;
-    }
-
-    @Override
-    public void applyEnablingRules() {
-        if (command != null) {
-            command.revalidate();
-        }
-        super.applyEnablingRules();
     }
 
     public Command getCommand() {

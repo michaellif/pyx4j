@@ -40,7 +40,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
-import com.pyx4j.widgets.client.WidgetsImageBundle;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Dialog extends DialogPanel {
@@ -49,27 +49,29 @@ public class Dialog extends DialogPanel {
         Error, Warning, Info, Confirm
     }
 
-    protected Button focusButton;
+    private Button focusButton;
 
-    protected Button yesButton;
+    private Button yesButton;
 
-    protected Button noButton;
+    private Button noButton;
 
-    protected Button okButton;
+    private Button okButton;
 
-    protected Button cancelButton;
+    private Button cancelButton;
 
-    protected Button closeButton;
+    private Button closeButton;
 
-    protected Button custom1Button;
+    private Button custom1Button;
 
-    protected Button custom2Button;
+    private Button custom2Button;
 
-    protected Button custom3Button;
+    private Button custom3Button;
 
-    protected Button custom4Button;
+    private Button custom4Button;
 
-    protected DialogOptions options;
+    private final DialogOptions options;
+
+    private final DockPanel content;
 
     public Dialog(String message) {
         this("Information", message, Type.Info, new OkOption() {
@@ -83,21 +85,18 @@ public class Dialog extends DialogPanel {
     }
 
     public Dialog(String caption, String message, Type type, DialogOptions options) {
-        this(caption, new MessagePanel(message, type), options);
+        this(caption, options);
+        setBody(new MessagePanel(message, type));
     }
 
-    public Dialog(String caption, Widget message, DialogOptions options) {
+    public Dialog(String caption, DialogOptions options) {
         setCaption(caption);
 
         this.options = options;
 
-        DockPanel content = new DockPanel();
+        content = new DockPanel();
         content.setHeight("100%");
         content.setWidth("100%");
-
-        content.add(message, DockPanel.CENTER);
-        message.setSize("100%", "100%");
-        content.setCellHeight(message, "100%");
 
         Panel buttonPanel = createButtonsPanel();
         content.add(buttonPanel, DockPanel.SOUTH);
@@ -107,6 +106,12 @@ public class Dialog extends DialogPanel {
         setPixelSize(400, 300);
         center();
 
+    }
+
+    public void setBody(Widget message) {
+        content.add(message, DockPanel.CENTER);
+        message.setSize("100%", "100%");
+        content.setCellHeight(message, "100%");
     }
 
     private HorizontalPanel createButtonsPanel() {

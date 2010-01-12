@@ -41,7 +41,6 @@ public class CHyperlink extends CFocusComponent<NativeHyperlink> {
     public CHyperlink(String title, Command command) {
         super(title);
         this.command = command;
-        addAccessAdapter(new CommandAccessAdapter(command));
     }
 
     @Override
@@ -78,14 +77,6 @@ public class CHyperlink extends CFocusComponent<NativeHyperlink> {
 
     public boolean isWordWrap() {
         return wordWrap;
-    }
-
-    @Override
-    public void applyEnablingRules() {
-        if (command != null) {
-            command.revalidate();
-        }
-        super.applyEnablingRules();
     }
 
 }

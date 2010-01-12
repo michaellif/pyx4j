@@ -20,15 +20,12 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import javax.swing.UIManager;
-
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
-import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class NativeSuggestBox extends NativeTriggerComponent<Object> implements INativeEditableComponent<Object> {
 
@@ -75,11 +72,7 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
 
     @Override
     protected void onTrigger(boolean show) {
-        final Dialog dialog = new Dialog("Under Construction", "Under Construction", new OkOption() {
-            public void onClickOk() {
-            }
-        });
-        dialog.show();
+        MessageDialog.info("Under Construction", "Under Construction");
     }
 
     public void addItem(String optionName) {

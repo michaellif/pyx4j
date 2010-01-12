@@ -8,11 +8,16 @@
 
 TODO
  Misha:
-    Module for UncaughtHandler -> pyx-gwt-commons
-    Module for MessageDialog and Message
-    DefaultExceptionHandler ->  pyx-gwt-commons
+    - Module for UncaughtHandler -> pyx-gwt-commons
+    
+    
+    - Module for MessageDialog and Message
+    DONE - MessageDialog created in widgets.
+    TODO - Create error with option to "see details" and throwable as parameter
+    
+    - DefaultExceptionHandler ->  pyx-gwt-commons
 
-    Module for ClientState class
+    - Module for ClientState class
 
  Vlad:
    DONE - Ivestigate common logger!

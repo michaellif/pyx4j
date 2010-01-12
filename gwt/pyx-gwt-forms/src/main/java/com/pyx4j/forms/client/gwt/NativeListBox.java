@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.gwt;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ui.CListBox;
@@ -49,9 +51,10 @@ public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements
         setWidth(cListBox.getWidth());
         setHeight(cListBox.getHeight());
 
-        nativeListBox.addChangeHandler(new SafeChangeListener() {
+        nativeListBox.addChangeHandler(new ChangeHandler() {
+
             @Override
-            public void onChange() {
+            public void onChange(ChangeEvent event) {
                 if (!displayProperties.multipleSelect) {
                     // Only one item can be selected
                     int selectedFirst = nativeListBox.getSelectedIndex();

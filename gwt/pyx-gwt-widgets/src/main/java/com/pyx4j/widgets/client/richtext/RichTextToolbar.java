@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.WidgetsImageBundle;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all

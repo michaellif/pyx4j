@@ -14,32 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
+ * Created on Dec 25, 2009
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.forms.client;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.core.client.GWT;
 
-public class CommandAccessAdapter implements IAccessAdapter {
+import com.pyx4j.forms.client.images.FormImages;
 
-    private final Command command;
+public class ImageFactory {
 
-    public CommandAccessAdapter(Command command) {
-        this.command = command;
+    public interface FormsImageBundle extends FormImages {
     }
 
-    public boolean isEnabled(CComponent<?> component) {
-        return command.isEnabled();
-    }
+    private static FormsImageBundle bundle = GWT.create(FormsImageBundle.class);
 
-    public boolean isReadOnly(CComponent<?> component) {
-        return false;
-    }
-
-    public boolean isVisible(CComponent<?> component) {
-        return true;
+    public static FormsImageBundle getImages() {
+        return bundle;
     }
 
 }

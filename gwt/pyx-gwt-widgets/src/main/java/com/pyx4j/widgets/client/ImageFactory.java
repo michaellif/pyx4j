@@ -22,7 +22,15 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.widgets.client.dialog.images.DialogImages;
+import com.pyx4j.widgets.client.images.WidgetsImages;
+import com.pyx4j.widgets.client.richtext.images.RichTextImages;
+import com.pyx4j.widgets.client.tabpanel.images.TabpanelImages;
+
 public class ImageFactory {
+
+    public interface WidgetsImageBundle extends WidgetsImages, DialogImages, RichTextImages, TabpanelImages {
+    }
 
     private static WidgetsImageBundle bundle = GWT.create(WidgetsImageBundle.class);
 

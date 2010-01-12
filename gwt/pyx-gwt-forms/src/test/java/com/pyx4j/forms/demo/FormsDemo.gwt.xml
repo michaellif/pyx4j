@@ -3,7 +3,7 @@
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.user.Debug"/>
 
-	<inherits name='com.pyx4j.widgets.Forms' />
+	<inherits name='com.pyx4j.forms.Forms' />
 
 	<entry-point class='com.pyx4j.forms.demo.client.FormsDemo' />
 

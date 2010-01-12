@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.gwt;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -51,9 +53,10 @@ public class NativeTextBoxDelegate<E> {
         this.nativeTextBox = nativeTextBox;
         this.cTextBox = cTextField;
 
-        nativeTextBox.addChangeHandler(new SafeChangeListener() {
+        nativeTextBox.addChangeHandler(new ChangeHandler() {
+
             @Override
-            public void onChange() {
+            public void onChange(ChangeEvent event) {
                 keyTimer.cancel();
                 nativeValueUpdate();
             }

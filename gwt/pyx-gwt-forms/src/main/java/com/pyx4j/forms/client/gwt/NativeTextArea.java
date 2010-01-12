@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.TextArea;
 
@@ -33,9 +35,10 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
     public NativeTextArea(final CTextArea textArea) {
         super();
         this.textArea = textArea;
-        addChangeHandler(new SafeChangeListener() {
+        addChangeHandler(new ChangeHandler() {
+
             @Override
-            public void onChange() {
+            public void onChange(ChangeEvent event) {
                 textArea.setValue(getText());
             }
         });

@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -77,12 +78,12 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
             setCellWidth(composite, "100%");
         }
 
-        Image mImageButtonUp = AppImages.createImage(AppImages.getImages().triggerBlueUp());
-        triggerButton = new NativePushButton(mImageButtonUp, AppImages.createImage(AppImages.getImages().triggerBlueDown()));
+        Image mImageButtonUp = new Image(ImageFactory.getImages().triggerBlueUp());
+        triggerButton = new NativePushButton(mImageButtonUp, new Image(ImageFactory.getImages().triggerBlueDown()));
         triggerButton.setWidth("1%");
         Cursor.setHand(mImageButtonUp);
-        triggerButton.getUpDisabledFace().setImage(AppImages.createImage(AppImages.getImages().triggerBlueDisabled()));
-        Image mImageButtonOver = AppImages.createImage(AppImages.getImages().triggerBlueOver());
+        triggerButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().triggerBlueDisabled()));
+        Image mImageButtonOver = new Image(ImageFactory.getImages().triggerBlueOver());
         triggerButton.getUpHoveringFace().setImage(mImageButtonOver);
         Cursor.setHand(mImageButtonOver);
 

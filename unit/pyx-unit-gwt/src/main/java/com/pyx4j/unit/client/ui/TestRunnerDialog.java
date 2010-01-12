@@ -41,7 +41,9 @@ public class TestRunnerDialog extends Dialog {
     }
 
     public TestRunnerDialog(TestRunner runner) {
-        super("JUnit Client Side", runner, runner);
+        super("JUnit Client Side", runner);
+        setBody(runner);
+
     }
 
     public static void createAsync() {

@@ -36,7 +36,7 @@ import com.google.gwt.widgetideas.client.ResizableWidget;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.WidgetsImageBundle;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
 public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 

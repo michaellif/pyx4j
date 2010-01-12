@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.INativeListBox;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
@@ -183,10 +184,10 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         (getFlexCellFormatter()).setRowSpan(1, 0, 4);
 
         // ->
-        addButton = new NativePushButton(AppImages.createImage(AppImages.getImages().arrowLightGreyRight()), AppImages.createImage(AppImages.getImages()
+        addButton = new NativePushButton(new Image(ImageFactory.getImages().arrowLightGreyRight()), new Image(ImageFactory.getImages()
                 .arrowLightBlueRightDown()));
-        addButton.getUpDisabledFace().setImage(AppImages.createImage(AppImages.getImages().arrowGreyRight()));
-        Image imageRightOver = AppImages.createImage(AppImages.getImages().arrowLightBlueRight());
+        addButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyRight()));
+        Image imageRightOver = new Image(ImageFactory.getImages().arrowLightBlueRight());
         addButton.getUpHoveringFace().setImage(imageRightOver);
         Cursor.setHand(imageRightOver);
 
@@ -213,10 +214,10 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         });
 
         // <-
-        removeButton = new NativePushButton(AppImages.createImage(AppImages.getImages().arrowLightGreyLeft()), AppImages.createImage(AppImages.getImages()
+        removeButton = new NativePushButton(new Image(ImageFactory.getImages().arrowLightGreyLeft()), new Image(ImageFactory.getImages()
                 .arrowLightBlueLeftDown()));
-        removeButton.getUpDisabledFace().setImage(AppImages.createImage(AppImages.getImages().arrowGreyLeft()));
-        Image imageLeftOver = AppImages.createImage(AppImages.getImages().arrowLightBlueLeft());
+        removeButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyLeft()));
+        Image imageLeftOver = new Image(ImageFactory.getImages().arrowLightBlueLeft());
         removeButton.getUpHoveringFace().setImage(imageLeftOver);
         Cursor.setHand(imageLeftOver);
 

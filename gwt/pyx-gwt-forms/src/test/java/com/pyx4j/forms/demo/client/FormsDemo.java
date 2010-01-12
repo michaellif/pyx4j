@@ -26,7 +26,12 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CGroupBoxPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
@@ -43,6 +48,21 @@ public class FormsDemo implements EntryPoint {
 
         VerticalPanel contentPanel = new VerticalPanel();
         RootPanel.get().add(contentPanel);
+
+        CComponent<?>[][] components = new CComponent[][] {
+
+        { new CCheckBox("For this Session Only") },
+
+        };
+
+        CForm form = new CForm();
+
+        form.setComponents(components);
+        CGroupBoxPanel boxPanel = new CGroupBoxPanel("CMAC Client Config");
+        boxPanel.setExpended(false);
+        boxPanel.addComponent(form);
+
+        contentPanel.add((Widget) boxPanel.initNativeComponent());
 
     }
 

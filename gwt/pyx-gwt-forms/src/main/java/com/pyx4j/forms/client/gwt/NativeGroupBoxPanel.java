@@ -20,14 +20,10 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.ButtonBase;
@@ -43,7 +39,7 @@ import com.pyx4j.forms.client.ui.CGroupBoxPanel;
 import com.pyx4j.forms.client.ui.CLayoutConstraints;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.INativeSimplePanel;
-import com.pyx4j.log4gwt.demo.client.LogEventsPanel;
+import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.pyx4j.widgets.client.Tooltip;
 
 public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeSimplePanel {

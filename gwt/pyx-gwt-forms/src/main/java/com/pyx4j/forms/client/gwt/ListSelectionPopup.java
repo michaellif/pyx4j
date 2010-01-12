@@ -23,8 +23,6 @@ package com.pyx4j.forms.client.gwt;
 import java.util.Comparator;
 import java.util.List;
 
-import com.google.gwt.user.client.DOM;
-
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
@@ -33,31 +31,13 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 public abstract class ListSelectionPopup<E> extends Dialog {
 
-    private final AvailableSelectedBox selectedBox;
+    private AvailableSelectedBox selectedBox;
 
-    private String title;
-
-    public ListSelectionPopup() {
-        this(null);
-    }
-
-    public ListSelectionPopup(String title) {
-        super();
+    public ListSelectionPopup(String title, OkCancelOption callback) {
+        super(title == null ? "Selection Dialog" : title, callback);
         ListBoxDisplayProperties displayProperties = new ListBoxDisplayProperties();
         displayProperties.visibleItemCount = 4;
-        selectedBox = new AvailableSelectedBox(displayProperties);
-        this.title = title;
-    }
-
-    public void build(OkCancelOption callback) {
-        if (title == null) {
-            title = "Selection Dialog";
-        }
-        super.build(title, callback, -1);
-        super.addWidget(selectedBox);
-
-        //TODO do we need that?
-        DOM.setElementProperty(this.getElement(), "id", "dialog_entityselect");
+        setBody(new AvailableSelectedBox(displayProperties));
     }
 
     public void setComparator(Comparator<E> comparator) {

@@ -39,7 +39,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.Tooltip;
-import com.pyx4j.widgets.client.WidgetsImageBundle;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
 /**
  * @author michaellif
