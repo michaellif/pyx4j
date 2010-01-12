@@ -212,9 +212,9 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createLeftSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        HtmlPortlet portlet1 = new HtmlPortlet("portlet1");
+        HtmlPortlet portlet1 = new HtmlPortlet("<h3>PORTLET 1</h3><p>portlet1");
         panel.add(portlet1);
-        HtmlPortlet portlet2 = new HtmlPortlet("portlet2 portlet2 portlet2 portlet2");
+        HtmlPortlet portlet2 = new HtmlPortlet("<h3>PORTLET 2</h3><p> portlet2 portlet2 portlet2 portlet2 portlet2 portlet2 portlet2 portlet2 portlet2");
         panel.add(portlet2);
 
         return panel;
@@ -222,11 +222,11 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createRightSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        HtmlPortlet portlet3 = new HtmlPortlet("portlet3<p>portlet3<p>");
+        HtmlPortlet portlet3 = new HtmlPortlet("<h3>PORTLET 3</h3><p>portlet3");
         panel.add(portlet3);
-        HtmlPortlet portlet4 = new HtmlPortlet("portlet4<p>portlet4<p>");
+        HtmlPortlet portlet4 = new HtmlPortlet("<h3>PORTLET 4</h3><p>portlet4<p>");
         panel.add(portlet4);
-        HtmlPortlet portlet5 = new HtmlPortlet("portlet5<p>portlet5<p>portlet5<p>");
+        HtmlPortlet portlet5 = new HtmlPortlet("<h3>PORTLET 5</h3><p>portlet5<p>portlet5<p>");
         panel.add(portlet5);
 
         return panel;

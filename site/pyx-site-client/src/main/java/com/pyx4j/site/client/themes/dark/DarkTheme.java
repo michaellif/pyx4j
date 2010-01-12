@@ -190,9 +190,8 @@ public class DarkTheme extends GrayTheme {
 
     protected void initHtmlPortletStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
-        style.addProperty("margin", "20px");
+        style.addProperty("margin", "15px");
         style.addProperty("width", "150px");
-        style.addProperty("padding", "20px");
         style.addProperty("background", "url(images/header.gif) no-repeat top 80%");
         style.addProperty("color", "black");
         addStyle(style);

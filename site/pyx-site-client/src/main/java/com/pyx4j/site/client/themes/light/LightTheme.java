@@ -84,8 +84,8 @@ public class LightTheme extends WindowsTheme {
     private void initHeaderCaptionsStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
         style.addProperty("color", "gray");
-        style.addProperty("margin-left", "60px");
-        style.addProperty("margin-top", "150px");
+        style.addProperty("margin-left", "20px");
+        style.addProperty("margin-top", "160px");
         style.addProperty("font-size", "22px");
 
         addStyle(style);
@@ -197,9 +197,13 @@ public class LightTheme extends WindowsTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
         style.addProperty("margin", "20px");
         style.addProperty("width", "180px");
-        style.addProperty("padding", "20px");
-        style.addProperty("border", "1px solid #ff6600");
+        style.addProperty("padding", "5px");
+        style.addProperty("border", "1px solid #ffae5e");
         style.addProperty("color", "black");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name() + " h3");
+        style.addProperty("margin", "0");
         addStyle(style);
     }
 
