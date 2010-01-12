@@ -15,7 +15,6 @@ pyx-unit-shared
 pyx-unit-server
 \slf4j-api
 slf4j-jdk14
--pyx-slf4j-api-gwt
 -pyx-gwt-server.jar
 -pyx-entity-shared.jar
 -pyx-commons.jar
