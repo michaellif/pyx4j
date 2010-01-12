@@ -13,7 +13,7 @@ pyx-log-shared
 pyx-log-server
 pyx-unit-shared
 pyx-unit-server
-slf4j-api
+\slf4j-api
 slf4j-jdk14
 -pyx-slf4j-api-gwt
 -pyx-gwt-server.jar
