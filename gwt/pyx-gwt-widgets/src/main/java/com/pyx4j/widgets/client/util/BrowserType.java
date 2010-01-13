@@ -28,11 +28,17 @@ public class BrowserType {
         UNKNOWN, IE, MOZILLA, SAFARI, OPERA, IPHONE
     };
 
-    public static native boolean isIENative() /*-{ return ($doc.body.insertAdjacentHTML != null); }-*/;
+    public static native boolean isIENative() /*-{
+        return ($doc.body.insertAdjacentHTML != null);
+    }-*/;
 
-    public native static boolean isFirefoxNative() /*-{ var agt= $wnd.navigator.userAgent.toLowerCase(); return (agt.indexOf("firefox") != -1); }-*/;
+    public native static boolean isFirefoxNative() /*-{
+        var agt= $wnd.navigator.userAgent.toLowerCase(); return (agt.indexOf("firefox") != -1);
+    }-*/;
 
-    public native static String getUserAgent() /*-{ return $wnd.navigator.userAgent; }-*/;
+    public native static String getUserAgent() /*-{
+        return $wnd.navigator.userAgent;
+    }-*/;
 
     public static final boolean isFirefox() {
         return (impl.getType() == Browser.MOZILLA);
@@ -46,13 +52,46 @@ public class BrowserType {
         return impl.getType();
     }
 
+    public static final float getVersion() {
+        return impl.getVersion();
+    }
+
     public static final String getCompiledType() {
         return impl.getCompiledType();
+    }
+
+    private static Boolean isIE6;
+
+    private static Boolean isIE7;
+
+    private static Boolean isIE8;
+
+    public static final boolean isIE6() {
+        if (isIE6 == null) {
+            isIE6 = isIE() && (!isIE8()) && (!isIE7());
+        }
+        return isIE6;
+    }
+
+    public static final boolean isIE7() {
+        if (isIE7 == null) {
+            isIE7 = isIE() && getUserAgent().toLowerCase().contains("msie 7");
+        }
+        return isIE7;
+    }
+
+    public static final boolean isIE8() {
+        if (isIE8 == null) {
+            isIE8 = isIE() && getUserAgent().toLowerCase().contains("msie 8");
+        }
+        return isIE8;
     }
 
     private static interface Impl {
 
         Browser getType();
+
+        float getVersion();
 
         String getCompiledType();
     }
@@ -78,6 +117,11 @@ public class BrowserType {
         }
 
         @Override
+        public float getVersion() {
+            return 0;
+        }
+
+        @Override
         public final String getCompiledType() {
             return "CompiledType#UNKNOWN";
         }
@@ -89,6 +133,11 @@ public class BrowserType {
         @Override
         public final Browser getType() {
             return Browser.MOZILLA;
+        }
+
+        @Override
+        public float getVersion() {
+            return 0;
         }
 
         @Override
@@ -106,6 +155,14 @@ public class BrowserType {
         }
 
         @Override
+        public float getVersion() {
+            String ua = getUserAgent().toLowerCase();
+            String ieVersionString = ua.substring(ua.indexOf("msie ") + 5);
+            ieVersionString = ieVersionString.substring(0, ieVersionString.indexOf(";"));
+            return Float.parseFloat(ieVersionString);
+        }
+
+        @Override
         public final String getCompiledType() {
             return "CompiledType#IE6";
         }
@@ -117,6 +174,11 @@ public class BrowserType {
         @Override
         public final Browser getType() {
             return Browser.IE;
+        }
+
+        @Override
+        public float getVersion() {
+            return 8;
         }
 
         @Override
@@ -134,6 +196,11 @@ public class BrowserType {
         }
 
         @Override
+        public float getVersion() {
+            return 0;
+        }
+
+        @Override
         public final String getCompiledType() {
             return "CompiledType#SAFARI";
         }
@@ -145,6 +212,11 @@ public class BrowserType {
         @Override
         public final Browser getType() {
             return Browser.OPERA;
+        }
+
+        @Override
+        public float getVersion() {
+            return 0;
         }
 
         @Override
