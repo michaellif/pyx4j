@@ -192,16 +192,16 @@ public class WindowsTheme extends Theme {
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Caption.name());
         style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("filter", "alpha(opacity=80)");
-        style.addProperty("opacity", "0.8");
+        style.addProperty("filter", "alpha(opacity=90)");
+        style.addProperty("opacity", "0.9");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Resizer.name());
         style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("filter", "alpha(opacity=80)");
-        style.addProperty("opacity", "0.8");
+        style.addProperty("filter", "alpha(opacity=90)");
+        style.addProperty("opacity", "0.9");
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Content.name());
