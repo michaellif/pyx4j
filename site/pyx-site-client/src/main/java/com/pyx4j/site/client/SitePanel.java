@@ -23,16 +23,11 @@ package com.pyx4j.site.client;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -52,7 +47,6 @@ import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
 
@@ -282,15 +276,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         addToFooterPanel(html);
     }
 
-    protected void createFooterLinks(List<Link> footerLinks) {
-        footerLinkBar = new LinkBar(LinkBarType.Footer);
-
-        for (Link link : site.footerLinks) {
-            footerLinkBar.add(link.html, link.href, link.internal);
-        }
-        addToFooterPanel(footerLinkBar);
-    }
-
     protected void createHeaderLinks(List<Link> headerLinks) {
         headerLinkBar = new LinkBar(LinkBarType.Header);
 
@@ -298,6 +283,15 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
             headerLinkBar.add(link.html, link.href, link.internal);
         }
         addToHeaderPanel(headerLinkBar);
+    }
+
+    protected void createFooterLinks(List<Link> footerLinks) {
+        footerLinkBar = new LinkBar(LinkBarType.Footer);
+
+        for (Link link : site.footerLinks) {
+            footerLinkBar.add(link.html, link.href, link.internal);
+        }
+        addToFooterPanel(footerLinkBar);
     }
 
     @Override

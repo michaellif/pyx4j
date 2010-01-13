@@ -48,7 +48,7 @@ public class EasySite extends Site {
             page.caption = "Home";
             page.name = "home";
             page.data.html = "Home";
-            addHomePage(page);
+            addPage(page, true);
         }
 
         {

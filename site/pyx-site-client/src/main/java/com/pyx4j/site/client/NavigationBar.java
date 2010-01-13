@@ -148,7 +148,11 @@ public class NavigationBar extends ComplexPanel {
 
             switch (type) {
             case Primary:
-                getElement().getStyle().setProperty("display", "inline");
+                if ("CompiledType#IE8".equals(BrowserType.getCompiledType())) {
+                    getElement().getStyle().setProperty("display", "inline-block");
+                } else {
+                    getElement().getStyle().setProperty("display", "inline");
+                }
                 anchor.getElement().getStyle().setProperty("display", "inline-block");
                 if (BrowserType.isFirefox()) {
                     getElement().getStyle().setProperty("cssFloat", "left");

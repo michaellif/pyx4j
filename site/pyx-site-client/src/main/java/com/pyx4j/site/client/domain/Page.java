@@ -20,9 +20,7 @@
  */
 package com.pyx4j.site.client.domain;
 
-public class Page extends PageContainer {
-
-    public PageContainer parent;
+public class Page {
 
     public PageData data = new PageData();
 

@@ -20,9 +20,10 @@
  */
 package com.pyx4j.site.client.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Site extends PageContainer {
+public class Site {
 
     public String homePageName;
 
@@ -34,13 +35,21 @@ public class Site extends PageContainer {
 
     public String footerCopiright;
 
+    public List<Page> pages = new ArrayList<Page>();
+
     public Site() {
 
     }
 
-    public void addHomePage(Page page) {
-        homePageName = page.name;
-        addPage(page);
+    public void addPage(Page page) {
+        addPage(page, false);
+    }
+
+    public void addPage(Page page, boolean homePage) {
+        pages.add(page);
+        if (homePage) {
+            homePageName = page.name;
+        }
     }
 
     public Page getPage(String pageBreadcrumb) {
