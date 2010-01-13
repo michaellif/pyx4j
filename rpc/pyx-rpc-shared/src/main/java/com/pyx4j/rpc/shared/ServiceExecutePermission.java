@@ -24,6 +24,8 @@ import com.pyx4j.security.shared.BasicPermission;
 
 public class ServiceExecutePermission extends BasicPermission {
 
+    private static final long serialVersionUID = -2469354627746681497L;
+
     public ServiceExecutePermission(String target) {
         super(target);
     }

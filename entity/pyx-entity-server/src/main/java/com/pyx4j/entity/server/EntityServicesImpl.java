@@ -25,8 +25,10 @@ import java.util.Vector;
 
 import com.pyx4j.entity.rpc.EntityServices.Query;
 import com.pyx4j.entity.rpc.EntityServices.Save;
+import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
 
@@ -34,6 +36,11 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity<?> execute(IEntity<?> request) {
+            if (request.getPrimaryKey() == null) {
+                SecurityController.assertPermission(EntityPermission.permissionCreate(request.getObjectClass()));
+            } else {
+                SecurityController.assertPermission(EntityPermission.permissionUpdate(request.getObjectClass()));
+            }
             PersistenceServicesFactory.getPersistenceService().persist(request);
             return request;
         }
@@ -44,16 +51,14 @@ public class EntityServicesImpl {
         @SuppressWarnings("unchecked")
         @Override
         public Vector execute(EntityCriteria request) {
-
-            List rc = PersistenceServicesFactory.getPersistenceService().query(request);
-            if (rc instanceof Vector<?>) {
-                return (Vector) rc;
-            } else {
-                Vector v = new Vector();
-                v.addAll(rc);
-                return v;
+            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+            List<IEntity<?>> rc = PersistenceServicesFactory.getPersistenceService().query(request);
+            Vector<IEntity<?>> v = new Vector<IEntity<?>>();
+            for (IEntity<?> ent : rc) {
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                v.add(ent);
             }
+            return v;
         }
-
     }
 }

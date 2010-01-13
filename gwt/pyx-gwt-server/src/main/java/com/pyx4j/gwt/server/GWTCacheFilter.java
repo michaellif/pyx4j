@@ -59,7 +59,6 @@ public class GWTCacheFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             String uri = ((HttpServletRequest) request).getRequestURI();
-            System.out.println(uri);
             if (uri.indexOf(".cache.") != -1) {
                 ((HttpServletResponse) response).setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
                 ((HttpServletResponse) response).setHeader("Cache-control", cacheControl);

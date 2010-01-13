@@ -25,18 +25,20 @@ import com.pyx4j.security.shared.Permission;
 
 public abstract class AbstractCRUDPermission extends BasicPermission {
 
-    protected final static int CREATE = 0x1;
+    private static final long serialVersionUID = -868170178884486842L;
 
-    protected final static int READ = 0x2;
+    public final static int CREATE = 0x1;
 
-    protected final static int UPDATE = 0x4;
+    public final static int READ = 0x2;
 
-    protected final static int DELETE = 0x8;
+    public final static int UPDATE = 0x4;
+
+    public final static int DELETE = 0x8;
 
     /**
      * All actions (C, R, U, D);
      */
-    protected final static int ALL = CREATE | READ | UPDATE | DELETE;
+    public final static int ALL = CREATE | READ | UPDATE | DELETE;
 
     private final int mask;
 

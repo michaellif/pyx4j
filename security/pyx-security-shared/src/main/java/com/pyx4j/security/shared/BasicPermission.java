@@ -22,6 +22,8 @@ package com.pyx4j.security.shared;
 
 public class BasicPermission implements Permission {
 
+    private static final long serialVersionUID = 7407387043880019023L;
+
     private final boolean wildcard;
 
     private final String path;
@@ -29,7 +31,7 @@ public class BasicPermission implements Permission {
     public BasicPermission(String path) {
         this.wildcard = path.endsWith("*");
         if (this.wildcard) {
-            path = path.substring(0, this.path.length() - 1);
+            path = path.substring(0, path.length() - 1);
         }
         this.path = path;
     }

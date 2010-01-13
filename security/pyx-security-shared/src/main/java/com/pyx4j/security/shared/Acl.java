@@ -20,9 +20,13 @@
  */
 package com.pyx4j.security.shared;
 
+import java.util.Set;
+
 public interface Acl {
 
     public boolean checkBehavior(Behavior behavior);
+
+    public Set<Behavior> getBehaviors();
 
     public boolean checkPermission(Permission permission);
 

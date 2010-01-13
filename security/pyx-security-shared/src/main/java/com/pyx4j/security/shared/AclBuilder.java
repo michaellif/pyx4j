@@ -81,13 +81,20 @@ public class AclBuilder {
             return false;
         }
 
+        @Override
+        public Set<Behavior> getBehaviors() {
+            return behaviors;
+        }
+
     }
 
     private Map<Behavior, PermissionsGroup> groups = new HashMap<Behavior, PermissionsGroup>();
 
     private final PermissionsGroup global = new PermissionsGroup();
 
-    protected AclBuilder() {
+    private boolean frozen;
+
+    public AclBuilder() {
 
     }
 
@@ -97,17 +104,26 @@ public class AclBuilder {
             me.getValue().freeze();
         }
         groups = Collections.unmodifiableMap(groups);
+        frozen = true;
     }
 
     private void addRoles(Role r, Set<Role> set) {
         set.add(r);
         Set<Role> memebers = r.getMemberRoles();
-        for (Role m : memebers) {
-            addRoles(m, set);
+        if (memebers != null) {
+            for (Role m : memebers) {
+                addRoles(m, set);
+            }
         }
     }
 
     public Acl createAcl(Set<Role> roles) {
+        if (!frozen) {
+            throw new RuntimeException("ACL has not been frosen");
+        }
+        if ((roles == null) || (roles.size() == 0)) {
+            return new AclImpl(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions);
+        }
         PermissionsGroup g = new PermissionsGroup();
         g.add(global);
         Set<Behavior> behaviors = new HashSet<Behavior>();
@@ -145,6 +161,7 @@ public class AclBuilder {
         PermissionsGroup g = groups.get(behavior);
         if (g == null) {
             g = new PermissionsGroup();
+            groups.put(behavior, g);
         }
         return g;
     }

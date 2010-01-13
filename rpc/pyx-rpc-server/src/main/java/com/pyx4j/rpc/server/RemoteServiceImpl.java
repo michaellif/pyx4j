@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.ServiceExecutePermission;
+import com.pyx4j.security.shared.SecurityController;
 
 public class RemoteServiceImpl implements RemoteService {
 
@@ -41,6 +43,7 @@ public class RemoteServiceImpl implements RemoteService {
     @SuppressWarnings("unchecked")
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException {
+        SecurityController.assertPermission(new ServiceExecutePermission(serviceInterfaceClassName));
         Class<? extends Service> clazz = ServiceRegistry.getServiceClass(serviceInterfaceClassName);
         if (clazz == null) {
             try {

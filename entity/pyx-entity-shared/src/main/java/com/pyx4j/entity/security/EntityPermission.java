@@ -22,6 +22,8 @@ package com.pyx4j.entity.security;
 
 public class EntityPermission extends AbstractCRUDPermission {
 
+    private static final long serialVersionUID = 7095635694477738182L;
+
     public static EntityPermission permissionCreate(Class<?> entityClass) {
         return new EntityPermission(entityClass, CREATE);
     }
@@ -42,11 +44,11 @@ public class EntityPermission extends AbstractCRUDPermission {
         super(name, actions);
     }
 
-    protected EntityPermission(Class<?> entityClass, int actions) {
+    public EntityPermission(Class<?> entityClass, int actions) {
         super(entityClass.getName(), actions);
     }
 
-    protected EntityPermission(String name, int actions) {
+    public EntityPermission(String name, int actions) {
         super(name, actions);
     }
 }

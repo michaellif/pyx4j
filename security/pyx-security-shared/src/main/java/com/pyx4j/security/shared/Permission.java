@@ -20,8 +20,9 @@
  */
 package com.pyx4j.security.shared;
 
+import java.io.Serializable;
 
-public interface Permission {
+public interface Permission extends Serializable {
 
     public boolean implies(Permission p);
 

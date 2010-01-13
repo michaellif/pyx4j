@@ -13,6 +13,8 @@ pyx-log-shared
 pyx-log-server
 pyx-unit-shared
 pyx-unit-server
+pyx-security-shared
+pyx-security-server
 \slf4j-api
 slf4j-jdk14
 -pyx-gwt-server.jar
@@ -24,4 +26,6 @@ slf4j-jdk14
 -pyx-unit-server.jar
 -pyx-entity-server.jar
 -pyx-entity-gae.jar
+-pyx-security-shared.jar
+-pyx-security-server.jar
 -slf4j-jdk14.jar
