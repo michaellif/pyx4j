@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -150,7 +151,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
         final Image imageInfoWarn = new Image();
         log.trace("tooltip.bundle.applyTo");
-        //TODO AppImages.getImages().formTooltipEmpty().applyTo(imageInfoWarn);
+        imageInfoWarn.setResource(ImageFactory.getImages().formTooltipEmpty());
 
         log.trace("cr.tooltip");
         final Tooltip tooltip = Tooltip.tooltip(imageInfoWarn, "");
@@ -302,15 +303,13 @@ public class NativeForm extends FlexTable implements INativeComponent {
         if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
             tooltip.setTooltipText(source.getToolTip());
             if (source.getToolTip() == null || source.getToolTip().trim().length() == 0) {
-                image.setVisible(false);
-                //TODO  AppImages.getImages().formTooltipEmpty().applyTo(image);
+                image.setResource(ImageFactory.getImages().formTooltipEmpty());
             } else {
                 if (source instanceof CEditableComponent<?> && !((CEditableComponent<?>) source).isValid()) {
-                    //TODO  AppImages.getImages().formTooltipWarn().applyTo(image);
+                    image.setResource(ImageFactory.getImages().formTooltipWarn());
                 } else {
-                    //TODO  AppImages.getImages().formTooltipInfo().applyTo(image);
+                    image.setResource(ImageFactory.getImages().formTooltipInfo());
                 }
-                image.setVisible(true);
             }
         }
     }

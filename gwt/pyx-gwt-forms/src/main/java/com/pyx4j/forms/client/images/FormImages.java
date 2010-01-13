@@ -59,4 +59,12 @@ public interface FormImages extends ClientBundle {
 
     ImageResource arrowGreyLeft();
 
+    // ----
+
+    ImageResource formTooltipEmpty();
+
+    ImageResource formTooltipInfo();
+
+    ImageResource formTooltipWarn();
+
 }

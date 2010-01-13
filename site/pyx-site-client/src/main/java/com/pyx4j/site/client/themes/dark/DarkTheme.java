@@ -23,9 +23,25 @@ package com.pyx4j.site.client.themes.dark;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.style.gray.GrayTheme;
+import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
-public class DarkTheme extends GrayTheme {
+public class DarkTheme extends WindowsTheme {
+
+    @Override
+    protected void initThemeColors() {
+        putThemeColor(ThemeColor.OBJECT_TONE1, "#404040");
+        putThemeColor(ThemeColor.OBJECT_TONE2, "#303030");
+        putThemeColor(ThemeColor.OBJECT_TONE3, "#505050");
+        putThemeColor(ThemeColor.BORDER, "#666666");
+        putThemeColor(ThemeColor.SELECTION, "#ff6600");
+        putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, "#ffffff");
+        putThemeColor(ThemeColor.TEXT, "#000000");
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, "#fafafa");
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
+        putThemeColor(ThemeColor.SEPARATOR, "#999999");
+    }
 
     @Override
     protected void initStyles() {
@@ -114,7 +130,7 @@ public class DarkTheme extends GrayTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
-        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        style.addProperty("color", getThemeColor(ThemeColor.SELECTION_TEXT));
         style.addProperty("padding", "0px 20px 0px 20px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");

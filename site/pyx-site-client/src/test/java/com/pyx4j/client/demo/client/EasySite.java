@@ -46,26 +46,9 @@ public class EasySite extends Site {
         headerLinks.add(new CommandLink("Sign Up", new Command() {
             @Override
             public void execute() {
-                Dialog dialog = new Dialog("Create your FREE account", new SignUpDialogOptions() {
-
-                    @Override
-                    public boolean onClickCancel() {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onClickCustom1() {
-                        // TODO Auto-generated method stub
-                        return true;
-                    }
-
-                    @Override
-                    public String custom1Text() {
-                        // TODO Auto-generated method stub
-                        return "Create&nbsp;Account";
-                    }
-                });
-                dialog.setBody(new HTML("Name: <p> Email:"));
+                SignUpPanel signUpPanel = new SignUpPanel();
+                Dialog dialog = new Dialog("Create your FREE account", signUpPanel);
+                dialog.setBody(signUpPanel);
             }
         }));
 

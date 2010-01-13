@@ -40,7 +40,7 @@
         		
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-widgets</artifactId>
+            <artifactId>pyx-gwt-forms</artifactId>
             <version>${project.version}</version>
         </dependency>
         		

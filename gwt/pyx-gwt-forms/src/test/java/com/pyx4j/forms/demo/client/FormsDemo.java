@@ -51,14 +51,14 @@ public class FormsDemo implements EntryPoint {
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { new CCheckBox("For this Session Only") },
+        { new CCheckBox("CCheckBox") },
 
         };
 
         CForm form = new CForm();
 
         form.setComponents(components);
-        CGroupBoxPanel boxPanel = new CGroupBoxPanel("CMAC Client Config");
+        CGroupBoxPanel boxPanel = new CGroupBoxPanel("CGroupBoxPanel");
         boxPanel.setExpended(false);
         boxPanel.addComponent(form);
 
