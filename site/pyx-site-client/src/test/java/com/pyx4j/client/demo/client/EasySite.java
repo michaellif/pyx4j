@@ -23,6 +23,7 @@ package com.pyx4j.client.demo.client;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.site.client.domain.CommandLink;
 import com.pyx4j.site.client.domain.Link;
@@ -30,6 +31,9 @@ import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.PageLink;
 import com.pyx4j.site.client.domain.PageUri;
 import com.pyx4j.site.client.domain.Site;
+import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.Custom1Option;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 public class EasySite extends Site {
 
@@ -42,7 +46,26 @@ public class EasySite extends Site {
         headerLinks.add(new CommandLink("Sign Up", new Command() {
             @Override
             public void execute() {
-                System.out.println("Sign Up");
+                Dialog dialog = new Dialog("Create your FREE account", new SignUpDialogOptions() {
+
+                    @Override
+                    public boolean onClickCancel() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onClickCustom1() {
+                        // TODO Auto-generated method stub
+                        return true;
+                    }
+
+                    @Override
+                    public String custom1Text() {
+                        // TODO Auto-generated method stub
+                        return "Create&nbsp;Account";
+                    }
+                });
+                dialog.setBody(new HTML("Name: <p> Email:"));
             }
         }));
 
@@ -112,4 +135,9 @@ public class EasySite extends Site {
         }
 
     }
+
+    interface SignUpDialogOptions extends Custom1Option, CancelOption {
+
+    }
+
 }
