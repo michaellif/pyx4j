@@ -8,12 +8,13 @@
  */
 package com.pyx4j.site.client.domain;
 
-public class Link {
+public class PageLink extends Link {
 
-    public String html;
+    public PageUri uri;
 
-    public Link(String html) {
-        this.html = html;
+    public PageLink(String html, PageUri uri) {
+        super(html);
+        this.uri = uri;
     }
 
 }

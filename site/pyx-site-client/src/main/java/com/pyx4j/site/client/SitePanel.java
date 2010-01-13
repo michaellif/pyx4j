@@ -122,7 +122,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         setHeaderCaptions(page.caption);
 
-        primaryNavigationBar.setSelected(page.name);
+        primaryNavigationBar.setSelected(page.uri);
 
     }
 
@@ -264,7 +264,9 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
 
         for (Page page : site.pages) {
-            primaryNavigationBar.add(page.caption, page.name);
+            if (page.uri.isRoot()) {
+                primaryNavigationBar.add(page.caption, page.uri);
+            }
         }
         addToHeaderPanel(primaryNavigationBar);
 
@@ -280,7 +282,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         headerLinkBar = new LinkBar(LinkBarType.Header);
 
         for (Link link : site.headerLinks) {
-            headerLinkBar.add(link.html, link.href, link.internal);
+            headerLinkBar.add(link);
         }
         addToHeaderPanel(headerLinkBar);
     }
@@ -289,7 +291,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         footerLinkBar = new LinkBar(LinkBarType.Footer);
 
         for (Link link : site.footerLinks) {
-            footerLinkBar.add(link.html, link.href, link.internal);
+            footerLinkBar.add(link);
         }
         addToFooterPanel(footerLinkBar);
     }

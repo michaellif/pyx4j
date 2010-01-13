@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.domain.PageUri;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -85,8 +86,8 @@ public class NavigationBar extends ComplexPanel {
 
     }
 
-    public void add(String text, String pageName) {
-        NavigationTab tab = new NavigationTab(text, pageName);
+    public void add(String text, PageUri uri) {
+        NavigationTab tab = new NavigationTab(text, uri);
         if (firstTab == null) {
             firstTab = tab;
         }
@@ -96,14 +97,14 @@ public class NavigationBar extends ComplexPanel {
         add(tab, ul);
     }
 
-    public void setSelected(String pageName) {
+    public void setSelected(PageUri uri) {
         for (NavigationTab tab : tabs) {
-            tab.setSelected(tab.pageName == pageName);
+            tab.setSelected(uri.isContained(tab.uri));
         }
     }
 
     class NavigationTabAnchor extends Anchor {
-        NavigationTabAnchor(String text, final String pageName) {
+        NavigationTabAnchor(String text, final PageUri uri) {
             super("<span>" + text + "</span>", true);
 
             getElement().getStyle().setProperty("outline", "0px");
@@ -125,7 +126,7 @@ public class NavigationBar extends ComplexPanel {
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    History.newItem(pageName, true);
+                    History.newItem(uri.getUri(), true);
                 }
             });
 
@@ -136,15 +137,15 @@ public class NavigationBar extends ComplexPanel {
 
         private final NavigationTabAnchor anchor;
 
-        private final String pageName;
+        private final PageUri uri;
 
-        NavigationTab(String text, final String pageName) {
-            this.pageName = pageName;
+        NavigationTab(String text, final PageUri uri) {
+            this.uri = uri;
 
             setElement(Document.get().createLIElement());
             UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
 
-            anchor = new NavigationTabAnchor(text, pageName);
+            anchor = new NavigationTabAnchor(text, uri);
 
             switch (type) {
             case Primary:

@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
@@ -28,6 +29,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.domain.CommandLink;
+import com.pyx4j.site.client.domain.Link;
+import com.pyx4j.site.client.domain.PageLink;
+import com.pyx4j.site.client.domain.PageUri;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -76,25 +81,56 @@ public class LinkBar extends ComplexPanel {
 
     }
 
-    public void add(String html, String href, boolean internal) {
-        LinkItem tab = new LinkItem(html, href, internal);
+    public void add(Link link) {
+        LinkItem tab = null;
+        if (link instanceof PageLink) {
+            PageLink pageLink = (PageLink) link;
+            tab = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri));
+        } else if (link instanceof CommandLink) {
+            CommandLink commandLink = (CommandLink) link;
+            tab = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command));
+        }
+        ul.appendChild(tab.getElement());
+        add(tab, ul);
+    }
+
+    public void add(String html, Command command) {
+        LinkItem tab = new LinkItem(new LinkItemAnchor(html, command));
         ul.appendChild(tab.getElement());
         add(tab, ul);
     }
 
     class LinkItemAnchor extends Anchor {
-        LinkItemAnchor(String html, final String href, boolean internal) {
-            super(html, true, internal ? null : href);
 
-            getElement().getStyle().setProperty("outline", "0px");
-            getElement().getStyle().setCursor(Cursor.POINTER);
+        LinkItemAnchor(String html, final PageUri uri) {
+            super(html, true, "");
 
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    History.newItem(href, true);
+                    History.newItem(uri.getUri(), true);
                 }
             });
+
+            init();
+        }
+
+        LinkItemAnchor(String html, final Command command) {
+            super(html, true, "");
+
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    command.execute();
+                }
+            });
+
+            init();
+        }
+
+        private void init() {
+            getElement().getStyle().setProperty("outline", "0px");
+            getElement().getStyle().setCursor(Cursor.POINTER);
 
             addMouseOverHandler(new MouseOverHandler() {
                 @Override
@@ -117,7 +153,7 @@ public class LinkBar extends ComplexPanel {
 
         private final LinkItemAnchor anchor;
 
-        LinkItem(String html, String href, boolean internal) {
+        LinkItem(LinkItemAnchor linkItemAnchor) {
             setElement(Document.get().createLIElement());
             switch (type) {
             case Header:
@@ -146,7 +182,7 @@ public class LinkBar extends ComplexPanel {
                 DOM.appendChild(getElement(), separator);
             }
 
-            anchor = new LinkItemAnchor(html, href, internal);
+            anchor = linkItemAnchor;
 
             anchor.getElement().getStyle().setProperty("display", "inline");
 

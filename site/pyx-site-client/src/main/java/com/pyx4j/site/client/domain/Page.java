@@ -24,12 +24,12 @@ public class Page {
 
     public PageData data = new PageData();
 
-    public String name;
+    public PageUri uri;
 
     public String caption;
 
     @Override
     public String toString() {
-        return name;
+        return uri.toString();
     }
 }

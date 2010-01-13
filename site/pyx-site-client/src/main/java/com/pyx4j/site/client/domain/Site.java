@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Site {
 
-    public String homePageName;
+    public PageUri homePageUri;
 
     public String logoUrl;
 
@@ -48,13 +48,17 @@ public class Site {
     public void addPage(Page page, boolean homePage) {
         pages.add(page);
         if (homePage) {
-            homePageName = page.name;
+            homePageUri = page.uri;
         }
     }
 
-    public Page getPage(String pageBreadcrumb) {
+    public Page getPage(String uri) {
+        return getPage(new PageUri(uri));
+    }
+
+    public Page getPage(PageUri uri) {
         for (Page page : pages) {
-            if (page.name == pageBreadcrumb) {
+            if (page.uri.equals(uri)) {
                 return page;
             }
         }
