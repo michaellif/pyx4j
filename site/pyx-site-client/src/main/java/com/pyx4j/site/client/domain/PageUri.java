@@ -47,10 +47,10 @@ public class PageUri {
             return false;
         }
         PageUri that = (PageUri) obj;
-        if (this.uri != that.uri) {
-            return false;
-        } else {
+        if (this.uri.equals(that.uri)) {
             return true;
+        } else {
+            return false;
         }
     }
 
