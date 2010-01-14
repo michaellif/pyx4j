@@ -48,8 +48,6 @@ public class StyleManger {
             stylesString.append(style.toString(theme));
         }
 
-        System.out.println(stylesString.toString());
-
         cleanUpInjectedStyles();
         StyleInjector.inject(stylesString.toString());
     }
