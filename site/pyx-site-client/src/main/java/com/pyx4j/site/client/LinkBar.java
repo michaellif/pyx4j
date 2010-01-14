@@ -116,7 +116,7 @@ public class LinkBar extends ComplexPanel {
         }
 
         LinkItemAnchor(String html, final Command command) {
-            super(html, true, "");
+            super(html, true, "#");
 
             addClickHandler(new ClickHandler() {
                 @Override
