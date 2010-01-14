@@ -21,44 +21,46 @@
 package com.pyx4j.client.demo.client;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 
-public class SignUpPanel extends VerticalPanel implements Custom1Option, CancelOption {
+public class LogInPanel extends VerticalPanel implements Custom1Option, CancelOption {
 
-    SignUpPanel() {
+    LogInPanel() {
 
         getElement().getStyle().setPadding(30, Unit.PX);
         getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-        CTextField nameTextField = new CTextField("Name");
-        nameTextField.setMandatory(true);
-
         CTextField emailTextField = new CTextField("Email");
 
-        CPasswordTextField password1TextField = new CPasswordTextField("Password");
-        password1TextField.setToolTip("5-15 characters");
+        CPasswordTextField passwordTextField = new CPasswordTextField("Password");
 
-        CPasswordTextField password2TextField = new CPasswordTextField("Re-type password");
+        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
 
-        CComboBox<String> userType = new CComboBox<String>("I am a...");
+            @Override
+            public void execute() {
+                System.out.println("forgotPassword");
+            }
+        });
+        forgotPassword.setValue("Forgot Password?");
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { nameTextField, emailTextField },
+        { emailTextField },
 
-        { password1TextField, password2TextField },
+        { passwordTextField },
 
-        { userType, null },
+        { forgotPassword },
 
         };
 
@@ -83,6 +85,6 @@ public class SignUpPanel extends VerticalPanel implements Custom1Option, CancelO
     @Override
     public String custom1Text() {
         // TODO Auto-generated method stub
-        return "Create&nbsp;Account";
+        return "Log&nbsp;In";
     }
 }

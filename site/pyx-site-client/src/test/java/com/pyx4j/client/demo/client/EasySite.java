@@ -52,7 +52,15 @@ public class EasySite extends Site {
             }
         }));
 
-        headerLinks.add(new PageLink("Log In", new PageUri("aboutUs")));
+        headerLinks.add(new CommandLink("Log In", new Command() {
+            @Override
+            public void execute() {
+                LogInPanel logInPanel = new LogInPanel();
+                Dialog dialog = new Dialog("Log In", logInPanel);
+                dialog.setBody(logInPanel);
+                dialog.setPixelSize(300, 200);
+            }
+        }));
 
         footerLinks = new ArrayList<Link>();
         footerLinks.add(new PageLink("Technical Support", new PageUri("home:technicalSupport")));

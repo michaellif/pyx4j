@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -152,6 +153,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
         final Image imageInfoWarn = new Image();
         log.trace("tooltip.bundle.applyTo");
         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipEmpty());
+        imageInfoWarn.getElement().getStyle().setMarginRight(25, Unit.PX);
+        imageInfoWarn.getElement().getStyle().setMarginLeft(2, Unit.PX);
 
         log.trace("cr.tooltip");
         final Tooltip tooltip = Tooltip.tooltip(imageInfoWarn, "");
@@ -176,12 +179,12 @@ public class NativeForm extends FlexTable implements INativeComponent {
         if (InfoImageAlignment.BEFORE.equals(infoImageAlignment)) {
             widgetContainer.add(imageInfoWarn);
             widgetContainer.add(nativeComponent);
-            DOM.setStyleAttribute(nativeComponent.getElement(), "marginRight", "20px");
-            widgetContainer.setCellWidth(imageInfoWarn, "20px");
+            //            DOM.setStyleAttribute(nativeComponent.getElement(), "marginRight", "20px");
+            //            widgetContainer.setCellWidth(imageInfoWarn, "20px");
         } else if (InfoImageAlignment.AFTER.equals(infoImageAlignment)) {
             widgetContainer.add(nativeComponent);
             widgetContainer.add(imageInfoWarn);
-            widgetContainer.setCellWidth(imageInfoWarn, "20px");
+            //            widgetContainer.setCellWidth(imageInfoWarn, "20px");
         } else {
             widgetContainer.add(nativeComponent);
         }

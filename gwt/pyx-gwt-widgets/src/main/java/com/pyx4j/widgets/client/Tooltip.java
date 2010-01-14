@@ -37,7 +37,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHandler {
 
-    private static final int DELAY_TO_SHOW = 1000;
+    private static final int DELAY_TO_SHOW = 300;
 
     private static final int DELAY_TO_HIDE = 7000;
 
