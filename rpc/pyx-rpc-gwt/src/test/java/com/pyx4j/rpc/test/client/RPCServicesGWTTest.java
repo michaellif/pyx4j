@@ -23,6 +23,7 @@ package com.pyx4j.rpc.test.client;
 import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.GUnitTester;
 
@@ -37,8 +38,7 @@ public class RPCServicesGWTTest extends TestCase {
         final AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             public void onFailure(Throwable t) {
-                t.printStackTrace();
-                fail(t.getMessage());
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
             public void onSuccess(String result) {

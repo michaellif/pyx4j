@@ -54,7 +54,7 @@ public class EntityServicesGWTTest extends TestCase {
         final AsyncCallback<IEntity<?>> callback = new AsyncCallback<IEntity<?>>() {
 
             public void onFailure(Throwable t) {
-                fail(t.getMessage());
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
             public void onSuccess(IEntity<?> result) {
@@ -77,7 +77,7 @@ public class EntityServicesGWTTest extends TestCase {
         final AsyncCallback callback = new AsyncCallback<Vector<Country>>() {
 
             public void onFailure(Throwable t) {
-                fail(t.getMessage());
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
             public void onSuccess(Vector<Country> result) {
@@ -101,7 +101,7 @@ public class EntityServicesGWTTest extends TestCase {
         final AsyncCallback callback = new AsyncCallback<Vector<Country>>() {
 
             public void onFailure(Throwable t) {
-                fail(t.getMessage());
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
             public void onSuccess(Vector<Country> result) {
@@ -114,7 +114,7 @@ public class EntityServicesGWTTest extends TestCase {
         final AsyncCallback<IEntity<?>> setUpCallback = new AsyncCallback<IEntity<?>>() {
 
             public void onFailure(Throwable t) {
-                fail(t.getMessage());
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
             public void onSuccess(IEntity<?> result) {
