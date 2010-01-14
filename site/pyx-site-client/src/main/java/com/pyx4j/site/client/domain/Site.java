@@ -35,29 +35,29 @@ public class Site {
 
     public String footerCopiright;
 
-    public List<Page> pages = new ArrayList<Page>();
+    public List<AbstractPage> pages = new ArrayList<AbstractPage>();
 
     public Site() {
 
     }
 
-    public void addPage(Page page) {
+    public void addPage(AbstractPage page) {
         addPage(page, false);
     }
 
-    public void addPage(Page page, boolean homePage) {
+    public void addPage(AbstractPage page, boolean homePage) {
         pages.add(page);
         if (homePage) {
             homePageUri = page.uri;
         }
     }
 
-    public Page getPage(String uri) {
+    public AbstractPage getPage(String uri) {
         return getPage(new PageUri(uri));
     }
 
-    public Page getPage(PageUri uri) {
-        for (Page page : pages) {
+    public AbstractPage getPage(PageUri uri) {
+        for (AbstractPage page : pages) {
             if (page.uri.equals(uri)) {
                 return page;
             }
@@ -65,7 +65,7 @@ public class Site {
         return null;
     }
 
-    public Page getHomePage() {
+    public AbstractPage getHomePage() {
         return pages.get(0);
     }
 

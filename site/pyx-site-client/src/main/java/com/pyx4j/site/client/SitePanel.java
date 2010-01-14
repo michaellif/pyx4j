@@ -32,17 +32,20 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.domain.Link;
-import com.pyx4j.site.client.domain.Page;
+import com.pyx4j.site.client.domain.AbstractPage;
 import com.pyx4j.site.client.domain.Site;
+import com.pyx4j.site.client.domain.StaticPage;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
@@ -105,7 +108,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         // Show the initial screen.
         String initToken = History.getToken();
         if (initToken.length() > 0) {
-            Page page = site.getPage(initToken);
+            AbstractPage page = site.getPage(initToken);
             if (page == null) {
                 show(site.getHomePage());
             } else {
@@ -117,8 +120,17 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     }
 
-    private void show(Page page) {
-        mainSectionPanel.setWidget(new HTML(page.data.html, true));
+    private void show(AbstractPage page) {
+        Widget widget = null;
+        if (page instanceof StaticPage) {
+            widget = new HTML(((StaticPage) page).data.html, true);
+        } else if (page instanceof DynamicPage) {
+            widget = ((DynamicPage) page).getWidget();
+        }
+
+        if (widget != null) {
+            mainSectionPanel.setWidget(widget);
+        }
 
         setHeaderCaptions(page.caption);
 
@@ -228,6 +240,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected SimplePanel createMainSectionPanel() {
         SimplePanel panel = new SimplePanel();
+        panel.setWidth("100%");
         return panel;
     }
 
@@ -263,7 +276,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     protected void createPrimaryNavigation() {
         primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
 
-        for (Page page : site.pages) {
+        for (AbstractPage page : site.pages) {
             if (page.uri.isRoot()) {
                 primaryNavigationBar.add(page.caption, page.uri);
             }
@@ -298,7 +311,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
-        Page page = site.getPage(event.getValue());
+        AbstractPage page = site.getPage(event.getValue());
         if (page == null) {
             show(site.getHomePage());
             return;

@@ -25,13 +25,26 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CListBox;
+import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.forms.client.ui.CListBox.Layout;
+import com.pyx4j.site.client.DynamicPage;
 import com.pyx4j.site.client.domain.CommandLink;
 import com.pyx4j.site.client.domain.Link;
-import com.pyx4j.site.client.domain.Page;
+import com.pyx4j.site.client.domain.AbstractPage;
 import com.pyx4j.site.client.domain.PageLink;
 import com.pyx4j.site.client.domain.PageUri;
 import com.pyx4j.site.client.domain.Site;
+import com.pyx4j.site.client.domain.StaticPage;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -71,7 +84,7 @@ public class EasySite extends Site {
         footerCopiright = "&copy; 2010 EasySite. All rights reserved.";
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Home";
             page.uri = new PageUri("home");
             page.data.html = "Home";
@@ -79,7 +92,7 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Services";
             page.uri = new PageUri("services");
             page.data.html = "Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>";
@@ -87,7 +100,7 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "About Us";
             page.uri = new PageUri("aboutUs");
             page.data.html = "About Us<P> About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>";
@@ -95,7 +108,7 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Contact Us";
             page.uri = new PageUri("contactUs");
             page.data.html = "Contact Us";
@@ -103,7 +116,7 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Technical Support";
             page.uri = new PageUri("home:technicalSupport");
             page.data.html = "Technical Support Technical Support Technical Support Technical Support";
@@ -111,7 +124,7 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Privacy policy";
             page.uri = new PageUri("home:privacyPolicy");
             page.data.html = "Privacy policy";
@@ -119,7 +132,7 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Terms of Use";
             page.uri = new PageUri("home:termsOfUse");
             page.data.html = "Terms of Use";
@@ -127,19 +140,42 @@ public class EasySite extends Site {
         }
 
         {
-            Page page = new Page();
+            SignUpPage page = new SignUpPage();
             page.caption = "Sign Up";
             page.uri = new PageUri("user:signUp");
-            page.data.html = "Sign Up";
             addPage(page);
         }
 
         {
-            Page page = new Page();
+            StaticPage page = new StaticPage();
             page.caption = "Profile";
             page.uri = new PageUri("user:profile");
             page.data.html = "Profile";
             addPage(page);
+        }
+
+    }
+
+    class SignUpPage extends DynamicPage {
+
+        @Override
+        public Widget getWidget() {
+            CComponent<?>[][] components = new CComponent[][] {
+
+            { new CTextField("Address") },
+
+            { new CTextField("Phone") },
+
+            { new CCheckBox("Exclude from search") },
+
+            { new CListBox<String>("Interested in", Layout.PLAIN) },
+
+            };
+
+            CForm form = new CForm();
+
+            form.setComponents(components);
+            return (Widget) form.initNativeComponent();
         }
 
     }

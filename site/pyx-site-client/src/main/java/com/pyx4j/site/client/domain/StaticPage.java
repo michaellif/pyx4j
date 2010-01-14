@@ -20,16 +20,8 @@
  */
 package com.pyx4j.site.client.domain;
 
-public class Page {
+public class StaticPage extends AbstractPage {
 
     public PageData data = new PageData();
 
-    public PageUri uri;
-
-    public String caption;
-
-    @Override
-    public String toString() {
-        return uri.toString();
-    }
 }
