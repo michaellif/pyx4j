@@ -42,7 +42,11 @@ public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryI
     public <T extends IEntity<?>> T create(Class<T> clazz) {
         IEntityFactoryImpl implCreator = implementationsMap.get(clazz);
         if (implCreator == null) {
-            throw new Error("Class " + clazz.getName() + " implementation not found");
+            if (clazz == null) {
+                throw new NullPointerException("Can't create {null} class");
+            } else {
+                throw new Error("Class " + clazz.getName() + " implementation not found");
+            }
         }
         return implCreator.create(clazz);
     }
