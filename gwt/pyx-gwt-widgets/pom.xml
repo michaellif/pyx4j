@@ -26,16 +26,22 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
+            <artifactId>pyx-commons</artifactId>
             <version>${project.version}</version>
-            <optional>true</optional>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-gwt</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-server</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+            <scope>test</scope>
         </dependency>
 
 	</dependencies>
