@@ -103,7 +103,7 @@ public class LinkBar extends ComplexPanel {
     class LinkItemAnchor extends Anchor {
 
         LinkItemAnchor(String html, final PageUri uri) {
-            super(html, true, "");
+            super(html, true, "#");
 
             addClickHandler(new ClickHandler() {
                 @Override

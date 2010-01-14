@@ -23,6 +23,7 @@ package com.pyx4j.client.demo.client;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.site.client.domain.CommandLink;
@@ -122,6 +123,22 @@ public class EasySite extends Site {
             page.caption = "Terms of Use";
             page.uri = new PageUri("home:termsOfUse");
             page.data.html = "Terms of Use";
+            addPage(page);
+        }
+
+        {
+            Page page = new Page();
+            page.caption = "Sign Up";
+            page.uri = new PageUri("user:signUp");
+            page.data.html = "Sign Up";
+            addPage(page);
+        }
+
+        {
+            Page page = new Page();
+            page.caption = "Profile";
+            page.uri = new PageUri("user:profile");
+            page.data.html = "Profile";
             addPage(page);
         }
 

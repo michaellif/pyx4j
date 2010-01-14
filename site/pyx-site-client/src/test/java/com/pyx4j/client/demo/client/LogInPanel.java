@@ -22,6 +22,7 @@ package com.pyx4j.client.demo.client;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,7 +37,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 
 public class LogInPanel extends VerticalPanel implements Custom1Option, CancelOption {
 
-    LogInPanel() {
+    public LogInPanel() {
 
         getElement().getStyle().setPadding(30, Unit.PX);
         getElement().getStyle().setPaddingRight(10, Unit.PX);
@@ -78,7 +79,7 @@ public class LogInPanel extends VerticalPanel implements Custom1Option, CancelOp
 
     @Override
     public boolean onClickCustom1() {
-        // TODO Auto-generated method stub
+        History.newItem("user:profile");
         return true;
     }
 
