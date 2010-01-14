@@ -15,6 +15,7 @@ pyx-unit-shared
 pyx-unit-server
 pyx-security-shared
 pyx-security-server
+javassist
 \slf4j-api
 slf4j-jdk14
 -pyx-gwt-server.jar
@@ -29,3 +30,4 @@ slf4j-jdk14
 -pyx-security-shared.jar
 -pyx-security-server.jar
 -slf4j-jdk14.jar
+-javassist.jar
