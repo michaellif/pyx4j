@@ -32,6 +32,10 @@
             <resource>
                 <directory>src/main/java</directory>
             </resource>
+            <!-- super-source -->
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
         </resources>
     </build>
 
