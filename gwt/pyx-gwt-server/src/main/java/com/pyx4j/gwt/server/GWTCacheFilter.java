@@ -31,15 +31,26 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Consts;
 
 public class GWTCacheFilter implements Filter {
+
+    private static final Logger log = LoggerFactory.getLogger(GWTCacheFilter.class);
 
     private int cacheExpiresHours = 24;
 
     private String cacheControl;
 
     private boolean developmentMode = false;
+
+    private final boolean developmentDebug = false;
+
+    private long firstRequest = 0;
+
+    private boolean clientStartedNotifyOnce = true;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -48,7 +59,10 @@ public class GWTCacheFilter implements Filter {
             cacheExpiresHours = Integer.parseInt(rate);
         }
         cacheControl = "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours);
-        developmentMode = (System.clearProperty("sun.desktop") != null);
+        developmentMode = (System.getProperty("sun.desktop") != null);
+        if (developmentMode) {
+            log.debug("Filter works in developmentMode");
+        }
     }
 
     @Override
@@ -59,6 +73,17 @@ public class GWTCacheFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             String uri = ((HttpServletRequest) request).getRequestURI();
+            if (developmentDebug && developmentMode) {
+                if (firstRequest == 0) {
+                    firstRequest = System.currentTimeMillis();
+                    log.debug("First request has been made {}", uri);
+                } else if (clientStartedNotifyOnce && uri.startsWith("/client-started")) {
+                    log.debug("Client app Start duration {} msec", System.currentTimeMillis() - firstRequest);
+                    clientStartedNotifyOnce = false;
+                }
+                log.debug("url {}", uri);
+            }
+
             if (uri.indexOf(".cache.") != -1) {
                 ((HttpServletResponse) response).setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
                 ((HttpServletResponse) response).setHeader("Cache-control", cacheControl);
