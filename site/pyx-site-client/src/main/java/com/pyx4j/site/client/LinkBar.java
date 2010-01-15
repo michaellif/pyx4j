@@ -103,7 +103,7 @@ public class LinkBar extends ComplexPanel {
     class LinkItemAnchor extends Anchor {
 
         LinkItemAnchor(String html, final PageUri uri) {
-            super(html, true, "#");
+            super(html, true, "javascript:void(0)");
 
             addClickHandler(new ClickHandler() {
                 @Override
@@ -116,7 +116,7 @@ public class LinkBar extends ComplexPanel {
         }
 
         LinkItemAnchor(String html, final Command command) {
-            super(html, true, "#");
+            super(html, true, "javascript:void(0)");
 
             addClickHandler(new ClickHandler() {
                 @Override

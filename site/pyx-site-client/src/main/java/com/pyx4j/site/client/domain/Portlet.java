@@ -22,12 +22,10 @@ package com.pyx4j.site.client.domain;
 
 public class Portlet {
 
-    enum Location {
-        left, right
+    public String html;
+
+    public Portlet(String html) {
+        this.html = html;
     }
-
-    String html;
-
-    Location location;
 
 }

@@ -10,12 +10,13 @@ package com.pyx4j.site.client;
 
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.site.client.domain.Portlet;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 
-public class HtmlPortlet extends HTML {
+public class HtmlPortletWidget extends HTML {
 
-    public HtmlPortlet(String html) {
-        super(html);
+    public HtmlPortletWidget(Portlet portlet) {
+        super(portlet.html);
         setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
     }
 

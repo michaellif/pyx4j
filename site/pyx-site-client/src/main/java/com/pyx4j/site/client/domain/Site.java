@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Site {
 
-    public PageUri homePageUri;
+    public AbstractPage homePage;
 
     public String logoUrl;
 
@@ -45,10 +45,10 @@ public class Site {
         addPage(page, false);
     }
 
-    public void addPage(AbstractPage page, boolean homePage) {
+    public void addPage(AbstractPage page, boolean isHome) {
         pages.add(page);
-        if (homePage) {
-            homePageUri = page.uri;
+        if (isHome) {
+            homePage = page;
         }
     }
 

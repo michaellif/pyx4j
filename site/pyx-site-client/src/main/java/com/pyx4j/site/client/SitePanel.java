@@ -32,18 +32,17 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
-import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.AbstractPage;
+import com.pyx4j.site.client.domain.Link;
+import com.pyx4j.site.client.domain.Portlet;
 import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.site.client.domain.StaticPage;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -130,9 +129,24 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         if (widget != null) {
             mainSectionPanel.setWidget(widget);
+            widget.getElement().getStyle().setProperty("textAlign", "center");
         }
 
         setHeaderCaptions(page.caption);
+
+        leftSectionPanel.clear();
+        if (page.leftPortlets != null) {
+            for (Portlet portlet : page.leftPortlets) {
+                leftSectionPanel.add(createPortletWidget(portlet));
+            }
+        }
+
+        rightSectionPanel.clear();
+        if (page.rightPortlets != null) {
+            for (Portlet portlet : page.rightPortlets) {
+                rightSectionPanel.add(createPortletWidget(portlet));
+            }
+        }
 
         primaryNavigationBar.setSelected(page.uri);
 
@@ -218,24 +232,16 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     protected FlowPanel createLeftSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        HtmlPortlet portlet1 = new HtmlPortlet("<h3>PORTLET 1</h3><p>portlet1");
-        panel.add(portlet1);
-        HtmlPortlet portlet2 = new HtmlPortlet("<h3>PORTLET 2</h3><p> portlet2 portlet2 portlet2 portlet2 portlet2 portlet2 portlet2 portlet2 portlet2");
-        panel.add(portlet2);
-
         return panel;
     }
 
     protected FlowPanel createRightSectionPanel() {
         FlowPanel panel = new FlowPanel();
-        HtmlPortlet portlet3 = new HtmlPortlet("<h3>PORTLET 3</h3><p>portlet3");
-        panel.add(portlet3);
-        HtmlPortlet portlet4 = new HtmlPortlet("<h3>PORTLET 4</h3><p>portlet4<p>");
-        panel.add(portlet4);
-        HtmlPortlet portlet5 = new HtmlPortlet("<h3>PORTLET 5</h3><p>portlet5<p>portlet5<p>");
-        panel.add(portlet5);
-
         return panel;
+    }
+
+    private Widget createPortletWidget(Portlet portlet) {
+        return new HtmlPortletWidget(portlet);
     }
 
     protected SimplePanel createMainSectionPanel() {

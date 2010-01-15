@@ -20,11 +20,17 @@
  */
 package com.pyx4j.site.client.domain;
 
+import java.util.List;
+
 public abstract class AbstractPage {
 
     public PageUri uri;
 
     public String caption;
+
+    public List<Portlet> leftPortlets;
+
+    public List<Portlet> rightPortlets;
 
     @Override
     public String toString() {

@@ -26,5 +26,4 @@ public class PageData {
 
     public String html;
 
-    public List<Portlet> portlets;
 }
