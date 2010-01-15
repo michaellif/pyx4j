@@ -46,6 +46,7 @@ public class DarkTheme extends WindowsTheme {
     @Override
     protected void initStyles() {
         super.initStyles();
+        initGeneralStyles();
         initSitePanelStyles();
         initContentPanelStyles();
         initHeaderStyles();
@@ -61,12 +62,19 @@ public class DarkTheme extends WindowsTheme {
 
     }
 
-    private void initSitePanelStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
-        style.addProperty("background", "url(images/background.jpg) repeat-x");
+    private void initGeneralStyles() {
+        Style style = new Style("html");
+        style.addProperty("overflow-y", "scroll");
         addStyle(style);
         style = new Style("body");
         style.addProperty("background", "#21262C");
+        style.addProperty("margin", "0");
+        addStyle(style);
+    }
+
+    private void initSitePanelStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
+        style.addProperty("background", "url(images/background.jpg) repeat-x");
         addStyle(style);
     }
 
