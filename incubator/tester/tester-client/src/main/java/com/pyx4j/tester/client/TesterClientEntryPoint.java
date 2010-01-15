@@ -40,7 +40,7 @@ public class TesterClientEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        NotifyClientStarted.notifyServer();
+        //NotifyClientStarted.notifyServer();
 
         ClientEntityFactory.ensureIEntityImplementations();
         StyleManger.installTheme(new WindowsTheme());
