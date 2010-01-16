@@ -23,7 +23,7 @@ package com.pyx4j.site.client.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Site {
+public class SiteStaticProperties {
 
     public AbstractPage homePage;
 
@@ -37,36 +37,8 @@ public class Site {
 
     public List<AbstractPage> pages = new ArrayList<AbstractPage>();
 
-    public Site() {
+    public SiteStaticProperties() {
 
-    }
-
-    public void addPage(AbstractPage page) {
-        addPage(page, false);
-    }
-
-    public void addPage(AbstractPage page, boolean isHome) {
-        pages.add(page);
-        if (isHome) {
-            homePage = page;
-        }
-    }
-
-    public AbstractPage getPage(String uri) {
-        return getPage(new PageUri(uri));
-    }
-
-    public AbstractPage getPage(PageUri uri) {
-        for (AbstractPage page : pages) {
-            if (page.uri.equals(uri)) {
-                return page;
-            }
-        }
-        return null;
-    }
-
-    public AbstractPage getHomePage() {
-        return pages.get(0);
     }
 
 }

@@ -25,11 +25,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.site.client.domain.Site;
+import com.pyx4j.site.client.domain.SiteStaticProperties;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -40,9 +41,11 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        Site site = new EasySite();
+        SiteStaticProperties properties = new EasySite();
 
-        SitePanel pagePanel = new SitePanel(site);
+        SitePanel pagePanel = new SitePanel();
+
+        pagePanel.show(History.getToken());
         RootPanel.get().add(pagePanel);
 
     }

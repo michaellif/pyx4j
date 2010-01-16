@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style;
@@ -42,8 +43,8 @@ import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.domain.AbstractPage;
 import com.pyx4j.site.client.domain.Link;
+import com.pyx4j.site.client.domain.PageUri;
 import com.pyx4j.site.client.domain.Portlet;
-import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.site.client.domain.StaticPage;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
@@ -52,7 +53,17 @@ import com.pyx4j.widgets.client.style.StyleManger;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
 
-    private final Site site;
+    public AbstractPage homePage;
+
+    public String logoUrl;
+
+    public List<Link> headerLinks;
+
+    public List<Link> footerLinks;
+
+    public String footerCopiright;
+
+    public List<AbstractPage> pages = new ArrayList<AbstractPage>();
 
     private AbsolutePanel headerPanel;
 
@@ -80,9 +91,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private static DarkTheme darkTheme = new DarkTheme();
 
-    public SitePanel(Site site) {
-        this.site = site;
-
+    public SitePanel() {
         setSize("100%", "100%");
 
         add(createContentPanel());
@@ -92,31 +101,31 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         createPrimaryNavigation();
 
-        createLogoImage(site.logoUrl);
+        createLogoImage();
 
-        createHeaderLinks(site.headerLinks);
+        createHeaderLinks();
 
-        createFooterLinks(site.footerLinks);
+        createFooterLinks();
 
-        createFooterCopiright(site.footerCopiright);
+        createFooterCopiright();
 
         StyleManger.installTheme(darkTheme);
 
         History.addValueChangeHandler(this);
 
-        // Show the initial screen.
-        String initToken = History.getToken();
-        if (initToken.length() > 0) {
-            AbstractPage page = site.getPage(initToken);
+    }
+
+    public void show(String historyToken) {
+        if (historyToken.length() > 0) {
+            AbstractPage page = getPage(historyToken);
             if (page == null) {
-                show(site.getHomePage());
+                show(getHomePage());
             } else {
                 show(page);
             }
         } else {
-            show(site.getHomePage());
+            show(getHomePage());
         }
-
     }
 
     private void show(AbstractPage page) {
@@ -261,11 +270,11 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         addToHeaderPanel(headerCaptions);
     }
 
-    protected void createLogoImage(String url) {
+    protected void createLogoImage() {
         logoImage = new Image();
         logoImage.setStyleName(SiteCSSClass.pyx4j_Site_Logo.name());
 
-        logoImage.setUrl(url);
+        logoImage.setUrl(logoUrl);
         addToHeaderPanel(logoImage);
         logoImage.addClickHandler(new ClickHandler() {
             @Override
@@ -282,7 +291,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     protected void createPrimaryNavigation() {
         primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
 
-        for (AbstractPage page : site.pages) {
+        for (AbstractPage page : pages) {
             if (page.uri.isRoot()) {
                 primaryNavigationBar.add(page.caption, page.uri);
             }
@@ -291,35 +300,63 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     }
 
-    protected void createFooterCopiright(String footerCopiright) {
+    protected void createFooterCopiright() {
         HTML html = new HTML(footerCopiright, false);
         html.setStyleName(SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         addToFooterPanel(html);
     }
 
-    protected void createHeaderLinks(List<Link> headerLinks) {
+    protected void createHeaderLinks() {
         headerLinkBar = new LinkBar(LinkBarType.Header);
 
-        for (Link link : site.headerLinks) {
+        for (Link link : headerLinks) {
             headerLinkBar.add(link);
         }
         addToHeaderPanel(headerLinkBar);
     }
 
-    protected void createFooterLinks(List<Link> footerLinks) {
+    protected void createFooterLinks() {
         footerLinkBar = new LinkBar(LinkBarType.Footer);
 
-        for (Link link : site.footerLinks) {
+        for (Link link : footerLinks) {
             footerLinkBar.add(link);
         }
         addToFooterPanel(footerLinkBar);
     }
 
+    public void addPage(AbstractPage page) {
+        addPage(page, false);
+    }
+
+    public void addPage(AbstractPage page, boolean isHome) {
+        pages.add(page);
+        if (isHome) {
+            homePage = page;
+        }
+    }
+
+    public AbstractPage getPage(String uri) {
+        return getPage(new PageUri(uri));
+    }
+
+    public AbstractPage getPage(PageUri uri) {
+        for (AbstractPage page : pages) {
+            if (page.uri.equals(uri)) {
+                return page;
+            }
+        }
+        return null;
+    }
+
+    public AbstractPage getHomePage() {
+        return pages.get(0);
+    }
+
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
-        AbstractPage page = site.getPage(event.getValue());
+        AbstractPage page = getPage(event.getValue());
         if (page == null) {
-            show(site.getHomePage());
+            show(getHomePage());
             return;
         }
         show(page);
