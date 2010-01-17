@@ -23,6 +23,10 @@ package com.pyx4j.site.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -39,13 +43,13 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
-import com.pyx4j.site.client.domain.AbstractPage;
 import com.pyx4j.site.client.domain.Link;
+import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.PageUri;
 import com.pyx4j.site.client.domain.Portlet;
-import com.pyx4j.site.client.domain.StaticPage;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
@@ -53,9 +57,11 @@ import com.pyx4j.widgets.client.style.StyleManger;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
 
-    private AbstractPage homePage;
+    private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
-    private final List<AbstractPage> pages = new ArrayList<AbstractPage>();
+    private Page homePage;
+
+    private final List<Page> pages = new ArrayList<Page>();
 
     private AbsolutePanel headerPanel;
 
@@ -85,6 +91,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private static DarkTheme darkTheme = new DarkTheme();
 
+    private static InlineWidgetFactory widgetFactory = GWT.create(InlineWidgetFactory.class);
+
     public SitePanel() {
         setSize("100%", "100%");
 
@@ -111,7 +119,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     public void show(String historyToken) {
         if (historyToken.length() > 0) {
-            AbstractPage page = getPage(historyToken);
+            Page page = getPage(historyToken);
             if (page == null) {
                 if (getHomePage() != null) {
                     show(getHomePage());
@@ -126,17 +134,21 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         }
     }
 
-    private void show(AbstractPage page) {
-        Widget widget = null;
-        if (page instanceof StaticPage) {
-            widget = new HTML(((StaticPage) page).data.html, true);
-        } else if (page instanceof DynamicPage) {
-            widget = ((DynamicPage) page).getWidget();
-        }
+    private void show(Page page) {
+        Widget widget = new HTML(page.data.html, true);
 
-        if (widget != null) {
-            mainSectionPanel.setWidget(widget);
-            widget.getElement().getStyle().setProperty("textAlign", "center");
+        mainSectionPanel.setWidget(widget);
+
+        if (page.inlineWidgetsList != null) {
+            for (String widgetId : page.inlineWidgetsList) {
+                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
+                Widget inlineWidget = widgetFactory.createWidget(widgetId);
+                if (root != null && inlineWidget != null) {
+                    root.add(inlineWidget);
+                } else {
+                    log.warn("Failed to add inline widget " + widgetId + " to panel.");
+                }
+            }
         }
 
         setHeaderCaption(page.caption);
@@ -327,11 +339,11 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         footerLinkBar.add(link);
     }
 
-    public void addPage(AbstractPage page) {
+    public void addPage(Page page) {
         addPage(page, false);
     }
 
-    public void addPage(AbstractPage page, boolean isHome) {
+    public void addPage(Page page, boolean isHome) {
         pages.add(page);
         if (isHome) {
             homePage = page;
@@ -341,12 +353,12 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         }
     }
 
-    public AbstractPage getPage(String uri) {
+    public Page getPage(String uri) {
         return getPage(new PageUri(uri));
     }
 
-    public AbstractPage getPage(PageUri uri) {
-        for (AbstractPage page : pages) {
+    public Page getPage(PageUri uri) {
+        for (Page page : pages) {
             if (page.uri.equals(uri)) {
                 return page;
             }
@@ -354,13 +366,13 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         return null;
     }
 
-    public AbstractPage getHomePage() {
+    public Page getHomePage() {
         return homePage;
     }
 
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
-        AbstractPage page = getPage(event.getValue());
+        Page page = getPage(event.getValue());
         if (page == null) {
             show(getHomePage());
             return;

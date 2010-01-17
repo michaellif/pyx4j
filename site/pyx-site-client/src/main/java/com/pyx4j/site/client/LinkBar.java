@@ -84,12 +84,13 @@ public class LinkBar extends ComplexPanel {
 
     public void add(Link link) {
         LinkItem item = null;
+        boolean hasSeparator = LinkBar.this.getWidgetCount() != 0;
         if (link instanceof PageLink) {
             PageLink pageLink = (PageLink) link;
-            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri));
+            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri), hasSeparator);
         } else if (link instanceof CommandLink) {
             CommandLink commandLink = (CommandLink) link;
-            item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command));
+            item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), hasSeparator);
         }
         ul.appendChild(item.getElement());
         add(item, ul);
@@ -156,7 +157,7 @@ public class LinkBar extends ComplexPanel {
 
         private final LinkItemAnchor anchor;
 
-        LinkItem(LinkItemAnchor linkItemAnchor) {
+        LinkItem(LinkItemAnchor linkItemAnchor, boolean hasSeparator) {
             setElement(Document.get().createLIElement());
             switch (type) {
             case Header:
@@ -176,7 +177,7 @@ public class LinkBar extends ComplexPanel {
                 getElement().getStyle().setProperty("float", "left");
             }
 
-            if (LinkBar.this.getWidgetCount() != 0) {
+            if (hasSeparator) {
                 Element separator = Document.get().createSpanElement().cast();
                 separator.getStyle().setProperty("display", "inline");
                 separator.setInnerText("| ");

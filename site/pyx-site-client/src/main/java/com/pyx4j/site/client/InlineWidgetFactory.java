@@ -14,14 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
- * @author michaellif
+ * Created on Jan 17, 2010
+ * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.client.domain;
+package com.pyx4j.site.client;
 
-public class StaticPage extends AbstractPage {
+import com.google.gwt.user.client.ui.Widget;
 
-    public PageData data = new PageData();
+public class InlineWidgetFactory {
 
+    public Widget createWidget(String id) {
+        return null;
+    }
 }

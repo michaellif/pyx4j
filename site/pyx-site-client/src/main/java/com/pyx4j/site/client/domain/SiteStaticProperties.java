@@ -33,7 +33,7 @@ public class SiteStaticProperties {
 
     public String footerCopiright;
 
-    public List<AbstractPage> pages = new ArrayList<AbstractPage>();
+    public List<Page> pages = new ArrayList<Page>();
 
     public SiteStaticProperties() {
 
