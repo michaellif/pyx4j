@@ -53,17 +53,9 @@ import com.pyx4j.widgets.client.style.StyleManger;
 
 public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
 
-    public AbstractPage homePage;
+    private AbstractPage homePage;
 
-    public String logoUrl;
-
-    public List<Link> headerLinks;
-
-    public List<Link> footerLinks;
-
-    public String footerCopiright;
-
-    public List<AbstractPage> pages = new ArrayList<AbstractPage>();
+    private final List<AbstractPage> pages = new ArrayList<AbstractPage>();
 
     private AbsolutePanel headerPanel;
 
@@ -81,6 +73,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private Image logoImage;
 
+    private HTML copitightHtml;
+
     private NavigationBar primaryNavigationBar;
 
     private LinkBar headerLinkBar;
@@ -97,17 +91,17 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         add(createContentPanel());
         setStyleName(SiteCSSClass.pyx4j_Site_SitePanel.name());
 
-        createHeaderCaptions();
+        createHeaderCaptionsPanel();
 
-        createPrimaryNavigation();
+        createPrimaryNavigationPanel();
 
-        createLogoImage();
+        createLogoImagePanel();
 
-        createHeaderLinks();
+        createHeaderLinksPanel();
 
-        createFooterLinks();
+        createFooterLinksPanel();
 
-        createFooterCopiright();
+        createFooterCopirightPanel();
 
         StyleManger.installTheme(darkTheme);
 
@@ -119,12 +113,16 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         if (historyToken.length() > 0) {
             AbstractPage page = getPage(historyToken);
             if (page == null) {
-                show(getHomePage());
+                if (getHomePage() != null) {
+                    show(getHomePage());
+                }
             } else {
                 show(page);
             }
         } else {
-            show(getHomePage());
+            if (getHomePage() != null) {
+                show(getHomePage());
+            }
         }
     }
 
@@ -141,7 +139,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
             widget.getElement().getStyle().setProperty("textAlign", "center");
         }
 
-        setHeaderCaptions(page.caption);
+        setHeaderCaption(page.caption);
 
         leftSectionPanel.clear();
         if (page.leftPortlets != null) {
@@ -194,14 +192,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         return contentPanel;
     }
 
-    protected AbsolutePanel createHeaderPanel() {
-        AbsolutePanel headerPanel = new AbsolutePanel();
-
-        headerPanel.setStyleName(SiteCSSClass.pyx4j_Site_Header.name());
-
-        return headerPanel;
-    }
-
     public void addToHeaderPanel(Widget w) {
         addToHeaderPanel(w, 0, 0);
     }
@@ -209,6 +199,14 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     public void addToHeaderPanel(Widget w, int left, int top) {
         headerPanel.remove(w);
         headerPanel.add(w, left, top);
+    }
+
+    protected AbsolutePanel createHeaderPanel() {
+        AbsolutePanel headerPanel = new AbsolutePanel();
+
+        headerPanel.setStyleName(SiteCSSClass.pyx4j_Site_Header.name());
+
+        return headerPanel;
     }
 
     protected AbsolutePanel createFooterPanel() {
@@ -259,22 +257,21 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         return panel;
     }
 
-    protected void createHeaderCaptions() {
+    protected void createHeaderCaptionsPanel() {
         headerCaptions = new Label();
         headerCaptions.setStyleName(SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
 
     }
 
-    public void setHeaderCaptions(String captions) {
+    public void setHeaderCaption(String captions) {
         headerCaptions.setText(captions);
         addToHeaderPanel(headerCaptions);
     }
 
-    protected void createLogoImage() {
+    protected void createLogoImagePanel() {
         logoImage = new Image();
         logoImage.setStyleName(SiteCSSClass.pyx4j_Site_Logo.name());
 
-        logoImage.setUrl(logoUrl);
         addToHeaderPanel(logoImage);
         logoImage.addClickHandler(new ClickHandler() {
             @Override
@@ -288,40 +285,46 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         });
     }
 
-    protected void createPrimaryNavigation() {
-        primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
+    public void setLogoImage(String logoUrl) {
+        logoImage.setUrl(logoUrl);
+    }
 
-        for (AbstractPage page : pages) {
-            if (page.uri.isRoot()) {
-                primaryNavigationBar.add(page.caption, page.uri);
-            }
-        }
+    protected void createPrimaryNavigationPanel() {
+        primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
         addToHeaderPanel(primaryNavigationBar);
 
     }
 
-    protected void createFooterCopiright() {
-        HTML html = new HTML(footerCopiright, false);
-        html.setStyleName(SiteCSSClass.pyx4j_Site_FooterCopiright.name());
-        addToFooterPanel(html);
+    protected void createFooterCopirightPanel() {
+        copitightHtml = new HTML("", false);
+        copitightHtml.setStyleName(SiteCSSClass.pyx4j_Site_FooterCopiright.name());
+        addToFooterPanel(copitightHtml);
     }
 
-    protected void createHeaderLinks() {
-        headerLinkBar = new LinkBar(LinkBarType.Header);
+    public void setFooterCopiright(String html) {
+        copitightHtml.setHTML(html);
+    }
 
-        for (Link link : headerLinks) {
-            headerLinkBar.add(link);
-        }
+    protected void createHeaderLinksPanel() {
+        headerLinkBar = new LinkBar(LinkBarType.Header);
         addToHeaderPanel(headerLinkBar);
     }
 
-    protected void createFooterLinks() {
-        footerLinkBar = new LinkBar(LinkBarType.Footer);
+    public void addHeaderLink(Link link) {
+        headerLinkBar.add(link);
+    }
 
-        for (Link link : footerLinks) {
-            footerLinkBar.add(link);
-        }
+    public void removeHeaderLink(Link link) {
+        headerLinkBar.remove(link);
+    }
+
+    protected void createFooterLinksPanel() {
+        footerLinkBar = new LinkBar(LinkBarType.Footer);
         addToFooterPanel(footerLinkBar);
+    }
+
+    public void addFooterLink(Link link) {
+        footerLinkBar.add(link);
     }
 
     public void addPage(AbstractPage page) {
@@ -332,6 +335,9 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         pages.add(page);
         if (isHome) {
             homePage = page;
+        }
+        if (page.uri.isRoot()) {
+            primaryNavigationBar.add(page.caption, page.uri);
         }
     }
 
@@ -349,7 +355,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     public AbstractPage getHomePage() {
-        return pages.get(0);
+        return homePage;
     }
 
     @Override

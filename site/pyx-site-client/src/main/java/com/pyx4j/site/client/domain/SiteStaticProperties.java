@@ -25,8 +25,6 @@ import java.util.List;
 
 public class SiteStaticProperties {
 
-    public AbstractPage homePage;
-
     public String logoUrl;
 
     public List<Link> headerLinks;

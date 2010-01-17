@@ -24,12 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.SitePanel;
+import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.SiteStaticProperties;
 
 /**
@@ -41,20 +40,27 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        SiteStaticProperties properties = new EasySite();
-
         SitePanel pagePanel = new SitePanel();
 
+        SiteStaticProperties staticProperties = new SiteStaticProperties();
+
+        pagePanel.setLogoImage(staticProperties.logoUrl);
+
+        for (int i = 0; i < staticProperties.pages.size(); i++) {
+            pagePanel.addPage(staticProperties.pages.get(i), i == 0);
+        }
+
+        for (Link link : staticProperties.headerLinks) {
+            pagePanel.addHeaderLink(link);
+        }
+
+        for (Link link : staticProperties.footerLinks) {
+            pagePanel.addFooterLink(link);
+        }
+
+        pagePanel.setFooterCopiright(staticProperties.footerCopiright);
         pagePanel.show(History.getToken());
         RootPanel.get().add(pagePanel);
 
     }
-
-    class SiteSection extends HTML {
-        SiteSection(String capture, String color) {
-            super(capture);
-            DOM.setStyleAttribute(getElement(), "background", color);
-        }
-    }
-
 }

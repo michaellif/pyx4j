@@ -82,7 +82,6 @@ public class EasySite extends SiteStaticProperties {
             page.uri = new PageUri("home");
             page.data.html = "Home";
             pages.add(page);
-            homePage = page;
         }
 
         {

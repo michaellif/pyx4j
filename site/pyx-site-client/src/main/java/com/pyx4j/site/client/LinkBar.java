@@ -8,6 +8,7 @@
  */
 package com.pyx4j.site.client;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -46,7 +47,7 @@ public class LinkBar extends ComplexPanel {
 
     private final Element ul;
 
-    private boolean empty = true;
+    private final HashMap<Link, LinkItem> items = new HashMap<Link, LinkItem>();
 
     public LinkBar(LinkBarType type) {
         super();
@@ -82,22 +83,24 @@ public class LinkBar extends ComplexPanel {
     }
 
     public void add(Link link) {
-        LinkItem tab = null;
+        LinkItem item = null;
         if (link instanceof PageLink) {
             PageLink pageLink = (PageLink) link;
-            tab = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri));
+            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri));
         } else if (link instanceof CommandLink) {
             CommandLink commandLink = (CommandLink) link;
-            tab = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command));
+            item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command));
         }
-        ul.appendChild(tab.getElement());
-        add(tab, ul);
+        ul.appendChild(item.getElement());
+        add(item, ul);
+        items.put(link, item);
     }
 
-    public void add(String html, Command command) {
-        LinkItem tab = new LinkItem(new LinkItemAnchor(html, command));
-        ul.appendChild(tab.getElement());
-        add(tab, ul);
+    public void remove(Link link) {
+        LinkItem item = items.remove(link);
+        if (item != null) {
+            remove(item);
+        }
     }
 
     class LinkItemAnchor extends Anchor {
@@ -173,9 +176,7 @@ public class LinkBar extends ComplexPanel {
                 getElement().getStyle().setProperty("float", "left");
             }
 
-            if (empty) {
-                empty = false;
-            } else {
+            if (LinkBar.this.getWidgetCount() != 0) {
                 Element separator = Document.get().createSpanElement().cast();
                 separator.getStyle().setProperty("display", "inline");
                 separator.setInnerText("| ");
