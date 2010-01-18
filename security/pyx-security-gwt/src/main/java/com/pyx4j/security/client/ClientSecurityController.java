@@ -20,24 +20,37 @@
  */
 package com.pyx4j.security.client;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
-public class ClientSecurityController extends SecurityController {
+public class ClientSecurityController extends SecurityController implements HasValueChangeHandlers<Set<Behavior>> {
+
+    private HandlerManager handlerManager;
 
     //TODO implement something
-    private final Acl acl = new AclImpl();
+    private final AclImpl acl = new AclImpl();
 
     // Allow everything
     private static class AclImpl implements Acl {
 
+        private Set<Behavior> behaviors = new HashSet<Behavior>();
+
         @Override
         public boolean checkBehavior(Behavior behavior) {
-            return false;
+            return behaviors.contains(behavior);
         }
 
         @Override
@@ -47,14 +60,58 @@ public class ClientSecurityController extends SecurityController {
 
         @Override
         public Set<Behavior> getBehaviors() {
-            return null;
+            return Collections.unmodifiableSet(behaviors);
         }
 
+    }
+
+    public ClientSecurityController() {
+
+    }
+
+    public static ClientSecurityController instance() {
+        return (ClientSecurityController) SecurityController.instance();
+    }
+
+    /**
+     * TODO make a proper implementation, Use this only for DEMO
+     * 
+     * @Deprecated probably will change
+     */
+    @Deprecated
+    public static void grant(Behavior behavior) {
+        instance().acl.behaviors.add(behavior);
+        ValueChangeEvent.fire(instance(), instance().acl.getBehaviors());
+    }
+
+    public static void authenticate(Set<Behavior> behaviors) {
+        instance().acl.behaviors = Collections.unmodifiableSet(behaviors);
+        ValueChangeEvent.fire(instance(), instance().acl.getBehaviors());
     }
 
     @Override
     public Acl getAcl() {
         return acl;
+    }
+
+    protected HandlerManager ensureHandlers() {
+        return handlerManager == null ? handlerManager = new HandlerManager(this) : handlerManager;
+    }
+
+    protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
+        return ensureHandlers().addHandler(type, handler);
+    }
+
+    @Override
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Set<Behavior>> handler) {
+        return addHandler(handler, ValueChangeEvent.getType());
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        if (handlerManager != null) {
+            handlerManager.fireEvent(event);
+        }
     }
 
 }
