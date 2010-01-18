@@ -23,7 +23,7 @@ package com.pyx4j.entity.test.shared;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
-public class EntityMetatTest extends InitializerTestCase {
+public class EntityMetaTest extends InitializerTestCase {
 
     public void testEmployeeMemberList() {
         Employee emp = EntityFactory.create(Employee.class);

@@ -49,6 +49,12 @@
             <artifactId>pyx-rpc-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
+      
+		<dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-forms</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.google.gwt</groupId>
@@ -56,7 +62,7 @@
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
-        
+           
     </dependencies>
 
     <build>

@@ -138,6 +138,12 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return member;
     }
 
+    @Override
+    public IObject<?, ?> getMember(Path path) {
+        //TODO implement
+        return null;
+    }
+
     /**
      * Use data map directly. No need to create Member
      */
@@ -148,6 +154,12 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
             return null;
         }
         return data.get(memberName);
+    }
+
+    @Override
+    public Object getMemberValue(Path path) {
+        //TODO implement
+        return null;
     }
 
     /**
@@ -163,6 +175,16 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @Override
     public List<Validator> getValidators(Path memberPath) {
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public OBJECT_TYPE cloneEntity() {
+        OBJECT_TYPE entity = EntityFactory.create((Class<OBJECT_TYPE>) getObjectClass());
+
+        //TODO use same map for now, do clone
+        entity.setValue(data);
+
+        return entity;
     }
 
     @Override

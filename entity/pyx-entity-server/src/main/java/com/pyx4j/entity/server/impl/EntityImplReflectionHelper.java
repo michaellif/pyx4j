@@ -52,7 +52,7 @@ public class EntityImplReflectionHelper {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends IObject<?, ?>> IEntity<T> lazyCreateMemberIEntity(SharedEntityHandler<?> implHandler, String name, Class<?> valueClass) {
+    private static <T extends IEntity<?>> IEntity<T> lazyCreateMemberIEntity(SharedEntityHandler<?> implHandler, String name, Class<?> valueClass) {
         String handlerClassName = valueClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass;
         try {
