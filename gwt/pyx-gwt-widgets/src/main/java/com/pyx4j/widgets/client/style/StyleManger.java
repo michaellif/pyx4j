@@ -20,12 +20,17 @@
  */
 package com.pyx4j.widgets.client.style;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.StyleInjector;
 
 public class StyleManger {
+
+    private static final Logger log = LoggerFactory.getLogger(StyleManger.class);
 
     private static StyleManger instance;
 
@@ -49,6 +54,9 @@ public class StyleManger {
         }
 
         cleanUpInjectedStyles();
+
+        log.debug(stylesString.toString());
+
         StyleInjector.inject(stylesString.toString());
     }
 

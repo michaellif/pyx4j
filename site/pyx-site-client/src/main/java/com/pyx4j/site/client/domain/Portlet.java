@@ -22,10 +22,13 @@ package com.pyx4j.site.client.domain;
 
 public class Portlet {
 
-    public String html;
+    public String capture;
 
-    public Portlet(String html) {
-        this.html = html;
+    public String body;
+
+    public Portlet(String capture, String body) {
+        this.capture = capture;
+        this.body = body;
     }
 
 }

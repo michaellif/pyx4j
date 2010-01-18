@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -42,7 +43,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
@@ -59,6 +59,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
+    private String siteName;
+    
     private Page homePage;
 
     private final List<Page> pages = new ArrayList<Page>();
@@ -93,7 +95,10 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private static InlineWidgetFactory widgetFactory = GWT.create(InlineWidgetFactory.class);
 
-    public SitePanel() {
+    public SitePanel(String siteName) {
+    	
+    	this.siteName = siteName;
+    	
         setSize("100%", "100%");
 
         add(createContentPanel());
@@ -111,7 +116,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
         createFooterCopirightPanel();
 
-        StyleManger.installTheme(darkTheme);
+        StyleManger.installTheme(lightTheme);
 
         History.addValueChangeHandler(this);
 
@@ -168,6 +173,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         }
 
         primaryNavigationBar.setSelected(page.uri);
+        
+        Window.setTitle(siteName+" "+page.caption);
 
     }
 
@@ -260,7 +267,7 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
     }
 
     private Widget createPortletWidget(Portlet portlet) {
-        return new HtmlPortletWidget(portlet);
+        return new PortletWidget(portlet);
     }
 
     protected SimplePanel createMainSectionPanel() {

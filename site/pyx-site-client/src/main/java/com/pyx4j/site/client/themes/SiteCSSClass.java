@@ -59,4 +59,9 @@ public enum SiteCSSClass {
 
     //Html Portlet
     pyx4j_Site_HtmlPortlet,
+    
+    pyx4j_Site_HtmlPortletHeader,
+
+    pyx4j_Site_HtmlPortletBody,
+
 }

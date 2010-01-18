@@ -26,9 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
-
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.Site;
 
 /**
@@ -40,7 +38,7 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        SitePanel pagePanel = new SitePanel();
+        SitePanel pagePanel = new SitePanel("PYX4J Site Demo");
 
         Site staticProperties = new Site();
 

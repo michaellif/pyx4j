@@ -21,47 +21,28 @@
 package com.pyx4j.site.client.themes.light;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.client.themes.SiteTheme;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
-public class LightTheme extends WindowsTheme {
+public class LightTheme extends SiteTheme {
 
     @Override
-    protected void initStyles() {
-        super.initStyles();
-        initGeneralStyles();
-        initSitePanelStyles();
-        initContentPanelStyles();
-        initHeaderStyles();
-        initMainPanelStyles();
-        initFooterStyles();
-        initHeaderCaptionsStyles();
-        initLogoStyles();
-        initPrimaryNavigStyles();
-        initHeaderLinksStyles();
-        initFooterLinksStyles();
-        initFooterCopyrightStyles();
-        initHtmlPortletStyles();
-
-    }
-
-    private void initGeneralStyles() {
-        Style style = new Style("html");
-        style.addProperty("overflow-y", "scroll");
-        addStyle(style);
-        style = new Style("body");
+    protected void initGeneralStyles() {
+        super.initGeneralStyles();
+        Style style = new Style("body");
         style.addProperty("background", "#F8F8F8");
-        style.addProperty("margin", "0");
         addStyle(style);
     }
 
-    private void initSitePanelStyles() {
+    @Override
+    protected void initSitePanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
         addStyle(style);
     }
 
-    private void initContentPanelStyles() {
+    @Override
+    protected void initContentPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_ContentPanel.name());
         style.addProperty("width", "968px");
         style.addProperty("padding-top", "20px");
@@ -69,6 +50,7 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
         style.addProperty("background", "transparent url(images/container-header.gif) no-repeat");
@@ -76,20 +58,25 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initMainPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainPanel.name());
         style.addProperty("background", "transparent url(images/container-main.gif) repeat-y");
+        style.addProperty("padding-left", "20px");
+        style.addProperty("padding-right", "20px");
         addStyle(style);
     }
 
-    private void initFooterStyles() {
+    @Override
+    protected void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
         style.addProperty("background", "transparent url(images/container-footer.gif) no-repeat 50% 100%");
         style.addProperty("height", "30px");
         addStyle(style);
     }
 
-    private void initHeaderCaptionsStyles() {
+    @Override
+    protected void initHeaderCaptionsStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
         style.addProperty("color", "gray");
         style.addProperty("margin-left", "20px");
@@ -99,6 +86,7 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initLogoStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Logo.name());
         style.addProperty("margin-left", "20px");
@@ -106,6 +94,7 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initPrimaryNavigStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "20px");
@@ -147,6 +136,7 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initHeaderLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "700px");
@@ -170,6 +160,7 @@ public class LightTheme extends WindowsTheme {
 
     }
 
+    @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
         style.addProperty("margin-left", "550px");
@@ -193,6 +184,7 @@ public class LightTheme extends WindowsTheme {
 
     }
 
+    @Override
     protected void initFooterCopyrightStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         style.addProperty("margin-left", "20px");
@@ -201,17 +193,26 @@ public class LightTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initHtmlPortletStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
         style.addProperty("margin", "20px");
-        style.addProperty("width", "180px");
+        style.addProperty("width", "230px");
         style.addProperty("padding", "5px");
-        style.addProperty("border", "1px solid #ffae5e");
-        style.addProperty("color", "black");
+        style.addProperty("color", "gray");
         style.addProperty("text-align", "center");
         addStyle(style);
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name() + " h3");
         style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
+        style.addProperty("color", "#ff6600");
+        style.addProperty("padding", "5px");
+        style.addProperty("background", "transparent url(images/portlet-border-header.gif) no-repeat 0% 0%");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
+        style.addProperty("padding", "5px");
+        style.addProperty("background", "transparent url(images/portlet-border-body.gif) no-repeat 0% 100%");
         addStyle(style);
     }
 

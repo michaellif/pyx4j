@@ -21,11 +21,11 @@
 package com.pyx4j.site.client.themes.dark;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.client.themes.SiteTheme;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
-public class DarkTheme extends WindowsTheme {
+public class DarkTheme extends SiteTheme {
 
     @Override
     protected void initThemeColors() {
@@ -44,41 +44,22 @@ public class DarkTheme extends WindowsTheme {
     }
 
     @Override
-    protected void initStyles() {
-        super.initStyles();
-        initGeneralStyles();
-        initSitePanelStyles();
-        initContentPanelStyles();
-        initHeaderStyles();
-        initMainPanelStyles();
-        initFooterStyles();
-        initHeaderCaptionsStyles();
-        initLogoStyles();
-        initPrimaryNavigStyles();
-        initHeaderLinksStyles();
-        initFooterLinksStyles();
-        initFooterCopyrightStyles();
-        initHtmlPortletStyles();
-
-    }
-
-    private void initGeneralStyles() {
-        Style style = new Style("html");
-        style.addProperty("overflow-y", "scroll");
-        addStyle(style);
-        style = new Style("body");
+    protected void initGeneralStyles() {
+        super.initGeneralStyles();
+        Style style = new Style("body");
         style.addProperty("background", "#21262C");
-        style.addProperty("margin", "0");
         addStyle(style);
     }
 
-    private void initSitePanelStyles() {
+    @Override
+    protected void initSitePanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
         style.addProperty("background", "url(images/background.jpg) repeat-x");
         addStyle(style);
     }
 
-    private void initContentPanelStyles() {
+    @Override
+    protected void initContentPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_ContentPanel.name());
         style.addProperty("width", "924px");
         style.addProperty("padding-top", "0px");
@@ -86,13 +67,15 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
-    private void initHeaderStyles() {
+    @Override
+    protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
         style.addProperty("background", "url(images/topHdr_ecommerce.jpg) no-repeat");
         style.addProperty("height", "250px");
         addStyle(style);
     }
 
+    @Override
     protected void initMainPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainPanel.name());
         style.addProperty("background", "white");
@@ -100,14 +83,16 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
-    private void initFooterStyles() {
+    @Override
+    protected void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
         style.addProperty("background", "url(images/topHdr_ecommerce.jpg) no-repeat 50% 100%");
         style.addProperty("height", "35px");
         addStyle(style);
     }
 
-    private void initHeaderCaptionsStyles() {
+    @Override
+    protected void initHeaderCaptionsStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
         style.addProperty("color", "#ff6600");
         style.addProperty("margin-left", "270px");
@@ -116,6 +101,7 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initLogoStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Logo.name());
         style.addProperty("margin-left", "20px");
@@ -123,6 +109,7 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initPrimaryNavigStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "0px");
@@ -158,6 +145,7 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initHeaderLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "700px");
@@ -181,6 +169,7 @@ public class DarkTheme extends WindowsTheme {
 
     }
 
+    @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
         style.addProperty("margin-left", "550px");
@@ -204,6 +193,7 @@ public class DarkTheme extends WindowsTheme {
 
     }
 
+    @Override
     protected void initFooterCopyrightStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         style.addProperty("margin-left", "20px");
@@ -212,12 +202,22 @@ public class DarkTheme extends WindowsTheme {
         addStyle(style);
     }
 
+    @Override
     protected void initHtmlPortletStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
         style.addProperty("margin", "15px");
         style.addProperty("width", "150px");
-        style.addProperty("background", "url(images/header.gif) no-repeat top 80%");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
+        style.addProperty("background", "transparent url(images/header.gif) no-repeat bottom 80%");
+        style.addProperty("color", "gray");
+        style.addProperty("padding", "10px 5px");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
+        style.addProperty("padding", "5px");
         style.addProperty("color", "black");
+        style.addProperty("text-align", "center");
         addStyle(style);
     }
 
