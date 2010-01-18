@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.client.domain.Link;
-import com.pyx4j.site.client.domain.SiteStaticProperties;
+import com.pyx4j.site.client.domain.Site;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -42,7 +42,7 @@ public class SiteDemo implements EntryPoint {
 
         SitePanel pagePanel = new SitePanel();
 
-        SiteStaticProperties staticProperties = new SiteStaticProperties();
+        Site staticProperties = new Site();
 
         pagePanel.setLogoImage(staticProperties.logoUrl);
 
@@ -50,12 +50,12 @@ public class SiteDemo implements EntryPoint {
             pagePanel.addPage(staticProperties.pages.get(i), i == 0);
         }
 
-        for (Link link : staticProperties.headerLinks) {
-            pagePanel.addHeaderLink(link);
+        for (int i = 0; i < staticProperties.headerLinks.size(); i++) {
+            pagePanel.addHeaderLink(staticProperties.headerLinks.get(i), i != 0);
         }
 
-        for (Link link : staticProperties.footerLinks) {
-            pagePanel.addFooterLink(link);
+        for (int i = 0; i < staticProperties.footerLinks.size(); i++) {
+            pagePanel.addFooterLink(staticProperties.footerLinks.get(i), i != 0);
         }
 
         pagePanel.setFooterCopiright(staticProperties.footerCopiright);

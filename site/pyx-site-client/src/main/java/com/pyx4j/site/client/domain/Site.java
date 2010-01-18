@@ -23,7 +23,7 @@ package com.pyx4j.site.client.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SiteStaticProperties {
+public class Site {
 
     public String logoUrl;
 
@@ -35,7 +35,7 @@ public class SiteStaticProperties {
 
     public List<Page> pages = new ArrayList<Page>();
 
-    public SiteStaticProperties() {
+    public Site() {
 
     }
 

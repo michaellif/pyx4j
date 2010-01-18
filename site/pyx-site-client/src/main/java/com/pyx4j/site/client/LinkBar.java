@@ -82,15 +82,14 @@ public class LinkBar extends ComplexPanel {
 
     }
 
-    public void add(Link link) {
+    public void add(Link link, boolean separator) {
         LinkItem item = null;
-        boolean hasSeparator = LinkBar.this.getWidgetCount() != 0;
         if (link instanceof PageLink) {
             PageLink pageLink = (PageLink) link;
-            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri), hasSeparator);
+            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri), separator);
         } else if (link instanceof CommandLink) {
             CommandLink commandLink = (CommandLink) link;
-            item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), hasSeparator);
+            item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), separator);
         }
         ul.appendChild(item.getElement());
         add(item, ul);
@@ -102,6 +101,11 @@ public class LinkBar extends ComplexPanel {
         if (item != null) {
             remove(item);
         }
+    }
+
+    public void setVisible(Link link, boolean flag) {
+        LinkItem item = items.get(link);
+        item.setVisible(flag);
     }
 
     class LinkItemAnchor extends Anchor {

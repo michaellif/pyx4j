@@ -322,12 +322,16 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         addToHeaderPanel(headerLinkBar);
     }
 
-    public void addHeaderLink(Link link) {
-        headerLinkBar.add(link);
+    public void addHeaderLink(Link link, boolean separator) {
+        headerLinkBar.add(link, separator);
     }
 
     public void removeHeaderLink(Link link) {
         headerLinkBar.remove(link);
+    }
+
+    public void setVisibleHeaderLink(Link link, boolean flag) {
+        headerLinkBar.setVisible(link, flag);
     }
 
     protected void createFooterLinksPanel() {
@@ -335,8 +339,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         addToFooterPanel(footerLinkBar);
     }
 
-    public void addFooterLink(Link link) {
-        footerLinkBar.add(link);
+    public void addFooterLink(Link link, boolean separator) {
+        footerLinkBar.add(link, separator);
     }
 
     public void addPage(Page page) {

@@ -29,10 +29,10 @@ import com.pyx4j.site.client.domain.CommandLink;
 import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.PageLink;
 import com.pyx4j.site.client.domain.PageUri;
-import com.pyx4j.site.client.domain.SiteStaticProperties;
+import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class EasySite extends SiteStaticProperties {
+public class EasySite extends Site {
 
     public EasySite() {
 
