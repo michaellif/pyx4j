@@ -33,7 +33,7 @@ public interface AuthenticationServices {
 
     };
 
-    public interface Logout extends Service<VoidSerializable, VoidSerializable> {
+    public interface Logout extends Service<VoidSerializable, AuthenticationResponse> {
 
     };
 }
