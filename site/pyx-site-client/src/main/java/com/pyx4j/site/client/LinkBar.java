@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.domain.CommandLink;
+import com.pyx4j.site.client.domain.ExternalLink;
 import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.PageLink;
 import com.pyx4j.site.client.domain.PageUri;
@@ -90,6 +91,9 @@ public class LinkBar extends ComplexPanel {
         } else if (link instanceof CommandLink) {
             CommandLink commandLink = (CommandLink) link;
             item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), separator);
+        } else if (link instanceof ExternalLink) {
+            ExternalLink externalLink = (ExternalLink) link;
+            item = new LinkItem(new LinkItemAnchor(externalLink.html, externalLink.href), separator);
         }
         ul.appendChild(item.getElement());
         add(item, ul);
@@ -133,6 +137,11 @@ public class LinkBar extends ComplexPanel {
                 }
             });
 
+            init();
+        }
+
+        LinkItemAnchor(String html, String href) {
+            super(html, true, href);
             init();
         }
 
