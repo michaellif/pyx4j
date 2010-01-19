@@ -70,7 +70,10 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new SetHandler(this, name);
     }
 
-    private Map<String, Object> ensureData() {
+    /**
+     * Unsure that data is created before setting the value of member
+     */
+    private Map<String, Object> getOrCreateValue() {
         Map<String, Object> v = getValue();
         if (v == null) {
             setValue(v = new HashMap<String, Object>());
@@ -88,7 +91,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     public void setPrimaryKey(String pk) {
-        ensureData().put(PRIMARY_KEY, pk);
+        getOrCreateValue().put(PRIMARY_KEY, pk);
     }
 
     @Override
@@ -183,7 +186,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      */
     @Override
     public void setMemberValue(String memberName, Object value) {
-        ensureData().put(memberName, value);
+        getOrCreateValue().put(memberName, value);
     }
 
     //TODO
