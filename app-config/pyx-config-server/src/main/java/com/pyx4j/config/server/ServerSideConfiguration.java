@@ -48,7 +48,7 @@ public class ServerSideConfiguration {
 
     public static final ServerSideConfiguration instance() {
         // Fall back for Tests
-        if (ServerSideConfiguration.instance != null) {
+        if (ServerSideConfiguration.instance == null) {
             instance = new ServerSideConfiguration();
         }
         return instance;

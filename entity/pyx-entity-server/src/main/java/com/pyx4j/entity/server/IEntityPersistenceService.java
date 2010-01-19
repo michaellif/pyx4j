@@ -33,6 +33,12 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria);
 
+    public <T extends IEntity<?>> List<String> queryKeys(EntityCriteria<T> criteria);
+
     public void delete(IEntity<?> entity);
+
+    public void delete(Class<?> entityClass, String primaryKey);
+
+    public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria);
 
 }

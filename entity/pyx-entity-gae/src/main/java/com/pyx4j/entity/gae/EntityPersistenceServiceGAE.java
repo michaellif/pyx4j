@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.gae;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -36,6 +37,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
@@ -90,6 +92,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                     value = new Text((String) value);
                 }
+            } else if (value instanceof Enum<?>) {
+                value = ((Enum<?>) value).name();
             }
             entity.setProperty(me.getKey(), value);
         }
@@ -122,6 +126,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastore.delete(KeyFactory.stringToKey(iEntity.getPrimaryKey()));
     }
 
+    @Override
+    public void delete(Class<?> entityClass, String primaryKey) {
+        datastore.delete(KeyFactory.stringToKey(primaryKey));
+    }
+
     private void updateIEntity(IEntity<?> iEntity, Entity entity) {
         iEntity.setPrimaryKey(KeyFactory.keyToString(entity.getKey()));
         for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
@@ -136,6 +145,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     retrieveEntity(childIEntity, (Key) value);
                 }
                 continue;
+            } else if (value instanceof String) {
+                Class<?> cls = iEntity.getMemberMeta(me.getKey()).getValueClass();
+                if (Enum.class.isAssignableFrom(cls)) {
+                    value = Enum.valueOf((Class<Enum>) cls, (String) value);
+                }
             }
             iEntity.setMemberValue(me.getKey(), value);
         }
@@ -193,20 +207,31 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void addFilter(Query query, PropertyCriterion propertyCriterion) {
-        query.addFilter(propertyCriterion.getPropertyName(), operator(propertyCriterion.getRestriction()), propertyCriterion.getValue());
+    public static Object datastoreValue(Serializable value) {
+        if (value instanceof Enum<?>) {
+            return ((Enum<?>) value).name();
+        } else if (value instanceof IEntity<?>) {
+            return KeyFactory.stringToKey(((IEntity<?>) value).getPrimaryKey());
+        } else {
+            return value;
+        }
     }
 
-    @Override
-    public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria) {
-        Class<T> entityClass;
+    private void addFilter(Query query, PropertyCriterion propertyCriterion) {
+        query.addFilter(propertyCriterion.getPropertyName(), operator(propertyCriterion.getRestriction()), datastoreValue(propertyCriterion.getValue()));
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends IEntity<?>> Class<T> entityClass(EntityCriteria<T> criteria) {
         try {
-            entityClass = (Class<T>) Class.forName(criteria.getDomainName(), true, Thread.currentThread().getContextClassLoader());
+            return (Class<T>) Class.forName(criteria.getDomainName(), true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Not an Entity");
         }
-        Query query = new Query(getIEntityKind(entityClass));
+    }
 
+    private <T extends IEntity<?>> Query buildQuery(Class<T> entityClass, EntityCriteria<T> criteria) {
+        Query query = new Query(getIEntityKind(entityClass));
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
@@ -214,7 +239,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
             }
         }
+        return query;
+    }
 
+    @Override
+    public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria) {
+        Class<T> entityClass = entityClass(criteria);
+        Query query = buildQuery(entityClass, criteria);
         PreparedQuery pq = datastore.prepare(query);
 
         List<T> rc = new Vector<T>();
@@ -224,5 +255,31 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             rc.add(iEntity);
         }
         return rc;
+    }
+
+    public <T extends IEntity<?>> List<String> queryKeys(EntityCriteria<T> criteria) {
+        Class<T> entityClass = entityClass(criteria);
+        Query query = buildQuery(entityClass, criteria);
+        query.setKeysOnly();
+        PreparedQuery pq = datastore.prepare(query);
+
+        List<String> rc = new Vector<String>();
+        for (Entity entity : pq.asIterable()) {
+            rc.add(KeyFactory.keyToString(entity.getKey()));
+        }
+        return rc;
+    }
+
+    public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria) {
+        Class<T> entityClass = entityClass(criteria);
+        Query query = buildQuery(entityClass, criteria);
+        query.setKeysOnly();
+        PreparedQuery pq = datastore.prepare(query);
+
+        List<Key> keys = new Vector<Key>();
+        for (Entity entity : pq.asIterable()) {
+            keys.add(entity.getKey());
+        }
+        datastore.delete(keys);
     }
 }

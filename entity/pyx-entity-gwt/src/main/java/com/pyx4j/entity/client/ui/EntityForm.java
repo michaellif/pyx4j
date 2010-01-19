@@ -109,4 +109,8 @@ public class EntityForm<E extends IEntity<?>> {
         }
     }
 
+    public E getValue() {
+        return editableEntity;
+    }
+
 }

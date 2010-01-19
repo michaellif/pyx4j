@@ -51,6 +51,9 @@ public class RemoteServiceImpl implements RemoteService {
                 clazz = serviceFactory.getServiceClass(serviceInterfaceClassName);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
+            } catch (Throwable t) {
+                log.error("Service call error", t);
+                throw new RuntimeException("Fatal system error");
             }
             ServiceRegistry.register(serviceInterfaceClassName, clazz);
         }
