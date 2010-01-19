@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.meta;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IObject;
@@ -66,6 +67,8 @@ public interface MemberMeta {
     public int getStringLength();
 
     public List<Validator> getValidators();
+
+    public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass);
 
     // --- TODO ---
     //    public boolean isPrimitive();

@@ -20,37 +20,92 @@
  */
 package com.pyx4j.entity.client.ui;
 
-import com.google.gwt.dev.util.collect.HashMap;
+import java.util.HashMap;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
+import com.pyx4j.entity.annotations.validator.Password;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CPanel;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CTextField;
 
-public class EntityForm extends CPanel {
+public class EntityForm<E extends IEntity<?>> {
 
-    private IEntity<IEntity<?>> origEntity;
+    private final E metaEntity;
 
-    private IEntity<IEntity<?>> editableEntity;
+    private E origEntity;
 
-    private final HashMap<CEditableComponent<?>, Path> binding = new HashMap<CEditableComponent<?>, Path>();
+    private E editableEntity;
 
-    public EntityForm(Layout layout) {
-        super(layout);
-    }
+    private final HashMap<CEditableComponent<?>, String> binding = new HashMap<CEditableComponent<?>, String>();
 
-    public void bind(CEditableComponent<?> component, Path path) {
-        binding.put(component, path);
+    @SuppressWarnings("unchecked")
+    private final ValueChangeHandler valuePropagation;
+
+    public static <T extends IEntity<?>> EntityForm<T> create(Class<T> clazz) {
+        return new EntityForm<T>(clazz);
     }
 
     @SuppressWarnings("unchecked")
-    public void populate(IEntity<IEntity<?>> entity) {
+    private class ValuePropagation implements ValueChangeHandler {
+
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            String memberName = binding.get(event.getSource());
+            if ((memberName != null) && (editableEntity != null)) {
+                editableEntity.setMemberValue(memberName, event.getValue());
+            }
+        }
+    }
+
+    public EntityForm(Class<E> clazz) {
+        metaEntity = EntityFactory.create(clazz);
+        valuePropagation = new ValuePropagation();
+    }
+
+    public E meta() {
+        return metaEntity;
+    }
+
+    public CEditableComponent<?> create(IObject<?, ?> member) {
+        MemberMeta mm = member.getMeta();
+        CEditableComponent<?> comp;
+        if (mm.getValueClass().equals(String.class)) {
+            if (mm.isValidatorAnnotationPresent(Password.class)) {
+                comp = new CPasswordTextField(mm.getCaption());
+            } else {
+                comp = new CTextField(mm.getCaption());
+            }
+        } else {
+            comp = new CTextField(mm.getCaption());
+        }
+        bind(comp, mm.getFieldName());
+        return comp;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void bind(CEditableComponent<?> component, String path) {
+        binding.put(component, path);
+        component.addValueChangeHandler(valuePropagation);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void populate(E entity) {
         this.origEntity = entity;
-        editableEntity = (IEntity<IEntity<?>>) entity.cloneEntity();
+        if (entity != null) {
+            this.editableEntity = (E) entity.cloneEntity();
+        } else {
+            this.editableEntity = EntityFactory.create((Class<E>) meta().getObjectClass());
+        }
 
         for (CEditableComponent component : binding.keySet()) {
-            Path path = binding.get(component);
-            component.setValue(editableEntity.getMember(path).getValue());
+            String memberName = binding.get(component);
+            component.setValue(editableEntity.getMemberValue(memberName));
         }
     }
 

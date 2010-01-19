@@ -22,6 +22,7 @@ package com.pyx4j.entity.client;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -35,10 +36,11 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
      * ensure IEntityImplementations are serialized by RPC.
      */
     public static void ensureIEntityImplementations() {
+        EntityFactory.setImplementation(new ClientEntityFactory());
         if (!GWT.isScript()) {
             // Hosted mode initialization needs to call GWT.create(..); 
             try {
-                new ClientEntityFactory().create(null);
+                EntityFactory.create(null);
             } catch (NullPointerException ignore) {
             }
         }

@@ -45,6 +45,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
@@ -263,7 +264,8 @@ public class EntityFactoryGenerator extends Generator {
             writer.println("if (\"" + method.getName() + "\".equals(memberName)) {");
             writer.indent();
 
-            writer.print("return new ");
+            writer.print(ClientMemberMetaImpl.class.getSimpleName());
+            writer.print(" mm = new ");
             writer.print(ClientMemberMetaImpl.class.getSimpleName());
             writer.print("(");
 
@@ -333,6 +335,15 @@ public class EntityFactoryGenerator extends Generator {
             }
 
             writer.println(");");
+
+            if (method.isAnnotationPresent(Password.class)) {
+                writer.print("mm.addValidatorAnnotation(");
+                writer.print(Password.class.getName());
+                writer.print(".class");
+                writer.println(");");
+            }
+
+            writer.println("return mm;");
             writer.outdent();
             writer.println("}");
         }

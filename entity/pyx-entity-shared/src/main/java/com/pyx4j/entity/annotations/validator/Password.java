@@ -14,23 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 18, 2010
+ * Created on Jan 19, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.security.rpc;
+package com.pyx4j.entity.annotations.validator;
 
-import com.pyx4j.entity.annotations.validator.Email;
-import com.pyx4j.entity.annotations.validator.Password;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface AuthenticationRequest extends IEntity<AuthenticationRequest> {
-
-    @Email
-    IPrimitive<String> email();
-
-    @Password
-    IPrimitive<String> password();
+@Target( { ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Password {
 
 }

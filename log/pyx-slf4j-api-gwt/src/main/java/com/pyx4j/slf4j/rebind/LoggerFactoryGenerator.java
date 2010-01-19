@@ -53,7 +53,7 @@ public class LoggerFactoryGenerator extends Generator {
                 for (JClassType type : oracle.getTypes()) {
                     if ((type.isClass() != null) && type.isAssignableTo(factoryType) && (!type.isAbstract())) {
                         if (logOnce) {
-                            logger.log(TreeLogger.INFO, "Use LoggerFactory class: " + type.getQualifiedSourceName());
+                            logger.log(TreeLogger.DEBUG, "Use LoggerFactory class: " + type.getQualifiedSourceName());
                             logOnce = false;
                         }
                         return type.getQualifiedSourceName();

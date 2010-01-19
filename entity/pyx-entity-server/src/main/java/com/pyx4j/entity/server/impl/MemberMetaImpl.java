@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server.impl;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -39,6 +40,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
 public class MemberMetaImpl implements MemberMeta {
+
+    private final Method method;
 
     private final String fieldName;
 
@@ -66,6 +69,7 @@ public class MemberMetaImpl implements MemberMeta {
 
     @SuppressWarnings("unchecked")
     public MemberMetaImpl(Method method) {
+        this.method = method;
         objectClass = (Class<? extends IObject<?, ?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
@@ -158,6 +162,11 @@ public class MemberMetaImpl implements MemberMeta {
     public List<Validator> getValidators() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        return method.isAnnotationPresent(annotationClass);
     }
 
 }

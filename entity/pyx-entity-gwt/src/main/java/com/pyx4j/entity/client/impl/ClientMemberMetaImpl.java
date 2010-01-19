@@ -20,7 +20,10 @@
  */
 package com.pyx4j.entity.client.impl;
 
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -51,6 +54,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
      * See com.pyx4j.entity.annotations.StringLength
      */
     private final int stringLength;
+
+    private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass, String fieldName, String caption, String description,
             boolean persistenceTransient, boolean detached, boolean ownedRelationships, int stringLength) {
@@ -115,6 +120,22 @@ public class ClientMemberMetaImpl implements MemberMeta {
     public List<Validator> getValidators() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public void addValidatorAnnotation(Class<? extends Annotation> annotationClass) {
+        if (annotations == null) {
+            annotations = new HashSet<Class<?>>();
+        }
+        annotations.add(annotationClass);
+    }
+
+    @Override
+    public boolean isValidatorAnnotationPresent(Class<? extends Annotation> annotationClass) {
+        if (annotations == null) {
+            return false;
+        } else {
+            return annotations.contains(annotationClass);
+        }
     }
 
 }

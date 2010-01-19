@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.gwt.NativeForm;
 
 public class CForm extends CContainer {
@@ -61,6 +63,12 @@ public class CForm extends CContainer {
         super(title);
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
+    }
+
+    public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {
+        CForm form = new CForm(allignment);
+        form.setComponents(components);
+        return (Widget) form.initNativeComponent();
     }
 
     public void setComponents(CComponent<?>[][] components) {
