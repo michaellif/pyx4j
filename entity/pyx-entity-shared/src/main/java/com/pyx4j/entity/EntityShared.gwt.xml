@@ -3,6 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
 	<inherits name='com.pyx4j.security.SecurityShared'/>
+	<inherits name='com.pyx4j.Commons'/>
 	<source path="annotations"/>
 	<source path="security"/>
 	<source path="shared"/>
