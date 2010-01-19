@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
@@ -40,7 +41,12 @@ public class FactoryTest extends InitializerTestCase {
         assertEquals("name Value", "Canada", country.name().getValue());
 
         Address address = EntityFactory.create(Address.class);
+        address.streetName().setValue("Street");
         address.country().set(country);
+
+        System.out.println(((IFullDebug) country).debugString());
+        System.out.println(((IFullDebug) address).debugString());
+        System.out.println(((IFullDebug) (address.country())).debugString());
 
         assertEquals("address.country Value", "Canada", address.country().name().getValue());
     }

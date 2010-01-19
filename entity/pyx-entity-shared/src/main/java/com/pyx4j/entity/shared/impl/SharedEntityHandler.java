@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -36,7 +37,7 @@ import com.pyx4j.entity.shared.validator.Validator;
 
 @SuppressWarnings("serial")
 public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements
-        IEntity<OBJECT_TYPE> {
+        IEntity<OBJECT_TYPE>, IFullDebug {
 
     private Map<String, Object> data;
 
@@ -69,34 +70,47 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new SetHandler(this, name);
     }
 
-    private void ensureData() {
-        if (data == null) {
-            setValue(new HashMap<String, Object>());
+    private Map<String, Object> ensureData() {
+        Map<String, Object> v = getValue();
+        if (v == null) {
+            setValue(v = new HashMap<String, Object>());
         }
+        return v;
     }
 
     public String getPrimaryKey() {
-        if (data == null) {
+        Map<String, Object> v = getValue();
+        if (v == null) {
             return null;
+        } else {
+            return (String) v.get(PRIMARY_KEY);
         }
-        return (String) data.get(PRIMARY_KEY);
     }
 
     public void setPrimaryKey(String pk) {
-        ensureData();
-        data.put(PRIMARY_KEY, pk);
+        ensureData().put(PRIMARY_KEY, pk);
     }
 
     @Override
     public Map<String, Object> getValue() {
-        return data;
+        if (getParent() != null) {
+            Map<String, Object> v = getParent().getValue();
+            if (v == null) {
+                return null;
+            } else {
+                return (Map<String, Object>) v.get(getFieldName());
+            }
+        } else {
+            return data;
+        }
     }
 
     @Override
     public void setValue(Map<String, Object> value) {
-        this.data = value;
         if (getParent() != null) {
             getParent().getValue().put(getFieldName(), value);
+        } else {
+            this.data = value;
         }
     }
 
@@ -150,10 +164,12 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @Override
     public Object getMemberValue(String memberName) {
         // Like Elvis operator
-        if (data == null) {
+        Map<String, Object> v = getValue();
+        if (v == null) {
             return null;
+        } else {
+            return v.get(memberName);
         }
-        return data.get(memberName);
     }
 
     @Override
@@ -167,8 +183,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      */
     @Override
     public void setMemberValue(String memberName, Object value) {
-        ensureData();
-        data.put(memberName, value);
+        ensureData().put(memberName, value);
     }
 
     //TODO
@@ -180,11 +195,58 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @SuppressWarnings("unchecked")
     public OBJECT_TYPE cloneEntity() {
         OBJECT_TYPE entity = EntityFactory.create((Class<OBJECT_TYPE>) getObjectClass());
-
-        //TODO use same map for now, do clone
-        entity.setValue(data);
-
+        Map<String, Object> v = getValue();
+        if (v != null) {
+            Map<String, Object> data2 = new HashMap<String, Object>();
+            cloneMap(v, data2);
+            entity.setValue(data2);
+        }
         return entity;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void cloneMap(Map<String, Object> src, Map<String, Object> dst) {
+        for (Map.Entry<String, Object> me : src.entrySet()) {
+            if (me.getValue() instanceof Map<?, ?>) {
+                Map<String, Object> data2 = new HashMap<String, Object>();
+                cloneMap((Map<String, Object>) me.getValue(), data2);
+                dst.put(me.getKey(), data2);
+            } else {
+                dst.put(me.getKey(), me.getValue());
+            }
+        }
+    }
+
+    private void dumpMap(StringBuilder b, Map<String, Object> map) {
+        boolean first = true;
+        for (Map.Entry<String, Object> me : map.entrySet()) {
+            if (!first) {
+                b.append(' ');
+            } else {
+                first = false;
+            }
+            b.append(me.getKey()).append("=");
+            if (me.getValue() instanceof Map<?, ?>) {
+                b.append('{');
+                dumpMap(b, (Map<String, Object>) me.getValue());
+                b.append('}');
+            } else {
+                b.append(me.getValue());
+            }
+        }
+    }
+
+    @Override
+    public String debugString() {
+        StringBuilder b = new StringBuilder();
+        b.append(getObjectClass().getName()).append(" ");
+        Map<String, Object> v = getValue();
+        if (v != null) {
+            dumpMap(b, v);
+        } else {
+            b.append("{null}");
+        }
+        return b.toString();
     }
 
     @Override
