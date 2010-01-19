@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class AclBuilder {
+public class AclBuilder implements AclCreator {
 
     private static class PermissionsGroup {
 
@@ -43,49 +43,6 @@ public class AclBuilder {
             permissions = Collections.unmodifiableSet(permissions);
             restrictions = Collections.unmodifiableSet(restrictions);
         }
-    }
-
-    private static class AclImpl implements Acl {
-
-        private final Set<Behavior> behaviors;
-
-        private final Set<Permission> permissions;
-
-        private final Set<Restriction> restrictions;
-
-        private AclImpl(Set<Behavior> behaviors, Set<Permission> permissions, Set<Restriction> restrictions) {
-            super();
-            this.behaviors = behaviors;
-            this.permissions = permissions;
-            this.restrictions = restrictions;
-        }
-
-        @Override
-        public boolean checkBehavior(Behavior behavior) {
-            return behaviors.contains(behavior);
-        }
-
-        @Override
-        //TODO Optimize by Permission.class
-        public boolean checkPermission(Permission permission) {
-            for (Permission p : permissions) {
-                if (p.implies(permission)) {
-                    for (Restriction r : restrictions) {
-                        if (r.implies(permission)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public Set<Behavior> getBehaviors() {
-            return behaviors;
-        }
-
     }
 
     private Map<Behavior, PermissionsGroup> groups = new HashMap<Behavior, PermissionsGroup>();
@@ -117,12 +74,13 @@ public class AclBuilder {
         }
     }
 
+    @Override
     public Acl createAcl(Set<Role> roles) {
         if (!frozen) {
             throw new RuntimeException("ACL has not been frosen");
         }
         if ((roles == null) || (roles.size() == 0)) {
-            return new AclImpl(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions);
+            return new AclSerializable(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions);
         }
         PermissionsGroup g = new PermissionsGroup();
         g.add(global);
@@ -139,10 +97,9 @@ public class AclBuilder {
             if (bg != null) {
                 g.add(bg);
             }
-
         }
         g.freeze();
-        return new AclImpl(Collections.unmodifiableSet(behaviors), g.permissions, g.restrictions);
+        return new AclSerializable(Collections.unmodifiableSet(behaviors), g.permissions, g.restrictions);
     }
 
     protected void grant(Permission permission) {

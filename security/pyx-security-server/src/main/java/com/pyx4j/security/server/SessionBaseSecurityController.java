@@ -20,29 +20,32 @@
  */
 package com.pyx4j.security.server;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.Acl;
-import com.pyx4j.security.shared.AclBuilder;
-import com.pyx4j.security.shared.AllPermissions;
+import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
 
 public class SessionBaseSecurityController extends SecurityController {
 
-    //TODO implement something
-    private final AclBuilder ab;
+    private final AclCreator aclCreator;
 
     public SessionBaseSecurityController() {
-        ab = new AclBuilder() {
-            {
-                grant(new AllPermissions());
-                freeze();
-            }
-        };
-
+        AclCreator ac = ServerSideConfiguration.instance().getAclCreator();
+        if (ac == null) {
+            ac = new AclCreatorAllowAll();
+        }
+        aclCreator = ac;
     }
 
     @Override
     public Acl getAcl() {
-        return ab.createAcl(null);
+        Acl userAcl = Context.getVisit().getAcl();
+        if (userAcl == null) {
+            return aclCreator.createAcl(null);
+        } else {
+            return userAcl;
+        }
     }
 
 }

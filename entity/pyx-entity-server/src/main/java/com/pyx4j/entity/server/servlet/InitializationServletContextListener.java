@@ -22,10 +22,13 @@ package com.pyx4j.entity.server.servlet;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,6 +39,20 @@ public class InitializationServletContextListener implements ServletContextListe
     public void contextInitialized(ServletContextEvent sce) {
         try {
             EntityFactory.setImplementation(new ServerEntityFactory());
+
+            String configClass = sce.getServletContext().getInitParameter(ServerSideConfiguration.class.getName());
+            if (CommonsStringUtils.isStringSet(configClass)) {
+                try {
+                    ServerSideConfiguration.setInstance((ServerSideConfiguration) Class.forName(configClass).newInstance());
+                } catch (Throwable e) {
+                    Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
+                    log.error("ServerSideConfiguration creation error", e);
+                    throw new ServletException("ServerSideConfiguration not avalable");
+                }
+            } else {
+                ServerSideConfiguration.setInstance(new ServerSideConfiguration());
+            }
+
             EntityImplGenerator.generate();
         } catch (Throwable e) {
             Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);

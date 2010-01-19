@@ -25,6 +25,7 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;

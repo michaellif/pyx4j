@@ -29,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.rpc.shared.RemoteService;
 
 @SuppressWarnings("serial")
@@ -52,6 +54,9 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                     throw new ServletException("RPC ServiceFactory not avalable");
                 }
             }
+        }
+        if (serviceFactory == null) {
+            serviceFactory = ServerSideConfiguration.instance().getRPCServiceFactory();
         }
         if (serviceFactory == null) {
             serviceFactory = new ReflectionServiceFactory();

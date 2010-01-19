@@ -14,16 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on Jan 19, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.rpc.server;
+package com.pyx4j.security.server;
 
-import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.security.shared.AclBuilder;
+import com.pyx4j.security.shared.AllPermissions;
 
-public interface IServiceFactory {
+/**
+ * Default AccessControlList
+ */
+public class AclCreatorAllowAll extends AclBuilder {
 
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException;
+    public AclCreatorAllowAll() {
+        grant(new AllPermissions());
+        freeze();
+    }
 
 }

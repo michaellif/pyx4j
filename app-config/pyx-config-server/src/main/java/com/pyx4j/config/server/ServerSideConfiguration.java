@@ -20,6 +20,63 @@
  */
 package com.pyx4j.config.server;
 
-public abstract class ServerSideConfiguration {
+import java.util.List;
+
+import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.security.shared.AclCreator;
+
+/**
+ * All methods can return null to use default implementation in framework.
+ * 
+ * This is the main configuration class you should override in application.
+ * 
+ * Example web.xml
+ * 
+ * <pre>
+ * <web-app>
+ *   ....
+ *  <context-param>
+ *      <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
+ *      <param-value>com.mycorp.server.MyServerSideConfiguration</param-value>
+ *  </context-param>
+ *   ....
+ * </pre>
+ */
+public class ServerSideConfiguration {
+
+    private static ServerSideConfiguration instance;
+
+    public static final ServerSideConfiguration instance() {
+        // Fall back for Tests
+        if (ServerSideConfiguration.instance != null) {
+            instance = new ServerSideConfiguration();
+        }
+        return instance;
+    }
+
+    public static final void setInstance(ServerSideConfiguration instance) {
+        if (ServerSideConfiguration.instance != null) {
+            throw new Error("Can't redefine ServerSideConfiguration");
+        }
+        ServerSideConfiguration.instance = instance;
+    }
+
+    public IServiceFactory getRPCServiceFactory() {
+        return null;
+    }
+
+    /**
+     * @return empty List to avoid Entity Implementations creation.
+     */
+    public List<String> findEntityClasses() {
+        return null;
+    }
+
+    /**
+     * Default is Allow All Access Control List
+     */
+    public AclCreator getAclCreator() {
+        return null;
+    }
 
 }
