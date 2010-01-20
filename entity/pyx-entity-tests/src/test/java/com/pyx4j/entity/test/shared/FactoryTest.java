@@ -114,6 +114,10 @@ public class FactoryTest extends InitializerTestCase {
         employee3.setPrimaryKey("key2");
         assertEquals("same key (emp2 and emp3)", employee2, employee3);
         assertTrue("contains(emp3(emp2))", department.employees().contains(employee3));
+
+        employee2.setPrimaryKey("key2x");
+        employee3.setPrimaryKey("key2x");
+        assertTrue("contains mod Key(emp3(emp2))", department.employees().contains(employee3));
     }
 
     public void testPathCalculation() {

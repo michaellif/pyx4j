@@ -21,16 +21,26 @@
 package com.pyx4j.entity.shared.impl;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
 public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
+
+    private static class ElementsComparator implements Comparator<Map<String, ?>> {
+
+        @Override
+        public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+            return o1.equals(o2) ? 0 : (o1.hashCode() - o2.hashCode());
+        }
+
+    }
 
     public SetHandler(IEntity<?> parent, String fieldName) {
         super(ISet.class, parent, fieldName);
@@ -72,7 +82,8 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
     public boolean add(OBJECT_TYPE entity) {
         Set<Map<String, ?>> value = getValue();
         if (value == null) {
-            value = new HashSet<Map<String, ?>>();
+            // Use TreeSet for implementation to allow for modifiable Objects Properties (hashCode) after they are added to Set
+            value = new TreeSet<Map<String, ?>>(new ElementsComparator());
             setValue(value);
         }
         return value.add(entity.getValue());
