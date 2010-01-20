@@ -116,32 +116,36 @@ public class LinkBar extends ComplexPanel {
 
         LinkItemAnchor(String html, final PageUri uri) {
             super(html, true, "javascript:void(0)");
-
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     History.newItem(uri.getUri(), true);
+                    getParent().removeStyleDependentName("mouseOver");
                 }
             });
-
             init();
         }
 
         LinkItemAnchor(String html, final Command command) {
             super(html, true, "javascript:void(0)");
-
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     command.execute();
+                    getParent().removeStyleDependentName("mouseOver");
                 }
             });
-
             init();
         }
 
         LinkItemAnchor(String html, String href) {
             super(html, true, href);
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    getParent().removeStyleDependentName("mouseOver");
+                }
+            });
             init();
         }
 
