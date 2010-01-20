@@ -20,9 +20,12 @@
  */
 package com.pyx4j.security.server;
 
+import java.util.Set;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.AclCreator;
+import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -37,6 +40,11 @@ public class SessionBaseSecurityController extends SecurityController {
             ac = new AclCreatorAllowAll();
         }
         aclCreator = ac;
+    }
+
+    @Override
+    public Acl authenticate(Set<Behavior> behaviors) {
+        return aclCreator.createAcl(behaviors);
     }
 
     @Override

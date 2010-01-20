@@ -24,11 +24,18 @@ import java.io.Serializable;
 import java.util.Set;
 
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.UserVisit;
 
 @SuppressWarnings("serial")
 public class AuthenticationResponse implements Serializable {
 
+    private UserVisit userVisit;
+
     private Set<Behavior> behaviors;
+
+    private int maxInactiveInterval;
+
+    private String logoutURL;
 
     public AuthenticationResponse() {
 
@@ -41,4 +48,33 @@ public class AuthenticationResponse implements Serializable {
     public void setBehaviors(Set<Behavior> behaviors) {
         this.behaviors = behaviors;
     }
+
+    /**
+     * @return an integer specifying the number of seconds this session remains open
+     *         between client requests
+     */
+    public int getMaxInactiveInterval() {
+        return maxInactiveInterval;
+    }
+
+    public void setMaxInactiveInterval(int maxInactiveInterval) {
+        this.maxInactiveInterval = maxInactiveInterval;
+    }
+
+    public UserVisit getUserVisit() {
+        return userVisit;
+    }
+
+    public void setUserVisit(UserVisit userVisit) {
+        this.userVisit = userVisit;
+    }
+
+    public String getLogoutURL() {
+        return logoutURL;
+    }
+
+    public void setLogoutURL(String logoutURL) {
+        this.logoutURL = logoutURL;
+    }
+
 }

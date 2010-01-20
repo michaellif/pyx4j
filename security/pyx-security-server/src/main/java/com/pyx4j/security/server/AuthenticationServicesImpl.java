@@ -29,6 +29,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 /**
@@ -40,10 +41,18 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
     public static AuthenticationResponse createAuthenticationResponse() {
         AuthenticationResponse ar = new AuthenticationResponse();
+        if (Context.getSession() != null) {
+            ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
+        }
         // Make it serializable by RPC
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(SecurityController.getBehaviors());
         ar.setBehaviors(behaviors);
+
+        if (Context.getVisit() != null) {
+            ar.setUserVisit(Context.getVisit().getUserVisit());
+        }
+
         return ar;
     }
 

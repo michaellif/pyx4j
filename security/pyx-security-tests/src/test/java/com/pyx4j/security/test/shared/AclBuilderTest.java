@@ -34,7 +34,6 @@ import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.AclBuilder;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.PermitionAntipode;
-import com.pyx4j.security.shared.Role;
 
 public class AclBuilderTest extends TestCase {
 
@@ -65,26 +64,6 @@ public class AclBuilderTest extends TestCase {
         }
     }
 
-    class SimpleRole implements Role {
-
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-
-        SimpleRole(Behavior behavior) {
-            behaviors.add(behavior);
-        }
-
-        @Override
-        public Set<Behavior> getAssignedBehaviors() {
-            return behaviors;
-        }
-
-        @Override
-        public Set<Role> getMemberRoles() {
-            return null;
-        }
-
-    }
-
     public void testAccessControlPublic() {
         Acl acl = new AccessControlList().createAcl(null);
         assertTrue(acl.checkPermission(new EntityPermission("Public", EntityPermission.READ)));
@@ -100,8 +79,8 @@ public class AclBuilderTest extends TestCase {
     }
 
     public void testAccessControlEmployee() {
-        Set<Role> roles = new HashSet<Role>();
-        roles.add(new SimpleRole(TestBehavior.EMPLOYEE));
+        Set<Behavior> roles = new HashSet<Behavior>();
+        roles.add(TestBehavior.EMPLOYEE);
 
         Acl acl = new AccessControlList().createAcl(roles);
         log.debug("Emp ACL {}", acl);

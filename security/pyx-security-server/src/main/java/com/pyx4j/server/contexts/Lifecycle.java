@@ -23,6 +23,7 @@ package com.pyx4j.server.contexts;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,7 +31,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.security.shared.Acl;
+import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.UserVisit;
 
 public class Lifecycle {
 
@@ -64,7 +67,7 @@ public class Lifecycle {
     }
 
     @SuppressWarnings("unchecked")
-    public static void beginSession(String principalPrimaryKey, Acl acl) {
+    public static void beginSession(UserVisit userVisit, Set<Behavior> behaviors) {
         HttpSession session = Context.getSession();
         // Preserve some administration and debug session attributes 
         Map<String, Object> keepAttributes = new HashMap<String, Object>();
@@ -87,7 +90,7 @@ public class Lifecycle {
             newSession.setAttribute(me.getKey(), me.getValue());
         }
         beginSession(newSession);
-        Context.getVisit().beginSession(principalPrimaryKey, acl);
+        Context.getVisit().beginSession(userVisit, SecurityController.instance().authenticate(behaviors));
     }
 
     public static void beginSession(HttpSession session) {

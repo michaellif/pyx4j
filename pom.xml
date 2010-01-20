@@ -110,8 +110,8 @@
         <module>log/pyx-slf4j-api-gwt</module>
         <module>log/pyx-log-gwt</module>
 
-        <module>security/pyx-security-gwt</module>
         <module>rpc/pyx-rpc-gwt</module>
+        <module>security/pyx-security-gwt</module>
         <module>log/pyx-log-gwt-rpcappender</module>
         <module>log/pyx-log-server</module>
         <module>unit/pyx-unit-gwt</module>

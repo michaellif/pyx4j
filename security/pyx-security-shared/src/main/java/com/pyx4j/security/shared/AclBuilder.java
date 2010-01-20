@@ -64,34 +64,16 @@ public class AclBuilder implements AclCreator {
         frozen = true;
     }
 
-    private void addRoles(Role r, Set<Role> set) {
-        set.add(r);
-        Set<Role> memebers = r.getMemberRoles();
-        if (memebers != null) {
-            for (Role m : memebers) {
-                addRoles(m, set);
-            }
-        }
-    }
-
     @Override
-    public Acl createAcl(Set<Role> roles) {
+    public Acl createAcl(Set<Behavior> behaviors) {
         if (!frozen) {
             throw new RuntimeException("ACL has not been frosen");
         }
-        if ((roles == null) || (roles.size() == 0)) {
+        if ((behaviors == null) || (behaviors.size() == 0)) {
             return new AclSerializable(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions);
         }
         PermissionsGroup g = new PermissionsGroup();
         g.add(global);
-        Set<Behavior> behaviors = new HashSet<Behavior>();
-        Set<Role> allRoles = new HashSet<Role>();
-        for (Role r : roles) {
-            addRoles(r, allRoles);
-        }
-        for (Role r : allRoles) {
-            behaviors.addAll(r.getAssignedBehaviors());
-        }
         for (Behavior behavior : behaviors) {
             PermissionsGroup bg = groups.get(behavior);
             if (bg != null) {

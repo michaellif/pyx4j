@@ -34,10 +34,29 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-log-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-security-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+                
     </dependencies>
 
     <build>

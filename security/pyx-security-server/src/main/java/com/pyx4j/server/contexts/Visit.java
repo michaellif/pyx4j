@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import com.pyx4j.security.shared.Acl;
+import com.pyx4j.security.shared.UserVisit;
 
 /**
  * The way to access the session is Context.getVisit()
@@ -33,7 +34,7 @@ public class Visit implements Serializable {
 
     private static final long serialVersionUID = -8328593691009613691L;
 
-    private String principalPrimaryKey;
+    private UserVisit userVisit;
 
     private Acl acl;
 
@@ -44,7 +45,7 @@ public class Visit implements Serializable {
     private long requestIDCount = 0;
 
     public Visit() {
-        this.principalPrimaryKey = null;
+        this.userVisit = null;
         this.attributes = new Hashtable<String, Serializable>();
         this.transientAttributes = new Hashtable<String, Object>();
     }
@@ -54,24 +55,25 @@ public class Visit implements Serializable {
      */
 
     public boolean isUserLoggedIn() {
-        return (this.principalPrimaryKey != null);
+        return (this.userVisit != null);
     }
 
-    public String getPrincipalPrimaryKey() {
-        return principalPrimaryKey;
+    public UserVisit getUserVisit() {
+        return userVisit;
     }
 
     public Acl getAcl() {
         return acl;
     }
 
-    protected void beginSession(String principalPrimaryKey, Acl acl) {
-        this.principalPrimaryKey = principalPrimaryKey;
+    protected void beginSession(UserVisit userVisit, Acl acl) {
+        this.userVisit = userVisit;
         this.acl = acl;
     }
 
     protected void endSession() {
-        this.principalPrimaryKey = null;
+        this.userVisit = null;
+        this.acl = null;
     }
 
     public Serializable getAttribute(String name) {
@@ -113,10 +115,10 @@ public class Visit implements Serializable {
 
     @Override
     public String toString() {
-        if (this.principalPrimaryKey == null) {
+        if (this.userVisit == null) {
             return "anonymous";
         } else {
-            return this.principalPrimaryKey;
+            return this.userVisit.getName();
         }
     }
 

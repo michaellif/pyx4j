@@ -31,6 +31,7 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
@@ -40,10 +41,9 @@ public class ClientSecurityController extends SecurityController implements HasV
 
     private HandlerManager handlerManager;
 
-    //TODO implement something
     private final AclImpl acl = new AclImpl();
 
-    // Allow everything
+    // Allow everything from Permission point of view
     private static class AclImpl implements Acl {
 
         private Set<Behavior> behaviors = new HashSet<Behavior>();
@@ -60,7 +60,7 @@ public class ClientSecurityController extends SecurityController implements HasV
 
         @Override
         public Set<Behavior> getBehaviors() {
-            return Collections.unmodifiableSet(behaviors);
+            return behaviors;
         }
 
     }
@@ -73,20 +73,11 @@ public class ClientSecurityController extends SecurityController implements HasV
         return (ClientSecurityController) SecurityController.instance();
     }
 
-    /**
-     * TODO make a proper implementation, Use this only for DEMO
-     * 
-     * @Deprecated probably will change
-     */
-    @Deprecated
-    public static void grant(Behavior behavior) {
-        instance().acl.behaviors.add(behavior);
+    @Override
+    public Acl authenticate(Set<Behavior> behaviors) {
+        acl.behaviors = Collections.unmodifiableSet(behaviors);
         ValueChangeEvent.fire(instance(), instance().acl.getBehaviors());
-    }
-
-    public static void authenticate(Set<Behavior> behaviors) {
-        instance().acl.behaviors = Collections.unmodifiableSet(behaviors);
-        ValueChangeEvent.fire(instance(), instance().acl.getBehaviors());
+        return acl;
     }
 
     @Override

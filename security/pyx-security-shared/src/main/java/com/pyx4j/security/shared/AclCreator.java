@@ -24,6 +24,6 @@ import java.util.Set;
 
 public interface AclCreator {
 
-    public Acl createAcl(Set<Role> roles);
+    public Acl createAcl(Set<Behavior> behaviors);
 
 }

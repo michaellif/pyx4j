@@ -46,6 +46,8 @@ public abstract class SecurityController {
 
     public abstract Acl getAcl();
 
+    public abstract Acl authenticate(Set<Behavior> behaviors);
+
     public static boolean checkBehavior(Behavior behavior) {
         return controller.getAcl().checkBehavior(behavior);
     }
