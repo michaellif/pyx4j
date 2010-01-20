@@ -44,8 +44,9 @@ public class ClientContext {
         return userVisit;
     }
 
-    public static void authenticate(AuthenticationResponse authenticationResponse) {
+    public static void authenticated(AuthenticationResponse authenticationResponse) {
         userVisit = authenticationResponse.getUserVisit();
+        log.info("Authenticated", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
     }
 
@@ -59,9 +60,25 @@ public class ClientContext {
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticate(result);
+                ClientContext.authenticated(result);
             }
         };
         RPCManager.execute(AuthenticationServices.Logout.class, null, callback);
+    }
+
+    public static void getServerSession() {
+        AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                log.error("Logout failure", caught);
+            }
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+            }
+        };
+        RPCManager.execute(AuthenticationServices.GetStatus.class, null, callback);
     }
 }

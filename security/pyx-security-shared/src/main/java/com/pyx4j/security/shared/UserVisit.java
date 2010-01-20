@@ -58,4 +58,9 @@ public class UserVisit implements Serializable {
         this.principalPrimaryKey = principalPrimaryKey;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }
