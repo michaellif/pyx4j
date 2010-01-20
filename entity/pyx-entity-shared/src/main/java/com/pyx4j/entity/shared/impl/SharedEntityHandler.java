@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -41,6 +42,8 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         IEntity<OBJECT_TYPE>, IFullDebug {
 
     private Map<String, Object> data;
+
+    private transient EntityMeta entityMeta;
 
     protected transient final HashMap<String, IObject<?, ?>> members = new HashMap<String, IObject<?, ?>>();
 
@@ -72,9 +75,9 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     /**
-     * Unsure that data is created before setting the value of member
+     * Guarantee that data is created before setting the value of member
      */
-    private Map<String, Object> getOrCreateValue() {
+    private Map<String, Object> ensureValue() {
         Map<String, Object> v = getValue();
         if (v == null) {
             setValue(v = new EntityValueMap());
@@ -92,7 +95,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     public void setPrimaryKey(String pk) {
-        getOrCreateValue().put(PRIMARY_KEY, pk);
+        ensureValue().put(PRIMARY_KEY, pk);
     }
 
     @Override
@@ -147,14 +150,22 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     @SuppressWarnings("unchecked")
     @Override
-    public synchronized Set<String> getMemberNames() {
-        return EntityFactory.getEntityMeta((Class<IEntity<?>>) getObjectClass()).getMemberNames();
+    public EntityMeta getEntityMeta() {
+        if (entityMeta == null) {
+            // Cache Meta for this class.
+            entityMeta = EntityFactory.getEntityMeta((Class<IEntity<?>>) getObjectClass());
+        }
+        return entityMeta;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public synchronized Set<String> getMemberNames() {
+        return getEntityMeta().getMemberNames();
+    }
+
     @Override
     public MemberMeta getMemberMeta(String memberName) {
-        return EntityFactory.getEntityMeta((Class<IEntity<?>>) getObjectClass()).getMemberMeta(memberName);
+        return getEntityMeta().getMemberMeta(memberName);
     }
 
     @Override
@@ -198,7 +209,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
      */
     @Override
     public void setMemberValue(String memberName, Object value) {
-        getOrCreateValue().put(memberName, value);
+        ensureValue().put(memberName, value);
     }
 
     //TODO

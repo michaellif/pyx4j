@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -55,6 +56,8 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
      * inside EntityMeta.
      */
     public MemberMeta getMemberMeta(String memberName);
+
+    public EntityMeta getEntityMeta();
 
     public List<Validator> getValidators(Path memberPath);
 

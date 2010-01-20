@@ -134,6 +134,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void persist(IEntity<?> iEntity) {
+        if (iEntity.getEntityMeta().isTransient()) {
+            throw new Error("Can't persist Transient Entity");
+        }
         Entity entity;
         if (iEntity.getPrimaryKey() == null) {
             entity = new Entity(getIEntityKind(iEntity));
@@ -148,6 +151,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void delete(IEntity<?> iEntity) {
+        if (iEntity.getEntityMeta().isTransient()) {
+            throw new Error("Can't delete Transient Entity");
+        }
         datastore.delete(KeyFactory.stringToKey(iEntity.getPrimaryKey()));
     }
 
@@ -213,6 +219,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (!getIEntityKind(entityClass).equals(key.getKind())) {
             throw new RuntimeException("Unexpected IEntity " + getIEntityKind(entityClass) + " Kind " + key.getKind());
         }
+        T iEntity = EntityFactory.create(entityClass);
+        if (iEntity.getEntityMeta().isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+
         Entity entity;
         try {
             entity = datastore.get(key);
@@ -220,7 +231,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             throw new RuntimeException("EntityNotFound");
         }
 
-        T iEntity = EntityFactory.create(entityClass);
         updateIEntity(iEntity, entity);
         return iEntity;
     }
@@ -284,6 +294,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
+        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
         Query query = buildQuery(entityClass, criteria);
         PreparedQuery pq = datastore.prepare(query);
 
@@ -298,6 +311,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     public <T extends IEntity<?>> List<String> queryKeys(EntityCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
+        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
         Query query = buildQuery(entityClass, criteria);
         query.setKeysOnly();
         PreparedQuery pq = datastore.prepare(query);
@@ -311,6 +327,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
+        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+            throw new Error("Can't delete Transient Entity");
+        }
         Query query = buildQuery(entityClass, criteria);
         query.setKeysOnly();
         PreparedQuery pq = datastore.prepare(query);
