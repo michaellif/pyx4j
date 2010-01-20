@@ -33,9 +33,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.domain.PageUri;
 
-public class DestinationDispatcher implements ValueChangeHandler<String> {
+public class SiteDispatcher implements ValueChangeHandler<String> {
 
-    private static final Logger log = LoggerFactory.getLogger(DestinationDispatcher.class);
+    private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
 
     private final List<SitePanel> sites = new ArrayList<SitePanel>();
 
@@ -43,7 +43,7 @@ public class DestinationDispatcher implements ValueChangeHandler<String> {
 
     private String welcomeUri;
 
-    public DestinationDispatcher() {
+    public SiteDispatcher() {
         History.addValueChangeHandler(this);
     }
 
