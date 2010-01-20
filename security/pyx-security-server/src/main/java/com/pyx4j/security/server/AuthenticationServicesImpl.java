@@ -20,21 +20,30 @@
  */
 package com.pyx4j.security.server;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
+import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Lifecycle;
 
 /**
- * This is implementation does not use DB to load and verify users.
+ * This implementation does not use DB to load and verify users.
+ * 
+ * You need to override AuthenticateImpl in App.
  */
 public class AuthenticationServicesImpl implements AuthenticationServices {
 
     public static AuthenticationResponse createAuthenticationResponse() {
         AuthenticationResponse ar = new AuthenticationResponse();
-        ar.setBehaviors(SecurityController.getBehaviors());
+        // Make it serializable by RPC
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.addAll(SecurityController.getBehaviors());
+        ar.setBehaviors(behaviors);
         return ar;
     }
 

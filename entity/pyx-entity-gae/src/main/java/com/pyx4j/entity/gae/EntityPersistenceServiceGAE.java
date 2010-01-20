@@ -39,11 +39,13 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -100,7 +102,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 Set<Key> childKeys = new HashSet<Key>();
                 if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
-                    //TODO
+                    ISet<IEntity<?>> memberSet = (ISet<IEntity<?>>) iEntity.getMember(me.getKey());
+                    for (IEntity<?> childIEntity : memberSet) {
+                        persist(childIEntity);
+                        childKeys.add(KeyFactory.stringToKey(childIEntity.getPrimaryKey()));
+                    }
                 } else {
                     for (Object el : (Set) value) {
                         String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
@@ -170,8 +176,19 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     value = Enum.valueOf((Class<Enum>) cls, (String) value);
                 }
             } else if (value instanceof List<?>) {
-                // ISet ?
-                //TODO
+                IObject<?, ?> member = iEntity.getMember(me.getKey());
+                if (member instanceof ISet) {
+                    for (Key childKey : (List<Key>) value) {
+                        IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
+                        if (member.getMeta().isDetached()) {
+                            childIEntity.setPrimaryKey(KeyFactory.keyToString(childKey));
+                        } else {
+                            retrieveEntity(childIEntity, childKey);
+                        }
+                        ((ISet) member).add(childIEntity);
+                    }
+                    continue;
+                }
             }
             iEntity.setMemberValue(me.getKey(), value);
         }

@@ -25,7 +25,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -106,6 +105,8 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
     @Test
     public void unownedSetPersist() {
         Department department = EntityFactory.create(Department.class);
+        String deptName = "Dept " + uniqueString();
+        department.name().setValue(deptName);
         srv.persist(department);
 
         Employee employee1 = EntityFactory.create(Employee.class);
@@ -126,8 +127,12 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
         Assert.assertTrue("contains(emp2)", department.employees().contains(employee2));
 
         Department departmentR = srv.retrieve(Department.class, department.getPrimaryKey());
-        System.out.println(((IFullDebug) departmentR).debugString());
+        //System.out.println(((IFullDebug) departmentR).debugString());
 
+        Assert.assertEquals("Retr. department.name", deptName, departmentR.name().getValue());
+        Assert.assertEquals("Retr. Set size", 2, departmentR.employees().getValue().size());
+        Assert.assertTrue("Retr. contains(emp1)", departmentR.employees().contains(employee1));
+        Assert.assertTrue("Retr. contains(emp2)", departmentR.employees().contains(employee2));
         //TODO
         //System.out.println(departmentR.employees().getValue().getClass());
 
