@@ -30,9 +30,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -43,6 +40,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
@@ -55,12 +53,14 @@ import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-public class SitePanel extends SimplePanel implements ValueChangeHandler<String> {
+public class SitePanel extends SimplePanel {
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
     private String siteName;
-    
+
+    private String siteCaption;
+
     private Page homePage;
 
     private final List<Page> pages = new ArrayList<Page>();
@@ -95,10 +95,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     private static InlineWidgetFactory widgetFactory = GWT.create(InlineWidgetFactory.class);
 
-    public SitePanel(String siteName) {
-    	
-    	this.siteName = siteName;
-    	
+    public SitePanel() {
+
         setSize("100%", "100%");
 
         add(createContentPanel());
@@ -117,8 +115,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         createFooterCopirightPanel();
 
         StyleManger.installTheme(lightTheme);
-
-        History.addValueChangeHandler(this);
 
     }
 
@@ -173,8 +169,8 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         }
 
         primaryNavigationBar.setSelected(page.uri);
-        
-        Window.setTitle(siteName+" "+page.caption);
+
+        Window.setTitle(siteCaption + " " + page.caption);
 
     }
 
@@ -304,6 +300,18 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
         });
     }
 
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public void setSiteCaption(String siteCaption) {
+        this.siteCaption = siteCaption;
+    }
+
     public void setLogoImage(String logoUrl) {
         logoImage.setUrl(logoUrl);
     }
@@ -379,16 +387,6 @@ public class SitePanel extends SimplePanel implements ValueChangeHandler<String>
 
     public Page getHomePage() {
         return homePage;
-    }
-
-    @Override
-    public void onValueChange(ValueChangeEvent<String> event) {
-        Page page = getPage(event.getValue());
-        if (page == null) {
-            show(getHomePage());
-            return;
-        }
-        show(page);
     }
 
 }

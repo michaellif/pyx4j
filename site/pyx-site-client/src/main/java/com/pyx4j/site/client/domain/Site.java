@@ -25,6 +25,10 @@ import java.util.List;
 
 public class Site {
 
+    public String siteName;
+
+    public String siteCaption;
+
     public String logoUrl;
 
     public List<Link> headerLinks;

@@ -22,6 +22,8 @@ package com.pyx4j.site.client.domain;
 
 public class PageUri {
 
+    private String siteName;
+
     private String[] path;
 
     private final String uri;
@@ -29,7 +31,13 @@ public class PageUri {
     public PageUri(String uri) {
         this.uri = uri;
         if (uri != null) {
-            path = uri.split(":");
+            String[] components = uri.split("\\|");
+            if (components.length == 2) {
+                siteName = components[0];
+                path = components[1].split(":");
+            } else {
+                throw new RuntimeException("Wrong URI format " + uri);
+            }
         }
     }
 
@@ -56,6 +64,10 @@ public class PageUri {
 
     public String getUri() {
         return uri;
+    }
+
+    public String getSiteName() {
+        return siteName;
     }
 
     public boolean isContained(PageUri parent) {

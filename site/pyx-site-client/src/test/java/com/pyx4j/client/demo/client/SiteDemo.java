@@ -38,7 +38,7 @@ public class SiteDemo implements EntryPoint {
 
     public void onModuleLoad() {
 
-        SitePanel pagePanel = new SitePanel("PYX4J Site Demo");
+        SitePanel pagePanel = new SitePanel();
 
         Site staticProperties = new Site();
 
