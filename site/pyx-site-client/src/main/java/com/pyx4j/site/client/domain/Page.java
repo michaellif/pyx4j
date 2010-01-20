@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Page {
@@ -30,12 +29,6 @@ public class Page {
     public String caption;
 
     public PageData data = new PageData();
-
-    public List<Portlet> leftPortlets;
-
-    public List<Portlet> rightPortlets;
-
-    public List<String> inlineWidgetsList;
 
     @Override
     public String toString() {

@@ -26,4 +26,10 @@ public class PageData {
 
     public String html;
 
+    public List<String> inlineWidgetsList;
+
+    public List<Portlet> leftPortlets;
+
+    public List<Portlet> rightPortlets;
+
 }

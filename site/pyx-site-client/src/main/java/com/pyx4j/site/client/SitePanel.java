@@ -140,8 +140,8 @@ public class SitePanel extends SimplePanel {
 
         mainSectionPanel.setWidget(widget);
 
-        if (page.inlineWidgetsList != null) {
-            for (String widgetId : page.inlineWidgetsList) {
+        if (page.data.inlineWidgetsList != null) {
+            for (String widgetId : page.data.inlineWidgetsList) {
                 InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
                 Widget inlineWidget = widgetFactory.createWidget(widgetId);
                 if (root != null && inlineWidget != null) {
@@ -155,15 +155,15 @@ public class SitePanel extends SimplePanel {
         setHeaderCaption(page.caption);
 
         leftSectionPanel.clear();
-        if (page.leftPortlets != null) {
-            for (Portlet portlet : page.leftPortlets) {
+        if (page.data.leftPortlets != null) {
+            for (Portlet portlet : page.data.leftPortlets) {
                 leftSectionPanel.add(createPortletWidget(portlet));
             }
         }
 
         rightSectionPanel.clear();
-        if (page.rightPortlets != null) {
-            for (Portlet portlet : page.rightPortlets) {
+        if (page.data.rightPortlets != null) {
+            for (Portlet portlet : page.data.rightPortlets) {
                 rightSectionPanel.add(createPortletWidget(portlet));
             }
         }
