@@ -49,7 +49,7 @@ public class ClientContext {
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
     }
 
-    public void logout() {
+    public static void logout() {
         AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
 
             @Override
