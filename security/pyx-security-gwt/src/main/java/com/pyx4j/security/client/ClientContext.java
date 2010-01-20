@@ -46,7 +46,7 @@ public class ClientContext {
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         userVisit = authenticationResponse.getUserVisit();
-        log.info("Authenticated", userVisit);
+        log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
     }
 
