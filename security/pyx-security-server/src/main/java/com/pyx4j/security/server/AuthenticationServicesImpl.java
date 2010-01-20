@@ -20,13 +20,10 @@
  */
 package com.pyx4j.security.server;
 
-import java.util.HashSet;
-
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
-import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -35,10 +32,9 @@ import com.pyx4j.server.contexts.Lifecycle;
  */
 public class AuthenticationServicesImpl implements AuthenticationServices {
 
-    protected static AuthenticationResponse createAuthenticationResponse() {
+    public static AuthenticationResponse createAuthenticationResponse() {
         AuthenticationResponse ar = new AuthenticationResponse();
-        ar.setBehaviors(new HashSet<Behavior>());
-        ar.getBehaviors().addAll(SecurityController.getBehaviors());
+        ar.setBehaviors(SecurityController.getBehaviors());
         return ar;
     }
 
