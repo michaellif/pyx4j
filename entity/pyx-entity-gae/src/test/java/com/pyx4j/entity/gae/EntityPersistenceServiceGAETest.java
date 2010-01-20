@@ -25,11 +25,13 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
 public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
@@ -99,5 +101,35 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
         Assert.assertNotNull("retrieve owned member", employee2.homeAddress().streetName());
 
         Assert.assertEquals("streetName is wrong", addressStreet, employee2.homeAddress().streetName().getValue());
+    }
+
+    @Test
+    public void unownedSetPersist() {
+        Department department = EntityFactory.create(Department.class);
+        srv.persist(department);
+
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("Firstname1");
+        srv.persist(employee1);
+        department.employees().add(employee1);
+
+        Employee employee2 = EntityFactory.create(Employee.class);
+        employee2.firstName().setValue("Firstname2");
+        srv.persist(employee2);
+        department.employees().add(employee2);
+
+        srv.persist(department);
+        //System.out.println(((IFullDebug) department).debugString());
+
+        Assert.assertEquals("Set size", 2, department.employees().getValue().size());
+        Assert.assertTrue("contains(emp1)", department.employees().contains(employee1));
+        Assert.assertTrue("contains(emp2)", department.employees().contains(employee2));
+
+        Department departmentR = srv.retrieve(Department.class, department.getPrimaryKey());
+        System.out.println(((IFullDebug) departmentR).debugString());
+
+        //TODO
+        //System.out.println(departmentR.employees().getValue().getClass());
+
     }
 }

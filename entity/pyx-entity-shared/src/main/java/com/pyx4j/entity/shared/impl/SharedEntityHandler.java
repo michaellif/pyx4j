@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -45,7 +46,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     public SharedEntityHandler(Class<OBJECT_TYPE> clazz) {
         super(clazz);
-        data = new HashMap<String, Object>();
+        data = new EntityValueMap();
     }
 
     /**
@@ -76,7 +77,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     private Map<String, Object> getOrCreateValue() {
         Map<String, Object> v = getValue();
         if (v == null) {
-            setValue(v = new HashMap<String, Object>());
+            setValue(v = new EntityValueMap());
         }
         return v;
     }
@@ -115,6 +116,17 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         } else {
             this.data = value;
         }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other == null) || !(other instanceof IEntity<?>) || (!this.getClass().equals(other.getClass()))) {
+            return false;
+        }
+        return EqualsHelper.equals(this.getPrimaryKey(), ((IEntity<?>) other).getPrimaryKey());
     }
 
     @Override
@@ -200,7 +212,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         OBJECT_TYPE entity = EntityFactory.create((Class<OBJECT_TYPE>) getObjectClass());
         Map<String, Object> v = getValue();
         if (v != null) {
-            Map<String, Object> data2 = new HashMap<String, Object>();
+            Map<String, Object> data2 = new EntityValueMap();
             cloneMap(v, data2);
             entity.setValue(data2);
         }
@@ -211,30 +223,11 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     private void cloneMap(Map<String, Object> src, Map<String, Object> dst) {
         for (Map.Entry<String, Object> me : src.entrySet()) {
             if (me.getValue() instanceof Map<?, ?>) {
-                Map<String, Object> data2 = new HashMap<String, Object>();
+                Map<String, Object> data2 = new EntityValueMap();
                 cloneMap((Map<String, Object>) me.getValue(), data2);
                 dst.put(me.getKey(), data2);
             } else {
                 dst.put(me.getKey(), me.getValue());
-            }
-        }
-    }
-
-    private void dumpMap(StringBuilder b, Map<String, Object> map) {
-        boolean first = true;
-        for (Map.Entry<String, Object> me : map.entrySet()) {
-            if (!first) {
-                b.append(' ');
-            } else {
-                first = false;
-            }
-            b.append(me.getKey()).append("=");
-            if (me.getValue() instanceof Map<?, ?>) {
-                b.append('{');
-                dumpMap(b, (Map<String, Object>) me.getValue());
-                b.append('}');
-            } else {
-                b.append(me.getValue());
             }
         }
     }
@@ -245,7 +238,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         b.append(getObjectClass().getName()).append(" ");
         Map<String, Object> v = getValue();
         if (v != null) {
-            dumpMap(b, v);
+            EntityValueMap.dumpMap(b, v);
         } else {
             b.append("{null}");
         }

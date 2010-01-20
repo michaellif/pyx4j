@@ -21,18 +21,16 @@
 package com.pyx4j.entity.shared.impl;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
+public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
 
     public SetHandler(IEntity<?> parent, String fieldName) {
         super(ISet.class, parent, fieldName);
@@ -67,32 +65,22 @@ public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler
 
     @Override
     public void setValue(Set<Map<String, ?>> value) {
-        Map<String, Object> data = getParent().getValue();
-        if (data == null) {
-            data = new HashMap<String, Object>();
-            getParent().setValue(data);
-        }
-        data.put(getFieldName(), value);
+        getParent().setMemberValue(getFieldName(), value);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean add(OBJECT_TYPE entity) {
-        Map<String, Object> data = getParent().getValue();
-        if (data == null) {
-            data = new HashMap<String, Object>();
-            getParent().setValue(data);
+        Set<Map<String, ?>> value = getValue();
+        if (value == null) {
+            value = new HashSet<Map<String, ?>>();
+            setValue(value);
         }
-        if (!data.containsKey(getFieldName())) {
-            data.put(getFieldName(), new HashSet<Object>());
-        }
-        return ((HashSet<Object>) data.get(getFieldName())).add(entity.getValue());
+        return value.add(entity.getValue());
     }
 
     @Override
     public boolean addAll(Collection<? extends OBJECT_TYPE> c) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -105,10 +93,10 @@ public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler
 
     @Override
     public boolean contains(Object o) {
-        if (o instanceof IObject<?, ?>) {
+        if (o instanceof IEntity<?>) {
             Set<?> set = getValue();
             if (set != null) {
-                return set.contains(((IObject<?, ?>) o).getValue());
+                return set.contains(((IEntity<?>) o).getValue());
             }
         }
         return false;
@@ -116,14 +104,17 @@ public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
+        Set<?> set = getValue();
+        if (set != null) {
+            return set.size() != 0;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -140,20 +131,22 @@ public class SetHandler<OBJECT_TYPE extends IObject<?, ?>> extends ObjectHandler
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int size() {
-        // TODO Auto-generated method stub
-        return 0;
+        Set<?> set = getValue();
+        if (set != null) {
+            return set.size();
+        } else {
+            return 0;
+        }
     }
 
     @Override

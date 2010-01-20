@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.test.shared;
 
-import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
@@ -34,7 +33,7 @@ public class FactoryTest extends InitializerTestCase {
     public void testObjectCreation() {
         Country country = EntityFactory.create(Country.class);
         assertNotNull("EntityFactory create", country);
-        System.out.println("Country ProxyClass:" + country.getClass().getName());
+        //System.out.println("Country ProxyClass:" + country.getClass().getName());
 
         country.name().setValue("Canada");
 
@@ -44,9 +43,9 @@ public class FactoryTest extends InitializerTestCase {
         address.streetName().setValue("Street");
         address.country().set(country);
 
-        System.out.println(((IFullDebug) country).debugString());
-        System.out.println(((IFullDebug) address).debugString());
-        System.out.println(((IFullDebug) (address.country())).debugString());
+        //System.out.println(((IFullDebug) country).debugString());
+        //System.out.println(((IFullDebug) address).debugString());
+        //System.out.println(((IFullDebug) (address.country())).debugString());
 
         assertEquals("address.country Value", "Canada", address.country().name().getValue());
     }
@@ -81,18 +80,40 @@ public class FactoryTest extends InitializerTestCase {
         assertNull("Memeber value", employee.homeAddress().streetName().getValue());
     }
 
+    public void testEquals() {
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("Firstname1");
+        employee1.setPrimaryKey("keyX");
+
+        Employee employee2 = EntityFactory.create(Employee.class);
+        employee2.firstName().setValue("Firstname2");
+        employee2.setPrimaryKey("keyX");
+        assertEquals("same key", employee1, employee2);
+    }
+
     public void testSetManipulations() {
         Department department = EntityFactory.create(Department.class);
-        Employee employee = EntityFactory.create(Employee.class);
-        employee.firstName().setValue("Firstname");
-        department.employees().add(employee);
-        employee = EntityFactory.create(Employee.class);
-        employee.firstName().setValue("Firstname2");
-        department.employees().add(employee);
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("Firstname1");
+        employee1.setPrimaryKey("key1");
+        department.employees().add(employee1);
 
-        assertTrue("Set size is wrong", department.employees().getValue().size() == 2);
-        assertTrue("contains() failed", department.employees().contains(employee));
+        Employee employee2 = EntityFactory.create(Employee.class);
+        employee2.firstName().setValue("Firstname2");
+        employee2.setPrimaryKey("key2");
+        department.employees().add(employee2);
 
+        Employee employee3 = EntityFactory.create(Employee.class);
+        employee3.firstName().setValue("Firstname3");
+
+        assertEquals("Set size", 2, department.employees().size());
+        assertEquals("Set size", 2, department.employees().getValue().size());
+        assertTrue("contains(emp1)", department.employees().contains(employee1));
+        assertTrue("contains(emp2)", department.employees().contains(employee2));
+        assertFalse("contains(emp3)", department.employees().contains(employee3));
+        employee3.setPrimaryKey("key2");
+        assertEquals("same key (emp2 and emp3)", employee2, employee3);
+        assertTrue("contains(emp3(emp2))", department.employees().contains(employee3));
     }
 
     public void testPathCalculation() {

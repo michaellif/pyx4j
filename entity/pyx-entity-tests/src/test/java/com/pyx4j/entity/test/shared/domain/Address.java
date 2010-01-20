@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Address extends IEntity<Address> {
 
+    // to test unowned ManyToOne or OneToOne
     Country country();
 
     IPrimitive<String> streetName();

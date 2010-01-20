@@ -21,8 +21,10 @@
 package com.pyx4j.entity.gae;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -37,12 +39,12 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -84,7 +86,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 } else {
                     childKey = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKey == null) {
-                        continue;
+                        throw new Error("Saving unperisted reference " + meta.getCaption());
                     }
                 }
                 value = KeyFactory.stringToKey(childKey);
@@ -94,6 +96,23 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
             } else if (value instanceof Enum<?>) {
                 value = ((Enum<?>) value).name();
+            } else if ((ISet.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof Set<?>)) {
+                Set<Key> childKeys = new HashSet<Key>();
+                if (meta.isOwnedRelationships()) {
+                    // Save Owned iEntity
+                    //TODO
+                } else {
+                    for (Object el : (Set) value) {
+                        String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
+                        if (childKey == null) {
+                            throw new Error("Saving unperisted reference " + meta.getCaption());
+                        }
+                        childKeys.add(KeyFactory.stringToKey(childKey));
+                    }
+                }
+                value = childKeys;
+            } else {
+                System.out.println("Else:" + value.getClass().getName());
             }
             entity.setProperty(me.getKey(), value);
         }
@@ -150,6 +169,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 if (Enum.class.isAssignableFrom(cls)) {
                     value = Enum.valueOf((Class<Enum>) cls, (String) value);
                 }
+            } else if (value instanceof List<?>) {
+                // ISet ?
+                //TODO
             }
             iEntity.setMemberValue(me.getKey(), value);
         }
