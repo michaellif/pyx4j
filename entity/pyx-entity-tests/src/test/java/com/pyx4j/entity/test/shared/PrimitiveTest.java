@@ -54,6 +54,14 @@ public class PrimitiveTest extends InitializerTestCase {
         assertEquals("Value", Boolean.TRUE, emp.reliable().getValue());
     }
 
+    public void testLong() {
+        Employee emp = EntityFactory.create(Employee.class);
+        assertNull("Initial value", emp.holidays().getValue());
+        assertEquals("Class of Value", Long.class, emp.holidays().getValueClass());
+        emp.holidays().setValue(5L);
+        assertEquals("Value", Long.valueOf(5), emp.holidays().getValue());
+    }
+
     public void testInteger() {
         Employee emp = EntityFactory.create(Employee.class);
         assertNull("Initial value", emp.rating().getValue());

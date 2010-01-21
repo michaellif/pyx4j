@@ -39,7 +39,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
@@ -180,6 +179,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 Class<?> cls = iEntity.getMemberMeta(me.getKey()).getValueClass();
                 if (Enum.class.isAssignableFrom(cls)) {
                     value = Enum.valueOf((Class<Enum>) cls, (String) value);
+                }
+            } else if (value instanceof Long) {
+                if (Integer.class.isAssignableFrom(iEntity.getMemberMeta(me.getKey()).getValueClass())) {
+                    value = ((Long) value).intValue();
                 }
             } else if (value instanceof List<?>) {
                 IObject<?, ?> member = iEntity.getMember(me.getKey());

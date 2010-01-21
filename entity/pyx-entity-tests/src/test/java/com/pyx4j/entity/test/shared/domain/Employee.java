@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
 @Caption(name = "Laborer")
 public interface Employee extends IEntity<Employee> {
@@ -41,6 +42,8 @@ public interface Employee extends IEntity<Employee> {
 
     IPrimitive<Boolean> reliable();
 
+    IPrimitive<Long> holidays();
+
     IPrimitive<Integer> rating();
 
     IPrimitive<Double> salary();
@@ -48,6 +51,9 @@ public interface Employee extends IEntity<Employee> {
     IPrimitive<EmploymentStatus> employmentStatus();
 
     IPrimitive<Status> accessStatus();
+
+    @Owned
+    ISet<Task> tasks();
 
     Department department();
 
