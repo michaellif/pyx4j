@@ -163,7 +163,7 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
-        style.addProperty("margin-left", "550px");
+        style.addProperty("margin-left", "450px");
         style.addProperty("margin-top", "1px");
         style.addProperty("color", "gray");
         addStyle(style);
