@@ -19,6 +19,12 @@
 
     <dependencies>
 
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-tests</artifactId>
@@ -50,21 +56,21 @@
             <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-gwt</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-gwt</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-runner</artifactId>
@@ -76,7 +82,7 @@
             <artifactId>pyx-log-gwt-rpcappender</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

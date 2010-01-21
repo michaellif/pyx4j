@@ -20,17 +20,15 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>com.googlecode.gwt-incubator</groupId>
 			<artifactId>gwt-incubator</artifactId>
 		</dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -42,6 +40,14 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-forms</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-server</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+            <scope>test</scope>
         </dependency>
 
 	</dependencies>
