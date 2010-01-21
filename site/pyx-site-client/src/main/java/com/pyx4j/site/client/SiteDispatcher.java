@@ -21,6 +21,7 @@
 package com.pyx4j.site.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
 
     private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
 
-    private final List<SitePanel> sites = new ArrayList<SitePanel>();
+    private final List<SitePanel> sitePanels = new ArrayList<SitePanel>();
 
     private SitePanel currentSitePanel;
 
@@ -94,7 +95,7 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
     }
 
     public SitePanel getSitePanel(String siteName) {
-        for (SitePanel sitePanel : sites) {
+        for (SitePanel sitePanel : sitePanels) {
             if (siteName.equals(sitePanel.getSiteName())) {
                 return sitePanel;
             }
@@ -102,8 +103,12 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
         return null;
     }
 
-    protected void addSite(SitePanel panel) {
-        sites.add(panel);
+    protected void addSitePanel(SitePanel panel) {
+        sitePanels.add(panel);
+    }
+
+    public Iterable<SitePanel> getAllSitePanels() {
+        return sitePanels;
     }
 
     public ResourceUri getWelcomeUri() {
