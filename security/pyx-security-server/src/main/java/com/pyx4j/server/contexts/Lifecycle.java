@@ -61,7 +61,7 @@ public class Lifecycle {
         HttpSession session = Context.getSession();
         if (session == null) {
             beginSession(Context.getRequest().getSession(true));
-            log.info("Anonymous Session starts " + Context.getSession().getId());
+            log.info("Anonymous Session {} starts", Context.getSession().getId());
         }
         //Context.getVisit().beginAnonymousSession(JAASHelper.anonymousLogin());
     }
@@ -79,13 +79,13 @@ public class Lifecycle {
                 }
             }
             try {
-                log.info("Session ends " + session.getId());
+                log.info("Session {} ends", session.getId());
                 session.invalidate();
             } catch (IllegalStateException e) {
             }
         }
         HttpSession newSession = Context.getRequest().getSession(true);
-        log.info("authenticated  Session starts " + newSession.getId());
+        log.info("Session {} starts for {}", newSession.getId(), userVisit.getName());
         for (Map.Entry<String, Object> me : keepAttributes.entrySet()) {
             newSession.setAttribute(me.getKey(), me.getValue());
         }
@@ -111,7 +111,7 @@ public class Lifecycle {
         if (session != null) {
             Context.remove();
             try {
-                log.info("Session ends " + session.getId());
+                log.info("Session {} ends", session.getId());
                 session.invalidate();
             } catch (IllegalStateException e) {
                 // this method is called already

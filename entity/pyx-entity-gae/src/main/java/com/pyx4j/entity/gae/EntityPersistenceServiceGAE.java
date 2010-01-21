@@ -39,6 +39,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
@@ -296,6 +297,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity<?>> List<T> query(EntityCriteria<T> criteria) {
+        long start = System.nanoTime();
         Class<T> entityClass = entityClass(criteria);
         if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -308,6 +310,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             T iEntity = EntityFactory.create(entityClass);
             updateIEntity(iEntity, entity);
             rc.add(iEntity);
+        }
+        long duration = System.nanoTime() - start;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running query {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("query {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         }
         return rc;
     }
