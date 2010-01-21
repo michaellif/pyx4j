@@ -20,7 +20,11 @@
  */
 package com.pyx4j.site.client.domain;
 
-public class PageUri {
+public class ResourceUri {
+
+    public static String SITE_SEPARATOR = ":";
+
+    public static String PAGE_SEPARATOR = "/";
 
     private String siteName;
 
@@ -28,17 +32,23 @@ public class PageUri {
 
     private final String uri;
 
-    public PageUri(String uri) {
+    public ResourceUri(String uri) {
         this.uri = uri;
         if (uri != null) {
-            String[] components = uri.split("\\|");
+            String[] components = uri.split(SITE_SEPARATOR);
             if (components.length == 2) {
                 siteName = components[0];
-                path = components[1].split(":");
+                path = components[1].split(PAGE_SEPARATOR);
             } else {
                 throw new RuntimeException("Wrong URI format " + uri);
             }
         }
+    }
+
+    public ResourceUri(String siteName, String... path) {
+        this.uri = createUri(siteName, path);
+        this.siteName = siteName;
+        this.path = path;
     }
 
     @Override
@@ -51,10 +61,10 @@ public class PageUri {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof PageUri)) {
+        if (!(obj instanceof ResourceUri)) {
             return false;
         }
-        PageUri that = (PageUri) obj;
+        ResourceUri that = (ResourceUri) obj;
         if (this.uri.equals(that.uri)) {
             return true;
         } else {
@@ -70,11 +80,23 @@ public class PageUri {
         return siteName;
     }
 
-    public boolean isContained(PageUri parent) {
+    public boolean isContained(ResourceUri parent) {
         return uri.startsWith(parent.getUri());
     }
 
     public boolean isRoot() {
-        return !uri.contains(":");
+        return !uri.contains(PAGE_SEPARATOR);
+    }
+
+    public static String createUri(String siteName, String... path) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(siteName);
+        builder.append(SITE_SEPARATOR);
+        for (int i = 0; i < path.length;) {
+            builder.append(path[i]);
+            if (++i != path.length)
+                builder.append(PAGE_SEPARATOR);
+        }
+        return builder.toString();
     }
 }

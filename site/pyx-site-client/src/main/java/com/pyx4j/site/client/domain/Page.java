@@ -20,11 +20,9 @@
  */
 package com.pyx4j.site.client.domain;
 
-import java.util.List;
-
 public class Page {
 
-    public PageUri uri;
+    public ResourceUri uri;
 
     public String caption;
 

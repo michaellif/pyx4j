@@ -28,7 +28,7 @@ import com.pyx4j.site.client.domain.Page;
 import com.pyx4j.site.client.domain.CommandLink;
 import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.PageLink;
-import com.pyx4j.site.client.domain.PageUri;
+import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -60,16 +60,16 @@ public class EasySite extends Site {
         }));
 
         footerLinks = new ArrayList<Link>();
-        footerLinks.add(new PageLink("Technical Support", new PageUri("home:technicalSupport")));
-        footerLinks.add(new PageLink("Privacy policy", new PageUri("home:privacyPolicy")));
-        footerLinks.add(new PageLink("Terms of Use", new PageUri("home:termsOfUse")));
+        footerLinks.add(new PageLink("Technical Support", new ResourceUri("home:technicalSupport")));
+        footerLinks.add(new PageLink("Privacy policy", new ResourceUri("home:privacyPolicy")));
+        footerLinks.add(new PageLink("Terms of Use", new ResourceUri("home:termsOfUse")));
 
         footerCopiright = "&copy; 2010 EasySite. All rights reserved.";
 
         {
             Page page = new Page();
             page.caption = "Home";
-            page.uri = new PageUri("home");
+            page.uri = new ResourceUri("home");
             page.data.html = "Home";
             pages.add(page);
         }
@@ -77,7 +77,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "Services";
-            page.uri = new PageUri("services");
+            page.uri = new ResourceUri("services");
             page.data.html = "Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>Services<P>";
             pages.add(page);
         }
@@ -85,7 +85,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "About Us";
-            page.uri = new PageUri("aboutUs");
+            page.uri = new ResourceUri("aboutUs");
             page.data.html = "About Us<P> About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>About Us<P>";
             pages.add(page);
         }
@@ -93,7 +93,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "Contact Us";
-            page.uri = new PageUri("contactUs");
+            page.uri = new ResourceUri("contactUs");
             page.data.html = "Contact Us";
             pages.add(page);
         }
@@ -101,7 +101,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "Technical Support";
-            page.uri = new PageUri("home:technicalSupport");
+            page.uri = new ResourceUri("home:technicalSupport");
             page.data.html = "Technical Support Technical Support Technical Support Technical Support";
             pages.add(page);
         }
@@ -109,7 +109,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "Privacy policy";
-            page.uri = new PageUri("home:privacyPolicy");
+            page.uri = new ResourceUri("home:privacyPolicy");
             page.data.html = "Privacy policy";
             pages.add(page);
         }
@@ -117,7 +117,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "Terms of Use";
-            page.uri = new PageUri("home:termsOfUse");
+            page.uri = new ResourceUri("home:termsOfUse");
             page.data.html = "Terms of Use";
             pages.add(page);
         }
@@ -125,7 +125,7 @@ public class EasySite extends Site {
         {
             Page page = new Page();
             page.caption = "Profile";
-            page.uri = new PageUri("user:profile");
+            page.uri = new ResourceUri("user:profile");
             page.data.html = "Profile";
             pages.add(page);
         }

@@ -31,7 +31,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.site.client.domain.PageUri;
+import com.pyx4j.site.client.domain.ResourceUri;
 
 public class SiteDispatcher implements ValueChangeHandler<String> {
 
@@ -41,7 +41,7 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
 
     private SitePanel currentSitePanel;
 
-    private String welcomeUri;
+    private ResourceUri welcomeUri;
 
     public SiteDispatcher() {
         History.addValueChangeHandler(this);
@@ -50,20 +50,23 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
     public void show(String historyToken) {
         log.debug("Show page " + historyToken);
         if (historyToken == null || historyToken.length() == 0) {
-            historyToken = welcomeUri;
+            historyToken = welcomeUri.getUri();
             if (historyToken == null) {
                 throw new RuntimeException("welcomeUri is not set");
             }
         }
-        SitePanel sitePanel = getSitePanel(new PageUri(historyToken));
+        SitePanel sitePanel = getSitePanel(new ResourceUri(historyToken));
         if (sitePanel == null) {
-            historyToken = welcomeUri;
-            sitePanel = getSitePanel(new PageUri(historyToken));
+            historyToken = welcomeUri.getUri();
+            sitePanel = getSitePanel(new ResourceUri(historyToken));
         }
         if (sitePanel == null) {
             throw new RuntimeException("site can't be found for welcomeUri " + welcomeUri);
         }
+        show(sitePanel, historyToken);
+    }
 
+    protected void show(SitePanel sitePanel, String historyToken) {
         if (!sitePanel.equals(currentSitePanel)) {
             if (currentSitePanel != null) {
                 RootPanel.get().remove(currentSitePanel);
@@ -71,10 +74,18 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
             currentSitePanel = sitePanel;
             RootPanel.get().add(currentSitePanel);
         }
-        show(sitePanel, historyToken);
+        if (historyToken == null) {
+            sitePanel.showCurrent();
+        } else {
+            sitePanel.show(historyToken);
+        }
     }
 
-    private SitePanel getSitePanel(PageUri uri) {
+    public void showCurrent(SitePanel sitePanel) {
+        show(sitePanel, null);
+    }
+
+    private SitePanel getSitePanel(ResourceUri uri) {
         String siteName = uri.getSiteName();
         if (siteName == null) {
             return null;
@@ -82,7 +93,7 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
         return getSitePanel(siteName);
     }
 
-    private SitePanel getSitePanel(String siteName) {
+    public SitePanel getSitePanel(String siteName) {
         for (SitePanel sitePanel : sites) {
             if (siteName.equals(sitePanel.getSiteName())) {
                 return sitePanel;
@@ -91,20 +102,24 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
         return null;
     }
 
-    private void show(SitePanel sitePanel, String historyToken) {
-        sitePanel.show(historyToken);
-    }
-
     protected void addSite(SitePanel panel) {
         sites.add(panel);
     }
 
-    public String getWelcomeUri() {
+    public ResourceUri getWelcomeUri() {
         return welcomeUri;
     }
 
-    public void setWelcomeUri(String welcomeUri) {
+    public void setWelcomeUri(ResourceUri welcomeUri) {
         this.welcomeUri = welcomeUri;
+    }
+
+    public SitePanel getCurrentSitePanel() {
+        return currentSitePanel;
+    }
+
+    public void setCurrentSitePanel(SitePanel currentSitePanel) {
+        this.currentSitePanel = currentSitePanel;
     }
 
     @Override

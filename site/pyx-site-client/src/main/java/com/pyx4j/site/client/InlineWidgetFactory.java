@@ -22,9 +22,11 @@ package com.pyx4j.site.client;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.domain.ResourceUri;
+
 public class InlineWidgetFactory {
 
-    public Widget createWidget(String id) {
+    public Widget createWidget(ResourceUri id) {
         return null;
     }
 }

@@ -46,7 +46,7 @@ import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.Page;
-import com.pyx4j.site.client.domain.PageUri;
+import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.domain.Portlet;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
@@ -64,6 +64,8 @@ public class SitePanel extends SimplePanel {
     private Page homePage;
 
     private final List<Page> pages = new ArrayList<Page>();
+
+    private Page currentPage;
 
     private AbsolutePanel headerPanel;
 
@@ -122,15 +124,15 @@ public class SitePanel extends SimplePanel {
         if (historyToken.length() > 0) {
             Page page = getPage(historyToken);
             if (page == null) {
-                if (getHomePage() != null) {
-                    show(getHomePage());
+                if (homePage != null) {
+                    show(homePage);
                 }
             } else {
                 show(page);
             }
         } else {
-            if (getHomePage() != null) {
-                show(getHomePage());
+            if (homePage != null) {
+                show(homePage);
             }
         }
     }
@@ -141,13 +143,13 @@ public class SitePanel extends SimplePanel {
         mainSectionPanel.setWidget(widget);
 
         if (page.data.inlineWidgetsList != null) {
-            for (String widgetId : page.data.inlineWidgetsList) {
-                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
-                Widget inlineWidget = widgetFactory.createWidget(widgetId);
+            for (ResourceUri uri : page.data.inlineWidgetsList) {
+                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
+                Widget inlineWidget = widgetFactory.createWidget(uri);
                 if (root != null && inlineWidget != null) {
                     root.add(inlineWidget);
                 } else {
-                    log.warn("Failed to add inline widget " + widgetId + " to panel.");
+                    log.warn("Failed to add inline widget " + uri + " to panel.");
                 }
             }
         }
@@ -172,6 +174,16 @@ public class SitePanel extends SimplePanel {
 
         Window.setTitle(siteCaption + " " + page.caption);
 
+        currentPage = page;
+
+    }
+
+    protected void showCurrent() {
+        if (currentPage != null) {
+            show(currentPage);
+        } else {
+            show(homePage);
+        }
     }
 
     protected Panel createContentPanel() {
@@ -373,10 +385,10 @@ public class SitePanel extends SimplePanel {
     }
 
     public Page getPage(String uri) {
-        return getPage(new PageUri(uri));
+        return getPage(new ResourceUri(uri));
     }
 
-    public Page getPage(PageUri uri) {
+    public Page getPage(ResourceUri uri) {
         for (Page page : pages) {
             if (page.uri.equals(uri)) {
                 return page;

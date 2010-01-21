@@ -34,7 +34,7 @@ import com.pyx4j.site.client.domain.CommandLink;
 import com.pyx4j.site.client.domain.ExternalLink;
 import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.PageLink;
-import com.pyx4j.site.client.domain.PageUri;
+import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -114,7 +114,7 @@ public class LinkBar extends ComplexPanel {
 
     class LinkItemAnchor extends Anchor {
 
-        LinkItemAnchor(String html, final PageUri uri) {
+        LinkItemAnchor(String html, final ResourceUri uri) {
             super(html, true, "javascript:void(0)");
             setWordWrap(false);
             addClickHandler(new ClickHandler() {

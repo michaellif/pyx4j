@@ -10,9 +10,9 @@ package com.pyx4j.site.client.domain;
 
 public class PageLink extends Link {
 
-    public PageUri uri;
+    public ResourceUri uri;
 
-    public PageLink(String html, PageUri uri) {
+    public PageLink(String html, ResourceUri uri) {
         super(html);
         this.uri = uri;
     }

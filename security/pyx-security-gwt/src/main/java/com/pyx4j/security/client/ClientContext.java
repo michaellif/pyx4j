@@ -44,6 +44,10 @@ public class ClientContext {
         return userVisit;
     }
 
+    public static boolean isAuthenticated() {
+        return userVisit != null;
+    }
+
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         userVisit = authenticationResponse.getUserVisit();
         log.info("Authenticated {}", userVisit);

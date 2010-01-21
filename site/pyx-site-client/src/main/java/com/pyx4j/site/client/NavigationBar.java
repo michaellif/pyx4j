@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.domain.PageUri;
+import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -86,7 +86,7 @@ public class NavigationBar extends ComplexPanel {
 
     }
 
-    public void add(String text, PageUri uri) {
+    public void add(String text, ResourceUri uri) {
         NavigationTab tab = new NavigationTab(text, uri);
         if (firstTab == null) {
             firstTab = tab;
@@ -97,14 +97,14 @@ public class NavigationBar extends ComplexPanel {
         add(tab, ul);
     }
 
-    public void setSelected(PageUri uri) {
+    public void setSelected(ResourceUri uri) {
         for (NavigationTab tab : tabs) {
             tab.setSelected(uri.isContained(tab.uri));
         }
     }
 
     class NavigationTabAnchor extends Anchor {
-        NavigationTabAnchor(String text, final PageUri uri) {
+        NavigationTabAnchor(String text, final ResourceUri uri) {
             super("<span>" + text + "</span>", true);
 
             getElement().getStyle().setProperty("outline", "0px");
@@ -137,9 +137,9 @@ public class NavigationBar extends ComplexPanel {
 
         private final NavigationTabAnchor anchor;
 
-        private final PageUri uri;
+        private final ResourceUri uri;
 
-        NavigationTab(String text, final PageUri uri) {
+        NavigationTab(String text, final ResourceUri uri) {
             this.uri = uri;
 
             setElement(Document.get().createLIElement());

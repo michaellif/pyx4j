@@ -27,30 +27,18 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
+import com.pyx4j.site.client.domain.ResourceUri;
+
 public class InlineWidgetRootPanel extends AbsolutePanel {
 
-    private static Map<String, InlineWidgetRootPanel> rootPanels = new HashMap<String, InlineWidgetRootPanel>();
+    private static Map<ResourceUri, InlineWidgetRootPanel> rootPanels = new HashMap<ResourceUri, InlineWidgetRootPanel>();
 
-    /**
-     * Gets the root panel associated with a given browser element. For this to work, the
-     * HTML document into which the application is loaded must have specified an element
-     * with the given id.
-     * 
-     * @param id
-     *            the id of the element to be wrapped with a root panel (
-     *            <code>null</code> specifies the default instance, which wraps the
-     *            &lt;body&gt; element)
-     * @return the root panel, or <code>null</code> if no such element was found
-     */
-    public static InlineWidgetRootPanel get(String id) {
-        // See if this RootPanel is already created.
-        InlineWidgetRootPanel rp = rootPanels.get(id);
+    public static InlineWidgetRootPanel get(ResourceUri uri) {
+        InlineWidgetRootPanel rp = rootPanels.get(uri);
 
-        // Find the element that this RootPanel will wrap.
         Element elem = null;
-        if (id != null) {
-            // Return null if the id is specified, but no element is found.
-            if (null == (elem = Document.get().getElementById(id))) {
+        if (uri != null) {
+            if (null == (elem = Document.get().getElementById(uri.getUri()))) {
                 return null;
             }
         }
@@ -67,7 +55,7 @@ public class InlineWidgetRootPanel extends AbsolutePanel {
 
         rp = new InlineWidgetRootPanel(elem);
 
-        rootPanels.put(id, rp);
+        rootPanels.put(uri, rp);
         return rp;
     }
 
