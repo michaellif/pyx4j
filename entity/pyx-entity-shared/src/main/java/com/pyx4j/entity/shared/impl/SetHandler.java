@@ -130,8 +130,26 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
     @Override
     public Iterator<OBJECT_TYPE> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("TODO create IEntity Owned by ISet");
+        //        return new Iterator<OBJECT_TYPE>() {
+        //
+        //            @Override
+        //            public boolean hasNext() {
+        //                return false;
+        //            }
+        //
+        //            @Override
+        //            public OBJECT_TYPE next() {
+        //                return null;
+        //            }
+        //
+        //            @Override
+        //            public void remove() {
+        //                // TODO Auto-generated method stub
+        //            }
+        //        };
+
+        //return getValue().iterator();
     }
 
     @Override
