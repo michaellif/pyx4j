@@ -46,6 +46,7 @@ public class WindowsTheme extends Theme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initDialogPanelStyles();
+        initGwtButtonStyles();
         initButtonStyles();
         initTooltipStyle();
     }
@@ -281,7 +282,48 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-style", "inset");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
+    }
 
+    protected void initGwtButtonStyles() {
+        // GWT Button, Code is a copy from com.google.gwt.user.theme.standard.Standard
+        String gwtButton = ".gwt-Button";
+        Style style = new Style(gwtButton);
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "3px 5px");
+        style.addProperty("text-decoration", "none");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("background", "url(images/button-bkg.png) repeat-x 0px -27px");
+        style.addProperty("border", "1px outset #ccc");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.gwtButtonDefault.name());
+        style.addProperty("border", "1px outset #3090C7");
+        addStyle(style);
+
+        // The next is added and is not in default GWT code. 
+        style = new Style(gwtButton + ":focus");
+        style.addProperty("border", "1px outset #3090C7");
+        addStyle(style);
+
+        style = new Style(gwtButton + ":active");
+        style.addProperty("border", "1px inset #ccc");
+        addStyle(style);
+
+        style = new Style(gwtButton + ":hover");
+        style.addProperty("border-color", "#9cf #69e #69e #7af");
+        addStyle(style);
+
+        style = new Style(gwtButton + "[disabled]");
+        style.addProperty("cursor", "default");
+        style.addProperty("color", "#888");
+        style.addProperty("background", "url(images/button-bkg.png) repeat-x 0px -35px");
+        style.addProperty("border", "1px ridged #cccccc");
+        addStyle(style);
+
+        style = new Style(gwtButton + "[disabled]:hover");
+        style.addProperty("border", "2px outset #ccc");
+        addStyle(style);
     }
 
     protected void initTooltipStyle() {
