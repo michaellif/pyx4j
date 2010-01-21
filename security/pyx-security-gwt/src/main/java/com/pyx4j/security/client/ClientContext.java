@@ -66,7 +66,7 @@ public class ClientContext {
         RPCManager.execute(AuthenticationServices.Logout.class, null, callback);
     }
 
-    public static void getServerSession() {
+    public static void obtainAuthenticationData() {
         AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
 
             @Override
