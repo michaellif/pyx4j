@@ -23,6 +23,7 @@ package com.pyx4j.entity.server.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -40,21 +41,22 @@ public class EntityImplReflectionHelper {
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Unknown member " + memberName);
         }
-        if (IPrimitive.class.equals(method.getReturnType())) {
-            return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) ((ParameterizedType) method.getGenericReturnType())
-                    .getActualTypeArguments()[0]);
-        } else if (ISet.class.equals(method.getReturnType())) {
-            return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity<?>>) ((ParameterizedType) method.getGenericReturnType())
-                    .getActualTypeArguments()[0]);
-        } else if (IEntity.class.isAssignableFrom(method.getReturnType())) {
+        Class<?> memberClass = method.getReturnType();
+        if (IPrimitive.class.equals(memberClass)) {
+            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) paramType);
+        } else if (ISet.class.equals(memberClass)) {
+            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity<?>>) paramType);
+        } else if (IEntity.class.isAssignableFrom(memberClass)) {
             return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
         } else {
-            throw new RuntimeException("Unknown member type" + method.getReturnType());
+            throw new RuntimeException("Unknown member type" + memberClass);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends IEntity<?>> IEntity<T> lazyCreateMemberIEntity(SharedEntityHandler<?> implHandler, String name, Class<?> valueClass) {
+    private static IEntity<?> lazyCreateMemberIEntity(SharedEntityHandler<?> implHandler, String name, Class<?> valueClass) {
         String handlerClassName = valueClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass;
         try {
@@ -64,7 +66,7 @@ public class EntityImplReflectionHelper {
         }
         try {
             Constructor childConstructor = handlerClass.getConstructor(IEntity.class, String.class);
-            return (IEntity<T>) childConstructor.newInstance(implHandler, name);
+            return (IEntity<?>) childConstructor.newInstance(implHandler, name);
         } catch (Throwable e) {
             throw new RuntimeException(e.getMessage(), e);
         }

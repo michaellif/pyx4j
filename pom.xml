@@ -129,6 +129,8 @@
         <module>entity/pyx-entity-tests</module>
         <module>entity/pyx-entity-gae</module>
 
+        <module>security/pyx-security-tests</module>
+
         <module>unit/pyx-unit-shared</module>
         <module>unit/pyx-unit-server</module>
         <module>unit/pyx-unit-runner</module>
