@@ -116,6 +116,7 @@ public class LinkBar extends ComplexPanel {
 
         LinkItemAnchor(String html, final PageUri uri) {
             super(html, true, "javascript:void(0)");
+            setWordWrap(false);
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -128,6 +129,7 @@ public class LinkBar extends ComplexPanel {
 
         LinkItemAnchor(String html, final Command command) {
             super(html, true, "javascript:void(0)");
+            setWordWrap(false);
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -140,6 +142,7 @@ public class LinkBar extends ComplexPanel {
 
         LinkItemAnchor(String html, String href) {
             super(html, true, href);
+            setWordWrap(false);
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
