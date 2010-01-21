@@ -32,6 +32,8 @@ import com.pyx4j.entity.shared.ISet;
 @Caption(name = "Laborer")
 public interface Employee extends IEntity<Employee> {
 
+    public static int DECLARED_MEMEBERS = 13;
+
     public static enum EmploymentStatus {
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT
     }

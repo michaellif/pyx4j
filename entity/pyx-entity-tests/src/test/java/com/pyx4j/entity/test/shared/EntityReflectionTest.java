@@ -40,7 +40,7 @@ public class EntityReflectionTest extends InitializerTestCase {
     public void testEmployeeMemberList() {
         Employee emp = EntityFactory.create(Employee.class);
         Set<String> names = emp.getMemberNames();
-        assertEquals("Employee Memebers count", 11, names.size());
+        assertEquals("Employee Memebers count", Employee.DECLARED_MEMEBERS, names.size());
     }
 
     public void testAddressMemberAccess() {
