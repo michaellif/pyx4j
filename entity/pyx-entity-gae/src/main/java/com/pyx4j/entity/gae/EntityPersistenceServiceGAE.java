@@ -219,6 +219,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity<?>> T retrieve(Class<T> entityClass, String primaryKey) {
+        long start = System.nanoTime();
         Key key = KeyFactory.stringToKey(primaryKey);
         if (!getIEntityKind(entityClass).equals(key.getKind())) {
             throw new RuntimeException("Unexpected IEntity " + getIEntityKind(entityClass) + " Kind " + key.getKind());
@@ -236,6 +237,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
 
         updateIEntity(iEntity, entity);
+
+        long duration = System.nanoTime() - start;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running retrieve {} took {}ms", entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("retrieve {} took {}ms", entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+        }
         return iEntity;
     }
 
@@ -321,6 +329,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     public <T extends IEntity<?>> List<String> queryKeys(EntityCriteria<T> criteria) {
+        long start = System.nanoTime();
         Class<T> entityClass = entityClass(criteria);
         if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -332,6 +341,31 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         List<String> rc = new Vector<String>();
         for (Entity entity : pq.asIterable()) {
             rc.add(KeyFactory.keyToString(entity.getKey()));
+        }
+        long duration = System.nanoTime() - start;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running queryKeys {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("queryKeys {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        }
+        return rc;
+    }
+
+    public <T extends IEntity<?>> int count(EntityCriteria<T> criteria) {
+        long start = System.nanoTime();
+        Class<T> entityClass = entityClass(criteria);
+        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        Query query = buildQuery(entityClass, criteria);
+        query.setKeysOnly();
+        PreparedQuery pq = datastore.prepare(query);
+        int rc = pq.countEntities();
+        long duration = System.nanoTime() - start;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running countQuery {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("countQuery {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         }
         return rc;
     }

@@ -82,7 +82,7 @@ public class EntityImplGenerator {
                 continue;
             }
             if ((!pathname.contains("WEB-INF")) || pathname.contains("datanucleus") || pathname.contains("geronimo") || pathname.contains("jdo")
-                    || pathname.contains("javassist")) {
+                    || pathname.contains("javassist") || pathname.contains("appengine") || pathname.contains("gwt-servlet")) {
                 continue;
             }
             pathname = pathname.substring(prefix.length());

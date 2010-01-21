@@ -35,6 +35,8 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity<?>> List<String> queryKeys(EntityCriteria<T> criteria);
 
+    public <T extends IEntity<?>> int count(EntityCriteria<T> criteria);
+
     public void delete(IEntity<?> entity);
 
     public void delete(Class<?> entityClass, String primaryKey);
