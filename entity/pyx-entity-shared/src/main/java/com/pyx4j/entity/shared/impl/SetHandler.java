@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -139,9 +140,31 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
     @Override
     public Iterator<OBJECT_TYPE> iterator() {
+        // iterator is also behaves likes Elvis 
+        final Set<Map<String, ?>> setValue = getValue();
+        if (setValue == null) {
+            return new Iterator<OBJECT_TYPE>() {
+
+                @Override
+                public boolean hasNext() {
+                    return false;
+                }
+
+                @Override
+                public OBJECT_TYPE next() {
+                    throw new NoSuchElementException();
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }
+
         return new Iterator<OBJECT_TYPE>() {
 
-            final Iterator<Map<String, ?>> iter = getValue().iterator();
+            final Iterator<Map<String, ?>> iter = setValue.iterator();
 
             @Override
             public boolean hasNext() {
