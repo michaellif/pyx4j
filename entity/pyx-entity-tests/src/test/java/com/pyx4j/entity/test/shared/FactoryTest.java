@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.util.Iterator;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
@@ -110,6 +112,20 @@ public class FactoryTest extends InitializerTestCase {
         assertEquals("Set size", 2, department.employees().getValue().size());
         assertTrue("contains(emp1)", department.employees().contains(employee1));
         assertTrue("contains(emp2)", department.employees().contains(employee2));
+
+        Iterator<Employee> it = department.employees().iterator();
+        assertEquals("iterator.hasNext() first", true, it.hasNext());
+        Employee itEmp1 = it.next();
+        assertEquals("iterator.hasNext() second", true, it.hasNext());
+        Employee itEmp2 = it.next();
+        assertEquals("iterator.hasNext()", false, it.hasNext());
+        if (itEmp1.equals(employee1)) {
+            assertEquals("iterator. second()", employee2, itEmp2);
+        } else {
+            assertEquals("iterator. first()", employee2, itEmp1);
+            assertEquals("iterator. second()", employee1, itEmp2);
+        }
+
         assertFalse("contains(emp3)", department.employees().contains(employee3));
         employee3.setPrimaryKey("key2");
         assertEquals("same key (emp2 and emp3)", employee2, employee3);

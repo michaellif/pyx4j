@@ -37,7 +37,6 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -412,10 +411,14 @@ public class EntityFactoryGenerator extends Generator {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType");
                 }
-                writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", "
-                        + ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class);");
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
-                writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\");");
+                if (!(type instanceof JParameterizedType)) {
+                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType");
+                }
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
                 writer.println("return new " + type.getQualifiedSourceName() + IMPL + "(this, \"" + method.getName() + "\");");
             } else {

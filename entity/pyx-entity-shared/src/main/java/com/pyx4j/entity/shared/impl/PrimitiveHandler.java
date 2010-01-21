@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
@@ -53,6 +52,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
         data.put(getFieldName(), value);
     }
 
+    @Override
     public Class<TYPE> getValueClass() {
         return valueClass;
     }

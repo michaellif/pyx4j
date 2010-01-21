@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
 public class EntityImplReflectionHelper {
 
+    @SuppressWarnings("unchecked")
     public static IObject<?, ?> lazyCreateMember(SharedEntityHandler<?> implHandler, String memberName) {
         Method method;
         try {
@@ -43,7 +44,8 @@ public class EntityImplReflectionHelper {
             return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) ((ParameterizedType) method.getGenericReturnType())
                     .getActualTypeArguments()[0]);
         } else if (ISet.class.equals(method.getReturnType())) {
-            return implHandler.lazyCreateMemberISet(method.getName());
+            return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity<?>>) ((ParameterizedType) method.getGenericReturnType())
+                    .getActualTypeArguments()[0]);
         } else if (IEntity.class.isAssignableFrom(method.getReturnType())) {
             return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
         } else {

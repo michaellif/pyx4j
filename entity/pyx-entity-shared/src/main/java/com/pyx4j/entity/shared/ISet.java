@@ -25,4 +25,6 @@ import java.util.Set;
 
 public interface ISet<TYPE extends IEntity<?>> extends IObject<ISet<TYPE>, Set<Map<String, ?>>>, Set<TYPE> {
 
+    public Class<TYPE> getValueClass();
+
 }

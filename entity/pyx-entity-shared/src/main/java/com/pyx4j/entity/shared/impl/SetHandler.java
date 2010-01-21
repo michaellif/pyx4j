@@ -27,11 +27,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
 public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
+
+    private final Class<OBJECT_TYPE> valueClass;
 
     private static class ElementsComparator implements Comparator<Map<String, ?>> {
 
@@ -42,8 +45,14 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
     }
 
-    public SetHandler(IEntity<?> parent, String fieldName) {
+    public SetHandler(IEntity<?> parent, String fieldName, Class<OBJECT_TYPE> valueClass) {
         super(ISet.class, parent, fieldName);
+        this.valueClass = valueClass;
+    }
+
+    @Override
+    public Class<OBJECT_TYPE> getValueClass() {
+        return valueClass;
     }
 
     @Override
@@ -130,26 +139,28 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
     @Override
     public Iterator<OBJECT_TYPE> iterator() {
-        throw new UnsupportedOperationException("TODO create IEntity Owned by ISet");
-        //        return new Iterator<OBJECT_TYPE>() {
-        //
-        //            @Override
-        //            public boolean hasNext() {
-        //                return false;
-        //            }
-        //
-        //            @Override
-        //            public OBJECT_TYPE next() {
-        //                return null;
-        //            }
-        //
-        //            @Override
-        //            public void remove() {
-        //                // TODO Auto-generated method stub
-        //            }
-        //        };
+        return new Iterator<OBJECT_TYPE>() {
 
-        //return getValue().iterator();
+            final Iterator<Map<String, ?>> iter = getValue().iterator();
+
+            @Override
+            public boolean hasNext() {
+                return iter.hasNext();
+            }
+
+            @Override
+            public OBJECT_TYPE next() {
+                Map<String, Object> entityValue = (Map<String, Object>) iter.next();
+                OBJECT_TYPE entity = EntityFactory.create(getValueClass());
+                entity.setValue(entityValue);
+                return entity;
+            }
+
+            @Override
+            public void remove() {
+                iter.remove();
+            }
+        };
     }
 
     @Override

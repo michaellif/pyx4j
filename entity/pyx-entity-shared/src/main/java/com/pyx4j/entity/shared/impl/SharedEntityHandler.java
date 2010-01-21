@@ -69,9 +69,8 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new PrimitiveHandler<T>(this, name, primitiveValueClass);
     }
 
-    @SuppressWarnings("unchecked")
-    public ISet<?> lazyCreateMemberISet(String name) {
-        return new SetHandler(this, name);
+    public <T extends IEntity<?>> ISet<T> lazyCreateMemberISet(String name, Class<T> setValueClass) {
+        return new SetHandler<T>(this, name, setValueClass);
     }
 
     /**
