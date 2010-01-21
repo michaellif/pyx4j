@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+
+<!-- @version $Revision$ ($Author$) $Date$ -->
+
+    <publishDate position="left" format="MM-dd-yyyy HH:mm" />
+
+    <body>
+        <links>
+            <item name="CC" href="http://pyx4j.com/cruisecontrol-public/"/>
+            <item name="Live" href="http://pyx4j-demo.pyx4j.com"/>
+        </links>
+
+        <menu name="Ver #build#" inherit="top"/>
+
+        <menu ref="parent" />
+
+        <menu ref="modules" />
+
+        <menu ref="reports" />
+
+    </body>
+
+</project>
