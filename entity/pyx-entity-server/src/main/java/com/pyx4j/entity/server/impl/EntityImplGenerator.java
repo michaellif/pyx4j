@@ -81,6 +81,10 @@ public class EntityImplGenerator {
             if (!pathname.startsWith(prefix)) {
                 continue;
             }
+            if ((!pathname.contains("WEB-INF")) || pathname.contains("datanucleus") || pathname.contains("geronimo") || pathname.contains("jdo")
+                    || pathname.contains("javassist")) {
+                continue;
+            }
             pathname = pathname.substring(prefix.length());
             try {
                 log.trace("ClassPool append path {}", pathname);
@@ -92,6 +96,7 @@ public class EntityImplGenerator {
     }
 
     public static void generate() {
+        long start = System.currentTimeMillis();
         List<String> classes = EntityClassFinder.findEntityClasses();
         if (classes.size() == 0) {
             log.warn("IEntity classes not found");
@@ -101,7 +106,7 @@ public class EntityImplGenerator {
         for (String c : classes) {
             EntityImplGenerator.instance().generateImplementation(c);
         }
-        log.info("Created {} IEntity implementations", classes.size());
+        log.info("Created {} IEntity implementations in {} msec", classes.size(), System.currentTimeMillis() - start);
 
     }
 
