@@ -14,20 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 25, 2009
- * @author Michael
+ * Created on Apr 27, 2009
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.admin;
+package com.pyx4j.site.admin.client;
 
-import com.google.gwt.core.client.GWT;
+public class Toolbar extends com.pyx4j.ria.client.Toolbar {
 
-public class ImageFactory {
+    public Toolbar(final AdminApplication app) {
 
-    private static AdminImageBundle bundle = GWT.create(AdminImageBundle.class);
+        addItem(ImageFactory.getImages().save(), app.getSaveCommand(), "Save");
 
-    public static AdminImageBundle getImages() {
-        return bundle;
     }
-
 }

@@ -18,12 +18,12 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.admin;
+package com.pyx4j.site.admin.client;
 
 import com.google.gwt.resources.client.ClientBundle;
 
 import com.pyx4j.ria.client.RiaImageBundle;
-import com.pyx4j.site.admin.images.AdminAppImages;
+import com.pyx4j.site.admin.client.images.AdminAppImages;
 
 public interface AdminImageBundle extends ClientBundle, RiaImageBundle, AdminAppImages {
 

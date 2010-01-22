@@ -112,7 +112,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         DOM.setStyleAttribute(scrollContainer.getElement(), "position", "relative");
         scrollContainer.setWidth("100%");
         scrollContainer.setHeight("100%");
-        scrollContainer.setHeight("1.6em");
+        scrollContainer.setHeight("26px");
 
         scrollContainer.add(scrollPanel);
 

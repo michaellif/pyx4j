@@ -1,4 +1,4 @@
-package com.pyx4j.site.admin;
+package com.pyx4j.site.admin.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -21,7 +21,7 @@ import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Client implements EntryPoint {
+public class AdminClient implements EntryPoint {
 
     private final PageServiceAsync pageService = GWT.create(PageService.class);
 

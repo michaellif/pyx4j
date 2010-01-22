@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.admin;
+package com.pyx4j.site.admin.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

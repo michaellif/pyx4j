@@ -21,8 +21,8 @@
 package com.pyx4j.site.client;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +32,12 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.client.domain.ResourceUri;
 
-public class SiteDispatcher implements ValueChangeHandler<String> {
+public abstract class SiteDispatcher implements ValueChangeHandler<String> {
 
     private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
 
@@ -44,8 +47,18 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
 
     private ResourceUri welcomeUri;
 
+    private Boolean logedIn;
+
     public SiteDispatcher() {
         History.addValueChangeHandler(this);
+        ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
+                onAuthenticationChange();
+            }
+        });
+        onAuthenticationChange();
+
     }
 
     public void show(String historyToken) {
@@ -102,6 +115,24 @@ public class SiteDispatcher implements ValueChangeHandler<String> {
         }
         return null;
     }
+
+    private void onAuthenticationChange() {
+        if (ClientContext.isAuthenticated()) {
+            if (logedIn == null || !logedIn) {
+                onAfterLogIn();
+                logedIn = true;
+            }
+        } else {
+            if (logedIn == null || logedIn) {
+                onAfterLogOut();
+                logedIn = false;
+            }
+        }
+    }
+
+    abstract protected void onAfterLogOut();
+
+    abstract protected void onAfterLogIn();
 
     protected void addSitePanel(SitePanel panel) {
         sitePanels.add(panel);

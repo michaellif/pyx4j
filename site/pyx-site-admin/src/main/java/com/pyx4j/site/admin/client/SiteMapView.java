@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.admin;
+package com.pyx4j.site.admin.client;
 
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.VerticalPanel;

@@ -32,8 +32,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.site.admin.*;
-import com.pyx4j.site.admin.PageServiceAsync;
+import com.pyx4j.site.admin.client.*;
 
 public class UpdatePage extends VerticalPanel {
 

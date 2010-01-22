@@ -1,4 +1,4 @@
-package com.pyx4j.site.admin;
+package com.pyx4j.site.admin.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

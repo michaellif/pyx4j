@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.admin.images;
+package com.pyx4j.site.admin.client.images;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
