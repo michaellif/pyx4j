@@ -22,9 +22,9 @@ package com.pyx4j.site.client.domain;
 
 public class ResourceUri {
 
-    public static String SITE_SEPARATOR = ":";
+    public static String SITE_SEPARATOR = "&";
 
-    public static String PAGE_SEPARATOR = "/";
+    public static String PAGE_SEPARATOR = "$";
 
     private String siteName;
 

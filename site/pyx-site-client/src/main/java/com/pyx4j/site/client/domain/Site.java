@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Site {
 
-    public String siteName;
+    public String siteId;
 
     public String siteCaption;
 

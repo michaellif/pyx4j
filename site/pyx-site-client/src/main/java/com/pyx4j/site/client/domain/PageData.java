@@ -24,6 +24,8 @@ import java.util.List;
 
 public class PageData {
 
+    public String logoUrl;
+
     public String html;
 
     public List<ResourceUri> inlineWidgetsList;
