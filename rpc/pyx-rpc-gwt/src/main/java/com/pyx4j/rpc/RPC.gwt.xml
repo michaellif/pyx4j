@@ -3,6 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.rpc.RPCShared'/>
+    <inherits name='com.pyx4j.gwt.GwtCommons'/>
 	<source path="client"/>
 	
 	<extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.ui.*" />

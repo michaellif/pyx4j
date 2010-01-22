@@ -6,6 +6,7 @@
     <inherits name='com.google.gwt.widgetideas.BasicWidget' />
     <inherits name='com.pyx4j.widgets.BrowserType' />
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
+    <inherits name='com.pyx4j.gwt.GwtCommons'/>
 
     <source path="client" />
 
