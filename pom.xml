@@ -499,8 +499,23 @@
             </plugin>
             -->
 
-            <!--artifactId>maven-changelog-plugin</artifactId-->
-            <!--
+            <plugin>
+                <inherited>false</inherited>
+                <groupId>net.sf</groupId>
+                <artifactId>stat-scm</artifactId>
+                <configuration>
+                    <nonDeveloperLogins>
+                        <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
+                    </nonDeveloperLogins>
+                    <systemProperties>
+                        <property>
+                            <name>java.util.logging.config.file</name>
+                            <value>src/site/stat-scm-logging-error.properties</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>changelog-maven-plugin</artifactId>
@@ -522,7 +537,7 @@
                   </reportSet>
                 </reportSets>
             </plugin>
-            -->
+
         </plugins>
     </reporting>
 </project>
