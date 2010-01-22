@@ -56,7 +56,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
-
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class DialogPanel extends PopupPanel {
@@ -117,8 +116,8 @@ public class DialogPanel extends PopupPanel {
 
     private final int clientTop;
 
-    public DialogPanel() {
-        super(true);
+    public DialogPanel(boolean autoHide, boolean modal) {
+        super(autoHide, modal);
 
         setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
         //Don't move it to styles because width of border is used in calculation of resizing

@@ -14,42 +14,67 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 25, 2009
- * @author Michael
+ * Created on 26-Sep-06
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.widgets.client.dialog;
 
+import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.style.CSSClass;
 
+/**
+ * Shared implementation for Modal Dialogs
+ */
 public class Dialog extends DialogPanel {
+
+    Logger log = LoggerFactory.getLogger(Dialog.class);
 
     public static enum Type {
         Error, Warning, Info, Confirm
     }
 
-    private Button focusButton;
+    private FocusWidget firstFocusWidget;
+
+    private Button defaultButton;
+
+    boolean allowEnterKeyForDefaultButton;
+
+    protected final HorizontalPanel buttonsPanel;
 
     private Button yesButton;
 
@@ -73,6 +98,8 @@ public class Dialog extends DialogPanel {
 
     private final DockPanel content;
 
+    private FocusHandler focusHandler;
+
     public Dialog(String message) {
         this("Information", message, Type.Info, new OkOption() {
 
@@ -90,6 +117,7 @@ public class Dialog extends DialogPanel {
     }
 
     public Dialog(String caption, DialogOptions options) {
+        super(false, true);
         setCaption(caption);
 
         this.options = options;
@@ -98,14 +126,28 @@ public class Dialog extends DialogPanel {
         content.setHeight("100%");
         content.setWidth("100%");
 
-        Panel buttonPanel = createButtonsPanel();
-        content.add(buttonPanel, DockPanel.SOUTH);
-        content.setCellWidth(buttonPanel, "100%");
+        buttonsPanel = createButtonsPanel();
+        content.add(buttonsPanel, DockPanel.SOUTH);
+        content.setCellWidth(buttonsPanel, "100%");
 
         setWidget(content);
         setPixelSize(400, 300);
         center();
 
+        this.addKeyUpHandler(new KeyUpHandler() {
+
+            public void onKeyUp(KeyUpEvent event) {
+                if ((allowEnterKeyForDefaultButton) && event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    defaultButton.click();
+                } else if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+                    if (cancelButton != null) {
+                        cancelButton.click();
+                    } else if (closeButton != null) {
+                        closeButton.click();
+                    }
+                }
+            }
+        });
     }
 
     public void setBody(Widget message) {
@@ -176,13 +218,21 @@ public class Dialog extends DialogPanel {
         return buttonsPanel;
     }
 
+    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+        return addDomHandler(handler, KeyUpEvent.getType());
+    }
+
     /**
      * This is alternative to using CustomOption. Override to change the text in dialog.
      * 
      * @return text for 'Ok' button
      */
     protected String optionTextOk() {
-        return "Ok";
+        if (options instanceof OkOptionText) {
+            return ((OkOptionText) options).optionTextOk();
+        } else {
+            return "Ok";
+        }
     }
 
     /**
@@ -191,7 +241,11 @@ public class Dialog extends DialogPanel {
      * @return text for 'Cancel' button
      */
     protected String optionTextCancel() {
-        return "Cancel";
+        if (options instanceof CancelOptionText) {
+            return ((CancelOptionText) options).optionTextCancel();
+        } else {
+            return "Cancel";
+        }
     }
 
     /**
@@ -208,8 +262,9 @@ public class Dialog extends DialogPanel {
         button.ensureDebugId("Dialog." + text);
         button.addClickHandler(buttonListener);
         DOM.setStyleAttribute(button.getElement(), "margin", "3px");
-        if (canHaveFocus && focusButton == null) {
-            focusButton = button;
+        DOM.setStyleAttribute(button.getElement(), "whiteSpace", "nowrap");
+        if (canHaveFocus && defaultButton == null) {
+            defaultButton = button;
         }
         return button;
     }
@@ -310,17 +365,62 @@ public class Dialog extends DialogPanel {
     @Override
     public void show() {
         super.show();
-        if (this.focusButton != null) {
-            requestFocus(this.focusButton);
-        }
-    }
-
-    public void requestFocus(final FocusWidget focusWidget) {
+        // The insides of Dialog may be CForm that is only initialized on show.
         DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
             public void execute() {
-                focusWidget.setFocus(true);
+                setupFocusManager();
+                if (firstFocusWidget != null) {
+                    firstFocusWidget.setFocus(true);
+                } else {
+                    if (defaultButton != null) {
+                        defaultButton.setFocus(true);
+                    }
+                }
             }
         });
     }
 
+    public void requestFocus(final FocusWidget focusWidget) {
+        firstFocusWidget = focusWidget;
+    }
+
+    private void setupFocusManager() {
+        if (focusHandler == null) {
+            focusHandler = new FocusHandler() {
+                @Override
+                public void onFocus(FocusEvent event) {
+                    if (defaultButton != null) {
+                        log.trace("Focus on {}", event.getSource().getClass());
+                        boolean allowDefaultButton = ((event.getSource() instanceof TextBox) || (event.getSource() instanceof CheckBox))
+                                || (event.getSource() instanceof ListBox);
+                        allowEnterKeyForDefaultButton = allowDefaultButton;
+                        if (allowDefaultButton) {
+                            defaultButton.addStyleName(CSSClass.gwtButtonDefault.name());
+                        } else {
+                            defaultButton.removeStyleName(CSSClass.gwtButtonDefault.name());
+                        }
+                    }
+                }
+            };
+        }
+        attachFocusHandler(this.content.iterator());
+    }
+
+    private void attachFocusHandler(Iterator<Widget> iterator) {
+        while (iterator.hasNext()) {
+            Widget w = iterator.next();
+            if (w == buttonsPanel) {
+                continue;
+            }
+            if (w instanceof FocusWidget) {
+                ((FocusWidget) w).addFocusHandler(focusHandler);
+                if (firstFocusWidget == null) {
+                    firstFocusWidget = (FocusWidget) w;
+                }
+            }
+            if (w instanceof HasWidgets) {
+                attachFocusHandler(((HasWidgets) w).iterator());
+            }
+        }
+    }
 }

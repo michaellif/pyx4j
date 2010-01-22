@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2006-2010 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,17 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 26-Sep-06
+ * Created on Jan 21, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.widgets.client.dialog;
 
-/**
- * Create Dialog with Cancel button.
- */
-public interface CancelOption extends DialogOptions {
+public interface CancelOptionText extends DialogOptions {
 
-    public boolean onClickCancel();
+    String optionTextCancel();
 
 }

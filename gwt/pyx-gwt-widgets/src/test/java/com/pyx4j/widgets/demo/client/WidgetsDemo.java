@@ -27,18 +27,21 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.google.gwt.user.client.ui.Widget;
+import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.GlueOption;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
@@ -53,6 +56,7 @@ public class WidgetsDemo implements EntryPoint {
     public void onModuleLoad() {
 
         StyleManger.installTheme(new WindowsTheme());
+        ClientLogger.setDebugOn(true);
 
         VerticalPanel contentPanel = new VerticalPanel();
         RootPanel.get().add(contentPanel);
@@ -119,7 +123,7 @@ public class WidgetsDemo implements EntryPoint {
     class DialogButtonHandler2 implements ClickHandler {
 
         public void onClick(ClickEvent event) {
-            Dialog dialog = new Dialog("Caption2", "Test2Test2", Type.Error, new Options2() {
+            Dialog dialog = new Dialog("Caption2", new Options2() {
 
                 @Override
                 public boolean onClickCancel() {
@@ -146,7 +150,7 @@ public class WidgetsDemo implements EntryPoint {
 
                 @Override
                 public boolean onClickCustom1() {
-                    log.info("custom1Text");
+                    log.info("onClickCustom1");
                     return false;
                 }
 
@@ -157,12 +161,29 @@ public class WidgetsDemo implements EntryPoint {
 
                 @Override
                 public boolean onClickCustom2() {
-                    log.info("custom2Text");
+                    log.info("onClickCustom2");
                     return false;
                 }
             });
+
+            VerticalPanel inputPanel = new VerticalPanel();
+
+            inputPanel.add(createLabled("Text Box :", new TextBox()));
+            inputPanel.add(createLabled("Check Box:", new CheckBox()));
+            inputPanel.add(createLabled("Text Area:", new TextArea()));
+
+            dialog.setBody(inputPanel);
+
             dialog.show();
         }
+
+    }
+
+    private static Widget createLabled(String lable, Widget widget) {
+        HorizontalPanel panel = new HorizontalPanel();
+        panel.add(new Label(lable));
+        panel.add(widget);
+        return panel;
     }
 
 }
