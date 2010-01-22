@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
 
 public class GoogleAnalytics {
 
@@ -33,7 +34,10 @@ public class GoogleAnalytics {
     private static String googleAnalyticsTracker;
 
     public static void setGoogleAnalyticsTracker(String googleAnalyticsTracker) {
-        GoogleAnalytics.googleAnalyticsTracker = googleAnalyticsTracker;
+        String h = Window.Location.getHostName();
+        if (!"localhost".equals(h) && !"127.1.1.1".equals(h)) {
+            GoogleAnalytics.googleAnalyticsTracker = googleAnalyticsTracker;
+        }
     }
 
     public static void track(final String actionName) {
@@ -54,4 +58,5 @@ public class GoogleAnalytics {
 
     private static native void trackPageView(String tracker, String pageUrl)
     /*-{ $wnd._gat._getTracker(tracker)._trackPageview(pageUrl); }-*/;
+
 }
