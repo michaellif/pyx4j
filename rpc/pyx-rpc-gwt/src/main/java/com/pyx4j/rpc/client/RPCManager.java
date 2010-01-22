@@ -73,11 +73,12 @@ public class RPCManager {
 
         @Override
         public void onFailure(Throwable caught) {
+            this.callback.onFailure(caught);
         }
 
         @Override
         public void onSuccess(Object result) {
-
+            this.callback.onSuccess(result);
         }
     }
 
