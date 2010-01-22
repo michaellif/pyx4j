@@ -34,12 +34,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.ria.client.ApplicationManager;
 
-public class SiteMapView extends AbstractView {
+public class PortletsView extends AbstractView {
 
     private static Logger log = LoggerFactory.getLogger(SiteMapView.class);
 
-    public SiteMapView() {
-        super(new VerticalPanel(), "Site Map", ImageFactory.getImages().image());
+    public PortletsView() {
+        super(new VerticalPanel(), "Portlets", ImageFactory.getImages().image());
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
         contentPane.setSpacing(4);
 
@@ -49,33 +49,17 @@ public class SiteMapView extends AbstractView {
             @Override
             public void onSelection(SelectionEvent<TreeItem> event) {
                 String name = event.getSelectedItem().getText();
-                log.debug("Open editor for " + name);
-                ((AdminApplication) ApplicationManager.getCurrentApplication()).editPortlet(name);
+                log.debug("Open portlet editor for " + name);
+                ((AdminApplication) ApplicationManager.getCurrentApplication()).editPage(name);
             }
         });
+
         contentPane.add(tree);
+        tree.addItem("Portlets 1");
+        tree.addItem("Portlets 2");
+        tree.addItem("Portlets 3");
+        tree.addItem("Portlets 4");
 
-        {
-            TreeItem pubRoot = new TreeItem("pub");
-            TreeItem pubHomeRoot = new TreeItem("home");
-            pubHomeRoot.addItem("techSupport");
-            pubHomeRoot.addItem("policy");
-            pubRoot.addItem(pubHomeRoot);
-            pubRoot.addItem("aboutUs");
-            pubRoot.addItem("contactUs");
-            tree.addItem(pubRoot);
-        }
-
-        {
-            TreeItem pubRoot = new TreeItem("hiring");
-            TreeItem pubHomeRoot = new TreeItem("home");
-            pubHomeRoot.addItem("techSupport");
-            pubHomeRoot.addItem("policy");
-            pubRoot.addItem(pubHomeRoot);
-            pubRoot.addItem("aboutUs");
-            pubRoot.addItem("contactUs");
-            tree.addItem(pubRoot);
-        }
     }
 
     @Override

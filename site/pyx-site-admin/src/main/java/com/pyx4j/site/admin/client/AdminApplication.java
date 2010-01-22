@@ -57,9 +57,19 @@ public class AdminApplication implements IApplication {
 
     }
 
-    public void openEditor(IView view) {
-        mainPanel.getTopFolder().addView(view, false);
-        mainPanel.getTopFolder().showView(view);
+    private void openEditor(IView editor) {
+        mainPanel.getTopFolder().addView(editor, true);
+        mainPanel.getTopFolder().showView(editor);
+    }
+
+    public void editPage(String pageName) {
+        PageEditor editor = new PageEditor(pageName);
+        openEditor(editor);
+    }
+
+    public void editPortlet(String portletName) {
+        PortletEditor editor = new PortletEditor(portletName);
+        openEditor(editor);
     }
 
     public void onLoad() {
@@ -89,7 +99,10 @@ public class AdminApplication implements IApplication {
 
         mainPanel.getLeftFolder().addView(new SiteMapView(), false);
 
-        //TODO mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));
+        mainPanel.getLeftFolder().addView(new PortletsView(), false);
+
+        //TODO
+        //mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));
 
         perspective.setMainPanel(mainPanel);
 

@@ -49,6 +49,8 @@ public class WindowsTheme extends Theme {
         initGwtButtonStyles();
         initButtonStyles();
         initTooltipStyle();
+        initTreeStyle();
+
     }
 
     protected void initThemeColors() {
@@ -333,6 +335,19 @@ public class WindowsTheme extends Theme {
         style.addProperty("padding", "1px 3px 1px 3px");
         style.addProperty("color", "#000000");
         style.addProperty("font-size", "16px");
+        addStyle(style);
+    }
+
+    protected void initTreeStyle() {
+        Style style = new Style(".gwt-Tree .gwt-TreeItem");
+        style.addProperty("padding", "1px 0px");
+        style.addProperty("margin", "0px");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("cursor", "hand");
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+        style = new Style(".gwt-Tree .gwt-TreeItem-selected");
+        style.addProperty("background", ThemeColor.SELECTION);
         addStyle(style);
     }
 
