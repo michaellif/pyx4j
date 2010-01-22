@@ -44,7 +44,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             detailsMessage = "\n\nErrorCode [" + errorCode + "]";
         }
 
-        boolean colsed = false;
+        boolean todoSessionClosed = false;
 
         MessageDialog.error("An Unexpected Error Has Occurred",
 
@@ -52,7 +52,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         + "describing the steps taken prior to the error.\n"
 
-        + ((colsed) ? "\nThis session has been terminated to prevent data corruption." : "")
+        + ((todoSessionClosed) ? "\nThis session has been terminated to prevent data corruption." : "")
 
         + ((detailsMessage != null) ? detailsMessage : ""));
 
