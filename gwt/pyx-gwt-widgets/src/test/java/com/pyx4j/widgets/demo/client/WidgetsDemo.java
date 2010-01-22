@@ -36,11 +36,13 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.GlueOption;
+import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -57,6 +59,7 @@ public class WidgetsDemo implements EntryPoint {
 
         StyleManger.installTheme(new WindowsTheme());
         ClientLogger.setDebugOn(true);
+        UnrecoverableErrorHandlerDialog.register();
 
         VerticalPanel contentPanel = new VerticalPanel();
         RootPanel.get().add(contentPanel);
@@ -90,6 +93,30 @@ public class WidgetsDemo implements EntryPoint {
             contentPanel.add(dialogButton);
         }
 
+        {
+            final Button button = new Button("Throw Unhandled Error");
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    throw new Error("Unhandled problem");
+                }
+            });
+            contentPanel.add(button);
+        }
+
+        {
+            final Button button = new Button("Throw NPE");
+            button.addClickHandler(new ClickHandler() {
+
+                @SuppressWarnings("null")
+                @Override
+                public void onClick(ClickEvent event) {
+                    ClickHandler ch = null;
+                    ch.onClick(null);
+                }
+            });
+            contentPanel.add(button);
+        }
     }
 
     class MyHandler implements ClickHandler {
