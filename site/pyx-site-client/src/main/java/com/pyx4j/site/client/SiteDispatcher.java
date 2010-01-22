@@ -32,12 +32,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.client.domain.ResourceUri;
 
-public abstract class SiteDispatcher implements ValueChangeHandler<String> {
+public abstract class SiteDispatcher {
 
     private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
 
@@ -50,7 +51,12 @@ public abstract class SiteDispatcher implements ValueChangeHandler<String> {
     private Boolean logedIn;
 
     public SiteDispatcher() {
-        History.addValueChangeHandler(this);
+        History.addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                show(event.getValue());
+            }
+        });
         ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
@@ -90,6 +96,7 @@ public abstract class SiteDispatcher implements ValueChangeHandler<String> {
         if (historyToken == null) {
             sitePanel.showCurrent();
         } else {
+            GoogleAnalytics.track("#" + historyToken);
             sitePanel.show(historyToken);
         }
     }
@@ -155,11 +162,6 @@ public abstract class SiteDispatcher implements ValueChangeHandler<String> {
 
     public void setCurrentSitePanel(SitePanel currentSitePanel) {
         this.currentSitePanel = currentSitePanel;
-    }
-
-    @Override
-    public void onValueChange(ValueChangeEvent<String> event) {
-        show(event.getValue());
     }
 
 }
