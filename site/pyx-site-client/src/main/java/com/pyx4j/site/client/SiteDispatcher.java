@@ -57,7 +57,6 @@ public abstract class SiteDispatcher implements ValueChangeHandler<String> {
                 onAuthenticationChange();
             }
         });
-        onAuthenticationChange();
 
     }
 
@@ -116,7 +115,7 @@ public abstract class SiteDispatcher implements ValueChangeHandler<String> {
         return null;
     }
 
-    private void onAuthenticationChange() {
+    protected void onAuthenticationChange() {
         if (ClientContext.isAuthenticated()) {
             if (logedIn == null || !logedIn) {
                 onAfterLogIn();
