@@ -141,7 +141,7 @@ public class RPCAppender implements Appender {
                     }
                 };
                 lastDeliveryAttemptTime = System.currentTimeMillis();
-                RPCManager.execute(LogServices.Log.class, sendBuffer, callback);
+                RPCManager.executeBackground(LogServices.Log.class, sendBuffer, callback);
             }
         } catch (Throwable t) {
             GWT.log("Execution of LogServices failed", t);

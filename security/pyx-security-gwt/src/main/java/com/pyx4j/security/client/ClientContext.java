@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -83,6 +82,6 @@ public class ClientContext {
                 ClientContext.authenticated(result);
             }
         };
-        RPCManager.execute(AuthenticationServices.GetStatus.class, null, callback);
+        RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
     }
 }

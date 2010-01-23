@@ -57,12 +57,25 @@ public class RPCManager {
     }
 
     @SuppressWarnings("unchecked")
-    public static <I extends Serializable, O extends Serializable> void execute(final Class<? extends Service<I, O>> serviceInterface, I request,
+    public static <I extends Serializable, O extends Serializable> void executeBackground(final Class<? extends Service<I, O>> serviceInterface, I request,
             AsyncCallback<O> callback) {
-        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(serviceInterface, callback);
+        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(true, serviceInterface, callback);
         try {
             runningServicesCount++;
-            fireStatusChangeEvent(When.START, serviceInterface, -1);
+            fireStatusChangeEvent(When.START, true, serviceInterface, -1);
+            service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
+        } catch (Throwable e) {
+            serviceHandlingCallback.onFailure(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <I extends Serializable, O extends Serializable> void execute(final Class<? extends Service<I, O>> serviceInterface, I request,
+            AsyncCallback<O> callback) {
+        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(false, serviceInterface, callback);
+        try {
+            runningServicesCount++;
+            fireStatusChangeEvent(When.START, false, serviceInterface, -1);
             service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
@@ -74,11 +87,14 @@ public class RPCManager {
 
         private final long requestStartTime = System.currentTimeMillis();
 
+        private final boolean executeBackground;
+
         final Class<? extends Service> serviceInterface;
 
         final AsyncCallback callback;
 
-        ServiceHandlingCallback(final Class<? extends Service> serviceInterface, AsyncCallback callback) {
+        ServiceHandlingCallback(boolean executeBackground, final Class<? extends Service> serviceInterface, AsyncCallback callback) {
+            this.executeBackground = executeBackground;
             this.serviceInterface = serviceInterface;
             this.callback = callback;
         }
@@ -95,7 +111,7 @@ public class RPCManager {
             } catch (Throwable e) {
                 UncaughtHandler.onUnrecoverableError(e, "UIonF." + GWTJava5Helper.getSimpleName(serviceInterface));
             } finally {
-                fireStatusChangeEvent(When.FAILURE, serviceInterface, System.currentTimeMillis() - requestStartTime);
+                fireStatusChangeEvent(When.FAILURE, executeBackground, serviceInterface, System.currentTimeMillis() - requestStartTime);
             }
         }
 
@@ -109,15 +125,15 @@ public class RPCManager {
             } catch (Throwable e) {
                 UncaughtHandler.onUnrecoverableError(e, "UIonS." + GWTJava5Helper.getSimpleName(serviceInterface));
             } finally {
-                fireStatusChangeEvent(When.SUCCESS, serviceInterface, System.currentTimeMillis() - requestStartTime);
+                fireStatusChangeEvent(When.SUCCESS, executeBackground, serviceInterface, System.currentTimeMillis() - requestStartTime);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static void fireStatusChangeEvent(When when, Class<? extends Service> serviceDescriptorClass, long requestDuration) {
+    private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service> serviceDescriptorClass, long requestDuration) {
         if (handlerManager != null) {
-            handlerManager.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, serviceDescriptorClass, requestDuration));
+            handlerManager.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, executeBackground, serviceDescriptorClass, requestDuration));
         }
     }
 
