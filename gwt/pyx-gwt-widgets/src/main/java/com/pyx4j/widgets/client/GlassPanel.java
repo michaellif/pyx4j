@@ -60,7 +60,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         getElement().getStyle().setProperty("position", "absolute");
         getElement().getStyle().setProperty("overflow", "hidden");
         getElement().getStyle().setProperty("cursor", "wait");
-        getElement().getStyle().setProperty("zIndex", "10");
+        getElement().getStyle().setProperty("zIndex", "100");
 
         getElement().getStyle().setDisplay(Display.NONE);
 
