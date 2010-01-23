@@ -46,11 +46,11 @@ public class AppenderConsole implements Appender {
     }
 
     private static native boolean supported() /*-{
-                                              return $wnd.console != null && typeof($wnd.console.log) == 'function';
-                                              }-*/;
+        return $wnd.console != null && typeof($wnd.console.log) == 'function';
+    }-*/;
 
     private native void log(String message) /*-{
-                                            $wnd.console.log(message);
-                                            }-*/;
+        $wnd.console.log(message);
+    }-*/;
 
 }
