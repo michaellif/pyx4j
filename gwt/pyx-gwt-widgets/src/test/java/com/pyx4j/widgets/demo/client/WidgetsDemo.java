@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -37,6 +38,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -52,7 +54,7 @@ import com.pyx4j.widgets.client.style.window.WindowsTheme;
  */
 public class WidgetsDemo implements EntryPoint {
 
-    final Logger log = LoggerFactory.getLogger(WidgetsDemo.class);
+    private static final Logger log = LoggerFactory.getLogger(WidgetsDemo.class);
 
     public void onModuleLoad() {
 
@@ -116,6 +118,26 @@ public class WidgetsDemo implements EntryPoint {
                 }
             });
             contentPanel.add(button);
+        }
+
+        {
+            Button buttonGlass = new Button("Glass ON (15 sec)");
+            contentPanel.add(buttonGlass);
+            buttonGlass.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    log.info("glassPanel.show");
+                    GlassPanel.show();
+                    Timer timer = new Timer() {
+                        @Override
+                        public void run() {
+                            GlassPanel.hide();
+                            log.info("glassPanel.hide");
+                        }
+                    };
+                    timer.schedule(1000 * 15);
+                };
+            });
         }
     }
 

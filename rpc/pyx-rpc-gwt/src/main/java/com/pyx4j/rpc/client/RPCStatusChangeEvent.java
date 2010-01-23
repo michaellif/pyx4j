@@ -21,7 +21,6 @@
 package com.pyx4j.rpc.client;
 
 import com.google.gwt.event.shared.GwtEvent;
-
 import com.pyx4j.rpc.shared.Service;
 
 public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
@@ -30,12 +29,21 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
 
     private final boolean rpcIdle;
 
-    private final Class<? extends Service<?, ?>> serviceDescriptorClass;
+    public static enum When {
+        START, FAILURE, SUCCESS
+    }
+
+    private final When when;
+
+    @SuppressWarnings("unchecked")
+    private final Class<? extends Service> serviceDescriptorClass;
 
     private final long requestDuration;
 
-    public RPCStatusChangeEvent(boolean rpcIdle, Class<? extends Service<?, ?>> serviceDescriptorClass, long requestDuration) {
+    @SuppressWarnings("unchecked")
+    public RPCStatusChangeEvent(When when, boolean rpcIdle, Class<? extends Service> serviceDescriptorClass, long requestDuration) {
         super();
+        this.when = when;
         this.rpcIdle = rpcIdle;
         this.serviceDescriptorClass = serviceDescriptorClass;
         this.requestDuration = requestDuration;
@@ -49,7 +57,8 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
         return rpcIdle;
     }
 
-    public Class<? extends Service<?, ?>> getServiceDescriptorClass() {
+    @SuppressWarnings("unchecked")
+    public Class<? extends Service> getServiceDescriptorClass() {
         return serviceDescriptorClass;
     }
 
@@ -65,6 +74,10 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
     @Override
     public GwtEvent.Type<RPCStatusChangeHandler> getAssociatedType() {
         return TYPE;
+    }
+
+    public When getWhen() {
+        return when;
     }
 
 }

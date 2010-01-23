@@ -46,6 +46,8 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         DOM.setStyleAttribute(getElement(), "position", "absolute");
         DOM.setStyleAttribute(getElement(), "zIndex", "-10");
         DOM.setStyleAttribute(getElement(), "overflow", "hidden");
+        DOM.setStyleAttribute(getElement(), "background", "gray");
+        DOM.setStyleAttribute(getElement(), "filter", "alpha(opacity=50)");
     }
 
     public static GlassPanel instance() {

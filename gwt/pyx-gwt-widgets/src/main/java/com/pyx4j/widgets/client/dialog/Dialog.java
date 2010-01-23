@@ -66,7 +66,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
  */
 public class Dialog extends DialogPanel {
 
-    Logger log = LoggerFactory.getLogger(Dialog.class);
+    private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
     public static enum Type {
         Error, Warning, Info, Confirm

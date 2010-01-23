@@ -22,21 +22,30 @@ package com.pyx4j.rpc.client;
 
 import java.io.Serializable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RemoteServiceAsync;
 import com.pyx4j.rpc.shared.Service;
 
 public class RPCManager {
 
+    private static final Logger log = LoggerFactory.getLogger(RPCManager.class);
+
     private static final RemoteServiceAsync service;
 
     private static HandlerManager handlerManager;
+
+    private static int runningServicesCount = 0;
 
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
@@ -52,7 +61,8 @@ public class RPCManager {
             AsyncCallback<O> callback) {
         final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(serviceInterface, callback);
         try {
-            fireStatusChangeEvent(serviceInterface, -1);
+            runningServicesCount++;
+            fireStatusChangeEvent(When.START, serviceInterface, -1);
             service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
@@ -61,6 +71,8 @@ public class RPCManager {
 
     @SuppressWarnings("unchecked")
     private static class ServiceHandlingCallback implements AsyncCallback {
+
+        private final long requestStartTime = System.currentTimeMillis();
 
         final Class<? extends Service> serviceInterface;
 
@@ -73,18 +85,39 @@ public class RPCManager {
 
         @Override
         public void onFailure(Throwable caught) {
-            this.callback.onFailure(caught);
+            runningServicesCount--;
+            try {
+                if (callback != null) {
+                    this.callback.onFailure(caught);
+                } else {
+                    log.error("Server error", caught);
+                }
+            } catch (Throwable e) {
+                UncaughtHandler.onUnrecoverableError(e, "UIonF." + GWTJava5Helper.getSimpleName(serviceInterface));
+            } finally {
+                fireStatusChangeEvent(When.FAILURE, serviceInterface, System.currentTimeMillis() - requestStartTime);
+            }
         }
 
         @Override
         public void onSuccess(Object result) {
-            this.callback.onSuccess(result);
+            runningServicesCount--;
+            try {
+                if (callback != null) {
+                    this.callback.onSuccess(result);
+                }
+            } catch (Throwable e) {
+                UncaughtHandler.onUnrecoverableError(e, "UIonS." + GWTJava5Helper.getSimpleName(serviceInterface));
+            } finally {
+                fireStatusChangeEvent(When.SUCCESS, serviceInterface, System.currentTimeMillis() - requestStartTime);
+            }
         }
     }
 
-    private static void fireStatusChangeEvent(Class<? extends Service<?, ?>> serviceDescriptorClass, long requestDuration) {
+    @SuppressWarnings("unchecked")
+    private static void fireStatusChangeEvent(When when, Class<? extends Service> serviceDescriptorClass, long requestDuration) {
         if (handlerManager != null) {
-            handlerManager.fireEvent(new RPCStatusChangeEvent(true, serviceDescriptorClass, requestDuration));
+            handlerManager.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, serviceDescriptorClass, requestDuration));
         }
     }
 
