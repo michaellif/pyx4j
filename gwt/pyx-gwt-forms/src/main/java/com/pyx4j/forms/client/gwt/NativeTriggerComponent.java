@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -200,6 +199,10 @@ public abstract class NativeTriggerComponent<E> extends HorizontalPanel implemen
 
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
         return focusWidget.addKeyUpHandler(handler);
+    }
+
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return focusWidget.addKeyDownHandler(handler);
     }
 
     @Override
