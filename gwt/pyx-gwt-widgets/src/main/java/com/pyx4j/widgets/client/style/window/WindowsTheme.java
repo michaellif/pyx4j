@@ -190,8 +190,8 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".gwt-PopupPanelGlass");
         style.addProperty("background-color", "#000");
-        style.addProperty("opacity", "0.3");
-        style.addProperty("filter", "alpha(opacity=30)");
+        style.addProperty("opacity", "0.2");
+        style.addProperty("filter", "alpha(opacity=20)");
         addStyle(style);
     }
 
@@ -361,8 +361,8 @@ public class WindowsTheme extends Theme {
     protected void initGlassPanelStyle() {
         Style style = new Style("." + CSSClass.pyx4j_GlassPanel.name());
         style.addProperty("background-color", "#000");
-        style.addProperty("opacity", "0.3");
-        style.addProperty("filter", "alpha(opacity=30)");
+        style.addProperty("opacity", "0.2");
+        style.addProperty("filter", "alpha(opacity=20)");
         addStyle(style);
     }
 
