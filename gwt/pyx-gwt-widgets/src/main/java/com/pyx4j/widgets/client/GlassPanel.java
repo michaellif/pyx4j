@@ -69,7 +69,8 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     public static void show() {
         showRequestCount++;
         if (showRequestCount == 1) {
-            instance().setPixelSize(Window.getClientWidth(), Window.getClientHeight());
+            DOM.setCapture(instance.getElement());
+            instance.setPixelSize(Window.getClientWidth(), Window.getClientHeight());
             instance.getElement().getStyle().setDisplay(Display.BLOCK);
         }
     }
@@ -82,6 +83,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         showRequestCount--;
         assert showRequestCount > -1;
         if (showRequestCount == 0) {
+            DOM.releaseCapture(instance.getElement());
             instance.getElement().getStyle().setDisplay(Display.NONE);
         }
     }

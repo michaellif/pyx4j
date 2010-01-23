@@ -29,11 +29,11 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.GlassPanel;
+
 public class Perspective {
 
     private Panel parent;
-
-    private final GlassPanel glassPanel;
 
     private final DockPanel contentPanel;
 
@@ -52,7 +52,6 @@ public class Perspective {
     private final SpaceHolderPanel footerHolder;
 
     public Perspective() {
-        glassPanel = new GlassPanel();
 
         contentPanel = new DockPanel();
         contentPanel.setSize("100%", "100%");
@@ -132,16 +131,16 @@ public class Perspective {
         this.parent = parent;
         if (parent instanceof RootPanel) {
             ((RootPanel) parent).add(contentPanel, 0, 0);
-            ((RootPanel) parent).add(glassPanel, 0, 0);
+            ((RootPanel) parent).add(GlassPanel.instance(), 0, 0);
         } else {
             parent.add(contentPanel);
-            parent.add(glassPanel);
+            parent.add(GlassPanel.instance());
         }
     }
 
     public void detachFromParent() {
         parent.remove(contentPanel);
-        parent.remove(glassPanel);
+        parent.remove(GlassPanel.instance());
         parent = null;
     }
 

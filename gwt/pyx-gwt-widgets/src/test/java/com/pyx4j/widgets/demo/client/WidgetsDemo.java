@@ -66,13 +66,8 @@ public class WidgetsDemo implements EntryPoint {
 
         VerticalPanel contentPanel = new VerticalPanel();
 
-        AbsolutePanel rootPanel = new AbsolutePanel();
-        rootPanel.setSize("100%", "100%");
-
-        rootPanel.add(GlassPanel.instance());
-        rootPanel.add(contentPanel);
-
-        RootPanel.get().add(rootPanel);
+        RootPanel.get().add(GlassPanel.instance());
+        RootPanel.get().add(contentPanel);
 
         final Button sendButton = new Button("Send");
         final TextBox pageNameTextBox = new TextBox();
