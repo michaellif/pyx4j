@@ -74,7 +74,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void show() {
-        log.info("Show glass panel request");
+        log.debug("Show glass panel request");
         showRequestCount++;
         if (showRequestCount == 1) {
             DOM.setCapture(instance.getElement());
@@ -88,7 +88,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void hide() {
-        log.info("Hide glass panel request");
+        log.debug("Hide glass panel request");
         showRequestCount--;
         assert showRequestCount > -1;
         if (showRequestCount == 0) {
