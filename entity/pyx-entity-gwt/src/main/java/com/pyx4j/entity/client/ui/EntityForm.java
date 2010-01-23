@@ -21,10 +21,10 @@
 package com.pyx4j.entity.client.ui;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -86,6 +86,16 @@ public class EntityForm<E extends IEntity<?>> {
         }
         bind(comp, mm.getFieldName());
         return comp;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> CEditableComponent<T> get(IObject<?, T> member) {
+        for (Map.Entry<CEditableComponent<?>, String> me : binding.entrySet()) {
+            if (me.getValue().equals(member.getFieldName())) {
+                return (CEditableComponent<T>) me.getKey();
+            }
+        }
+        throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
     }
 
     @SuppressWarnings("unchecked")
