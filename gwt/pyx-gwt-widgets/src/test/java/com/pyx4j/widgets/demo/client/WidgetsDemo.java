@@ -27,7 +27,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -129,19 +128,23 @@ public class WidgetsDemo implements EntryPoint {
             buttonGlass.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    log.info("glassPanel.show");
-                    GlassPanel.show();
-                    Timer timer = new Timer() {
-                        @Override
-                        public void run() {
-                            GlassPanel.hide();
-                            log.info("glassPanel.hide");
-                        }
-                    };
-                    timer.schedule(1000 * 15);
+                    showGlassPanel(15);
                 };
             });
         }
+    }
+
+    private static void showGlassPanel(int sec) {
+        log.info("glassPanel.show");
+        GlassPanel.show();
+        Timer timer = new Timer() {
+            @Override
+            public void run() {
+                GlassPanel.hide();
+                log.info("glassPanel.hide");
+            }
+        };
+        timer.schedule(1000 * sec);
     }
 
     class MyHandler implements ClickHandler {
@@ -199,12 +202,13 @@ public class WidgetsDemo implements EntryPoint {
 
                 @Override
                 public String custom1Text() {
-                    return "Custom1";
+                    return "Glass ON (15 sec)";
                 }
 
                 @Override
                 public boolean onClickCustom1() {
                     log.info("onClickCustom1");
+                    showGlassPanel(15);
                     return false;
                 }
 
