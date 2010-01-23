@@ -27,6 +27,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -64,7 +65,14 @@ public class WidgetsDemo implements EntryPoint {
         UnrecoverableErrorHandlerDialog.register();
 
         VerticalPanel contentPanel = new VerticalPanel();
-        RootPanel.get().add(contentPanel);
+
+        AbsolutePanel rootPanel = new AbsolutePanel();
+        rootPanel.setSize("100%", "100%");
+
+        rootPanel.add(GlassPanel.instance());
+        rootPanel.add(contentPanel);
+
+        RootPanel.get().add(rootPanel);
 
         final Button sendButton = new Button("Send");
         final TextBox pageNameTextBox = new TextBox();

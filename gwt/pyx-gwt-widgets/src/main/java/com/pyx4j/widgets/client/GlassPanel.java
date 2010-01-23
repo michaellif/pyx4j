@@ -20,6 +20,10 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.DOM;
@@ -41,13 +45,18 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         DOM.setInnerHTML(getElement(), "<table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
         setSize("100%", "100%");
 
-        DOM.setStyleAttribute(getElement(), "left", "0px");
-        DOM.setStyleAttribute(getElement(), "top", "0px");
-        DOM.setStyleAttribute(getElement(), "position", "absolute");
-        DOM.setStyleAttribute(getElement(), "zIndex", "-10");
-        DOM.setStyleAttribute(getElement(), "overflow", "hidden");
-        DOM.setStyleAttribute(getElement(), "background", "gray");
-        DOM.setStyleAttribute(getElement(), "filter", "alpha(opacity=50)");
+        getElement().getStyle().setProperty("left", "0px");
+        getElement().getStyle().setProperty("top", "0px");
+        getElement().getStyle().setProperty("position", "absolute");
+        getElement().getStyle().setProperty("overflow", "hidden");
+        getElement().getStyle().setProperty("filter", "alpha(opacity=20)");
+        getElement().getStyle().setProperty("opacity", "0.2");
+        getElement().getStyle().setProperty("background", "green");
+        getElement().getStyle().setProperty("cursor", "wait");
+        getElement().getStyle().setProperty("zIndex", "10");
+
+        getElement().getStyle().setDisplay(Display.NONE);
+
     }
 
     public static GlassPanel instance() {
@@ -61,8 +70,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         showRequestCount++;
         if (showRequestCount == 1) {
             instance().setPixelSize(Window.getClientWidth(), Window.getClientHeight());
-            DOM.setStyleAttribute(instance.getElement(), "zIndex", "10");
-            DOM.setStyleAttribute(instance.getElement(), "cursor", "wait");
+            instance.getElement().getStyle().setDisplay(Display.BLOCK);
         }
     }
 
@@ -74,14 +82,32 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         showRequestCount--;
         assert showRequestCount > -1;
         if (showRequestCount == 0) {
-            DOM.setStyleAttribute(instance.getElement(), "cursor", "move");
-            DOM.setStyleAttribute(instance.getElement(), "zIndex", "-10");
+            instance.getElement().getStyle().setDisplay(Display.NONE);
         }
     }
 
-    @Override
     public void onResize(ResizeEvent event) {
-        instance().setPixelSize(Window.getClientWidth(), Window.getClientHeight());
+        Style style = getElement().getStyle();
+
+        int winWidth = Window.getClientWidth();
+        int winHeight = Window.getClientHeight();
+
+        // Hide the glass while checking the document size. Otherwise it would
+        // interfere with the measurement.
+        style.setDisplay(Display.NONE);
+        style.setWidth(0, Unit.PX);
+        style.setHeight(0, Unit.PX);
+
+        int width = Document.get().getScrollWidth();
+        int height = Document.get().getScrollHeight();
+
+        // Set the glass size to the larger of the window's client size or the
+        // document's scroll size.
+        style.setWidth(Math.max(width, winWidth), Unit.PX);
+        style.setHeight(Math.max(height, winHeight), Unit.PX);
+
+        // The size is set. Show the glass again.
+        style.setDisplay(Display.BLOCK);
     }
 
 }
