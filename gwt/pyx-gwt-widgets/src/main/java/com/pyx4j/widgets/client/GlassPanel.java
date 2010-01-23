@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
@@ -30,10 +33,14 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.widgets.client.dialog.Dialog;
+
 /**
  * Block access to GUI elements while service is running.
  */
 public class GlassPanel extends SimplePanel implements ResizeHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
     private static GlassPanel instance;
 
@@ -67,6 +74,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void show() {
+        log.info("Show glass panel request");
         showRequestCount++;
         if (showRequestCount == 1) {
             DOM.setCapture(instance.getElement());
@@ -80,6 +88,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void hide() {
+        log.info("Hide glass panel request");
         showRequestCount--;
         assert showRequestCount > -1;
         if (showRequestCount == 0) {
