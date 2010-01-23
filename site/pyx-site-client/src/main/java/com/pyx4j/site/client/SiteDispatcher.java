@@ -37,6 +37,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.client.domain.ResourceUri;
+import com.pyx4j.widgets.client.GlassPanel;
 
 public abstract class SiteDispatcher {
 
@@ -63,6 +64,8 @@ public abstract class SiteDispatcher {
                 onAuthenticationChange();
             }
         });
+
+        RootPanel.get().add(GlassPanel.instance());
 
     }
 

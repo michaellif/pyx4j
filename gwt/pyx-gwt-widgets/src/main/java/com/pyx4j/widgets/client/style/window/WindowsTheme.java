@@ -50,6 +50,7 @@ public class WindowsTheme extends Theme {
         initButtonStyles();
         initTooltipStyle();
         initTreeStyle();
+        initGlassPanelStyle();
 
     }
 
@@ -354,6 +355,14 @@ public class WindowsTheme extends Theme {
         addStyle(style);
         style = new Style(".gwt-Tree .gwt-TreeItem-selected");
         style.addProperty("background", ThemeColor.SELECTION);
+        addStyle(style);
+    }
+
+    protected void initGlassPanelStyle() {
+        Style style = new Style("." + CSSClass.pyx4j_GlassPanel.name());
+        style.addProperty("background-color", "#000");
+        style.addProperty("opacity", "0.3");
+        style.addProperty("filter", "alpha(opacity=30)");
         addStyle(style);
     }
 

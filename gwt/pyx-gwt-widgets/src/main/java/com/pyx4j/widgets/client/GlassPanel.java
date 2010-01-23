@@ -29,11 +29,13 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 /**
  * Block access to GUI elements while service is running.
@@ -46,9 +48,10 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
     private static int showRequestCount;
 
+    private HandlerRegistration handlerRegistration;
+
     protected GlassPanel() {
         super(DOM.createDiv());
-        Window.addResizeHandler(this);
         DOM.setInnerHTML(getElement(), "<table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
         setSize("100%", "100%");
 
@@ -56,13 +59,12 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         getElement().getStyle().setProperty("top", "0px");
         getElement().getStyle().setProperty("position", "absolute");
         getElement().getStyle().setProperty("overflow", "hidden");
-        getElement().getStyle().setProperty("filter", "alpha(opacity=20)");
-        getElement().getStyle().setProperty("opacity", "0.2");
-        getElement().getStyle().setProperty("background", "green");
         getElement().getStyle().setProperty("cursor", "wait");
         getElement().getStyle().setProperty("zIndex", "10");
 
         getElement().getStyle().setDisplay(Display.NONE);
+
+        setStyleName(CSSClass.pyx4j_GlassPanel.name());
 
     }
 
@@ -74,12 +76,13 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void show() {
-        log.debug("Show glass panel request");
         showRequestCount++;
+        log.debug("Show glass panel request (" + showRequestCount + ")");
         if (showRequestCount == 1) {
-            DOM.setCapture(instance.getElement());
-            instance.setPixelSize(Window.getClientWidth(), Window.getClientHeight());
-            instance.getElement().getStyle().setDisplay(Display.BLOCK);
+            instance().handlerRegistration = Window.addResizeHandler(instance());
+            DOM.setCapture(instance().getElement());
+            instance().setPixelSize(Window.getClientWidth(), Window.getClientHeight());
+            instance().getElement().getStyle().setDisplay(Display.BLOCK);
         }
     }
 
@@ -88,12 +91,13 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void hide() {
-        log.debug("Hide glass panel request");
         showRequestCount--;
+        log.debug("Hide glass panel request(" + showRequestCount + ")");
         assert showRequestCount > -1;
         if (showRequestCount == 0) {
-            DOM.releaseCapture(instance.getElement());
-            instance.getElement().getStyle().setDisplay(Display.NONE);
+            instance().handlerRegistration.removeHandler();
+            DOM.releaseCapture(instance().getElement());
+            instance().getElement().getStyle().setDisplay(Display.NONE);
         }
     }
 

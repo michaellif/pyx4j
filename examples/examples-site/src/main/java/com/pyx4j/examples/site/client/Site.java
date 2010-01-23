@@ -161,12 +161,8 @@ public class Site implements EntryPoint, ValueChangeHandler<String> {
 
         History.addValueChangeHandler(this);
 
-        AbsolutePanel contentPanel = new AbsolutePanel();
-
-        contentPanel.add(GlassPanel.instance());
-        contentPanel.add(mainPanel);
-
-        RootPanel.get().add(contentPanel);
+        RootPanel.get().add(GlassPanel.instance());
+        RootPanel.get().add(mainPanel);
 
         // Show the initial screen.
         String initToken = History.getToken();

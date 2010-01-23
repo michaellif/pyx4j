@@ -43,6 +43,9 @@ public enum CSSClass {
     pyx4j_Tooltip,
 
     //Dialog
-    pyx4j_Dialog, pyx4j_Dialog_Caption, pyx4j_Dialog_Resizer, pyx4j_Dialog_Content
+    pyx4j_Dialog, pyx4j_Dialog_Caption, pyx4j_Dialog_Resizer, pyx4j_Dialog_Content,
+
+    //Tooltip
+    pyx4j_GlassPanel,
 
 }

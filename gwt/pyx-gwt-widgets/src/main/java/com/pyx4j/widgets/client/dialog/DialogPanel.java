@@ -56,6 +56,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
+
+import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class DialogPanel extends PopupPanel {
@@ -121,8 +123,9 @@ public class DialogPanel extends PopupPanel {
 
         setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
         //Don't move it to styles because width of border is used in calculation of resizing
-        DOM.setStyleAttribute(getElement(), "borderStyle", "ridge");
-        DOM.setStyleAttribute(getElement(), "borderWidth", BORDER_WIDTH + "px");
+        getElement().getStyle().setProperty("borderStyle", "ridge");
+        getElement().getStyle().setProperty("borderWidth", BORDER_WIDTH + "px");
+        getElement().getStyle().setProperty("zIndex", "20");
 
         windowWidth = Window.getClientWidth();
         windowHeight = Window.getClientHeight();
