@@ -21,6 +21,8 @@
 package com.pyx4j.widgets.client.dialog;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +34,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -104,6 +106,11 @@ public class Dialog extends DialogPanel {
 
     private BlurHandler blurHandler;
 
+    // Handle focus for Stack of Dialogs, e.g. make proper focus on dialog bellow once the one above closed. 
+    private FocusWidget currentFocusWidget;
+
+    private static final List<Dialog> openDialogs = new Vector<Dialog>();
+
     public Dialog(String message) {
         this("Information", message, Type.Info, new OkOption() {
 
@@ -138,12 +145,17 @@ public class Dialog extends DialogPanel {
         setPixelSize(400, 300);
         center();
 
-        this.addKeyUpHandler(new KeyUpHandler() {
+        this.addKeyDownHandler(new KeyDownHandler() {
 
-            public void onKeyUp(KeyUpEvent event) {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
                 if ((allowEnterKeyForDefaultButton) && event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    // This does help for in Safari on Windows, 
+                    // or else other dialog shown after this would catch the keyCode be automatically closed.
+                    event.preventDefault();
                     defaultButton.click();
                 } else if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+                    event.preventDefault();
                     if (cancelButton != null) {
                         cancelButton.click();
                     } else if (closeButton != null) {
@@ -152,6 +164,8 @@ public class Dialog extends DialogPanel {
                 }
             }
         });
+
+        setGlassEnabled(true);
     }
 
     public void setBody(Widget message) {
@@ -222,8 +236,8 @@ public class Dialog extends DialogPanel {
         return buttonsPanel;
     }
 
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return addDomHandler(handler, KeyUpEvent.getType());
+    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
+        return addDomHandler(handler, KeyDownEvent.getType());
     }
 
     /**
@@ -367,7 +381,15 @@ public class Dialog extends DialogPanel {
     }
 
     @Override
+    public boolean equals(Object other) {
+        return (this == other);
+    }
+
+    @Override
     public void show() {
+        if (!openDialogs.contains(this)) {
+            openDialogs.add(this);
+        }
         super.show();
         // The insides of Dialog may be CForm that is only initialized on show.
         DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
@@ -375,6 +397,7 @@ public class Dialog extends DialogPanel {
                 setupFocusManager();
                 if (firstFocusWidget != null) {
                     firstFocusWidget.setFocus(true);
+                    currentFocusWidget = firstFocusWidget;
                 } else {
                     if (defaultButton != null) {
                         defaultButton.setFocus(true);
@@ -382,6 +405,37 @@ public class Dialog extends DialogPanel {
                 }
             }
         });
+    }
+
+    @Override
+    public void hide() {
+        openDialogs.remove(this);
+        super.hide();
+
+        // Set proper focus in the Dialog blow just closed one.
+        if (openDialogs.size() > 0) {
+            final Dialog d = openDialogs.get(openDialogs.size() - 1);
+            if (d.currentFocusWidget != null) {
+                DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+                    public void execute() {
+                        if (d.currentFocusWidget != null) {
+                            d.currentFocusWidget.setFocus(true);
+                            log.trace("Focus requestd to {}", d.currentFocusWidget);
+                        }
+                    }
+                });
+            }
+        } else {
+            log.trace("Last dialog Closed");
+        }
+    }
+
+    public static void closeOpenDialogs() {
+        for (int i = 0; i < openDialogs.size(); i++) {
+            Dialog d = openDialogs.get(i);
+            d.hide();
+        }
+        openDialogs.clear();
     }
 
     public void requestFocus(final FocusWidget focusWidget) {
@@ -404,6 +458,9 @@ public class Dialog extends DialogPanel {
                             defaultButton.removeStyleName(CSSClass.gwtButtonDefault.name());
                         }
                     }
+                    if (event.getSource() instanceof FocusWidget) {
+                        currentFocusWidget = (FocusWidget) event.getSource();
+                    }
                 }
             };
         }
@@ -412,6 +469,7 @@ public class Dialog extends DialogPanel {
                 @Override
                 public void onBlur(BlurEvent event) {
                     if (defaultButton != null) {
+                        allowEnterKeyForDefaultButton = false;
                         defaultButton.removeStyleName(CSSClass.gwtButtonDefault.name());
                     }
                 }
@@ -424,13 +482,10 @@ public class Dialog extends DialogPanel {
     private void attachFocusHandler(Iterator<Widget> iterator) {
         while (iterator.hasNext()) {
             Widget w = iterator.next();
-            if (w == buttonsPanel) {
-                continue;
-            }
             if (w instanceof FocusWidget) {
                 ((FocusWidget) w).addFocusHandler(focusHandler);
                 ((FocusWidget) w).addBlurHandler(blurHandler);
-                if (firstFocusWidget == null) {
+                if ((firstFocusWidget == null) && (!(w instanceof Button))) {
                     firstFocusWidget = (FocusWidget) w;
                 }
             }

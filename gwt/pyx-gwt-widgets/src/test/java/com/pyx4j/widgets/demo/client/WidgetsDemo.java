@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -59,6 +58,7 @@ public class WidgetsDemo implements EntryPoint {
 
         StyleManger.installTheme(new WindowsTheme());
         ClientLogger.setDebugOn(true);
+        ClientLogger.setTraceOn(true);
         UnrecoverableErrorHandlerDialog.register();
 
         VerticalPanel contentPanel = new VerticalPanel();
@@ -167,7 +167,9 @@ public class WidgetsDemo implements EntryPoint {
                 @Override
                 public boolean onClickYes() {
                     log.info("onClickYes");
-                    return true;
+                    Dialog dialog = new Dialog("Yes");
+                    dialog.show();
+                    return false;
                 }
 
                 @Override
