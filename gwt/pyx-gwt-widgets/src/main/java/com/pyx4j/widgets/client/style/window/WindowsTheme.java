@@ -186,6 +186,12 @@ public class WindowsTheme extends Theme {
         style = new Style(".gwt-DialogBox .Caption");
         style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
+
+        style = new Style(".gwt-PopupPanelGlass");
+        style.addProperty("background-color", "#000");
+        style.addProperty("opacity", "0.3");
+        style.addProperty("filter", "alpha(opacity=30)");
+        addStyle(style);
     }
 
     protected void initDialogPanelStyles() {

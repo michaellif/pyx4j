@@ -129,6 +129,7 @@ public class Dialog extends DialogPanel {
 
     public Dialog(String caption, DialogOptions options) {
         super(false, true);
+        setGlassEnabled(true);
         setCaption(caption);
 
         this.options = options;
@@ -165,7 +166,6 @@ public class Dialog extends DialogPanel {
             }
         });
 
-        setGlassEnabled(true);
     }
 
     public void setBody(Widget message) {
