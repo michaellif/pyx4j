@@ -25,6 +25,8 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -99,6 +101,8 @@ public class Dialog extends DialogPanel {
     private final DockPanel content;
 
     private FocusHandler focusHandler;
+
+    private BlurHandler blurHandler;
 
     public Dialog(String message) {
         this("Information", message, Type.Info, new OkOption() {
@@ -403,6 +407,17 @@ public class Dialog extends DialogPanel {
                 }
             };
         }
+        if (blurHandler == null) {
+            blurHandler = new BlurHandler() {
+                @Override
+                public void onBlur(BlurEvent event) {
+                    if (defaultButton != null) {
+                        defaultButton.removeStyleName(CSSClass.gwtButtonDefault.name());
+                    }
+                }
+
+            };
+        }
         attachFocusHandler(this.content.iterator());
     }
 
@@ -414,6 +429,7 @@ public class Dialog extends DialogPanel {
             }
             if (w instanceof FocusWidget) {
                 ((FocusWidget) w).addFocusHandler(focusHandler);
+                ((FocusWidget) w).addBlurHandler(blurHandler);
                 if (firstFocusWidget == null) {
                     firstFocusWidget = (FocusWidget) w;
                 }
