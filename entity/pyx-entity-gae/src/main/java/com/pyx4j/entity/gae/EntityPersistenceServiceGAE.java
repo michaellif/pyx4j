@@ -45,6 +45,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -109,6 +110,26 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                 } else {
                     for (Object el : (Set) value) {
+                        String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
+                        if (childKey == null) {
+                            throw new Error("Saving unperisted reference " + meta.getCaption());
+                        }
+                        childKeys.add(KeyFactory.stringToKey(childKey));
+                    }
+                }
+                value = childKeys;
+            } else if ((IList.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof List<?>)) {
+                Set<Key> childKeys = new HashSet<Key>();
+                //TODO save order
+                if (meta.isOwnedRelationships()) {
+                    // Save Owned iEntity
+                    IList<IEntity<?>> memberList = (IList<IEntity<?>>) iEntity.getMember(me.getKey());
+                    for (IEntity<?> childIEntity : memberList) {
+                        persist(childIEntity);
+                        childKeys.add(KeyFactory.stringToKey(childIEntity.getPrimaryKey()));
+                    }
+                } else {
+                    for (Object el : (List) value) {
                         String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving unperisted reference " + meta.getCaption());
@@ -187,7 +208,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
             } else if (value instanceof List<?>) {
                 IObject<?, ?> member = iEntity.getMember(me.getKey());
-                if (member instanceof ISet) {
+                if (member instanceof ISet<?>) {
                     for (Key childKey : (List<Key>) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
                         if (member.getMeta().isDetached()) {
@@ -197,6 +218,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                         ((ISet) member).add(childIEntity);
                     }
+                    continue;
+                } else if (member instanceof List<?>) {
+                    for (Key childKey : (List<Key>) value) {
+                        IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
+                        if (member.getMeta().isDetached()) {
+                            childIEntity.setPrimaryKey(KeyFactory.keyToString(childKey));
+                        } else {
+                            retrieveEntity(childIEntity, childKey);
+                        }
+                        ((IList) member).add(childIEntity);
+                    }
+                    // TODO retrieve order and sort by this order
                     continue;
                 }
             }

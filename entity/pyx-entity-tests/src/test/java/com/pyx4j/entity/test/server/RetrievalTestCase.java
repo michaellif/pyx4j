@@ -103,4 +103,28 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         //            Assert.assertEquals("Retr 3. department.name", deptName, departments3.get(0).name().getValue());
         //        }
     }
+
+    public void testOwnedList() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("Bob");
+
+        Task task = EntityFactory.create(Task.class);
+        Date today = new Date();
+        task.deadLine().setValue(today);
+        task.status().setValue(Status.DEACTIVATED);
+
+        emp.tasksSorted().add(task);
+
+        srv.persist(emp);
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertEquals("Value", "Bob", emp2.firstName().getValue());
+
+        Assert.assertEquals("Retr. Set size", 1, emp2.tasksSorted().size());
+        Assert.assertTrue("Retr. contains", emp2.tasksSorted().contains(task));
+
+        Task task2 = emp2.tasksSorted().iterator().next();
+
+        Assert.assertEquals("deadLine", today, task2.deadLine().getValue());
+        Assert.assertEquals("Status", Status.DEACTIVATED, task2.status().getValue());
+    }
 }

@@ -33,6 +33,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -74,6 +75,8 @@ public class MemberMetaImpl implements MemberMeta {
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
         } else if (ISet.class.equals(objectClass)) {
+            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+        } else if (IList.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
             valueClass = objectClass;
