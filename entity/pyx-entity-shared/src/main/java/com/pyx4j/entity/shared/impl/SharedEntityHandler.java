@@ -29,6 +29,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -73,10 +74,14 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new SetHandler<T>(this, name, setValueClass);
     }
 
+    public <T extends IEntity<?>> IList<T> lazyCreateMemberIList(String name, Class<T> setValueClass) {
+        return new ListHandler<T>(this, name, setValueClass);
+    }
+
     /**
      * Guarantee that data is created before setting the value of member
      */
-    private Map<String, Object> ensureValue() {
+    protected Map<String, Object> ensureValue() {
         Map<String, Object> v = getValue();
         if (v == null) {
             setValue(v = new EntityValueMap());
@@ -97,6 +102,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         ensureValue().put(PRIMARY_KEY, pk);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<String, Object> getValue() {
         if (getParent() != null) {
@@ -125,7 +131,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         if (other == this) {
             return true;
         }
-        if ((other == null) || !(other instanceof IEntity<?>) || (!this.getClass().equals(other.getClass()))) {
+        if ((other == null) || (this.getPrimaryKey() == null) || !(other instanceof IEntity<?>) || (!this.getClass().equals(other.getClass()))) {
             return false;
         }
         return EqualsHelper.equals(this.getPrimaryKey(), ((IEntity<?>) other).getPrimaryKey());

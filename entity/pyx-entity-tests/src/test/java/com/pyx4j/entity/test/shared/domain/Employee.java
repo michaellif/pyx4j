@@ -26,13 +26,14 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 @Caption(name = "Laborer")
 public interface Employee extends IEntity<Employee> {
 
-    public static int DECLARED_MEMEBERS = 13;
+    public static int DECLARED_MEMEBERS = 14;
 
     public static enum EmploymentStatus {
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT
@@ -56,6 +57,9 @@ public interface Employee extends IEntity<Employee> {
 
     @Owned
     ISet<Task> tasks();
+
+    @Owned
+    IList<Task> tasksSorted();
 
     Department department();
 

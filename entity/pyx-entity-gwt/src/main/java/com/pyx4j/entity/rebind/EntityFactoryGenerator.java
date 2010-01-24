@@ -49,6 +49,7 @@ import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -65,6 +66,8 @@ public class EntityFactoryGenerator extends Generator {
     private JClassType iPrimitiveInterfaceType;
 
     private JClassType iSetInterfaceType;
+
+    private JClassType iListInterfaceType;
 
     private JClassType iEnentityInterfaceType;
 
@@ -95,6 +98,7 @@ public class EntityFactoryGenerator extends Generator {
             iEnentityInterfaceType = oracle.getType(IEntity.class.getName());
             iPrimitiveInterfaceType = oracle.getType(IPrimitive.class.getName());
             iSetInterfaceType = oracle.getType(ISet.class.getName());
+            iListInterfaceType = oracle.getType(IList.class.getName());
 
             List<JClassType> cases = new Vector<JClassType>();
 
@@ -283,6 +287,13 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+            } else if (type.isAssignableTo(iListInterfaceType)) {
+                if (!(type instanceof JParameterizedType)) {
+                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType");
+                }
+                writer.println(((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class, ");
+                writer.print("(Class<? extends IObject<?, ?>>)");
+                writer.println(type.getQualifiedSourceName() + ".class, ");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
@@ -419,6 +430,12 @@ public class EntityFactoryGenerator extends Generator {
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\", " + valueClass + ".class);");
+            } else if (type.isAssignableTo(iListInterfaceType)) {
+                if (!(type instanceof JParameterizedType)) {
+                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType");
+                }
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                writer.println("return lazyCreateMemberIList(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
                 writer.println("return new " + type.getQualifiedSourceName() + IMPL + "(this, \"" + method.getName() + "\");");
             } else {

@@ -14,53 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 20, 2009
- * @author michaellif
+ * Created on Jan 24, 2010
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.shared.impl;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE>, Set<Map<String, Object>>> implements ISet<TYPE> {
+public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TYPE>, List<Map<String, Object>>> implements IList<TYPE> {
 
     private final Class<TYPE> valueClass;
 
-    private static class ElementsComparator implements Comparator<Map<String, Object>> {
-
-        @Override
-        public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-            if (o1 == o2) {
-                return 0;
-            }
-            //Map represent the IEntity use PRIMARY_KEY
-            Object pk1 = o1.get(IEntity.PRIMARY_KEY);
-            if (pk1 != null) {
-                Object pk2 = o2.get(IEntity.PRIMARY_KEY);
-                if (pk2 != null) {
-                    if (pk1.equals(pk2)) {
-                        return 0;
-                    }
-                }
-            }
-            // Fall back to general comparison
-            return o1.hashCode() - o2.hashCode();
-        }
-
-    }
-
-    public SetHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
+    public ListHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
         super(ISet.class, parent, fieldName);
         this.valueClass = valueClass;
     }
@@ -77,70 +55,81 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     @Override
     public boolean isNull() {
-        // TODO implement this
+        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void set(ISet<TYPE> entity) {
+    public void set(IList<TYPE> entity) {
         setValue(entity.getValue());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<Map<String, Object>> getValue() {
+    public List<Map<String, Object>> getValue() {
         Map<String, Object> data = getParent().getValue();
         if (data == null) {
             return null;
         } else {
-            return (Set<Map<String, Object>>) data.get(getFieldName());
+            return (List<Map<String, Object>>) data.get(getFieldName());
         }
     }
 
     @Override
-    public void setValue(Set<Map<String, Object>> value) {
+    public void setValue(List<Map<String, Object>> value) {
         getParent().setMemberValue(getFieldName(), value);
     }
 
     /**
      * Guarantee that data holder is created before setting the value of element
      */
-    private Set<Map<String, Object>> ensureValue() {
-        Set<Map<String, Object>> value = getValue();
+    private List<Map<String, Object>> ensureValue() {
+        List<Map<String, Object>> value = getValue();
         if (value == null) {
-            // Use TreeSet for implementation to allow for modifiable Objects Properties (hashCode) after they are added to Set
-            value = new TreeSet<Map<String, Object>>(new ElementsComparator());
+            // TODO test  modifiable Objects Properties 
+            value = new Vector<Map<String, Object>>();
             setValue(value);
         }
         return value;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean add(TYPE entity) {
-        return ensureValue().add(((SharedEntityHandler) entity).ensureValue());
+        return ensureValue().add(entity.getValue());
+    }
+
+    @Override
+    public void add(int index, TYPE entity) {
+        ensureValue().add(index, entity.getValue());
+
     }
 
     @Override
     public boolean addAll(Collection<? extends TYPE> c) {
-        // TODO implement this
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends TYPE> c) {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException();
     }
 
     @Override
     public void clear() {
-        Set<?> set = getValue();
-        if (set != null) {
-            set.clear();
+        List<Map<String, Object>> value = getValue();
+        if (value != null) {
+            value.clear();
         }
     }
 
     @Override
     public boolean contains(Object o) {
         if (o instanceof IEntity<?>) {
-            Set<?> set = getValue();
-            if (set != null) {
-                return set.contains(((IEntity<?>) o).getValue());
+            List<?> value = getValue();
+            if (value != null) {
+                return value.contains(((IEntity<?>) o).getValue());
             }
         }
         return false;
@@ -153,20 +142,47 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
     }
 
     @Override
+    public TYPE get(int index) {
+        List<Map<String, Object>> value = getValue();
+        if (value != null) {
+            Map<String, Object> entityValue = value.get(index);
+            TYPE entity = EntityFactory.create(getValueClass());
+            entity.setValue(entityValue);
+            return entity;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        if (o instanceof IEntity<?>) {
+            List<?> value = getValue();
+            if (value != null) {
+                return value.indexOf(((IEntity<?>) o).getValue());
+            } else {
+                return -1;
+            }
+        } else {
+            throw new ClassCastException("Value of class " + getValueClass() + " expected");
+        }
+    }
+
+    @Override
     public boolean isEmpty() {
-        Set<?> value = getValue();
+        List<?> value = getValue();
         if (value != null) {
             return value.isEmpty();
         } else {
-            return false;
+            return true;
         }
     }
 
     @Override
     public Iterator<TYPE> iterator() {
         // iterator is also behaves likes Elvis 
-        final Set<Map<String, Object>> setValue = getValue();
-        if (setValue == null) {
+        final List<Map<String, Object>> value = getValue();
+        if (value == null) {
             return new Iterator<TYPE>() {
 
                 @Override
@@ -188,7 +204,7 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
         return new Iterator<TYPE>() {
 
-            final Iterator<Map<String, Object>> iter = setValue.iterator();
+            final Iterator<Map<String, Object>> iter = value.iterator();
 
             @Override
             public boolean hasNext() {
@@ -211,14 +227,38 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
     }
 
     @Override
+    public int lastIndexOf(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public ListIterator<TYPE> listIterator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ListIterator<TYPE> listIterator(int index) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public boolean remove(Object o) {
         if (o instanceof IEntity<?>) {
-            Set<?> set = getValue();
-            if (set != null) {
-                return set.remove(((IEntity<?>) o).getValue());
+            List<?> value = getValue();
+            if (value != null) {
+                return value.remove(((IEntity<?>) o).getValue());
             }
         }
         return false;
+    }
+
+    @Override
+    public TYPE remove(int index) {
+        // TODO implement this
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -234,13 +274,25 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
     }
 
     @Override
+    public TYPE set(int index, TYPE element) {
+        // TODO implement this
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int size() {
-        Set<?> set = getValue();
-        if (set != null) {
-            return set.size();
+        List<?> value = getValue();
+        if (value != null) {
+            return value.size();
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public List<TYPE> subList(int fromIndex, int toIndex) {
+        // TODO implement this
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -250,14 +302,9 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
     }
 
     @Override
-    public <TT> TT[] toArray(TT[] a) {
+    public <T> T[] toArray(T[] a) {
         // TODO implement this
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String toString() {
-        return getObjectClass().getName() + getValue();
     }
 
 }

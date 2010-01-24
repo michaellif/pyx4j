@@ -26,6 +26,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -45,11 +46,14 @@ public class EntityImplReflectionHelper {
         if (IPrimitive.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) paramType);
+        } else if (IEntity.class.isAssignableFrom(memberClass)) {
+            return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
         } else if (ISet.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity<?>>) paramType);
-        } else if (IEntity.class.isAssignableFrom(memberClass)) {
-            return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
+        } else if (IList.class.equals(memberClass)) {
+            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            return implHandler.lazyCreateMemberIList(method.getName(), (Class<IEntity<?>>) paramType);
         } else {
             throw new RuntimeException("Unknown member type" + memberClass);
         }
