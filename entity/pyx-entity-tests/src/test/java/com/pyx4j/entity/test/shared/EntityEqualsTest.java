@@ -36,4 +36,15 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         assertFalse("new Items are diferent", task1.equals(task2));
     }
+
+    public void testSameValue() {
+
+        Task task1 = EntityFactory.create(Task.class);
+        task1.status().setValue(Status.ACTIVE);
+
+        Task task2 = EntityFactory.create(Task.class);
+        task2.set(task1);
+
+        assertTrue("new Items have same value", task1.equals(task2));
+    }
 }

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -126,15 +125,19 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         }
     }
 
+    /**
+     * IEntity equals by value or Map object (e.g. the same map) or value of PK.equals().
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
-        if ((other == null) || (this.getPrimaryKey() == null) || !(other instanceof IEntity<?>) || (!this.getClass().equals(other.getClass()))) {
+        Map<String, Object> thisValue = this.getValue();
+        if ((other == null) || (thisValue == null) || (!(other instanceof IEntity<?>)) || (!this.getClass().equals(other.getClass()))) {
             return false;
         }
-        return EqualsHelper.equals(this.getPrimaryKey(), ((IEntity<?>) other).getPrimaryKey());
+        return thisValue.equals(((IEntity<?>) other).getValue());
     }
 
     @Override

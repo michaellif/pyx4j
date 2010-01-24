@@ -37,7 +37,11 @@ public class EntityValueMap extends HashMap<String, Object> {
         if (other == null) {
             return false;
         }
-        return EqualsHelper.equals(this.get(IEntity.PRIMARY_KEY), ((Map<?, ?>) other).get(IEntity.PRIMARY_KEY));
+        Object pk = this.get(IEntity.PRIMARY_KEY);
+        if (pk == null) {
+            return false;
+        }
+        return EqualsHelper.equals(pk, ((Map<?, ?>) other).get(IEntity.PRIMARY_KEY));
     }
 
     @Override

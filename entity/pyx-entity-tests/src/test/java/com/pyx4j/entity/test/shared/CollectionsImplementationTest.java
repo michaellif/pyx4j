@@ -51,4 +51,30 @@ public class CollectionsImplementationTest extends InitializerTestCase {
         assertTrue("contains 1", emp.tasks().contains(task1));
         assertTrue("contains 2", emp.tasks().contains(task2));
     }
+
+    public void testListCreation() {
+
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("Bob");
+
+        Task task1 = EntityFactory.create(Task.class);
+        Date today = new Date();
+        task1.deadLine().setValue(today);
+        task1.status().setValue(Status.DEACTIVATED);
+
+        assertTrue("added 1", emp.tasksSorted().add(task1));
+
+        Task task2 = EntityFactory.create(Task.class);
+        task2.status().setValue(Status.ACTIVE);
+
+        assertFalse("contains 2", emp.tasksSorted().contains(task2));
+        assertTrue("added 2", emp.tasksSorted().add(task2));
+
+        assertEquals("Set size", 2, emp.tasksSorted().size());
+        assertTrue("contains 1", emp.tasksSorted().contains(task1));
+        assertTrue("contains 2", emp.tasksSorted().contains(task2));
+
+        assertEquals("get(0)", task1, emp.tasksSorted().get(0));
+        assertEquals("get(1)", task2, emp.tasksSorted().get(1));
+    }
 }
