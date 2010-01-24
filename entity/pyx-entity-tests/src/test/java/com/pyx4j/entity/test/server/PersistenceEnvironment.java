@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.test.server;
 
+/**
+ * Setup Persistence Tests environment, Required for GAE Persistence JVM test in JUnit.
+ */
 public abstract class PersistenceEnvironment {
 
     public enum EnvironmentType {

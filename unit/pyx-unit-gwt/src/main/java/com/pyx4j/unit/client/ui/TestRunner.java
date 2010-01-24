@@ -43,9 +43,10 @@ import com.pyx4j.unit.client.GResult;
 import com.pyx4j.unit.client.GUnitTester;
 import com.pyx4j.unit.client.TestAwareExceptionHandler;
 import com.pyx4j.widgets.client.dialog.CloseOption;
-import com.pyx4j.widgets.client.dialog.Custom1Option;
+import com.pyx4j.widgets.client.dialog.OkOption;
+import com.pyx4j.widgets.client.dialog.OkOptionText;
 
-public class TestRunner extends VerticalPanel implements Custom1Option, CloseOption {
+public class TestRunner extends VerticalPanel implements OkOption, OkOptionText, CloseOption {
 
     private static final Logger log = LoggerFactory.getLogger(TestRunner.class);
 
@@ -308,14 +309,14 @@ public class TestRunner extends VerticalPanel implements Custom1Option, CloseOpt
     }
 
     @Override
-    public String custom1Text() {
-        return "Run";
+    public boolean onClickOk() {
+        runSelectedTests();
+        return false;
     }
 
     @Override
-    public boolean onClickCustom1() {
-        runSelectedTests();
-        return false;
+    public String optionTextOk() {
+        return "Run";
     }
 
     @Override

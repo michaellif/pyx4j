@@ -21,10 +21,14 @@
 package com.pyx4j.entity.test.server;
 
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
@@ -53,5 +57,50 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         Assert.assertEquals("deadLine", today, task2.deadLine().getValue());
         Assert.assertEquals("Status", Status.DEACTIVATED, task2.status().getValue());
+    }
+
+    public void testUnownedSetRetrieveOwner() {
+        // Setup data
+        Department department = EntityFactory.create(Department.class);
+        String deptName = "Dept " + uniqueString();
+        department.name().setValue(deptName);
+        srv.persist(department);
+
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("Firstname1" + uniqueString());
+        srv.persist(employee1);
+        department.employees().add(employee1);
+
+        Employee employee2 = EntityFactory.create(Employee.class);
+        employee2.firstName().setValue("Firstname2" + uniqueString());
+        srv.persist(employee2);
+        department.employees().add(employee2);
+
+        srv.persist(department);
+
+        {
+            EntityCriteria<Department> criteria1 = EntityCriteria.create(Department.class);
+            criteria1.add(PropertyCriterion.eq(department.name(), deptName));
+            List<Department> departments1 = srv.query(criteria1);
+            Assert.assertEquals("Retr 1. List size", 1, departments1.size());
+            Assert.assertEquals("Retr 1. department.name", deptName, departments1.get(0).name().getValue());
+        }
+
+        {
+            EntityCriteria<Department> criteria2 = EntityCriteria.create(Department.class);
+            criteria2.add(PropertyCriterion.eq(department.employees(), employee2));
+            List<Department> departments2 = srv.query(criteria2);
+            Assert.assertEquals("Retr 2. List size", 1, departments2.size());
+            Assert.assertEquals("Retr 2. department.name", deptName, departments2.get(0).name().getValue());
+        }
+
+        // TODO Variation of passing only Entity Key, Not supported for now
+        //        {
+        //            EntityCriteria<Department> criteria3 = EntityCriteria.create(Department.class);
+        //            criteria3.add(PropertyCriterion.eq(department.employees(), employee2.getPrimaryKey()));
+        //            List<Department> departments3 = srv.query(criteria3);
+        //            Assert.assertEquals("Retr 3. List size", 1, departments3.size());
+        //            Assert.assertEquals("Retr 3. department.name", deptName, departments3.get(0).name().getValue());
+        //        }
     }
 }

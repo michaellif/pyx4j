@@ -8,13 +8,11 @@
 
 TODO
  Misha:
-    - Module for UncaughtHandler -> pyx-gwt-commons
-    
-    
-    - Module for MessageDialog and Message
+
+    DONE - Module for MessageDialog and Message
     DONE - MessageDialog created in widgets.
     TODO - Create error with option to "see details" and throwable as parameter
-    
+
     - DefaultExceptionHandler ->  pyx-gwt-commons
 
     - Module for ClientState class
@@ -25,4 +23,5 @@ TODO
    Better client log configuration. e.g. ability to create diferent Logger at least in development mode. Now we have one global flag debugOn
 
    DONE - GWT side EntityMeta and MemberMeta
-   Persistence tests Commons for Maven/Server side * GAE/RDBMS. How to run the same abstract tests in GAE and in Hibernate.
+   DONE Persistence tests Commons for Maven/Server side * GAE/RDBMS. How to run the same abstract tests in GAE and in Hibernate.
+   DONE - Module for UncaughtHandler -> pyx-gwt-commons

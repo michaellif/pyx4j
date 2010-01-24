@@ -26,6 +26,10 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.test.env.ConfigureTestsEnv;
 
+/**
+ * This is the base for abstract Server side tests. RDBMS or GAE test would have their own
+ * PersistenceEnvironment implementation.
+ */
 public abstract class DatastoreTestBase extends TestCase {
 
     protected IEntityPersistenceService srv;

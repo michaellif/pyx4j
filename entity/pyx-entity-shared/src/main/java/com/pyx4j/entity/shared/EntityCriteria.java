@@ -73,6 +73,10 @@ public class EntityCriteria<E extends IEntity<?>> implements Serializable {
         domainName = entityClass.getName();
     }
 
+    public static <T extends IEntity<?>> EntityCriteria<T> create(Class<T> entityClass) {
+        return new EntityCriteria<T>(entityClass);
+    }
+
     public EntityCriteria<E> add(Criterion criterion) {
         if (filters == null) {
             filters = new Vector<Criterion>();
