@@ -23,6 +23,8 @@ package com.pyx4j.site.client.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.site.client.Link;
+
 public class Site {
 
     public String siteId;

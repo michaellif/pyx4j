@@ -30,10 +30,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.domain.CommandLink;
-import com.pyx4j.site.client.domain.ExternalLink;
-import com.pyx4j.site.client.domain.Link;
-import com.pyx4j.site.client.domain.PageLink;
 import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;

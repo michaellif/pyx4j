@@ -6,7 +6,9 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.site.client.domain;
+package com.pyx4j.site.client;
+
+import com.pyx4j.site.client.domain.ResourceUri;
 
 public class PageLink extends Link {
 

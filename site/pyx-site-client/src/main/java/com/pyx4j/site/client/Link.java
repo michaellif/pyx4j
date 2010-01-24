@@ -6,9 +6,9 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.site.client.domain;
+package com.pyx4j.site.client;
 
-public class Link {
+public abstract class Link {
 
     public String html;
 

@@ -24,10 +24,10 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.site.client.CommandLink;
+import com.pyx4j.site.client.Link;
+import com.pyx4j.site.client.PageLink;
 import com.pyx4j.site.client.domain.Page;
-import com.pyx4j.site.client.domain.CommandLink;
-import com.pyx4j.site.client.domain.Link;
-import com.pyx4j.site.client.domain.PageLink;
 import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.domain.Site;
 import com.pyx4j.widgets.client.dialog.Dialog;

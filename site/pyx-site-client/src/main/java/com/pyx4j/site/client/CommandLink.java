@@ -6,7 +6,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.site.client.domain;
+package com.pyx4j.site.client;
 
 import com.google.gwt.user.client.Command;
 

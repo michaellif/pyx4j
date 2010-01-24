@@ -44,8 +44,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
-import com.pyx4j.site.client.domain.Link;
 import com.pyx4j.site.client.domain.Page;
+import com.pyx4j.site.client.domain.PageData;
 import com.pyx4j.site.client.domain.ResourceUri;
 import com.pyx4j.site.client.domain.Portlet;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -370,10 +370,6 @@ public class SitePanel extends SimplePanel {
         footerLinkBar.add(link, separator);
     }
 
-    public void addPage(Page page) {
-        addPage(page, false);
-    }
-
     public void addPage(Page page, boolean isHome) {
         pages.add(page);
         if (isHome) {
@@ -382,6 +378,15 @@ public class SitePanel extends SimplePanel {
         if (page.uri.isRoot()) {
             primaryNavigationBar.add(page.caption, page.uri);
         }
+    }
+
+    public void addPage(com.pyx4j.site.shared.domain.Page page, boolean isHome) {
+        Page oldPage = new Page();
+        oldPage.caption = page.caption().getValue();
+        oldPage.uri = new ResourceUri(page.uri().uri().getValue());
+        oldPage.data = new PageData();
+        oldPage.data.html = page.data().html().getValue();
+        addPage(oldPage, isHome);
     }
 
     public Page getPage(String uri) {

@@ -6,7 +6,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.site.client.domain;
+package com.pyx4j.site.client;
 
 public class ExternalLink extends Link {
 
