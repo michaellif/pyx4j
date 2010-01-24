@@ -22,13 +22,16 @@ package com.pyx4j.site.shared.domain;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-public interface Page extends IEntity<Page> {
+public interface PageData extends IEntity<PageData> {
 
-    ResourceUri uri();
+    IPrimitive<String> html();
 
-    IPrimitive<String> caption();
+    ISet<ResourceUri> inlineWidgetUris();
 
-    PageData data();
+    ISet<Portlet> leftPortlets();
+
+    ISet<Portlet> rightPortlets();
 
 }

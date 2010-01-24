@@ -20,13 +20,8 @@
  */
 package com.pyx4j.site.shared.domain;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+public interface PageLink extends Link {
 
-public interface PageDescriptor extends IEntity<PageDescriptor> {
-
-    IPrimitive<String> name();
-
-    IPrimitive<String> linkHtml();
+    ResourceUri uri();
 
 }

@@ -20,15 +20,26 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.pyx4j.site.shared.domain.Link;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-public interface Page extends IEntity<Page> {
+public interface Site extends IEntity<Site> {
 
-    ResourceUri uri();
+    IPrimitive<String> siteId();
 
-    IPrimitive<String> caption();
+    IPrimitive<String> siteCaption();
 
-    PageData data();
+    IPrimitive<String> logoUrl();
+
+    ISet<Link> headerLinks();
+
+    ISet<Link> footerLinks();
+
+    IPrimitive<String> footerCopiright();
+
+    ISet<Page> pages();
 
 }

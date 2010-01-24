@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 28, 2009
+ * Created on Jan 23, 2010
  * @author Misha
  * @version $Id$
  */
@@ -23,12 +23,8 @@ package com.pyx4j.site.shared.domain;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Page extends IEntity<Page> {
+public interface ResourceUri extends IEntity<ResourceUri> {
 
-    ResourceUri uri();
-
-    IPrimitive<String> caption();
-
-    PageData data();
+    IPrimitive<String> uri();
 
 }

@@ -23,12 +23,8 @@ package com.pyx4j.site.shared.domain;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Page extends IEntity<Page> {
+public interface Link extends IEntity<Link> {
 
-    ResourceUri uri();
-
-    IPrimitive<String> caption();
-
-    PageData data();
+    IPrimitive<String> html();
 
 }
