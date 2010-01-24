@@ -21,6 +21,7 @@
 package com.pyx4j.site.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -386,6 +387,18 @@ public class SitePanel extends SimplePanel {
         oldPage.uri = new ResourceUri(page.uri().uri().getValue());
         oldPage.data = new PageData();
         oldPage.data.html = page.data().html().getValue();
+        oldPage.data.rightPortlets = new ArrayList<Portlet>();
+        Iterator<com.pyx4j.site.shared.domain.Portlet> iterator = page.data().rightPortlets().iterator();
+        while (iterator.hasNext()) {
+            com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
+            oldPage.data.rightPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
+        }
+        oldPage.data.leftPortlets = new ArrayList<Portlet>();
+        iterator = page.data().leftPortlets().iterator();
+        while (iterator.hasNext()) {
+            com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
+            oldPage.data.leftPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
+        }
         addPage(oldPage, isHome);
     }
 
