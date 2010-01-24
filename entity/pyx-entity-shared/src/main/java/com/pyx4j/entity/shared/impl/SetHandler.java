@@ -33,14 +33,14 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, ?>>> implements ISet<OBJECT_TYPE> {
+public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<ISet<OBJECT_TYPE>, Set<Map<String, Object>>> implements ISet<OBJECT_TYPE> {
 
     private final Class<OBJECT_TYPE> valueClass;
 
-    private static class ElementsComparator implements Comparator<Map<String, ?>> {
+    private static class ElementsComparator implements Comparator<Map<String, Object>> {
 
         @Override
-        public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+        public int compare(Map<String, Object> o1, Map<String, Object> o2) {
             return o1.equals(o2) ? 0 : (o1.hashCode() - o2.hashCode());
         }
 
@@ -74,26 +74,26 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
     @SuppressWarnings("unchecked")
     @Override
-    public Set<Map<String, ?>> getValue() {
-        Map<String, ?> data = getParent().getValue();
+    public Set<Map<String, Object>> getValue() {
+        Map<String, Object> data = getParent().getValue();
         if (data == null) {
             return null;
         } else {
-            return (Set<Map<String, ?>>) data.get(getFieldName());
+            return (Set<Map<String, Object>>) data.get(getFieldName());
         }
     }
 
     @Override
-    public void setValue(Set<Map<String, ?>> value) {
+    public void setValue(Set<Map<String, Object>> value) {
         getParent().setMemberValue(getFieldName(), value);
     }
 
     @Override
     public boolean add(OBJECT_TYPE entity) {
-        Set<Map<String, ?>> value = getValue();
+        Set<Map<String, Object>> value = getValue();
         if (value == null) {
             // Use TreeSet for implementation to allow for modifiable Objects Properties (hashCode) after they are added to Set
-            value = new TreeSet<Map<String, ?>>(new ElementsComparator());
+            value = new TreeSet<Map<String, Object>>(new ElementsComparator());
             setValue(value);
         }
         return value.add(entity.getValue());
@@ -141,7 +141,7 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
     @Override
     public Iterator<OBJECT_TYPE> iterator() {
         // iterator is also behaves likes Elvis 
-        final Set<Map<String, ?>> setValue = getValue();
+        final Set<Map<String, Object>> setValue = getValue();
         if (setValue == null) {
             return new Iterator<OBJECT_TYPE>() {
 
@@ -164,7 +164,7 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
         return new Iterator<OBJECT_TYPE>() {
 
-            final Iterator<Map<String, ?>> iter = setValue.iterator();
+            final Iterator<Map<String, Object>> iter = setValue.iterator();
 
             @Override
             public boolean hasNext() {
@@ -173,7 +173,7 @@ public class SetHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<IS
 
             @Override
             public OBJECT_TYPE next() {
-                Map<String, Object> entityValue = (Map<String, Object>) iter.next();
+                Map<String, Object> entityValue = iter.next();
                 OBJECT_TYPE entity = EntityFactory.create(getValueClass());
                 entity.setValue(entityValue);
                 return entity;

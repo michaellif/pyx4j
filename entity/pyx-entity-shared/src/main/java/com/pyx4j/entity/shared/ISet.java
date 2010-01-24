@@ -23,7 +23,7 @@ package com.pyx4j.entity.shared;
 import java.util.Map;
 import java.util.Set;
 
-public interface ISet<TYPE extends IEntity<?>> extends IObject<ISet<TYPE>, Set<Map<String, ?>>>, Set<TYPE> {
+public interface ISet<TYPE extends IEntity<?>> extends IObject<ISet<TYPE>, Set<Map<String, Object>>>, Set<TYPE> {
 
     public Class<TYPE> getValueClass();
 
