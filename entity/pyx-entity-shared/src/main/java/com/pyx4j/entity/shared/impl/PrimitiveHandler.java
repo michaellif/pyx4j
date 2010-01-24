@@ -74,6 +74,19 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
 
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        TYPE thisValue = this.getValue();
+        if ((other == null) || (thisValue == null) || (!(other instanceof IPrimitive<?>))
+                || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {
+            return false;
+        }
+        return thisValue.equals(((IPrimitive<?>) other).getValue());
+    }
+
     //TODO
     @Override
     public String toString() {

@@ -76,5 +76,26 @@ public class CollectionsImplementationTest extends InitializerTestCase {
 
         assertEquals("get(0)", task1, emp.tasksSorted().get(0));
         assertEquals("get(1)", task2, emp.tasksSorted().get(1));
+
+        // List can contain the same element more then one time.
+        assertTrue("added 1 again", emp.tasksSorted().add(task1));
+        assertEquals("Set size", 3, emp.tasksSorted().size());
+        assertTrue("contains 3", emp.tasksSorted().contains(task1));
     }
+
+    public void testSetMemeberRefference() {
+        Employee emp = EntityFactory.create(Employee.class);
+
+        Task task1 = EntityFactory.create(Task.class);
+        emp.tasks().add(task1);
+        Task task1ref = emp.tasks().iterator().next();
+
+        Date today = new Date();
+        task1.deadLine().setValue(today);
+        task1.status().setValue(Status.DEACTIVATED);
+
+        assertEquals("deadLine", task1.deadLine(), task1ref.deadLine());
+        assertEquals("status", task1.status(), task1ref.status());
+    }
+
 }

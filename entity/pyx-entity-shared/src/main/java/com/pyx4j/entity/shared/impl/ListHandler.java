@@ -93,9 +93,10 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
         return value;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean add(TYPE entity) {
-        return ensureValue().add(entity.getValue());
+        return ensureValue().add(((SharedEntityHandler) entity).ensureValue());
     }
 
     @Override
