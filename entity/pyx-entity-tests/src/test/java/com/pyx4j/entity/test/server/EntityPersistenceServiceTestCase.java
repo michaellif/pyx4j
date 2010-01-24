@@ -14,16 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Jan 23, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.gae;
+package com.pyx4j.entity.test.server;
 
 import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -33,16 +30,8 @@ import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 
-public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
+public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase {
 
-    private IEntityPersistenceService srv;
-
-    @Before
-    public void setupPersistenceService() {
-        srv = PersistenceServicesFactory.getPersistenceService();
-    }
-
-    @Test
     public void testPersist() {
         Assert.assertNotNull("getPersistenceService", srv);
 
@@ -60,8 +49,7 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
         Assert.assertEquals("primaryKey Value", primaryKey, country2.getPrimaryKey());
     }
 
-    @Test
-    public void unownedOneToOnePersist() {
+    public void testUnownedOneToOnePersist() {
         IEntityPersistenceService srv = PersistenceServicesFactory.getPersistenceService();
         Country country = EntityFactory.create(Country.class);
         String countryName = "Canada" + uniqueString();
@@ -80,8 +68,7 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
 
     }
 
-    @Test
-    public void ownedOneToOnePersist() {
+    public void testOwnedOneToOnePersist() {
         Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("Firstname");
 
@@ -102,8 +89,7 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
         Assert.assertEquals("streetName is wrong", addressStreet, employee2.homeAddress().streetName().getValue());
     }
 
-    @Test
-    public void unownedSetPersist() {
+    public void testUnownedSetPersist() {
         Department department = EntityFactory.create(Department.class);
         String deptName = "Dept " + uniqueString();
         department.name().setValue(deptName);
@@ -137,4 +123,5 @@ public class EntityPersistenceServiceGAETest extends LocalDatastoreTest {
         //System.out.println(departmentR.employees().getValue().getClass());
 
     }
+
 }

@@ -20,19 +20,22 @@
  */
 package com.pyx4j.entity.gae;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.pyx4j.entity.test.server.DatastoreTestBase;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class SimpleDatastoreTest extends LocalDatastoreTest {
+public class SimpleDatastoreTest extends DatastoreTestBase {
 
-    @Test
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
+    }
+
     public void testSinglePutSuccess() throws EntityNotFoundException {
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

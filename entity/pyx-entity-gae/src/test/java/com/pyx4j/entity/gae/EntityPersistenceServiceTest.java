@@ -14,16 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 20, 2010
+ * Created on Jan 5, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.gae;
 
+import com.pyx4j.entity.test.server.EntityPersistenceServiceTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.RetrievalTestCase;
 
-public class RetrievalTest extends RetrievalTestCase {
+public class EntityPersistenceServiceTest extends EntityPersistenceServiceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {

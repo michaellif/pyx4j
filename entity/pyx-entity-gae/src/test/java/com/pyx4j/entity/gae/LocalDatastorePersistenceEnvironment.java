@@ -30,30 +30,30 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.dev.LocalDatastoreService;
 import com.google.appengine.tools.development.ApiProxyLocalImpl;
 import com.google.apphosting.api.ApiProxy;
-
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public abstract class LocalDatastoreTest {
-
-    protected DatastoreService datastoreService;
+public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment {
 
     /** true to store saved changes, default to false */
     protected boolean storeChanges = false;
 
     private static int uniqueCount = 0;
 
+    @Override
     @Before
     public void setupDatastore() {
         ApiProxy.setEnvironmentForCurrentThread(new TestEnvironment());
         ApiProxyLocalImpl impl = new ApiProxyLocalImpl(new File(".")) {
         };
-        impl.setProperty(LocalDatastoreService.NO_STORAGE_PROPERTY, Boolean.toString(!storeChanges));
+        impl.setProperty(LocalDatastoreService.NO_STORAGE_PROPERTY, Boolean.FALSE.toString());
         ApiProxy.setDelegate(impl);
-        datastoreService = DatastoreServiceFactory.getDatastoreService();
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
         EntityFactory.setImplementation(new ServerEntityFactory());
     }
 
+    @Override
     @After
     public void teardownDatastore() {
         ApiProxyLocalImpl proxy = (ApiProxyLocalImpl) ApiProxy.getDelegate();

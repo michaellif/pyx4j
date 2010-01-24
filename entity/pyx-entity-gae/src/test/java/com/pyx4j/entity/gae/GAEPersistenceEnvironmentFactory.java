@@ -14,20 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 20, 2010
+ * Created on Jan 23, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.gae;
 
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.server.RetrievalTestCase;
 
-public class RetrievalTest extends RetrievalTestCase {
+public class GAEPersistenceEnvironmentFactory {
 
-    @Override
-    protected PersistenceEnvironment getPersistenceEnvironment() {
-        return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
+    public static PersistenceEnvironment getPersistenceEnvironment() {
+        switch (PersistenceEnvironment.getEnvironmentType()) {
+        case LocalJVM:
+            return new LocalDatastorePersistenceEnvironment();
+        case GAEDevelopment:
+        case GAESandbox:
+        default:
+            return null;
+        }
     }
-
 }

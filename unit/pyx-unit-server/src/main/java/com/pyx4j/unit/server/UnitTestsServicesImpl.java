@@ -62,27 +62,33 @@ public abstract class UnitTestsServicesImpl {
                     continue;
                 }
                 if (!TestCase.class.isAssignableFrom(c)) {
-                    log.warn("Not a TestCase class {}", className);
+                    log.warn("Not a JUnit 3 TestCase class {}", className);
                 }
-                //Use jUnit 'API' to get lists of tests
-                TestSuite ts = new TestSuite((Class<TestCase>) c);
-                if (ts.countTestCases() != 0) {
-                    UnitTestInfo ti = new UnitTestInfo(className);
-                    if (tests.contains(ti)) {
-                        continue;
-                    }
-                    Enumeration<Test> iter = ts.tests();
-                    while (iter.hasMoreElements()) {
-                        Test t = iter.nextElement();
-                        if (t instanceof TestCase) {
-                            ti.addTestName(((TestCase) t).getName());
-                        } else {
-                            log.warn("Not a TestCase {}", t);
+                try {
+                    //Use jUnit 'API' to get lists of tests
+                    TestSuite ts = new TestSuite((Class<TestCase>) c);
+                    if (ts.countTestCases() != 0) {
+                        UnitTestInfo ti = new UnitTestInfo(className);
+                        if (tests.contains(ti)) {
+                            continue;
+                        }
+                        Enumeration<Test> iter = ts.tests();
+                        while (iter.hasMoreElements()) {
+                            Test t = iter.nextElement();
+                            if (t instanceof TestCase) {
+                                ti.addTestName(((TestCase) t).getName());
+                            } else {
+                                log.warn("Not a TestCase {}", t);
+                            }
+                        }
+                        if (ti.getTestNames() != null) {
+                            tests.add(ti);
                         }
                     }
-                    if (ti.getTestNames() != null) {
-                        tests.add(ti);
-                    }
+                } catch (Throwable e) {
+                    // TODO Auto-generated catch block
+                    log.error("Test {} creation error {} ", className, e);
+                    throw new Error("Can't create test " + className);
                 }
             }
 

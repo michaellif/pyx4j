@@ -27,6 +27,13 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-gae</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-server</artifactId>
             <version>${project.version}</version>
         </dependency>
