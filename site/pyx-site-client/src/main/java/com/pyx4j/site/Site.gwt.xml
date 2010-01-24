@@ -6,6 +6,7 @@
     <inherits name='com.google.gwt.widgetideas.BasicWidget' />
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.pyx4j.forms.Forms'/>
+    <inherits name='com.pyx4j.site.SiteShared'/>
     <inherits name='com.pyx4j.site.client.themes.light.LightTheme' />
     <inherits name='com.pyx4j.site.client.themes.dark.DarkTheme' />
     

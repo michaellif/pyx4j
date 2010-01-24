@@ -58,6 +58,12 @@
 		
 		<dependency>
 			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-site-shared</artifactId>
+            <version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.pyx4j</groupId>
 			<artifactId>pyx-entity-gwt</artifactId>
             <version>${project.version}</version>
 		</dependency>

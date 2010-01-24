@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,6 +30,7 @@ public interface Page extends IEntity<Page> {
 
     IPrimitive<String> caption();
 
+    @Owned
     PageData data();
 
 }

@@ -22,6 +22,7 @@ package com.pyx4j.site.shared.domain;
 
 import com.pyx4j.site.shared.domain.Link;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -34,12 +35,15 @@ public interface Site extends IEntity<Site> {
 
     IPrimitive<String> logoUrl();
 
+    @Owned
     ISet<Link> headerLinks();
 
+    @Owned
     ISet<Link> footerLinks();
 
     IPrimitive<String> footerCopiright();
 
+    @Owned
     ISet<Page> pages();
 
 }
