@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.ria.client.ApplicationManager;
 import com.pyx4j.site.shared.domain.Portlet;
@@ -86,7 +87,7 @@ public class PortletsView extends AbstractView {
     public void update() {
         portletsTree.clear();
         for (Portlet portlet : siteData.getPortlets()) {
-            TreeItem item = new TreeItem(portlet.portletId().getValue());
+            TreeItem item = new TreeItem(HtmlUtils.escapeText(portlet.portletId().getValue()));
             item.setUserObject(portlet);
             portletsTree.addItem(item);
         }

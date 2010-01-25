@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.ria.client.ApplicationManager;
 import com.pyx4j.site.shared.domain.Page;
@@ -83,17 +84,13 @@ public class SiteMapView extends AbstractView {
         return null;
     }
 
-    private String escape(String value) {
-        return value.replaceAll("&", "&amp;");
-    }
-
     public void update() {
         siteTree.clear();
         for (Site site : siteData.getSites()) {
             TreeItem siteRootItem = new TreeItem(site.siteId().getValue());
             siteRootItem.setUserObject(site);
             for (Page page : site.pages()) {
-                TreeItem pageItem = new TreeItem(escape(page.uri().uri().getValue()));
+                TreeItem pageItem = new TreeItem(HtmlUtils.escapeText(page.uri().uri().getValue()));
                 pageItem.setUserObject(page);
                 siteRootItem.addItem(pageItem);
             }
