@@ -24,10 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.site.client.domain.Site;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -37,28 +33,6 @@ public class SiteDemo implements EntryPoint {
     final Logger log = LoggerFactory.getLogger(SiteDemo.class);
 
     public void onModuleLoad() {
-
-        SitePanel pagePanel = new SitePanel();
-
-        Site staticProperties = new Site();
-
-        pagePanel.setLogoImage(staticProperties.logoUrl);
-
-        for (int i = 0; i < staticProperties.pages.size(); i++) {
-            pagePanel.addPage(staticProperties.pages.get(i), i == 0);
-        }
-
-        for (int i = 0; i < staticProperties.headerLinks.size(); i++) {
-            pagePanel.addHeaderLink(staticProperties.headerLinks.get(i), i != 0);
-        }
-
-        for (int i = 0; i < staticProperties.footerLinks.size(); i++) {
-            pagePanel.addFooterLink(staticProperties.footerLinks.get(i), i != 0);
-        }
-
-        pagePanel.setFooterCopiright(staticProperties.footerCopiright);
-        pagePanel.show(History.getToken());
-        RootPanel.get().add(pagePanel);
 
     }
 }
