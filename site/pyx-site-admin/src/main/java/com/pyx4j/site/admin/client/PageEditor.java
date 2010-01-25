@@ -52,6 +52,10 @@ public class PageEditor extends AbstractView {
 
         RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(pageEditor);
 
+        htmlViewer = new TextArea();
+        htmlViewer.setSize("420px", "150px");
+        htmlViewer.setEnabled(false);
+
         Button refreshButton = new Button("Refresh", new ClickHandler() {
 
             @Override
@@ -59,11 +63,6 @@ public class PageEditor extends AbstractView {
                 htmlViewer.setText(pageEditor.getHTML());
             }
         });
-
-        htmlViewer = new TextArea();
-        htmlViewer.setSize("420px", "150px");
-        htmlViewer.setEnabled(false);
-
         contentPane.add(editorDecorator);
         contentPane.add(htmlViewer);
         contentPane.add(refreshButton);

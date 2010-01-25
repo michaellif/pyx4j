@@ -119,7 +119,6 @@ public class AdminApplication implements IApplication {
         };
         RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Portlet.class), rpcCallbackPortlet);
 
-
         saveCommand = new Command() {
             @Override
             public void execute() {
@@ -129,6 +128,10 @@ public class AdminApplication implements IApplication {
                     PageEditor pageEditor = (PageEditor) currentEditor;
                     Page page = pageEditor.getUpdatedPage();
                     RPCManager.execute(EntityServices.Save.class, page, null);
+                } else if (currentEditor instanceof PortletEditor) {
+                    PortletEditor portletEditor = (PortletEditor) currentEditor;
+                    Portlet portlet = portletEditor.getUpdatedPortlet();
+                    RPCManager.execute(EntityServices.Save.class, portlet, null);
                 }
             }
         };

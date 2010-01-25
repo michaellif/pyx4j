@@ -20,11 +20,13 @@
  */
 package com.pyx4j.site.admin.client;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,26 +38,36 @@ public class PortletEditor extends AbstractView {
 
     private final Portlet portlet;
 
+    private final RichTextArea portletEditor;
+
+    private final TextArea htmlViewer;
+
     public PortletEditor(Portlet portlet) {
         super(new VerticalPanel(), portlet.portletId().getValue(), ImageFactory.getImages().image());
         this.portlet = portlet;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 
-        final TextBox pageNameTextBox = new TextBox();
+        portletEditor = new RichTextArea();
+        portletEditor.getElement().getStyle().setColor("black");
 
-        final RichTextArea pageEditor = new RichTextArea();
+        RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(portletEditor);
 
-        RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(pageEditor);
+        htmlViewer = new TextArea();
+        htmlViewer.setSize("420px", "150px");
+        htmlViewer.setEnabled(false);
 
-        final TextArea htmlViewer = new TextArea();
+        Button refreshButton = new Button("Refresh", new ClickHandler() {
 
-        contentPane.add(pageNameTextBox);
+            @Override
+            public void onClick(ClickEvent event) {
+                htmlViewer.setText(portletEditor.getHTML());
+            }
+        });
         contentPane.add(editorDecorator);
         contentPane.add(htmlViewer);
+        contentPane.add(refreshButton);
 
-        // Focus the cursor on the name field when the app loads
-        pageNameTextBox.setFocus(true);
-        pageNameTextBox.selectAll();
+        populate();
 
     }
 
@@ -76,7 +88,13 @@ public class PortletEditor extends AbstractView {
         return null;
     }
 
-    void simple() {
+    private void populate() {
+        portletEditor.setHTML(portlet.html().getValue());
+        htmlViewer.setText(portlet.html().getValue());
+    }
 
+    public Portlet getUpdatedPortlet() {
+        portlet.html().setValue(portletEditor.getHTML());
+        return portlet;
     }
 }
