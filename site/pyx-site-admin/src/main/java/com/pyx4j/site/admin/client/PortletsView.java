@@ -32,6 +32,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
+import com.pyx4j.ria.client.ApplicationManager;
+import com.pyx4j.site.shared.domain.Portlet;
 
 public class PortletsView extends AbstractView {
 
@@ -39,29 +41,31 @@ public class PortletsView extends AbstractView {
 
     private final SiteData siteData;
 
+    private final Tree portletsTree;
+
     public PortletsView(SiteData siteData) {
         super(new VerticalPanel(), "Portlets", ImageFactory.getImages().image());
         this.siteData = siteData;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
         contentPane.setSpacing(4);
 
-        Tree tree = new Tree();
-        tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+        portletsTree = new Tree();
+        portletsTree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
             @Override
             public void onSelection(SelectionEvent<TreeItem> event) {
                 String name = event.getSelectedItem().getText();
-                log.debug("Open portlet editor for " + name);
-                //((AdminApplication) ApplicationManager.getCurrentApplication()).editPage(name);
+                log.debug("Open portlet {} editor", name);
+                Object item = event.getSelectedItem().getUserObject();
+                if (item instanceof Portlet) {
+                    ((AdminApplication) ApplicationManager.getCurrentApplication()).editPortlet((Portlet) item);
+                } else {
+                    log.error("Invalid ObjectClass {}", item);
+                }
             }
         });
 
-        contentPane.add(tree);
-        tree.addItem("Portlets 1");
-        tree.addItem("Portlets 2");
-        tree.addItem("Portlets 3");
-        tree.addItem("Portlets 4");
-
+        contentPane.add(portletsTree);
     }
 
     @Override
@@ -80,7 +84,12 @@ public class PortletsView extends AbstractView {
     }
 
     public void update() {
-        // TODO Auto-generated method stub
+        portletsTree.clear();
+        for (Portlet portlet : siteData.getPortlets()) {
+            TreeItem item = new TreeItem(portlet.capture().getValue());
+            item.setUserObject(portlet);
+            portletsTree.addItem(item);
+        }
 
     }
 
