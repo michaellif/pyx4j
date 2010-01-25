@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.ria.client.FolderSectionPanel;
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
 import com.pyx4j.ria.client.IView;
@@ -118,12 +119,17 @@ public class AdminApplication implements IApplication {
         };
         RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Portlet.class), rpcCallbackPortlet);
 
+
         saveCommand = new Command() {
             @Override
             public void execute() {
-                //TODO
-                //                Logger.info("Save");
-                //                Logger.debug("Save");
+                FolderSectionPanel panel = mainPanel.getTopFolder();
+                IView currentEditor = panel.getCurrentView();
+                if (currentEditor instanceof PageEditor) {
+                    PageEditor pageEditor = (PageEditor) currentEditor;
+                    Page page = pageEditor.getUpdatedPage();
+                    RPCManager.execute(EntityServices.Save.class, page, null);
+                }
             }
         };
 

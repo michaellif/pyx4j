@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.admin.client;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -49,12 +52,21 @@ public class PageEditor extends AbstractView {
 
         RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(pageEditor);
 
-        htmlViewer = new TextArea();
+        Button refreshButton = new Button("Refresh", new ClickHandler() {
 
+            @Override
+            public void onClick(ClickEvent event) {
+                htmlViewer.setText(pageEditor.getHTML());
+            }
+        });
+
+        htmlViewer = new TextArea();
+        htmlViewer.setSize("420px", "150px");
         htmlViewer.setEnabled(false);
 
         contentPane.add(editorDecorator);
         contentPane.add(htmlViewer);
+        contentPane.add(refreshButton);
 
         populate();
 
@@ -82,8 +94,8 @@ public class PageEditor extends AbstractView {
         htmlViewer.setText(page.data().html().getValue());
     }
 
-    private void updateEntity() {
+    public Page getUpdatedPage() {
         page.data().html().setValue(pageEditor.getHTML());
-        populate();
+        return page;
     }
 }
