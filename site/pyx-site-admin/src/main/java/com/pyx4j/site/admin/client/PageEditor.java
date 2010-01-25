@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,26 +35,28 @@ public class PageEditor extends AbstractView {
 
     private final Page page;
 
+    private final RichTextArea pageEditor;
+
+    private final TextArea htmlViewer;
+
     public PageEditor(Page page) {
         super(new VerticalPanel(), page.uri().uri().getValue(), ImageFactory.getImages().image());
         this.page = page;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 
-        final TextBox pageNameTextBox = new TextBox();
-
-        final RichTextArea pageEditor = new RichTextArea();
+        pageEditor = new RichTextArea();
+        pageEditor.getElement().getStyle().setColor("black");
 
         RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(pageEditor);
 
-        final TextArea htmlViewer = new TextArea();
+        htmlViewer = new TextArea();
 
-        contentPane.add(pageNameTextBox);
+        htmlViewer.setEnabled(false);
+
         contentPane.add(editorDecorator);
         contentPane.add(htmlViewer);
 
-        // Focus the cursor on the name field when the app loads
-        pageNameTextBox.setFocus(true);
-        pageNameTextBox.selectAll();
+        populate();
 
     }
 
@@ -76,7 +77,13 @@ public class PageEditor extends AbstractView {
         return null;
     }
 
-    void simple() {
+    private void populate() {
+        pageEditor.setHTML(page.data().html().getValue());
+        htmlViewer.setText(page.data().html().getValue());
+    }
 
+    private void updateEntity() {
+        page.data().html().setValue(pageEditor.getHTML());
+        populate();
     }
 }
