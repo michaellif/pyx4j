@@ -20,7 +20,15 @@
  */
 package com.pyx4j.entity.gae;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +38,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -39,6 +48,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -63,10 +73,62 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private final int ORDINARY_STRING_LENGHT_MAX = 500;
 
+    private static final String SECONDARY_PRROPERTY_SUFIX = "_$";
+
     private final DatastoreService datastore;
 
     public EntityPersistenceServiceGAE() {
         datastore = DatastoreServiceFactory.getDatastoreService();
+    }
+
+    private static void closeQuietly(OutputStream output) {
+        try {
+            if (output != null) {
+                output.close();
+            }
+        } catch (Throwable e) {
+        }
+    }
+
+    private static void closeQuietly(InputStream input) {
+        try {
+            if (input != null) {
+                input.close();
+            }
+        } catch (Throwable e) {
+        }
+    }
+
+    private Blob createBlob(Serializable o) {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(buf);
+            out.writeObject(o);
+        } catch (Throwable t) {
+            throw new Error("Unable to serialize " + o.getClass(), t);
+        } finally {
+            closeQuietly(out);
+        }
+        Blob blob = new Blob(buf.toByteArray());
+        return blob;
+    }
+
+    private Object readObject(Blob blob) {
+        if (blob == null) {
+            return null;
+        }
+        ByteArrayInputStream b = new ByteArrayInputStream(blob.getBytes());
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(b);
+            return in.readObject();
+        } catch (Throwable t) {
+            throw new Error("Unable to de serialize ", t);
+        } finally {
+            closeQuietly(in);
+            closeQuietly(b);
+        }
     }
 
     private void updateEntityProperties(Entity entity, IEntity<?> iEntity) {
@@ -80,19 +142,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             Object value = me.getValue();
             if (value instanceof Map<?, ?>) {
-                String childKey;
                 if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
-                    persist(childIEntity);
-                    childKey = childIEntity.getPrimaryKey();
+                    value = persistImpl(childIEntity);
                 } else {
-                    childKey = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
+                    String childKey = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKey == null) {
                         throw new Error("Saving unperisted reference " + meta.getCaption());
                     }
+                    value = KeyFactory.stringToKey(childKey);
                 }
-                value = KeyFactory.stringToKey(childKey);
             } else if (value instanceof String) {
                 if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                     value = new Text((String) value);
@@ -105,11 +165,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     ISet<IEntity<?>> memberSet = (ISet<IEntity<?>>) iEntity.getMember(me.getKey());
                     for (IEntity<?> childIEntity : memberSet) {
-                        persist(childIEntity);
-                        childKeys.add(KeyFactory.stringToKey(childIEntity.getPrimaryKey()));
+                        Key key = persistImpl(childIEntity);
+                        childKeys.add(key);
                     }
                 } else {
-                    for (Object el : (Set) value) {
+                    for (Object el : (Set<?>) value) {
                         String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving unperisted reference " + meta.getCaption());
@@ -120,23 +180,27 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = childKeys;
             } else if ((IList.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof List<?>)) {
                 Set<Key> childKeys = new HashSet<Key>();
-                //TODO save order
+                Vector<Long> childKeysOrder = new Vector<Long>();
                 if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IList<IEntity<?>> memberList = (IList<IEntity<?>>) iEntity.getMember(me.getKey());
                     for (IEntity<?> childIEntity : memberList) {
-                        persist(childIEntity);
-                        childKeys.add(KeyFactory.stringToKey(childIEntity.getPrimaryKey()));
+                        Key key = persistImpl(childIEntity);
+                        childKeys.add(key);
+                        childKeysOrder.add(key.getId());
                     }
                 } else {
-                    for (Object el : (List) value) {
+                    for (Object el : (List<?>) value) {
                         String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving unperisted reference " + meta.getCaption());
                         }
-                        childKeys.add(KeyFactory.stringToKey(childKey));
+                        Key key = KeyFactory.stringToKey(childKey);
+                        childKeys.add(key);
+                        childKeysOrder.add(key.getId());
                     }
                 }
+                entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
             } else {
                 System.out.println("Else:" + value.getClass().getName());
@@ -155,6 +219,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void persist(IEntity<?> iEntity) {
+        persistImpl(iEntity);
+    }
+
+    private Key persistImpl(IEntity<?> iEntity) {
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't persist Transient Entity");
         }
@@ -168,6 +236,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         updateEntityProperties(entity, iEntity);
         Key keyCreated = datastore.put(entity);
         iEntity.setPrimaryKey(KeyFactory.keyToString(keyCreated));
+        return keyCreated;
     }
 
     @Override
@@ -220,6 +289,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                     continue;
                 } else if (member instanceof List<?>) {
+                    // retrieve order  and sort by this order
+                    List<Long> childKeysOrder;
+                    childKeysOrder = (List<Long>) readObject((Blob) entity.getProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX));
+                    if (childKeysOrder != null) {
+                        Collections.sort(((List<Key>) value), new KeyComparator(childKeysOrder));
+                    }
+
                     for (Key childKey : (List<Key>) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
                         if (member.getMeta().isDetached()) {
@@ -229,12 +305,30 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                         ((IList) member).add(childIEntity);
                     }
-                    // TODO retrieve order and sort by this order
                     continue;
                 }
+            } else if (me.getKey().endsWith(SECONDARY_PRROPERTY_SUFIX)) {
+                continue;
             }
             iEntity.setMemberValue(me.getKey(), value);
         }
+    }
+
+    private class KeyComparator implements Comparator<Key> {
+
+        private final List<Long> keyIdOrdered;
+
+        KeyComparator(List<Long> keyIdOrdered) {
+            this.keyIdOrdered = keyIdOrdered;
+        }
+
+        @Override
+        public int compare(Key k1, Key k2) {
+            int idx1 = keyIdOrdered.indexOf(k1.getId());
+            int idx2 = keyIdOrdered.indexOf(k2.getId());
+            return idx1 - idx2;
+        }
+
     }
 
     private void retrieveEntity(IEntity<?> iEntity, Key key) {
