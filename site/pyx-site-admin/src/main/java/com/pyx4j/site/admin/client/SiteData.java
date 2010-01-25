@@ -25,6 +25,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
 
 public class SiteData {
@@ -32,6 +33,8 @@ public class SiteData {
     private static Logger log = LoggerFactory.getLogger(SiteData.class);
 
     private Vector<Site> sites;
+
+    private Vector<Portlet> portlets;
 
     public SiteData() {
     }
@@ -43,6 +46,14 @@ public class SiteData {
 
     public Vector<Site> getSites() {
         return sites;
+    }
+
+    public Vector<Portlet> getPortlets() {
+        return portlets;
+    }
+
+    public void setPortlets(Vector<Portlet> portlets) {
+        this.portlets = portlets;
     }
 
 }

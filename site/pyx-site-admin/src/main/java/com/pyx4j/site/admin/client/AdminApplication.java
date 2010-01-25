@@ -101,10 +101,23 @@ public class AdminApplication implements IApplication {
             public void onSuccess(Vector<Site> result) {
                 siteData.setSites(result);
                 siteMapView.update();
-                portletsView.update();
             }
         };
         RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Site.class), (AsyncCallback) rpcCallback);
+
+        final AsyncCallback rpcCallbackPortlet = new AsyncCallback<Vector<Portlet>>() {
+
+            public void onFailure(Throwable t) {
+                log.error(t.getClass().getName() + "[" + t.getMessage() + "]");
+            }
+
+            public void onSuccess(Vector<Portlet> result) {
+                siteData.setPortlets(result);
+                portletsView.update();
+            }
+        };
+        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Portlet.class), rpcCallbackPortlet);
+
         saveCommand = new Command() {
             @Override
             public void execute() {
