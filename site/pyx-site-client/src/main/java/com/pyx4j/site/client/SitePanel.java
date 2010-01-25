@@ -432,4 +432,12 @@ public class SitePanel extends SimplePanel {
         return homePage;
     }
 
+    public void onAfterLogIn() {
+
+    }
+
+    public void onAfterLogOut() {
+
+    }
+
 }

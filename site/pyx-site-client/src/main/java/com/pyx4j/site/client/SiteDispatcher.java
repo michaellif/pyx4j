@@ -20,8 +20,6 @@
  */
 package com.pyx4j.site.client;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -30,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.gwt.commons.GoogleAnalytics;
@@ -43,13 +42,9 @@ public abstract class SiteDispatcher {
 
     private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
 
-    private final List<SitePanel> sitePanels = new ArrayList<SitePanel>();
-
     private SitePanel currentSitePanel;
 
     private ResourceUri welcomeUri;
-
-    private Boolean logedIn;
 
     public SiteDispatcher() {
         History.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -69,23 +64,35 @@ public abstract class SiteDispatcher {
 
     }
 
-    public void show(String historyToken) {
-        log.debug("Show page " + historyToken);
-        if (historyToken == null || historyToken.length() == 0) {
-            historyToken = welcomeUri.getUri();
-            if (historyToken == null) {
+    //TODO handle wrong tokens !!!
+    public void show(String token) {
+
+        log.debug("Show page " + token);
+        if (token == null || token.length() == 0) {
+            token = welcomeUri.getUri();
+            if (token == null) {
                 throw new RuntimeException("welcomeUri is not set");
             }
         }
-        SitePanel sitePanel = getSitePanel(new ResourceUri(historyToken));
-        if (sitePanel == null) {
-            historyToken = welcomeUri.getUri();
-            sitePanel = getSitePanel(new ResourceUri(historyToken));
-        }
-        if (sitePanel == null) {
-            throw new RuntimeException("site can't be found for welcomeUri " + welcomeUri);
-        }
-        show(sitePanel, historyToken);
+        final String siteName = token.substring(0, token.indexOf(com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR));
+        final String finalToken = token;
+
+        obtainSitePanel(siteName, new AsyncCallback<SitePanel>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                //TODO 
+            }
+
+            @Override
+            public void onSuccess(SitePanel sitePanel) {
+                if (sitePanel != null) {
+                    show(sitePanel, finalToken);
+                } else {
+                    throw new Error("sitePanel is not found");
+                }
+            }
+        });
+
     }
 
     protected void show(SitePanel sitePanel, String historyToken) {
@@ -108,48 +115,35 @@ public abstract class SiteDispatcher {
         show(sitePanel, null);
     }
 
-    private SitePanel getSitePanel(ResourceUri uri) {
-        String siteName = uri.getSiteName();
-        if (siteName == null) {
-            return null;
-        }
-        return getSitePanel(siteName);
-    }
+    public void obtainSitePanel(String siteName, AsyncCallback<SitePanel> callback) {
 
-    public SitePanel getSitePanel(String siteName) {
-        for (SitePanel sitePanel : sitePanels) {
-            if (siteName.equals(sitePanel.getSiteName())) {
-                return sitePanel;
-            }
-        }
-        return null;
     }
 
     protected void onAuthenticationChange() {
         if (ClientContext.isAuthenticated()) {
-            if (logedIn == null || !logedIn) {
-                onAfterLogIn();
-                logedIn = true;
-            }
+            onAfterLogIn();
         } else {
-            if (logedIn == null || logedIn) {
-                onAfterLogOut();
-                logedIn = false;
-            }
+            onAfterLogOut();
         }
     }
 
-    abstract protected void onAfterLogOut();
+    protected void onAfterLogOut() {
+        log.debug("onAfterLogOut");
+        for (SitePanel panel : getAllSitePanels()) {
+            panel.onAfterLogOut();
+        }
 
-    abstract protected void onAfterLogIn();
-
-    protected void addSitePanel(SitePanel panel) {
-        sitePanels.add(panel);
     }
 
-    public Iterable<SitePanel> getAllSitePanels() {
-        return sitePanels;
+    protected void onAfterLogIn() {
+        log.debug("onAfterLogIn");
+        for (SitePanel panel : getAllSitePanels()) {
+            panel.onAfterLogIn();
+        }
+
     }
+
+    public abstract Iterable<SitePanel> getAllSitePanels();
 
     public ResourceUri getWelcomeUri() {
         return welcomeUri;
