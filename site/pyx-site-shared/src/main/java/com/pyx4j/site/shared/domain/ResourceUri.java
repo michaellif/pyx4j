@@ -25,6 +25,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface ResourceUri extends IEntity<ResourceUri> {
 
+    public static String SITE_SEPARATOR = "&";
+
+    public static String PAGE_SEPARATOR = "$";
+
     IPrimitive<String> uri();
 
 }
