@@ -3,6 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
 	<inherits name='com.pyx4j.security.SecurityShared'/>
+	<inherits name='com.pyx4j.security.RPC'/>
 	
 	<generate-with class="com.pyx4j.security.rebind.DefineSecurityControllerGenerator">
         <when-type-assignable class="com.pyx4j.security.shared.SecurityController"/>
