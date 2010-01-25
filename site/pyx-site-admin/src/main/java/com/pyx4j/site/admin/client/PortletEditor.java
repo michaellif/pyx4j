@@ -37,7 +37,7 @@ public class PortletEditor extends AbstractView {
     private final Portlet portlet;
 
     public PortletEditor(Portlet portlet) {
-        super(new VerticalPanel(), portlet.capture().getValue(), ImageFactory.getImages().image());
+        super(new VerticalPanel(), portlet.portletId().getValue(), ImageFactory.getImages().image());
         this.portlet = portlet;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 

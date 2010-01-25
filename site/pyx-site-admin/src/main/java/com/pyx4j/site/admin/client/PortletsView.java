@@ -86,7 +86,7 @@ public class PortletsView extends AbstractView {
     public void update() {
         portletsTree.clear();
         for (Portlet portlet : siteData.getPortlets()) {
-            TreeItem item = new TreeItem(portlet.capture().getValue());
+            TreeItem item = new TreeItem(portlet.portletId().getValue());
             item.setUserObject(portlet);
             portletsTree.addItem(item);
         }

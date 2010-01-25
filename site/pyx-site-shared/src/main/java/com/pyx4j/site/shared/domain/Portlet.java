@@ -25,6 +25,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Portlet extends IEntity<Portlet> {
 
+    IPrimitive<String> portletId();
+
     IPrimitive<String> capture();
 
     IPrimitive<String> html();
