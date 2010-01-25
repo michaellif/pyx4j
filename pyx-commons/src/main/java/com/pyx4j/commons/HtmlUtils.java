@@ -20,7 +20,7 @@
  */
 package com.pyx4j.commons;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HtmlUtils {
@@ -44,7 +44,7 @@ public class HtmlUtils {
     private static Map<Character, String> htmlEntityTableEncode;
 
     private static void buildEntityTables() {
-        htmlEntityTableEncode = new Hashtable<Character, String>(HTML_ENTITIES.length);
+        htmlEntityTableEncode = new HashMap<Character, String>(HTML_ENTITIES.length);
         for (int i = 0; i < HTML_ENTITIES.length; i += 2) {
             if (!htmlEntityTableEncode.containsKey(HTML_ENTITIES[i])) {
                 htmlEntityTableEncode.put(HTML_ENTITIES[i].charAt(0), HTML_ENTITIES[i + 1]);
