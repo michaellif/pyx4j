@@ -83,13 +83,17 @@ public class SiteMapView extends AbstractView {
         return null;
     }
 
+    private String escape(String value) {
+        return value.replaceAll("&", "&amp;");
+    }
+
     public void update() {
         siteTree.clear();
         for (Site site : siteData.getSites()) {
             TreeItem siteRootItem = new TreeItem(site.siteId().getValue());
             siteRootItem.setUserObject(site);
             for (Page page : site.pages()) {
-                TreeItem pageItem = new TreeItem(page.uri().uri().getValue());
+                TreeItem pageItem = new TreeItem(escape(page.uri().uri().getValue()));
                 pageItem.setUserObject(page);
                 siteRootItem.addItem(pageItem);
             }
