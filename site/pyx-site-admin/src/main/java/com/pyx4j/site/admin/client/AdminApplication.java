@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -43,6 +44,7 @@ import com.pyx4j.ria.client.Perspective;
 import com.pyx4j.ria.client.StatusBar;
 import com.pyx4j.ria.client.ThreeFoldersMainPanel;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.shared.domain.Site;
 
 public class AdminApplication implements IApplication {
@@ -116,13 +118,14 @@ public class AdminApplication implements IApplication {
         perspective.setActionsToolbar(new Toolbar(this));
 
         HorizontalPanel links = new HorizontalPanel();
-        Anchor logoutHyperlink = new Anchor("Sign out", "Sign-out");
+        Anchor logoutHyperlink = new Anchor("Sign out", "javascript:void(0)");
         DOM.setStyleAttribute(logoutHyperlink.getElement(), "marginRight", "10px");
         DOM.setStyleAttribute(logoutHyperlink.getElement(), "whiteSpace", "nowrap");
         logoutHyperlink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //TODO Logger.info("TODO Logout");
+                ClientContext.logout();
+                Window.Location.replace("/");
             }
         });
         links.add(logoutHyperlink);
