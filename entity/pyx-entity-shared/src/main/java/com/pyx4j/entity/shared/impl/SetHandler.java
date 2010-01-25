@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -37,7 +38,9 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     private final Class<TYPE> valueClass;
 
-    private static class ElementsComparator implements Comparator<Map<String, Object>> {
+    //TODO probably we don't need it now. Remove.
+    @SuppressWarnings("serial")
+    public static class ElementsComparator implements Comparator<Map<String, Object>>, Serializable {
 
         @Override
         public int compare(Map<String, Object> o1, Map<String, Object> o2) {
