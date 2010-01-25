@@ -41,4 +41,8 @@ public class SiteData {
         log.info(sites.toString());
     }
 
+    public Vector<Site> getSites() {
+        return sites;
+    }
+
 }

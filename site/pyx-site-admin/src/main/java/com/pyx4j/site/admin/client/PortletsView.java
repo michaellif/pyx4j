@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
-import com.pyx4j.ria.client.ApplicationManager;
 
 public class PortletsView extends AbstractView {
 
@@ -53,7 +52,7 @@ public class PortletsView extends AbstractView {
             public void onSelection(SelectionEvent<TreeItem> event) {
                 String name = event.getSelectedItem().getText();
                 log.debug("Open portlet editor for " + name);
-                ((AdminApplication) ApplicationManager.getCurrentApplication()).editPage(name);
+                //((AdminApplication) ApplicationManager.getCurrentApplication()).editPage(name);
             }
         });
 

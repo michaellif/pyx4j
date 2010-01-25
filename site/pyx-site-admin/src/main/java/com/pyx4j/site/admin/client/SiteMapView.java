@@ -33,6 +33,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.ria.client.ApplicationManager;
+import com.pyx4j.site.shared.domain.Page;
+import com.pyx4j.site.shared.domain.Site;
 
 public class SiteMapView extends AbstractView {
 
@@ -40,45 +42,30 @@ public class SiteMapView extends AbstractView {
 
     private static Logger log = LoggerFactory.getLogger(SiteMapView.class);
 
+    private final Tree siteTree;
+
     public SiteMapView(SiteData siteData) {
         super(new VerticalPanel(), "Site Map", ImageFactory.getImages().image());
         this.siteData = siteData;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
         contentPane.setSpacing(4);
 
-        Tree tree = new Tree();
-        tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+        siteTree = new Tree();
+        siteTree.addSelectionHandler(new SelectionHandler<TreeItem>() {
 
             @Override
             public void onSelection(SelectionEvent<TreeItem> event) {
                 String name = event.getSelectedItem().getText();
                 log.debug("Open editor for " + name);
-                ((AdminApplication) ApplicationManager.getCurrentApplication()).editPortlet(name);
+                Object item = event.getSelectedItem().getUserObject();
+                if (item instanceof Page) {
+                    ((AdminApplication) ApplicationManager.getCurrentApplication()).editPage((Page) item);
+                } else if (item instanceof Site) {
+                    ((AdminApplication) ApplicationManager.getCurrentApplication()).editSite((Site) item);
+                }
             }
         });
-        contentPane.add(tree);
-
-        {
-            TreeItem pubRoot = new TreeItem("pub");
-            TreeItem pubHomeRoot = new TreeItem("home");
-            pubHomeRoot.addItem("techSupport");
-            pubHomeRoot.addItem("policy");
-            pubRoot.addItem(pubHomeRoot);
-            pubRoot.addItem("aboutUs");
-            pubRoot.addItem("contactUs");
-            tree.addItem(pubRoot);
-        }
-
-        {
-            TreeItem pubRoot = new TreeItem("hiring");
-            TreeItem pubHomeRoot = new TreeItem("home");
-            pubHomeRoot.addItem("techSupport");
-            pubHomeRoot.addItem("policy");
-            pubRoot.addItem(pubHomeRoot);
-            pubRoot.addItem("aboutUs");
-            pubRoot.addItem("contactUs");
-            tree.addItem(pubRoot);
-        }
+        contentPane.add(siteTree);
     }
 
     @Override
@@ -97,8 +84,17 @@ public class SiteMapView extends AbstractView {
     }
 
     public void update() {
-        // TODO Auto-generated method stub
+        siteTree.clear();
+        for (Site site : siteData.getSites()) {
+            TreeItem siteRootItem = new TreeItem(site.siteId().getValue());
+            siteRootItem.setUserObject(site);
+            for (Page page : site.pages()) {
+                TreeItem pageItem = new TreeItem(page.uri().uri().getValue());
+                pageItem.setUserObject(page);
+                siteRootItem.addItem(pageItem);
+            }
+            siteTree.addItem(siteRootItem);
+        }
 
     }
-
 }

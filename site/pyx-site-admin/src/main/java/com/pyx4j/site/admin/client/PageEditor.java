@@ -29,12 +29,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
+import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 
 public class PageEditor extends AbstractView {
 
-    public PageEditor(String label) {
-        super(new VerticalPanel(), label, ImageFactory.getImages().image());
+    private final Page page;
+
+    public PageEditor(Page page) {
+        super(new VerticalPanel(), page.uri().uri().getValue(), ImageFactory.getImages().image());
+        this.page = page;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 
         final TextBox pageNameTextBox = new TextBox();

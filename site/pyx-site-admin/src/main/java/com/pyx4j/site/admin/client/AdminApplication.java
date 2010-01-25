@@ -45,7 +45,10 @@ import com.pyx4j.ria.client.StatusBar;
 import com.pyx4j.ria.client.ThreeFoldersMainPanel;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.shared.domain.Page;
+import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class AdminApplication implements IApplication {
 
@@ -74,14 +77,17 @@ public class AdminApplication implements IApplication {
         mainPanel.getTopFolder().showView(editor);
     }
 
-    public void editPage(String pageName) {
-        PageEditor editor = new PageEditor(pageName);
-        openEditor(editor);
+    public void editSite(Site site) {
+        //TODO
+        MessageDialog.warn("No site Editor", "TODO");
     }
 
-    public void editPortlet(String portletName) {
-        PortletEditor editor = new PortletEditor(portletName);
-        openEditor(editor);
+    public void editPage(Page page) {
+        openEditor(new PageEditor(page));
+    }
+
+    public void editPortlet(Portlet portlet) {
+        openEditor(new PortletEditor(portlet));
     }
 
     public void onLoad() {

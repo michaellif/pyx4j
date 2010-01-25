@@ -29,12 +29,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.AbstractView;
+import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 
 public class PortletEditor extends AbstractView {
 
-    public PortletEditor(String label) {
-        super(new VerticalPanel(), label, ImageFactory.getImages().image());
+    private final Portlet portlet;
+
+    public PortletEditor(Portlet portlet) {
+        super(new VerticalPanel(), portlet.capture().getValue(), ImageFactory.getImages().image());
+        this.portlet = portlet;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 
         final TextBox pageNameTextBox = new TextBox();
