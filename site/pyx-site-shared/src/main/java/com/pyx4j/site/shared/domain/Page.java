@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Page extends IEntity<Page> {
 
+    @Owned
     ResourceUri uri();
 
     IPrimitive<String> caption();

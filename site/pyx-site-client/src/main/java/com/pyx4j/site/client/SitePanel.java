@@ -387,18 +387,31 @@ public class SitePanel extends SimplePanel {
         oldPage.uri = new ResourceUri(page.uri().uri().getValue());
         oldPage.data = new PageData();
         oldPage.data.html = page.data().html().getValue();
-        oldPage.data.rightPortlets = new ArrayList<Portlet>();
-        Iterator<com.pyx4j.site.shared.domain.Portlet> iterator = page.data().rightPortlets().iterator();
-        while (iterator.hasNext()) {
-            com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
-            oldPage.data.rightPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
+        {
+            oldPage.data.rightPortlets = new ArrayList<Portlet>();
+            Iterator<com.pyx4j.site.shared.domain.Portlet> iterator = page.data().rightPortlets().iterator();
+            while (iterator.hasNext()) {
+                com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
+                oldPage.data.rightPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
+            }
         }
-        oldPage.data.leftPortlets = new ArrayList<Portlet>();
-        iterator = page.data().leftPortlets().iterator();
-        while (iterator.hasNext()) {
-            com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
-            oldPage.data.leftPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
+        {
+            oldPage.data.leftPortlets = new ArrayList<Portlet>();
+            Iterator<com.pyx4j.site.shared.domain.Portlet> iterator = page.data().leftPortlets().iterator();
+            while (iterator.hasNext()) {
+                com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
+                oldPage.data.leftPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
+            }
         }
+        {
+            oldPage.data.inlineWidgetsList = new ArrayList<ResourceUri>();
+            Iterator<com.pyx4j.site.shared.domain.ResourceUri> iterator = page.data().inlineWidgetUris().iterator();
+            while (iterator.hasNext()) {
+                com.pyx4j.site.shared.domain.ResourceUri widgetId = iterator.next();
+                oldPage.data.inlineWidgetsList.add(new ResourceUri(widgetId.uri().getValue()));
+            }
+        }
+
         addPage(oldPage, isHome);
     }
 
