@@ -21,6 +21,7 @@
 package com.pyx4j.site.shared.domain;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.ISet;
 
 public interface PageData extends IEntity<PageData> {
 
+    @StringLength(8192)
     IPrimitive<String> html();
 
     @Owned

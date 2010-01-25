@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,6 +30,7 @@ public interface Portlet extends IEntity<Portlet> {
 
     IPrimitive<String> capture();
 
+    @StringLength(4096)
     IPrimitive<String> html();
 
 }

@@ -87,7 +87,7 @@ public class MemberMetaImpl implements MemberMeta {
 
         // Read Annotations
         StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
-        if (String.class.equals(objectClass)) {
+        if (String.class.equals(valueClass)) {
             if (stringLengthAnnotation != null) {
                 stringLength = stringLengthAnnotation.value();
             } else {
