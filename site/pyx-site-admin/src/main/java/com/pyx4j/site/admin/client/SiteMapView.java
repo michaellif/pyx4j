@@ -36,10 +36,13 @@ import com.pyx4j.ria.client.ApplicationManager;
 
 public class SiteMapView extends AbstractView {
 
+    private final SiteData siteData;
+
     private static Logger log = LoggerFactory.getLogger(SiteMapView.class);
 
-    public SiteMapView() {
+    public SiteMapView(SiteData siteData) {
         super(new VerticalPanel(), "Site Map", ImageFactory.getImages().image());
+        this.siteData = siteData;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
         contentPane.setSpacing(4);
 
@@ -91,6 +94,11 @@ public class SiteMapView extends AbstractView {
     @Override
     public Widget getToolbarPane() {
         return null;
+    }
+
+    public void update() {
+        // TODO Auto-generated method stub
+
     }
 
 }

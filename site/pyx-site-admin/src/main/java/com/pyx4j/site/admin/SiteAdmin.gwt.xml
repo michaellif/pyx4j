@@ -6,6 +6,13 @@
 	<inherits name='com.google.gwt.user.User'/>
 	<inherits name='com.pyx4j.widgets.Widgets'/>
 	<inherits name='com.pyx4j.ria.Ria'/>
+	<inherits name='com.pyx4j.rpc.RPC'/>
+	<inherits name='com.pyx4j.site.Site' />
+	<inherits name='com.pyx4j.entity.EntityRPC'/>
+    <inherits name='com.pyx4j.security.RPC' />
+    <inherits name='com.pyx4j.security.Security' />
+    <inherits name='com.pyx4j.entity.Entity'/>
+	<inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
 	
 	<entry-point class='com.pyx4j.site.admin.client.AdminClient'/>
 	

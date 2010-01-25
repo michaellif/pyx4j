@@ -38,8 +38,11 @@ public class PortletsView extends AbstractView {
 
     private static Logger log = LoggerFactory.getLogger(SiteMapView.class);
 
-    public PortletsView() {
+    private final SiteData siteData;
+
+    public PortletsView(SiteData siteData) {
         super(new VerticalPanel(), "Portlets", ImageFactory.getImages().image());
+        this.siteData = siteData;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
         contentPane.setSpacing(4);
 
@@ -75,6 +78,11 @@ public class PortletsView extends AbstractView {
     @Override
     public Widget getToolbarPane() {
         return null;
+    }
+
+    public void update() {
+        // TODO Auto-generated method stub
+
     }
 
 }

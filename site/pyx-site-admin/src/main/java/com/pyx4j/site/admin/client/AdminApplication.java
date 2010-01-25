@@ -20,41 +20,51 @@
  */
 package com.pyx4j.site.admin.client;
 
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
 import com.pyx4j.ria.client.IView;
 import com.pyx4j.ria.client.Perspective;
 import com.pyx4j.ria.client.StatusBar;
 import com.pyx4j.ria.client.ThreeFoldersMainPanel;
+import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.site.shared.domain.Site;
 
 public class AdminApplication implements IApplication {
+
+    private static Logger log = LoggerFactory.getLogger(AdminApplication.class);
 
     private Perspective perspective;
 
     private StatusBar statusBar;
 
-    private final Command saveCommand;
+    private Command saveCommand;
 
     private ThreeFoldersMainPanel mainPanel;
 
-    public AdminApplication() {
-        saveCommand = new Command() {
-            @Override
-            public void execute() {
-                //TODO
-                //                Logger.info("Save");
-                //                Logger.debug("Save");
-            }
-        };
+    private final SiteData siteData;
 
+    private SiteMapView siteMapView;
+
+    private PortletsView portletsView;
+
+    public AdminApplication() {
+        siteData = new SiteData();
     }
 
     private void openEditor(IView editor) {
@@ -73,6 +83,29 @@ public class AdminApplication implements IApplication {
     }
 
     public void onLoad() {
+
+        final AsyncCallback<Vector<Site>> rpcCallback = new AsyncCallback<Vector<Site>>() {
+
+            public void onFailure(Throwable t) {
+                log.error(t.getClass().getName() + "[" + t.getMessage() + "]");
+            }
+
+            public void onSuccess(Vector<Site> result) {
+                siteData.setSites(result);
+                siteMapView.update();
+                portletsView.update();
+            }
+        };
+        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Site.class), (AsyncCallback) rpcCallback);
+        saveCommand = new Command() {
+            @Override
+            public void execute() {
+                //TODO
+                //                Logger.info("Save");
+                //                Logger.debug("Save");
+            }
+        };
+
         perspective = new Perspective();
 
         statusBar = new StatusBar();
@@ -97,9 +130,13 @@ public class AdminApplication implements IApplication {
 
         mainPanel = new ThreeFoldersMainPanel();
 
-        mainPanel.getLeftFolder().addView(new SiteMapView(), false);
+        siteMapView = new SiteMapView(siteData);
 
-        mainPanel.getLeftFolder().addView(new PortletsView(), false);
+        mainPanel.getLeftFolder().addView(siteMapView, false);
+
+        portletsView = new PortletsView(siteData);
+
+        mainPanel.getLeftFolder().addView(portletsView, false);
 
         //TODO
         //mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));

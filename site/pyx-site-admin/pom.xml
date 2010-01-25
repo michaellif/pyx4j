@@ -30,7 +30,31 @@
 
 		<dependency>
 			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-log-gwt-rpcappender</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
 			<artifactId>pyx-gwt-ria</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-rpc-gwt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-entity-rpc</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-entity-gwt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
