@@ -83,7 +83,7 @@ public class LinkBar extends ComplexPanel {
         LinkItem item = null;
         if (link instanceof PageLink) {
             PageLink pageLink = (PageLink) link;
-            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri.uri().getValue()), separator);
+            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri), separator);
         } else if (link instanceof CommandLink) {
             CommandLink commandLink = (CommandLink) link;
             item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), separator);
