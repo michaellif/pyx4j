@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rebind;
 
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Vector;
 
@@ -44,7 +45,11 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.Email;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
+import com.pyx4j.entity.annotations.validator.PasswordCreator;
+import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
@@ -346,12 +351,11 @@ public class EntityFactoryGenerator extends Generator {
 
             writer.println(");");
 
-            if (method.isAnnotationPresent(Password.class)) {
-                writer.print("mm.addValidatorAnnotation(");
-                writer.print(Password.class.getName());
-                writer.print(".class");
-                writer.println(");");
-            }
+            addValidatorAnnotation(writer, method, Password.class);
+            addValidatorAnnotation(writer, method, PasswordCreator.class);
+            addValidatorAnnotation(writer, method, NotNull.class);
+            addValidatorAnnotation(writer, method, Email.class);
+            addValidatorAnnotation(writer, method, Pattern.class);
 
             writer.println("return mm;");
             writer.outdent();
@@ -360,6 +364,18 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("throw new RuntimeException(\"Unknown member \" + memberName);");
         writer.outdent();
         writer.println("}");
+    }
+
+    private boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {
+        if (method.isAnnotationPresent(annotationClass)) {
+            writer.print("mm.addValidatorAnnotation(");
+            writer.print(annotationClass.getName());
+            writer.print(".class");
+            writer.println(");");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void createEntityHandlerImpl(TreeLogger logger, GeneratorContext context, JClassType interfaceType) {
