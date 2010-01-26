@@ -157,11 +157,13 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
     @Override
     public void onMouseOver(MouseOverEvent event) {
-        if (tooltipPanel == null) {
-            tooltipPanel = new TooltipPanel();
+        if (this.text != null) {
+            if (tooltipPanel == null) {
+                tooltipPanel = new TooltipPanel();
+            }
+            tooltipPanel.setPointerLocation(event.getClientX(), event.getClientY());
+            tooltipPanel.scheduleShow(target, this.text);
         }
-        tooltipPanel.setPointerLocation(event.getClientX(), event.getClientY());
-        tooltipPanel.scheduleShow(target, this.text);
     }
 
     @Override

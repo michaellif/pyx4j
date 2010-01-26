@@ -306,8 +306,10 @@ public class NativeForm extends FlexTable implements INativeComponent {
         if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
             tooltip.setTooltipText(source.getToolTip());
             if (source.getToolTip() == null || source.getToolTip().trim().length() == 0) {
+                Cursor.setDefault(image.getElement());
                 image.setResource(ImageFactory.getImages().formTooltipEmpty());
             } else {
+                Cursor.setHand(image.getElement());
                 if (source instanceof CEditableComponent<?> && !((CEditableComponent<?>) source).isValid()) {
                     image.setResource(ImageFactory.getImages().formTooltipWarn());
                 } else {
