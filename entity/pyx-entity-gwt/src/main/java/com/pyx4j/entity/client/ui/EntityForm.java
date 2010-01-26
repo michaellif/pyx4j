@@ -25,11 +25,13 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -81,8 +83,13 @@ public class EntityForm<E extends IEntity<?>> {
             } else {
                 comp = new CTextField(mm.getCaption());
             }
+        } else if (mm.getValueClass().isEnum()) {
+            comp = new CComboBox(mm.getCaption());
         } else {
             comp = new CTextField(mm.getCaption());
+        }
+        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
+            comp.setMandatory(true);
         }
         bind(comp, mm.getFieldName());
         return comp;
