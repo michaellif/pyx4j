@@ -93,6 +93,10 @@ public class Context {
         return getRequest().getScheme();
     }
 
+    public static String getRequestRemoteAddr() {
+        return getRequest().getRemoteAddr();
+    }
+
     public static boolean isSecurityEnabled() {
         return security.get();
     }
