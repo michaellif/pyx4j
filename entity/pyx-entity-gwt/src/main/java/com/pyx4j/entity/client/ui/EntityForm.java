@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,6 +34,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
 
@@ -80,6 +82,8 @@ public class EntityForm<E extends IEntity<?>> {
         if (mm.getValueClass().equals(String.class)) {
             if (mm.isValidatorAnnotationPresent(Password.class)) {
                 comp = new CPasswordTextField(mm.getCaption());
+            } else if (mm.isValidatorAnnotationPresent(Email.class)) {
+                comp = new CEmailField(mm.getCaption());
             } else {
                 comp = new CTextField(mm.getCaption());
             }
