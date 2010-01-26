@@ -73,6 +73,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
             super(true);
             add(content = new HTML());
             setStyleName(CSSClass.pyx4j_Tooltip.name());
+            getElement().getStyle().setProperty("zIndex", "30");
         }
 
         private void setPointerLocation(int left, int top) {
