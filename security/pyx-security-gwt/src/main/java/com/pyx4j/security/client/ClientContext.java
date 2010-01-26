@@ -53,20 +53,31 @@ public class ClientContext {
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
     }
 
-    public static void logout() {
-        AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+    /**
+     * Keep in mind when changing URL just after this call, that some fast bowers like
+     * Chrome and Safari would not execute RPC call and session would still be active.
+     */
+    public static void logout(final AsyncCallback<AuthenticationResponse> callback) {
+        AsyncCallback<AuthenticationResponse> defaultCallback = new AsyncCallback<AuthenticationResponse>() {
 
             @Override
             public void onFailure(Throwable caught) {
-                log.error("Logout failure", caught);
+                if (callback == null) {
+                    log.error("Logout failure", caught);
+                } else {
+                    callback.onFailure(caught);
+                }
             }
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
+                if (callback != null) {
+                    callback.onSuccess(result);
+                }
             }
         };
-        RPCManager.execute(AuthenticationServices.Logout.class, null, callback);
+        RPCManager.execute(AuthenticationServices.Logout.class, null, defaultCallback);
     }
 
     public static void obtainAuthenticationData() {

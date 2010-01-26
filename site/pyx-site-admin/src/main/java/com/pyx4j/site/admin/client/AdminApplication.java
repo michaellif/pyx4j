@@ -34,7 +34,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.ria.client.FolderSectionPanel;
@@ -46,6 +45,7 @@ import com.pyx4j.ria.client.StatusBar;
 import com.pyx4j.ria.client.ThreeFoldersMainPanel;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
@@ -152,8 +152,17 @@ public class AdminApplication implements IApplication {
         logoutHyperlink.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ClientContext.logout();
-                Window.Location.replace("/");
+                ClientContext.logout(new AsyncCallback<AuthenticationResponse>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        log.error("Logout failure", caught);
+                    }
+
+                    @Override
+                    public void onSuccess(AuthenticationResponse result) {
+                        Window.Location.replace("/");
+                    }
+                });
             }
         });
         links.add(logoutHyperlink);
