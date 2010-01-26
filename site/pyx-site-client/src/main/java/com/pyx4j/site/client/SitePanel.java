@@ -21,7 +21,6 @@
 package com.pyx4j.site.client;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -45,13 +44,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
-import com.pyx4j.site.client.domain.Page;
-import com.pyx4j.site.client.domain.PageData;
-import com.pyx4j.site.client.domain.ResourceUri;
-import com.pyx4j.site.client.domain.Portlet;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
+import com.pyx4j.site.shared.domain.Page;
+import com.pyx4j.site.shared.domain.Portlet;
+import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 public class SitePanel extends SimplePanel {
@@ -139,12 +138,12 @@ public class SitePanel extends SimplePanel {
     }
 
     private void show(Page page) {
-        Widget widget = new HTML(page.data.html, true);
+        Widget widget = new HTML(page.data().html().getValue(), true);
 
         mainSectionPanel.setWidget(widget);
 
-        if (page.data.inlineWidgetsList != null) {
-            for (ResourceUri uri : page.data.inlineWidgetsList) {
+        if (page.data().inlineWidgetUris().size() > 0) {
+            for (ResourceUri uri : page.data().inlineWidgetUris()) {
                 InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
                 Widget inlineWidget = widgetFactory.createWidget(uri);
                 if (root != null && inlineWidget != null) {
@@ -155,25 +154,25 @@ public class SitePanel extends SimplePanel {
             }
         }
 
-        setHeaderCaption(page.caption);
+        setHeaderCaption(page.caption().getValue());
 
         leftSectionPanel.clear();
-        if (page.data.leftPortlets != null) {
-            for (Portlet portlet : page.data.leftPortlets) {
+        if (page.data().leftPortlets().size() > 0) {
+            for (Portlet portlet : page.data().leftPortlets()) {
                 leftSectionPanel.add(createPortletWidget(portlet));
             }
         }
 
         rightSectionPanel.clear();
-        if (page.data.rightPortlets != null) {
-            for (Portlet portlet : page.data.rightPortlets) {
+        if (page.data().rightPortlets().size() > 0) {
+            for (Portlet portlet : page.data().leftPortlets()) {
                 rightSectionPanel.add(createPortletWidget(portlet));
             }
         }
 
-        primaryNavigationBar.setSelected(page.uri);
+        primaryNavigationBar.setSelected(page.uri());
 
-        Window.setTitle(siteCaption + " " + page.caption);
+        Window.setTitle(siteCaption + " " + page.caption().getValue());
 
         currentPage = page;
 
@@ -371,57 +370,28 @@ public class SitePanel extends SimplePanel {
         footerLinkBar.add(link, separator);
     }
 
-    public void addPage(Page page, boolean isHome) {
+    public void addPage(com.pyx4j.site.shared.domain.Page page, boolean isHome) {
         pages.add(page);
         if (isHome) {
             homePage = page;
         }
-        if (page.uri.isRoot()) {
-            primaryNavigationBar.add(page.caption, page.uri);
+        if (ResourceUriUtil.isRoot(page.uri())) {
+            primaryNavigationBar.add(page.caption().getValue(), page.uri());
         }
-    }
-
-    public void addPage(com.pyx4j.site.shared.domain.Page page, boolean isHome) {
-        Page oldPage = new Page();
-        oldPage.caption = page.caption().getValue();
-        oldPage.uri = new ResourceUri(page.uri().uri().getValue());
-        oldPage.data = new PageData();
-        oldPage.data.html = page.data().html().getValue();
-        {
-            oldPage.data.rightPortlets = new ArrayList<Portlet>();
-            Iterator<com.pyx4j.site.shared.domain.Portlet> iterator = page.data().rightPortlets().iterator();
-            while (iterator.hasNext()) {
-                com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
-                oldPage.data.rightPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
-            }
-        }
-        {
-            oldPage.data.leftPortlets = new ArrayList<Portlet>();
-            Iterator<com.pyx4j.site.shared.domain.Portlet> iterator = page.data().leftPortlets().iterator();
-            while (iterator.hasNext()) {
-                com.pyx4j.site.shared.domain.Portlet portlet = iterator.next();
-                oldPage.data.leftPortlets.add(new Portlet(portlet.capture().getValue(), portlet.html().getValue()));
-            }
-        }
-        {
-            oldPage.data.inlineWidgetsList = new ArrayList<ResourceUri>();
-            Iterator<com.pyx4j.site.shared.domain.ResourceUri> iterator = page.data().inlineWidgetUris().iterator();
-            while (iterator.hasNext()) {
-                com.pyx4j.site.shared.domain.ResourceUri widgetId = iterator.next();
-                oldPage.data.inlineWidgetsList.add(new ResourceUri(widgetId.uri().getValue()));
-            }
-        }
-
-        addPage(oldPage, isHome);
     }
 
     public Page getPage(String uri) {
-        return getPage(new ResourceUri(uri));
+        for (Page page : pages) {
+            if (page.uri().uri().getValue().equals(uri)) {
+                return page;
+            }
+        }
+        return null;
     }
 
     public Page getPage(ResourceUri uri) {
         for (Page page : pages) {
-            if (page.uri.equals(uri)) {
+            if (page.uri().getValue().equals(uri.getValue())) {
                 return page;
             }
         }

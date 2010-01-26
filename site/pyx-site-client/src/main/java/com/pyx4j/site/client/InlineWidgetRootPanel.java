@@ -27,7 +27,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
-import com.pyx4j.site.client.domain.ResourceUri;
+import com.pyx4j.site.shared.domain.ResourceUri;
 
 public class InlineWidgetRootPanel extends AbsolutePanel {
 
@@ -38,7 +38,7 @@ public class InlineWidgetRootPanel extends AbsolutePanel {
 
         Element elem = null;
         if (uri != null) {
-            if (null == (elem = Document.get().getElementById(uri.getUri()))) {
+            if (null == (elem = Document.get().getElementById(uri.uri().getValue()))) {
                 return null;
             }
         }

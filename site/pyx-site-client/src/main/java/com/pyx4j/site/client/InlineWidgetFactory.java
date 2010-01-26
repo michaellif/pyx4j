@@ -22,7 +22,7 @@ package com.pyx4j.site.client;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.domain.ResourceUri;
+import com.pyx4j.site.shared.domain.ResourceUri;
 
 public class InlineWidgetFactory {
 

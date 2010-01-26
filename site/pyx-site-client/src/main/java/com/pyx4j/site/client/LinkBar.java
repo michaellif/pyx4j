@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.domain.ResourceUri;
+import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -83,7 +83,7 @@ public class LinkBar extends ComplexPanel {
         LinkItem item = null;
         if (link instanceof PageLink) {
             PageLink pageLink = (PageLink) link;
-            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri), separator);
+            item = new LinkItem(new LinkItemAnchor(pageLink.html, pageLink.uri.uri().getValue()), separator);
         } else if (link instanceof CommandLink) {
             CommandLink commandLink = (CommandLink) link;
             item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), separator);
@@ -116,7 +116,7 @@ public class LinkBar extends ComplexPanel {
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    History.newItem(uri.getUri(), true);
+                    History.newItem(uri.uri().getValue(), true);
                     getParent().removeStyleDependentName("mouseOver");
                 }
             });

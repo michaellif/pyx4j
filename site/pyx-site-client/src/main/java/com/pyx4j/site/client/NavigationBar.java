@@ -42,7 +42,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.domain.ResourceUri;
+import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -99,7 +100,7 @@ public class NavigationBar extends ComplexPanel {
 
     public void setSelected(ResourceUri uri) {
         for (NavigationTab tab : tabs) {
-            tab.setSelected(uri.isContained(tab.uri));
+            tab.setSelected(ResourceUriUtil.isContained(uri, tab.uri));
         }
     }
 
@@ -126,7 +127,7 @@ public class NavigationBar extends ComplexPanel {
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    History.newItem(uri.getUri(), true);
+                    History.newItem(uri.uri().getValue(), true);
                 }
             });
 

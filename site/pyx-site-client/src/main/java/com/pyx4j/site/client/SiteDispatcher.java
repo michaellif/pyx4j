@@ -35,7 +35,7 @@ import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.site.client.domain.ResourceUri;
+import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
 
 public abstract class SiteDispatcher {
@@ -69,7 +69,7 @@ public abstract class SiteDispatcher {
 
         log.debug("Show page " + token);
         if (token == null || token.length() == 0) {
-            token = welcomeUri.getUri();
+            token = welcomeUri.uri().getValue();
             if (token == null) {
                 throw new RuntimeException("welcomeUri is not set");
             }
