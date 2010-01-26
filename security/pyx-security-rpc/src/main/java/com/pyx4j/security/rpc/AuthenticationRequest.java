@@ -22,6 +22,7 @@ package com.pyx4j.security.rpc;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.Email;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,9 +31,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface AuthenticationRequest extends IEntity<AuthenticationRequest> {
 
     @Email
+    @NotNull
     IPrimitive<String> email();
 
     @Password
+    @NotNull
     IPrimitive<String> password();
 
 }
