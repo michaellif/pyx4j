@@ -53,7 +53,7 @@ import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.widgets.client.style.StyleManger;
 
-public class SitePanel extends SimplePanel {
+public abstract class SitePanel extends SimplePanel {
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
 
@@ -95,7 +95,7 @@ public class SitePanel extends SimplePanel {
 
     private static DarkTheme darkTheme = new DarkTheme();
 
-    private static InlineWidgetFactory widgetFactory = GWT.create(InlineWidgetFactory.class);
+    private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactory.class);
 
     public SitePanel() {
 
@@ -145,7 +145,12 @@ public class SitePanel extends SimplePanel {
         if (page.data().inlineWidgetUris().size() > 0) {
             for (ResourceUri uri : page.data().inlineWidgetUris()) {
                 InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
-                Widget inlineWidget = widgetFactory.createWidget(uri);
+                //check in local (page) factory
+                Widget inlineWidget = localWidgetFactory().createWidget(uri);
+                //check in global factory
+                if (inlineWidget == null) {
+                    inlineWidget = globalWidgetFactory.createWidget(uri);
+                }
                 if (root != null && inlineWidget != null) {
                     root.add(inlineWidget);
                 } else {
@@ -185,6 +190,8 @@ public class SitePanel extends SimplePanel {
             show(homePage);
         }
     }
+
+    abstract protected InlineWidgetFactory localWidgetFactory();
 
     protected Panel createContentPanel() {
         FlowPanel contentPanel = new FlowPanel();
