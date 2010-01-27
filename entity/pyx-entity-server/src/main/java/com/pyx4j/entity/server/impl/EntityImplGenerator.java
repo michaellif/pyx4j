@@ -20,7 +20,11 @@
  */
 package com.pyx4j.entity.server.impl;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
@@ -46,26 +50,75 @@ public class EntityImplGenerator {
 
     public static final String MARKER_RESOURCE_NAME = "META-INF/MANIFEST.MF";
 
+    public static final String ALREADY_GENERATED_MARKER_RESOURCE_NAME = "META-INF/domain-generated.txt";
+
     private static EntityImplGenerator instance;
 
     private final ClassPool pool;
 
-    private EntityImplGenerator() {
+    private EntityImplGenerator(boolean webapp) {
         pool = ClassPool.getDefault();
-        appendGaeClassPath();
+        appendClassPath(webapp);
     }
 
     public static synchronized EntityImplGenerator instance() {
         if (instance == null) {
-            instance = new EntityImplGenerator();
+            instance = new EntityImplGenerator(true);
         }
         return instance;
+    }
+
+    public static void main(String[] args) {
+        File target;
+        if ((args != null) && (args.length > 0)) {
+            target = new File(args[0]);
+        } else {
+            target = new File(new File("target"), "classes");
+        }
+
+        long start = System.currentTimeMillis();
+        List<String> classes = EntityClassFinder.findEntityClasses();
+        if (classes.size() == 0) {
+            log.warn("IEntity classes not found");
+            return;
+        }
+        log.debug("found IEntity {} ", classes);
+        EntityImplGenerator gen = new EntityImplGenerator(false);
+        for (String c : classes) {
+            CtClass klass = gen.createImplementation(c);
+            try {
+                klass.writeFile(target.getAbsolutePath());
+            } catch (Throwable e) {
+                log.error("compile error", e);
+                throw new Error("Can't create class " + c);
+            }
+        }
+        File marker = new File(target, ALREADY_GENERATED_MARKER_RESOURCE_NAME);
+        if (!marker.getParentFile().isDirectory()) {
+            marker.getParentFile().mkdirs();
+        }
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(marker)));
+            for (String c : classes) {
+                out.println(c);
+            }
+            out.close();
+        } catch (IOException e) {
+            throw new Error("Can't create marker file");
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+        log.info("Wrote {} IEntity implementations in {} msec", classes.size(), System.currentTimeMillis() - start);
+
     }
 
     /**
      * Required only to work on GAE
      */
-    private void appendGaeClassPath() {
+    private void appendClassPath(boolean webapp) {
         ClassLoader cld = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> urls;
         try {
@@ -81,8 +134,11 @@ public class EntityImplGenerator {
             if (!pathname.startsWith(prefix)) {
                 continue;
             }
-            if ((!pathname.contains("WEB-INF")) || pathname.contains("datanucleus") || pathname.contains("geronimo") || pathname.contains("jdo")
-                    || pathname.contains("javassist") || pathname.contains("appengine") || pathname.contains("gwt-servlet")) {
+            if (webapp && (!pathname.contains("WEB-INF"))) {
+                continue;
+            }
+            if (pathname.contains("datanucleus") || pathname.contains("geronimo") || pathname.contains("jdo") || pathname.contains("javassist")
+                    || pathname.contains("appengine") || pathname.contains("gwt-servlet")) {
                 continue;
             }
             pathname = pathname.substring(prefix.length());
@@ -96,6 +152,11 @@ public class EntityImplGenerator {
     }
 
     public static void generate() {
+        if (Thread.currentThread().getContextClassLoader().getResource(ALREADY_GENERATED_MARKER_RESOURCE_NAME) != null) {
+            log.debug("IEntity implementations already present");
+            return;
+        }
+
         long start = System.currentTimeMillis();
         List<String> classes = EntityClassFinder.findEntityClasses();
         if (classes.size() == 0) {
@@ -121,7 +182,27 @@ public class EntityImplGenerator {
         return generateImplementation(interfaceClass);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends IEntity<?>> Class<T> generateImplementation(Class<T> interfaceClass) {
+        try {
+            return createImplementationClass(interfaceClass).toClass();
+        } catch (CannotCompileException e) {
+            log.error("Impl compile error", e);
+            throw new Error("Can't create class " + interfaceClass.getName());
+        }
+    }
+
+    public CtClass createImplementation(String interfaceName) {
+        Class<IEntity<?>> interfaceClass;
+        try {
+            interfaceClass = (Class<IEntity<?>>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new Error(interfaceName + " not available");
+        }
+        return createImplementationClass(interfaceClass);
+    }
+
+    public <T extends IEntity<?>> CtClass createImplementationClass(Class<T> interfaceClass) {
         String interfaceName = interfaceClass.getName();
         String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         try {
@@ -158,12 +239,12 @@ public class EntityImplGenerator {
                 cc.addMethod(member);
             }
 
-            return cc.toClass();
+            return cc;
         } catch (CannotCompileException e) {
             log.error("Impl compile error", e);
             throw new Error("Can't create class " + name);
         } catch (NotFoundException e) {
-            log.error("Impl  construction error", e);
+            log.error("Impl construction error", e);
             throw new Error("Can't create class " + name);
         }
     }
