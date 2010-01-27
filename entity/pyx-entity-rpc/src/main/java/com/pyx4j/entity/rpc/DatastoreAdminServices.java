@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Jan 27, 2010
  * @author vlads
  * @version $Id$
  */
@@ -22,30 +22,23 @@ package com.pyx4j.entity.rpc;
 
 import java.util.Vector;
 
-import com.pyx4j.entity.shared.EntityCriteria;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface EntityServices {
+/**
+ * This is mainly development time service.
+ */
+public interface DatastoreAdminServices {
 
-    public interface Save extends Service<IEntity<?>, IEntity<?>> {
-
-    };
-
-    public interface Query extends Service<EntityCriteria, Vector> {
-
-    };
-
-    public interface Count extends Service<EntityCriteria, Long> {
+    public interface ResetInitialData extends Service<VoidSerializable, String> {
 
     };
 
-    public interface Delete extends Service<IEntity<?>, VoidSerializable> {
+    public interface GetPreloaders extends Service<VoidSerializable, Vector<DataPreloaderInfo>> {
 
     };
 
-    public interface DeleteQuery extends Service<EntityCriteria, VoidSerializable> {
+    public interface ExectutePreloaders extends Service<Vector<DataPreloaderInfo>, String> {
 
     };
 }

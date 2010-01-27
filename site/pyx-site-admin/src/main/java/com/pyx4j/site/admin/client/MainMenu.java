@@ -20,17 +20,24 @@
  */
 package com.pyx4j.site.admin.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
-//TODO import com.pyx4j.client.log.Logger;
-
 public class MainMenu extends MenuBar {
+
+    private static Logger log = LoggerFactory.getLogger(MainMenu.class);
 
     public MainMenu(final AdminApplication app) {
 
@@ -42,10 +49,22 @@ public class MainMenu extends MenuBar {
         MenuBar datastoreMenuBar = new MenuBar(true);
         addItem(new MenuItem("Datastore", fileMenuBar));
 
-        datastoreMenuBar.addItem(new MenuItem("Preload", new Command() {
+        datastoreMenuBar.addItem(new MenuItem("Reset Initial Data", new Command() {
             @Override
             public void execute() {
-                //TODO 
+                final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        log.error("CreateInitialData Service failed", caught);
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        MessageDialog.info("Execution completed", result);
+                    }
+                };
+                RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
             }
         }));
 
