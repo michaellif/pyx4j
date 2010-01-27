@@ -41,49 +41,55 @@ public class MainMenu extends MenuBar {
 
     public MainMenu(final AdminApplication app) {
 
-        MenuBar fileMenuBar = new MenuBar(true);
-        addItem(new MenuItem("File", fileMenuBar));
+        {
+            MenuBar fileMenuBar = new MenuBar(true);
+            addItem(new MenuItem("File", fileMenuBar));
 
-        fileMenuBar.addItem(new MenuItem("Save", app.getSaveCommand()));
+            fileMenuBar.addItem(new MenuItem("Save", app.getSaveCommand()));
+        }
 
-        MenuBar datastoreMenuBar = new MenuBar(true);
-        addItem(new MenuItem("Datastore", fileMenuBar));
+        {
+            MenuBar datastoreMenuBar = new MenuBar(true);
+            addItem(new MenuItem("Datastore", datastoreMenuBar));
 
-        datastoreMenuBar.addItem(new MenuItem("Reset Initial Data", new Command() {
-            @Override
-            public void execute() {
-                final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
+            datastoreMenuBar.addItem(new MenuItem("Reset Initial Data", new Command() {
+                @Override
+                public void execute() {
+                    final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        log.error("CreateInitialData Service failed", caught);
-                    }
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            log.error("CreateInitialData Service failed", caught);
+                        }
 
-                    @Override
-                    public void onSuccess(String result) {
-                        MessageDialog.info("Execution completed", result);
-                    }
-                };
-                RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
-            }
-        }));
+                        @Override
+                        public void onSuccess(String result) {
+                            MessageDialog.info("Execution completed", result);
+                        }
+                    };
+                    RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
+                }
+            }));
+        }
 
-        MenuBar helpMenuBar = new MenuBar(true);
-        addItem(new MenuItem("Help", helpMenuBar));
+        {
+            MenuBar helpMenuBar = new MenuBar(true);
+            addItem(new MenuItem("Help", helpMenuBar));
 
-        helpMenuBar.addItem(new MenuItem("About", new Command() {
-            @Override
-            public void execute() {
-                Dialog aboutDialog = new Dialog("About", "TODO About", Type.Info, new OkOption() {
+            helpMenuBar.addItem(new MenuItem("About", new Command() {
+                @Override
+                public void execute() {
+                    Dialog aboutDialog = new Dialog("About", "TODO About", Type.Info, new OkOption() {
 
-                    @Override
-                    public boolean onClickOk() {
-                        return true;
-                    }
-                });
-                aboutDialog.show();
-            }
-        }));
+                        @Override
+                        public boolean onClickOk() {
+                            return true;
+                        }
+                    });
+                    aboutDialog.show();
+                }
+            }));
+        }
 
     }
 
