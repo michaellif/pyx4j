@@ -61,7 +61,7 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
 
     public CComboBox(String title, NotInOptionsPolicy policy) {
         super(title);
-        setWidth("200px");
+        setWidth("204px");
         if (policy == null) {
             this.policy = NotInOptionsPolicy.KEEP;
         } else {

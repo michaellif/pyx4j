@@ -50,6 +50,7 @@ public abstract class SiteTheme extends WindowsTheme {
         addStyle(style);
         style = new Style("body");
         style.addProperty("margin", "0");
+        style.addProperty("border", "none");
         addStyle(style);
         style = new Style("h1");
         style.addProperty("font-size", "2em");
