@@ -17,6 +17,18 @@
     <name>tester-gae-server</name>
     <description>tester-gae-server implementations</description>
 
+    <distributionManagement>
+        <!-- not for deployment in repository -->
+        <repository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
 
         <dependency>
@@ -31,7 +43,7 @@
             <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-server</artifactId>
