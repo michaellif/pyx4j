@@ -51,6 +51,7 @@ import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
+import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 public abstract class SitePanel extends SimplePanel {
@@ -152,6 +153,7 @@ public abstract class SitePanel extends SimplePanel {
                     inlineWidget = globalWidgetFactory.createWidget(uri);
                 }
                 if (root != null && inlineWidget != null) {
+                    inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
                     root.add(inlineWidget);
                 } else {
                     log.warn("Failed to add inline widget " + uri + " to panel.");

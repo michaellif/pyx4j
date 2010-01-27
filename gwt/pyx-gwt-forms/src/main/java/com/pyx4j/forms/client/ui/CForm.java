@@ -71,6 +71,14 @@ public class CForm extends CContainer {
         return (Widget) form.initNativeComponent();
     }
 
+    public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption) {
+        CGroupBoxPanel group = new CGroupBoxPanel(caption, false);
+        CForm form = new CForm(allignment);
+        form.setComponents(components);
+        group.addComponent(form);
+        return (Widget) group.initNativeComponent();
+    }
+
     public void setComponents(CComponent<?>[][] components) {
         this.components = components;
 

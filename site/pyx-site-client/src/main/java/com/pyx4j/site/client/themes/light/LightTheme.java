@@ -51,6 +51,12 @@ public class LightTheme extends SiteTheme {
     }
 
     @Override
+    protected void initContentStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_Content.name());
+        addStyle(style);
+    }
+
+    @Override
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
         style.addProperty("background", "transparent url(images/container-header.gif) no-repeat");

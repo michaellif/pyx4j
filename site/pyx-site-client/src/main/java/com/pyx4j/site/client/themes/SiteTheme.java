@@ -41,7 +41,7 @@ public abstract class SiteTheme extends WindowsTheme {
         initFooterLinksStyles();
         initFooterCopyrightStyles();
         initHtmlPortletStyles();
-
+        initContentStyles();
     }
 
     protected void initGeneralStyles() {
@@ -88,6 +88,8 @@ public abstract class SiteTheme extends WindowsTheme {
     protected abstract void initSitePanelStyles();
 
     protected abstract void initContentPanelStyles();
+
+    protected abstract void initContentStyles();
 
     protected abstract void initHeaderStyles();
 

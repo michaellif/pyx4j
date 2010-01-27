@@ -39,6 +39,16 @@ public class MainMenu extends MenuBar {
 
         fileMenuBar.addItem(new MenuItem("Save", app.getSaveCommand()));
 
+        MenuBar datastoreMenuBar = new MenuBar(true);
+        addItem(new MenuItem("Datastore", fileMenuBar));
+
+        datastoreMenuBar.addItem(new MenuItem("Preload", new Command() {
+            @Override
+            public void execute() {
+                //TODO 
+            }
+        }));
+
         MenuBar helpMenuBar = new MenuBar(true);
         addItem(new MenuItem("Help", helpMenuBar));
 

@@ -54,7 +54,7 @@ public class PageEditor extends AbstractView {
 
         htmlViewer = new TextArea();
         htmlViewer.setSize("420px", "150px");
-        htmlViewer.setEnabled(false);
+        htmlViewer.setReadOnly(true);
 
         Button refreshButton = new Button("Refresh", new ClickHandler() {
 
