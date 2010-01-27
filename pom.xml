@@ -32,7 +32,6 @@
         </license>
     </licenses>
 
-
     <url>http://code.pyx4j.com</url>
 
     <ciManagement>
@@ -41,8 +40,8 @@
     </ciManagement>
 
     <issueManagement>
-        <system>No issue management system is defined. For now use e-mail: vlads@pyx4j.com</system>
-        <url>http://mail.google.com/mail/</url>
+        <system>Bugzilla</system>
+        <url>https://pyx4j.com/bug/</url>
     </issueManagement>
 
     <distributionManagement>
