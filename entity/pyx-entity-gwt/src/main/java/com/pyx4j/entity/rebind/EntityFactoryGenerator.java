@@ -38,11 +38,14 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.Email;
@@ -100,6 +103,8 @@ public class EntityFactoryGenerator extends Generator {
                         + "Call ClientEntityFactory.ensureIEntityImplementations(); in your code first");
             }
 
+            RpcBlacklistCheck rpcFilter = new RpcBlacklistCheck(logger, context.getPropertyOracle());
+
             iEnentityInterfaceType = oracle.getType(IEntity.class.getName());
             iPrimitiveInterfaceType = oracle.getType(IPrimitive.class.getName());
             iSetInterfaceType = oracle.getType(ISet.class.getName());
@@ -111,6 +116,11 @@ public class EntityFactoryGenerator extends Generator {
                 if (type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type) {
                     cases.add(type);
                     logger.log(TreeLogger.Type.DEBUG, "Creating IEntity:" + type.getName());
+
+                    if (type.isAnnotationPresent(RpcBlacklist.class) && rpcFilter.isAllowed(type)) {
+                        throw new RuntimeException("IEntity class :" + type.getPackage().getName() + "." + type.getName() + " should be in rpc.blacklist");
+                    }
+
                     createEntityHandlerImpl(logger, context, type);
                     createEntityMetaImpl(logger, context, type);
                 }
