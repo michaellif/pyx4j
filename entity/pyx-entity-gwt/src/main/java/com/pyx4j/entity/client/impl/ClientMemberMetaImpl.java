@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
@@ -54,6 +55,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
      * See com.pyx4j.entity.annotations.StringLength
      */
     private final int stringLength;
+
+    private EditorType editorType;
 
     private Set<Class<?>> annotations;
 
@@ -120,6 +123,15 @@ public class ClientMemberMetaImpl implements MemberMeta {
     public List<Validator> getValidators() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public EditorType getEditorType() {
+        return this.editorType;
+    }
+
+    public void setEditorType(EditorType editorType) {
+        this.editorType = editorType;
     }
 
     public void addValidatorAnnotation(Class<? extends Annotation> annotationClass) {

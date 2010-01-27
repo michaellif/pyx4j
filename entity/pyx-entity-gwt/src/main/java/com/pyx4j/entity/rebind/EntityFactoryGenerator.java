@@ -44,6 +44,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.StringLength;
@@ -360,6 +361,13 @@ public class EntityFactoryGenerator extends Generator {
             }
 
             writer.println(");");
+
+            if (method.isAnnotationPresent(Editor.class)) {
+                writer.print("mm.setEditorType(");
+                writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
+                writer.print(method.getAnnotation(Editor.class).type().name());
+                writer.println(");");
+            }
 
             addValidatorAnnotation(writer, method, Password.class);
             addValidatorAnnotation(writer, method, PasswordCreator.class);

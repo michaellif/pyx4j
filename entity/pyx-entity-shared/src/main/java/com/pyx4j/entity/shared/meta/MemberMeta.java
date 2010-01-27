@@ -23,6 +23,7 @@ package com.pyx4j.entity.shared.meta;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -65,6 +66,8 @@ public interface MemberMeta {
      * See com.pyx4j.entity.annotations.StringLength
      */
     public int getStringLength();
+
+    public EditorType getEditorType();
 
     public List<Validator> getValidators();
 

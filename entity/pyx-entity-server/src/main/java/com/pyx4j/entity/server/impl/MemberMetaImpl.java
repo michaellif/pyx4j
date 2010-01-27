@@ -29,9 +29,11 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -159,6 +161,16 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public int getStringLength() {
         return stringLength;
+    }
+
+    @Override
+    public EditorType getEditorType() {
+        Editor editorAnnotation = method.getAnnotation(Editor.class);
+        if (editorAnnotation == null) {
+            return null;
+        } else {
+            return editorAnnotation.type();
+        }
     }
 
     @Override

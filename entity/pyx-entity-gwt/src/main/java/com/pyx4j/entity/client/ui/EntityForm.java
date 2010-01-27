@@ -20,11 +20,14 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
@@ -32,10 +35,15 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
+import com.pyx4j.forms.client.ui.CIntegerField;
+import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextField;
 
 public class EntityForm<E extends IEntity<?>> {
@@ -79,7 +87,26 @@ public class EntityForm<E extends IEntity<?>> {
     public CEditableComponent<?> create(IObject<?, ?> member) {
         MemberMeta mm = member.getMeta();
         CEditableComponent<?> comp;
-        if (mm.getValueClass().equals(String.class)) {
+        EditorType editorType = mm.getEditorType();
+
+        if (editorType != null) {
+            switch (editorType) {
+            case text:
+                comp = new CTextField(mm.getCaption());
+                break;
+            case password:
+                comp = new CPasswordTextField(mm.getCaption());
+                break;
+            case combo:
+                comp = new CComboBox(mm.getCaption());
+                break;
+            case suggest:
+                comp = new CSuggestBox(mm.getCaption());
+                break;
+            default:
+                throw new Error("Unknown ");
+            }
+        } else if (mm.getValueClass().equals(String.class)) {
             if (mm.isValidatorAnnotationPresent(Password.class)) {
                 comp = new CPasswordTextField(mm.getCaption());
             } else if (mm.isValidatorAnnotationPresent(Email.class)) {
@@ -89,6 +116,14 @@ public class EntityForm<E extends IEntity<?>> {
             }
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox(mm.getCaption());
+        } else if (mm.getValueClass().equals(Date.class)) {
+            comp = new CDatePicker(mm.getCaption());
+        } else if (mm.getValueClass().equals(Boolean.class)) {
+            comp = new CCheckBox(mm.getCaption());
+        } else if (mm.getValueClass().equals(Integer.class)) {
+            comp = new CIntegerField(mm.getCaption());
+        } else if (mm.getValueClass().equals(Long.class)) {
+            comp = new CLongField(mm.getCaption());
         } else {
             comp = new CTextField(mm.getCaption());
         }

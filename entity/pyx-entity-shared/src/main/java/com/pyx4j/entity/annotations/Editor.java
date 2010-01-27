@@ -25,20 +25,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.TYPE, ElementType.METHOD })
+@Target( { ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Editor {
 
-    public enum EditorType {
-        text, combo, suggest
+    public static enum EditorType {
+        text, password, combo, suggest
     }
 
     /**
-     * Display name of the member or Entity.
-     * 
-     * @return the display name of the column
+     * UI Editor type of the member.
      */
     EditorType type();
 
-    String description() default "";
 }

@@ -31,6 +31,14 @@ public class CSuggestBox extends CEditableComponent<Object> {
 
     private final ArrayList<Object> options = new ArrayList<Object>();
 
+    public CSuggestBox() {
+        this(null);
+    }
+
+    public CSuggestBox(String title) {
+        super(title);
+    }
+
     @Override
     public NativeSuggestBox getNativeComponent() {
         return nativeSuggestBox;
