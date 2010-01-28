@@ -147,8 +147,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     @Override
     public boolean isNull() {
-        // TODO Auto-generated method stub
-        return false;
+        return getValue() == null;
     }
 
     @Override

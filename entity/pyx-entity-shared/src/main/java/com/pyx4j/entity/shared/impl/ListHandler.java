@@ -55,8 +55,7 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
 
     @Override
     public boolean isNull() {
-        // TODO Auto-generated method stub
-        return false;
+        return (getValue() == null);
     }
 
     @Override
@@ -247,19 +246,23 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
 
     @Override
     public boolean remove(Object o) {
-        if (o instanceof IEntity<?>) {
+        if ((o instanceof IEntity<?>) && (getValueClass().equals(((IEntity<?>) o).getObjectClass()))) {
             List<?> value = getValue();
             if (value != null) {
                 return value.remove(((IEntity<?>) o).getValue());
+            } else {
+                return false;
             }
+        } else {
+            throw new ClassCastException("List member type expected " + getValueClass());
         }
-        return false;
     }
 
     @Override
     public TYPE remove(int index) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        TYPE entity = get(index);
+        getValue().remove(index);
+        return entity;
     }
 
     @Override

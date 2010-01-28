@@ -80,8 +80,7 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     @Override
     public boolean isNull() {
-        // TODO implement this
-        return false;
+        return (getValue() == null);
     }
 
     @Override
@@ -215,13 +214,17 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     @Override
     public boolean remove(Object o) {
-        if (o instanceof IEntity<?>) {
+        if ((o instanceof IEntity<?>) && (getValueClass().equals(((IEntity<?>) o).getObjectClass()))) {
             Set<?> set = getValue();
             if (set != null) {
                 return set.remove(((IEntity<?>) o).getValue());
+            } else {
+                return false;
             }
+        } else {
+            throw new ClassCastException("Set member type expected " + getValueClass());
         }
-        return false;
+
     }
 
     @Override
