@@ -61,7 +61,7 @@ public class WindowsTheme extends Theme {
         putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
         putThemeColor(ThemeColor.OBJECT_TONE2, "#fdfae9");
         putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
-        putThemeColor(ThemeColor.BORDER, "lightBlue");
+        putThemeColor(ThemeColor.BORDER, "#666666");
         putThemeColor(ThemeColor.SELECTION, "#86adc4");
         putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
         putThemeColor(ThemeColor.TEXT, "#000000");

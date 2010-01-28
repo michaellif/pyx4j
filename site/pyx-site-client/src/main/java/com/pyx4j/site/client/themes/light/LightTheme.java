@@ -28,6 +28,12 @@ import com.pyx4j.widgets.client.style.ThemeColor;
 public class LightTheme extends SiteTheme {
 
     @Override
+    protected void initThemeColors() {
+        super.initThemeColors();
+        putThemeColor(ThemeColor.BORDER, "#cccccc");
+    }
+
+    @Override
     protected void initGeneralStyles() {
         super.initGeneralStyles();
         Style style = new Style("body");

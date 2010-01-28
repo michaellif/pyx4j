@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.pyx4j.widgets.client.PasswordTextBox;
 
 import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
