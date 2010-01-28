@@ -28,7 +28,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
+import com.pyx4j.widgets.client.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -84,6 +84,8 @@ public class WidgetsDemo implements EntryPoint {
         contentPanel.add(editorDecorator);
         contentPanel.add(sendButton);
         contentPanel.add(htmlViewer);
+
+        contentPanel.add(new CheckBox());
 
         {
             final Button dialogButton = new Button("Show Dialog1");

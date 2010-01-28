@@ -26,10 +26,10 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.INativeNativeComboBox;
+import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 /**

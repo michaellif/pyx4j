@@ -22,10 +22,10 @@ package com.pyx4j.forms.client.gwt;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.CheckBox;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.widgets.client.CheckBox;
 
 public class NativeCheckBox extends CheckBox implements INativeEditableComponent<Boolean> {
 

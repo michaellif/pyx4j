@@ -51,6 +51,9 @@ public class WindowsTheme extends Theme {
         initTooltipStyle();
         initTreeStyle();
         initGlassPanelStyle();
+        initTextBoxStyle();
+        initCheckBoxStyle();
+        initListBoxStyle();
 
     }
 
@@ -58,7 +61,7 @@ public class WindowsTheme extends Theme {
         putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
         putThemeColor(ThemeColor.OBJECT_TONE2, "#fdfae9");
         putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
-        putThemeColor(ThemeColor.BORDER, "#666666");
+        putThemeColor(ThemeColor.BORDER, "lightBlue");
         putThemeColor(ThemeColor.SELECTION, "#86adc4");
         putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
         putThemeColor(ThemeColor.TEXT, "#000000");
@@ -363,6 +366,24 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", "#000");
         style.addProperty("opacity", "0.2");
         style.addProperty("filter", "alpha(opacity=20)");
+        addStyle(style);
+    }
+
+    protected void initCheckBoxStyle() {
+        Style style = new Style("." + CSSClass.pyx4j_CheckBox.name());
+        style.addProperty("border-color", ThemeColor.BORDER);
+        addStyle(style);
+    }
+
+    protected void initTextBoxStyle() {
+        Style style = new Style("." + CSSClass.pyx4j_TextBox.name());
+        style.addProperty("border-color", ThemeColor.BORDER);
+        addStyle(style);
+    }
+
+    protected void initListBoxStyle() {
+        Style style = new Style("." + CSSClass.pyx4j_ListBox.name());
+        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
     }
 

@@ -48,4 +48,13 @@ public enum CSSClass {
     //Tooltip
     pyx4j_GlassPanel,
 
+    //CheckBox
+    pyx4j_CheckBox,
+
+    //TextBox
+    pyx4j_TextBox,
+
+    //ListBox
+    pyx4j_ListBox,
+
 }
