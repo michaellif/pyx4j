@@ -64,8 +64,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
 
     @Override
     public boolean isNull() {
-        // TODO Auto-generated method stub
-        return false;
+        return (getValue() == null);
     }
 
     @Override

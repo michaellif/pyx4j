@@ -48,7 +48,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -202,8 +201,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
-            } else {
-                System.out.println("Else:" + value.getClass().getName());
             }
             entity.setProperty(me.getKey(), value);
         }

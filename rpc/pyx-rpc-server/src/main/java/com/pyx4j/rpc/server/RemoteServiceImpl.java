@@ -71,6 +71,9 @@ public class RemoteServiceImpl implements RemoteService {
             return serviceInstance.execute(serviceRequest);
         } catch (RuntimeException e) {
             log.error("Service call error", e);
+            if (e.getMessage() == null) {
+                throw new RuntimeException("System error, contact support");
+            }
             throw e;
         }
     }
