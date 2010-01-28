@@ -36,13 +36,6 @@ public class Context {
 
     private static final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>();
 
-    private static final ThreadLocal<Boolean> security = new ThreadLocal<Boolean>() {
-        @Override
-        protected Boolean initialValue() {
-            return Boolean.TRUE;
-        }
-    };
-
     public static Visit getVisit() {
         return abstractVisit.get();
     }
@@ -95,14 +88,6 @@ public class Context {
 
     public static String getRequestRemoteAddr() {
         return getRequest().getRemoteAddr();
-    }
-
-    public static boolean isSecurityEnabled() {
-        return security.get();
-    }
-
-    public static void setSecurityEnabled(boolean v) {
-        security.set(v);
     }
 
     static void remove() {
