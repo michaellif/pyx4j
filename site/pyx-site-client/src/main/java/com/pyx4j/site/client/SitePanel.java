@@ -169,18 +169,20 @@ public abstract class SitePanel extends SimplePanel {
 
             if (page.data().inlineWidgetUris().size() > 0) {
                 for (ResourceUri uri : page.data().inlineWidgetUris()) {
-                    InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
                     //check in local (page) factory
-                    Widget inlineWidget = localWidgetFactory().createWidget(uri);
-                    //check in global factory
-                    if (inlineWidget == null) {
-                        inlineWidget = globalWidgetFactory.createWidget(uri);
-                    }
-                    if (root != null && inlineWidget != null) {
-                        inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
-                        root.add(inlineWidget);
-                    } else {
-                        log.warn("Failed to add inline widget " + uri + " to panel.");
+                    if (localWidgetFactory() != null) {
+                        InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
+                        Widget inlineWidget = localWidgetFactory().createWidget(uri);
+                        //check in global factory
+                        if (inlineWidget == null) {
+                            inlineWidget = globalWidgetFactory.createWidget(uri);
+                        }
+                        if (root != null && inlineWidget != null) {
+                            inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
+                            root.add(inlineWidget);
+                        } else {
+                            log.warn("Failed to add inline widget " + uri + " to panel.");
+                        }
                     }
                 }
             }
