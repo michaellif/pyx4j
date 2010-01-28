@@ -14,17 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 17, 2010
- * @author Michael
+ * Created on Jan 28, 2010
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.site.client;
 
-import com.pyx4j.site.shared.domain.ResourceUri;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public class InlineWidgetFactory {
+public class InlineWidget extends SimplePanel {
 
-    public InlineWidget createWidget(ResourceUri id) {
-        return null;
+    public InlineWidget() {
+
     }
 }

@@ -23,6 +23,7 @@ package com.pyx4j.site.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private LinkBar footerLinkBar;
 
-    private final HashMap<String, Widget> cahedPanels = new HashMap<String, Widget>();
+    private final HashMap<String, PageWidget> cahedPanels = new HashMap<String, PageWidget>();
 
     private static LightTheme lightTheme = new LightTheme();
 
@@ -156,23 +157,26 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     private void show(Page page) {
+        show(page, null);
+    }
 
-        Widget widget;
+    private void show(Page page, Map<String, String> params) {
+
+        PageWidget pageWidget;
         String path = page.uri().uri().getValue();
         if (cahedPanels.containsKey(path)) {
-            widget = cahedPanels.get(path);
-            mainSectionPanel.setWidget(widget);
+            pageWidget = cahedPanels.get(path);
+            mainSectionPanel.setWidget(pageWidget);
         } else {
-            widget = new HTML(page.data().html().getValue(), true);
-            cahedPanels.put(path, widget);
-            mainSectionPanel.setWidget(widget);
+            pageWidget = new PageWidget(mainSectionPanel, page.data());
+            cahedPanels.put(path, pageWidget);
 
             if (page.data().inlineWidgetUris().size() > 0) {
                 for (ResourceUri uri : page.data().inlineWidgetUris()) {
                     //check in local (page) factory
                     if (localWidgetFactory() != null) {
                         InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
-                        Widget inlineWidget = localWidgetFactory().createWidget(uri);
+                        InlineWidget inlineWidget = localWidgetFactory().createWidget(uri);
                         //check in global factory
                         if (inlineWidget == null) {
                             inlineWidget = globalWidgetFactory.createWidget(uri);
@@ -180,6 +184,7 @@ public abstract class SitePanel extends SimplePanel {
                         if (root != null && inlineWidget != null) {
                             inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
                             root.add(inlineWidget);
+                            pageWidget.addInlineWidget(inlineWidget);
                         } else {
                             log.warn("Failed to add inline widget " + uri + " to panel.");
                         }
@@ -217,6 +222,7 @@ public abstract class SitePanel extends SimplePanel {
 
         currentPage = page;
 
+        pageWidget.executeAfterShow(params);
     }
 
     protected void showCurrent() {
