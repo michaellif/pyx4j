@@ -20,27 +20,18 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.impl.FocusImpl;
-
+import com.google.gwt.user.client.ui.Anchor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.INativeFocusComponent;
 
-public class NativeHyperlink extends Hyperlink implements INativeFocusComponent {
-
-    private static final FocusImpl impl = FocusImpl.getFocusImplForWidget();
+public class NativeHyperlink extends Anchor implements INativeFocusComponent {
 
     private Command comand;
 
@@ -49,9 +40,8 @@ public class NativeHyperlink extends Hyperlink implements INativeFocusComponent 
     private boolean enabled;
 
     public NativeHyperlink(CHyperlink hyperlink, Command comand) {
+        super(hyperlink.getValue());
         this.cHyperlink = hyperlink;
-
-        setText(hyperlink.getValue());
         setTabIndex(hyperlink.getTabIndex());
         setCommand(comand);
 
@@ -87,55 +77,19 @@ public class NativeHyperlink extends Hyperlink implements INativeFocusComponent 
         return comand;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    @Override
     public void setWordWrap(boolean wrap) {
         getElement().getStyle().setProperty("whiteSpace", wrap ? "normal" : "nowrap");
     }
 
-    public HandlerRegistration addFocusHandler(FocusHandler handler) {
-        return addDomHandler(handler, FocusEvent.getType());
-    }
-
-    public HandlerRegistration addBlurHandler(BlurHandler handler) {
-        return addDomHandler(handler, BlurEvent.getType());
-    }
-
-    public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
-        return addDomHandler(handler, KeyUpEvent.getType());
-    }
-
-    public int getTabIndex() {
-        return impl.getTabIndex(getElement());
-    }
-
-    public void setFocus(boolean focused) {
-        if (focused) {
-            impl.focus(getElement());
-        } else {
-            impl.blur(getElement());
-        }
-    }
-
-    public void setTabIndex(int index) {
-        impl.setTabIndex(getElement(), index);
-    }
-
-    @Override
-    protected void setElement(com.google.gwt.user.client.Element elem) {
-        super.setElement(elem);
-
-        // Accessibility: setting tab index to be 0 by default, ensuring element
-        // appears in tab sequence. Note that this call will not interfere with
-        // any calls made to FocusWidget.setTabIndex(int) by user code, because
-        // FocusWidget.setTabIndex(int) cannot be called until setElement(elem)
-        // has been called.
-        setTabIndex(0);
-    }
 }
