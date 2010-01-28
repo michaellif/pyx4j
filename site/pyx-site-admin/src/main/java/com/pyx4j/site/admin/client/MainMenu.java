@@ -30,14 +30,21 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.site.client.themes.dark.DarkTheme;
+import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.widgets.client.style.StyleManger;
 
 public class MainMenu extends MenuBar {
 
     private static Logger log = LoggerFactory.getLogger(MainMenu.class);
+
+    private static LightTheme lightTheme = new LightTheme();
+
+    private static DarkTheme darkTheme = new DarkTheme();
 
     public MainMenu(final AdminApplication app) {
 
@@ -46,6 +53,25 @@ public class MainMenu extends MenuBar {
             addItem(new MenuItem("File", fileMenuBar));
 
             fileMenuBar.addItem(new MenuItem("Save", app.getSaveCommand()));
+        }
+
+        {
+            MenuBar styleMenuBar = new MenuBar(true);
+            addItem(new MenuItem("Style", styleMenuBar));
+
+            styleMenuBar.addItem(new MenuItem("Light", new Command() {
+
+                @Override
+                public void execute() {
+                    StyleManger.installTheme(lightTheme);
+                }
+            }));
+            styleMenuBar.addItem(new MenuItem("Dark", new Command() {
+                @Override
+                public void execute() {
+                    StyleManger.installTheme(darkTheme);
+                }
+            }));
         }
 
         {

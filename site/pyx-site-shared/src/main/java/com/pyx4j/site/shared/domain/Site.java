@@ -20,18 +20,30 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Site extends IEntity<Site> {
 
+    @NotNull
+    @Caption(name = "Site Id")
     IPrimitive<String> siteId();
 
+    @NotNull
+    @Caption(name = "Caption")
     IPrimitive<String> siteCaption();
 
+    @NotNull
+    @Caption(name = "Logo Url")
     IPrimitive<String> logoUrl();
+
+    @NotNull
+    @Caption(name = "Skin Type")
+    IPrimitive<SkinType> skinType();
 
     @Owned
     IList<Link> headerLinks();
@@ -39,6 +51,7 @@ public interface Site extends IEntity<Site> {
     @Owned
     IList<Link> footerLinks();
 
+    @Caption(name = "Footer Copiright")
     IPrimitive<String> footerCopiright();
 
     @Owned

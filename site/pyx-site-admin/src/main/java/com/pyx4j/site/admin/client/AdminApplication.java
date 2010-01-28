@@ -79,8 +79,7 @@ public class AdminApplication implements IApplication {
     }
 
     public void editSite(Site site) {
-        //TODO
-        MessageDialog.warn("No site Editor", "TODO");
+        openEditor(new SiteEditor(site));
     }
 
     public void editPage(Page page) {
@@ -124,7 +123,10 @@ public class AdminApplication implements IApplication {
             public void execute() {
                 FolderSectionPanel panel = mainPanel.getTopFolder();
                 IView currentEditor = panel.getCurrentView();
-                if (currentEditor instanceof PageEditor) {
+                if (currentEditor instanceof SiteEditor) {
+                    SiteEditor siteEditor = (SiteEditor) currentEditor;
+                    RPCManager.execute(EntityServices.Save.class, siteEditor.getSite(), null);
+                } else if (currentEditor instanceof PageEditor) {
                     PageEditor pageEditor = (PageEditor) currentEditor;
                     Page page = pageEditor.getUpdatedPage();
                     RPCManager.execute(EntityServices.Save.class, page, null);

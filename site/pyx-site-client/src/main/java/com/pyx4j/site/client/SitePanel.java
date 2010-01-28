@@ -21,6 +21,7 @@
 package com.pyx4j.site.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -50,13 +52,16 @@ import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.domain.SkinType;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
-import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 public abstract class SitePanel extends SimplePanel {
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
+
+    private final Site site;
 
     private String siteName;
 
@@ -92,14 +97,16 @@ public abstract class SitePanel extends SimplePanel {
 
     private LinkBar footerLinkBar;
 
+    private final HashMap<String, Widget> cahedPanels = new HashMap<String, Widget>();
+
     private static LightTheme lightTheme = new LightTheme();
 
     private static DarkTheme darkTheme = new DarkTheme();
 
     private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactory.class);
 
-    public SitePanel() {
-
+    public SitePanel(Site site) {
+        this.site = site;
         setSize("100%", "100%");
 
         add(createContentPanel());
@@ -117,7 +124,17 @@ public abstract class SitePanel extends SimplePanel {
 
         createFooterCopirightPanel();
 
-        StyleManger.installTheme(lightTheme);
+        switch (site.skinType().getValue()) {
+        case light:
+            StyleManger.installTheme(lightTheme);
+            break;
+        case dark:
+            StyleManger.installTheme(darkTheme);
+            break;
+
+        default:
+            break;
+        }
 
     }
 
@@ -139,26 +156,41 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     private void show(Page page) {
-        Widget widget = new HTML(page.data().html().getValue(), true);
 
-        mainSectionPanel.setWidget(widget);
+        Widget widget;
+        String path = page.uri().uri().getValue();
+        if (cahedPanels.containsKey(path)) {
+            widget = cahedPanels.get(path);
+            mainSectionPanel.setWidget(widget);
+        } else {
+            widget = new HTML(page.data().html().getValue(), true);
+            cahedPanels.put(path, widget);
+            mainSectionPanel.setWidget(widget);
 
-        if (page.data().inlineWidgetUris().size() > 0) {
-            for (ResourceUri uri : page.data().inlineWidgetUris()) {
-                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
-                //check in local (page) factory
-                Widget inlineWidget = localWidgetFactory().createWidget(uri);
-                //check in global factory
-                if (inlineWidget == null) {
-                    inlineWidget = globalWidgetFactory.createWidget(uri);
-                }
-                if (root != null && inlineWidget != null) {
-                    inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
-                    root.add(inlineWidget);
-                } else {
-                    log.warn("Failed to add inline widget " + uri + " to panel.");
+            if (page.data().inlineWidgetUris().size() > 0) {
+                for (ResourceUri uri : page.data().inlineWidgetUris()) {
+                    InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
+                    //check in local (page) factory
+                    Widget inlineWidget = localWidgetFactory().createWidget(uri);
+                    //check in global factory
+                    if (inlineWidget == null) {
+                        inlineWidget = globalWidgetFactory.createWidget(uri);
+                    }
+                    if (root != null && inlineWidget != null) {
+                        inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
+                        root.add(inlineWidget);
+                    } else {
+                        log.warn("Failed to add inline widget " + uri + " to panel.");
+                    }
                 }
             }
+
+        }
+
+        if (SkinType.dark.equals(site.skinType().getValue()) && lightTheme.equals(StyleManger.getTheme())) {
+            StyleManger.installTheme(darkTheme);
+        } else if (SkinType.light.equals(site.skinType().getValue()) && darkTheme.equals(StyleManger.getTheme())) {
+            StyleManger.installTheme(lightTheme);
         }
 
         setHeaderCaption(page.caption().getValue());
@@ -172,7 +204,7 @@ public abstract class SitePanel extends SimplePanel {
 
         rightSectionPanel.clear();
         if (page.data().rightPortlets().size() > 0) {
-            for (Portlet portlet : page.data().leftPortlets()) {
+            for (Portlet portlet : page.data().rightPortlets()) {
                 rightSectionPanel.add(createPortletWidget(portlet));
             }
         }
@@ -307,16 +339,13 @@ public abstract class SitePanel extends SimplePanel {
     protected void createLogoImagePanel() {
         logoImage = new Image();
         logoImage.setStyleName(SiteCSSClass.pyx4j_Site_Logo.name());
+        logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
 
         addToHeaderPanel(logoImage);
         logoImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (lightTheme.equals(StyleManger.getTheme())) {
-                    StyleManger.installTheme(darkTheme);
-                } else {
-                    StyleManger.installTheme(lightTheme);
-                }
+                Window.Location.replace("/");
             }
         });
     }
