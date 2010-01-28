@@ -44,6 +44,7 @@ import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CSuggestBox;
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 
 public class EntityForm<E extends IEntity<?>> {
@@ -96,6 +97,9 @@ public class EntityForm<E extends IEntity<?>> {
                 break;
             case password:
                 comp = new CPasswordTextField(mm.getCaption());
+                break;
+            case textarea:
+                comp = new CTextArea(mm.getCaption());
                 break;
             case combo:
                 comp = new CComboBox(mm.getCaption());
