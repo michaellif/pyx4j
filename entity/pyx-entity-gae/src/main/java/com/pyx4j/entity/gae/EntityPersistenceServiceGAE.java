@@ -48,7 +48,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -329,8 +328,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (value instanceof List<?>) {
                 IObject<?, ?> member = iEntity.getMember(keyName);
                 if (member.getMeta().isEmbedded()) {
-                    // Support only singleMemeberName
-
+                    // We Support only single MemeberName !
+                    String singleMemeberName = null;
+                    for (Object valueItem : (List) value) {
+                        IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
+                        if (singleMemeberName == null) {
+                            singleMemeberName = childIEntity.getMemberNames().iterator().next();
+                        }
+                        childIEntity.setMemberValue(singleMemeberName, deserializeValue(valueItem));
+                        ((ISet) member).add(childIEntity);
+                    }
+                    continue;
                 } else if (member instanceof ISet<?>) {
                     for (Key childKey : (List<Key>) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
