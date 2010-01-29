@@ -154,6 +154,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
     public void testEmbeddedEntitySet() {
 
         Province prov = EntityFactory.create(Province.class);
+        prov.name().setValue("Ontario" + uniqueString());
 
         City city1 = EntityFactory.create(City.class);
         city1.name().setValue("Ottawa" + uniqueString());
@@ -178,6 +179,14 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         } else {
             Assert.assertEquals("Retr. Value", city1.name(), city2r.name());
             Assert.assertEquals("Retr. Value", city2.name(), city1r.name());
+        }
+
+        {
+            EntityCriteria<Province> criteria1 = EntityCriteria.create(Province.class);
+            criteria1.add(PropertyCriterion.eq(prov.cities(), city1.name().getValue()));
+            List<Province> provs = srv.query(criteria1);
+            Assert.assertEquals("Retr 1. List size", 1, provs.size());
+            Assert.assertEquals("Retr 1. prov.name", prov.name().getValue(), provs.get(0).name().getValue());
         }
     }
 }
