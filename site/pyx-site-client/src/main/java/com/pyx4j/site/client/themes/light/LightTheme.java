@@ -66,7 +66,7 @@ public class LightTheme extends SiteTheme {
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
         style.addProperty("background", "transparent url(images/container-header.gif) no-repeat");
-        style.addProperty("height", "200px");
+        style.addProperty("height", "170px");
         addStyle(style);
     }
 
@@ -92,7 +92,7 @@ public class LightTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
         style.addProperty("color", "gray");
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "160px");
+        style.addProperty("margin-top", "130px");
         style.addProperty("font-size", "22px");
 
         addStyle(style);
@@ -110,7 +110,7 @@ public class LightTheme extends SiteTheme {
     protected void initPrimaryNavigStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "120px");
+        style.addProperty("margin-top", "90px");
         style.addProperty("width", "800px");
         style.addProperty("height", "32px");
         style.addProperty("padding-left", "20px");
@@ -130,6 +130,7 @@ public class LightTheme extends SiteTheme {
         style.addProperty("color", getThemeColor(ThemeColor.TEXT));
         style.addProperty("padding", "0px 16px 0px 20px");
         style.addProperty("height", "32px");
+        style.addProperty("font-size", "18px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
         addStyle(style);
@@ -153,7 +154,6 @@ public class LightTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "700px");
         style.addProperty("margin-top", "10px");
-        style.addProperty("color", "gray");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");
@@ -162,7 +162,13 @@ public class LightTheme extends SiteTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a");
         style.addProperty("text-decoration", "none");
+        style.addProperty("font-size", "13px");
         style.addProperty("color", "gray");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " span");
+        style.addProperty("font-size", "11px");
+        style.addProperty("color", "black");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
@@ -176,7 +182,8 @@ public class LightTheme extends SiteTheme {
     protected void initWelcomeMessageStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_WelcomeMessage.name());
         style.addProperty("margin-left", "500px");
-        style.addProperty("margin-top", "13px");
+        style.addProperty("margin-top", "15px");
+        style.addProperty("font-size", "13px");
         style.addProperty("color", "black");
         addStyle(style);
     }
