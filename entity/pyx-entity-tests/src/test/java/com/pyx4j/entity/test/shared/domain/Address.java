@@ -25,6 +25,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Address extends IEntity<Address> {
 
+    public static int TEST_DECLARED_MEMEBERS = 3;
+
     // to test unowned ManyToOne or OneToOne
     Country country();
 

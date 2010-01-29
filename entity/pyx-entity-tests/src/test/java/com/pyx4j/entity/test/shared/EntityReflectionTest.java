@@ -34,7 +34,7 @@ public class EntityReflectionTest extends InitializerTestCase {
 
         assertTrue("Address has streetName", names.contains("streetName"));
         assertTrue("Address has country", names.contains("country"));
-        assertEquals("Address Memebers count", 2, names.size());
+        assertEquals("Address Memebers count", Address.TEST_DECLARED_MEMEBERS, names.size());
     }
 
     public void testEmployeeMemberList() {
