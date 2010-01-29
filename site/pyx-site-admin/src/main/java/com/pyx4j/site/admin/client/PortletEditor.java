@@ -94,7 +94,7 @@ public class PortletEditor extends AbstractView {
     }
 
     public Portlet getUpdatedPortlet() {
-        portlet.html().setValue(portletEditor.getHTML());
+        portlet.html().setValue(HtmlCleanup.cleanup(portletEditor.getHTML()));
         return portlet;
     }
 }
