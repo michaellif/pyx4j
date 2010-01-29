@@ -14,35 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 18, 2010
+ * Created on Jan 29, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.security.rpc;
+package com.pyx4j.entity.test.shared.rpc;
 
 import com.pyx4j.commons.Pair;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.Email;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
-public interface AuthenticationRequest extends IEntity<AuthenticationRequest> {
+public interface ComplexPrimitive extends IEntity<ComplexPrimitive> {
 
-    @Email
-    @NotNull
-    IPrimitive<String> email();
+    IPrimitive<String> name();
 
-    @Password
-    @NotNull
-    IPrimitive<String> password();
+    IPrimitive<Pair<String, String>> stringPair();
 
-    /**
-     * Text from image for human verification.
-     */
-    @Editor(type = Editor.EditorType.captcha)
-    IPrimitive<Pair<String, String>> captcha();
 }

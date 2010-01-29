@@ -22,10 +22,12 @@ package com.pyx4j.entity.test.shared;
 
 import java.util.Date;
 
+import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.rpc.ComplexPrimitive;
 
 public class PrimitiveTest extends InitializerTestCase {
 
@@ -92,5 +94,14 @@ public class PrimitiveTest extends InitializerTestCase {
         assertEquals("Class of Value", EmploymentStatus.class, emp.employmentStatus().getValueClass());
         emp.employmentStatus().setValue(EmploymentStatus.FULL_TIME);
         assertEquals("Value", EmploymentStatus.FULL_TIME, emp.employmentStatus().getValue());
+    }
+
+    public void testComplexPrimitive() {
+        ComplexPrimitive cp = EntityFactory.create(ComplexPrimitive.class);
+        Pair<String, String> pair = new Pair<String, String>("left", "right");
+        Pair<String, String> pair2 = new Pair<String, String>("left", "right");
+        cp.stringPair().setValue(pair);
+        assertEquals("Class of Value", Pair.class, cp.stringPair().getValueClass());
+        assertEquals("Value", pair2, cp.stringPair().getValue());
     }
 }

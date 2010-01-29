@@ -35,16 +35,20 @@ import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 public class EntityImplReflectionHelper {
 
     @SuppressWarnings("unchecked")
-    public static IObject<?, ?> lazyCreateMember(SharedEntityHandler<?> implHandler, String memberName) {
+    public static IObject<?, ?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler<?> implHandler, String memberName) {
         Method method;
         try {
-            method = implHandler.getObjectClass().getMethod(memberName, (Class[]) null);
+            method = interfaceClass.getMethod(memberName, (Class[]) null);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Unknown member " + memberName);
         }
         Class<?> memberClass = method.getReturnType();
         if (IPrimitive.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            if (!(paramType instanceof Class)) {
+                // e.g. generic Collection<String> 
+                paramType = ((ParameterizedType) paramType).getRawType();
+            }
             return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) paramType);
         } else if (IEntity.class.isAssignableFrom(memberClass)) {
             return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());

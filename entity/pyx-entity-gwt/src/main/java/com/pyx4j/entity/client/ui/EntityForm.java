@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -106,6 +107,9 @@ public class EntityForm<E extends IEntity<?>> {
                 break;
             case suggest:
                 comp = new CSuggestBox(mm.getCaption());
+                break;
+            case captcha:
+                comp = new CCaptcha();
                 break;
             default:
                 throw new Error("Unknown ");

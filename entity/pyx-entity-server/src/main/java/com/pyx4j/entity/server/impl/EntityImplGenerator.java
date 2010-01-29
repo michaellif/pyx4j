@@ -222,7 +222,7 @@ public class EntityImplGenerator {
 
             // Abstract methods
             CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);
-            lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(this, $1);");
+            lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(" + interfaceName + ".class, this, $1);");
             cc.addMethod(lazyCreateMember);
 
             // Members access

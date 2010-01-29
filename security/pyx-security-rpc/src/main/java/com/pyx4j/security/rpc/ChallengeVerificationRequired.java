@@ -14,28 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Jan 29, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.security.rpc;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+@SuppressWarnings("serial")
+public class ChallengeVerificationRequired extends RuntimeException {
 
-@Target( { ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Editor {
-
-    public static enum EditorType {
-        text, password, textarea, combo, suggest, captcha
+    public ChallengeVerificationRequired() {
+        super();
     }
 
-    /**
-     * UI Editor type of the member.
-     */
-    EditorType type();
-
+    public ChallengeVerificationRequired(String message) {
+        super(message);
+    }
 }

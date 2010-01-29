@@ -27,10 +27,13 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.rpc.ComplexPrimitive;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.test.client.TestServices;
 import com.pyx4j.unit.client.GUnitTester;
@@ -95,4 +98,29 @@ public class EntitySerializationGWTTest extends TestCase {
         RPCManager.execute(TestServices.EchoSerializable.class, emp, callback);
     }
 
+    public void testComplexPrimitiveSerialization() {
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+
+        ComplexPrimitive cp = EntityFactory.create(ComplexPrimitive.class);
+        final Pair<String, String> pair = new Pair<String, String>("left", "right");
+        cp.stringPair().setValue(pair);
+
+        final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
+
+            public void onFailure(Throwable t) {
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
+            }
+
+            public void onSuccess(Serializable result) {
+                Assert.assertTrue("ComplexPrimitive class expected", (result instanceof ComplexPrimitive));
+                ComplexPrimitive cp2 = (ComplexPrimitive) result;
+                assertEquals("Class of Value", Pair.class, cp2.stringPair().getValueClass());
+                assertEquals("Value", pair, cp2.stringPair().getValue());
+                GUnitTester.finishTest(EntitySerializationGWTTest.this);
+            }
+        };
+
+        RPCManager.execute(TestServices.EchoSerializable.class, cp, callback);
+
+    }
 }

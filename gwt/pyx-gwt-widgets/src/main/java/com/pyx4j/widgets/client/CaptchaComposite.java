@@ -44,6 +44,8 @@ public class CaptchaComposite extends Composite {
 
     private static String publicKey;
 
+    private boolean created = false;
+
     public CaptchaComposite() {
         this.initWidget(grid);
         Label dummyLable = new Label();
@@ -56,6 +58,11 @@ public class CaptchaComposite extends Composite {
         CaptchaComposite.publicKey = publicKey;
     }
 
+    public native void setFocus()
+    /*-{
+        return $wnd.Recaptcha.focus_response_field();
+    }-*/;
+
     public native String getValueResponse()
     /*-{
         return $wnd.Recaptcha.get_response();
@@ -66,7 +73,12 @@ public class CaptchaComposite extends Composite {
         return $wnd.Recaptcha.get_challenge();
     }-*/;
 
-    private native void createChallenge()
+    private void createChallenge() {
+        createChallengeImpl();
+        created = true;
+    }
+
+    private native void createChallengeImpl()
     /*-{
         $wnd.Recaptcha.create(
         @com.pyx4j.widgets.client.CaptchaComposite::publicKey,
@@ -79,21 +91,39 @@ public class CaptchaComposite extends Composite {
         $wnd.Recaptcha.destroy();
     }-*/;
 
-    public native void createNewChallenge()
+    public void createNewChallenge() {
+        if (isVisible() && created) {
+            createNewChallengeImpl();
+        }
+    }
+
+    public native void createNewChallengeImpl()
     /*-{
         $wnd.Recaptcha.reload();
     }-*/;
 
     @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible && !created) {
+            createChallenge();
+        }
+    }
+
+    @Override
     protected void onLoad() {
         super.onLoad();
-        createChallenge();
+        if (isVisible()) {
+            createChallenge();
+        }
     }
 
     @Override
     protected void onUnload() {
         super.onLoad();
-        destroyCaptcha();
+        if (created) {
+            destroyCaptcha();
+        }
     }
 
 }
