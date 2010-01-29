@@ -23,14 +23,16 @@ package com.pyx4j.site.admin.client;
 public class HtmlCleanup {
 
     public static String cleanup(String html) {
+        html = html.replaceAll(" type=\"text/javascript\"", "");
+        html = html.replaceAll("<script.*</script>", "");
         if (html.contains("<script>")) {
-            html = html.replaceAll("<script>", "<nothing>");
+            html = html.replace("<script>", "<div style=\"display: none;\">");
         }
         if (html.contains("<script ")) {
-            html = html.replaceAll("<script ", "<nothing>");
+            html = html.replace("<script ", "<div style=\"display: none;\" ");
         }
         if (html.contains("</script>")) {
-            html = html.replaceAll("</script>", "</nothing>");
+            html = html.replace("</script>", "</div>");
         }
         return html;
     }

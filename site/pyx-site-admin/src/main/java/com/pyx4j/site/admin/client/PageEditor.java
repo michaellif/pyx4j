@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
@@ -49,11 +48,12 @@ public class PageEditor extends AbstractView {
 
         pageEditor = new RichTextArea();
         pageEditor.getElement().getStyle().setColor("black");
+        pageEditor.setSize("420px", "150px");
 
         RichTextEditorDecorator editorDecorator = new RichTextEditorDecorator(pageEditor);
 
         htmlViewer = new TextArea();
-        htmlViewer.setSize("800px", "3000px");
+        htmlViewer.setSize("420px", "150px");
         htmlViewer.setReadOnly(true);
 
         Button refreshButton = new Button("Refresh", new ClickHandler() {
