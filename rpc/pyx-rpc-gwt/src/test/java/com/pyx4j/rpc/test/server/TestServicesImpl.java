@@ -20,12 +20,18 @@
  */
 package com.pyx4j.rpc.test.server;
 
-import com.pyx4j.rpc.test.client.TestServices.Echo;
-import com.pyx4j.rpc.test.client.TestServices.ThrowException;
+import java.io.Serializable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.rpc.test.client.TestServices;
 
 public class TestServicesImpl {
 
-    public static class EchoImpl implements Echo {
+    private static final Logger log = LoggerFactory.getLogger(TestServicesImpl.class);
+
+    public static class EchoImpl implements TestServices.Echo {
 
         @Override
         public String execute(String request) {
@@ -34,7 +40,16 @@ public class TestServicesImpl {
 
     }
 
-    public static class ThrowExceptionImpl implements ThrowException {
+    public static class EchoSerializableImpl implements TestServices.EchoSerializable {
+
+        @Override
+        public Serializable execute(Serializable request) {
+            log.debug("got {} will echo", request);
+            return request;
+        }
+    }
+
+    public static class ThrowExceptionImpl implements TestServices.ThrowException {
 
         @Override
         public String execute(String request) {

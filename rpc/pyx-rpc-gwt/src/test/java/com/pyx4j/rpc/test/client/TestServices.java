@@ -20,11 +20,17 @@
  */
 package com.pyx4j.rpc.test.client;
 
+import java.io.Serializable;
+
 import com.pyx4j.rpc.shared.Service;
 
 public interface TestServices {
 
     public interface Echo extends Service<String, String> {
+
+    };
+
+    public interface EchoSerializable extends Service<Serializable, Serializable> {
 
     };
 

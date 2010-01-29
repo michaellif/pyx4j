@@ -32,6 +32,7 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.runner.ServerTestRunner;
+import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
@@ -43,6 +44,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         //NotifyClientStarted.notifyServer();
 
         ClientEntityFactory.ensureIEntityImplementations();
+        UnrecoverableErrorHandlerDialog.register();
         StyleManger.installTheme(new WindowsTheme());
 
         ClientLogger.addAppender(new RPCAppender());
