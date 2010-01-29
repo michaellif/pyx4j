@@ -98,6 +98,8 @@ public abstract class SitePanel extends SimplePanel {
 
     private LinkBar footerLinkBar;
 
+    private WelcomeMessage welcomeMessage;
+
     private final HashMap<String, PageWidget> cahedPanels = new HashMap<String, PageWidget>();
 
     private static LightTheme lightTheme = new LightTheme();
@@ -120,6 +122,8 @@ public abstract class SitePanel extends SimplePanel {
         createLogoImagePanel();
 
         createHeaderLinksPanel();
+
+        createWelcomeMessagePanel();
 
         createFooterLinksPanel();
 
@@ -414,6 +418,15 @@ public abstract class SitePanel extends SimplePanel {
 
     public void addFooterLink(Link link, boolean separator) {
         footerLinkBar.add(link, separator);
+    }
+
+    protected void createWelcomeMessagePanel() {
+        welcomeMessage = new WelcomeMessage();
+        addToHeaderPanel(welcomeMessage);
+    }
+
+    protected void setWelcomeMessage(String html) {
+        welcomeMessage.setHTML(html);
     }
 
     public void addPage(com.pyx4j.site.shared.domain.Page page, boolean isHome) {

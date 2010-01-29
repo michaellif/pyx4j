@@ -38,6 +38,7 @@ public abstract class SiteTheme extends WindowsTheme {
         initLogoStyles();
         initPrimaryNavigStyles();
         initHeaderLinksStyles();
+        initWelcomeMessageStyles();
         initFooterLinksStyles();
         initFooterCopyrightStyles();
         initHtmlPortletStyles();
@@ -104,6 +105,8 @@ public abstract class SiteTheme extends WindowsTheme {
     protected abstract void initPrimaryNavigStyles();
 
     protected abstract void initHeaderLinksStyles();
+
+    protected abstract void initWelcomeMessageStyles();
 
     protected abstract void initFooterLinksStyles();
 

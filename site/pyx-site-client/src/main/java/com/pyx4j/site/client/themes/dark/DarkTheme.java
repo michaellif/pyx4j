@@ -176,6 +176,15 @@ public class DarkTheme extends SiteTheme {
     }
 
     @Override
+    protected void initWelcomeMessageStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_WelcomeMessage.name());
+        style.addProperty("margin-left", "400px");
+        style.addProperty("margin-top", "13px");
+        style.addProperty("color", "black");
+        addStyle(style);
+    }
+
+    @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
         style.addProperty("margin-left", "450px");
