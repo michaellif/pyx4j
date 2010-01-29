@@ -36,6 +36,7 @@ import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.shared.UnitTestInfo;
 import com.pyx4j.unit.shared.UnitTestsServices;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ServerTestRunner {
 
@@ -67,6 +68,7 @@ public class ServerTestRunner {
 
             public void onFailure(Throwable t) {
                 log.error("Can't load Server side TestsList", t);
+                MessageDialog.error("Server side Tests", t.getMessage());
             }
 
             public void onSuccess(Vector<UnitTestInfo> result) {
