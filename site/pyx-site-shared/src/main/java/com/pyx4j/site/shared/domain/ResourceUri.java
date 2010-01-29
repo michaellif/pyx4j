@@ -20,9 +20,11 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@EmbeddedEntity
 public interface ResourceUri extends IEntity<ResourceUri> {
 
     public static String SITE_SEPARATOR = "&";
