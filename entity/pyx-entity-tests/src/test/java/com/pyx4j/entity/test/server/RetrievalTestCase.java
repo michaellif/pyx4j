@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.server;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -28,8 +29,11 @@ import junit.framework.Assert;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Province;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 
@@ -126,5 +130,54 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         Assert.assertEquals("deadLine", today, task2.deadLine().getValue());
         Assert.assertEquals("Status", Status.DEACTIVATED, task2.status().getValue());
+    }
+
+    public void testEmbeddedEntity() {
+
+        Address address = EntityFactory.create(Address.class);
+
+        City city = EntityFactory.create(City.class);
+        String cityName = "Toronto" + uniqueString();
+        city.name().setValue(cityName);
+
+        address.city().set(city);
+
+        srv.persist(address);
+
+        String primaryKey = address.getPrimaryKey();
+        Address address2 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertNotNull("retrieve", address2);
+
+        Assert.assertEquals("address.city Value", cityName, address2.city().name().getValue());
+    }
+
+    public void testEmbeddedEntitySet() {
+
+        Province prov = EntityFactory.create(Province.class);
+
+        City city1 = EntityFactory.create(City.class);
+        city1.name().setValue("Ottawa" + uniqueString());
+
+        City city2 = EntityFactory.create(City.class);
+        city2.name().setValue("Toronto" + uniqueString());
+
+        prov.cities().add(city1);
+        prov.cities().add(city2);
+
+        srv.persist(prov);
+        Province prov2 = srv.retrieve(Province.class, prov.getPrimaryKey());
+
+        Assert.assertEquals("Retr. Set size", 2, prov2.cities().size());
+
+        Iterator<City> it = prov2.cities().iterator();
+        City city1r = it.next();
+        City city2r = it.next();
+
+        if (city1r.name().equals(city1.name())) {
+            Assert.assertEquals("Retr. Value", city2.name(), city2r.name());
+        } else {
+            Assert.assertEquals("Retr. Value", city1.name(), city2r.name());
+            Assert.assertEquals("Retr. Value", city2.name(), city1r.name());
+        }
     }
 }

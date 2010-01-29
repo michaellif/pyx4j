@@ -40,6 +40,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final boolean ownedRelationships;
 
+    private final boolean embedded;
+
     private final Class<?> valueClass;
 
     private final Class<? extends IObject<?, ?>> objectClass;
@@ -61,12 +63,13 @@ public class ClientMemberMetaImpl implements MemberMeta {
     private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass, String fieldName, String caption, String description,
-            boolean persistenceTransient, boolean detached, boolean ownedRelationships, int stringLength) {
+            boolean persistenceTransient, boolean detached, boolean ownedRelationships, boolean embedded, int stringLength) {
         super();
         this.fieldName = fieldName;
         this.persistenceTransient = persistenceTransient;
         this.detached = detached;
         this.ownedRelationships = ownedRelationships;
+        this.embedded = embedded;
         this.valueClass = valueClass;
         this.objectClass = objectClass;
         this.caption = caption;
@@ -102,6 +105,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public boolean isOwnedRelationships() {
         return ownedRelationships;
+    }
+
+    @Override
+    public boolean isEmbedded() {
+        return embedded;
     }
 
     @Override

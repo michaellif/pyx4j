@@ -48,6 +48,8 @@ public interface MemberMeta {
 
     public boolean isOwnedRelationships();
 
+    public boolean isEmbedded();
+
     public Class<?> getValueClass();
 
     public Class<? extends IObject<?, ?>> getObjectClass();

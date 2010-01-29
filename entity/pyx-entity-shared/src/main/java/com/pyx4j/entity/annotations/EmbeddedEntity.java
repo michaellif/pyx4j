@@ -14,21 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on Jan 28, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface Address extends IEntity<Address> {
+/**
+ * Entity embedded into another object during persistence.
+ * 
+ * Member automatically becomes Owned @see com.pyx4j.entity.annotations.Owned
+ * 
+ * @see javax.jdo.annotations.EmbeddedOnly
+ * @see javax.persistence.Embeddable
+ */
+@Target( { ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EmbeddedEntity {
 
-    // to test unowned ManyToOne or OneToOne
-    Country country();
-
-    City city();
-
-    IPrimitive<String> streetName();
 }

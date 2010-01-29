@@ -14,21 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on Jan 28, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Address extends IEntity<Address> {
+@EmbeddedEntity
+public interface City extends IEntity<City> {
 
-    // to test unowned ManyToOne or OneToOne
-    Country country();
+    IPrimitive<String> name();
 
-    City city();
-
-    IPrimitive<String> streetName();
 }

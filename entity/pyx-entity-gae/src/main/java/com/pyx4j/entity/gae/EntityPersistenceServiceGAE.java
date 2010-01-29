@@ -48,6 +48,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -72,7 +73,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private final int ORDINARY_STRING_LENGHT_MAX = 500;
 
-    private static final String SECONDARY_PRROPERTY_SUFIX = "_$";
+    private static final String SECONDARY_PRROPERTY_SUFIX = "_$s";
+
+    private static final String EMBEDDED_PRROPERTY_SUFIX = "_$e";
 
     private final DatastoreService datastore;
 
@@ -130,6 +133,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    private void embedEntityProperties(Entity entity, String prefix, IEntity<?> childIEntity) {
+        for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
+            MemberMeta meta = childIEntity.getMemberMeta(me.getKey());
+            if (meta.isTransient()) {
+                continue;
+            }
+            Object value = me.getValue();
+            entity.setProperty(prefix + "_" + me.getKey() + EMBEDDED_PRROPERTY_SUFIX, value);
+        }
+    }
+
     private void updateEntityProperties(Entity entity, IEntity<?> iEntity) {
         for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
@@ -144,7 +158,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
-                    value = persistImpl(childIEntity);
+                    if (meta.isEmbedded()) {
+                        embedEntityProperties(entity, me.getKey(), childIEntity);
+                        continue;
+                    } else {
+                        value = persistImpl(childIEntity);
+                    }
                 } else {
                     String childKey = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKey == null) {
@@ -163,9 +182,22 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     ISet<IEntity<?>> memberSet = (ISet<IEntity<?>>) iEntity.getMember(me.getKey());
-                    for (IEntity<?> childIEntity : memberSet) {
-                        Key key = persistImpl(childIEntity);
-                        childKeys.add(key);
+                    if (meta.isEmbedded()) {
+                        Set childValue = new HashSet();
+                        String singleMemeberName = null;
+                        for (IEntity<?> childIEntity : memberSet) {
+                            if (singleMemeberName == null) {
+                                singleMemeberName = childIEntity.getMemberNames().iterator().next();
+                            }
+                            childValue.add(childIEntity.getMemberValue(singleMemeberName));
+                        }
+                        entity.setProperty(me.getKey(), childValue);
+                        continue;
+                    } else {
+                        for (IEntity<?> childIEntity : memberSet) {
+                            Key key = persistImpl(childIEntity);
+                            childKeys.add(key);
+                        }
                     }
                 } else {
                     for (Object el : (Set<?>) value) {
@@ -249,14 +281,36 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastore.delete(KeyFactory.stringToKey(primaryKey));
     }
 
+    private Object deserializeValue(Object value) {
+        if (value instanceof Text) {
+            return ((Text) value).getValue();
+        }
+        return value;
+    }
+
     private void updateIEntity(IEntity<?> iEntity, Entity entity) {
         iEntity.setPrimaryKey(KeyFactory.keyToString(entity.getKey()));
         for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
             Object value = me.getValue();
-            if (value instanceof Text) {
+            String keyName = me.getKey();
+
+            if (keyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) {
+                continue;
+            } else if (keyName.endsWith(EMBEDDED_PRROPERTY_SUFIX)) {
+                String memberName = keyName.substring(0, keyName.indexOf('_'));
+                IObject<?, ?> member = iEntity.getMember(memberName);
+                String memberValueName = keyName.substring(memberName.length() + 1, keyName.length() - EMBEDDED_PRROPERTY_SUFIX.length());
+                if (member instanceof ISet<?>) {
+                    // Support only singleMemeberName
+
+                } else {
+                    IEntity<?> childIEntity = (IEntity<?>) member;
+                    childIEntity.setMemberValue(memberValueName, deserializeValue(value));
+                }
+            } else if (value instanceof Text) {
                 value = ((Text) value).getValue();
             } else if (value instanceof Key) {
-                IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
+                IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(keyName);
                 if (childIEntity.getMeta().isDetached()) {
                     childIEntity.setPrimaryKey(KeyFactory.keyToString((Key) value));
                 } else {
@@ -264,17 +318,20 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 continue;
             } else if (value instanceof String) {
-                Class<?> cls = iEntity.getMemberMeta(me.getKey()).getValueClass();
+                Class<?> cls = iEntity.getMemberMeta(keyName).getValueClass();
                 if (Enum.class.isAssignableFrom(cls)) {
                     value = Enum.valueOf((Class<Enum>) cls, (String) value);
                 }
             } else if (value instanceof Long) {
-                if (Integer.class.isAssignableFrom(iEntity.getMemberMeta(me.getKey()).getValueClass())) {
+                if (Integer.class.isAssignableFrom(iEntity.getMemberMeta(keyName).getValueClass())) {
                     value = ((Long) value).intValue();
                 }
             } else if (value instanceof List<?>) {
-                IObject<?, ?> member = iEntity.getMember(me.getKey());
-                if (member instanceof ISet<?>) {
+                IObject<?, ?> member = iEntity.getMember(keyName);
+                if (member.getMeta().isEmbedded()) {
+                    // Support only singleMemeberName
+
+                } else if (member instanceof ISet<?>) {
                     for (Key childKey : (List<Key>) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
                         if (member.getMeta().isDetached()) {
@@ -285,10 +342,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         ((ISet) member).add(childIEntity);
                     }
                     continue;
-                } else if (member instanceof List<?>) {
+                } else if (member instanceof IList<?>) {
                     // retrieve order  and sort by this order
                     List<Long> childKeysOrder;
-                    childKeysOrder = (List<Long>) readObject((Blob) entity.getProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX));
+                    childKeysOrder = (List<Long>) readObject((Blob) entity.getProperty(keyName + SECONDARY_PRROPERTY_SUFIX));
                     if (childKeysOrder != null) {
                         Collections.sort(((List<Key>) value), new KeyComparator(childKeysOrder));
                     }
@@ -304,10 +361,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                     continue;
                 }
-            } else if (me.getKey().endsWith(SECONDARY_PRROPERTY_SUFIX)) {
-                continue;
             }
-            iEntity.setMemberValue(me.getKey(), value);
+            iEntity.setMemberValue(keyName, value);
         }
     }
 

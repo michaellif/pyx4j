@@ -45,6 +45,7 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.StringLength;
@@ -288,29 +289,34 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(ClientMemberMetaImpl.class.getSimpleName());
             writer.print("(");
 
+            JClassType valueClass;
             // Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass,
             if (type.isAssignableTo(iPrimitiveInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType");
                 }
-                writer.println(((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class, ");
+                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
+                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType");
                 }
-                writer.println(((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class, ");
+                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
+                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
             } else if (type.isAssignableTo(iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType");
                 }
-                writer.println(((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName() + ".class, ");
+                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
+                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
+                valueClass = type;
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
             } else {
@@ -345,12 +351,14 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("\", ");
             }
 
-            // boolean persistenceTransient, boolean detached, boolean ownedRelationships, int stringLength
+            // boolean persistenceTransient, boolean detached, boolean ownedRelationships, boolean embedded, int stringLength
             writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(Detached.class) != null)).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null)).toString());
+            writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null)).toString());
+            writer.print(", ");
+            writer.print(Boolean.valueOf(method.getAnnotation(EmbeddedEntity.class) != null).toString());
             writer.print(", ");
 
             StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
