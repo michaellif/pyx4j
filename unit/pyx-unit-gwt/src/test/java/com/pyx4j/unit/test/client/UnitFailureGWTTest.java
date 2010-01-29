@@ -23,6 +23,7 @@ package com.pyx4j.unit.test.client;
 import junit.framework.TestCase;
 
 import com.google.gwt.user.client.Timer;
+
 import com.pyx4j.unit.client.GUnitTester;
 
 /**
@@ -33,6 +34,18 @@ import com.pyx4j.unit.client.GUnitTester;
 public class UnitFailureGWTTest extends TestCase {
 
     static final int TIME_OUT = 10 * 1000;
+
+    public void testAsyncSuccess() {
+
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+
+        new Timer() {
+            @Override
+            public void run() {
+                GUnitTester.finishTest(UnitFailureGWTTest.this);
+            }
+        }.schedule(150);
+    }
 
     public void testCompareFailure() {
         assertEquals("Expected, Failed", "Bob", "John");
@@ -47,7 +60,7 @@ public class UnitFailureGWTTest extends TestCase {
             public void run() {
                 fail("Expected, Failed");
             }
-        }.schedule(50);
+        }.schedule(150);
     }
 
     public void testDelayedFailure() {
@@ -59,7 +72,7 @@ public class UnitFailureGWTTest extends TestCase {
             public void run() {
                 throw new IllegalArgumentException("Expected, Delayed Failed");
             }
-        }.schedule(50);
+        }.schedule(150);
     }
 
     public void testExpectedException() {

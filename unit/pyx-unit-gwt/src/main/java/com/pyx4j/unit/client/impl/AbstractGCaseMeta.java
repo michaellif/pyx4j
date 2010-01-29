@@ -36,6 +36,8 @@ import com.pyx4j.unit.client.TestAwareExceptionHandler;
 
 public abstract class AbstractGCaseMeta implements GCaseMeta {
 
+    //private static final Logger log = LoggerFactory.getLogger(AbstractGCaseMeta.class);
+
     private final Class<? extends TestCase> caseClass;
 
     private final String name;
@@ -77,7 +79,13 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
             }
         }
 
-        void dispose() {
+        /**
+         * @return false if test already completed
+         */
+        boolean dispose() {
+            if (instance == null) {
+                return false;
+            }
             if (instance instanceof TestCaseAccessProtected) {
                 try {
                     ((TestCaseAccessProtected) instance).accessProtectedTearDown();
@@ -91,14 +99,15 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
             if (testAwareExceptionHandler != null) {
                 testAwareExceptionHandler.delegateExceptionHandler(null);
             }
-            if (instance != null) {
-                running.remove(instance);
-                instance = null;
-            }
             if (timeoutTimer != null) {
                 timeoutTimer.cancel();
                 timeoutTimer = null;
             }
+            if (instance != null) {
+                running.remove(instance);
+                instance = null;
+            }
+            return true;
         }
 
         @Override
@@ -107,9 +116,11 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
             if (t.getMessage() != null) {
                 exceptionMessage += " [" + t.getMessage() + "]";
             }
-            dispose();
-            long duration = (startTime == 0) ? 0 : System.currentTimeMillis() - startTime;
-            callback.onComplete(new GResult(false, exceptionMessage, duration));
+            if (dispose()) {
+                long duration = (startTime == 0) ? 0 : System.currentTimeMillis() - startTime;
+                //log.debug("onComplete called for UncaughtException");
+                callback.onComplete(new GResult(false, exceptionMessage, duration));
+            }
         }
     }
 
@@ -141,9 +152,11 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         }
         // delayTestFinish was not called
         if ((rc.timeoutTimer == null) || (exceptionMessage != null)) {
-            rc.dispose();
-            long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
-            callback.onComplete(new GResult(exceptionMessage == null, exceptionMessage, duration));
+            if (rc.dispose()) {
+                long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
+                //log.debug("onComplete called");
+                callback.onComplete(new GResult(exceptionMessage == null, exceptionMessage, duration));
+            }
         }
     }
 
@@ -155,9 +168,11 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         rc.timeoutTimer = new Timer() {
             @Override
             public void run() {
-                rc.dispose();
-                long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
-                rc.callback.onComplete(new GResult(false, "Test timeout", duration));
+                if (rc.dispose()) {
+                    long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
+                    //log.debug("onComplete called for timeout");
+                    rc.callback.onComplete(new GResult(false, "Test timeout", duration));
+                }
             }
         };
     }
@@ -170,9 +185,11 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         if (rc.timeoutTimer == null) {
             throw new Error("Not delayed Case");
         }
-        rc.dispose();
-        long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
-        rc.callback.onComplete(new GResult(true, null, duration));
+        if (rc.dispose()) {
+            long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
+            //log.debug("onComplete called for finishTest");
+            rc.callback.onComplete(new GResult(true, null, duration));
+        }
     }
 
     protected abstract TestCase createTestCase() throws Exception;
