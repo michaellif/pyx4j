@@ -134,6 +134,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private void embedEntityProperties(Entity entity, String prefix, IEntity<?> childIEntity) {
         for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
+            if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
+                continue;
+            }
             MemberMeta meta = childIEntity.getMemberMeta(me.getKey());
             if (meta.isTransient()) {
                 continue;
