@@ -22,8 +22,6 @@ package com.pyx4j.entity.test.server;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.server.IEntityPersistenceService;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -50,7 +48,6 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
     }
 
     public void testUnownedOneToOnePersist() {
-        IEntityPersistenceService srv = PersistenceServicesFactory.getPersistenceService();
         Country country = EntityFactory.create(Country.class);
         String countryName = "Canada" + uniqueString();
         country.name().setValue(countryName);

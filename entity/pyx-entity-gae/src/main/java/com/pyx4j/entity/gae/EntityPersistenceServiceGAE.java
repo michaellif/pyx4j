@@ -72,9 +72,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private final int ORDINARY_STRING_LENGHT_MAX = 500;
 
-    private static final String SECONDARY_PRROPERTY_SUFIX = "__s";
+    private static final String SECONDARY_PRROPERTY_SUFIX = "-s";
 
-    private static final String EMBEDDED_PRROPERTY_SUFIX = "__e";
+    private static final String EMBEDDED_PRROPERTY_SUFIX = "-e";
 
     private final DatastoreService datastore;
 
@@ -132,7 +132,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void embedEntityProperties(Entity entity, String prefix, IEntity<?> childIEntity) {
+    private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity<?> childIEntity) {
         for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue;
@@ -144,13 +144,15 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             Object value = me.getValue();
             if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
                 if (meta.isEmbedded()) {
-                    embedEntityProperties(entity, prefix + "_" + me.getKey(), (IEntity<?>) childIEntity.getMember(me.getKey()));
+                    embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity<?>) childIEntity
+                            .getMember(me.getKey()));
                 } else {
-                    entity.setProperty(prefix + "_" + me.getKey() + EMBEDDED_PRROPERTY_SUFIX, KeyFactory.stringToKey((String) ((Map) value)
+                    entity.setProperty(prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX, KeyFactory.stringToKey((String) ((Map) value)
                             .get(IEntity.PRIMARY_KEY)));
                 }
             } else {
-                entity.setProperty(prefix + "_" + me.getKey() + EMBEDDED_PRROPERTY_SUFIX, value);
+                //System.out.println(value + " + save as [" + prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX + "]");
+                entity.setProperty(prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX, value);
             }
         }
     }
@@ -170,7 +172,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
                     if (meta.isEmbedded()) {
-                        embedEntityProperties(entity, me.getKey(), childIEntity);
+                        embedEntityProperties(entity, me.getKey(), "", childIEntity);
                         continue;
                     } else {
                         value = persistImpl(childIEntity);
@@ -292,11 +294,39 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastore.delete(KeyFactory.stringToKey(primaryKey));
     }
 
-    private Object deserializeValue(Object value) {
+    private Object deserializeValue(IEntity<?> iEntity, String keyName, Object value) {
         if (value instanceof Text) {
             return ((Text) value).getValue();
+        } else if (value instanceof Key) {
+            IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(keyName);
+            if (childIEntity.getMeta().isDetached()) {
+                childIEntity.setPrimaryKey(KeyFactory.keyToString((Key) value));
+            } else {
+                retrieveEntity(childIEntity, (Key) value);
+            }
+            return childIEntity.getValue();
         }
         return value;
+    }
+
+    /**
+     * Recursive set child values
+     */
+    private void setEmbededIEntityValue(IEntity<?> iEntity, String keyName, Object value) {
+        String memberName = keyName.substring(0, keyName.indexOf('_'));
+        IObject<?, ?> member = iEntity.getMember(memberName);
+        String memberValueName = keyName.substring(memberName.length() + 1, keyName.length() - EMBEDDED_PRROPERTY_SUFIX.length());
+        if (member instanceof ISet<?>) {
+            // Support only singleMemeberName
+            throw new Error("Unsupported Embeded type");
+        } else {
+            IEntity<?> childIEntity = (IEntity<?>) member;
+            if (memberValueName.endsWith(EMBEDDED_PRROPERTY_SUFIX)) {
+                setEmbededIEntityValue(childIEntity, memberValueName, value);
+            } else {
+                childIEntity.setMemberValue(memberValueName, deserializeValue(childIEntity, memberValueName, value));
+            }
+        }
     }
 
     private void updateIEntity(IEntity<?> iEntity, Entity entity) {
@@ -308,16 +338,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (keyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) {
                 continue;
             } else if (keyName.endsWith(EMBEDDED_PRROPERTY_SUFIX)) {
-                String memberName = keyName.substring(0, keyName.indexOf('_'));
-                IObject<?, ?> member = iEntity.getMember(memberName);
-                String memberValueName = keyName.substring(memberName.length() + 1, keyName.length() - EMBEDDED_PRROPERTY_SUFIX.length());
-                if (member instanceof ISet<?>) {
-                    // Support only singleMemeberName
-
-                } else {
-                    IEntity<?> childIEntity = (IEntity<?>) member;
-                    childIEntity.setMemberValue(memberValueName, deserializeValue(value));
-                }
+                // Recursive child values
+                setEmbededIEntityValue(iEntity, keyName, value);
+                continue;
             } else if (value instanceof Text) {
                 value = ((Text) value).getValue();
             } else if (value instanceof Key) {
@@ -347,7 +370,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         if (singleMemeberName == null) {
                             singleMemeberName = childIEntity.getMemberNames().iterator().next();
                         }
-                        childIEntity.setMemberValue(singleMemeberName, deserializeValue(valueItem));
+                        childIEntity.setMemberValue(singleMemeberName, deserializeValue(childIEntity, singleMemeberName, valueItem));
                         ((ISet) member).add(childIEntity);
                     }
                     continue;

@@ -26,11 +26,13 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
+import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Province;
@@ -188,5 +190,41 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
             Assert.assertEquals("Retr 1. List size", 1, provs.size());
             Assert.assertEquals("Retr 1. prov.name", prov.name().getValue(), provs.get(0).name().getValue());
         }
+    }
+
+    public void testEmbeddedEntityLevel2() {
+
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("Bob" + uniqueString());
+
+        Address address = EntityFactory.create(Address.class);
+        String streetName = "Bloor" + uniqueString();
+        address.streetName().setValue(streetName);
+
+        City city = EntityFactory.create(City.class);
+        String cityName = "Toronto" + uniqueString();
+        city.name().setValue(cityName);
+
+        Country country = EntityFactory.create(Country.class);
+        String countryName = "Canada" + uniqueString();
+        country.name().setValue(countryName);
+        srv.persist(country);
+        address.country().set(country);
+
+        address.city().set(city);
+
+        emp.workAddress().set(address);
+
+        srv.persist(emp);
+
+        String primaryKey = emp.getPrimaryKey();
+        Employee emp2 = srv.retrieve(Employee.class, primaryKey);
+        Assert.assertNotNull("retrieve", emp2);
+
+        Assert.assertEquals("address.streetName Value", streetName, emp2.workAddress().streetName().getValue());
+        System.out.println(((IFullDebug) emp2).debugString());
+
+        Assert.assertEquals("address.country Value", countryName, emp2.workAddress().country().name().getValue());
+        Assert.assertEquals("address.city Value", cityName, emp2.workAddress().city().name().getValue());
     }
 }

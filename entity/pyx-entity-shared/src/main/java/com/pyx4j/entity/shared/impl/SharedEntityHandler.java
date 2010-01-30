@@ -119,7 +119,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @Override
     public void setValue(Map<String, Object> value) {
         if (getParent() != null) {
-            getParent().getValue().put(getFieldName(), value);
+            ((SharedEntityHandler) getParent()).ensureValue().put(getFieldName(), value);
         } else {
             this.data = value;
         }
