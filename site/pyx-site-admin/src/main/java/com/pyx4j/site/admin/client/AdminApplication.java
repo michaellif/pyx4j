@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.ria.client.FolderSectionPanel;
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
@@ -118,6 +119,17 @@ public class AdminApplication implements IApplication {
         };
         RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Portlet.class), rpcCallbackPortlet);
 
+        final AsyncCallback rpcSaveCallback = new AsyncCallback() {
+
+            public void onFailure(Throwable t) {
+                MessageDialog.error("Save failed", t);
+            }
+
+            public void onSuccess(Object result) {
+                MessageDialog.info("Save", "Object " + ((IEntity<?>) result).getEntityMeta().getCaption() + " saved");
+            }
+        };
+
         saveCommand = new Command() {
             @Override
             public void execute() {
@@ -125,15 +137,15 @@ public class AdminApplication implements IApplication {
                 IView currentEditor = panel.getCurrentView();
                 if (currentEditor instanceof SiteEditor) {
                     SiteEditor siteEditor = (SiteEditor) currentEditor;
-                    RPCManager.execute(EntityServices.Save.class, siteEditor.getSite(), null);
+                    RPCManager.execute(EntityServices.Save.class, siteEditor.getSite(), rpcSaveCallback);
                 } else if (currentEditor instanceof PageEditor) {
                     PageEditor pageEditor = (PageEditor) currentEditor;
                     Page page = pageEditor.getUpdatedPage();
-                    RPCManager.execute(EntityServices.Save.class, page, null);
+                    RPCManager.execute(EntityServices.Save.class, page, rpcSaveCallback);
                 } else if (currentEditor instanceof PortletEditor) {
                     PortletEditor portletEditor = (PortletEditor) currentEditor;
                     Portlet portlet = portletEditor.getUpdatedPortlet();
-                    RPCManager.execute(EntityServices.Save.class, portlet, null);
+                    RPCManager.execute(EntityServices.Save.class, portlet, rpcSaveCallback);
                 }
             }
         };

@@ -24,14 +24,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
+import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
@@ -85,16 +88,40 @@ public class MainMenu extends MenuBar {
 
                         @Override
                         public void onFailure(Throwable caught) {
-                            log.error("CreateInitialData Service failed", caught);
+                            MessageDialog.error("CreateInitialData Service failed", caught);
                         }
 
                         @Override
                         public void onSuccess(String result) {
-                            MessageDialog.info("Execution completed", result);
+                            new Dialog("DB Reset completed", result, Type.Info, new Custom1Option() {
+                                public boolean onClickCustom1() {
+                                    logout();
+                                    return true;
+                                }
+
+                                public String custom1Text() {
+                                    return "Logout";
+                                }
+                            }).show();
                         }
                     };
                     RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
                 }
+
+                public void logout() {
+                    ClientContext.logout(new AsyncCallback<AuthenticationResponse>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            log.error("Logout failure", caught);
+                        }
+
+                        @Override
+                        public void onSuccess(AuthenticationResponse result) {
+                            Window.Location.replace("/");
+                        }
+                    });
+                }
+
             }));
         }
 

@@ -16,6 +16,14 @@ public class MessageDialog {
         return show(title, text, Type.Error);
     }
 
+    public static Dialog error(String title, Throwable caught) {
+        String text = caught.getMessage();
+        if (text == null) {
+            text = caught.getClass().getName();
+        }
+        return show(title, text, Type.Error);
+    }
+
     public static Dialog warn(String title, String text) {
         return show(title, text, Type.Warning);
     }

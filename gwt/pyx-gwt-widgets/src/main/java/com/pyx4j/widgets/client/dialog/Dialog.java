@@ -181,24 +181,34 @@ public class Dialog extends DialogPanel {
 
         ClickHandler buttonListener = new ButtonListener();
 
+        boolean hasDefaultButtons = (options instanceof YesOption) || (options instanceof NoOption) || (options instanceof OkOption)
+                || (options instanceof CancelOption) || (options instanceof CloseOption);
+
+        if (!hasDefaultButtons) {
+            Panel glue = new SimplePanel();
+            glue.setWidth("100%");
+            buttonsPanel.insert(glue, 0);
+            buttonsPanel.setCellWidth(glue, "100%");
+        }
+
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener, false);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener, !hasDefaultButtons);
             buttonsPanel.add(custom1Button);
         }
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener, false);
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener, !hasDefaultButtons);
             buttonsPanel.add(custom2Button);
         }
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener, false);
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener, !hasDefaultButtons);
             buttonsPanel.add(custom3Button);
         }
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener, false);
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener, !hasDefaultButtons);
             buttonsPanel.add(custom4Button);
         }
 
-        {
+        if (hasDefaultButtons) {
             Panel glue = new SimplePanel();
             glue.setWidth("100%");
             if (options instanceof GlueOption) {
