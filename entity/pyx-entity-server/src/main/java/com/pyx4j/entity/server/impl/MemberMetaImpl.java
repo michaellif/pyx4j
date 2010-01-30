@@ -117,7 +117,7 @@ public class MemberMetaImpl implements MemberMeta {
         }
 
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
-        embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null);
+        embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
         ownedRelationships = embedded || (method.getAnnotation(Owned.class) != null);
         detached = (method.getAnnotation(Detached.class) != null);
     }

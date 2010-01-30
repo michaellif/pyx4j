@@ -72,9 +72,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private final int ORDINARY_STRING_LENGHT_MAX = 500;
 
-    private static final String SECONDARY_PRROPERTY_SUFIX = "_$s";
+    private static final String SECONDARY_PRROPERTY_SUFIX = "__s";
 
-    private static final String EMBEDDED_PRROPERTY_SUFIX = "_$e";
+    private static final String EMBEDDED_PRROPERTY_SUFIX = "__e";
 
     private final DatastoreService datastore;
 
@@ -142,7 +142,16 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 continue;
             }
             Object value = me.getValue();
-            entity.setProperty(prefix + "_" + me.getKey() + EMBEDDED_PRROPERTY_SUFIX, value);
+            if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
+                if (meta.isEmbedded()) {
+                    embedEntityProperties(entity, prefix + "_" + me.getKey(), (IEntity<?>) childIEntity.getMember(me.getKey()));
+                } else {
+                    entity.setProperty(prefix + "_" + me.getKey() + EMBEDDED_PRROPERTY_SUFIX, KeyFactory.stringToKey((String) ((Map) value)
+                            .get(IEntity.PRIMARY_KEY)));
+                }
+            } else {
+                entity.setProperty(prefix + "_" + me.getKey() + EMBEDDED_PRROPERTY_SUFIX, value);
+            }
         }
     }
 

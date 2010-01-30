@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * @see javax.jdo.annotations.EmbeddedOnly
  * @see javax.persistence.Embeddable
  */
-@Target( { ElementType.TYPE })
+@Target( { ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EmbeddedEntity {
 

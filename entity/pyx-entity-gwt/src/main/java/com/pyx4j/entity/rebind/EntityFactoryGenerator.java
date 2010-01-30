@@ -39,7 +39,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -356,9 +355,10 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(Detached.class) != null)).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null)).toString());
+            boolean embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
+            writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf(method.getAnnotation(EmbeddedEntity.class) != null).toString());
+            writer.print(Boolean.valueOf(embedded).toString());
             writer.print(", ");
 
             StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
