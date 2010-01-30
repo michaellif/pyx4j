@@ -8,11 +8,11 @@
  */
 package com.pyx4j.site.client;
 
-public abstract class Link {
+public abstract class LinkBarItem {
 
     public String html;
 
-    public Link(String html) {
+    public LinkBarItem(String html) {
         this.html = html;
     }
 

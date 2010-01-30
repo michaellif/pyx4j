@@ -14,20 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 29, 2010
+ * Created on Jan 30, 2010
  * @author Misha
  * @version $Id$
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.user.client.ui.HTML;
+public class LinkBarMessage extends LinkBarItem {
 
-import com.pyx4j.site.client.themes.SiteCSSClass;
-
-public class WelcomeMessage extends HTML {
-
-    public WelcomeMessage() {
-        setStyleName(SiteCSSClass.pyx4j_Site_WelcomeMessage.name());
+    public LinkBarMessage(String html) {
+        super(html);
     }
 
 }

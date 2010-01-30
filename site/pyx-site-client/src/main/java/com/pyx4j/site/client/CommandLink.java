@@ -10,7 +10,7 @@ package com.pyx4j.site.client;
 
 import com.google.gwt.user.client.Command;
 
-public class CommandLink extends Link {
+public class CommandLink extends LinkBarItem {
 
     public Command command;
 

@@ -8,7 +8,7 @@
  */
 package com.pyx4j.site.client;
 
-public class ExternalLink extends Link {
+public class ExternalLink extends LinkBarItem {
 
     public String href;
 

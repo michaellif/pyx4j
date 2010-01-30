@@ -44,7 +44,7 @@ public class LinkBar extends ComplexPanel {
 
     private final Element ul;
 
-    private final HashMap<Link, LinkItem> items = new HashMap<Link, LinkItem>();
+    private final HashMap<LinkBarItem, LinkItem> items = new HashMap<LinkBarItem, LinkItem>();
 
     public LinkBar(LinkBarType type) {
         super();
@@ -59,9 +59,9 @@ public class LinkBar extends ComplexPanel {
         ul.getStyle().setProperty("display", "inline");
 
         if (BrowserType.isFirefox()) {
-            ul.getStyle().setProperty("cssFloat", "left");
+            ul.getStyle().setProperty("cssFloat", "right");
         } else {
-            ul.getStyle().setProperty("float", "left");
+            ul.getStyle().setProperty("float", "right");
         }
 
         div.appendChild(ul);
@@ -79,7 +79,7 @@ public class LinkBar extends ComplexPanel {
 
     }
 
-    public void add(Link link, boolean separator) {
+    public void add(LinkBarItem link, boolean separator) {
         LinkItem item = null;
         if (link instanceof PageLink) {
             PageLink pageLink = (PageLink) link;
@@ -90,25 +90,35 @@ public class LinkBar extends ComplexPanel {
         } else if (link instanceof ExternalLink) {
             ExternalLink externalLink = (ExternalLink) link;
             item = new LinkItem(new LinkItemAnchor(externalLink.html, externalLink.href), separator);
+        } else if (link instanceof LinkBarMessage) {
+            LinkBarMessage message = (LinkBarMessage) link;
+            item = new LinkItem(new LinkItemAnchor(message.html), separator);
         }
         ul.appendChild(item.getElement());
         add(item, ul);
         items.put(link, item);
     }
 
-    public void remove(Link link) {
+    public void remove(LinkBarItem link) {
         LinkItem item = items.remove(link);
         if (item != null) {
             remove(item);
         }
     }
 
-    public void setVisible(Link link, boolean flag) {
+    public void setVisible(LinkBarItem link, boolean flag) {
         LinkItem item = items.get(link);
         item.setVisible(flag);
     }
 
     class LinkItemAnchor extends Anchor {
+
+        LinkItemAnchor(String html) {
+            super(html, true, "javascript:void(0)");
+            setWordWrap(false);
+            getElement().getStyle().setProperty("outline", "0px");
+            getElement().getStyle().setCursor(Cursor.DEFAULT);
+        }
 
         LinkItemAnchor(String html, final ResourceUri uri) {
             super(html, true, "javascript:void(0)");

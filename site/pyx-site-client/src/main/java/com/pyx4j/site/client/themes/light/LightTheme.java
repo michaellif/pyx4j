@@ -152,8 +152,9 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initHeaderLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
-        style.addProperty("margin-left", "740px");
+        style.addProperty("margin-left", "100px");
         style.addProperty("margin-top", "10px");
+        style.addProperty("width", "850px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");

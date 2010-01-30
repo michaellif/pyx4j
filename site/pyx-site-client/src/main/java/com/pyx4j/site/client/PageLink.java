@@ -10,7 +10,7 @@ package com.pyx4j.site.client;
 
 import com.pyx4j.site.shared.domain.ResourceUri;
 
-public class PageLink extends Link {
+public class PageLink extends LinkBarItem {
 
     public ResourceUri uri;
 
