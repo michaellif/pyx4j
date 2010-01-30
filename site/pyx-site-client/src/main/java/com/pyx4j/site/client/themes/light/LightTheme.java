@@ -111,7 +111,7 @@ public class LightTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "20px");
         style.addProperty("margin-top", "90px");
-        style.addProperty("width", "800px");
+        style.addProperty("width", "908px");
         style.addProperty("height", "32px");
         style.addProperty("padding-left", "20px");
         style.addProperty("background", "transparent url(images/primaryNav-underline.gif) repeat-x 100% 100%");
@@ -152,12 +152,12 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initHeaderLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
-        style.addProperty("margin-left", "700px");
+        style.addProperty("margin-left", "740px");
         style.addProperty("margin-top", "10px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");
-        style.addProperty("padding", "3px");
+        style.addProperty("padding", "0px 3px 0px 3px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a");
@@ -181,10 +181,11 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initWelcomeMessageStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_WelcomeMessage.name());
-        style.addProperty("margin-left", "500px");
-        style.addProperty("margin-top", "15px");
+        style.addProperty("margin-left", "550px");
+        style.addProperty("margin-top", "13px");
         style.addProperty("font-size", "13px");
         style.addProperty("color", "black");
+        style.addProperty("width", "180px");
         addStyle(style);
     }
 
