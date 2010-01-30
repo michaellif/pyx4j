@@ -13,6 +13,11 @@
 
 		http://m2eclipse.sonatype.org/update-dev/
 
+========= maven build =========
+
+for cmd line maven build add OS env variable (this values are for 32bit os)
+MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
+
 ========= Install Google App Engine SDK for Java =========
 
 1. Install default plugin - http://dl.google.com/eclipse/plugin/3.5
