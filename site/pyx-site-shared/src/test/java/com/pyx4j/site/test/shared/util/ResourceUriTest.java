@@ -18,19 +18,8 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.shared.util;
+package com.pyx4j.site.test.shared.util;
 
-import com.pyx4j.site.shared.domain.ResourceUri;
-
-import junit.framework.TestCase;
-
-public class ResourceUriTest extends TestCase {
-
-    public void testCreateUri() {
-        //        String actual = ResourceUriUtil.createResourceUri("sitename", "first").uri().getValue();
-        //        String expected = "sitename" + ResourceUri.SITE_SEPARATOR + "first";
-        //        assertEquals("expected = " + expected + "; actual = " + actual, expected, actual);
-
-    }
+public class ResourceUriTest {
 
 }
