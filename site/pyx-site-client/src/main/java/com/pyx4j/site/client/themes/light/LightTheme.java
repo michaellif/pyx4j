@@ -192,6 +192,7 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a");
+        style.addProperty("font-size", "13px");
         style.addProperty("color", "gray");
         style.addProperty("text-decoration", "none");
         addStyle(style);
@@ -208,6 +209,7 @@ public class LightTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         style.addProperty("margin-left", "20px");
         style.addProperty("margin-top", "1px");
+        style.addProperty("font-size", "13px");
         style.addProperty("color", "gray");
         addStyle(style);
     }
