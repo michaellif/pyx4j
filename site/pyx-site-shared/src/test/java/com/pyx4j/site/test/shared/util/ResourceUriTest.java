@@ -20,6 +20,10 @@
  */
 package com.pyx4j.site.test.shared.util;
 
-public class ResourceUriTest {
+import junit.framework.TestCase;
 
+public class ResourceUriTest extends TestCase {
+
+    public void testResourceUri() {
+    }
 }
