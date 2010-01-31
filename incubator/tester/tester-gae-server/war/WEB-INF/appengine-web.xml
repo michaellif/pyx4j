@@ -4,8 +4,17 @@
 	<application>pyx4j-tester</application>
 	<version>2</version>
 	
+	<precompilation-enabled>true</precompilation-enabled>
 	<sessions-enabled>true</sessions-enabled>
 	
+	<static-files>
+	    <include path="**.nocache.*" expiration="1s"/> 
+        <include path="/**.cache.*" expiration="1d"/>
+        <include path="/**.png" expiration="1d"/>
+        <include path="/**.gif" expiration="1d"/>
+        <include path="/test.html" expiration="1s"/>   
+    </static-files>
+    
 	<!-- Configure java.util.logging -->
 	<system-properties>
 		<property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>

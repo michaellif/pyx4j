@@ -36,6 +36,14 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 
+/**
+ * This should not be used in GAE environment! Use <static-files></static-files> in
+ * appengine-web.xml
+ * 
+ * @see http://code.google.com/appengine/docs/java/config/appconfig.html#
+ *      Static_Files_and_Resource_Files
+ * 
+ */
 public class GWTCacheFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GWTCacheFilter.class);
