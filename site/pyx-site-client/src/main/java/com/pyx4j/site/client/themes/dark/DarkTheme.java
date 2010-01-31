@@ -154,9 +154,10 @@ public class DarkTheme extends SiteTheme {
     @Override
     protected void initHeaderLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
-        style.addProperty("margin-left", "700px");
+        style.addProperty("margin-left", "100px");
         style.addProperty("margin-top", "10px");
         style.addProperty("color", "black");
+        style.addProperty("width", "750px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");
@@ -178,8 +179,9 @@ public class DarkTheme extends SiteTheme {
     @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
-        style.addProperty("margin-left", "450px");
+        style.addProperty("margin-left", "300px");
         style.addProperty("margin-top", "5px");
+        style.addProperty("width", "550px");
         style.addProperty("color", "lightGrey");
         addStyle(style);
 

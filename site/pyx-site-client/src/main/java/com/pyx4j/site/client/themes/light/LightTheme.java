@@ -182,8 +182,8 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
-        style.addProperty("margin-left", "450px");
-        style.addProperty("margin-top", "1px");
+        style.addProperty("margin-left", "300px");
+        style.addProperty("width", "650px");
         style.addProperty("color", "gray");
         addStyle(style);
 
@@ -197,6 +197,11 @@ public class LightTheme extends SiteTheme {
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " span");
+        style.addProperty("font-size", "11px");
+        style.addProperty("color", "gray");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
         style.addProperty("color", "black");
         style.addProperty("text-decoration", "underline");
@@ -208,7 +213,7 @@ public class LightTheme extends SiteTheme {
     protected void initFooterCopyrightStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "1px");
+        style.addProperty("margin-top", "5px");
         style.addProperty("font-size", "13px");
         style.addProperty("color", "gray");
         addStyle(style);

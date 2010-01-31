@@ -77,21 +77,24 @@ public abstract class SiteDispatcher {
         final String siteName = token.substring(0, token.indexOf(com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR));
         final String finalToken = token;
 
-        obtainSitePanel(siteName, new AsyncCallback<SitePanel>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                //TODO 
-            }
-
-            @Override
-            public void onSuccess(SitePanel sitePanel) {
-                if (sitePanel != null) {
-                    show(sitePanel, finalToken);
-                } else {
-                    throw new Error("sitePanel is not found");
+        //TODO check site permission
+        if (true) {
+            obtainSitePanel(siteName, new AsyncCallback<SitePanel>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    //TODO 
                 }
-            }
-        });
+
+                @Override
+                public void onSuccess(SitePanel sitePanel) {
+                    if (sitePanel != null) {
+                        show(sitePanel, finalToken);
+                    } else {
+                        throw new Error("sitePanel is not found");
+                    }
+                }
+            });
+        }
 
     }
 

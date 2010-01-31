@@ -67,7 +67,10 @@ public class ResourceUriUtil {
     }
 
     public static boolean isContained(ResourceUri parent, ResourceUri child) {
-        return parent != null && child != null && (child.uri().getValue().startsWith(parent.uri().getValue()));
+        String childValue = child.uri().getValue();
+        String parentValue = parent.uri().getValue();
+
+        return parent != null && child != null && (childValue.equals(parentValue) || childValue.startsWith(parentValue + "PAGE_SEPARATOR"));
     }
 
     public static boolean isRoot(ResourceUri uri) {
