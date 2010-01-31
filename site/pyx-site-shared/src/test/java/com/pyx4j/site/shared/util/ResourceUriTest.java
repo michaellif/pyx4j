@@ -14,29 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 23, 2010
- * @author Misha
+ * Created on Jan 30, 2010
+ * @author Michael
  * @version $Id$
  */
-package com.pyx4j.site.shared.domain;
+package com.pyx4j.site.shared.util;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-
-@EmbeddedEntity
-public interface ResourceUri extends IEntity<ResourceUri> {
-
-    public static String SITE_SEPARATOR = "&";
-
-    public static String PAGE_SEPARATOR = "$";
-
-    public static String ARGS_GROUP_SEPARATOR = "?";
-
-    public static String ARGS_SEPARATOR = "&";
-
-    public static String NAME_VALUE_SEPARATOR = "=";
-
-    IPrimitive<String> uri();
+public class ResourceUriTest {
 
 }

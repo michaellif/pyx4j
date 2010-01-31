@@ -20,8 +20,10 @@
  */
 package com.pyx4j.site.shared.util;
 
-import static com.pyx4j.site.shared.domain.ResourceUri.PAGE_SEPARATOR;
+import static com.pyx4j.site.shared.domain.ResourceUri.*;
 import static com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR;
+
+import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.ResourceUri;
@@ -29,14 +31,35 @@ import com.pyx4j.site.shared.domain.ResourceUri;
 public class ResourceUriUtil {
 
     public static ResourceUri createResourceUri(String siteName, String... path) {
+        return createResourceUri(siteName, null, path);
+    }
+
+    public static ResourceUri createResourceUri(String siteName, Map<String, String> args, String... path) {
         StringBuilder builder = new StringBuilder();
         builder.append(siteName);
         builder.append(SITE_SEPARATOR);
-        for (int i = 0; i < path.length;) {
-            builder.append(path[i]);
-            if (++i != path.length)
-                builder.append(PAGE_SEPARATOR);
+        if (path != null) {
+            for (int i = 0; i < path.length;) {
+                builder.append(path[i]);
+                if (++i < path.length) {
+                    builder.append(PAGE_SEPARATOR);
+                }
+            }
         }
+
+        if (args != null) {
+            int i = 0;
+            for (String name : args.keySet()) {
+                if (i == 0) {
+                    builder.append(ARGS_GROUP_SEPARATOR);
+                }
+                builder.append(name).append(NAME_VALUE_SEPARATOR).append(args.get(name));
+                if (++i < path.length) {
+                    builder.append(ARGS_SEPARATOR);
+                }
+            }
+        }
+
         ResourceUri resourceUri = EntityFactory.create(ResourceUri.class);
         resourceUri.uri().setValue(builder.toString());
 

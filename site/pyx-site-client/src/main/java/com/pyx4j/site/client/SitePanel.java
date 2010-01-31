@@ -141,6 +141,7 @@ public abstract class SitePanel extends SimplePanel {
 
     public void show(String historyToken) {
         if (historyToken.length() > 0) {
+
             Page page = getPage(historyToken);
             if (page == null) {
                 if (homePage != null) {
@@ -223,6 +224,11 @@ public abstract class SitePanel extends SimplePanel {
         currentPage = page;
 
         pageWidget.executeAfterShow(params);
+
+        executeAfterShow(params);
+    }
+
+    private void executeAfterShow(Map<String, String> params) {
     }
 
     protected void showCurrent() {

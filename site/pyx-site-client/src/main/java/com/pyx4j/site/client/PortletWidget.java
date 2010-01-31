@@ -11,8 +11,8 @@ package com.pyx4j.site.client;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.shared.domain.Portlet;
 
 public class PortletWidget extends VerticalPanel {
 
