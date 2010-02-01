@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
+import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.runner.ServerTestRunner;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
@@ -49,6 +50,7 @@ public class TesterClientEntryPoint implements EntryPoint {
 
         ClientLogger.addAppender(new RPCAppender());
         ClientLogger.setDebugOn(true);
+        RPCManager.enableAppEngineUsageStats();
 
         VerticalPanel menu = new VerticalPanel();
         RootPanel.get().add(menu, 0, 0);

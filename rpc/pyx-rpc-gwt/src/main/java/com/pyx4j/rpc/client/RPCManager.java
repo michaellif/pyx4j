@@ -56,6 +56,11 @@ public class RPCManager {
         target.setServiceEntryPoint(url);
     }
 
+    public static void enableAppEngineUsageStats() {
+        ServiceDefTarget target = (ServiceDefTarget) service;
+        target.setRpcRequestBuilder(new AppEngineUsageProcessingRpcRequestBuilder());
+    }
+
     @SuppressWarnings("unchecked")
     public static <I extends Serializable, O extends Serializable> void executeBackground(final Class<? extends Service<I, O>> serviceInterface, I request,
             AsyncCallback<O> callback) {
