@@ -25,7 +25,7 @@ import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 public interface PageData extends IEntity<PageData> {
 
@@ -33,7 +33,7 @@ public interface PageData extends IEntity<PageData> {
     IPrimitive<String> html();
 
     @Owned
-    ISet<ResourceUri> inlineWidgetUris();
+    IPrimitiveSet<String> inlineWidgetIds();
 
     IList<Portlet> leftPortlets();
 

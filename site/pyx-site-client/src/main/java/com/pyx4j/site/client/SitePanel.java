@@ -172,22 +172,22 @@ public abstract class SitePanel extends SimplePanel {
             pageWidget = new PageWidget(mainSectionPanel, page.data());
             cahedPanels.put(path, pageWidget);
 
-            if (page.data().inlineWidgetUris().size() > 0) {
-                for (ResourceUri uri : page.data().inlineWidgetUris()) {
+            if (!page.data().inlineWidgetIds().isNull() && page.data().inlineWidgetIds().getValue().size() > 0) {
+                for (String widgetId : page.data().inlineWidgetIds().getValue()) {
                     //check in local (page) factory
                     if (localWidgetFactory() != null) {
-                        InlineWidgetRootPanel root = InlineWidgetRootPanel.get(uri);
-                        InlineWidget inlineWidget = localWidgetFactory().createWidget(uri);
+                        InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
+                        InlineWidget inlineWidget = localWidgetFactory().createWidget(widgetId);
                         //check in global factory
                         if (inlineWidget == null) {
-                            inlineWidget = globalWidgetFactory.createWidget(uri);
+                            inlineWidget = globalWidgetFactory.createWidget(widgetId);
                         }
                         if (root != null && inlineWidget != null) {
                             inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
                             root.add(inlineWidget);
                             pageWidget.addInlineWidget(inlineWidget);
                         } else {
-                            log.warn("Failed to add inline widget " + uri + " to panel.");
+                            log.warn("Failed to add inline widget " + widgetId + " to panel.");
                         }
                     }
                 }

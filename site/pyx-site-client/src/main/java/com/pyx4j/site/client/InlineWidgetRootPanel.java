@@ -31,14 +31,14 @@ import com.pyx4j.site.shared.domain.ResourceUri;
 
 public class InlineWidgetRootPanel extends AbsolutePanel {
 
-    private static Map<ResourceUri, InlineWidgetRootPanel> rootPanels = new HashMap<ResourceUri, InlineWidgetRootPanel>();
+    private static Map<String, InlineWidgetRootPanel> rootPanels = new HashMap<String, InlineWidgetRootPanel>();
 
-    public static InlineWidgetRootPanel get(ResourceUri uri) {
-        InlineWidgetRootPanel rp = rootPanels.get(uri);
+    public static InlineWidgetRootPanel get(String widgetId) {
+        InlineWidgetRootPanel rp = rootPanels.get(widgetId);
 
         Element elem = null;
-        if (uri != null) {
-            if (null == (elem = Document.get().getElementById(uri.uri().getValue()))) {
+        if (widgetId != null) {
+            if (null == (elem = Document.get().getElementById(widgetId))) {
                 return null;
             }
         }
@@ -55,7 +55,7 @@ public class InlineWidgetRootPanel extends AbsolutePanel {
 
         rp = new InlineWidgetRootPanel(elem);
 
-        rootPanels.put(uri, rp);
+        rootPanels.put(widgetId, rp);
         return rp;
     }
 

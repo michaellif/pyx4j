@@ -20,11 +20,9 @@
  */
 package com.pyx4j.site.client;
 
-import com.pyx4j.site.shared.domain.ResourceUri;
-
 public class InlineWidgetFactory {
 
-    public InlineWidget createWidget(ResourceUri id) {
+    public InlineWidget createWidget(String id) {
         return null;
     }
 }
