@@ -27,6 +27,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -48,6 +49,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -56,6 +58,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -402,6 +405,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                         ((IList) member).add(childIEntity);
                     }
+                    continue;
+                } else if (member instanceof IPrimitiveSet<?>) {
+                    ((IPrimitiveSet) member).addAll((Collection) value);
                     continue;
                 }
             }

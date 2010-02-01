@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
@@ -85,6 +86,8 @@ public class MemberMetaImpl implements MemberMeta {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
             valueClass = objectClass;
+        } else if (IPrimitiveSet.class.equals(objectClass)) {
+            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
         } else {
             throw new RuntimeException("Unknown member type" + objectClass);
         }

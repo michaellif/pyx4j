@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.util.Iterator;
+
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -27,6 +29,7 @@ import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase {
 
@@ -119,6 +122,31 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         //TODO
         //System.out.println(departmentR.employees().getValue().getClass());
 
+    }
+
+    public void testPrimitiveSet() {
+        Task task = EntityFactory.create(Task.class);
+        task.notes().add("Note1");
+        task.notes().add("Note2");
+
+        srv.persist(task);
+        Task task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+
+        assertTrue("contains(1)", task2.notes().contains("Note1"));
+        assertTrue("contains(2)", task2.notes().contains("Note2"));
+
+        Iterator<String> it = task2.notes().iterator();
+        assertEquals("iterator.hasNext() first", true, it.hasNext());
+        String el1 = it.next();
+        assertEquals("iterator.hasNext() second", true, it.hasNext());
+        String el2 = it.next();
+        assertEquals("iterator.hasNext()", false, it.hasNext());
+        if (el1.equals("Note1")) {
+            assertEquals("iterator. second()", "Note2", el2);
+        } else {
+            assertEquals("iterator. first()", "Note2", el1);
+            assertEquals("iterator. second()", "Note1", el2);
+        }
     }
 
 }
