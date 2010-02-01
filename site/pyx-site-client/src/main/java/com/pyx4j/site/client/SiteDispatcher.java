@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -65,17 +67,31 @@ public abstract class SiteDispatcher {
     }
 
     //TODO handle wrong tokens !!!
-    public void show(String token) {
+    public void show(String path) {
+        //Split path to uri and args
+        String uri = null;
+        Map<String, String> args = null;
+        int splitIndex = path.indexOf(ResourceUri.ARGS_GROUP_SEPARATOR);
+        if (splitIndex == -1) {
+            uri = path;
+        } else {
+            uri = path.substring(0, splitIndex);
+            if (path.length() > splitIndex) {
+                args = parsArgs(path.substring(splitIndex + 1));
+            }
+        }
 
-        log.debug("Show page " + token);
-        if (token == null || token.length() == 0) {
-            token = welcomeUri.uri().getValue();
-            if (token == null) {
+        log.debug("Page URI " + uri);
+        log.debug("Page Args " + args);
+
+        if (uri == null || uri.length() == 0) {
+            uri = welcomeUri.uri().getValue();
+            if (uri == null) {
                 throw new RuntimeException("welcomeUri is not set");
             }
         }
-        final String siteName = token.substring(0, token.indexOf(com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR));
-        final String finalToken = token;
+        final String siteName = uri.substring(0, uri.indexOf(com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR));
+        final String finalToken = uri;
 
         //TODO check site permission
         if (true) {
@@ -98,6 +114,23 @@ public abstract class SiteDispatcher {
 
     }
 
+    private Map<String, String> parsArgs(String substring) {
+        Map<String, String> args = null;
+        String[] nameValues = substring.split(ResourceUri.ARGS_SEPARATOR);
+        if (nameValues.length > 0) {
+            args = new HashMap<String, String>();
+            for (int i = 0; i < nameValues.length; i++) {
+                String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
+                if (nameAndValue.length == 2) {
+                    args.put(nameAndValue[0], nameAndValue[1]);
+                } else {
+                    log.warn("Can't pars argument {}", nameValues[i]);
+                }
+            }
+        }
+        return args;
+    }
+
     protected void show(SitePanel sitePanel, String historyToken) {
         if (!sitePanel.equals(currentSitePanel)) {
             if (currentSitePanel != null) {
@@ -112,10 +145,6 @@ public abstract class SiteDispatcher {
             GoogleAnalytics.track("#" + historyToken);
             sitePanel.show(historyToken);
         }
-    }
-
-    public void showCurrent(SitePanel sitePanel) {
-        show(sitePanel, null);
     }
 
     public void obtainSitePanel(String siteName, AsyncCallback<SitePanel> callback) {
