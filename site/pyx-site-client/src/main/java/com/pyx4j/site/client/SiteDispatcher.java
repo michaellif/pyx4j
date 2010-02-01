@@ -86,12 +86,14 @@ public abstract class SiteDispatcher {
 
         if (uri == null || uri.length() == 0) {
             uri = welcomeUri.uri().getValue();
+            args = null;
             if (uri == null) {
                 throw new RuntimeException("welcomeUri is not set");
             }
         }
         final String siteName = uri.substring(0, uri.indexOf(com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR));
-        final String finalToken = uri;
+        final String finalUri = uri;
+        final Map<String, String> finalArgs = args;
 
         //TODO check site permission
         if (true) {
@@ -104,7 +106,7 @@ public abstract class SiteDispatcher {
                 @Override
                 public void onSuccess(SitePanel sitePanel) {
                     if (sitePanel != null) {
-                        show(sitePanel, finalToken);
+                        show(sitePanel, finalUri, finalArgs);
                     } else {
                         throw new Error("sitePanel is not found");
                     }
@@ -114,24 +116,7 @@ public abstract class SiteDispatcher {
 
     }
 
-    private Map<String, String> parsArgs(String substring) {
-        Map<String, String> args = null;
-        String[] nameValues = substring.split(ResourceUri.ARGS_SEPARATOR);
-        if (nameValues.length > 0) {
-            args = new HashMap<String, String>();
-            for (int i = 0; i < nameValues.length; i++) {
-                String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
-                if (nameAndValue.length == 2) {
-                    args.put(nameAndValue[0], nameAndValue[1]);
-                } else {
-                    log.warn("Can't pars argument {}", nameValues[i]);
-                }
-            }
-        }
-        return args;
-    }
-
-    protected void show(SitePanel sitePanel, String historyToken) {
+    protected void show(SitePanel sitePanel, String uri, Map<String, String> args) {
         if (!sitePanel.equals(currentSitePanel)) {
             if (currentSitePanel != null) {
                 RootPanel.get().remove(currentSitePanel);
@@ -139,11 +124,11 @@ public abstract class SiteDispatcher {
             currentSitePanel = sitePanel;
             RootPanel.get().add(currentSitePanel);
         }
-        if (historyToken == null) {
+        if (uri == null) {
             sitePanel.showCurrent();
         } else {
-            GoogleAnalytics.track("#" + historyToken);
-            sitePanel.show(historyToken);
+            GoogleAnalytics.track("#" + uri);
+            sitePanel.show(uri, args);
         }
     }
 
@@ -191,6 +176,23 @@ public abstract class SiteDispatcher {
 
     public void setCurrentSitePanel(SitePanel currentSitePanel) {
         this.currentSitePanel = currentSitePanel;
+    }
+
+    private Map<String, String> parsArgs(String substring) {
+        Map<String, String> args = null;
+        String[] nameValues = substring.split(ResourceUri.ARGS_SEPARATOR);
+        if (nameValues.length > 0) {
+            args = new HashMap<String, String>();
+            for (int i = 0; i < nameValues.length; i++) {
+                String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
+                if (nameAndValue.length == 2) {
+                    args.put(nameAndValue[0], nameAndValue[1]);
+                } else {
+                    log.warn("Can't pars argument {}", nameValues[i]);
+                }
+            }
+        }
+        return args;
     }
 
 }

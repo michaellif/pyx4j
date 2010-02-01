@@ -43,7 +43,7 @@ public class PageWidget extends HTML {
         inlineWidgets.add(inlineWidget);
     }
 
-    public void executeAfterShow(Map<String, String> params) {
+    protected void executeAfterShow(Map<String, String> params) {
 
     }
 }
