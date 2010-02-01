@@ -26,6 +26,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 import com.pyx4j.entity.test.shared.rpc.ComplexPrimitive;
 
@@ -103,5 +104,20 @@ public class PrimitiveTest extends InitializerTestCase {
         cp.stringPair().setValue(pair);
         assertEquals("Class of Value", Pair.class, cp.stringPair().getValueClass());
         assertEquals("Value", pair2, cp.stringPair().getValue());
+    }
+
+    public void testPrimitiveSet() {
+        Task task = EntityFactory.create(Task.class);
+        assertTrue("Initial value isNull", task.notes().isNull());
+        assertTrue("Initial value Empty", task.notes().isEmpty());
+        assertFalse("Initial iterator null safe", task.notes().iterator().hasNext());
+
+        task.notes().add("Identify");
+        assertFalse("Value isNull", task.notes().isNull());
+        assertFalse("Value Empty", task.notes().isEmpty());
+        assertTrue("Iterator", task.notes().iterator().hasNext());
+        
+        task.notes().add("Define");
+        task.notes().add("Verify");
     }
 }

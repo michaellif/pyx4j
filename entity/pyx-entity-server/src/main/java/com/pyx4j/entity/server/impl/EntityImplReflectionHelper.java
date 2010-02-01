@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
@@ -58,6 +59,9 @@ public class EntityImplReflectionHelper {
         } else if (IList.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             return implHandler.lazyCreateMemberIList(method.getName(), (Class<IEntity<?>>) paramType);
+        } else if (IPrimitiveSet.class.equals(memberClass)) {
+            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            return implHandler.lazyCreateMemberIPrimitiveSet(method.getName(), (Class<IEntity<?>>) paramType);
         } else {
             throw new RuntimeException("Unknown member type" + memberClass);
         }

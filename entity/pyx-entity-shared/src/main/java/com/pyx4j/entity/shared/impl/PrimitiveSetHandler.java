@@ -1,0 +1,205 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2010 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on Feb 1, 2010
+ * @author vlads
+ * @version $Id$
+ */
+package com.pyx4j.entity.shared.impl;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.Path;
+
+public class PrimitiveSetHandler<TYPE> extends ObjectHandler<IPrimitiveSet<TYPE>, Set<TYPE>> implements IPrimitiveSet<TYPE> {
+
+    private final Class<TYPE> valueClass;
+
+    public PrimitiveSetHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
+        super(IPrimitiveSet.class, parent, fieldName);
+        this.valueClass = valueClass;
+    }
+
+    @Override
+    public Class<TYPE> getValueClass() {
+        return valueClass;
+    }
+
+    @Override
+    public Path getPath() {
+        return new Path(this);
+    }
+
+    @Override
+    public void set(IPrimitiveSet<TYPE> object) {
+        getParent().setMemberValue(getFieldName(), object);
+    }
+
+    @Override
+    public boolean isNull() {
+        return (getValue() == null);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Set<TYPE> getValue() {
+        return (Set<TYPE>) getParent().getMemberValue(getFieldName());
+    }
+
+    @Override
+    public void setValue(Set<TYPE> value) {
+        getParent().setMemberValue(getFieldName(), value);
+    }
+
+    /**
+     * Guarantee that data holder is created before setting the value of element
+     */
+    private Set<TYPE> ensureValue() {
+        Set<TYPE> value = getValue();
+        if (value == null) {
+            value = new HashSet<TYPE>();
+            setValue(value);
+        }
+        return value;
+    }
+
+    @Override
+    public boolean add(TYPE e) {
+        if (!getValueClass().equals(e.getClass())) {
+            throw new ClassCastException("Set member type expected " + getValueClass());
+        }
+        return ensureValue().add(e);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends TYPE> c) {
+        return ensureValue().addAll(c);
+    }
+
+    @Override
+    public void clear() {
+        Set<?> value = getValue();
+        if (value != null) {
+            value.clear();
+        }
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        if (!getValueClass().equals(o.getClass())) {
+            throw new ClassCastException("Set member type expected " + getValueClass());
+        }
+        Set<?> value = getValue();
+        if (value != null) {
+            return value.contains(o);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        Set<?> value = getValue();
+        if (value != null) {
+            return value.containsAll(c);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        Set<?> value = getValue();
+        if (value != null) {
+            return value.isEmpty();
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * iterator behaves likes Elvis
+     */
+    @Override
+    public Iterator<TYPE> iterator() {
+        Set<TYPE> set = getValue();
+        if (set == null) {
+            return new Iterator<TYPE>() {
+
+                @Override
+                public boolean hasNext() {
+                    return false;
+                }
+
+                @Override
+                public TYPE next() {
+                    throw new NoSuchElementException();
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        } else {
+            return set.iterator();
+        }
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return getValue().remove(o);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return getValue().removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return getValue().retainAll(c);
+    }
+
+    @Override
+    public int size() {
+        Set<?> set = getValue();
+        if (set != null) {
+            return set.size();
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public Object[] toArray() {
+        // TODO implement this
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        // TODO implement this
+        throw new UnsupportedOperationException();
+    }
+
+}

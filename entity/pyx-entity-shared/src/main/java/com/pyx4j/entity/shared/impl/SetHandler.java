@@ -160,7 +160,7 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
         if (value != null) {
             return value.isEmpty();
         } else {
-            return false;
+            return true;
         }
     }
 

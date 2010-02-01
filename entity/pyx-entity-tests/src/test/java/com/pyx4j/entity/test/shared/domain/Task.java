@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 public interface Task extends IEntity<Task> {
 
@@ -34,4 +35,6 @@ public interface Task extends IEntity<Task> {
     IPrimitive<Status> status();
 
     IPrimitive<Date> deadLine();
+
+    IPrimitiveSet<String> notes();
 }

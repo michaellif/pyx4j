@@ -39,6 +39,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -61,6 +62,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -79,6 +81,8 @@ public class EntityFactoryGenerator extends Generator {
     private JClassType iListInterfaceType;
 
     private JClassType iEnentityInterfaceType;
+
+    private JClassType iPrimitiveSetInterfaceType;
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
@@ -110,6 +114,7 @@ public class EntityFactoryGenerator extends Generator {
             iPrimitiveInterfaceType = oracle.getType(IPrimitive.class.getName());
             iSetInterfaceType = oracle.getType(ISet.class.getName());
             iListInterfaceType = oracle.getType(IList.class.getName());
+            iPrimitiveSetInterfaceType = oracle.getType(IPrimitiveSet.class.getName());
 
             List<JClassType> cases = new Vector<JClassType>();
 
@@ -298,6 +303,14 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+            } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
+                if (!(type instanceof JParameterizedType)) {
+                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType");
+                }
+                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
+                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
+                writer.print("(Class<? extends IObject<?, ?>>)");
+                writer.println(type.getQualifiedSourceName() + ".class, ");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType");
@@ -466,6 +479,12 @@ public class EntityFactoryGenerator extends Generator {
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", " + valueClass + ".class);");
+            } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
+                if (!(type instanceof JParameterizedType)) {
+                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType");
+                }
+                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                writer.println("return lazyCreateMemberIPrimitiveSet(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType");

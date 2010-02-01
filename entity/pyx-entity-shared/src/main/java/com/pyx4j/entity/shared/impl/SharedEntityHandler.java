@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -67,6 +68,10 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     public <T> IPrimitive<T> lazyCreateMemberIPrimitive(String name, Class<T> primitiveValueClass) {
         return new PrimitiveHandler<T>(this, name, primitiveValueClass);
+    }
+
+    public <T> IPrimitiveSet<T> lazyCreateMemberIPrimitiveSet(String name, Class<T> primitiveValueClass) {
+        return new PrimitiveSetHandler<T>(this, name, primitiveValueClass);
     }
 
     public <T extends IEntity<?>> ISet<T> lazyCreateMemberISet(String name, Class<T> setValueClass) {
