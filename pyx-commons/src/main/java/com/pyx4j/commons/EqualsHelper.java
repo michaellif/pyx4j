@@ -49,8 +49,10 @@ public abstract class EqualsHelper {
     }
 
     public static boolean equals(Collection<?> value1, Collection<?> value2) {
-        if ((value1 == null) ^ (value2 == null)) {
-            return true;
+        if (value1 == null) {
+            return (value2 == null);
+        } else if (value2 == null) {
+            return (value1 == null);
         } else {
             if (value1.size() != value2.size()) {
                 return false;
@@ -66,8 +68,10 @@ public abstract class EqualsHelper {
     }
 
     public static boolean equals(List<?> value1, List<?> value2) {
-        if ((value1 == null) ^ (value2 == null)) {
-            return true;
+        if (value1 == null) {
+            return (value2 == null);
+        } else if (value2 == null) {
+            return (value1 == null);
         } else {
             if (value1.size() != value2.size()) {
                 return false;
@@ -84,8 +88,10 @@ public abstract class EqualsHelper {
     }
 
     public static boolean equals(Map<?, ?> value1, Map<?, ?> value2) {
-        if ((value1 == null) ^ (value2 == null)) {
-            return true;
+        if (value1 == null) {
+            return (value2 == null);
+        } else if (value2 == null) {
+            return (value1 == null);
         } else {
             if (value1.size() != value2.size()) {
                 return false;
@@ -104,8 +110,10 @@ public abstract class EqualsHelper {
     }
 
     public static boolean equals(char[] value1, char[] value2) {
-        if ((value1 == null) ^ (value2 == null)) {
-            return true;
+        if (value1 == null) {
+            return (value2 == null);
+        } else if (value2 == null) {
+            return (value1 == null);
         } else {
             if (value1.length != value2.length) {
                 return false;

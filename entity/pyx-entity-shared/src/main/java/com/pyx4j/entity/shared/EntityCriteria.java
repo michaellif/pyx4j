@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.criterion.Criterion;
 
 /**
@@ -111,5 +112,49 @@ public class EntityCriteria<E extends IEntity<?>> implements Serializable {
 
     public List<Sort> getSorts() {
         return sorts;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof EntityCriteria)) {
+            return false;
+        }
+        return equals((EntityCriteria<E>) o);
+    }
+
+    public boolean equals(EntityCriteria<E> t) {
+        if (t == this) {
+            return true;
+        }
+        if ((domainName == null) || !domainName.equals(t.getDomainName())) {
+            return false;
+        }
+        if (!EqualsHelper.equals(filters, t.filters)) {
+            return false;
+        }
+        if (!EqualsHelper.equals(sorts, t.sorts)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        if (domainName != null) {
+            hashCode += domainName.hashCode();
+        }
+        if (filters != null) {
+            hashCode += filters.hashCode();
+        }
+        if (sorts != null) {
+            hashCode += sorts.hashCode();
+        }
+        return hashCode;
     }
 }

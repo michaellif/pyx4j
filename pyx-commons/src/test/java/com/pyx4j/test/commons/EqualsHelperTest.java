@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import com.pyx4j.commons.EqualsHelper;
-
 import junit.framework.TestCase;
+
+import com.pyx4j.commons.EqualsHelper;
 
 public class EqualsHelperTest extends TestCase {
 
@@ -73,6 +73,9 @@ public class EqualsHelperTest extends TestCase {
         value2 = new Vector<String>();
         value2.add("Bob3");
         assertFalse("Vectors are different", EqualsHelper.equals(value1, value2));
+        assertFalse("Vectors not equal to null", EqualsHelper.equals(null, value2));
+        assertFalse("Vectors not equal to null", EqualsHelper.equals(value1, null));
+        assertTrue("null Vectors are equal to null", EqualsHelper.equals((List<String>) null, null));
     }
 
     public void testEqualsHashSet() {
