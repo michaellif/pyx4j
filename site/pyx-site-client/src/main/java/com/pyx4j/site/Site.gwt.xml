@@ -11,4 +11,6 @@
     <inherits name='com.pyx4j.site.client.themes.dark.DarkTheme' />
     
 	<source path="client" />
+	
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.client.*" />
 </module>

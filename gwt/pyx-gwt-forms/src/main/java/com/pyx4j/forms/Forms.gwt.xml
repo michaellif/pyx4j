@@ -10,6 +10,5 @@
     
 	<source path="client" />
 	
-	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.widgets.client.dialog.*" />
-	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.widgets.client.style.*" />
+	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.forms.client.*" />
 </module>
