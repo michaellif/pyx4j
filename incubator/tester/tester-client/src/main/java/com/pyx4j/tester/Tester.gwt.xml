@@ -3,24 +3,23 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to='test'>
     <inherits name='com.google.gwt.user.User'/>
-    
+
     <!-- inherits name='com.google.gwt.http.HTTP'/ -->
-    
+
     <inherits name='com.pyx4j.unit.test.UnitTests'/>
 	<inherits name='com.pyx4j.test.CommonsTests'/>
     <inherits name='com.pyx4j.tester.TesterDomain'/>
     <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
     <inherits name='com.pyx4j.rpc.test.RPCTests'/>
 	<inherits name='com.pyx4j.unit.ServerSideUnitRunner'/>
-	
+
 	<inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
-	
+
 	<source path="client"/>
-	
+
 	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>
-	
+
 	<extend-configuration-property name="rpc.blacklist" value="java.util.Stack" />
-	<extend-configuration-property name="rpc.blacklist" value="java.util.Linked*" />
-	<extend-configuration-property name="rpc.blacklist" value="java.util.Tree*" />
+	<extend-configuration-property name="rpc.blacklist" value="java.util.Linked.*" />
 	<extend-configuration-property name="rpc.blacklist" value="java.lang.Object" />
 </module>
