@@ -39,7 +39,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -303,6 +302,7 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+                writer.println("false, ");
             } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType");
@@ -311,6 +311,7 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+                writer.println("false, ");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType");
@@ -319,6 +320,7 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+                writer.println("false, ");
             } else if (type.isAssignableTo(iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType");
@@ -327,10 +329,12 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?, ?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+                writer.println("false, ");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
                 valueClass = type;
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+                writer.println("true, ");
             } else {
                 throw new RuntimeException("Unknown member type" + method.getReturnType());
             }

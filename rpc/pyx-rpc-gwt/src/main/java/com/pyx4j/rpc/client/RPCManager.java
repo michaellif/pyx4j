@@ -47,6 +47,8 @@ public class RPCManager {
 
     private static int runningServicesCount = 0;
 
+    private static final int RECOVERABLE_CALL_RETRY_MAX = 3;
+
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
     }
@@ -61,26 +63,24 @@ public class RPCManager {
         target.setRpcRequestBuilder(new AppEngineUsageProcessingRpcRequestBuilder());
     }
 
-    @SuppressWarnings("unchecked")
     public static <I extends Serializable, O extends Serializable> void executeBackground(final Class<? extends Service<I, O>> serviceInterface, I request,
             AsyncCallback<O> callback) {
-        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(true, serviceInterface, callback);
-        try {
-            runningServicesCount++;
-            fireStatusChangeEvent(When.START, true, serviceInterface, -1);
-            service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
-        } catch (Throwable e) {
-            serviceHandlingCallback.onFailure(e);
-        }
+        executeImpl(serviceInterface, request, callback, true, 0);
+    }
+
+    public static <I extends Serializable, O extends Serializable> void execute(final Class<? extends Service<I, O>> serviceInterface, I request,
+            AsyncCallback<O> callback) {
+        executeImpl(serviceInterface, request, callback, false, 0);
     }
 
     @SuppressWarnings("unchecked")
-    public static <I extends Serializable, O extends Serializable> void execute(final Class<? extends Service<I, O>> serviceInterface, I request,
-            AsyncCallback<O> callback) {
-        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(false, serviceInterface, callback);
+    private static void executeImpl(final Class<? extends Service> serviceInterface, Serializable request, AsyncCallback<?> callback,
+            boolean executeBackground, int retryAttempt) {
+        final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(serviceInterface, request, callback, executeBackground,
+                retryAttempt);
         try {
             runningServicesCount++;
-            fireStatusChangeEvent(When.START, false, serviceInterface, -1);
+            fireStatusChangeEvent(When.START, executeBackground, serviceInterface, -1);
             service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
@@ -94,21 +94,31 @@ public class RPCManager {
 
         private final boolean executeBackground;
 
+        private final int retryAttempt;
+
         final Class<? extends Service> serviceInterface;
 
-        final AsyncCallback callback;
+        private AsyncCallback callback;
 
-        ServiceHandlingCallback(boolean executeBackground, final Class<? extends Service> serviceInterface, AsyncCallback callback) {
+        private Serializable request;
+
+        ServiceHandlingCallback(final Class<? extends Service> serviceInterface, Serializable request, AsyncCallback callback, boolean executeBackground,
+                int retryAttempt) {
             this.executeBackground = executeBackground;
             this.serviceInterface = serviceInterface;
             this.callback = callback;
+            this.request = request;
+            this.retryAttempt = retryAttempt;
         }
 
         @Override
         public void onFailure(Throwable caught) {
             runningServicesCount--;
             try {
-                if (callback != null) {
+                if ((callback instanceof RecoverableCall) && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
+                    log.error("Try to recover {} from service invocation error {}", serviceInterface, caught);
+                    executeImpl(serviceInterface, request, callback, executeBackground, retryAttempt + 1);
+                } else if (callback != null) {
                     this.callback.onFailure(caught);
                 } else {
                     log.error("Server error", caught);
@@ -116,6 +126,8 @@ public class RPCManager {
             } catch (Throwable e) {
                 UncaughtHandler.onUnrecoverableError(e, "UIonF." + GWTJava5Helper.getSimpleName(serviceInterface));
             } finally {
+                callback = null;
+                request = null;
                 fireStatusChangeEvent(When.FAILURE, executeBackground, serviceInterface, System.currentTimeMillis() - requestStartTime);
             }
         }
@@ -130,6 +142,8 @@ public class RPCManager {
             } catch (Throwable e) {
                 UncaughtHandler.onUnrecoverableError(e, "UIonS." + GWTJava5Helper.getSimpleName(serviceInterface));
             } finally {
+                callback = null;
+                request = null;
                 fireStatusChangeEvent(When.SUCCESS, executeBackground, serviceInterface, System.currentTimeMillis() - requestStartTime);
             }
         }

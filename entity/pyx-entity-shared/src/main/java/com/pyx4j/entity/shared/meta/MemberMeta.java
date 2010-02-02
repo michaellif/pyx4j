@@ -50,6 +50,8 @@ public interface MemberMeta {
 
     public boolean isEmbedded();
 
+    public boolean isEntity();
+
     public Class<?> getValueClass();
 
     public Class<? extends IObject<?, ?>> getObjectClass();

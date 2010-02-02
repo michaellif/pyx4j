@@ -22,6 +22,7 @@ package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IObject;
 
 @SuppressWarnings("serial")
@@ -65,5 +66,22 @@ public class PropertyCriterion implements Criterion {
 
     public Serializable getValue() {
         return this.value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PropertyCriterion)) {
+            return false;
+        }
+        if ((this.restriction == null) || (!this.restriction.equals(((PropertyCriterion) o).restriction))) {
+            return false;
+        }
+        return EqualsHelper.equals(this.value, ((PropertyCriterion) o).value) && EqualsHelper.equals(this.propertyName, ((PropertyCriterion) o).propertyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.restriction.hashCode() + ((this.propertyName != null) ? this.propertyName.hashCode() : -1)
+                + ((this.value != null) ? this.value.hashCode() : -1);
     }
 }

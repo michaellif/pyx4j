@@ -58,6 +58,8 @@ public class MemberMetaImpl implements MemberMeta {
 
     private final boolean embedded;
 
+    private final boolean entity;
+
     private final Class<?> valueClass;
 
     private final Class<? extends IObject<?, ?>> objectClass;
@@ -80,14 +82,19 @@ public class MemberMetaImpl implements MemberMeta {
         objectClass = (Class<? extends IObject<?, ?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            entity = false;
         } else if (ISet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            entity = false;
         } else if (IList.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            entity = false;
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
             valueClass = objectClass;
+            entity = true;
         } else if (IPrimitiveSet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            entity = false;
         } else {
             throw new RuntimeException("Unknown member type" + objectClass);
         }
@@ -158,6 +165,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public boolean isEmbedded() {
         return embedded;
+    }
+
+    @Override
+    public boolean isEntity() {
+        return entity;
     }
 
     @Override

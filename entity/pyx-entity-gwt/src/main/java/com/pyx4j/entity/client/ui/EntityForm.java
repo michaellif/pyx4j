@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -103,7 +102,11 @@ public class EntityForm<E extends IEntity<?>> {
                 comp = new CTextArea(mm.getCaption());
                 break;
             case combo:
-                comp = new CComboBox(mm.getCaption());
+                if (mm.isEntity()) {
+                    comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+                } else {
+                    comp = new CComboBox(mm.getCaption());
+                }
                 break;
             case suggest:
                 comp = new CSuggestBox(mm.getCaption());
@@ -122,6 +125,8 @@ public class EntityForm<E extends IEntity<?>> {
             } else {
                 comp = new CTextField(mm.getCaption());
             }
+        } else if (mm.isEntity()) {
+            comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox(mm.getCaption());
         } else if (mm.getValueClass().equals(Date.class)) {
