@@ -223,9 +223,10 @@ public abstract class SitePanel extends SimplePanel {
 
         currentPage = page;
 
+        executeAfterShow(args);
+
         pageWidget.executeAfterShow(args);
 
-        executeAfterShow(args);
     }
 
     protected void executeAfterShow(Map<String, String> params) {
