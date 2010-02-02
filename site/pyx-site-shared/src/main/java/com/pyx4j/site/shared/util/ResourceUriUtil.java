@@ -48,10 +48,23 @@ public class ResourceUriUtil {
     }
 
     public static boolean isContained(ResourceUri parent, ResourceUri child) {
+        if (parent == null || child == null) {
+            return false;
+        }
         String childValue = child.uri().getValue();
         String parentValue = parent.uri().getValue();
 
         return parent != null && child != null && (childValue.equals(parentValue) || childValue.startsWith(parentValue + "PAGE_SEPARATOR"));
+    }
+
+    public static boolean areEqual(ResourceUri uri1, ResourceUri uri2) {
+        if (uri1 == null || uri2 == null) {
+            return false;
+        }
+        String uri1Value = uri1.uri().getValue();
+        String uri2Value = uri2.uri().getValue();
+
+        return uri1Value != null && uri1Value.equals(uri2Value);
     }
 
     public static boolean isRoot(ResourceUri uri) {

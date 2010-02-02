@@ -145,23 +145,19 @@ public abstract class SitePanel extends SimplePanel {
             Page page = getPage(historyToken);
             if (page == null) {
                 if (homePage != null) {
-                    show(homePage);
+                    show(homePage, null);
                 }
             } else {
                 show(page, args);
             }
         } else {
             if (homePage != null) {
-                show(homePage);
+                show(homePage, null);
             }
         }
     }
 
-    private void show(Page page) {
-        show(page, null);
-    }
-
-    private void show(Page page, Map<String, String> args) {
+    protected void show(Page page, Map<String, String> args) {
 
         PageWidget pageWidget;
         String path = page.uri().uri().getValue();
@@ -223,21 +219,8 @@ public abstract class SitePanel extends SimplePanel {
 
         currentPage = page;
 
-        executeAfterShow(args);
+        pageWidget.populateInlineWidgets(args);
 
-        pageWidget.executeAfterShow(args);
-
-    }
-
-    protected void executeAfterShow(Map<String, String> params) {
-    }
-
-    protected void showCurrent() {
-        if (currentPage != null) {
-            show(currentPage);
-        } else {
-            show(homePage);
-        }
     }
 
     abstract protected InlineWidgetFactory localWidgetFactory();

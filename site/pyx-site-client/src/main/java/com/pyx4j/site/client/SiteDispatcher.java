@@ -117,16 +117,12 @@ public abstract class SiteDispatcher {
     }
 
     protected void show(SitePanel sitePanel, String uri, Map<String, String> args) {
-        if (!sitePanel.equals(currentSitePanel)) {
+        if (uri != null && !sitePanel.equals(currentSitePanel)) {
             if (currentSitePanel != null) {
                 RootPanel.get().remove(currentSitePanel);
             }
             currentSitePanel = sitePanel;
             RootPanel.get().add(currentSitePanel);
-        }
-        if (uri == null) {
-            sitePanel.showCurrent();
-        } else {
             GoogleAnalytics.track("#" + uri);
             sitePanel.show(uri, args);
         }
