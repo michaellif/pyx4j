@@ -55,7 +55,7 @@ public class StyleManger {
 
         cleanUpInjectedStyles();
 
-        log.debug(stylesString.toString());
+        log.trace(stylesString.toString());
 
         StyleInjector.inject(stylesString.toString());
     }
