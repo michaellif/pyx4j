@@ -30,7 +30,7 @@
             <artifactId>pyx-gwt-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-shared</artifactId>
@@ -55,11 +55,7 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-        </resources>
+        <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
         <testResources>
             <testResource>
                 <directory>src/test/java</directory>

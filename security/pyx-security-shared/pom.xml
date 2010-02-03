@@ -29,9 +29,7 @@
 
     <build>
         <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
+            <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
             <!-- super-source -->
 			<resource>
 				<directory>src/main/resources</directory>

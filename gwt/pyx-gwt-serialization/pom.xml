@@ -63,7 +63,7 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-gwt</artifactId>
@@ -75,11 +75,12 @@
 	</dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-        </resources>
+        <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

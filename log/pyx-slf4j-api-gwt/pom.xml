@@ -40,11 +40,8 @@
 	</dependencies>
 
     <build>
-		<!-- need this for GWT -->
+		<!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
 		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-			</resource>
 			<!-- super-source -->
 			<resource>
 				<directory>src/main/resources</directory>

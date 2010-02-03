@@ -36,15 +36,9 @@
             <artifactId>pyx-log-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
     </dependencies>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-        </resources>
-    </build>
+    <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
 
 </project>

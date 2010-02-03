@@ -382,6 +382,45 @@
                         </configuration>
                     </execution>
 
+                    <!-- hack for better GWT eclipse sync -->
+                    <execution>
+                        <id>prepare-package.add-sources-to-jar</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <condition property="jar.classes" value="${project.build.outputDirectory}" else="${project.build.directory}/sources">
+                                    <available file="${basedir}/jar-source-4gwt.marker"/>
+                                </condition>
+                                <copy todir="${jar.classes}" preservelastmodified="true" overwrite="true" failonerror="false">
+                                    <fileset dir="${project.build.sourceDirectory}"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>package.rm-sources-from-classes</id>
+                        <phase>package</phase>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <condition property="jar.classes" value="${project.build.outputDirectory}" else="${project.build.directory}/sources">
+                                    <available file="${basedir}/jar-source-4gwt.marker"/>
+                                </condition>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${jar.classes}">
+                                         <include name="**/*.java"/>
+                                    </fileset>
+                                </delete>
+                            </tasks>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>site.build-version</id>
                         <phase>site</phase>

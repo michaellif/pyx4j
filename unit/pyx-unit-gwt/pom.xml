@@ -73,9 +73,7 @@
 	<build>
 		<!-- need this for GWT -->
 		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-			</resource>
+			<!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
 			<!-- JUnit super-source -->
 			<resource>
 				<directory>src/main/resources</directory>
