@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.meta;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -49,4 +50,6 @@ public interface EntityMeta {
     public Set<String> getMemberNames();
 
     public MemberMeta getMemberMeta(String memberName);
+    
+    public List<String> getToStringMemberNames();
 }

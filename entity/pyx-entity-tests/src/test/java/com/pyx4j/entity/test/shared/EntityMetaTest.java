@@ -21,7 +21,12 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.City;
+import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
 
 public class EntityMetaTest extends InitializerTestCase {
 
@@ -33,5 +38,31 @@ public class EntityMetaTest extends InitializerTestCase {
         assertEquals("Memeber Caption defined", "Home address", emp.homeAddress().getMeta().getCaption());
         assertEquals("Memeber Caption implicit", "Hiredate", emp.hiredate().getMeta().getCaption());
         assertEquals("Memeber Caption implicit", "Work Address", emp.workAddress().getMeta().getCaption());
+    }
+
+    public void testStringView() {
+        City city = EntityFactory.create(City.class);
+        String cityName = "Toronto";
+        city.name().setValue(cityName);
+        assertEquals("City StringView", cityName, city.getStringView());
+
+        Task task = EntityFactory.create(Task.class);
+        task.description().setValue("Something");
+        task.status().setValue(Status.DEACTIVATED);
+        assertEquals("Task StringView", "Something Deactivated", task.getStringView());
+
+        // ---
+
+        Address address = EntityFactory.create(Address.class);
+        String streetName = "1 Bloor St.";
+        address.streetName().setValue(streetName);
+
+        Country country = EntityFactory.create(Country.class);
+        String countryName = "Canada";
+        country.name().setValue(countryName);
+        address.country().set(country);
+        address.city().set(city);
+
+        assertEquals("Address StringView", "1 Bloor St. " + cityName + " " + countryName, address.getStringView());
     }
 }

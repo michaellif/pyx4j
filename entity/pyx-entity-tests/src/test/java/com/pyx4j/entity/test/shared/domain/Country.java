@@ -20,11 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Country extends IEntity<Country> {
 
+    @ToString
     IPrimitive<String> name();
 
 }

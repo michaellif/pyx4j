@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -28,9 +29,12 @@ public interface Address extends IEntity<Address> {
     public static int TEST_DECLARED_MEMEBERS = 3;
 
     // to test unowned ManyToOne or OneToOne
+    @ToString(index = 3)
     Country country();
 
+    @ToString(index = 2)
     City city();
 
+    @ToString(index = 1)
     IPrimitive<String> streetName();
 }

@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.client.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -36,7 +38,9 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
 
-    public ClientEntityMetaImpl(String caption, String description, boolean persistenceTransient, String[] membersNames) {
+    private final List<String> toStringMemberNames;
+
+    public ClientEntityMetaImpl(String caption, String description, boolean persistenceTransient, String[] membersNames, String[] memberNamesToString) {
         super();
         this.caption = caption;
         this.description = description;
@@ -44,6 +48,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         for (String m : membersNames) {
             membersMeta.put(m, null);
         }
+        toStringMemberNames = Arrays.asList(memberNamesToString);
     }
 
     @Override
@@ -81,4 +86,8 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         return memberMeta;
     }
 
+    @Override
+    public List<String> getToStringMemberNames() {
+        return toStringMemberNames;
+    }
 }

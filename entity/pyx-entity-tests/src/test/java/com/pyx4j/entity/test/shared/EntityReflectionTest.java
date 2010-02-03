@@ -30,7 +30,7 @@ public class EntityReflectionTest extends InitializerTestCase {
 
     public void testAddressMemberList() {
         Address address = EntityFactory.create(Address.class);
-        Set<String> names = address.getMemberNames();
+        Set<String> names = address.getEntityMeta().getMemberNames();
 
         assertTrue("Address has streetName", names.contains("streetName"));
         assertTrue("Address has country", names.contains("country"));
@@ -39,7 +39,7 @@ public class EntityReflectionTest extends InitializerTestCase {
 
     public void testEmployeeMemberList() {
         Employee emp = EntityFactory.create(Employee.class);
-        Set<String> names = emp.getMemberNames();
+        Set<String> names = emp.getEntityMeta().getMemberNames();
         assertEquals("Employee Memebers count", Employee.DECLARED_MEMEBERS, names.size());
     }
 

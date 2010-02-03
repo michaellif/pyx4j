@@ -22,6 +22,9 @@ package com.pyx4j.entity.rebind;
 
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -39,6 +42,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -48,6 +52,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -235,13 +240,38 @@ public class EntityFactoryGenerator extends Generator {
         }
         Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
         StringBuilder membersNamesStringArray = new StringBuilder();
+
+        List<String> toStringMemberNames = new Vector<String>();
+        final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
+
         for (JMethod method : interfaceType.getMethods()) {
             if (isEntityMemeber(method)) {
                 if (membersNamesStringArray.length() > 0) {
                     membersNamesStringArray.append(", ");
                 }
                 membersNamesStringArray.append("\"").append(method.getName()).append("\"");
+                ToString ts = method.getAnnotation(ToString.class);
+                if (ts != null) {
+                    toStringMemberNames.add(method.getName());
+                    sortKeys.put(method.getName(), ts);
+                }
             }
+        }
+
+        Collections.sort(toStringMemberNames, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                int v1 = sortKeys.get(o1).index();
+                int v2 = sortKeys.get(o2).index();
+                return (v1 < v2 ? -1 : (v1 == v2 ? 0 : 1));
+            }
+        });
+        StringBuilder toStringMemberNamesStringArray = new StringBuilder();
+        for (String memberName : toStringMemberNames) {
+            if (toStringMemberNamesStringArray.length() > 0) {
+                toStringMemberNamesStringArray.append(", ");
+            }
+            toStringMemberNamesStringArray.append("\"").append(memberName).append("\"");
         }
 
         writer.println();
@@ -267,6 +297,10 @@ public class EntityFactoryGenerator extends Generator {
 
         writer.print("new String[] {");
         writer.print(membersNamesStringArray.toString());
+        writer.print("}, ");
+
+        writer.print("new String[] {");
+        writer.print(toStringMemberNamesStringArray.toString());
         writer.print("}");
 
         writer.println(");");

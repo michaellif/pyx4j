@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
@@ -134,8 +135,7 @@ public class CEntityListBox<E extends IEntity<E>> extends CListBox<E> {
             // Get super's NULL presentation
             return super.getItemName(null);
         } else {
-            //TODO use to ToString annotation of IEntity
-            return o.toString();
+            return o.getStringView();
         }
     }
 

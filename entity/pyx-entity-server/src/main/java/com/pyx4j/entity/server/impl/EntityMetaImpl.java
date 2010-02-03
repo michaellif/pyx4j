@@ -21,12 +21,17 @@
 package com.pyx4j.entity.server.impl;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -45,6 +50,8 @@ public class EntityMetaImpl implements EntityMeta {
     private boolean membersListCreated;
 
     protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
+
+    private List<String> toStringMemberNames;
 
     public EntityMetaImpl(Class<? extends IEntity<?>> clazz) {
         entityClass = clazz;
@@ -115,4 +122,29 @@ public class EntityMetaImpl implements EntityMeta {
         return membersMeta.keySet();
     }
 
+    @Override
+    public synchronized List<String> getToStringMemberNames() {
+        if (toStringMemberNames == null) {
+            toStringMemberNames = new Vector<String>();
+            final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
+            for (Method method : entityClass.getMethods()) {
+                ToString ts = method.getAnnotation(ToString.class);
+                if (ts != null) {
+                    toStringMemberNames.add(method.getName());
+                    sortKeys.put(method.getName(), ts);
+                }
+            }
+            if (toStringMemberNames.size() > 1) {
+                Collections.sort(toStringMemberNames, new Comparator<String>() {
+                    @Override
+                    public int compare(String o1, String o2) {
+                        int v1 = sortKeys.get(o1).index();
+                        int v2 = sortKeys.get(o2).index();
+                        return (v1 < v2 ? -1 : (v1 == v2 ? 0 : 1));
+                    }
+                });
+            }
+        }
+        return toStringMemberNames;
+    }
 }

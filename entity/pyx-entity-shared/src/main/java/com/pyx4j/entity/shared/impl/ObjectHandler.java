@@ -49,7 +49,7 @@ public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> imp
 
     @Override
     public MemberMeta getMeta() {
-        return getParent().getMemberMeta(getFieldName());
+        return getParent().getEntityMeta().getMemberMeta(getFieldName());
     }
 
     public String getFieldName() {

@@ -23,8 +23,8 @@ package com.pyx4j.entity.shared.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
 @SuppressWarnings("serial")
@@ -171,16 +170,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @Override
-    public synchronized Set<String> getMemberNames() {
-        return getEntityMeta().getMemberNames();
-    }
-
-    @Override
-    public MemberMeta getMemberMeta(String memberName) {
-        return getEntityMeta().getMemberMeta(memberName);
-    }
-
-    @Override
     public IObject<?, ?> getMember(String memberName) {
         IObject<?, ?> member = members.get(memberName);
         if (member == null) {
@@ -222,6 +211,43 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @Override
     public void setMemberValue(String memberName, Object value) {
         ensureValue().put(memberName, value);
+    }
+
+    private Object getMemberStringView(String memberName) {
+        if (entityMeta.getMemberMeta(memberName).isEntity()) {
+            return ((IEntity<?>) getMember(memberName)).getStringView();
+        } else {
+            return getMemberValue(memberName);
+        }
+    }
+
+    @Override
+    public String getStringView() {
+        List<String> sm = getEntityMeta().getToStringMemberNames();
+        switch (sm.size()) {
+        case 0:
+            return null;
+        case 1:
+            return CommonsStringUtils.nvl(getMemberStringView(sm.get(0)));
+        case 2:
+            return CommonsStringUtils.nvl_concat(getMemberStringView(sm.get(0)), getMemberStringView(sm.get(1)), " ");
+        default:
+            Map<String, Object> entityValue = getValue();
+            if (entityValue == null) {
+                return null;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (String memeberName : sm) {
+                Object v = entityValue.get(memeberName);
+                if (v != null) {
+                    if (sb.length() > 0) {
+                        sb.append(" ");
+                    }
+                    sb.append(getMemberStringView(memeberName));
+                }
+            }
+            return sb.toString();
+        }
     }
 
     //TODO

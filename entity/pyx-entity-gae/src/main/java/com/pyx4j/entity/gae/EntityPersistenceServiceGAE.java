@@ -140,7 +140,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue;
             }
-            MemberMeta meta = childIEntity.getMemberMeta(me.getKey());
+            MemberMeta meta = childIEntity.getEntityMeta().getMemberMeta(me.getKey());
             if (meta.isTransient()) {
                 continue;
             }
@@ -165,7 +165,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue;
             }
-            MemberMeta meta = iEntity.getMemberMeta(me.getKey());
+            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(me.getKey());
             if (meta.isTransient()) {
                 continue;
             }
@@ -203,7 +203,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         String singleMemeberName = null;
                         for (IEntity<?> childIEntity : memberSet) {
                             if (singleMemeberName == null) {
-                                singleMemeberName = childIEntity.getMemberNames().iterator().next();
+                                singleMemeberName = childIEntity.getEntityMeta().getMemberNames().iterator().next();
                             }
                             childValue.add(childIEntity.getMemberValue(singleMemeberName));
                         }
@@ -355,12 +355,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 continue;
             } else if (value instanceof String) {
-                Class<?> cls = iEntity.getMemberMeta(keyName).getValueClass();
+                Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
                 if (Enum.class.isAssignableFrom(cls)) {
                     value = Enum.valueOf((Class<Enum>) cls, (String) value);
                 }
             } else if (value instanceof Long) {
-                if (Integer.class.isAssignableFrom(iEntity.getMemberMeta(keyName).getValueClass())) {
+                if (Integer.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
                     value = ((Long) value).intValue();
                 }
             } else if (value instanceof List<?>) {
@@ -371,7 +371,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (Object valueItem : (List) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
                         if (singleMemeberName == null) {
-                            singleMemeberName = childIEntity.getMemberNames().iterator().next();
+                            singleMemeberName = childIEntity.getEntityMeta().getMemberNames().iterator().next();
                         }
                         childIEntity.setMemberValue(singleMemeberName, deserializeValue(childIEntity, singleMemeberName, valueItem));
                         ((ISet) member).add(childIEntity);

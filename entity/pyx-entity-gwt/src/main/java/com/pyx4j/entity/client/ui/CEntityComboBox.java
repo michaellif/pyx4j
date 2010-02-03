@@ -33,6 +33,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
@@ -243,8 +244,7 @@ public class CEntityComboBox<E extends IEntity<E>> extends CComboBox<E> {
                 return super.getItemName(null);
             }
         } else {
-            //TODO use to ToString annotation of IEntity
-            return o.toString();
+            return o.getStringView();
         }
     }
 

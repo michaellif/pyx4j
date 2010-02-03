@@ -73,6 +73,16 @@ public class CommonsStringUtils {
         }
     }
 
+    public static String nvl_concat(Object value1, Object value2, String sep) {
+        if (value1 == null) {
+            return nvl(value2);
+        } else if (value2 == null) {
+            return nvl(value1);
+        } else {
+            return value1 + sep + value2;
+        }
+    }
+
     public static String paddingRight(String str, int size, char padChar) {
         if (str == null) {
             return null;

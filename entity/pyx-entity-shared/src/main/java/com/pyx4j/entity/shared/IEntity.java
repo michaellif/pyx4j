@@ -23,10 +23,8 @@ package com.pyx4j.entity.shared;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
 public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Object>>, Serializable {
@@ -38,8 +36,6 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
     public String getPrimaryKey();
 
     public void setPrimaryKey(String pk);
-
-    public Set<String> getMemberNames();
 
     public IObject<?, ?> getMember(String memberName);
 
@@ -55,11 +51,16 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
      * A single instance of MemeberMeta is shared between all instances of the IEntity
      * inside EntityMeta.
      */
-    public MemberMeta getMemberMeta(String memberName);
-
     public EntityMeta getEntityMeta();
 
     public List<Validator> getValidators(Path memberPath);
+
+    /**
+     * Business toString() presentation. @see com.pyx4j.entity.annotations.ToString
+     * 
+     * @return String value of members annotated with ToString
+     */
+    public String getStringView();
 
     public E cloneEntity();
 }
