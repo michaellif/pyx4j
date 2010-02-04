@@ -222,7 +222,7 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initHtmlPortletStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
-        style.addProperty("margin", "20px");
+        style.addProperty("margin", "10px");
         style.addProperty("width", "230px");
         style.addProperty("padding", "5px");
         style.addProperty("color", "gray");
@@ -230,6 +230,9 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name() + " h3");
         style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name() + " tr");
+        style.addProperty("padding", "0");
         addStyle(style);
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
         style.addProperty("color", "#ff6600");

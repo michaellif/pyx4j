@@ -110,7 +110,7 @@ public abstract class SitePanel extends SimplePanel {
         this.site = site;
         setSize("100%", "100%");
 
-        add(createContentPanel());
+        setWidget(createContentPanel());
         setStyleName(SiteCSSClass.pyx4j_Site_SitePanel.name());
 
         createHeaderCaptionsPanel();

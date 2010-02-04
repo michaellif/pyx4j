@@ -20,8 +20,6 @@ public class PortletWidget extends VerticalPanel {
         super();
         setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
 
-        getElement().getStyle().setProperty("margin", "0px");
-
         HTML capturePanel = new HTML(portlet.capture().getValue());
         capturePanel.setWordWrap(false);
         add(capturePanel);
