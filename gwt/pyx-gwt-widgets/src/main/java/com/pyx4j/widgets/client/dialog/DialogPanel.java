@@ -28,6 +28,7 @@ import java.util.HashMap;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -123,8 +124,14 @@ public class DialogPanel extends PopupPanel {
 
         setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
         //Don't move it to styles because width of border is used in calculation of resizing
-        getElement().getStyle().setProperty("borderStyle", "ridge");
-        getElement().getStyle().setProperty("borderWidth", BORDER_WIDTH + "px");
+        if (BrowserType.isIE()) {
+            getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            getElement().getStyle().setProperty("borderWidth", 2 * BORDER_WIDTH + "px");
+        } else {
+            getElement().getStyle().setProperty("borderStyle", "ridge");
+            getElement().getStyle().setProperty("borderWidth", BORDER_WIDTH + "px");
+        }
+
         getElement().getStyle().setProperty("zIndex", "20");
 
         windowWidth = Window.getClientWidth();
@@ -384,6 +391,7 @@ public class DialogPanel extends PopupPanel {
         }
 
         DialogDecorator() {
+
             DOM.setElementPropertyInt(getTable(), "cellSpacing", 0);
             DOM.setElementPropertyInt(getTable(), "cellPadding", 0);
 
@@ -391,9 +399,11 @@ public class DialogPanel extends PopupPanel {
             Element row = DOM.createTR();
             DOM.appendChild(getBody(), row);
 
-            appendTd(new Resizer(DragZoneType.RESIZE_NW, "5px", "5px"), row);
-            appendTd(new Resizer(DragZoneType.RESIZE_N, "100%", "5px"), row);
-            appendTd(new Resizer(DragZoneType.RESIZE_NE, "5px", "5px"), row);
+            if (!BrowserType.isIE()) {
+                appendTd(new Resizer(DragZoneType.RESIZE_NW, "5px", "5px"), row);
+                appendTd(new Resizer(DragZoneType.RESIZE_N, "100%", "5px"), row);
+                appendTd(new Resizer(DragZoneType.RESIZE_NE, "5px", "5px"), row);
+            }
 
             //secondRow
             row = DOM.createTR();
@@ -401,9 +411,15 @@ public class DialogPanel extends PopupPanel {
 
             captionPanel = new Caption();
 
-            appendTd(new Resizer(DragZoneType.RESIZE_W, "5px", "100%"), row, 2, 1);
+            if (!BrowserType.isIE()) {
+                appendTd(new Resizer(DragZoneType.RESIZE_W, "5px", "100%"), row, 2, 1);
+            }
+
             appendTd(captionPanel, row, "100%", "5px");
-            appendTd(new Resizer(DragZoneType.RESIZE_E, "5px", "100%"), row, 2, 1);
+
+            if (!BrowserType.isIE()) {
+                appendTd(new Resizer(DragZoneType.RESIZE_E, "5px", "100%"), row, 2, 1);
+            }
 
             //thirdRow
             row = DOM.createTR();
@@ -415,9 +431,11 @@ public class DialogPanel extends PopupPanel {
             row = DOM.createTR();
             DOM.appendChild(getBody(), row);
 
-            appendTd(new Resizer(DragZoneType.RESIZE_SW, "5px", "5px"), row);
-            appendTd(new Resizer(DragZoneType.RESIZE_S, "100%", "5px"), row);
-            appendTd(new Resizer(DragZoneType.RESIZE_SE, "5px", "5px"), row);
+            if (!BrowserType.isIE()) {
+                appendTd(new Resizer(DragZoneType.RESIZE_SW, "5px", "5px"), row);
+                appendTd(new Resizer(DragZoneType.RESIZE_S, "100%", "5px"), row);
+                appendTd(new Resizer(DragZoneType.RESIZE_SE, "5px", "5px"), row);
+            }
 
         }
 
