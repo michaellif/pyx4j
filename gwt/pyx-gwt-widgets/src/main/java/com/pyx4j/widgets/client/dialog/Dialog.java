@@ -170,7 +170,7 @@ public class Dialog extends DialogPanel {
 
     public void setBody(Widget message) {
         content.add(message, DockPanel.CENTER);
-        message.setSize("100%", "100%");
+        message.setSize("400px", "200px");
         content.setCellHeight(message, "100%");
         center();
     }
