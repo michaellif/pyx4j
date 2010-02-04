@@ -22,10 +22,8 @@ package com.pyx4j.entity.gae;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,7 +47,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -63,6 +60,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.gwt.server.IOUtils;
 
 /**
  * 
@@ -85,24 +83,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastore = DatastoreServiceFactory.getDatastoreService();
     }
 
-    private static void closeQuietly(OutputStream output) {
-        try {
-            if (output != null) {
-                output.close();
-            }
-        } catch (Throwable e) {
-        }
-    }
-
-    private static void closeQuietly(InputStream input) {
-        try {
-            if (input != null) {
-                input.close();
-            }
-        } catch (Throwable e) {
-        }
-    }
-
     private Blob createBlob(Serializable o) {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         ObjectOutputStream out = null;
@@ -112,7 +92,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } catch (Throwable t) {
             throw new Error("Unable to serialize " + o.getClass(), t);
         } finally {
-            closeQuietly(out);
+            IOUtils.closeQuietly(out);
         }
         Blob blob = new Blob(buf.toByteArray());
         return blob;
@@ -130,8 +110,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } catch (Throwable t) {
             throw new Error("Unable to de serialize ", t);
         } finally {
-            closeQuietly(in);
-            closeQuietly(b);
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(b);
         }
     }
 
@@ -249,6 +229,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
+            } else if (value != null) {
+                if (value.getClass().isArray()) {
+                    //TODO support more arrays
+                    value = new Blob((byte[]) value);
+                }
             }
             entity.setProperty(me.getKey(), value);
         }
@@ -410,6 +395,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     ((IPrimitiveSet) member).addAll((Collection) value);
                     continue;
                 }
+            } else if (value instanceof Blob) {
+                value = ((Blob) value).getBytes();
+                //TODO support more types.
             }
             iEntity.setMemberValue(keyName, value);
         }

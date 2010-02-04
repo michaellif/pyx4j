@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.ISet;
 @Caption(name = "Laborer")
 public interface Employee extends IEntity<Employee> {
 
-    public static int DECLARED_MEMEBERS = 14;
+    public static int DECLARED_MEMEBERS = 15;
 
     public static enum EmploymentStatus {
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT
@@ -74,5 +74,7 @@ public interface Employee extends IEntity<Employee> {
     @Owned
     @EmbeddedEntity
     Address workAddress();
+
+    IPrimitive<byte[]> image();
 
 }

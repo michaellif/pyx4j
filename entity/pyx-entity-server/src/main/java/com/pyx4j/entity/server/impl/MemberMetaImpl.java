@@ -81,7 +81,7 @@ public class MemberMetaImpl implements MemberMeta {
         this.method = method;
         objectClass = (Class<? extends IObject<?, ?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
-            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
             entity = false;
         } else if (ISet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];

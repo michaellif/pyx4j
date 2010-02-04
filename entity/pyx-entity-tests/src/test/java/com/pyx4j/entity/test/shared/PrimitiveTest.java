@@ -116,8 +116,19 @@ public class PrimitiveTest extends InitializerTestCase {
         assertFalse("Value isNull", task.notes().isNull());
         assertFalse("Value Empty", task.notes().isEmpty());
         assertTrue("Iterator", task.notes().iterator().hasNext());
-        
+
         task.notes().add("Define");
         task.notes().add("Verify");
+    }
+
+    public void testBlob() {
+        Employee emp = EntityFactory.create(Employee.class);
+        assertNull("Initial value", emp.image().getValue());
+        assertEquals("Class of Value", byte[].class, emp.image().getValueClass());
+        byte[] value = new byte[] { 1, 2, 3 };
+        emp.image().setValue(value);
+        for (int i = 0; i < value.length; i++) {
+            assertEquals("Value " + i, value[i], emp.image().getValue()[i]);
+        }
     }
 }

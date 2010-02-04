@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.server.impl;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -35,6 +37,27 @@ import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
 public class EntityImplReflectionHelper {
 
+    static Class<?> toClass(Type type) {
+        if (type instanceof GenericArrayType) {
+            return Array.newInstance(toClass(((GenericArrayType) type).getGenericComponentType()), 0).getClass();
+        } else {
+            return (Class<?>) type;
+        }
+    }
+
+    static Class<?> primitiveValueClass(Type type) {
+        if (type instanceof Class<?>) {
+            return (Class<?>) type;
+        } else {
+            if (type instanceof GenericArrayType) {
+                return toClass(type);
+            } else {
+                // e.g. generic Collection<String> 
+                return (Class<?>) ((ParameterizedType) type).getRawType();
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public static IObject<?, ?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler<?> implHandler, String memberName) {
         Method method;
@@ -45,12 +68,8 @@ public class EntityImplReflectionHelper {
         }
         Class<?> memberClass = method.getReturnType();
         if (IPrimitive.class.equals(memberClass)) {
-            Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            if (!(paramType instanceof Class)) {
-                // e.g. generic Collection<String> 
-                paramType = ((ParameterizedType) paramType).getRawType();
-            }
-            return implHandler.lazyCreateMemberIPrimitive(method.getName(), (Class<?>) paramType);
+            Class<?> paramType = primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
+            return implHandler.lazyCreateMemberIPrimitive(method.getName(), paramType);
         } else if (IEntity.class.isAssignableFrom(memberClass)) {
             return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
         } else if (ISet.class.equals(memberClass)) {

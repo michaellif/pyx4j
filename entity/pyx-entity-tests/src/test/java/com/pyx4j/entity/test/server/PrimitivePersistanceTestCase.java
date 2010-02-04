@@ -128,4 +128,18 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Value", EmploymentStatus.FULL_TIME, emp2.employmentStatus().getValue());
     }
 
+    public void testBlob() {
+        Employee emp = EntityFactory.create(Employee.class);
+        byte[] value = new byte[] { 1, 2, 3 };
+        emp.image().setValue(value);
+
+        srv.persist(emp);
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        assertEquals("Class of Value", byte[].class, emp2.image().getValueClass());
+        assertEquals("Class of Value", byte[].class, emp2.image().getValue().getClass());
+        for (int i = 0; i < value.length; i++) {
+            assertEquals("Value " + i, value[i], emp2.image().getValue()[i]);
+        }
+    }
+
 }
