@@ -125,6 +125,7 @@ public class Dialog extends DialogPanel {
     public Dialog(String caption, String message, Type type, DialogOptions options) {
         this(caption, options);
         setBody(new MessagePanel(message, type));
+        center();
     }
 
     public Dialog(String caption, DialogOptions options) {
@@ -143,8 +144,7 @@ public class Dialog extends DialogPanel {
         content.setCellWidth(buttonsPanel, "100%");
 
         setWidget(content);
-        setPixelSize(400, 300);
-        center();
+        setPixelSize(1, 1);
 
         this.addKeyDownHandler(new KeyDownHandler() {
 
@@ -172,6 +172,7 @@ public class Dialog extends DialogPanel {
         content.add(message, DockPanel.CENTER);
         message.setSize("100%", "100%");
         content.setCellHeight(message, "100%");
+        center();
     }
 
     private HorizontalPanel createButtonsPanel() {

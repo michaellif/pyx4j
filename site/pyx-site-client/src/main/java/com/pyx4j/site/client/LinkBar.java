@@ -52,17 +52,6 @@ public class LinkBar extends ComplexPanel {
 
         Element div = Document.get().createDivElement().cast();
         ul = Document.get().createULElement().cast();
-        ul.getStyle().setProperty("listStyleType", "none");
-        ul.getStyle().setProperty("height", "100%");
-        ul.getStyle().setProperty("margin", "0");
-        ul.getStyle().setProperty("padding", "0");
-        ul.getStyle().setProperty("display", "inline");
-
-        if (BrowserType.isFirefox()) {
-            ul.getStyle().setProperty("cssFloat", "right");
-        } else {
-            ul.getStyle().setProperty("float", "right");
-        }
 
         div.appendChild(ul);
         setElement(div);
@@ -76,6 +65,17 @@ public class LinkBar extends ComplexPanel {
         default:
             break;
         }
+
+        if (BrowserType.isFirefox()) {
+            ul.getStyle().setProperty("cssFloat", "right");
+        } else {
+            ul.getStyle().setProperty("float", "right");
+        }
+        ul.getStyle().setProperty("listStyleType", "none");
+        ul.getStyle().setProperty("height", "100%");
+        ul.getStyle().setProperty("margin", "0");
+        ul.getStyle().setProperty("padding", "0");
+        ul.getStyle().setProperty("display", "inline");
 
     }
 

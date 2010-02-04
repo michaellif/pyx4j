@@ -58,6 +58,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentC
 import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 
 import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class DialogPanel extends PopupPanel {
 
@@ -133,7 +134,12 @@ public class DialogPanel extends PopupPanel {
 
         contentPanel = new SimplePanel();
         contentPanel.setStylePrimaryName(CSSClass.pyx4j_Dialog_Content.name());
-        contentPanel.setSize("100%", "100%");
+
+        if (BrowserType.isIE()) {
+            contentPanel.setWidth("100%");
+        } else {
+            contentPanel.setSize("100%", "100%");
+        }
 
         decoratorPanel = new DialogDecorator();
 
@@ -323,14 +329,17 @@ public class DialogPanel extends PopupPanel {
 
                 DOM.setStyleAttribute(getElement(), "fontSize", "0");
 
-                DOM.setStyleAttribute(getElement(), "cursor", dragZoneType.getCursor());
+                if (!BrowserType.isIE()) {
+                    DOM.setStyleAttribute(getElement(), "cursor", dragZoneType.getCursor());
 
-                MouseHandler mouseHandler = new MouseHandler(this);
-                addDomHandler(mouseHandler, MouseDownEvent.getType());
-                addDomHandler(mouseHandler, MouseUpEvent.getType());
-                addDomHandler(mouseHandler, MouseMoveEvent.getType());
-                addDomHandler(mouseHandler, MouseOverEvent.getType());
-                addDomHandler(mouseHandler, MouseOutEvent.getType());
+                    MouseHandler mouseHandler = new MouseHandler(this);
+                    addDomHandler(mouseHandler, MouseDownEvent.getType());
+                    addDomHandler(mouseHandler, MouseUpEvent.getType());
+                    addDomHandler(mouseHandler, MouseMoveEvent.getType());
+                    addDomHandler(mouseHandler, MouseOverEvent.getType());
+                    addDomHandler(mouseHandler, MouseOutEvent.getType());
+                }
+
                 resizers.put(this, dragZoneType);
 
                 setSize(width, height);

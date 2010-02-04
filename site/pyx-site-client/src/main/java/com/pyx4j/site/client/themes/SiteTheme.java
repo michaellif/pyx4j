@@ -82,7 +82,6 @@ public abstract class SiteTheme extends WindowsTheme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
-
     }
 
     protected abstract void initSitePanelStyles();

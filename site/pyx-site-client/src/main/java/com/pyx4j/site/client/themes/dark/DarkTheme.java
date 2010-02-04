@@ -160,6 +160,10 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("width", "750px");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " ul");
+        style.addProperty("float", "right");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " li");
         style.addProperty("padding", "3px");
         addStyle(style);
@@ -183,6 +187,10 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("margin-top", "5px");
         style.addProperty("width", "550px");
         style.addProperty("color", "lightGrey");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " ul");
+        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " li");
