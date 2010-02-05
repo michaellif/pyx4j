@@ -23,7 +23,6 @@ package com.pyx4j.site.server;
 import java.util.Collections;
 
 import javax.cache.Cache;
-import javax.cache.CacheException;
 import javax.cache.CacheManager;
 
 import org.slf4j.Logger;
@@ -53,9 +52,22 @@ public class SiteServicesImpl implements SiteServices {
             }
             IEntity<?> entity = new EntityServicesImpl.SaveImpl().execute(request);
             //TODO reset Cache and change updateTimestamp
+            if (entity instanceof Site) {
+                setCache((Site) entity);
+            }
             return entity;
         }
 
+    }
+
+    private static void setCache(Site site) {
+        Cache cache = null;
+        try {
+            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+            cache.put(KEY_PREFIX + site.siteId().getValue(), site);
+        } catch (Throwable e) {
+            log.error("Cache set error", e);
+        }
     }
 
     public static class RetrieveImpl implements SiteServices.Retrieve {
@@ -76,7 +88,7 @@ public class SiteServicesImpl implements SiteServices {
                         return site;
                     }
                 }
-            } catch (CacheException e) {
+            } catch (Throwable e) {
                 log.error("Cache access error", e);
             }
 
