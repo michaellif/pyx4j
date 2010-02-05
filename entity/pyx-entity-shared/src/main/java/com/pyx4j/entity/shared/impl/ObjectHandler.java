@@ -29,11 +29,11 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 @SuppressWarnings("unchecked")
 public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, Serializable {
 
-    private final Class<? extends IObject> clazz;
+    private transient final Class<? extends IObject> clazz;
 
-    private IEntity<?> parent;
+    private transient IEntity<?> parent;
 
-    private String fieldName;
+    private transient String fieldName;
 
     public ObjectHandler(Class<OBJECT_TYPE> clazz) {
         this.clazz = clazz;

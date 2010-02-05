@@ -51,6 +51,14 @@ public class HTML5LocalStorage extends JavaScriptObject {
         return this.length;
     }-*/;
 
+    /**
+     * The getItem(key) method return a structured clone of the current value associated
+     * with the given key. If the given key does not exist in the list associated with the
+     * object then this method must return null.
+     * 
+     * @param key
+     * @return current value or null if key does not exist.
+     */
     public final native String getItem(String key)
     /*-{
         return this.getItem(key);
@@ -61,6 +69,16 @@ public class HTML5LocalStorage extends JavaScriptObject {
         return this.key(index);
     }-*/;
 
+    /**
+     * New key/value pair added to the list, with the given key and with its value set to
+     * the newly obtained clone of value.
+     * 
+     * If the given key does exist in the list, then its value updated to the newly
+     * obtained clone of value.
+     * 
+     * @param key
+     * @param data
+     */
     public final native void setItem(String key, String data)
     /*-{
         this.setItem(key, data);
