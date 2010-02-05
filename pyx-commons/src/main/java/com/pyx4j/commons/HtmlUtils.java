@@ -46,7 +46,7 @@ public class HtmlUtils {
     private static void buildEntityTables() {
         htmlEntityTableEncode = new HashMap<Character, String>(HTML_ENTITIES.length);
         for (int i = 0; i < HTML_ENTITIES.length; i += 2) {
-            if (!htmlEntityTableEncode.containsKey(HTML_ENTITIES[i])) {
+            if (!htmlEntityTableEncode.containsKey(HTML_ENTITIES[i].charAt(0))) {
                 htmlEntityTableEncode.put(HTML_ENTITIES[i].charAt(0), HTML_ENTITIES[i + 1]);
             }
         }

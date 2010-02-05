@@ -149,9 +149,11 @@ public class EntityCriteria<E extends IEntity<?>> implements Serializable {
         if (domainName != null) {
             hashCode += domainName.hashCode();
         }
+        hashCode *= 0x1F;
         if (filters != null) {
             hashCode += filters.hashCode();
         }
+        hashCode *= 0x1F;
         if (sorts != null) {
             hashCode += sorts.hashCode();
         }

@@ -63,7 +63,6 @@ public class TimeUtils {
         long msec = since(start);
         long sec = msec / 1000;
         long min = sec / 60;
-        sec -= min * 60;
         long h = min / 60;
         min -= h * 60;
 

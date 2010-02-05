@@ -95,7 +95,9 @@ public class EntityImplGenerator {
         }
         File marker = new File(target, ALREADY_GENERATED_MARKER_RESOURCE_NAME);
         if (!marker.getParentFile().isDirectory()) {
-            marker.getParentFile().mkdirs();
+            if (!marker.getParentFile().mkdirs()) {
+                throw new Error("Can't create directory " + marker.getParentFile());
+            }
         }
         PrintWriter out = null;
         try {

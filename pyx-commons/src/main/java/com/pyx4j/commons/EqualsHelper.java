@@ -52,7 +52,7 @@ public abstract class EqualsHelper {
         if (value1 == null) {
             return (value2 == null);
         } else if (value2 == null) {
-            return (value1 == null);
+            return false;
         } else {
             if (value1.size() != value2.size()) {
                 return false;
@@ -71,7 +71,7 @@ public abstract class EqualsHelper {
         if (value1 == null) {
             return (value2 == null);
         } else if (value2 == null) {
-            return (value1 == null);
+            return false;
         } else {
             if (value1.size() != value2.size()) {
                 return false;
@@ -91,17 +91,17 @@ public abstract class EqualsHelper {
         if (value1 == null) {
             return (value2 == null);
         } else if (value2 == null) {
-            return (value1 == null);
+            return false;
         } else {
             if (value1.size() != value2.size()) {
                 return false;
             }
-            for (Object key1 : value1.keySet()) {
-                Object v2 = value2.get(key1);
+            for (Map.Entry<?, ?> me : value1.entrySet()) {
+                Object v2 = value2.get(me.getKey());
                 if (v2 == null) {
                     return false;
                 }
-                if (!v2.equals(value1.get(key1))) {
+                if (!v2.equals(me.getValue())) {
                     return false;
                 }
             }
@@ -113,7 +113,7 @@ public abstract class EqualsHelper {
         if (value1 == null) {
             return (value2 == null);
         } else if (value2 == null) {
-            return (value1 == null);
+            return false;
         } else {
             if (value1.length != value2.length) {
                 return false;

@@ -67,6 +67,11 @@ public class Pair<A extends Serializable, B extends Serializable> implements Ser
     }
 
     @Override
+    public int hashCode() {
+        return 0x1F * ((this.a != null) ? this.a.hashCode() : 0) + ((this.b != null) ? this.b.hashCode() : 0);
+    }
+
+    @Override
     public String toString() {
         return "Pair " + a + " " + b;
     }
