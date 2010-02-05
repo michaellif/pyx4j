@@ -29,6 +29,7 @@ import javax.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
@@ -115,15 +116,16 @@ public class SiteServicesImpl implements SiteServices {
         public Site execute(SiteRequest request) {
             Cache cache = null;
             try {
+                long start = System.nanoTime();
                 cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
                 Object cachedSite = cache.get(KEY_PREFIX + request.getSiteId());
                 if (cachedSite instanceof Site) {
                     Site site = (Site) cachedSite;
                     if (request.getModificationTime() == site.updateTimestamp().getValue()) {
-                        log.debug("Cached site is not updated, send null value");
+                        log.debug("Cached site is not updated, send null value, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
                         return EntityFactory.create(Site.class);
                     } else {
-                        log.debug("Send Cached site value");
+                        log.debug("Send Cached site value, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
                         return site;
                     }
                 }
