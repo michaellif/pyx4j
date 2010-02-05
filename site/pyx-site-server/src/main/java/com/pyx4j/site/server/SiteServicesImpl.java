@@ -96,12 +96,12 @@ public class SiteServicesImpl implements SiteServices {
             Site siteMeta = EntityFactory.create(Site.class);
             criteria.add(PropertyCriterion.eq(siteMeta.siteId(), request.getSiteId()));
             Site site = (Site) new EntityServicesImpl.RetrieveImpl().execute(criteria);
-            if (cache != null) {
+            if ((site != null) && (cache != null)) {
                 // Store for future use.
                 cache.put(KEY_PREFIX + request.getSiteId(), site);
             }
 
-            if (request.getModificationTime() == site.updateTimestamp().getValue()) {
+            if ((site != null) && (request.getModificationTime() == site.updateTimestamp().getValue())) {
                 log.debug("Site is not updated, send null value");
                 return siteMeta;
             } else {
