@@ -41,7 +41,7 @@ import com.pyx4j.unit.client.impl.AbstractTestSuiteMetaData;
 
 public class GUnitMetaDataGenerator extends Generator {
 
-    private final String BASE_TEST_CLASS_NAME = "junit.framework.TestCase";
+    private final static String BASE_TEST_CLASS_NAME = "junit.framework.TestCase";
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {

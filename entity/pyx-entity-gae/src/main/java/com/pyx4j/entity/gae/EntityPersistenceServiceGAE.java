@@ -406,7 +406,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private class KeyComparator implements Comparator<Key> {
+    private static class KeyComparator implements Comparator<Key> {
 
         private final List<Long> keyIdOrdered;
 

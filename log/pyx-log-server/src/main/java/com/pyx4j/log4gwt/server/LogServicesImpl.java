@@ -31,7 +31,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class LogServicesImpl {
 
-    public static String CLIENT_LOGGER_NAME = "client";
+    public static final String CLIENT_LOGGER_NAME = "client";
 
     private static final Logger log = LoggerFactory.getLogger(CLIENT_LOGGER_NAME);
 
