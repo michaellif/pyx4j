@@ -121,6 +121,9 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     @Override
     public void setValue(Map<String, Object> value) {
+        if ((value != null) && !(value instanceof EntityValueMap)) {
+            throw new ClassCastException("Entity expects EntityValueMap as value");
+        }
         if (getParent() != null) {
             ((SharedEntityHandler) getParent()).ensureValue().put(getFieldName(), value);
         } else {
@@ -141,6 +144,16 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
             return false;
         }
         return thisValue.equals(((IEntity<?>) other).getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        Map<String, Object> thisValue = this.getValue();
+        if (thisValue == null) {
+            return super.hashCode();
+        } else {
+            return thisValue.hashCode();
+        }
     }
 
     @Override

@@ -78,7 +78,16 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
         return thisValue.equals(((IPrimitive<?>) other).getValue());
     }
 
-    //TODO
+    @Override
+    public int hashCode() {
+        TYPE thisValue = this.getValue();
+        if (thisValue == null) {
+            return super.hashCode();
+        } else {
+            return thisValue.hashCode();
+        }
+    }
+
     @Override
     public String toString() {
         return getObjectClass().getName() + getValue();

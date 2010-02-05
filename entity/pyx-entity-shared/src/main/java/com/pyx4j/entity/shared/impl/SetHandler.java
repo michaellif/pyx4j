@@ -101,6 +101,9 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     @Override
     public void setValue(Set<Map<String, Object>> value) {
+        if ((value != null) && !(value instanceof TreeSet<?>)) {
+            throw new ClassCastException("Set expects TreeSet as value");
+        }
         getParent().setMemberValue(getFieldName(), value);
     }
 
