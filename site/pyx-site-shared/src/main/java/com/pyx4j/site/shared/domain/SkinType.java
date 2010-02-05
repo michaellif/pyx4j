@@ -21,5 +21,5 @@
 package com.pyx4j.site.shared.domain;
 
 public enum SkinType {
-    dark, light
+    dark, light, business
 }

@@ -55,7 +55,7 @@ public class SiteEditor extends AbstractView {
 
         };
 
-        ((CComboBox<SkinType>) (form.get(form.meta().skinType()))).setOptions(EnumSet.of(SkinType.light, SkinType.dark));
+        ((CComboBox<SkinType>) (form.get(form.meta().skinType()))).setOptions(EnumSet.of(SkinType.light, SkinType.dark, SkinType.business));
 
         form.populate(site);
 

@@ -33,7 +33,7 @@ public class BusinessTheme extends SiteTheme {
         putThemeColor(ThemeColor.OBJECT_TONE2, "#303030");
         putThemeColor(ThemeColor.OBJECT_TONE3, "#505050");
         putThemeColor(ThemeColor.BORDER, "#666666");
-        putThemeColor(ThemeColor.SELECTION, "#ff6600");
+        putThemeColor(ThemeColor.SELECTION, "#C90");
         putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
         putThemeColor(ThemeColor.TEXT_BACKGROUND, "#ffffff");
         putThemeColor(ThemeColor.TEXT, "#000000");
@@ -47,21 +47,22 @@ public class BusinessTheme extends SiteTheme {
     protected void initGeneralStyles() {
         super.initGeneralStyles();
         Style style = new Style("body");
-        style.addProperty("background", "#21262C");
+        style.addProperty("background", "white");
+        style.addProperty("font-family", "'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif");
         addStyle(style);
     }
 
     @Override
     protected void initSitePanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_SitePanel.name());
-        style.addProperty("background", "url(images/background.jpg) repeat-x");
+        style.addProperty("background", "url(images/business_background.gif) no-repeat 50% 0%");
         addStyle(style);
     }
 
     @Override
     protected void initContentPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_ContentPanel.name());
-        style.addProperty("width", "924px");
+        style.addProperty("width", "760px");
         style.addProperty("padding-top", "0px");
         style.addProperty("padding-bottom", "50px");
         addStyle(style);
@@ -76,8 +77,8 @@ public class BusinessTheme extends SiteTheme {
     @Override
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
-        style.addProperty("background", "url(images/topHdr_ecommerce.jpg) no-repeat");
-        style.addProperty("height", "250px");
+        style.addProperty("background", "url(images/business_banner.jpg) no-repeat");
+        style.addProperty("height", "291px");
         addStyle(style);
     }
 
@@ -92,7 +93,7 @@ public class BusinessTheme extends SiteTheme {
     @Override
     protected void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
-        style.addProperty("background", "url(images/topHdr_ecommerce.jpg) no-repeat 50% 100%");
+        style.addProperty("background", "white");
         style.addProperty("height", "35px");
         addStyle(style);
     }
@@ -100,7 +101,7 @@ public class BusinessTheme extends SiteTheme {
     @Override
     protected void initHeaderCaptionsStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
-        style.addProperty("color", "#ff6600");
+        style.addProperty("color", "#330066");
         style.addProperty("margin-left", "270px");
         style.addProperty("margin-top", "167px");
         style.addProperty("font-size", "28px");
@@ -123,18 +124,21 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("width", "100%");
         style.addProperty("height", "32px");
         style.addProperty("padding-left", "0px");
-        style.addProperty("background", "transparent url(images/menubkg2.gif) repeat-x");
+        style.addProperty("background", "transparent");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
-        style.addProperty("background", "transparent url(images/menusep.gif) no-repeat 100%");
+        style.addProperty("background", "transparent url(images/business_nav_divider.gif) no-repeat left center");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
-        style.addProperty("color", getThemeColor(ThemeColor.SELECTION_TEXT));
+        style.addProperty("color", "#330066");
         style.addProperty("padding", "0px 20px 0px 20px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
+        style.addProperty("font-size", "0.88em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("line-height", "0.88em");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a span");
@@ -143,7 +147,7 @@ public class BusinessTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");
-        style.addProperty("color", "#ff6600");
+        style.addProperty("color", "#886625");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
@@ -156,8 +160,8 @@ public class BusinessTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "100px");
         style.addProperty("margin-top", "10px");
-        style.addProperty("color", "black");
-        style.addProperty("width", "750px");
+        style.addProperty("color", "#C90");
+        style.addProperty("width", "650px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " ul");
@@ -170,12 +174,18 @@ public class BusinessTheme extends SiteTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a");
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", "black");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "13px");
+        style.addProperty("color", "#C90");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " span");
+        style.addProperty("font-size", "11px");
+        style.addProperty("color", "#C90");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
         style.addProperty("text-decoration", "underline");
-        style.addProperty("color", "#ff6600");
         addStyle(style);
 
     }
@@ -183,10 +193,9 @@ public class BusinessTheme extends SiteTheme {
     @Override
     protected void initFooterLinksStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name());
-        style.addProperty("margin-left", "300px");
-        style.addProperty("margin-top", "5px");
-        style.addProperty("width", "550px");
-        style.addProperty("color", "lightGrey");
+        style.addProperty("margin-left", "250px");
+        style.addProperty("width", "500px");
+        style.addProperty("color", "#C90");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLinks.name() + " ul");
@@ -199,12 +208,17 @@ public class BusinessTheme extends SiteTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a");
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", "lightGrey");
+        style.addProperty("font-size", "13px");
+        style.addProperty("color", "#C90");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " span");
+        style.addProperty("font-size", "11px");
+        style.addProperty("color", "#C90");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
         style.addProperty("text-decoration", "underline");
-        style.addProperty("color", "white");
         addStyle(style);
 
     }
@@ -214,7 +228,8 @@ public class BusinessTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
         style.addProperty("margin-left", "20px");
         style.addProperty("margin-top", "5px");
-        style.addProperty("color", "lightGrey");
+        style.addProperty("font-size", "13px");
+        style.addProperty("color", "#999");
         addStyle(style);
     }
 

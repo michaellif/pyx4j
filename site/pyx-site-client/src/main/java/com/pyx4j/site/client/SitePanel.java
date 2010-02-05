@@ -48,6 +48,7 @@ import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.client.themes.business.BusinessTheme;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.Page;
@@ -104,6 +105,8 @@ public abstract class SitePanel extends SimplePanel {
 
     private static DarkTheme darkTheme = new DarkTheme();
 
+    private static BusinessTheme businessTheme = new BusinessTheme();
+
     private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactory.class);
 
     public SitePanel(Site site) {
@@ -131,6 +134,9 @@ public abstract class SitePanel extends SimplePanel {
             break;
         case dark:
             StyleManger.installTheme(darkTheme);
+            break;
+        case business:
+            StyleManger.installTheme(businessTheme);
             break;
 
         default:
@@ -191,10 +197,12 @@ public abstract class SitePanel extends SimplePanel {
 
         }
 
-        if (SkinType.dark.equals(site.skinType().getValue()) && lightTheme.equals(StyleManger.getTheme())) {
+        if (SkinType.dark.equals(site.skinType().getValue())) {
             StyleManger.installTheme(darkTheme);
-        } else if (SkinType.light.equals(site.skinType().getValue()) && darkTheme.equals(StyleManger.getTheme())) {
+        } else if (SkinType.light.equals(site.skinType().getValue())) {
             StyleManger.installTheme(lightTheme);
+        } else if (SkinType.business.equals(site.skinType().getValue())) {
+            StyleManger.installTheme(businessTheme);
         }
 
         setHeaderCaption(page.caption().getValue());

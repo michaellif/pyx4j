@@ -32,6 +32,7 @@ import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.client.themes.business.BusinessTheme;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
@@ -48,6 +49,8 @@ public class MainMenu extends MenuBar {
     private static LightTheme lightTheme = new LightTheme();
 
     private static DarkTheme darkTheme = new DarkTheme();
+
+    private static BusinessTheme businessTheme = new BusinessTheme();
 
     public MainMenu(final AdminApplication app) {
 
@@ -73,6 +76,12 @@ public class MainMenu extends MenuBar {
                 @Override
                 public void execute() {
                     StyleManger.installTheme(darkTheme);
+                }
+            }));
+            styleMenuBar.addItem(new MenuItem("Business", new Command() {
+                @Override
+                public void execute() {
+                    StyleManger.installTheme(businessTheme);
                 }
             }));
         }
