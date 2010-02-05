@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.shared.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
@@ -44,12 +41,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
 
     @Override
     public void setValue(TYPE value) {
-        Map<String, Object> data = getParent().getValue();
-        if (data == null) {
-            data = new HashMap<String, Object>();
-            getParent().setValue(data);
-        }
-        data.put(getFieldName(), value);
+        ((SharedEntityHandler<?>) getParent()).ensureValue().put(getFieldName(), value);
     }
 
     @Override

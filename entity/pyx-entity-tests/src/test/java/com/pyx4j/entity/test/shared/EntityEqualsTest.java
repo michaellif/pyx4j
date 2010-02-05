@@ -21,6 +21,8 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.test.shared.domain.Department;
+import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 
@@ -46,5 +48,22 @@ public class EntityEqualsTest extends InitializerTestCase {
         task2.set(task1);
 
         assertTrue("new Items have same value", task1.equals(task2));
+    }
+
+    public void testEqualsWithSet() {
+
+        Department department1 = EntityFactory.create(Department.class);
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.setPrimaryKey("Ekey1");
+        department1.employees().add(employee1);
+        department1.setPrimaryKey("Dkey1");
+
+        Department department2 = EntityFactory.create(Department.class);
+        Employee employee2 = EntityFactory.create(Employee.class);
+        employee2.setPrimaryKey("Ekey2");
+        department2.employees().add(employee2);
+        department2.setPrimaryKey("Dkey1");
+
+        assertEquals("same key", department1, department2);
     }
 }

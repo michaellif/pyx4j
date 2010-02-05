@@ -49,7 +49,6 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     public SharedEntityHandler(Class<OBJECT_TYPE> clazz) {
         super(clazz);
-        data = new EntityValueMap();
     }
 
     /**
