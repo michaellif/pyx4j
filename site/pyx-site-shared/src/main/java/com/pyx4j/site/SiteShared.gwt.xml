@@ -3,4 +3,5 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
 	<source path="shared"/>
+	<source path="rpc"/>
 </module>

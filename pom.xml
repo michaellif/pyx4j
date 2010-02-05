@@ -138,6 +138,7 @@
 
         <module>site/pyx-site-shared</module>
         <module>site/pyx-site-client</module>
+        <module>site/pyx-site-server</module>
         <module>site/pyx-site-admin</module>
 
         <module>incubator/tester/tester-domain</module>

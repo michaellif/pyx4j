@@ -68,6 +68,12 @@
             <version>${project.version}</version>
 		</dependency>
 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-serialization</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
 	</dependencies>
 
     <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->

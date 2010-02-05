@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Site extends IEntity<Site> {
 
+    IPrimitive<Long> updateTimestamp();
+
     @NotNull
     @Caption(name = "Site Id")
     IPrimitive<String> siteId();

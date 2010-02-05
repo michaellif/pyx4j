@@ -47,6 +47,7 @@ import com.pyx4j.ria.client.ThreeFoldersMainPanel;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.site.rpc.SiteServices;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
@@ -137,15 +138,15 @@ public class AdminApplication implements IApplication {
                 IView currentEditor = panel.getCurrentView();
                 if (currentEditor instanceof SiteEditor) {
                     SiteEditor siteEditor = (SiteEditor) currentEditor;
-                    RPCManager.execute(EntityServices.Save.class, siteEditor.getSite(), rpcSaveCallback);
+                    RPCManager.execute(SiteServices.Save.class, siteEditor.getSite(), rpcSaveCallback);
                 } else if (currentEditor instanceof PageEditor) {
                     PageEditor pageEditor = (PageEditor) currentEditor;
                     Page page = pageEditor.getUpdatedPage();
-                    RPCManager.execute(EntityServices.Save.class, page, rpcSaveCallback);
+                    RPCManager.execute(SiteServices.Save.class, page, rpcSaveCallback);
                 } else if (currentEditor instanceof PortletEditor) {
                     PortletEditor portletEditor = (PortletEditor) currentEditor;
                     Portlet portlet = portletEditor.getUpdatedPortlet();
-                    RPCManager.execute(EntityServices.Save.class, portlet, rpcSaveCallback);
+                    RPCManager.execute(SiteServices.Save.class, portlet, rpcSaveCallback);
                 }
             }
         };
