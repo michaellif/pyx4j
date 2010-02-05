@@ -34,7 +34,7 @@ public class EntityValueMap extends HashMap<String, Object> {
         if (other == this) {
             return true;
         }
-        if (other == null) {
+        if (!(other instanceof EntityValueMap)) {
             return false;
         }
         Object pk = this.get(IEntity.PRIMARY_KEY);
@@ -54,6 +54,7 @@ public class EntityValueMap extends HashMap<String, Object> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void dumpMap(StringBuilder b, Map<String, Object> map) {
         boolean first = true;
         for (Map.Entry<String, Object> me : map.entrySet()) {
