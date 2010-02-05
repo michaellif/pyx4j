@@ -60,11 +60,20 @@ public class SiteServicesImpl implements SiteServices {
 
     }
 
+    @SuppressWarnings("unchecked")
     private static void setCache(Site site) {
-        Cache cache = null;
         try {
-            cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
             cache.put(KEY_PREFIX + site.siteId().getValue(), site);
+        } catch (Throwable e) {
+            log.error("Cache set error", e);
+        }
+    }
+
+    public static void resetCache(String siteId) {
+        try {
+            Cache cache = CacheManager.getInstance().getCacheFactory().createCache(Collections.emptyMap());
+            cache.remove(KEY_PREFIX + siteId);
         } catch (Throwable e) {
             log.error("Cache set error", e);
         }
