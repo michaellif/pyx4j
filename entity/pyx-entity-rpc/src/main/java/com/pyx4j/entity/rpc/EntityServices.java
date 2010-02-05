@@ -37,6 +37,10 @@ public interface EntityServices {
 
     };
 
+    public interface Retrieve extends Service<EntityCriteria, IEntity<?>> {
+
+    };
+
     public interface Count extends Service<EntityCriteria, Long> {
 
     };

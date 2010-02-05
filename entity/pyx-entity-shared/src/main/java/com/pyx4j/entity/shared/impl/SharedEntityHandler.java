@@ -45,7 +45,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     private transient EntityMeta entityMeta;
 
-    protected transient final HashMap<String, IObject<?, ?>> members = new HashMap<String, IObject<?, ?>>();
+    protected transient HashMap<String, IObject<?, ?>> members;
 
     public SharedEntityHandler(Class<OBJECT_TYPE> clazz) {
         super(clazz);
@@ -151,7 +151,8 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     @Override
     public boolean isNull() {
-        return getValue() == null;
+        Map<String, Object> thisValue = this.getValue();
+        return (thisValue == null) || (thisValue.size() == 0);
     }
 
     @Override
@@ -171,6 +172,9 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     @Override
     public IObject<?, ?> getMember(String memberName) {
+        if (members == null) {
+            members = new HashMap<String, IObject<?, ?>>();
+        }
         IObject<?, ?> member = members.get(memberName);
         if (member == null) {
             member = lazyCreateMember(memberName);

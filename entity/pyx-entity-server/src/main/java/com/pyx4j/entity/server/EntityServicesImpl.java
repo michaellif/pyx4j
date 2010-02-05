@@ -23,8 +23,7 @@ package com.pyx4j.entity.server;
 import java.util.List;
 import java.util.Vector;
 
-import com.pyx4j.entity.rpc.EntityServices.Query;
-import com.pyx4j.entity.rpc.EntityServices.Save;
+import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,7 +31,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
 
-    public static class SaveImpl implements Save {
+    public static class SaveImpl implements EntityServices.Save {
 
         @Override
         public IEntity<?> execute(IEntity<?> request) {
@@ -46,7 +45,7 @@ public class EntityServicesImpl {
         }
     }
 
-    public static class QueryImpl implements Query {
+    public static class QueryImpl implements EntityServices.Query {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -59,6 +58,20 @@ public class EntityServicesImpl {
                 v.add(ent);
             }
             return v;
+        }
+    }
+
+    public static class RetrieveImpl implements EntityServices.Retrieve {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public IEntity<?> execute(EntityCriteria request) {
+            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+            IEntity<?> ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
+            if (ent != null) {
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+            }
+            return ent;
         }
     }
 }

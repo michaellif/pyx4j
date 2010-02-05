@@ -20,12 +20,14 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 @SuppressWarnings("unchecked")
-public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE> {
+public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, Serializable {
 
     private final Class<? extends IObject> clazz;
 
