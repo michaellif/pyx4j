@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
@@ -123,7 +122,7 @@ public class CEntityListBox<E extends IEntity<E>> extends CListBox<E> {
             DeferredCommand.addCommand(new Command() {
                 @Override
                 public void execute() {
-                    ReferenceDataManager.obtain(criteria, handlingCallback, false);
+                    ReferenceDataManager.obtain(criteria, handlingCallback, true);
                 }
             });
         }
