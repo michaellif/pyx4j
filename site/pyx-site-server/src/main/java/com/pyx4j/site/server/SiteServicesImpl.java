@@ -21,6 +21,7 @@
 package com.pyx4j.site.server;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
@@ -29,12 +30,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.SiteRequest;
 import com.pyx4j.site.rpc.SiteServices;
+import com.pyx4j.site.shared.domain.Page;
+import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
 
 public class SiteServicesImpl implements SiteServices {
@@ -51,9 +55,35 @@ public class SiteServicesImpl implements SiteServices {
                 ((Site) request).updateTimestamp().setValue(System.currentTimeMillis());
             }
             IEntity<?> entity = new EntityServicesImpl.SaveImpl().execute(request);
-            //TODO reset Cache and change updateTimestamp
+            //Update Cache and change updateTimestamp
             if (entity instanceof Site) {
                 setCache((Site) entity);
+            } else {
+                EntityCriteria<Site> criteria = EntityCriteria.create(Site.class);
+                List<Site> sites = PersistenceServicesFactory.getPersistenceService().query(criteria);
+                for (Site site : sites) {
+                    boolean updated = false;
+                    if (request instanceof Page) {
+                        if (site.pages().contains(request)) {
+                            updated = true;
+                        }
+                    } else if (request instanceof Portlet) {
+                        pages: for (Page p : site.pages()) {
+                            if ((p.data().leftPortlets().contains(request)) || (p.data().rightPortlets().contains(request))) {
+                                updated = true;
+                                break pages;
+                            }
+                        }
+                    } else {
+                        log.warn("unknown object type", request.getObjectClass());
+                        updated = true;
+                    }
+                    if (updated) {
+                        site.updateTimestamp().setValue(System.currentTimeMillis());
+                        PersistenceServicesFactory.getPersistenceService().persist(site);
+                    }
+                    setCache(site);
+                }
             }
             return entity;
         }
