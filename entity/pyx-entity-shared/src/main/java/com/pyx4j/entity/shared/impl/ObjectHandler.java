@@ -26,8 +26,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-@SuppressWarnings("unchecked")
 public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, Serializable {
+
+    private static final long serialVersionUID = 335416094543053866L;
 
     private transient final Class<? extends IObject> clazz;
 

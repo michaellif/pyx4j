@@ -34,7 +34,9 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
+import javassist.CtField;
 import javassist.CtMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 
 import org.slf4j.Logger;
@@ -221,6 +223,11 @@ public class EntityImplGenerator {
             CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IEntity.class.getName()), ctStringClass }, cc);
             memberConstructor.setBody("super(" + interfaceName + ".class, $1, $2);");
             cc.addConstructor(memberConstructor);
+
+            // add field with default 1L value.
+            CtField field = new CtField(CtClass.longType, "serialVersionUID", cc);
+            field.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL);
+            cc.addField(field, "1L");
 
             // Abstract methods
             CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);

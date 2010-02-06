@@ -37,9 +37,10 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-@SuppressWarnings("serial")
 public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements
         IEntity<OBJECT_TYPE>, IFullDebug {
+
+    private static final long serialVersionUID = -7590484996971406115L;
 
     private Map<String, Object> data;
 
