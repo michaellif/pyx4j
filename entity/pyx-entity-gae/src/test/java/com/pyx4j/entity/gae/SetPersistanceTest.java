@@ -14,21 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on Feb 6, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.gae;
 
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
+import com.pyx4j.entity.test.server.SetPersistanceTestCase;
 
-public interface Country extends IEntity<Country> {
+public class SetPersistanceTest extends SetPersistanceTestCase {
 
-    @ToString
-    IPrimitive<String> name();
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
+    }
 
-    ISet<Province> province();
 }

@@ -14,21 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on Feb 6, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain;
 
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-public interface Country extends IEntity<Country> {
+public interface Organization extends IEntity<Organization> {
 
-    @ToString
     IPrimitive<String> name();
 
-    ISet<Province> province();
+    @Owned
+    ISet<Department> departments();
+
 }
