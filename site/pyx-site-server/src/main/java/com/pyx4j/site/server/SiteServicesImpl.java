@@ -58,7 +58,9 @@ public class SiteServicesImpl implements SiteServices {
             IEntity<?> entity = new EntityServicesImpl.SaveImpl().execute(request);
             //Update Cache and change updateTimestamp
             if (entity instanceof Site) {
-                setCache((Site) entity);
+                Site site = PersistenceServicesFactory.getPersistenceService().retrieve(Site.class, entity.getPrimaryKey());
+                setCache(site);
+                entity = site;
             } else {
                 EntityCriteria<Site> criteria = EntityCriteria.create(Site.class);
                 List<Site> sites = PersistenceServicesFactory.getPersistenceService().query(criteria);
