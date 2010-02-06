@@ -13,9 +13,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-entity-gae</artifactId>
-    <name>pyx-entity-gae</name>
-    <description>IEntity persistance in Google App Engine</description>
+    <artifactId>pyx-entity-hibernate</artifactId>
+    <name>pyx-entity-hibernate</name>
+    <description>IEntity persistance in RDBS using Hibernate</description>
 
     <dependencies>
 
@@ -31,34 +31,25 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-stubs</artifactId>
-            <optional>true</optional>
-        </dependency>
+        <!-- hibernate begin -->
 
         <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api</artifactId>
-            <optional>true</optional>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>3.3.2.GA</version><!--hibernate version-->
+            <exclusions>
+                <exclusion><groupId>commons-collections</groupId><artifactId>commons-collections</artifactId></exclusion>
+                <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
+                <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+            </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-local-runtime</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-labs</artifactId>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
+        <!-- hibernate end -->
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
             <optional>true</optional>
         </dependency>
 
@@ -77,6 +68,13 @@
 			<scope>test</scope>
             <optional>true</optional>
 		</dependency>
+
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.7</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
