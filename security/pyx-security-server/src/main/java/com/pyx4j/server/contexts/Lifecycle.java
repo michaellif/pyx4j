@@ -31,7 +31,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Consts;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
@@ -41,10 +40,10 @@ public class Lifecycle {
     private final static Logger log = LoggerFactory.getLogger(Lifecycle.class);
 
     public static void beginRequest(HttpServletRequest httprequest) {
-        long start = System.nanoTime();
+        //long start = System.nanoTime();
         Context.setRequest(httprequest);
         beginRequest(httprequest.getSession(false));
-        log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
+        //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
     }
 
     public static void beginRequest(HttpSession session) {
