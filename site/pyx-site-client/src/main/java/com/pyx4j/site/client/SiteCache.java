@@ -42,6 +42,10 @@ public class SiteCache {
 
     private static Logger log = LoggerFactory.getLogger(SiteCache.class);
 
+    static {
+        RPCManager.ensureInitialization();
+    }
+
     private static RPCSerializer rpcSerializer = GWT.create(RPCSerializer.class);
 
     public static void obtain(final String siteId, final AsyncCallback<Site> callback) {

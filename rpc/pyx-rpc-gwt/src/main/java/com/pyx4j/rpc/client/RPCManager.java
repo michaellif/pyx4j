@@ -56,6 +56,13 @@ public class RPCManager {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
     }
 
+    /**
+     * Resolve Hosted Mode initialization order
+     */
+    public static void ensureInitialization() {
+
+    }
+
     public static void setServiceEntryPointURL(String url) {
         ServiceDefTarget target = (ServiceDefTarget) service;
         target.setServiceEntryPoint(url);
