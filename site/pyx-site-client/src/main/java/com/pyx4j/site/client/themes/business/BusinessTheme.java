@@ -91,9 +91,53 @@ public class BusinessTheme extends SiteTheme {
     }
 
     @Override
+    protected void initMainSectionPanelStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name());
+        style.addProperty("margin", "20px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " h1, h2, h3, h4 ,h5");
+        style.addProperty("margin", "0 0 .5em 0");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "#306");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " a");
+        style.addProperty("color", "#c90");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " p, li");
+        style.addProperty("margin-bottom", "0.5em");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " p, li, dl, span");
+        style.addProperty("font-size", "0.81em");
+        style.addProperty("line-height", "1.5em");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " ul, ol");
+        style.addProperty(" margin-left", "1em");
+        style.addProperty(" margin-bottom", "1em");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " ul li");
+        style.addProperty(" list-style-type", "square");
+        style.addProperty(" list-style-image", "url(images/bullet.gif)");
+        addStyle(style);
+
+    }
+
+    @Override
     protected void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
         style.addProperty("background", "white");
+        style.addProperty("margin-top", "20px");
+        style.addProperty("border-top", "solid 1px #C90");
         style.addProperty("height", "35px");
         addStyle(style);
     }
@@ -137,14 +181,14 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("padding", "0px 20px 0px 20px");
         style.addProperty("text-decoration", "none");
         style.addProperty("background", "transparent");
-        style.addProperty("font-size", "0.88em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("line-height", "0.88em");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a span");
         style.addProperty("padding-top", "6px");
         style.addProperty("display", "block");
+        style.addProperty("font-size", "1em");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("line-height", "1em");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");

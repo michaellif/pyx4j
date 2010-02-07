@@ -328,6 +328,7 @@ public abstract class SitePanel extends SimplePanel {
     protected SimplePanel createMainSectionPanel() {
         SimplePanel panel = new SimplePanel();
         panel.setWidth("100%");
+        panel.setStyleName(SiteCSSClass.pyx4j_Site_MainSectionPanel.name());
         return panel;
     }
 

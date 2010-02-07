@@ -30,6 +30,8 @@ public enum SiteCSSClass {
 
     pyx4j_Site_MainPanel,
 
+    pyx4j_Site_MainSectionPanel,
+
     pyx4j_Site_Footer,
 
     pyx4j_Site_HeaderCaptions,

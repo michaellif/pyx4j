@@ -90,6 +90,12 @@ public class DarkTheme extends SiteTheme {
     }
 
     @Override
+    protected void initMainSectionPanelStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name());
+        addStyle(style);
+    }
+
+    @Override
     protected void initFooterStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Footer.name());
         style.addProperty("background", "url(images/topHdr_ecommerce.jpg) no-repeat 50% 100%");
