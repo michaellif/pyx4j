@@ -105,6 +105,7 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("margin-left", "270px");
         style.addProperty("margin-top", "167px");
         style.addProperty("font-size", "28px");
+        style.addProperty("font-weight", "bold");
         addStyle(style);
     }
 
@@ -112,7 +113,7 @@ public class BusinessTheme extends SiteTheme {
     protected void initLogoStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Logo.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "20px");
+        style.addProperty("margin-top", "10px");
         addStyle(style);
     }
 
