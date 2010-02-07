@@ -27,6 +27,7 @@ import java.util.Map;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.PageData;
 
 public class PageWidget extends HTML {
@@ -36,6 +37,7 @@ public class PageWidget extends HTML {
     public PageWidget(SimplePanel parent, PageData pageData) {
         super(pageData.html().getValue(), true);
         parent.setWidget(this);
+        setStyleName(SiteCSSClass.pyx4j_Site_PageWidget.name());
 
     }
 

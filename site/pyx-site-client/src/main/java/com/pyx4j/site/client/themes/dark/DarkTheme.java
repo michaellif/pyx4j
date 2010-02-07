@@ -90,8 +90,42 @@ public class DarkTheme extends SiteTheme {
     }
 
     @Override
-    protected void initMainSectionPanelStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name());
+    protected void initPageWidgetStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name());
+        style.addProperty("padding", "20px");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " h1, h2, h3, h4 ,h5");
+        style.addProperty("margin", "0 0 .5em 0");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "#306");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a");
+        style.addProperty("color", "#c90");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li");
+        style.addProperty("margin-bottom", "0.5em");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li, dl, span");
+        style.addProperty("font-size", "0.81em");
+        style.addProperty("line-height", "1.5em");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul, ol");
+        style.addProperty(" margin-left", "1em");
+        style.addProperty(" margin-bottom", "1em");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul li");
+        style.addProperty(" list-style-type", "square");
         addStyle(style);
     }
 
@@ -146,6 +180,7 @@ public class DarkTheme extends SiteTheme {
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a span");
         style.addProperty("padding-top", "6px");
         style.addProperty("display", "block");
+        style.addProperty("font-size", "18px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-selected a");

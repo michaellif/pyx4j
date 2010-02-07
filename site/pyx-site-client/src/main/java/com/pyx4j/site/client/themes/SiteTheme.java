@@ -33,7 +33,7 @@ public abstract class SiteTheme extends WindowsTheme {
         initContentPanelStyles();
         initHeaderStyles();
         initMainPanelStyles();
-        initMainSectionPanelStyles();
+        initPageWidgetStyles();
         initFooterStyles();
         initHeaderCaptionsStyles();
         initLogoStyles();
@@ -95,7 +95,7 @@ public abstract class SiteTheme extends WindowsTheme {
 
     protected abstract void initMainPanelStyles();
 
-    protected abstract void initMainSectionPanelStyles();
+    protected abstract void initPageWidgetStyles();
 
     protected abstract void initFooterStyles();
 

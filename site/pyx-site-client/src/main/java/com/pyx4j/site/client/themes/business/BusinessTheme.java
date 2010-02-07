@@ -91,41 +91,41 @@ public class BusinessTheme extends SiteTheme {
     }
 
     @Override
-    protected void initMainSectionPanelStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name());
-        style.addProperty("margin", "20px");
+    protected void initPageWidgetStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name());
+        style.addProperty("padding", "20px");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " h1, h2, h3, h4 ,h5");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " h1, h2, h3, h4 ,h5");
         style.addProperty("margin", "0 0 .5em 0");
         style.addProperty("font-weight", "bold");
         style.addProperty("color", "#306");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a");
         style.addProperty("color", "#c90");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " a:hover");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " p, li");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li");
         style.addProperty("margin-bottom", "0.5em");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " p, li, dl, span");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li, dl, span");
         style.addProperty("font-size", "0.81em");
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " ul, ol");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul, ol");
         style.addProperty(" margin-left", "1em");
         style.addProperty(" margin-bottom", "1em");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_MainSectionPanel.name() + " ul li");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul li");
         style.addProperty(" list-style-type", "square");
         style.addProperty(" list-style-image", "url(images/bullet.gif)");
         addStyle(style);
