@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 
 public class UncaughtHandler implements UncaughtExceptionHandler {
 
@@ -64,17 +65,19 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
 
     public static native String userAgent() /*-{ return navigator.userAgent; }-*/;
 
-    public static void onUnrecoverableError(Throwable e, String errorCode) {
+    public static void onUnrecoverableError(Throwable caught, String errorCode) {
         if (handlerReplacement != null) {
-            handlerReplacement.onUncaughtException(e);
+            handlerReplacement.onUncaughtException(caught);
         } else {
             try {
-                log.error("An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ")
-                /* + Logger. retriveTraceInfo ( ) */
-                + ";\n UserAgent " + userAgent(), e);
-                GoogleAnalytics.track("unrecoverableError");
+                if (!(caught instanceof IncompatibleRemoteServiceException)) {
+                    log.error("An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ")
+                    /* + Logger. retriveTraceInfo ( ) */
+                    + ";\n UserAgent " + userAgent(), caught);
+                    GoogleAnalytics.track("unrecoverableError");
+                }
                 if (UncaughtHandler.delegate != null) {
-                    UncaughtHandler.delegate.onUnrecoverableError(e, errorCode);
+                    UncaughtHandler.delegate.onUnrecoverableError(caught, errorCode);
                 }
             } catch (Throwable ignore) {
             }

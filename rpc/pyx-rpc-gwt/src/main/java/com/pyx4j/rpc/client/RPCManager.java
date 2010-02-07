@@ -28,8 +28,11 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
@@ -87,6 +90,10 @@ public class RPCManager {
         }
     }
 
+    public static boolean isRecoverableAppengineFailure(Throwable caught) {
+        return ((caught instanceof StatusCodeException) && (((StatusCodeException) caught).getStatusCode()) == Response.SC_INTERNAL_SERVER_ERROR);
+    }
+
     @SuppressWarnings("unchecked")
     private static class ServiceHandlingCallback implements AsyncCallback {
 
@@ -115,7 +122,9 @@ public class RPCManager {
         public void onFailure(Throwable caught) {
             runningServicesCount--;
             try {
-                if ((callback instanceof RecoverableCall) && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
+                if (caught instanceof IncompatibleRemoteServiceException) {
+                    UncaughtHandler.onUnrecoverableError(caught, "RPC." + GWTJava5Helper.getSimpleName(serviceInterface));
+                } else if ((callback instanceof RecoverableCall) && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
                     log.error("Try to recover {} from service invocation error {}", serviceInterface, caught);
                     executeImpl(serviceInterface, request, callback, executeBackground, retryAttempt + 1);
                 } else if (callback != null) {

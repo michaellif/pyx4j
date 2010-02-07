@@ -22,6 +22,6 @@ package com.pyx4j.gwt.commons;
 
 public interface UnrecoverableErrorHandler {
 
-    void onUnrecoverableError(Throwable e, String errorCode);
+    void onUnrecoverableError(Throwable caught, String errorCode);
 
 }

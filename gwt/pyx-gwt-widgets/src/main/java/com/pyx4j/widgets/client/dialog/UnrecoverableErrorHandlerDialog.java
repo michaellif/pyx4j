@@ -20,6 +20,10 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
+import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
@@ -41,23 +45,51 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
      * 
      * @return true if there was a session and it is Closed Now or would we closed ASAP.
      */
-    public boolean closeSessionOnUnrecoverableError() {
+    protected boolean closeSessionOnUnrecoverableError() {
         return false;
     }
 
     @Override
-    public void onUnrecoverableError(Throwable e, String errorCode) {
+    public void onUnrecoverableError(Throwable caught, String errorCode) {
         if (unrecoverableErrorDialogShown) {
             return;
         }
+        if (caught instanceof IncompatibleRemoteServiceException) {
+            showReloadApplicationDialog();
+        } else if ((caught instanceof StatusCodeException) && (((StatusCodeException) caught).getStatusCode()) == Response.SC_NOT_FOUND) {
+            showReloadApplicationDialog();
+        } else {
+            showDefaultErrorDialog(caught, errorCode);
+        }
+    }
+
+    protected void showReloadApplicationDialog() {
+        final YesNoOption optYesNo = new YesNoOption() {
+
+            public boolean onClickYes() {
+                Window.Location.reload();
+                return false;
+            }
+
+            public boolean onClickNo() {
+                return true;
+            }
+        };
+        String message = "We updated our application.\n In order to continue using this application you need to refresh the page."
+                + "\n Do you want to refresh client now?";
+        Dialog d = new Dialog("System error", message, Type.Error, optYesNo);
+        d.show();
+    }
+
+    protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
 
         String detailsMessage = null;
-        if (CommonsStringUtils.isStringSet(e.getMessage()) && e.getMessage().length() < 30) {
+        if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 30) {
             detailsMessage = "\n\nErrorCode ";
             if (errorCode != null) {
                 detailsMessage += "[" + errorCode + "] ";
             }
-            detailsMessage += e.getMessage();
+            detailsMessage += caught.getMessage();
         } else if (errorCode != null) {
             detailsMessage = "\n\nErrorCode [" + errorCode + "]";
         }
@@ -79,7 +111,6 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
                 return true;
             }
         });
-
         unrecoverableErrorDialogShown = true;
         d.show();
     }
