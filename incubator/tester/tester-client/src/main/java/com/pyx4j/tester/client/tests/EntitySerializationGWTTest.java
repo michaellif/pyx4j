@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
@@ -123,5 +124,42 @@ public class EntitySerializationGWTTest extends TestCase {
 
         RPCManager.execute(TestServices.EchoSerializable.class, cp, callback);
 
+    }
+
+    public void testRpcTransient() {
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+
+        final Department dept = EntityFactory.create(Department.class);
+        dept.name().setValue("R&D");
+        final Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("John Doe" + System.currentTimeMillis());
+        emp.accessStatus().setValue(Status.DEACTIVATED);
+        dept.employees().add(emp);
+
+        final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
+
+            public void onFailure(Throwable t) {
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
+            }
+
+            public void onSuccess(Serializable result) {
+                Assert.assertTrue("Department class expected", (result instanceof Department));
+                Department dept2 = (Department) result;
+
+                Assert.assertEquals("dept.employees.size", 1, dept2.employees().size());
+                Employee emp2 = dept2.employees().iterator().next();
+
+                Assert.assertEquals("String Class of Value", String.class, emp2.firstName().getValue().getClass());
+                Assert.assertEquals("String Value", emp.firstName().getValue(), emp2.firstName().getValue());
+
+                // This filed is RpcTransient
+                Assert.assertEquals("Enum Ext Class of Value", Status.class, emp2.accessStatus().getValue().getClass());
+                Assert.assertNull("Enum Ext Value", emp2.accessStatus().getValue());
+
+                GUnitTester.finishTest(EntitySerializationGWTTest.this);
+            }
+        };
+
+        RPCManager.execute(TestServices.EchoSerializable.class, dept, callback);
     }
 }
