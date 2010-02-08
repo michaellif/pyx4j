@@ -52,7 +52,6 @@ public class EntityJavaSerializationTest extends InitializerTestCase {
         City city = EntityFactory.create(City.class);
         String cityName = "Toronto";
         city.name().setValue(cityName);
-        System.out.println("hc0: " + System.identityHashCode(city));
 
         //Create new Instance using using reflection
         City city1 = city.getClass().newInstance();

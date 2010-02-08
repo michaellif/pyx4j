@@ -26,7 +26,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -222,7 +221,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         Assert.assertNotNull("retrieve", emp2);
 
         Assert.assertEquals("address.streetName Value", streetName, emp2.workAddress().streetName().getValue());
-        System.out.println(((IFullDebug) emp2).debugString());
+        //System.out.println(((IFullDebug) emp2).debugString());
 
         Assert.assertEquals("address.country Value", countryName, emp2.workAddress().country().name().getValue());
         Assert.assertEquals("address.city Value", cityName, emp2.workAddress().city().name().getValue());
