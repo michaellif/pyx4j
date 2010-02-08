@@ -214,6 +214,7 @@ public class EntityImplGenerator {
             cc.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
             cc.addInterface(pool.get(interfaceName));
             // Constructors
+            // N.B. transient fields are not initialized during deserialization 
             CtConstructor defaultConstructor = new CtConstructor(null, cc);
             defaultConstructor.setBody("super(" + interfaceName + ".class);");
             cc.addConstructor(defaultConstructor);
@@ -228,6 +229,11 @@ public class EntityImplGenerator {
             CtField field = new CtField(CtClass.longType, "serialVersionUID", cc);
             field.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL);
             cc.addField(field, "1L");
+
+            // Override getObjectClass with proper value since transient value is null in super 
+            CtMethod getObjectClassOverride = new CtMethod(pool.get(Class.class.getName()), "getObjectClass", null, cc);
+            getObjectClassOverride.setBody("return " + interfaceName + ".class;");
+            cc.addMethod(getObjectClassOverride);
 
             // Abstract methods
             CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);

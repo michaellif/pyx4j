@@ -37,7 +37,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 public class EntityJavaSerializationTest extends InitializerTestCase {
 
-    public void testObjectOperations() {
+    public void ZtestObjectOperations() {
         Country country = EntityFactory.create(Country.class);
         assertNotNull("EntityFactory create", country);
 
@@ -48,17 +48,26 @@ public class EntityJavaSerializationTest extends InitializerTestCase {
         }
     }
 
-    public void testSimpleObjectSerialization() throws IOException {
+    public void testSimpleObjectSerialization() throws Exception {
         City city = EntityFactory.create(City.class);
         String cityName = "Toronto";
         city.name().setValue(cityName);
+        System.out.println("hc0: " + System.identityHashCode(city));
+
+        //Create new Instance using using reflection
+        City city1 = city.getClass().newInstance();
+        assertEquals("City.class", City.class, city1.getObjectClass());
 
         City city2 = (City) unzip(zip(city));
 
+        assertEquals("City.class", City.class, city2.getObjectClass());
+        assertEquals("City.name", "name", city2.name().getFieldName());
         assertEquals("City.name", cityName, city2.name().getValue());
+        assertNotNull("EntityMeta", city2.getEntityMeta());
+        assertNotNull("MemberMeta", city2.getEntityMeta().getMemberMeta(city.name().getFieldName()));
     }
 
-    public void testComplexObjectSerialization() throws IOException {
+    public void ZtestComplexObjectSerialization() throws IOException {
         Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("First Name");
 
