@@ -50,6 +50,26 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         Assert.assertEquals("primaryKey Value", primaryKey, country2.getPrimaryKey());
     }
 
+    public void testUpdate() {
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp1.firstName().setValue("Firstname" + uniqueString());
+        emp1.holidays().setValue(Long.valueOf(System.currentTimeMillis()));
+
+        srv.persist(emp1);
+        String pk = emp1.getPrimaryKey();
+        Employee emp1r = srv.retrieve(Employee.class, pk);
+        Assert.assertEquals("holidays saved", emp1.holidays().getValue(), emp1r.holidays().getValue());
+
+        Employee emp2 = EntityFactory.create(Employee.class);
+        emp2.setPrimaryKey(pk);
+        emp2.firstName().setValue("Name" + uniqueString());
+        srv.persist(emp2);
+
+        Employee emp3 = srv.retrieve(Employee.class, pk);
+        Assert.assertEquals("firstName updated", emp2.firstName().getValue(), emp3.firstName().getValue());
+        Assert.assertEquals("holidays not updated", emp1.holidays().getValue(), emp3.holidays().getValue());
+    }
+
     public void testUnownedOneToOnePersist() {
         Country country = EntityFactory.create(Country.class);
         String countryName = "Canada" + uniqueString();

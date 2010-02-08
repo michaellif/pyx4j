@@ -50,6 +50,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -277,7 +278,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             entity = new Entity(getIEntityKind(iEntity));
         } else {
             Key key = KeyFactory.stringToKey(iEntity.getPrimaryKey());
-            entity = new Entity(key);
+            try {
+                datastoreCallStats.get().count++;
+                entity = datastore.get(key);
+            } catch (EntityNotFoundException e) {
+                throw new RuntimeException("EntityNotFound");
+            }
         }
         updateEntityProperties(entity, iEntity);
         datastoreCallStats.get().count++;
