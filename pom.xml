@@ -197,6 +197,7 @@
     <properties>
         <gwtVersion>2.0.1</gwtVersion>
         <gaeVersion>1.3.0</gaeVersion>
+        <pyx4jGwtVersion>0.5.5-SNAPSHOT</pyx4jGwtVersion>
 
         <buildLabel>${project.version}</buildLabel>
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>

@@ -87,6 +87,12 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-serialization</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-serialization</artifactId>
+            <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
 
@@ -111,12 +117,46 @@
 
     </dependencies>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-            </resource>
-        </resources>
-    </build>
+    <profiles>
+
+        <profile>
+            <id>gwtct</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-gwt-plugin</artifactId>
+                        <version>${pyx4jGwtVersion}</version>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>agregation.test</module>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                            </sourceDirectories>
+                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <target>${basedir}/war</target>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
+                            <!--compilerClass>com.google.gwt.dev.GWTCompiler</compilerClass-->
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>${gwtCompileReport}</compileReport>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 
 </project>
