@@ -42,7 +42,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -51,6 +50,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcBlacklist;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -239,6 +239,7 @@ public class EntityFactoryGenerator extends Generator {
             description = captionAnnotation.description();
         }
         Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
+        Boolean rpcTransient = (interfaceType.getAnnotation(RpcTransient.class) != null) || (interfaceType.getAnnotation(RpcBlacklist.class) != null);
         StringBuilder membersNamesStringArray = new StringBuilder();
 
         List<String> toStringMemberNames = new Vector<String>();
@@ -293,6 +294,9 @@ public class EntityFactoryGenerator extends Generator {
         }
 
         writer.print(persistenceTransient.toString());
+        writer.print(", ");
+
+        writer.print(rpcTransient.toString());
         writer.print(", ");
 
         writer.print("new String[] {");
@@ -401,8 +405,10 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("\", ");
             }
 
-            // boolean persistenceTransient, boolean detached, boolean ownedRelationships, boolean embedded, int stringLength
+            // boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded, int stringLength
             writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
+            writer.print(", ");
+            writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(Detached.class) != null)).toString());
             writer.print(", ");

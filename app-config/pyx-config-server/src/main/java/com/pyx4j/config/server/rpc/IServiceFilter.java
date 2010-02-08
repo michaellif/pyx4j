@@ -14,20 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on Feb 7, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.config.server.rpc;
 
-import java.util.List;
+import java.io.Serializable;
 
 import com.pyx4j.rpc.shared.Service;
 
-public interface IServiceFactory {
+public interface IServiceFilter {
 
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException;
+    public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request);
 
-    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass);
+    public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response);
 
 }

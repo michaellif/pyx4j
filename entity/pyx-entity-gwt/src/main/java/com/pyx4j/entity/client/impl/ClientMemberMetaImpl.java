@@ -36,6 +36,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final boolean persistenceTransient;
 
+    private final boolean rpcTransient;
+
     private final boolean detached;
 
     private final boolean ownedRelationships;
@@ -65,11 +67,13 @@ public class ClientMemberMetaImpl implements MemberMeta {
     private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass, boolean entity, String fieldName, String caption,
-            String description, boolean persistenceTransient, boolean detached, boolean ownedRelationships, boolean embedded, int stringLength) {
+            String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded,
+            int stringLength) {
         super();
         this.fieldName = fieldName;
         this.entity = entity;
         this.persistenceTransient = persistenceTransient;
+        this.rpcTransient = rpcTransient;
         this.detached = detached;
         this.ownedRelationships = ownedRelationships;
         this.embedded = embedded;
@@ -98,6 +102,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public boolean isTransient() {
         return persistenceTransient;
+    }
+
+    @Override
+    public boolean isRpcTransient() {
+        return rpcTransient;
     }
 
     @Override

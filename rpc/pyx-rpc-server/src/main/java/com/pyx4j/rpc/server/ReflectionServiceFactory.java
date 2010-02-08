@@ -20,10 +20,15 @@
  */
 package com.pyx4j.rpc.server;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.entity.server.RpcEntityServiceFilter;
 import com.pyx4j.rpc.shared.Service;
 
 /**
@@ -33,6 +38,13 @@ import com.pyx4j.rpc.shared.Service;
 public class ReflectionServiceFactory implements IServiceFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ReflectionServiceFactory.class);
+
+    private final List<IServiceFilter> filters;
+
+    public ReflectionServiceFactory() {
+        filters = new Vector<IServiceFilter>();
+        filters.add(new RpcEntityServiceFilter());
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -57,6 +69,11 @@ public class ReflectionServiceFactory implements IServiceFactory {
             throw new ClassNotFoundException("RPC Service " + serviceImplClassName + " not avalable");
         }
         return serviceClass;
+    }
+
+    @Override
+    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
+        return filters;
     }
 
 }

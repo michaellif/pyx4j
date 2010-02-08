@@ -21,11 +21,14 @@
 package com.pyx4j.rpc.server;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.ListIterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
@@ -45,7 +48,7 @@ public class RemoteServiceImpl implements RemoteService {
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException {
         SecurityController.assertPermission(new ServiceExecutePermission(serviceInterfaceClassName));
-        Class<? extends Service> clazz = ServiceRegistry.getServiceClass(serviceInterfaceClassName);
+        Class<? extends Service<?, ?>> clazz = ServiceRegistry.getServiceClass(serviceInterfaceClassName);
         if (clazz == null) {
             try {
                 clazz = serviceFactory.getServiceClass(serviceInterfaceClassName);
@@ -68,7 +71,21 @@ public class RemoteServiceImpl implements RemoteService {
             throw new RuntimeException("Fatal system error: " + e.getMessage());
         }
         try {
-            return serviceInstance.execute(serviceRequest);
+            List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
+            if (filters != null) {
+                for (IServiceFilter filter : filters) {
+                    serviceRequest = filter.filterIncomming(clazz, serviceRequest);
+                }
+            }
+            Serializable returnValue = serviceInstance.execute(serviceRequest);
+            if (filters != null) {
+                // Run filters in reverse order
+                ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
+                while (li.hasPrevious()) {
+                    returnValue = li.previous().filterOutgoing(clazz, returnValue);
+                }
+            }
+            return returnValue;
         } catch (RuntimeException e) {
             log.error("Service call error", e);
             if (e.getMessage() == null) {

@@ -47,9 +47,15 @@ public interface EntityMeta {
      */
     public boolean isTransient();
 
+    /**
+     * See com.pyx4j.entity.annotations.RpcTransient
+     */
+    public boolean isRpcTransient();
+
     public Set<String> getMemberNames();
 
     public MemberMeta getMemberMeta(String memberName);
-    
+
     public List<String> getToStringMemberNames();
+
 }

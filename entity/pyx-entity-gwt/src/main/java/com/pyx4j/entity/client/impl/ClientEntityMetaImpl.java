@@ -36,15 +36,19 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final boolean persistenceTransient;
 
+    private final boolean rpcTransient;
+
     protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
 
     private final List<String> toStringMemberNames;
 
-    public ClientEntityMetaImpl(String caption, String description, boolean persistenceTransient, String[] membersNames, String[] memberNamesToString) {
+    public ClientEntityMetaImpl(String caption, String description, boolean persistenceTransient, boolean rpcTransient, String[] membersNames,
+            String[] memberNamesToString) {
         super();
         this.caption = caption;
         this.description = description;
         this.persistenceTransient = persistenceTransient;
+        this.rpcTransient = rpcTransient;
         for (String m : membersNames) {
             membersMeta.put(m, null);
         }
@@ -64,6 +68,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public boolean isTransient() {
         return persistenceTransient;
+    }
+
+    @Override
+    public boolean isRpcTransient() {
+        return rpcTransient;
     }
 
     @Override

@@ -42,6 +42,11 @@ public interface MemberMeta {
     public boolean isTransient();
 
     /**
+     * See com.pyx4j.entity.annotations.RpcTransient
+     */
+    public boolean isRpcTransient();
+
+    /**
      * See com.pyx4j.entity.annotations.Detached
      */
     public boolean isDetached();

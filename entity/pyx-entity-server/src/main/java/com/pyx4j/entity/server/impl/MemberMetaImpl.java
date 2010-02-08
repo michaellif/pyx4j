@@ -32,6 +32,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -51,6 +52,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final String fieldName;
 
     private final boolean persistenceTransient;
+
+    private final boolean rpcTransient;
 
     private final boolean detached;
 
@@ -127,6 +130,7 @@ public class MemberMetaImpl implements MemberMeta {
         }
 
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
+        rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
         embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
         ownedRelationships = embedded || (method.getAnnotation(Owned.class) != null);
         detached = (method.getAnnotation(Detached.class) != null);
@@ -150,6 +154,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public boolean isTransient() {
         return persistenceTransient;
+    }
+
+    @Override
+    public boolean isRpcTransient() {
+        return rpcTransient;
     }
 
     @Override

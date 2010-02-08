@@ -35,15 +35,15 @@ public class ServiceRegistry {
     private static final Logger log = LoggerFactory.getLogger(ServiceRegistry.class);
 
     @SuppressWarnings("unchecked")
-    private static Map<String, Class<? extends Service>> services = new HashMap<String, Class<? extends Service>>();
+    private static Map<String, Class<? extends Service<?, ?>>> services = new HashMap<String, Class<? extends Service<?, ?>>>();
 
     private ServiceRegistry() {
 
     }
 
     @SuppressWarnings("unchecked")
-    public static void register(String name, Class<? extends Service> srv) {
-        Class<? extends Service> srvOrig = services.get(name);
+    public static void register(String name, Class<? extends Service<?, ?>> srv) {
+        Class<? extends Service<?, ?>> srvOrig = services.get(name);
         if (srvOrig != null) {
             log.warn("redefine service {} of class {}", name, srvOrig.getName());
         }
@@ -65,7 +65,7 @@ public class ServiceRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public static void register(Class<? extends Service> srv) {
+    public static void register(Class<? extends Service<?, ?>> srv) {
         for (Class interfaceClass : srv.getInterfaces()) {
             if (!Service.class.isAssignableFrom(interfaceClass)) {
                 continue;
@@ -86,7 +86,7 @@ public class ServiceRegistry {
         int cnt = 0;
         for (Class<?> c : classes) {
             if (Service.class.isAssignableFrom(c)) {
-                register((Class<Service>) c);
+                register((Class<Service<?, ?>>) c);
                 cnt++;
             }
         }
@@ -96,7 +96,7 @@ public class ServiceRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    static Class<? extends Service> getServiceClass(String serviceDescriptor) {
+    static Class<? extends Service<?, ?>> getServiceClass(String serviceDescriptor) {
         return services.get(serviceDescriptor);
     }
 

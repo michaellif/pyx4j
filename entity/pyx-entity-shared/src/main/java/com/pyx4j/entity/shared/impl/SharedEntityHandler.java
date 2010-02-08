@@ -217,6 +217,16 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @Override
+    public Object removeMemberValue(String memberName) {
+        Map<String, Object> v = getValue();
+        if (v != null) {
+            return v.remove(memberName);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Object getMemberValue(Path path) {
         //TODO implement
         return null;

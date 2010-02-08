@@ -14,20 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on Feb 7, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.config.server.rpc;
+package com.pyx4j.entity.annotations;
 
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.pyx4j.rpc.shared.Service;
-
-public interface IServiceFactory {
-
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException;
-
-    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass);
+/**
+ * This annotation specifies that the Entity or the member is not serialized to the wire.
+ * 
+ * The check is done on server service level @see
+ * com.pyx4j.entity.server.EntityServicesImpl
+ * 
+ * @see com.google.gwt.user.client.rpc.GwtTransient
+ * 
+ */
+@Target( { ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RpcTransient {
 
 }

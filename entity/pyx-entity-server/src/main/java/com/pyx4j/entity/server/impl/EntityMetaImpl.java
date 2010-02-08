@@ -31,6 +31,8 @@ import java.util.Vector;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.RpcBlacklist;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -46,6 +48,8 @@ public class EntityMetaImpl implements EntityMeta {
     private final String description;
 
     private final boolean persistenceTransient;
+
+    private final boolean rpcTransient;
 
     private boolean membersListCreated;
 
@@ -67,6 +71,7 @@ public class EntityMetaImpl implements EntityMeta {
             description = null;
         }
         persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
+        rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
     }
 
     @Override
@@ -82,6 +87,11 @@ public class EntityMetaImpl implements EntityMeta {
     @Override
     public boolean isTransient() {
         return persistenceTransient;
+    }
+
+    @Override
+    public boolean isRpcTransient() {
+        return rpcTransient;
     }
 
     @Override
