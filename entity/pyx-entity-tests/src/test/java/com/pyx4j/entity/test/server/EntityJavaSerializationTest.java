@@ -37,7 +37,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 public class EntityJavaSerializationTest extends InitializerTestCase {
 
-    public void ZtestObjectOperations() {
+    public void testObjectOperations() {
         Country country = EntityFactory.create(Country.class);
         assertNotNull("EntityFactory create", country);
 
@@ -67,7 +67,7 @@ public class EntityJavaSerializationTest extends InitializerTestCase {
         assertNotNull("MemberMeta", city2.getEntityMeta().getMemberMeta(city.name().getFieldName()));
     }
 
-    public void ZtestComplexObjectSerialization() throws IOException {
+    public void testComplexObjectSerialization() throws IOException {
         Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("First Name");
 
