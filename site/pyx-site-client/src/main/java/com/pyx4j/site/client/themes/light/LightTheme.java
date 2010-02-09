@@ -92,12 +92,13 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a");
-        style.addProperty("color", "#F8F8F8");
+        style.addProperty("color", "gray");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
+        style.addProperty("color", "black");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li");
@@ -184,7 +185,7 @@ public class LightTheme extends SiteTheme {
         style.addProperty("background", "transparent url(images/primaryNav-bg.gif) no-repeat");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
@@ -216,7 +217,7 @@ public class LightTheme extends SiteTheme {
         style.addProperty("color", "black");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         style.addProperty("color", "black");
         addStyle(style);
@@ -250,7 +251,7 @@ public class LightTheme extends SiteTheme {
         style.addProperty("color", "gray");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a:hover");
         style.addProperty("color", "black");
         style.addProperty("text-decoration", "underline");
         addStyle(style);

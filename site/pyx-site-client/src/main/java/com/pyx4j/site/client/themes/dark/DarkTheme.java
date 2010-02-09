@@ -102,11 +102,12 @@ public class DarkTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a");
-        style.addProperty("color", "#c90");
+        style.addProperty("color", "black");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a:hover");
+        style.addProperty("color", "grey");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
@@ -187,7 +188,7 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("color", "#ff6600");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
@@ -214,7 +215,7 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("color", "black");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         style.addProperty("color", "#ff6600");
         addStyle(style);
@@ -243,7 +244,7 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("color", "lightGrey");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         style.addProperty("color", "white");
         addStyle(style);

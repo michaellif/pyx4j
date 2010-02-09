@@ -195,7 +195,7 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("color", "#886625");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
     }
@@ -229,7 +229,7 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("color", "#C90");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLink.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
@@ -262,7 +262,7 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("color", "#C90");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + "-mouseOver a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_FooterLink.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
