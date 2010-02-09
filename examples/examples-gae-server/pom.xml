@@ -32,6 +32,18 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>examples-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-gae</artifactId>
             <version>${project.version}</version>
         </dependency>

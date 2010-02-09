@@ -40,6 +40,18 @@
 		</dependency>
 
         <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>examples-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
 			<groupId>com.pyx4j</groupId>
 			<artifactId>pyx-site-client</artifactId>
 			<version>${project.version}</version>
@@ -65,6 +77,69 @@
 
 	</dependencies>
 
+    <build>
 
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean.app-gwt-generated</id>
+                        <phase>clean</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <tasks>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${basedir}/../examples-gae-server/war/g.site"/>
+                                </delete>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+	</build>
+
+    <profiles>
+        <profile>
+            <id>gwtce</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-gwt-plugin</artifactId>
+                        <version>${pyx4jGwtVersion}</version>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>g.site</module>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                            </sourceDirectories>
+                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <target>${basedir}/../examples-gae-server/war</target>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
+                            <!--compilerClass>com.google.gwt.dev.GWTCompiler</compilerClass-->
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>${gwtCompileReport}</compileReport>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

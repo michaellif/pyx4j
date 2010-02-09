@@ -6,8 +6,9 @@
 	<inherits name='com.google.gwt.user.User'/>
 	<inherits name="com.google.gwt.i18n.I18N"/>
 	<inherits name="com.google.gwt.maps.GoogleMaps" />
-	<inherits name="com.pyx4j.site.SiteAdmin" />
+    <inherits name='com.pyx4j.site.Site' />
+    <inherits name='com.pyx4j.essentials.Essentials' />
 	
-	<entry-point class='com.pyx4j.examples.site.client.Site'/>
+	<entry-point class='com.pyx4j.examples.site.client.SiteEntryPoint'/>
 	
 </module>
