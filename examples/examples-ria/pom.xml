@@ -15,6 +15,18 @@
 	<artifactId>examples-ria</artifactId>
 	<name>examples-ria</name>
 
+    <distributionManagement>
+        <!-- not for deployment in repository -->
+        <repository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 	<dependencies>
 
         <dependency>
