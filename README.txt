@@ -18,6 +18,18 @@
 for cmd line maven build add OS env variable (this values are for 32bit os)
 MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
+* Maven build with "GWT" modules compilations to JavaScript
+
+  ** tester-client:
+        mvn -P gwtct
+
+  ** examples-*:
+        mvn -P gwtce
+
+* Before deployment to appengine run:
+
+        mvn -P prod
+
 ========= Install Google App Engine SDK for Java =========
 
 1. Install default plugin - http://dl.google.com/eclipse/plugin/3.5
