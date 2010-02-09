@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+
+	<application>pyx4j-demo</application>
+	<version>1</version>
+
+    <precompilation-enabled>true</precompilation-enabled>
+	<sessions-enabled>true</sessions-enabled>
+
+    <!--  Cache until next build -->
+    <static-files>
+        <include
+            path="**.nocache.*"
+            expiration="1s" />
+        <include
+            path="/**.cache.*"
+            expiration="30d" />
+        <include
+            path="/**.png"
+            expiration="4h" />
+        <include
+            path="/**.jpg"
+            expiration="4h" />
+        <include
+            path="/**.gif"
+            expiration="4h" />
+        <include
+            path="/**.ico"
+            expiration="4h" />
+        <include
+            path="/index.html"
+            expiration="4h" />
+        <include
+            path="/ria.html"
+            expiration="4h" />
+        <include
+            path="/**/hosted.html"
+            expiration="4h" />
+    </static-files>
+
+	<!-- Configure java.util.logging -->
+    <system-properties>
+        <property
+            name="java.util.logging.config.file"
+            value="WEB-INF/logging.properties"/>
+    </system-properties>
+
+</appengine-web-app>

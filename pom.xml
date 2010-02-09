@@ -151,7 +151,10 @@
         <module>incubator/tester/tester-client</module>
         <module>incubator/tester/tester-gae-server</module>
 
+        <module>examples/examples-domain</module>
         <module>examples/examples-site</module>
+        <module>examples/examples-ria</module>
+        <module>examples/examples-gae-server</module>
 
     </modules>
 
