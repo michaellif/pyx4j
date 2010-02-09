@@ -55,7 +55,7 @@
 
     <!-- Default page -->
     <welcome-file-list>
-        <welcome-file>ria.html</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
 </web-app>
