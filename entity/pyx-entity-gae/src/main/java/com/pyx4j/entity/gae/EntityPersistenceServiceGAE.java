@@ -50,7 +50,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -157,7 +156,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void updateEntityProperties(Entity entity, IEntity<?> iEntity) {
+    private void updateEntityProperties(Entity entity, IEntity<?> iEntity, boolean merge) {
         for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue;
@@ -175,7 +174,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         embedEntityProperties(entity, me.getKey(), "", childIEntity);
                         continue;
                     } else {
-                        value = persistImpl(childIEntity);
+                        value = persistImpl(childIEntity, merge);
                     }
                 } else {
                     String childKey = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
@@ -208,7 +207,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         continue;
                     } else {
                         for (IEntity<?> childIEntity : memberSet) {
-                            Key key = persistImpl(childIEntity);
+                            Key key = persistImpl(childIEntity, merge);
                             childKeys.add(key);
                         }
                     }
@@ -229,7 +228,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     IList<IEntity<?>> memberList = (IList<IEntity<?>>) iEntity.getMember(me.getKey());
                     for (IEntity<?> childIEntity : memberList) {
-                        Key key = persistImpl(childIEntity);
+                        Key key = persistImpl(childIEntity, merge);
                         childKeys.add(key);
                         childKeysOrder.add(key.getId());
                     }
@@ -266,10 +265,15 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void persist(IEntity<?> iEntity) {
-        persistImpl(iEntity);
+        persistImpl(iEntity, false);
     }
 
-    private Key persistImpl(IEntity<?> iEntity) {
+    @Override
+    public void merge(IEntity<?> iEntity) {
+        persistImpl(iEntity, true);
+    }
+
+    private Key persistImpl(IEntity<?> iEntity, boolean merge) {
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't persist Transient Entity");
         }
@@ -278,14 +282,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             entity = new Entity(getIEntityKind(iEntity));
         } else {
             Key key = KeyFactory.stringToKey(iEntity.getPrimaryKey());
-            try {
-                datastoreCallStats.get().count++;
-                entity = datastore.get(key);
-            } catch (EntityNotFoundException e) {
-                throw new RuntimeException("EntityNotFound");
+            if (merge) {
+                try {
+                    datastoreCallStats.get().count++;
+                    entity = datastore.get(key);
+                } catch (EntityNotFoundException e) {
+                    throw new RuntimeException("EntityNotFound");
+                }
+            } else {
+                entity = new Entity(key);
             }
         }
-        updateEntityProperties(entity, iEntity);
+        updateEntityProperties(entity, iEntity, merge);
         datastoreCallStats.get().count++;
         Key keyCreated = datastore.put(entity);
         iEntity.setPrimaryKey(KeyFactory.keyToString(keyCreated));

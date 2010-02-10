@@ -63,7 +63,7 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         Employee emp2 = EntityFactory.create(Employee.class);
         emp2.setPrimaryKey(pk);
         emp2.firstName().setValue("Name" + uniqueString());
-        srv.persist(emp2);
+        srv.merge(emp2);
 
         Employee emp3 = srv.retrieve(Employee.class, pk);
         Assert.assertEquals("firstName updated", emp2.firstName().getValue(), emp3.firstName().getValue());
