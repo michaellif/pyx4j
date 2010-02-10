@@ -6,7 +6,6 @@
 	<inherits name='com.google.gwt.user.User'/>
 	<inherits name="com.google.gwt.i18n.I18N"/>
 	<inherits name="com.google.gwt.maps.GoogleMaps" />
-    <inherits name='com.pyx4j.site.Site' />
     <inherits name='com.pyx4j.essentials.Essentials' />
     <inherits name='com.pyx4j.examples.ExamplesDomain' />
 	

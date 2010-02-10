@@ -18,19 +18,22 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client;
+package com.pyx4j.essentials.client;
 
-import com.pyx4j.essentials.client.EssentialsSiteEntryPoint;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.google.gwt.core.client.EntryPoint;
 
-public class SiteEntryPoint extends EssentialsSiteEntryPoint {
+import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.log4gwt.rpcappender.RPCAppender;
+import com.pyx4j.log4gwt.shared.Level;
+import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
-    @Override
+public class EssentialsSiteEntryPoint implements EntryPoint {
+
     public void onModuleLoad() {
-        super.onModuleLoad();
-
-        //ApplicationCommon.init();
-
-        MessageDialog.info("TODO", "TODO");
+        ClientEntityFactory.ensureIEntityImplementations();
+        ClientLogger.addAppender(new RPCAppender(Level.WARN));
+        ClientLogger.setDebugOn(true);
+        UnrecoverableErrorHandlerDialog.register();
     }
 }
