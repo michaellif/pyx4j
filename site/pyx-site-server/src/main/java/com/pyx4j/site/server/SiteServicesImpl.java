@@ -144,12 +144,15 @@ public class SiteServicesImpl implements SiteServices {
                 cache.put(KEY_PREFIX + request.getSiteId(), site);
             }
 
-            if ((site != null) && (request.getModificationTime() == site.updateTimestamp().getValue())) {
-                log.debug("Site is not updated, send null value");
-                return siteMeta;
-            } else {
-                return site;
+            if (site != null) {
+                if (site.updateTimestamp().isNull()) {
+                    throw new Error("Site data error, updateTimestamp is null");
+                } else if (request.getModificationTime() == site.updateTimestamp().getValue()) {
+                    log.debug("Site is not updated, send null value");
+                    return siteMeta;
+                }
             }
+            return site;
         }
     }
 
