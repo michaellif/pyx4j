@@ -571,12 +571,12 @@
                     <nonDeveloperLogins>
                         <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
                     </nonDeveloperLogins>
-                    <systemProperties>
+                    <!--systemProperties>
                         <property>
                             <name>java.util.logging.config.file</name>
                             <value>src/site/stat-scm-logging-error.properties</value>
                         </property>
-                    </systemProperties>
+                    </systemProperties-->
                 </configuration>
             </plugin>
 
