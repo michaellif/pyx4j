@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
-import com.pyx4j.widgets.client.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -38,6 +37,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.log4gwt.client.ClientLogger;
+import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -97,6 +97,17 @@ public class WidgetsDemo implements EntryPoint {
             final Button dialogButton = new Button("Show Dialog2");
             dialogButton.addClickHandler(new DialogButtonHandler2());
             contentPanel.add(dialogButton);
+        }
+
+        {
+            final Button button = new Button("Image from text");
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    new Base64ImageView().show();
+                }
+            });
+            contentPanel.add(button);
         }
 
         {
