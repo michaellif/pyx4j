@@ -33,18 +33,23 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.rpc.StatusCodeException;
+import com.google.gwt.user.client.rpc.impl.Serializer;
+
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RemoteServiceAsync;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.serialization.client.RemoteServiceSerializer;
 
 public class RPCManager {
 
     private static final Logger log = LoggerFactory.getLogger(RPCManager.class);
 
     private static final RemoteServiceAsync service;
+
+    private static final RemoteServiceSerializer serializer;
 
     private static HandlerManager handlerManager;
 
@@ -54,13 +59,7 @@ public class RPCManager {
 
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
-    }
-
-    /**
-     * Resolve Hosted Mode initialization order
-     */
-    public static void ensureInitialization() {
-
+        serializer = GWT.create(RPCSerializer.class);
     }
 
     public static void setServiceEntryPointURL(String url) {
@@ -71,6 +70,10 @@ public class RPCManager {
     public static void enableAppEngineUsageStats() {
         ServiceDefTarget target = (ServiceDefTarget) service;
         target.setRpcRequestBuilder(new AppEngineUsageProcessingRpcRequestBuilder());
+    }
+
+    public static Serializer getSerializer() {
+        return serializer.getSerializer();
     }
 
     public static <I extends Serializable, O extends Serializable> void executeBackground(final Class<? extends Service<I, O>> serviceInterface, I request,

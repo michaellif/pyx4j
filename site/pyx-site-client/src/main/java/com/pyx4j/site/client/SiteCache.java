@@ -23,9 +23,9 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -42,12 +42,6 @@ public class SiteCache {
 
     private static Logger log = LoggerFactory.getLogger(SiteCache.class);
 
-    static {
-        RPCManager.ensureInitialization();
-    }
-
-    private static RPCSerializer rpcSerializer = GWT.create(RPCSerializer.class);
-
     public static void obtain(final String siteId, final AsyncCallback<Site> callback) {
         final SiteRequest siteRequest = new SiteRequest();
         siteRequest.setSiteId(siteId);
@@ -61,7 +55,7 @@ public class SiteCache {
             String siteDataSerial = storage.getItem(dataKey);
             if (siteDataSerial != null) {
                 try {
-                    ClientSerializationStreamReader r = new ClientSerializationStreamReader(rpcSerializer.getSerializer());
+                    ClientSerializationStreamReader r = new ClientSerializationStreamReader(RPCManager.getSerializer());
                     r.prepareToRead(siteDataSerial);
                     Object o = r.readObject();
                     if (o instanceof Site) {
@@ -109,7 +103,7 @@ public class SiteCache {
     private static void storeSiteLocaly(String dataKey, Site site) {
         try {
             HTML5LocalStorage storage = HTML5LocalStorage.getLocalStorage();
-            SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(rpcSerializer.getSerializer());
+            SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(RPCManager.getSerializer());
             w.prepareToWrite();
             w.writeObject(site);
             storage.setItem(dataKey, w.toString());

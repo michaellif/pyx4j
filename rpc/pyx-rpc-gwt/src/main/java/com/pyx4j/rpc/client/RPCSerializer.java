@@ -14,17 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 4, 2010
+ * Created on Feb 10, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client;
+package com.pyx4j.rpc.client;
 
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.serialization.client.RemoteServiceSerializer;
 import com.pyx4j.serialization.client.RemoteServiceTarget;
 
 @RemoteServiceTarget(RemoteService.class)
-public interface RPCSerializer extends RemoteServiceSerializer {
+interface RPCSerializer extends RemoteServiceSerializer {
 
 }

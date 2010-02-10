@@ -40,6 +40,12 @@
 
 		<dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+		<dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-forms</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -47,6 +53,12 @@
 		<dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-gwt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-security-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
 
