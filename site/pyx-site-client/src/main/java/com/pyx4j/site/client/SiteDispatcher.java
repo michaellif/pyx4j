@@ -29,9 +29,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
@@ -100,13 +102,15 @@ public abstract class SiteDispatcher {
             obtainSitePanel(siteName, new AsyncCallback<SitePanel>() {
                 @Override
                 public void onFailure(Throwable caught) {
-                    //TODO 
+                    //TODO
+
                 }
 
                 @Override
                 public void onSuccess(SitePanel sitePanel) {
                     if (sitePanel != null) {
                         show(sitePanel, finalUri, finalArgs);
+                        hideLoadingIndicator();
                     } else {
                         throw new Error("sitePanel is not found");
                     }
@@ -191,6 +195,21 @@ public abstract class SiteDispatcher {
             }
         }
         return args;
+    }
+
+    /**
+     * Hide loading image if you had shown one.
+     */
+    public static void hideLoadingIndicator() {
+        // Remove the loading icon
+        RootPanel loading = RootPanel.get("loading");
+        if (loading != null) {
+            com.google.gwt.user.client.Element elem = loading.getElement();
+            UIObject.setVisible(elem, false);
+            DOM.setInnerHTML(elem, "");
+            loading.removeFromParent();
+            elem.getParentElement().removeChild(elem);
+        }
     }
 
 }

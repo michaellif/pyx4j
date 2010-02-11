@@ -20,10 +20,6 @@
  */
 package com.pyx4j.essentials.client;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.UIObject;
-
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
@@ -49,18 +45,4 @@ public class ApplicationCommon {
         RPCManager.enableAppEngineUsageStats();
     }
 
-    /**
-     * Hide loading image if you had shown one.
-     */
-    public static void hideLoadingIndicator() {
-        // Remove the loading icon
-        RootPanel loading = RootPanel.get("loading");
-        if (loading != null) {
-            com.google.gwt.user.client.Element elem = loading.getElement();
-            UIObject.setVisible(elem, false);
-            DOM.setInnerHTML(elem, "");
-            loading.removeFromParent();
-            elem.getParentElement().removeChild(elem);
-        }
-    }
 }
