@@ -99,7 +99,7 @@ public abstract class SiteDispatcher {
 
         //TODO check site permission
         if (true) {
-            obtainSitePanel(siteName, new AsyncCallback<SitePanel>() {
+            obtainSite(siteName, new AsyncCallback<SitePanel>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     //TODO
@@ -134,7 +134,7 @@ public abstract class SiteDispatcher {
         }
     }
 
-    public void obtainSitePanel(String siteName, AsyncCallback<SitePanel> callback) {
+    public void obtainSite(String siteName, AsyncCallback<SitePanel> callback) {
 
     }
 
