@@ -99,7 +99,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private LinkBar footerLinkBar;
 
-    private final HashMap<String, PageWidget> cahedPanels = new HashMap<String, PageWidget>();
+    private final HashMap<String, PageWidget> cachedPanels = new HashMap<String, PageWidget>();
 
     private static LightTheme lightTheme = new LightTheme();
 
@@ -167,12 +167,12 @@ public abstract class SitePanel extends SimplePanel {
 
         PageWidget pageWidget;
         String path = page.uri().uri().getValue();
-        if (cahedPanels.containsKey(path)) {
-            pageWidget = cahedPanels.get(path);
+        if (cachedPanels.containsKey(path)) {
+            pageWidget = cachedPanels.get(path);
             mainSectionPanel.setWidget(pageWidget);
         } else {
             pageWidget = new PageWidget(mainSectionPanel, page.data());
-            cahedPanels.put(path, pageWidget);
+            cachedPanels.put(path, pageWidget);
 
             if (!page.data().inlineWidgetIds().isNull() && page.data().inlineWidgetIds().getValue().size() > 0) {
                 for (String widgetId : page.data().inlineWidgetIds().getValue()) {
