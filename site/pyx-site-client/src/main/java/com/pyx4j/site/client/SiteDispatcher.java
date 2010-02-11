@@ -46,6 +46,8 @@ public abstract class SiteDispatcher {
 
     private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
 
+    private final HashMap<String, SitePanel> sitePanels = new HashMap<String, SitePanel>();
+
     private SitePanel currentSitePanel;
 
     private ResourceUri welcomeUri;
@@ -109,6 +111,7 @@ public abstract class SiteDispatcher {
                 @Override
                 public void onSuccess(SitePanel sitePanel) {
                     if (sitePanel != null) {
+                        initSitePanel(siteName, sitePanel);
                         show(sitePanel, finalUri, finalArgs);
                         hideLoadingIndicator();
                     } else {
@@ -148,7 +151,7 @@ public abstract class SiteDispatcher {
 
     protected void onAfterLogOut() {
         log.debug("onAfterLogOut");
-        for (SitePanel panel : getAllSitePanels()) {
+        for (SitePanel panel : sitePanels.values()) {
             panel.onAfterLogOut();
         }
 
@@ -156,13 +159,11 @@ public abstract class SiteDispatcher {
 
     protected void onAfterLogIn() {
         log.debug("onAfterLogIn");
-        for (SitePanel panel : getAllSitePanels()) {
+        for (SitePanel panel : sitePanels.values()) {
             panel.onAfterLogIn();
         }
 
     }
-
-    public abstract Iterable<SitePanel> getAllSitePanels();
 
     public ResourceUri getWelcomeUri() {
         return welcomeUri;
@@ -210,6 +211,19 @@ public abstract class SiteDispatcher {
             loading.removeFromParent();
             elem.getParentElement().removeChild(elem);
         }
+    }
+
+    private void initSitePanel(String name, SitePanel sitePanel) {
+        sitePanels.put(name, sitePanel);
+        if (ClientContext.isAuthenticated()) {
+            sitePanel.onAfterLogIn();
+        } else {
+            sitePanel.onAfterLogOut();
+        }
+    }
+
+    public HashMap<String, SitePanel> getSitePanels() {
+        return sitePanels;
     }
 
 }

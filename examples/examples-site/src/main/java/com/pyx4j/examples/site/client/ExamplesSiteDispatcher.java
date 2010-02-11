@@ -22,7 +22,6 @@ package com.pyx4j.examples.site.client;
 
 import com.pyx4j.essentials.client.AbstractSiteDispatcher;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
-import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ExamplesSiteDispatcher extends AbstractSiteDispatcher {
@@ -38,9 +37,4 @@ public class ExamplesSiteDispatcher extends AbstractSiteDispatcher {
         MessageDialog.info("TODO", "TODO");
     }
 
-    @Override
-    public Iterable<SitePanel> getAllSitePanels() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
