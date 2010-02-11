@@ -26,9 +26,10 @@ import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
+import com.pyx4j.site.client.SiteDispatcher;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
-public class EssentialsSiteEntryPoint implements EntryPoint {
+public abstract class AbstractSiteDispatcher extends SiteDispatcher implements EntryPoint {
 
     public void onModuleLoad() {
         ClientEntityFactory.ensureIEntityImplementations();

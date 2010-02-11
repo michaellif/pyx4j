@@ -128,7 +128,6 @@ public abstract class SiteDispatcher {
             GoogleAnalytics.track("#" + uri);
             sitePanel.show(uri, args);
         }
-
     }
 
     public void obtainSitePanel(String siteName, AsyncCallback<SitePanel> callback) {

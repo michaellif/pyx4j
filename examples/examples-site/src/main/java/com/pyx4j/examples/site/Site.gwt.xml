@@ -9,6 +9,6 @@
     <inherits name='com.pyx4j.essentials.Essentials' />
     <inherits name='com.pyx4j.examples.ExamplesDomain' />
 	
-	<entry-point class='com.pyx4j.examples.site.client.SiteEntryPoint'/>
+	<entry-point class='com.pyx4j.examples.site.client.ExamplesSiteDispatcher'/>
 	
 </module>

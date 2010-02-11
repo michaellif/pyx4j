@@ -20,10 +20,12 @@
  */
 package com.pyx4j.examples.site.client;
 
-import com.pyx4j.essentials.client.EssentialsSiteEntryPoint;
+import com.pyx4j.essentials.client.AbstractSiteDispatcher;
+import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class SiteEntryPoint extends EssentialsSiteEntryPoint {
+public class ExamplesSiteDispatcher extends AbstractSiteDispatcher {
 
     @Override
     public void onModuleLoad() {
@@ -31,6 +33,14 @@ public class SiteEntryPoint extends EssentialsSiteEntryPoint {
 
         //ApplicationCommon.init();
 
+        GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
+
         MessageDialog.info("TODO", "TODO");
+    }
+
+    @Override
+    public Iterable<SitePanel> getAllSitePanels() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
