@@ -41,6 +41,7 @@ public class EntityFactory {
     }
 
     public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity<?>> clazz) {
+        assert (clazz != null) : "Get meta for null";
         EntityMeta meta = entityMetaCache.get(clazz);
         if (meta == null) {
             meta = impl.createEntityMeta(clazz);

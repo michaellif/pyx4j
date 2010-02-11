@@ -42,6 +42,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -280,6 +281,9 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("public " + simpleName + "() { ");
         writer.indent();
         writer.print("super(");
+
+        writer.print(interfaceType.getName());
+        writer.print(".class, ");
 
         writer.print("\"");
         writer.print(caption);

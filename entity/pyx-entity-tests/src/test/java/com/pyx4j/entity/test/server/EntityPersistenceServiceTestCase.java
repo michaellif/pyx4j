@@ -42,7 +42,7 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
 
         srv.persist(country);
 
-        String primaryKey = country.getPrimaryKey();
+        Long primaryKey = country.getPrimaryKey();
 
         Country country2 = srv.retrieve(Country.class, primaryKey);
         Assert.assertNotNull("retrieve", country2);
@@ -56,7 +56,7 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         emp1.holidays().setValue(Long.valueOf(System.currentTimeMillis()));
 
         srv.persist(emp1);
-        String pk = emp1.getPrimaryKey();
+        Long pk = emp1.getPrimaryKey();
         Employee emp1r = srv.retrieve(Employee.class, pk);
         Assert.assertEquals("holidays saved", emp1.holidays().getValue(), emp1r.holidays().getValue());
 
@@ -80,7 +80,7 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         address.country().set(country);
         srv.persist(address);
 
-        String primaryKey = address.getPrimaryKey();
+        Long primaryKey = address.getPrimaryKey();
         Address address2 = srv.retrieve(Address.class, primaryKey);
         Assert.assertNotNull("retrieve", address2);
 
@@ -99,7 +99,7 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
         employee.homeAddress().set(address);
 
         srv.persist(employee);
-        String primaryKey = employee.getPrimaryKey();
+        Long primaryKey = employee.getPrimaryKey();
         Employee employee2 = srv.retrieve(Employee.class, primaryKey);
         Assert.assertNotNull("retrieve", employee2);
 

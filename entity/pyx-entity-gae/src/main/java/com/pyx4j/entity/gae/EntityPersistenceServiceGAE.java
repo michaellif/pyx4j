@@ -50,6 +50,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -62,6 +63,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -146,8 +148,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity<?>) childIEntity
                             .getMember(me.getKey()));
                 } else {
-                    entity.setProperty(prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX, KeyFactory.stringToKey((String) ((Map) value)
-                            .get(IEntity.PRIMARY_KEY)));
+                    String kind = EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getObjectClass()).getPersistenceName();
+                    Key key = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
+                    entity.setProperty(prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX, key);
                 }
             } else {
                 //System.out.println(value + " + save as [" + prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX + "]");
@@ -167,7 +170,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             Object value = me.getValue();
             if (value instanceof Map<?, ?>) {
-                if (meta.isOwnedRelationships()) {
+                if (!meta.isEntity()) {
+                    throw new Error("Saving unexpected value " + meta.getCaption());
+                } else if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
                     if (meta.isEmbedded()) {
@@ -177,11 +182,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         value = persistImpl(childIEntity, merge);
                     }
                 } else {
-                    String childKey = (String) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
+                    Long childKey = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKey == null) {
                         throw new Error("Saving unperisted reference " + meta.getCaption());
                     }
-                    value = KeyFactory.stringToKey(childKey);
+                    value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getObjectClass()).getPersistenceName(),
+                            childKey);
                 }
             } else if (value instanceof String) {
                 if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
@@ -213,11 +219,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                 } else {
                     for (Object el : (Set<?>) value) {
-                        String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
+                        Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving unperisted reference " + meta.getCaption());
                         }
-                        childKeys.add(KeyFactory.stringToKey(childKey));
+                        childKeys.add(KeyFactory.createKey(
+                                EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getValueClass()).getPersistenceName(), childKey));
                     }
                 }
                 value = childKeys;
@@ -234,13 +241,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                 } else {
                     for (Object el : (List<?>) value) {
-                        String childKey = (String) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
+                        Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
                             throw new Error("Saving unperisted reference " + meta.getCaption());
                         }
-                        Key key = KeyFactory.stringToKey(childKey);
+                        Key key = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getValueClass()).getPersistenceName(),
+                                childKey);
                         childKeys.add(key);
-                        childKeysOrder.add(key.getId());
+                        childKeysOrder.add(childKey);
                     }
                 }
                 entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
@@ -256,12 +264,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private String getIEntityKind(IEntity<?> iEntity) {
-        return iEntity.getObjectClass().getName();
+        return iEntity.getEntityMeta().getPersistenceName();
     }
 
-    private <T extends IEntity<?>> String getIEntityKind(Class<T> entityClass) {
-        return entityClass.getName();
-    }
+    //    private <T extends IEntity<?>> String getIEntityKind(Class<T> entityClass) {
+    //        return entityClass.getName();
+    //    }
 
     @Override
     public void persist(IEntity<?> iEntity) {
@@ -281,7 +289,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (iEntity.getPrimaryKey() == null) {
             entity = new Entity(getIEntityKind(iEntity));
         } else {
-            Key key = KeyFactory.stringToKey(iEntity.getPrimaryKey());
+            Key key = KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey());
             if (merge) {
                 try {
                     datastoreCallStats.get().count++;
@@ -296,7 +304,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         updateEntityProperties(entity, iEntity, merge);
         datastoreCallStats.get().count++;
         Key keyCreated = datastore.put(entity);
-        iEntity.setPrimaryKey(KeyFactory.keyToString(keyCreated));
+        iEntity.setPrimaryKey(keyCreated.getId());
         return keyCreated;
     }
 
@@ -306,13 +314,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             throw new Error("Can't delete Transient Entity");
         }
         datastoreCallStats.get().count++;
-        datastore.delete(KeyFactory.stringToKey(iEntity.getPrimaryKey()));
+        datastore.delete(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey()));
     }
 
     @Override
-    public void delete(Class<?> entityClass, String primaryKey) {
+    public void delete(Class<IEntity<?>> entityClass, long primaryKey) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
         datastoreCallStats.get().count++;
-        datastore.delete(KeyFactory.stringToKey(primaryKey));
+        datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
     }
 
     private Object deserializeValue(IEntity<?> iEntity, String keyName, Object value, Map<Key, IEntity<?>> retrievedMap) {
@@ -321,7 +333,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else if (value instanceof Key) {
             IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(keyName);
             if (childIEntity.getMeta().isDetached()) {
-                childIEntity.setPrimaryKey(KeyFactory.keyToString((Key) value));
+                childIEntity.setPrimaryKey(((Key) value).getId());
             } else {
                 retrieveEntity(childIEntity, (Key) value, retrievedMap);
             }
@@ -351,7 +363,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void updateIEntity(IEntity<?> iEntity, Entity entity, Map<Key, IEntity<?>> retrievedMap) {
-        iEntity.setPrimaryKey(KeyFactory.keyToString(entity.getKey()));
+        iEntity.setPrimaryKey(entity.getKey().getId());
         for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
             Object value = me.getValue();
             String keyName = me.getKey();
@@ -367,7 +379,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (value instanceof Key) {
                 IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(keyName);
                 if (childIEntity.getMeta().isDetached()) {
-                    childIEntity.setPrimaryKey(KeyFactory.keyToString((Key) value));
+                    childIEntity.setPrimaryKey(((Key) value).getId());
                 } else {
                     retrieveEntity(childIEntity, (Key) value, retrievedMap);
                 }
@@ -399,7 +411,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (Key childKey : (List<Key>) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
                         if (member.getMeta().isDetached()) {
-                            childIEntity.setPrimaryKey(KeyFactory.keyToString(childKey));
+                            childIEntity.setPrimaryKey(childKey.getId());
                         } else {
                             retrieveEntity(childIEntity, childKey, retrievedMap);
                         }
@@ -417,7 +429,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (Key childKey : (List<Key>) value) {
                         IEntity<?> childIEntity = EntityFactory.create((Class<IEntity<?>>) member.getMeta().getValueClass());
                         if (member.getMeta().isDetached()) {
-                            childIEntity.setPrimaryKey(KeyFactory.keyToString(childKey));
+                            childIEntity.setPrimaryKey(childKey.getId());
                         } else {
                             retrieveEntity(childIEntity, childKey, retrievedMap);
                         }
@@ -473,17 +485,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity<?>> T retrieve(Class<T> entityClass, String primaryKey) {
+    public <T extends IEntity<?>> T retrieve(Class<T> entityClass, long primaryKey) {
         long start = System.nanoTime();
-        Key key = KeyFactory.stringToKey(primaryKey);
-        if (!getIEntityKind(entityClass).equals(key.getKind())) {
-            throw new RuntimeException("Unexpected IEntity " + getIEntityKind(entityClass) + " Kind " + key.getKind());
-        }
         T iEntity = EntityFactory.create(entityClass);
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-
+        Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), primaryKey);
         Entity entity;
         try {
             datastoreCallStats.get().count++;
@@ -528,7 +536,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (value instanceof Enum<?>) {
             return ((Enum<?>) value).name();
         } else if (value instanceof IEntity<?>) {
-            return KeyFactory.stringToKey(((IEntity<?>) value).getPrimaryKey());
+            return KeyFactory.createKey(((IEntity<?>) value).getEntityMeta().getPersistenceName(), ((IEntity<?>) value).getPrimaryKey());
         } else {
             return value;
         }
@@ -547,8 +555,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private <T extends IEntity<?>> Query buildQuery(Class<T> entityClass, EntityCriteria<T> criteria) {
-        Query query = new Query(getIEntityKind(entityClass));
+    private <T extends IEntity<?>> Query buildQuery(EntityMeta entityMeta, EntityCriteria<T> criteria) {
+        Query query = new Query(entityMeta.getPersistenceName());
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
@@ -564,10 +572,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
-        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        Query query = buildQuery(entityClass, criteria);
+        Query query = buildQuery(entityMeta, criteria);
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
         pq.asIterable(FetchOptions.Builder.withLimit(1));
@@ -595,10 +604,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
-        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        Query query = buildQuery(entityClass, criteria);
+        Query query = buildQuery(entityMeta, criteria);
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
 
@@ -623,10 +633,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
-        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        Query query = buildQuery(entityClass, criteria);
+        Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
@@ -648,10 +659,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity<?>> int count(EntityCriteria<T> criteria) {
         long start = System.nanoTime();
         Class<T> entityClass = entityClass(criteria);
-        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        Query query = buildQuery(entityClass, criteria);
+        Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
@@ -667,10 +679,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
-        if (EntityFactory.getEntityMeta(entityClass).isTransient()) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
             throw new Error("Can't delete Transient Entity");
         }
-        Query query = buildQuery(entityClass, criteria);
+        Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);

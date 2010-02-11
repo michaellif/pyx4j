@@ -23,6 +23,8 @@ package com.pyx4j.entity.shared.meta;
 import java.util.List;
 import java.util.Set;
 
+import com.pyx4j.entity.shared.IEntity;
+
 /**
  * Represent the Meta data denoted using annotation. For consistency it is better to use
  * this class instead of using annotations directly. In GWT mode we have no other choice
@@ -31,6 +33,13 @@ import java.util.Set;
  * Use EntityFactory.getEntityMeta(Class) to get instances.
  */
 public interface EntityMeta {
+
+    public Class<? extends IEntity<?>> getEntityClass();
+
+    /**
+     * See com.pyx4j.entity.annotations.Table
+     */
+    public String getPersistenceName();
 
     /**
      * See com.pyx4j.entity.annotations.Caption

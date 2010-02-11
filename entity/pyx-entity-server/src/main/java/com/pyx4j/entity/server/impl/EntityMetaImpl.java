@@ -33,6 +33,7 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -42,6 +43,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 public class EntityMetaImpl implements EntityMeta {
 
     private final Class<? extends IEntity<?>> entityClass;
+
+    private final String persistenceName;
 
     private final String caption;
 
@@ -59,6 +62,14 @@ public class EntityMetaImpl implements EntityMeta {
 
     public EntityMetaImpl(Class<? extends IEntity<?>> clazz) {
         entityClass = clazz;
+        Table tableAnnotation = entityClass.getAnnotation(Table.class);
+        if (tableAnnotation != null) {
+            persistenceName = tableAnnotation.prefix()
+                    + (CommonsStringUtils.isStringSet(tableAnnotation.name()) ? tableAnnotation.name() : entityClass.getSimpleName());
+        } else {
+            persistenceName = entityClass.getSimpleName();
+        }
+
         Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
         if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
             caption = captionAnnotation.name();
@@ -72,6 +83,19 @@ public class EntityMetaImpl implements EntityMeta {
         }
         persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
         rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
+    }
+
+    @Override
+    public Class<? extends IEntity<?>> getEntityClass() {
+        return entityClass;
+    }
+
+    @Override
+    public String getPersistenceName() {
+        if (isTransient()) {
+            throw new Error("Can't Persist/Retrieve Transient Entity");
+        }
+        return persistenceName;
     }
 
     @Override

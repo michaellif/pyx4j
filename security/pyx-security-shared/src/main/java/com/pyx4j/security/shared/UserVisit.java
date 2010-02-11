@@ -25,10 +25,11 @@ import java.io.Serializable;
 /**
  * Expendable by application user Information
  */
-@SuppressWarnings("serial")
 public class UserVisit implements Serializable {
 
-    private String principalPrimaryKey;
+    private static final long serialVersionUID = 4747659543319319301L;
+
+    private Long principalPrimaryKey;
 
     private String name;
 
@@ -36,7 +37,7 @@ public class UserVisit implements Serializable {
 
     }
 
-    public UserVisit(String principalPrimaryKey, String name) {
+    public UserVisit(Long principalPrimaryKey, String name) {
         super();
         this.principalPrimaryKey = principalPrimaryKey;
         this.name = name;
@@ -50,11 +51,11 @@ public class UserVisit implements Serializable {
         this.name = name;
     }
 
-    public String getPrincipalPrimaryKey() {
+    public Long getPrincipalPrimaryKey() {
         return principalPrimaryKey;
     }
 
-    public void setPrincipalPrimaryKey(String principalPrimaryKey) {
+    public void setPrincipalPrimaryKey(Long principalPrimaryKey) {
         this.principalPrimaryKey = principalPrimaryKey;
     }
 

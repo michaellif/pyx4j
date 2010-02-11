@@ -31,7 +31,7 @@ public interface IEntityPersistenceService {
 
     public void merge(IEntity<?> entity);
 
-    public <T extends IEntity<?>> T retrieve(Class<T> entityClass, String primaryKey);
+    public <T extends IEntity<?>> T retrieve(Class<T> entityClass, long primaryKey);
 
     public <T extends IEntity<?>> T retrieve(EntityCriteria<T> criteria);
 
@@ -43,7 +43,7 @@ public interface IEntityPersistenceService {
 
     public void delete(IEntity<?> entity);
 
-    public void delete(Class<?> entityClass, String primaryKey);
+    public void delete(Class<IEntity<?>> entityClass, long primaryKey);
 
     public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria);
 

@@ -54,15 +54,15 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         Department department1 = EntityFactory.create(Department.class);
         Employee employee1 = EntityFactory.create(Employee.class);
-        employee1.setPrimaryKey("Ekey1");
+        employee1.setPrimaryKey(1L);
         department1.employees().add(employee1);
-        department1.setPrimaryKey("Dkey1");
+        department1.setPrimaryKey(11L);
 
         Department department2 = EntityFactory.create(Department.class);
         Employee employee2 = EntityFactory.create(Employee.class);
-        employee2.setPrimaryKey("Ekey2");
+        employee2.setPrimaryKey(2L);
         department2.employees().add(employee2);
-        department2.setPrimaryKey("Dkey1");
+        department2.setPrimaryKey(11L);
 
         assertEquals("same key", department1, department2);
     }

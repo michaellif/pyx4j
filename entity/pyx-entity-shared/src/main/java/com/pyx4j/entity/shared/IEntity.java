@@ -33,9 +33,9 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
 
     public static String SERIALIZABLE_IMPL_CLASS_SUFIX = "_Impl";
 
-    public String getPrimaryKey();
+    public Long getPrimaryKey();
 
-    public void setPrimaryKey(String pk);
+    public void setPrimaryKey(Long pk);
 
     public IObject<?, ?> getMember(String memberName);
 

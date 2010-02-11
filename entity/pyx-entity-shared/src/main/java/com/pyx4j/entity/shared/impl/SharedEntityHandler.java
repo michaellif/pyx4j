@@ -92,16 +92,18 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return v;
     }
 
-    public String getPrimaryKey() {
+    @Override
+    public Long getPrimaryKey() {
         Map<String, Object> v = getValue();
         if (v == null) {
             return null;
         } else {
-            return (String) v.get(PRIMARY_KEY);
+            return (Long) v.get(PRIMARY_KEY);
         }
     }
 
-    public void setPrimaryKey(String pk) {
+    @Override
+    public void setPrimaryKey(Long pk) {
         ensureValue().put(PRIMARY_KEY, pk);
     }
 

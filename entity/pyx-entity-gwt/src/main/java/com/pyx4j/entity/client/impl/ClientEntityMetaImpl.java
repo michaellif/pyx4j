@@ -25,10 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public abstract class ClientEntityMetaImpl implements EntityMeta {
+
+    private final Class<? extends IEntity<?>> entityClass;
 
     private final String caption;
 
@@ -42,9 +45,9 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final List<String> toStringMemberNames;
 
-    public ClientEntityMetaImpl(String caption, String description, boolean persistenceTransient, boolean rpcTransient, String[] membersNames,
-            String[] memberNamesToString) {
-        super();
+    public ClientEntityMetaImpl(Class<? extends IEntity<?>> entityClass, String caption, String description, boolean persistenceTransient,
+            boolean rpcTransient, String[] membersNames, String[] memberNamesToString) {
+        this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
         this.persistenceTransient = persistenceTransient;
@@ -53,6 +56,16 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
             membersMeta.put(m, null);
         }
         toStringMemberNames = Arrays.asList(memberNamesToString);
+    }
+
+    @Override
+    public Class<? extends IEntity<?>> getEntityClass() {
+        return entityClass;
+    }
+
+    @Override
+    public String getPersistenceName() {
+        return null;
     }
 
     @Override

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -38,6 +39,9 @@ public class EntityMetaTest extends InitializerTestCase {
         assertEquals("Memeber Caption defined", "Home address", emp.homeAddress().getMeta().getCaption());
         assertEquals("Memeber Caption implicit", "Hiredate", emp.hiredate().getMeta().getCaption());
         assertEquals("Memeber Caption implicit", "Work Address", emp.workAddress().getMeta().getCaption());
+
+        MemberMeta setMemberMeta = emp.tasks().getMeta();
+        assertEquals("ISet Meta valueClass", Task.class, setMemberMeta.getValueClass());
     }
 
     public void testStringView() {

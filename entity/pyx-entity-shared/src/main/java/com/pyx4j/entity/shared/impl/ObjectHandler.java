@@ -46,6 +46,7 @@ public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> imp
         this.fieldName = fieldName;
     }
 
+    @Override
     public IEntity<?> getParent() {
         return parent;
     }
@@ -55,11 +56,14 @@ public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> imp
         return getParent().getEntityMeta().getMemberMeta(getFieldName());
     }
 
+    @Override
     public String getFieldName() {
         return fieldName;
     }
 
+    @Override
     public Class<? extends IObject> getObjectClass() {
+        assert (clazz != null) : this.getClass() + " objectClass is null";
         return clazz;
     }
 
