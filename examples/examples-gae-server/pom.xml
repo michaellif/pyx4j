@@ -228,6 +228,33 @@
             </build>
         </profile>
 
+        <!-- todo move this to central pom in maven 3 -->
+        <profile>
+            <id>build</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>clean.java.io.tmpdir</id>
+                                <phase>clean</phase>
+                                <inherited>false</inherited>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <tasks>
+                                        <delete quiet="true" includeemptydirs="false">
+                                            <fileset dir="${java.io.tmpdir}"/>
+                                        </delete>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
 
