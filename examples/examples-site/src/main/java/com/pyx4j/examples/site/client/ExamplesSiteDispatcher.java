@@ -20,8 +20,11 @@
  */
 package com.pyx4j.examples.site.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.essentials.client.AbstractSiteDispatcher;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ExamplesSiteDispatcher extends AbstractSiteDispatcher {
@@ -35,6 +38,12 @@ public class ExamplesSiteDispatcher extends AbstractSiteDispatcher {
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
 
         MessageDialog.info("TODO", "TODO");
+    }
+
+    @Override
+    protected void obtainSite(String siteName, AsyncCallback<SitePanel> callback) {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -137,9 +137,7 @@ public abstract class SiteDispatcher {
         }
     }
 
-    public void obtainSite(String siteName, AsyncCallback<SitePanel> callback) {
-
-    }
+    protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);
 
     protected void onAuthenticationChange() {
         if (ClientContext.isAuthenticated()) {

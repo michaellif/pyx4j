@@ -43,6 +43,10 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
                 EntityFactory.create(null);
             } catch (NullPointerException ignore) {
             }
+        } else if (singleFactory == null) {
+            synchronized (ClientEntityFactory.class) {
+                singleFactory = GWT.create(IEntityFactoryImpl.class);
+            }
         }
     }
 

@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 
+import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -43,6 +44,9 @@ public class SiteCache {
     private static Logger log = LoggerFactory.getLogger(SiteCache.class);
 
     public static void obtain(final String siteId, final AsyncCallback<Site> callback) {
+
+        ClientEntityFactory.ensureIEntityImplementations();
+
         final SiteRequest siteRequest = new SiteRequest();
         siteRequest.setSiteId(siteId);
 
