@@ -14,52 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on Feb 10, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.examples.domain.crm;
 
-import java.util.Date;
-
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
 
-public interface Order extends IEntity<Order> {
+public interface Resource extends IEntity<Resource> {
 
-    public enum Status {
+    @NotNull
+    IPrimitive<String> name();
 
-        ACTIVE("Active"),
-
-        COMPLETED("Completed"),
-
-        SUSPENDED("Suspended");
-
-        private final String descr;
-
-        private Status(String descr) {
-            this.descr = descr;
-        }
-
-        @Override
-        public String toString() {
-            return descr;
-        }
-    }
-
-    IPrimitive<Status> status();
-
-    IPrimitive<Date> receivedDate();
-
-    IPrimitive<Date> completedDate();
-
-    IPrimitive<Date> dueDate();
-
-    IPrimitive<Double> cost();
-
-    IPrimitiveSet<String> notes();
-
-    ISet<Resource> resources();
 }
