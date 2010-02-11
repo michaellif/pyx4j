@@ -12,4 +12,44 @@ pyx
 
     This is the second generation framework we are using for our web applications.
 
-    {{{http://pyx4j.com/snapshot/pyx4j/pyx4j-gwt/}Old framework}}  is still maintained
+    This framework simplify domain driven application development on GAE with GWT.
+
+    {{{http://pyx4j.com/snapshot/pyx4j/pyx4j-gwt/}Old framework}} is still maintained.
+
+* IEntity
+
+    This is our approach to make data object and its metadata as one.
+
+    We slected this approach because we need
+
+    * Refactoring safe domain
+
+    * The same domain objects in GWT cleint mode and on server side
+
+    * Type safety using Java 5 generics
+
+    []
+
+---
+public interface Car extends IEntity<Car> {
+
+    IPrimitive<String> name();
+
+}
+---
+
+    Implemenation objects are created using bytecode manipulations (Javassist) on server and GWT rebind for client.
+
+    We can create Entity implemenation classes so bytecode manipulations can be avoided on production. This is the final step and optinal for application delopyment.
+Implemenations can be dynamicaly created at runtime during development.
+
+* CComponent(s)
+
+    Forms and data binging detatched from DOM objects.
+
+
+* Interesting alternatives
+
+    * {{{http://code.google.com/p/objectify-appengine/}Objectify-Appengine}}
+
+    * {{{http://code.google.com/p/gwt-ent/}GWT ENT}}

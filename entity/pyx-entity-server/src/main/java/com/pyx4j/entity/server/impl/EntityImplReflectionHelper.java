@@ -35,6 +35,11 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 
+/**
+ * We do use runtime reflection to collect meta data.
+ * 
+ * Ideally EntityImplGenerator can be made much more complex to move this to compile time.
+ */
 public class EntityImplReflectionHelper {
 
     static Class<?> toClass(Type type) {

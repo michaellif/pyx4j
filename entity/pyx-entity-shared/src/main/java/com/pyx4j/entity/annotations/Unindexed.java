@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Feb 11, 2010
  * @author vlads
  * @version $Id$
  */
@@ -26,14 +26,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Define a index in RDBMS or indexed property (optional) in App Engine persistent
- * storage.
+ * Define property stored as an unindexed property in App Engine persistent storage.
  * 
- * @see Unindexed for GAE persistance.
+ * Member will be stored with Entity.setUnindexedProperty() instead of
+ * Entity.setProperty().
  */
 @Target( { ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Indexed {
+public @interface Unindexed {
 
-    String name() default "";
 }
