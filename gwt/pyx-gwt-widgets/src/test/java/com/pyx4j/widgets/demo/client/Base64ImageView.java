@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
@@ -64,7 +63,7 @@ public class Base64ImageView extends VerticalPanel implements CancelOption, Cust
 
         add(imagesPanel);
 
-        dialog = new Dialog("Base64ImageView", this);
+        dialog = new Dialog("Base64ImageView " + BrowserType.getCompiledType(), this);
         dialog.setBody(this);
         dialog.setPixelSize(660, 300);
     }
@@ -96,7 +95,11 @@ public class Base64ImageView extends VerticalPanel implements CancelOption, Cust
                 data.add(t);
                 t = "";
             } else {
-                data.add("data:image/png;base64," + t);
+                if (t.startsWith("http")) {
+                    data.add(t);
+                } else {
+                    data.add("data:image/png;base64," + t);
+                }
                 t = "";
             }
         }
