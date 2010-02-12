@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
-import com.pyx4j.site.shared.domain.PageData;
 import com.pyx4j.site.shared.domain.Portlet;
 
 public class PortletWidget extends VerticalPanel {
@@ -37,10 +36,12 @@ public class PortletWidget extends VerticalPanel {
         this.portlet = portlet;
         setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
 
-        HTML capturePanel = new HTML(portlet.capture().getValue());
-        capturePanel.setWordWrap(false);
-        add(capturePanel);
-        capturePanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
+        if (portlet.capture().getValue() != null) {
+            HTML capturePanel = new HTML(portlet.capture().getValue());
+            capturePanel.setWordWrap(false);
+            add(capturePanel);
+            capturePanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
+        }
 
         HTML bodyPanel = new HTML(portlet.html().getValue());
         bodyPanel.setWordWrap(false);

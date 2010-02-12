@@ -283,7 +283,6 @@ public class BusinessTheme extends SiteTheme {
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
         style.addProperty("width", "220px");
         style.addProperty("background", "#E5CC7F");
-        style.addProperty("color", "gray");
         style.addProperty("padding", "5px 3px");
         addStyle(style);
 
@@ -295,7 +294,7 @@ public class BusinessTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a");
-        style.addProperty("color", "#c90");
+        style.addProperty("color", "#330066");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
