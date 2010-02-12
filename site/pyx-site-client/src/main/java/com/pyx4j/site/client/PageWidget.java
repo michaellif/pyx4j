@@ -38,15 +38,22 @@ public class PageWidget extends HTML {
 
     private final List<InlineWidget> inlineWidgets = new ArrayList<InlineWidget>();
 
+    private final SitePanel parent;
+
+    private final PageData pageData;
+
     public PageWidget(SitePanel parent, PageData pageData) {
         super(pageData.html().getValue(), true);
+        this.parent = parent;
+        this.pageData = pageData;
         setStyleName(SiteCSSClass.pyx4j_Site_PageWidget.name());
+    }
 
+    public void createInlineWidgets() {
         if (!pageData.inlineWidgetIds().isNull() && pageData.inlineWidgetIds().getValue().size() > 0) {
             for (String widgetId : pageData.inlineWidgetIds().getValue()) {
                 //check in local (page) factory
                 InlineWidget inlineWidget = null;
-                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
                 //check in local (page) factory
                 if (parent.getLocalWidgetFactory() != null) {
                     inlineWidget = parent.getLocalWidgetFactory().createWidget(widgetId);
@@ -55,6 +62,7 @@ public class PageWidget extends HTML {
                 if (inlineWidget == null) {
                     inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
                 }
+                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
                 if (root != null && inlineWidget != null) {
                     root.add(inlineWidget);
                     inlineWidgets.add(inlineWidget);

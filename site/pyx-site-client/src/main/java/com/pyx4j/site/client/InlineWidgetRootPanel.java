@@ -27,8 +27,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
-import com.pyx4j.site.shared.domain.ResourceUri;
-
 public class InlineWidgetRootPanel extends AbsolutePanel {
 
     private static Map<String, InlineWidgetRootPanel> rootPanels = new HashMap<String, InlineWidgetRootPanel>();

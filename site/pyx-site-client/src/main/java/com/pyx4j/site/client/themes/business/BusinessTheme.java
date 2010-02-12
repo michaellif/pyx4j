@@ -276,19 +276,33 @@ public class BusinessTheme extends SiteTheme {
     protected void initHtmlPortletStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
         style.addProperty("margin", "15px");
-        style.addProperty("width", "150px");
+        style.addProperty("width", "220px");
         style.addProperty("text-align", "center");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
-        style.addProperty("background", "transparent url(images/header.gif) no-repeat bottom 80%");
+        style.addProperty("width", "220px");
+        style.addProperty("background", "#E5CC7F");
         style.addProperty("color", "gray");
-        style.addProperty("padding", "10px 5px");
+        style.addProperty("padding", "5px 3px");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
         style.addProperty("padding", "5px");
         style.addProperty("color", "black");
         style.addProperty("text-align", "center");
+        style.addProperty("border", "1px solid #E5CC7F");
         addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a");
+        style.addProperty("color", "#c90");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
     }
 
 }

@@ -169,11 +169,13 @@ public abstract class SitePanel extends SimplePanel {
         String path = page.uri().uri().getValue();
         if (cachedPanels.containsKey(path)) {
             pageWidget = cachedPanels.get(path);
+            mainSectionPanel.setWidget(pageWidget);
         } else {
             pageWidget = new PageWidget(this, page.data());
             cachedPanels.put(path, pageWidget);
+            mainSectionPanel.setWidget(pageWidget);
+            pageWidget.createInlineWidgets();
         }
-        mainSectionPanel.setWidget(pageWidget);
 
         if (SkinType.dark.equals(site.skinType().getValue())) {
             StyleManger.installTheme(darkTheme);
@@ -188,14 +190,18 @@ public abstract class SitePanel extends SimplePanel {
         leftSectionPanel.clear();
         if (page.data().leftPortlets().size() > 0) {
             for (Portlet portlet : page.data().leftPortlets()) {
-                leftSectionPanel.add(new PortletWidget(this, portlet));
+                PortletWidget portletWidget = new PortletWidget(this, portlet);
+                leftSectionPanel.add(portletWidget);
+                portletWidget.createInlineWidgets();
             }
         }
 
         rightSectionPanel.clear();
         if (page.data().rightPortlets().size() > 0) {
             for (Portlet portlet : page.data().rightPortlets()) {
-                rightSectionPanel.add(new PortletWidget(this, portlet));
+                PortletWidget portletWidget = new PortletWidget(this, portlet);
+                rightSectionPanel.add(portletWidget);
+                portletWidget.createInlineWidgets();
             }
         }
 

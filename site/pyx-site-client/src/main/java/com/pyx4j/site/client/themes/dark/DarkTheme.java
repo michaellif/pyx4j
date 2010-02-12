@@ -261,16 +261,29 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("width", "150px");
         style.addProperty("text-align", "center");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
         style.addProperty("background", "transparent url(images/header.gif) no-repeat bottom 80%");
         style.addProperty("color", "gray");
         style.addProperty("padding", "10px 5px");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
         style.addProperty("padding", "5px");
         style.addProperty("color", "black");
         style.addProperty("text-align", "center");
         addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a");
+        style.addProperty("color", "black");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a:hover");
+        style.addProperty("color", "grey");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
     }
 
 }

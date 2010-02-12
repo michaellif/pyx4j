@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.shared.domain.PageData;
 import com.pyx4j.site.shared.domain.Portlet;
 
 public class PortletWidget extends VerticalPanel {
@@ -26,8 +27,14 @@ public class PortletWidget extends VerticalPanel {
 
     private final List<InlineWidget> inlineWidgets = new ArrayList<InlineWidget>();
 
+    private final SitePanel parent;
+
+    private final Portlet portlet;
+
     public PortletWidget(SitePanel parent, Portlet portlet) {
         super();
+        this.parent = parent;
+        this.portlet = portlet;
         setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
 
         HTML capturePanel = new HTML(portlet.capture().getValue());
@@ -40,6 +47,9 @@ public class PortletWidget extends VerticalPanel {
         add(bodyPanel);
         bodyPanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
 
+    }
+
+    public void createInlineWidgets() {
         if (!portlet.inlineWidgetIds().isNull() && portlet.inlineWidgetIds().getValue().size() > 0) {
             for (String widgetId : portlet.inlineWidgetIds().getValue()) {
                 InlineWidget inlineWidget = null;
@@ -60,7 +70,5 @@ public class PortletWidget extends VerticalPanel {
                 }
             }
         }
-
     }
-
 }

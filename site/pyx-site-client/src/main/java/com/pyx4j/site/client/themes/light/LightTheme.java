@@ -271,21 +271,36 @@ public class LightTheme extends SiteTheme {
         style.addProperty("color", "gray");
         style.addProperty("text-align", "center");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name() + " h3");
         style.addProperty("margin", "0");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name() + " tr");
         style.addProperty("padding", "0");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
         style.addProperty("color", "#ff6600");
         style.addProperty("padding", "5px");
         style.addProperty("background", "transparent url(images/portlet-border-header.gif) no-repeat 0% 0%");
         addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
         style.addProperty("padding", "5px");
         style.addProperty("background", "transparent url(images/portlet-border-body.gif) no-repeat 0% 100%");
         addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a");
+        style.addProperty("color", "gray");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name() + " a:hover");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("color", "black");
+        addStyle(style);
+
     }
 
 }
