@@ -39,7 +39,7 @@ public class EntityUrl {
 
     public static String getHistoryParmeters(IEntity<?> entity) {
         //TODO convert actual members to name value pairs.
-        String historyParmeters = "l" + localCount;
+        String historyParmeters = "l" + (localCount++);
         local.put(historyParmeters, entity);
         return historyParmeters;
     }
