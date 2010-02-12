@@ -59,11 +59,24 @@ public class GoogleAnalytics {
         String h = Window.Location.getHostName();
         if (!"localhost".equals(h) && !"127.1.1.1".equals(h)) {
             GoogleAnalytics.googleAnalyticsTracker = googleAnalyticsTracker;
-            if (googleAnalyticsTracker != null) {
-                // Allow for "Standard Setup" in html page
-                if (isInstalled()) {
-                    loaded = true;
-                } else if (!alreadyInjected) {
+        }
+    }
+
+    public static void track(final String actionName) {
+        if (googleAnalyticsTracker == null) {
+            return;
+        }
+        if (!loaded) {
+            // Allow for "Standard Setup" in html page
+            if (isInstalled()) {
+                loaded = true;
+            } else {
+                if (queuedActions == null) {
+                    queuedActions = new Vector<String>();
+                }
+                queuedActions.add(actionName);
+
+                if (!alreadyInjected) {
                     alreadyInjected = true;
                     injectJS();
                     loadTimer = new Timer() {
@@ -88,31 +101,20 @@ public class GoogleAnalytics {
                     };
                     loadTimer.scheduleRepeating(7 * 1000);
                 }
+                return;
             }
         }
-    }
 
-    public static void track(final String actionName) {
-        if (googleAnalyticsTracker == null) {
-            return;
-        }
-        if (!loaded) {
-            if (queuedActions == null) {
-                queuedActions = new Vector<String>();
-            }
-            queuedActions.add(actionName);
-        } else {
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    try {
-                        log.debug("googleAnalyticsTrack {}", actionName);
-                        trackPageView(googleAnalyticsTracker, actionName);
-                    } catch (Throwable e) {
-                        log.error("GoogleAnalytics error", e);
-                    }
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                try {
+                    log.debug("googleAnalyticsTrack {}", actionName);
+                    trackPageView(googleAnalyticsTracker, actionName);
+                } catch (Throwable e) {
+                    log.error("GoogleAnalytics error", e);
                 }
-            });
-        }
+            }
+        });
     }
 
     private static void fireQueuedActions() {
