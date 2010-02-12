@@ -20,16 +20,20 @@
  */
 package com.pyx4j.widgets.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.ScriptElement;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 
 /**
- * Application index.html require:
- * 
- * <script type="text/javascript"
- * src="http://api.recaptcha.net/js/recaptcha_ajax.js"></script>
+ * This class Injects reCAPTCHA Client API code.
  * 
  * @see http://recaptcha.net/apidocs/captcha/ for more information.
  * 
@@ -38,13 +42,25 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class CaptchaComposite extends Composite {
 
+    private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
+
     private final Grid grid = new Grid(1, 1);
 
     private static final String DIV_NAME = "recaptcha_div";
 
+    @SuppressWarnings("unused")
     private static String publicKey;
 
     private boolean created = false;
+
+    private static boolean alreadyInjected = false;
+
+    /** there are no callback in ga.js, so we use timer */
+    private static boolean loaded = false;
+
+    private static Timer loadTimer;
+
+    private static int timeoutCountdown = 30;
 
     public CaptchaComposite() {
         this.initWidget(grid);
@@ -74,6 +90,11 @@ public class CaptchaComposite extends Composite {
     }-*/;
 
     private void createChallenge() {
+        if (!loaded) {
+            if (load()) {
+                return;
+            }
+        }
         createChallengeImpl();
         created = true;
     }
@@ -126,4 +147,51 @@ public class CaptchaComposite extends Composite {
         }
     }
 
+    private boolean load() {
+        // Allow for "Standard Setup" in html page
+        if (isInstalled()) {
+            loaded = true;
+        } else {
+            if (!alreadyInjected) {
+                alreadyInjected = true;
+                injectJS();
+                loadTimer = new Timer() {
+                    @Override
+                    public void run() {
+                        if (isInstalled()) {
+                            loaded = true;
+                            loadTimer.cancel();
+                            loadTimer = null;
+                            log.debug("reCAPTCHA loaded");
+                            createChallengeImpl();
+                            created = true;
+                        } else {
+                            timeoutCountdown--;
+                            if (timeoutCountdown == 0) {
+                                loadTimer.cancel();
+                                loadTimer = null;
+                                log.error("reCAPTCHA load timeout");
+                            }
+                        }
+                    }
+                };
+                loadTimer.scheduleRepeating(500);
+            }
+        }
+        return !loaded;
+    }
+
+    private static void injectJS() {
+        String protocolPrefix = Window.Location.getProtocol().equals("https:") ? "https://api-secure" : "http://api";
+        Document doc = Document.get();
+        ScriptElement script = doc.createScriptElement();
+        script.setSrc(protocolPrefix + ".recaptcha.net/js/recaptcha_ajax.js");
+        script.setType("text/javascript");
+        doc.getBody().appendChild(script);
+    }
+
+    private static final native boolean isInstalled()
+    /*-{
+        return typeof $wnd.Recaptcha != "undefined";
+    }-*/;
 }
