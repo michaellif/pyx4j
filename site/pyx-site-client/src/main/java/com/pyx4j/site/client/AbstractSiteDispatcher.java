@@ -104,8 +104,7 @@ public abstract class AbstractSiteDispatcher {
             obtainSite(siteName, new AsyncCallback<SitePanel>() {
                 @Override
                 public void onFailure(Throwable caught) {
-                    //TODO
-
+                    hideLoadingIndicator();
                 }
 
                 @Override
@@ -115,6 +114,7 @@ public abstract class AbstractSiteDispatcher {
                         show(sitePanel, finalUri, finalArgs);
                         hideLoadingIndicator();
                     } else {
+                        hideLoadingIndicator();
                         throw new Error("sitePanel is not found");
                     }
                 }
