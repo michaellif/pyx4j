@@ -47,7 +47,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     }
 
     @Override
-    protected String getAppId() {
+    public String getAppId() {
         return "examples";
     }
 

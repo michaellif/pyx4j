@@ -139,7 +139,7 @@ public abstract class AbstractSiteDispatcher {
 
     protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);
 
-    protected abstract String getAppId();
+    public abstract String getAppId();
 
     protected void onAuthenticationChange() {
         if (ClientContext.isAuthenticated()) {

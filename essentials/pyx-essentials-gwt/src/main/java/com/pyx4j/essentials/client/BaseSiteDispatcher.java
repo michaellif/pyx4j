@@ -31,10 +31,17 @@ import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
 
+    private static BaseSiteDispatcher instance;
+
     public void onModuleLoad() {
+        instance = this;
         ClientEntityFactory.ensureIEntityImplementations();
         ClientLogger.addAppender(new RPCAppender(Level.WARN));
         ClientLogger.setDebugOn(true);
         UnrecoverableErrorHandlerDialog.register();
+    }
+
+    public static BaseSiteDispatcher instance() {
+        return instance;
     }
 }
