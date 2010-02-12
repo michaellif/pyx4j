@@ -20,6 +20,8 @@
  */
 package com.pyx4j.examples.site.client;
 
+import com.google.gwt.ajaxloader.client.AjaxLoader;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.essentials.client.BaseSiteDispatcher;
@@ -34,6 +36,13 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         super.onModuleLoad();
 
         //ApplicationCommon.init();
+
+        if (Window.Location.getHost().endsWith("pyx4j-demo.appspot.com")) {
+            AjaxLoader.init("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxSsRVEFJ6vLwIBuBBr9l_DYCz2brRSV7aQHBsZMSBwjF72gUZrsiWfavw");
+        } else {
+            // pyx4j.com
+            AjaxLoader.init("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxT2nw7IAgYZCN3UZ-Glm95U7gTjpRTVD1pxXeXBpUR-ZQ5Z0YCQkesTkg");
+        }
 
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
 
