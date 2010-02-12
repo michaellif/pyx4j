@@ -49,6 +49,8 @@ public interface Order extends IEntity<Order> {
         }
     }
 
+    IPrimitive<String> description();
+
     IPrimitive<Status> status();
 
     IPrimitive<Date> receivedDate();

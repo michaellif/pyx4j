@@ -54,6 +54,13 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         return b.toString();
     }
 
+    public static <T extends IEntity<?>> T createNamed(Class<T> clazz, String name) {
+        T ent = EntityFactory.create(clazz);
+        ent.setMemberValue("name", name);
+        PersistenceServicesFactory.getPersistenceService().persist(ent);
+        return ent;
+    }
+
     @Override
     public Set<String> getParameters() {
         return new HashSet<String>();

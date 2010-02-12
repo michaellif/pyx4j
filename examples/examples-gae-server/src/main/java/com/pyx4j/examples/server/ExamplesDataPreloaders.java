@@ -21,10 +21,11 @@
 package com.pyx4j.examples.server;
 
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.examples.server.preloader.crm.PreloadCrmDemo;
 
 public class ExamplesDataPreloaders extends DataPreloaderCollection {
 
     public ExamplesDataPreloaders() {
-
+        add(new PreloadCrmDemo());
     }
 }
