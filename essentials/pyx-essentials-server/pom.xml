@@ -30,10 +30,16 @@
             <artifactId>pyx-rpc-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 
