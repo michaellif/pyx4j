@@ -42,9 +42,9 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
 
-public abstract class SiteDispatcher {
+public abstract class AbstractSiteDispatcher {
 
-    private static final Logger log = LoggerFactory.getLogger(SiteDispatcher.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractSiteDispatcher.class);
 
     private final HashMap<String, SitePanel> sitePanels = new HashMap<String, SitePanel>();
 
@@ -52,7 +52,7 @@ public abstract class SiteDispatcher {
 
     private ResourceUri welcomeUri;
 
-    public SiteDispatcher() {
+    public AbstractSiteDispatcher() {
         History.addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
@@ -138,6 +138,8 @@ public abstract class SiteDispatcher {
     }
 
     protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);
+
+    protected abstract String getAppId();
 
     protected void onAuthenticationChange() {
         if (ClientContext.isAuthenticated()) {
