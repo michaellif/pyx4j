@@ -677,7 +677,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
-    public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria) {
+    public <T extends IEntity<?>> int delete(EntityCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
@@ -694,5 +694,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         datastoreCallStats.get().count++;
         datastore.delete(keys);
+        return keys.size();
     }
 }

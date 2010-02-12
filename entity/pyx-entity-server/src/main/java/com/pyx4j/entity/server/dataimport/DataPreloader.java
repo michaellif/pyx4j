@@ -38,6 +38,6 @@ public interface DataPreloader {
 
     public Set<String> getParameters();
 
-    public void setParameters(Map<String, Serializable> parameters);
+    public void setParametersValues(Map<String, Serializable> parameters);
 
 }

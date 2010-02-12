@@ -14,20 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on Feb 12, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.examples.server;
 
-import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
-import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-public class ExamplesRPCServiceFactory extends EssentialsRPCServiceFactory {
+public class ExamplesDataPreloaders extends DataPreloaderCollection {
 
-    @Override
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
-        return super.getServiceClass(serviceInterfaceClassName);
+    public ExamplesDataPreloaders() {
+
     }
-
 }

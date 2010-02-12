@@ -14,25 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on Feb 12, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.server;
+package com.pyx4j.essentials.server;
 
-import com.pyx4j.entity.rpc.DatastoreAdminServices;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
+public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
-    public static class ResetInitialDataImpl implements ResetInitialData {
-
-        @Override
-        public String execute(VoidSerializable request) {
-            //new PreloadSite().preload();
-            return "Nothing here...";
-        }
-
+    public DataPreloaderCollection getDataPreloaders() {
+        return null;
     }
-
 }

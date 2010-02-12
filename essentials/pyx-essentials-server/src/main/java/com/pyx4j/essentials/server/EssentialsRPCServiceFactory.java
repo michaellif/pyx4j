@@ -14,19 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on Feb 12, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.server;
+package com.pyx4j.essentials.server;
 
-import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
+import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.rpc.server.ReflectionServiceFactory;
 import com.pyx4j.rpc.shared.Service;
 
-public class ExamplesRPCServiceFactory extends EssentialsRPCServiceFactory {
+public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
 
     @Override
     public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
+
+        if (DatastoreAdminServices.ResetInitialData.class.getName().equals(serviceInterfaceClassName)) {
+            return EssentialsDatastoreAdminServicesImpl.ResetInitialDataImpl.class;
+        }
+        if (DatastoreAdminServices.GetPreloaders.class.getName().equals(serviceInterfaceClassName)) {
+            return EssentialsDatastoreAdminServicesImpl.GetPreloadersImpl.class;
+        }
+        if (DatastoreAdminServices.ExectutePreloaders.class.getName().equals(serviceInterfaceClassName)) {
+            return EssentialsDatastoreAdminServicesImpl.ExectutePreloadersImpl.class;
+        }
+
         return super.getServiceClass(serviceInterfaceClassName);
     }
 

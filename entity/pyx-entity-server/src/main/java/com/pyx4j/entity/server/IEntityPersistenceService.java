@@ -45,6 +45,6 @@ public interface IEntityPersistenceService {
 
     public void delete(Class<IEntity<?>> entityClass, long primaryKey);
 
-    public <T extends IEntity<?>> void delete(EntityCriteria<T> criteria);
+    public <T extends IEntity<?>> int delete(EntityCriteria<T> criteria);
 
 }
