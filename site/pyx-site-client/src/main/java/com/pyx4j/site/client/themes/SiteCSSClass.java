@@ -72,6 +72,4 @@ public enum SiteCSSClass {
 
     pyx4j_Site_HtmlPortletBody,
 
-    pyx4j_Site_Content,
-
 }

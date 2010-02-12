@@ -20,9 +20,11 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 public interface Portlet extends IEntity<Portlet> {
 
@@ -32,5 +34,8 @@ public interface Portlet extends IEntity<Portlet> {
 
     @StringLength(4096)
     IPrimitive<String> html();
+
+    @Owned
+    IPrimitiveSet<String> inlineWidgetIds();
 
 }

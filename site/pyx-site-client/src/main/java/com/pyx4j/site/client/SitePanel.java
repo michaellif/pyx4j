@@ -169,33 +169,11 @@ public abstract class SitePanel extends SimplePanel {
         String path = page.uri().uri().getValue();
         if (cachedPanels.containsKey(path)) {
             pageWidget = cachedPanels.get(path);
-            mainSectionPanel.setWidget(pageWidget);
         } else {
-            pageWidget = new PageWidget(mainSectionPanel, page.data());
+            pageWidget = new PageWidget(this, page.data());
             cachedPanels.put(path, pageWidget);
-
-            if (!page.data().inlineWidgetIds().isNull() && page.data().inlineWidgetIds().getValue().size() > 0) {
-                for (String widgetId : page.data().inlineWidgetIds().getValue()) {
-                    //check in local (page) factory
-                    if (localWidgetFactory() != null) {
-                        InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
-                        InlineWidget inlineWidget = localWidgetFactory().createWidget(widgetId);
-                        //check in global factory
-                        if (inlineWidget == null) {
-                            inlineWidget = globalWidgetFactory.createWidget(widgetId);
-                        }
-                        if (root != null && inlineWidget != null) {
-                            inlineWidget.setStyleName(SiteCSSClass.pyx4j_Site_Content.name());
-                            root.add(inlineWidget);
-                            pageWidget.addInlineWidget(inlineWidget);
-                        } else {
-                            log.warn("Failed to add inline widget " + widgetId + " to panel.");
-                        }
-                    }
-                }
-            }
-
         }
+        mainSectionPanel.setWidget(pageWidget);
 
         if (SkinType.dark.equals(site.skinType().getValue())) {
             StyleManger.installTheme(darkTheme);
@@ -210,14 +188,14 @@ public abstract class SitePanel extends SimplePanel {
         leftSectionPanel.clear();
         if (page.data().leftPortlets().size() > 0) {
             for (Portlet portlet : page.data().leftPortlets()) {
-                leftSectionPanel.add(createPortletWidget(portlet));
+                leftSectionPanel.add(new PortletWidget(this, portlet));
             }
         }
 
         rightSectionPanel.clear();
         if (page.data().rightPortlets().size() > 0) {
             for (Portlet portlet : page.data().rightPortlets()) {
-                rightSectionPanel.add(createPortletWidget(portlet));
+                rightSectionPanel.add(new PortletWidget(this, portlet));
             }
         }
 
@@ -231,7 +209,11 @@ public abstract class SitePanel extends SimplePanel {
 
     }
 
-    abstract protected InlineWidgetFactory localWidgetFactory();
+    public static InlineWidgetFactory getGlobalWidgetFactory() {
+        return globalWidgetFactory;
+    }
+
+    public abstract InlineWidgetFactory getLocalWidgetFactory();
 
     protected Panel createContentPanel() {
         FlowPanel contentPanel = new FlowPanel();
@@ -319,10 +301,6 @@ public abstract class SitePanel extends SimplePanel {
     protected FlowPanel createRightSectionPanel() {
         FlowPanel panel = new FlowPanel();
         return panel;
-    }
-
-    private Widget createPortletWidget(Portlet portlet) {
-        return new PortletWidget(portlet);
     }
 
     protected SimplePanel createMainSectionPanel() {

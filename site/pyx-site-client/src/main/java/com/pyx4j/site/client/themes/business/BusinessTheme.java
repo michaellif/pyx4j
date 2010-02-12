@@ -69,12 +69,6 @@ public class BusinessTheme extends SiteTheme {
     }
 
     @Override
-    protected void initContentStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_Content.name());
-        addStyle(style);
-    }
-
-    @Override
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
         style.addProperty("background", "url(images/business_banner.jpg) no-repeat");

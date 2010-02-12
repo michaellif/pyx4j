@@ -24,25 +24,47 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.PageData;
 
 public class PageWidget extends HTML {
 
+    private static final Logger log = LoggerFactory.getLogger(PageWidget.class);
+
     private final List<InlineWidget> inlineWidgets = new ArrayList<InlineWidget>();
 
-    public PageWidget(SimplePanel parent, PageData pageData) {
+    public PageWidget(SitePanel parent, PageData pageData) {
         super(pageData.html().getValue(), true);
-        parent.setWidget(this);
         setStyleName(SiteCSSClass.pyx4j_Site_PageWidget.name());
 
-    }
+        if (!pageData.inlineWidgetIds().isNull() && pageData.inlineWidgetIds().getValue().size() > 0) {
+            for (String widgetId : pageData.inlineWidgetIds().getValue()) {
+                //check in local (page) factory
+                InlineWidget inlineWidget = null;
+                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
+                //check in local (page) factory
+                if (parent.getLocalWidgetFactory() != null) {
+                    inlineWidget = parent.getLocalWidgetFactory().createWidget(widgetId);
+                }
+                //check in global factory
+                if (inlineWidget == null) {
+                    inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
+                }
+                if (root != null && inlineWidget != null) {
+                    root.add(inlineWidget);
+                    inlineWidgets.add(inlineWidget);
+                } else {
+                    log.warn("Failed to add inline widget " + widgetId + " to panel.");
+                }
 
-    public void addInlineWidget(InlineWidget inlineWidget) {
-        inlineWidgets.add(inlineWidget);
+            }
+        }
+
     }
 
     public void populateInlineWidgets(Map<String, String> args) {
