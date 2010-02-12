@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
+import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
 
 public class ClientContext {
@@ -51,6 +52,9 @@ public class ClientContext {
         userVisit = authenticationResponse.getUserVisit();
         log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
+        if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
+            RPCManager.enableAppEngineUsageStats();
+        }
     }
 
     /**

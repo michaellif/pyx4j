@@ -42,7 +42,6 @@ public class ApplicationCommon {
                 }
             }
         });
-        RPCManager.enableAppEngineUsageStats();
     }
 
 }
