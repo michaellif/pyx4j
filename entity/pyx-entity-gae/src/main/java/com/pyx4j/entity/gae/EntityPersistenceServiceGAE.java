@@ -171,7 +171,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             Object value = me.getValue();
             if (value instanceof Map<?, ?>) {
                 if (!meta.isEntity()) {
-                    throw new Error("Saving unexpected value " + meta.getCaption());
+                    throw new Error("Saving non persisted value " + meta.getCaption());
                 } else if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
@@ -184,7 +184,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 } else {
                     Long childKey = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKey == null) {
-                        throw new Error("Saving unperisted reference " + meta.getCaption());
+                        throw new Error("Saving non persisted reference " + meta.getCaption());
                     }
                     value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getObjectClass()).getPersistenceName(),
                             childKey);
@@ -221,7 +221,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (Object el : (Set<?>) value) {
                         Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
-                            throw new Error("Saving unperisted reference " + meta.getCaption());
+                            throw new Error("Saving non persisted reference " + meta.getCaption());
                         }
                         childKeys.add(KeyFactory.createKey(
                                 EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getValueClass()).getPersistenceName(), childKey));
@@ -243,7 +243,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (Object el : (List<?>) value) {
                         Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
-                            throw new Error("Saving unperisted reference " + meta.getCaption());
+                            throw new Error("Saving non persisted reference " + meta.getCaption());
                         }
                         Key key = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getValueClass()).getPersistenceName(),
                                 childKey);
