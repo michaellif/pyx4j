@@ -80,7 +80,7 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
     }
 
     protected Page createPage(String caption, ResourceUri uri, String html) {
-        return createPage(caption, uri, html);
+        return createPage(caption, uri, html, null, null, null);
     }
 
     protected Page createPage(String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {

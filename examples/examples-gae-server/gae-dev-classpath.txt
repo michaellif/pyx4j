@@ -14,6 +14,9 @@ pyx-security-server
 pyx-config-server
 pyx-site-shared
 pyx-site-server
+pyx-essentials-shared
+pyx-essentials-server
+examples-domain
 \slf4j-api
 slf4j-jdk14
 javassist
@@ -32,4 +35,7 @@ javassist
 -pyx-config-server.jar
 -pyx-site-shared.jar
 -pyx-site-server.jar
+-examples-domain.jar
+-pyx-essentials-shared.jar
+-pyx-essentials-server.jar
 -examples-gae-server-2.0.0-SNAPSHOT.jar

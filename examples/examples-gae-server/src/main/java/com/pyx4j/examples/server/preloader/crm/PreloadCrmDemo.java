@@ -71,6 +71,14 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         return b.toString();
     }
 
+    private Resource selectResource(int number) {
+        if (r.length >= number) {
+            return r[r.length % number];
+        } else {
+            return r[number];
+        }
+    }
+
     private void createCustomer(String name) {
         Customer customer = EntityFactory.create(Customer.class);
         customer.name().setValue(name);
@@ -81,14 +89,14 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         Order o1 = EntityFactory.create(Order.class);
         o1.description().setValue("Cat " + customerCount);
         o1.status().setValue(Status.ACTIVE);
-        o1.resources().add(r[customerCount + 1]);
+        o1.resources().add(selectResource(customerCount + 1));
         customer.orders().add(o1);
         orderCount++;
 
         Order o2 = EntityFactory.create(Order.class);
         o2.description().setValue("Dog " + customerCount);
         o2.status().setValue(Status.COMPLETED);
-        o2.resources().add(r[customerCount + 1]);
+        o2.resources().add(selectResource(customerCount + 1));
         o2.resources().add(r[0]);
         customer.orders().add(o2);
         orderCount++;
