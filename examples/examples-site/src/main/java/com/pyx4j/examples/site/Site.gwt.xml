@@ -8,6 +8,13 @@
 	<inherits name="com.google.gwt.maps.GoogleMaps" />
     <inherits name='com.pyx4j.essentials.Essentials' />
     <inherits name='com.pyx4j.examples.ExamplesDomain' />
+    <inherits name='com.pyx4j.examples.ExamplesRpc' />
+    <inherits name='com.pyx4j.security.Security' />
+    <inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
+    
+    <replace-with class="com.pyx4j.examples.site.client.InlineWidgetFactory">
+		<when-type-is class="com.pyx4j.site.client.InlineWidgetFactory"/>
+	</replace-with>
 	
 	<entry-point class='com.pyx4j.examples.site.client.ExamplesSiteDispatcher'/>
 	

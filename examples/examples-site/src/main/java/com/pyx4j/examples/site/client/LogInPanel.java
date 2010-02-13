@@ -14,20 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 12, 2010
- * @author vlads
+ * Created on Jan 13, 2010
+ * @author Misha
  * @version $Id$
  */
-package com.pyx4j.examples.server;
+package com.pyx4j.examples.site.client;
 
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
-import com.pyx4j.examples.server.preloader.PreloadSites;
-import com.pyx4j.examples.server.preloader.crm.PreloadCrmDemo;
+import com.pyx4j.essentials.client.BaseLogInPanel;
 
-public class ExamplesDataPreloaders extends DataPreloaderCollection {
+public abstract class LogInPanel extends BaseLogInPanel {
 
-    public ExamplesDataPreloaders() {
-        add(new PreloadCrmDemo());
-        add(new PreloadSites());
+    public LogInPanel() {
+
     }
+
+    @Override
+    public void onForgotPasswordRequest() {
+
+    }
+
 }

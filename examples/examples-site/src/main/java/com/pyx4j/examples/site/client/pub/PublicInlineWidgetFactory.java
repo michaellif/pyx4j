@@ -14,20 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 12, 2010
+ * Created on Dec 29, 2009
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.server;
+package com.pyx4j.examples.site.client.pub;
 
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
-import com.pyx4j.examples.server.preloader.PreloadSites;
-import com.pyx4j.examples.server.preloader.crm.PreloadCrmDemo;
+import com.pyx4j.site.client.InlineWidget;
+import com.pyx4j.site.client.InlineWidgetFactory;
 
-public class ExamplesDataPreloaders extends DataPreloaderCollection {
+public class PublicInlineWidgetFactory extends InlineWidgetFactory {
 
-    public ExamplesDataPreloaders() {
-        add(new PreloadCrmDemo());
-        add(new PreloadSites());
+    @Override
+    public InlineWidget createWidget(String widgetId) {
+        return null;
     }
+
 }

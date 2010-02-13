@@ -35,7 +35,7 @@ javassist
 -pyx-config-server.jar
 -pyx-site-shared.jar
 -pyx-site-server.jar
--examples-domain.jar
 -pyx-essentials-shared.jar
 -pyx-essentials-server.jar
+-examples-domain.jar
 -examples-gae-server-2.0.0-SNAPSHOT.jar

@@ -20,16 +20,29 @@
  */
 package com.pyx4j.examples.site.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.ajaxloader.client.AjaxLoader;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.essentials.client.BaseSiteDispatcher;
+import com.pyx4j.examples.rpc.Sites;
+import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
+import com.pyx4j.examples.site.client.headless.ExamplesHeadlessSitePanel;
+import com.pyx4j.examples.site.client.pub.ExamplesPublicSitePanel;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.site.client.SiteCache;
 import com.pyx4j.site.client.SitePanel;
+import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
+
+    private static Logger log = LoggerFactory.getLogger(ExamplesSiteDispatcher.class);
 
     @Override
     public void onModuleLoad() {
@@ -46,12 +59,59 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
 
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
 
-        MessageDialog.info("TODO", "TODO");
+        setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home"));
+
+        show(History.getToken());
+
     }
 
     @Override
-    protected void obtainSite(String siteName, AsyncCallback<SitePanel> callback) {
-        // TODO Auto-generated method stub
+    protected void obtainSite(final String siteName, final AsyncCallback<SitePanel> callback) {
+
+        if (!getSitePanels().containsKey(siteName)) {
+
+            final Sites siteId;
+            try {
+                siteId = Sites.valueOf(Sites.class, siteName);
+            } catch (Throwable e) {
+                MessageDialog.error("Ooops", "We don't have site [" + siteName + "]");
+                return;
+            }
+
+            final AsyncCallback<Site> rpcCallback = new AsyncCallback<Site>() {
+
+                public void onFailure(Throwable t) {
+                    log.error(t.getClass().getName() + "[" + t.getMessage() + "]");
+                    // TODO create utility site
+                    MessageDialog.error("Ooops", "System is unavailable, try again later");
+                }
+
+                public void onSuccess(final Site site) {
+                    if (site == null) {
+                        MessageDialog.error("DB Empty", "Contact administrator.");
+                    } else {
+                        switch (siteId) {
+                        case pub:
+                            ExamplesPublicSitePanel.asyncLoadSite(site, callback);
+                            break;
+                        case crm:
+                            ExamplesCrmSitePanel.asyncLoadSite(site, callback);
+                            break;
+                        case headless:
+                            ExamplesHeadlessSitePanel.asyncLoadSite(site, callback);
+                            break;
+                        }
+                    }
+
+                }
+            };
+
+            SiteCache.obtain(siteId.name(), rpcCallback);
+        } else {
+            if (getSitePanels().containsKey(siteName)) {
+                callback.onSuccess(getSitePanels().get(siteName));
+            }
+        }
 
     }
 
