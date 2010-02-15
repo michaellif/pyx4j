@@ -62,7 +62,7 @@ public class ExamplesPublicSitePanel extends ExamplesSitePanel {
     public void onAfterLogOut() {
         super.onAfterLogOut();
         removeAllHeaderLinks();
-        addHeaderLink(getLogInLink(), true);
+        addHeaderLink(getLogInLink(), false);
     }
 
     private void removeAllHeaderLinks() {

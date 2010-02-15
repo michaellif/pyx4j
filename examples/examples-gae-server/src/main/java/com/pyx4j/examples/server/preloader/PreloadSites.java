@@ -32,13 +32,9 @@ import com.pyx4j.site.shared.util.ResourceUriUtil;
 
 public class PreloadSites extends AbstractSitesDataPreloader {
 
-    private Portlet portlet_mantra;
+    private Portlet mantraPortlet;
 
-    private Portlet portlet2;
-
-    private Portlet portlet3;
-
-    private Portlet portlet4;
+    private Portlet slogan1Portlet;
 
     private Portlet partnersListPortlet;
 
@@ -50,21 +46,17 @@ public class PreloadSites extends AbstractSitesDataPreloader {
     }
 
     private void createPortlets() {
-        portlet_mantra = createPortlet1();
-        PersistenceServicesFactory.getPersistenceService().persist(portlet_mantra);
-        portlet2 = createPortlet2();
-        PersistenceServicesFactory.getPersistenceService().persist(portlet2);
-        portlet3 = createPortlet3();
-        PersistenceServicesFactory.getPersistenceService().persist(portlet3);
-        portlet4 = createPortlet4();
-        PersistenceServicesFactory.getPersistenceService().persist(portlet4);
+        mantraPortlet = createPortlet1();
+        PersistenceServicesFactory.getPersistenceService().persist(mantraPortlet);
+        slogan1Portlet = createPortlet2();
+        PersistenceServicesFactory.getPersistenceService().persist(slogan1Portlet);
         partnersListPortlet = createPartnersListPortlet();
         PersistenceServicesFactory.getPersistenceService().persist(partnersListPortlet);
     }
 
     private void createSitess() {
         PersistenceServicesFactory.getPersistenceService().persist(createPublicSite());
-        PersistenceServicesFactory.getPersistenceService().persist(createEmployerSite());
+        PersistenceServicesFactory.getPersistenceService().persist(createCrmSite());
         PersistenceServicesFactory.getPersistenceService().persist(createHeadlessSite());
 
     }
@@ -91,83 +83,51 @@ public class PreloadSites extends AbstractSitesDataPreloader {
     }
 
     private Portlet createPortlet2() {
-        Portlet portlet = createPortlet("portlet2-what",
+        Portlet portlet = createPortlet("portlet-slogan1",
 
-        "<span style='text-align:center;'><h4>What's PYXExample?</h4></span>",
+        "<span style='text-align:center;'><h4>PYX is Your System. Your Way.</h4></span>",
 
-        "<span style='text-align:center;'><h4>Job Search<br>Resources</h4></span>");
-
-        return portlet;
-    }
-
-    private Portlet createPortlet3() {
-        Portlet portlet = createPortlet("portlet3-jobs",
-
-        "<span style='text-align:center;'><h4>Latest Jobs</h4></span>",
-
-        "<span style='text-decoration:underline;'>IT Manager</h4></span>");
-
-        return portlet;
-    }
-
-    private Portlet createPortlet4() {
-        Portlet portlet = createPortlet("portlet4-featured",
-
-        "<span style='text-align:center;'><h4>Featured Jobs</h4></span>",
-
-        "<span style='text-decoration:underline;'><h4>IT Project Manager</h4></span>");
+        "<span style='text-align:center;'><h4>PYX lets you manage your business <br>the way it was meant to be operated. </h4></span>");
 
         return portlet;
     }
 
     @Override
     protected String footerCopiright() {
-        return "&copy; 2010 PYXExample.com. All rights reserved.";
+        return "&copy; 2008-2010 pyx4j.com. All rights reserved.";
     }
 
     private Site createPublicSite() {
         String siteId = Sites.pub.name();
-        Site site = createSite(siteId, "PYXExample.com");
+        Site site = createSite(siteId, "pyx4j.com");
 
-        site.pages().add(
-                createPage("Home", PageType.pub$home, "<t2>The best place to start your new career search</t2><b><div id='" + Widgets.pub$searchWidget
-                        + "'></div>",
+        site
+                .pages()
+                .add(
+                        createPage(
+                                "Home",
+                                PageType.pub$home,
+                                "<t2>Develop amazing web apps built on Google framework. PYX is a platform for rapid development of cross-browser web apps. PYX helps you build sustainable applications faster than ever.</t2>",
 
-                null,
+                                null,
 
-                new Portlet[] { partnersListPortlet, portlet2 },
+                                new Portlet[] { partnersListPortlet, slogan1Portlet },
 
-                new String[] { Widgets.pub$searchWidget.name() }));
+                                new String[] { Widgets.pub$searchWidget.name() }));
 
-        site.pages().add(createPage("Job Posting", PageType.pub$home$results, "<t2>results</t2><b><div id='" + Widgets.pub$resultsWidget.name() + "'></div>",
+        site.pages().add(createPage("Examples", ResourceUriUtil.createResourceUri(siteId, "advice"), null,
 
         null,
 
-        new Portlet[] { portlet_mantra, portlet2 },
-
-        new String[] { Widgets.pub$resultsWidget.name() }));
-
-        site.pages().add(createPage("Advice", ResourceUriUtil.createResourceUri(siteId, "advice"), null,
-
-        new Portlet[] { portlet4, portlet3 },
-
-        new Portlet[] { portlet2, portlet_mantra },
-
-        null));
-
-        site.pages().add(createPage("About Us", ResourceUriUtil.createResourceUri(siteId, "aboutUs"), null,
-
-        new Portlet[] { portlet_mantra, portlet3 },
-
-        new Portlet[] { portlet2, portlet4 },
+        new Portlet[] { slogan1Portlet, mantraPortlet },
 
         null));
 
         site.pages().add(createPage("Contact Us", PageType.pub$home$contactUs, null,
 
-        new Portlet[] { portlet2, portlet3 },
+        new Portlet[] { slogan1Portlet },
 
-        new Portlet[] { portlet_mantra, portlet4 },
+        new Portlet[] { mantraPortlet },
 
         null));
 
@@ -180,35 +140,26 @@ public class PreloadSites extends AbstractSitesDataPreloader {
         return site;
     }
 
-    private Site createEmployerSite() {
+    private Site createCrmSite() {
         String siteId = Sites.crm.name();
         Site site = createSite(siteId, "PYXExample.com");
         site.logoUrl().setValue("images/logo_hiring.png");
 
-        {
-            site.pages().add(
-                    createPage("Organization Profile", PageType.employer$organizationProfile, "<div id='" + Widgets.employer$organizationProfileWidget
-                            + "'></div>", null, new Portlet[] { portlet3, portlet2 },
-
-                    new String[] { Widgets.employer$organizationProfileWidget.name() }));
-        }
-
-        {
-            site.pages().add(
-                    createPage("Jobs", PageType.employer$jobs, "<div id='" + Widgets.employer$jobPosting + "'></div>", null,
-                            new Portlet[] { portlet3, portlet2 },
-
-                            new String[] { Widgets.employer$jobPosting.name() }));
-        }
+        site.pages().add(
+                createPage("Dashboard", PageType.employer$organizationProfile, null, null, null, new String[] { Widgets.employer$organizationProfileWidget
+                        .name() }));
 
         site.pages().add(
-                createPage("Personal Settings", PageType.employer$personalSettings, "</div><div id='" + Widgets.employer$personalSettingsWidget + "'></div>",
+                createPage("Customers", PageType.employer$jobs, "<div id='" + Widgets.employer$jobPosting + "'></div>", null, null,
+                        new String[] { Widgets.employer$jobPosting.name() }));
 
-                new Portlet[] { portlet_mantra, portlet_mantra },
+        site.pages().add(
+                createPage("Orders", PageType.employer$personalSettings, "</div><div id='" + Widgets.employer$personalSettingsWidget + "'></div>", null, null,
+                        new String[] { Widgets.employer$personalSettingsWidget.name() }));
 
-                new Portlet[] { portlet3, portlet2 },
-
-                new String[] { Widgets.employer$personalSettingsWidget.name() }));
+        site.pages().add(
+                createPage("Resources", PageType.employer$personalSettings, "</div><div id='" + Widgets.employer$personalSettingsWidget + "'></div>", null,
+                        null, new String[] { Widgets.employer$personalSettingsWidget.name() }));
 
         site.pages().add(createPage("Contact Us", PageType.employer$home$contactUs, null));
 
