@@ -169,11 +169,23 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+
         <repository>
             <id>pyx4j-internal</id>
             <url>http://repository.pyx4j.com/internal/maven2-internal</url>
             <snapshots>
                 <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>jboss-repository</id>
+            <url>http://repository.jboss.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
