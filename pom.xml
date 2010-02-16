@@ -335,6 +335,12 @@
 			    </exclusions>
 		    </dependency>
 
+            <dependency>
+                <groupId>net.tanesha.recaptcha4j</groupId>
+                <artifactId>recaptcha4j</artifactId>
+                <version>0.0.7</version>
+            </dependency>
+
             <!-- fixed for hibernate / ognl combo -->
             <!-- http://repository.jboss.org/maven2/javassist/javassist/ -->
             <dependency>

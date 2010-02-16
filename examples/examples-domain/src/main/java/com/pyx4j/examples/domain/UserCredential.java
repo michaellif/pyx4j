@@ -14,22 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 12, 2010
+ * Created on Feb 16, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server;
+package com.pyx4j.examples.domain;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.entity.annotations.RpcBlacklist;
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
+@RpcBlacklist
+public interface UserCredential extends IEntity<UserCredential> {
 
-    public DataPreloaderCollection getDataPreloaders() {
-        return null;
-    }
+    @RpcTransient
+    IPrimitive<String> credential();
 
-    public AbstractAntiBot getAntiBot() {
-        return new ReCaptchaAntiBot();
-    }
+    @RpcTransient
+    IPrimitive<String> activationKey();
+
+    @RpcTransient
+    IPrimitive<String> accessKey();
+
+    User user();
+
+    IPrimitive<ExamplesBehavior> behavior();
 }

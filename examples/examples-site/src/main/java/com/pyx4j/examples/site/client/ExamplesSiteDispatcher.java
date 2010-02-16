@@ -37,6 +37,7 @@ import com.pyx4j.site.client.SiteCache;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
+import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
@@ -57,6 +58,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         }
 
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
+        CaptchaComposite.setPublicKey("6LdBxgoAAAAAAP7RdZ3kbHwVA99j1qKB97pdo6Mq");
 
         setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home"));
 

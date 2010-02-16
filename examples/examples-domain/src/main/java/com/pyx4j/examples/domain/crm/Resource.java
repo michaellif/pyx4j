@@ -20,13 +20,17 @@
  */
 package com.pyx4j.examples.domain.crm;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.examples.domain.User;
 
 public interface Resource extends IEntity<Resource> {
 
     @NotNull
     IPrimitive<String> name();
 
+    @Detached
+    User user();
 }

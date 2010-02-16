@@ -23,8 +23,14 @@ package com.pyx4j.examples.server;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.security.shared.AclCreator;
 
 public class ExamplesServerSideConfiguration extends EssentialsServerSideConfiguration {
+
+    @Override
+    public AclCreator getAclCreator() {
+        return new ExamplesAccessControlList();
+    }
 
     @Override
     public IServiceFactory getRPCServiceFactory() {

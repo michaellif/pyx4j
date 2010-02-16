@@ -21,12 +21,14 @@
 package com.pyx4j.examples.domain.crm;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.examples.domain.User;
 
 public interface Customer extends IEntity<Customer> {
 
@@ -45,4 +47,7 @@ public interface Customer extends IEntity<Customer> {
     ISet<Order> orders();
 
     IPrimitiveSet<String> notes();
+
+    @Detached
+    User user();
 }

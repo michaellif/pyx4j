@@ -4,4 +4,6 @@
 <module>
     <inherits name='com.pyx4j.entity.EntityShared'/>
     <source path="domain"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.examples.domain.UserCredential.*" />
 </module>

@@ -22,11 +22,15 @@ package com.pyx4j.examples.server;
 
 import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.security.rpc.AuthenticationServices.Authenticate;
 
 public class ExamplesRPCServiceFactory extends EssentialsRPCServiceFactory {
 
     @Override
     public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
+        if (Authenticate.class.getName().equals(serviceInterfaceClassName)) {
+            return ExamplesAuthenticationServicesImpl.AuthenticateImpl.class;
+        }
         return super.getServiceClass(serviceInterfaceClassName);
     }
 

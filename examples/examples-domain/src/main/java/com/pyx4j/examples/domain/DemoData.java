@@ -14,22 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 12, 2010
+ * Created on Feb 16, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server;
+package com.pyx4j.examples.domain;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+public class DemoData {
 
-public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
+    public static int maxCustomers = 4;
 
-    public DataPreloaderCollection getDataPreloaders() {
-        return null;
-    }
+    public static int maxEmployee = 4;
 
-    public AbstractAntiBot getAntiBot() {
-        return new ReCaptchaAntiBot();
-    }
+    public static String CRM_ADMIN_USER_PREFIX = "a";
+
+    public static String CRM_CUSTOMER_USER_PREFIX = "cust";
+
+    public static String CRM_EMPLOYEE_USER_PREFIX = "emp";
+
+    public static String USERS_DOMAIN = "@pyx4j.com";
+
 }
