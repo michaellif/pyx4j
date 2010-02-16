@@ -268,6 +268,10 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("padding", "10px 5px");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletEmptyHeader.name());
+        style.addProperty("padding", "0px");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
         style.addProperty("padding", "5px");
         style.addProperty("color", "black");

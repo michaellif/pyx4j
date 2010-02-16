@@ -286,6 +286,11 @@ public class LightTheme extends SiteTheme {
         style.addProperty("background", "transparent url(images/portlet-border-header.gif) no-repeat 0% 0%");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletEmptyHeader.name());
+        style.addProperty("padding", "5px");
+        style.addProperty("background", "transparent url(images/portlet-border-header.gif) no-repeat 0% 0%");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
         style.addProperty("padding", "5px");
         style.addProperty("background", "transparent url(images/portlet-border-body.gif) no-repeat 0% 100%");

@@ -286,6 +286,11 @@ public class BusinessTheme extends SiteTheme {
         style.addProperty("padding", "5px 3px");
         addStyle(style);
 
+        style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletEmptyHeader.name());
+        style.addProperty("width", "220px");
+        style.addProperty("padding", "0px");
+        addStyle(style);
+
         style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
         style.addProperty("padding", "5px");
         style.addProperty("color", "black");
