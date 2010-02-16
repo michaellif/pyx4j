@@ -23,7 +23,6 @@ package com.pyx4j.examples.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -51,10 +50,10 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         //ApplicationCommon.init();
 
         if (Window.Location.getHost().endsWith("pyx4j-demo.appspot.com")) {
-            AjaxLoader.init("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxSsRVEFJ6vLwIBuBBr9l_DYCz2brRSV7aQHBsZMSBwjF72gUZrsiWfavw");
+            GoogleAPI.setGoogleAPIKey("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxSsRVEFJ6vLwIBuBBr9l_DYCz2brRSV7aQHBsZMSBwjF72gUZrsiWfavw");
         } else {
             // pyx4j.com
-            AjaxLoader.init("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxT2nw7IAgYZCN3UZ-Glm95U7gTjpRTVD1pxXeXBpUR-ZQ5Z0YCQkesTkg");
+            GoogleAPI.setGoogleAPIKey("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxT2nw7IAgYZCN3UZ-Glm95U7gTjpRTVD1pxXeXBpUR-ZQ5Z0YCQkesTkg");
         }
 
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
