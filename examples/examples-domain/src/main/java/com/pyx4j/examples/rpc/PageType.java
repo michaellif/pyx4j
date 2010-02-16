@@ -41,19 +41,21 @@ public enum PageType {
 
     //----crm-----//
 
-    employer$organizationProfile(ResourceUriUtil.createResourceUri(Sites.crm.name(), "organizationProfile")),
+    crm$dashboard(ResourceUriUtil.createResourceUri(Sites.crm.name(), "dashboard")),
 
-    employer$personalSettings(ResourceUriUtil.createResourceUri(Sites.crm.name(), "personalSettings")),
+    crm$customers(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customers")),
 
-    employer$jobs(ResourceUriUtil.createResourceUri(Sites.crm.name(), "jobs")),
+    crm$orders(ResourceUriUtil.createResourceUri(Sites.crm.name(), "orders")),
 
-    employer$home$contactUs(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "contactUs")),
+    crm$resources(ResourceUriUtil.createResourceUri(Sites.crm.name(), "resources")),
 
-    employer$home$technicalSupport(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "technicalSupport")),
+    crm$home$contactUs(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "contactUs")),
 
-    employer$home$privacyPolicy(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "privacyPolicy")),
+    crm$home$technicalSupport(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "technicalSupport")),
 
-    employer$home$termsOfUse(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "termsOfUse")),
+    crm$home$privacyPolicy(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "privacyPolicy")),
+
+    crm$home$termsOfUse(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "termsOfUse")),
 
     //----headless-----//
 

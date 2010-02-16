@@ -143,31 +143,30 @@ public class PreloadSites extends AbstractSitesDataPreloader {
     private Site createCrmSite() {
         String siteId = Sites.crm.name();
         Site site = createSite(siteId, "PYXExample.com");
-        site.logoUrl().setValue("images/logo_hiring.png");
 
         site.pages().add(
-                createPage("Dashboard", PageType.employer$organizationProfile, null, null, null, new String[] { Widgets.employer$organizationProfileWidget
-                        .name() }));
+                createPage("Dashboard", PageType.crm$dashboard, "<div id='" + Widgets.crm$dashboardWidget + "'></div>", null, null,
+                        new String[] { Widgets.crm$dashboardWidget.name() }));
 
         site.pages().add(
-                createPage("Customers", PageType.employer$jobs, "<div id='" + Widgets.employer$jobPosting + "'></div>", null, null,
-                        new String[] { Widgets.employer$jobPosting.name() }));
+                createPage("Customers", PageType.crm$customers, "<div id='" + Widgets.crm$customersWidget + "'></div>", null, null,
+                        new String[] { Widgets.crm$customersWidget.name() }));
 
         site.pages().add(
-                createPage("Orders", PageType.employer$personalSettings, "</div><div id='" + Widgets.employer$personalSettingsWidget + "'></div>", null, null,
-                        new String[] { Widgets.employer$personalSettingsWidget.name() }));
+                createPage("Orders", PageType.crm$orders, "</div><div id='" + Widgets.crm$ordersWidget + "'></div>", null, null,
+                        new String[] { Widgets.crm$ordersWidget.name() }));
 
         site.pages().add(
-                createPage("Resources", PageType.employer$personalSettings, "</div><div id='" + Widgets.employer$personalSettingsWidget + "'></div>", null,
-                        null, new String[] { Widgets.employer$personalSettingsWidget.name() }));
+                createPage("Resources", PageType.crm$resources, "</div><div id='" + Widgets.crm$resourcesWidget + "'></div>", null, null,
+                        new String[] { Widgets.crm$resourcesWidget.name() }));
 
-        site.pages().add(createPage("Contact Us", PageType.employer$home$contactUs, null));
+        site.pages().add(createPage("Contact Us", PageType.crm$home$contactUs, null));
 
-        site.pages().add(createPage("Technical Support", PageType.employer$home$technicalSupport, null));
+        site.pages().add(createPage("Technical Support", PageType.crm$home$technicalSupport, null));
 
-        site.pages().add(createPage("Privacy policy", PageType.employer$home$privacyPolicy, null));
+        site.pages().add(createPage("Privacy policy", PageType.crm$home$privacyPolicy, null));
 
-        site.pages().add(createPage("Terms of Use", PageType.employer$home$termsOfUse, null));
+        site.pages().add(createPage("Terms of Use", PageType.crm$home$termsOfUse, null));
 
         return site;
     }

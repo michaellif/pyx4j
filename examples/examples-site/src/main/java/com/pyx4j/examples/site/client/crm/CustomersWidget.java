@@ -20,25 +20,11 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.pyx4j.examples.rpc.Widgets;
 import com.pyx4j.site.client.InlineWidget;
-import com.pyx4j.site.client.InlineWidgetFactory;
 
-public class CrmInlineWidgetFactory extends InlineWidgetFactory {
+public class CustomersWidget extends InlineWidget {
 
-    @Override
-    public InlineWidget createWidget(String widgetId) {
-        if (Widgets.crm$dashboardWidget.name().equals(widgetId)) {
-            return new DashboardWidget();
-        } else if (Widgets.crm$customersWidget.name().equals(widgetId)) {
-            return new CustomersWidget();
-        } else if (Widgets.crm$ordersWidget.name().equals(widgetId)) {
-            return new OrdersWidget();
-        } else if (Widgets.crm$resourcesWidget.name().equals(widgetId)) {
-            return new ResourcesWidget();
-        } else {
-            return null;
-        }
+    public CustomersWidget() {
     }
 
 }

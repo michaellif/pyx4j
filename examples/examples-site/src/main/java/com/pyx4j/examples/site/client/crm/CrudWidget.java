@@ -14,38 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
- * @author vlads
+ * Created on Feb 16, 2010
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.rpc;
+package com.pyx4j.examples.site.client.crm;
 
-public enum Widgets {
+import java.util.Map;
 
-    //----pub-----//
+import com.pyx4j.site.client.InlineWidget;
 
-    pub$searchWidget, pub$resultsWidget, pub$partnersWidget,
+public class CrudWidget extends InlineWidget {
 
-    //----contractor-----//
+    @Override
+    public void populate(Map<String, String> args) {
 
-    contractor$profileWidget,
-
-    contractor$personalSettingsWidget,
-
-    //----employer-----//
-
-    crm$dashboardWidget,
-
-    crm$customersWidget,
-
-    crm$ordersWidget,
-
-    crm$resourcesWidget,
-
-    //----headless-----//
-
-    headless$activation,
-
-    headless$password,
+    }
 
 }
