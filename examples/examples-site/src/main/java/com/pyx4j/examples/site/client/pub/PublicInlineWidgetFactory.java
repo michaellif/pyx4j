@@ -20,6 +20,7 @@
  */
 package com.pyx4j.examples.site.client.pub;
 
+import com.pyx4j.examples.rpc.Widgets;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 
@@ -27,7 +28,11 @@ public class PublicInlineWidgetFactory extends InlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String widgetId) {
-        return null;
+        if (Widgets.pub$partnersWidget.name().equals(widgetId)) {
+            return new PartnersWidget();
+        } else {
+            return null;
+        }
     }
 
 }

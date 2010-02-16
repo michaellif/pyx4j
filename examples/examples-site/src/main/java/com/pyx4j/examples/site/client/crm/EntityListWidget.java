@@ -14,16 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
- * @author vlads
+ * Created on Feb 16, 2010
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.examples.site.client.crm;
 
-public class CustomersWidget extends EntityCrudWidget {
+import com.google.gwt.user.client.ui.HTML;
 
-    public CustomersWidget() {
-        super(new CustomerListWidget(), new CustomerEditorWidget());
+public class EntityListWidget extends HTML {
+
+    EntityListWidget() {
+        super("List");
     }
 
 }

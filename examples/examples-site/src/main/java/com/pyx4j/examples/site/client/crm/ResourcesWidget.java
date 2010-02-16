@@ -20,11 +20,10 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.pyx4j.site.client.InlineWidget;
-
-public class ResourcesWidget extends InlineWidget {
+public class ResourcesWidget extends EntityCrudWidget {
 
     public ResourcesWidget() {
+        super(new ResourceListWidget(), new ResourceEditorWidget());
     }
 
 }

@@ -14,16 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
- * @author vlads
+ * Created on Feb 16, 2010
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.examples.site.client.crm;
 
-public class CustomersWidget extends EntityCrudWidget {
-
-    public CustomersWidget() {
-        super(new CustomerListWidget(), new CustomerEditorWidget());
-    }
+public class ResourceEditorWidget extends EntityEditorWidget {
 
 }

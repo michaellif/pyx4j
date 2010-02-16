@@ -20,15 +20,6 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-import java.util.Map;
-
-import com.pyx4j.site.client.InlineWidget;
-
-public class CrudWidget extends InlineWidget {
-
-    @Override
-    public void populate(Map<String, String> args) {
-
-    }
+public class OrderEditorWidget extends EntityEditorWidget {
 
 }

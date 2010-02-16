@@ -20,11 +20,10 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.pyx4j.site.client.InlineWidget;
-
-public class OrdersWidget extends InlineWidget {
+public class OrdersWidget extends EntityCrudWidget {
 
     public OrdersWidget() {
+        super(new OrderListWidget(), new OrderEditorWidget());
     }
 
 }
