@@ -56,6 +56,7 @@ public class ExamplesPublicSitePanel extends ExamplesSitePanel {
         removeAllHeaderLinks();
         welcomeMessage = new LinkBarMessage("<b>Welcome, " + ClientContext.getUserVisit().getName() + "</b>");
         addHeaderLink(welcomeMessage, false);
+        addHeaderLink(getLogOutLink(), true);
     }
 
     @Override
@@ -68,6 +69,7 @@ public class ExamplesPublicSitePanel extends ExamplesSitePanel {
     private void removeAllHeaderLinks() {
         removeHeaderLink(welcomeMessage);
         removeHeaderLink(getLogInLink());
+        removeHeaderLink(getLogOutLink());
 
     }
 

@@ -22,6 +22,7 @@ package com.pyx4j.examples.site.client;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.CommandLink;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Link;
@@ -30,6 +31,8 @@ import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 public abstract class ExamplesSitePanel extends SitePanel {
+
+    private final CommandLink logOutLink;
 
     private final CommandLink logInLink;
 
@@ -75,10 +78,21 @@ public abstract class ExamplesSitePanel extends SitePanel {
             }
         });
 
+        logOutLink = new CommandLink("Sign Out", new Command() {
+            @Override
+            public void execute() {
+                ClientContext.logout(null);
+            }
+        });
+
     }
 
     protected CommandLink getLogInLink() {
         return logInLink;
+    }
+
+    protected CommandLink getLogOutLink() {
+        return logOutLink;
     }
 
 }

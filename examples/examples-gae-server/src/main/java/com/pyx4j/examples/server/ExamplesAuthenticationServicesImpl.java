@@ -72,6 +72,9 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
             if (!validEmailAddress(request.email().getValue())) {
                 throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
+
+            AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
+
             final User userMeta = EntityFactory.create(User.class);
             EntityCriteria<User> criteria = new EntityCriteria<User>(User.class);
 

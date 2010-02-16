@@ -43,7 +43,7 @@ public abstract class AbstractAntiBot {
             throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
         if (ab.isCaptchaRequired(email)) {
-            if (CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
+            if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
                 throw new RuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
             }
             ab.assertCaptcha(email, challengeResponse.getA(), challengeResponse.getB());
