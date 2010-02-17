@@ -20,6 +20,7 @@ examples-domain
 \slf4j-api
 slf4j-jdk14
 javassist
+recaptcha4j
 -pyx-gwt-server.jar
 -pyx-entity-shared.jar
 -pyx-commons.jar
