@@ -43,6 +43,10 @@ public interface Customer extends IEntity<Customer> {
     @Caption(name = "Zip/Postal")
     IPrimitive<String> zip();
 
+    IPrimitive<Double> latitude();
+
+    IPrimitive<Double> longitude();
+
     @Owned
     ISet<Order> orders();
 
