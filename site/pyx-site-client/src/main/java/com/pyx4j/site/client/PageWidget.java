@@ -27,12 +27,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.ui.HTML;
-
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.PageData;
 
-public class PageWidget extends HTML {
+public class PageWidget extends DynamicHTML {
 
     private static final Logger log = LoggerFactory.getLogger(PageWidget.class);
 
@@ -72,13 +70,11 @@ public class PageWidget extends HTML {
 
             }
         }
-
     }
 
     public void populateInlineWidgets(Map<String, String> args) {
         for (InlineWidget inlineWidget : inlineWidgets) {
             inlineWidget.populate(args);
         }
-
     }
 }

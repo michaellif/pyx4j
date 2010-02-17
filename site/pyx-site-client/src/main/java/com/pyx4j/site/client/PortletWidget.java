@@ -47,8 +47,7 @@ public class PortletWidget extends VerticalPanel {
             headerPanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletEmptyHeader.name());
         }
 
-        HTML bodyPanel = new HTML(portlet.html().getValue());
-        bodyPanel.setWordWrap(false);
+        DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), false);
         add(bodyPanel);
         bodyPanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
 
