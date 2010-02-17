@@ -22,9 +22,9 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import java.util.List;
 
-import com.pyx4j.domain.Entity;
+import com.pyx4j.entity.shared.IEntity;
 
-public interface DataTableConverter<E extends Entity> {
+public interface DataTableConverter<E extends IEntity<?>> {
 
     String[][] convert(List<E> list);
 

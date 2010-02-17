@@ -23,17 +23,17 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.log4gwt.Logger;
+import com.pyx4j.entity.shared.IEntity;
 
-public class DataItem {
+public class DataItem<E extends IEntity<IEntity<?>>> {
 
-    private final Map<ColumnDescriptor, Object> dataMap = new HashMap<ColumnDescriptor, Object>();
+    private final Map<ColumnDescriptor<E>, Object> dataMap = new HashMap<ColumnDescriptor<E>, Object>();
 
     private boolean checked;
 
-    private final DataTableModel model;
+    private final DataTableModel<E> model;
 
-    public DataItem(DataTableModel model) {
+    public DataItem(DataTableModel<E> model) {
         this.model = model;
     }
 
@@ -46,14 +46,14 @@ public class DataItem {
     }
 
     public void setCellValue(String columnName, Object value) {
-        ColumnDescriptor columnDescriptor = model.getColumnDescriptor(columnName);
+        ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptor(columnName);
         if (columnDescriptor == null) {
             throw new IllegalArgumentException("No column with name " + columnName + " is found.");
         }
         dataMap.put(columnDescriptor, value);
     }
 
-    public Object getCellValue(ColumnDescriptor descriptor) {
+    public Object getCellValue(ColumnDescriptor<E> descriptor) {
         return dataMap.get(descriptor);
     }
 

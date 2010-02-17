@@ -22,32 +22,23 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import java.util.List;
 
-import com.pyx4j.client.Message;
-import com.pyx4j.client.entity.DomainComponentsFactory;
-import com.pyx4j.client.exceptions.ClientException;
-import com.pyx4j.domain.Entity;
+import com.pyx4j.entity.shared.IEntity;
 
-public class DataTableConverterAdapter<E extends Entity> implements DataTableConverter<E> {
+public class DataTableConverterAdapter<E extends IEntity<IEntity<?>>> implements DataTableConverter<E> {
 
-    private final DomainComponentsFactory<E> factory;
+    private final List<ColumnDescriptor<E>> columnDescriptors;
 
-    public DataTableConverterAdapter(DomainComponentsFactory<E> factory) {
-        this.factory = factory;
+    public DataTableConverterAdapter(List<ColumnDescriptor<E>> columnDescriptors) {
+        this.columnDescriptors = columnDescriptors;
     }
 
     public String[][] convert(List<E> list) {
         String[][] data = new String[][] {};
-        try {
-            List<ColumnDescriptor<E>> descriptors = factory.getColumnDescriptors();
-            data = new String[list.size()][descriptors.size()];
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = 0; j < descriptors.size(); j++) {
-                    data[i][j] = descriptors.get(j).convert(list.get(i));
-                }
+        data = new String[list.size()][columnDescriptors.size()];
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < columnDescriptors.size(); j++) {
+                data[i][j] = columnDescriptors.get(j).convert(list.get(i));
             }
-        } catch (Exception e) {
-            Message.error("Data conversion failed", e);
-            throw new ClientException("Data conversion failed", e);
         }
         return data;
     }

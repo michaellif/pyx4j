@@ -31,12 +31,9 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.client.laf.DataTableUI;
-import com.pyx4j.client.laf.UIManager;
-import com.pyx4j.client.widgets.dataTable.DataTableModelEvent.Type;
-import com.pyx4j.domain.Entity;
+import com.pyx4j.entity.shared.IEntity;
 
-public class DataTable<E extends Entity> extends FlexTable implements DataTableModelListener, DataTableUI {
+public class DataTable<E extends IEntity<IEntity<?>>> extends FlexTable implements DataTableModelListener {
 
     private final DataTableModel<E> model;
 
@@ -141,17 +138,12 @@ public class DataTable<E extends Entity> extends FlexTable implements DataTableM
         clearTableData();
         renderHeader();
         renderBody();
-        updateLookAndFeel();
     }
 
     public void onTableModelChanged(DataTableModelEvent e) {
-        if (e.getType().equals(Type.REBUILD)) {
+        if (e.getType().equals(DataTableModelEvent.Type.REBUILD)) {
             renderTable();
         }
-    }
-
-    public void updateLookAndFeel() {
-        UIManager.getLookAndFeel().getDataTableLaF().installStyle(this);
     }
 
     public DataTableModel<E> getDataTableModel() {
@@ -164,7 +156,6 @@ public class DataTable<E extends Entity> extends FlexTable implements DataTableM
 
     public void setSelectedRow(int selectedRow) {
         this.selectedRow = selectedRow;
-        updateLookAndFeel();
     }
 
     public boolean isCheckboxColumnShown() {

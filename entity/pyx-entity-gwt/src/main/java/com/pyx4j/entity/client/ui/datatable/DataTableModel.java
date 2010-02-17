@@ -23,7 +23,6 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
@@ -43,6 +42,8 @@ public class DataTableModel<E extends IEntity<IEntity<?>>> implements TableListe
 
     private final ArrayList<DataItem> data = new ArrayList<DataItem>();
 
+    private final List<ColumnDescriptor<E>> columnDescriptors;
+
     private ColumnDescriptor<E> sortColumn;
 
     private ColumnDescriptor<E> secondarySortColumn;
@@ -53,13 +54,11 @@ public class DataTableModel<E extends IEntity<IEntity<?>>> implements TableListe
 
     private int totalRows;
 
-    private EntityMeta entityMeta;
+    private final EntityMeta entityMeta;
 
-    public DataTableModel() {
-    }
-
-    public DataTableModel(EntityMeta entityMeta) {
+    public DataTableModel(EntityMeta entityMeta, List<ColumnDescriptor<E>> columnDescriptors) {
         this.entityMeta = entityMeta;
+        this.columnDescriptors = columnDescriptors;
     }
 
     public void close() {
@@ -68,27 +67,15 @@ public class DataTableModel<E extends IEntity<IEntity<?>>> implements TableListe
     }
 
     public String getDebugId() {
-        return this.factory.getEntityName() + " List";
+        return entityMeta.getCaption() + " List";
     }
 
     public List<ColumnDescriptor<E>> getColumnDescriptors() {
-        return factory.getColumnDescriptors();
-    }
-
-    public List<ReportColumnDescriptor<? super E>> getReportColumnDescriptors() {
-        List<ReportColumnDescriptor<? super E>> r = new Vector<ReportColumnDescriptor<? super E>>();
-        for (ColumnDescriptor<E> descriptor : factory.getColumnDescriptors()) {
-            if (descriptor instanceof ColumnDescriptorReportAdapter) {
-                r.add(((ColumnDescriptorReportAdapter<E>) descriptor).getReportColumnDescriptor());
-            } else if (descriptor instanceof ReportColumnDescriptor) {
-                r.add((ReportColumnDescriptor<E>) descriptor);
-            }
-        }
-        return r;
+        return columnDescriptors;
     }
 
     public ColumnDescriptor<E> getColumnDescriptor(String columnName) {
-        for (ColumnDescriptor<E> descriptor : factory.getColumnDescriptors()) {
+        for (ColumnDescriptor<E> descriptor : columnDescriptors) {
             if (descriptor.getColumnName().equals(columnName)) {
                 return descriptor;
             }
@@ -102,7 +89,7 @@ public class DataTableModel<E extends IEntity<IEntity<?>>> implements TableListe
 
     public List<String> getColumnNames() {
         ArrayList<String> names = new ArrayList<String>();
-        for (ColumnDescriptor<E> descriptor : factory.getColumnDescriptors()) {
+        for (ColumnDescriptor<E> descriptor : columnDescriptors) {
             names.add(descriptor.getColumnName());
         }
         return names;
