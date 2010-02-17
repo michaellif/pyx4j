@@ -31,33 +31,32 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.site.client.InlineWidget;
 
-public class PartnersWidget extends InlineWidget {
+public class TechnologyWidget extends InlineWidget {
 
     private final VerticalPanel contentPanel;
 
     private final Image image;
 
-    public PartnersWidget() {
+    //TODO use our Logo
+    private final static String defaultLogo = "/images/appengine-noborder-120x30.gif";
+
+    public TechnologyWidget() {
 
         getElement().getStyle().setPadding(5, Unit.PX);
 
         contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        image = new Image("/images/partners/MEFPartners.png");
-        image.setSize("200px", "50px");
+        image = new Image(defaultLogo);
+        image.setSize("120px", "30px");
         contentPanel.add(image);
 
-        addPartner("Digital Mesh", "/images/partners/1.gif", "http://cnn.com");
-        addPartner("Bomgar", "/images/partners/2.gif", "http://cnn.com");
-        addPartner("Standpoint", "/images/partners/3.gif", "http://cnn.com");
-        addPartner("Efficient Frontier", "/images/partners/4.gif", "http://cnn.com");
-        addPartner("Expeed", "/images/partners/5.gif", "http://cnn.com");
-        addPartner("Dosatron", "/images/partners/6.gif", "http://cnn.com");
-        addPartner("Adaptdev", "/images/partners/7.gif", "http://cnn.com");
+        addPartner("Google App Engine", "/images/appengine-noborder-120x30.gif", "http://code.google.com/appengine");
+        addPartner("Google Web Toolkit", "/images/gwt-logo-120x30.png", "http://code.google.com/webtoolkit/");
+        addPartner("Apache Maven", "/images/built-by-maven-120x30.png", "http://maven.apache.org/");
+        addPartner("Eclipse", "/images/eclipse-120x30.png", "http://www.eclipse.org/");
 
         Anchor anchor = new Anchor("more...", "javascript:void(0)");
         anchor.addClickHandler(new ClickHandler() {
@@ -88,7 +87,7 @@ public class PartnersWidget extends InlineWidget {
 
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                image.setUrl("/images/partners/MEFPartners.png");
+                image.setUrl(defaultLogo);
             }
         });
     }

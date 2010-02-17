@@ -28,8 +28,8 @@ public class PublicInlineWidgetFactory extends InlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String widgetId) {
-        if (Widgets.pub$partnersWidget.name().equals(widgetId)) {
-            return new PartnersWidget();
+        if (Widgets.pub$technologyWidget.name().equals(widgetId)) {
+            return new TechnologyWidget();
         } else {
             return null;
         }

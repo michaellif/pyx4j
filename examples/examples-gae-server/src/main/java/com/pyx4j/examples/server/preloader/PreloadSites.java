@@ -72,13 +72,13 @@ public class PreloadSites extends AbstractSitesDataPreloader {
     }
 
     private Portlet createPartnersListPortlet() {
-        Portlet portlet = createPortlet("portlet1-partners",
+        Portlet portlet = createPortlet("portlet-technology",
 
-        "<span style='text-align:center;'><h4>Our Partners</h4></span>",
+        "<span style='text-align:center;'><h4>Our technology</h4></span>",
 
-        "<div id='" + Widgets.pub$partnersWidget + "'></div>");
+        "<div id='" + Widgets.pub$technologyWidget + "'></div>");
 
-        portlet.inlineWidgetIds().add(Widgets.pub$partnersWidget.name());
+        portlet.inlineWidgetIds().add(Widgets.pub$technologyWidget.name());
         return portlet;
     }
 

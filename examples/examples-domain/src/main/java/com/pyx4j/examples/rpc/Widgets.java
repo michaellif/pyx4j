@@ -24,7 +24,7 @@ public enum Widgets {
 
     //----pub-----//
 
-    pub$searchWidget, pub$resultsWidget, pub$partnersWidget,
+    pub$searchWidget, pub$resultsWidget, pub$technologyWidget,
 
     //----contractor-----//
 
