@@ -19,6 +19,7 @@ pyx-essentials-server
 examples-domain
 \slf4j-api
 slf4j-jdk14
+gwt-servlet
 javassist
 recaptcha4j
 -pyx-gwt-server.jar

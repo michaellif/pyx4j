@@ -160,8 +160,9 @@
 
     <repositories>
         <repository>
-            <id>google-gae-jclouds-repository</id>
-            <url>http://jclouds.googlecode.com/svn/repo</url>
+            <id>google-gae-googlecode-repository</id>
+            <!-- url>http://jclouds.googlecode.com/svn/repo</url -->
+            <url>http://mvn.twig-persist.googlecode.com/hg/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -210,7 +211,7 @@
 
     <properties>
         <gwtVersion>2.0.2</gwtVersion>
-        <gaeVersion>1.3.0</gaeVersion>
+        <gaeVersion>1.3.1</gaeVersion>
         <pyx4jGwtVersion>0.5.5-SNAPSHOT</pyx4jGwtVersion>
 
         <buildLabel>${project.version}</buildLabel>
@@ -255,7 +256,7 @@
 
             <dependency>
                 <groupId>com.google.appengine</groupId>
-                <artifactId>appengine-local-runtime</artifactId>
+                <artifactId>appengine-testing</artifactId>
                 <version>${gaeVersion}</version>
                 <scope>test</scope>
             </dependency>
