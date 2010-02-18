@@ -27,4 +27,8 @@ public interface ISet<TYPE extends IEntity<?>> extends IObject<ISet<TYPE>, Set<M
 
     public Class<TYPE> getValueClass();
 
+    /**
+     * Create new instance of the Value object
+     */
+    public TYPE $();
 }

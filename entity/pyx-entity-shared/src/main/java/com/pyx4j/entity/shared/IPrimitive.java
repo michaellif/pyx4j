@@ -24,6 +24,9 @@ public interface IPrimitive<TYPE> extends IObject<IPrimitive<TYPE>, TYPE> {
 
     public Class<TYPE> getValueClass();
 
+    //TODO
+    //public void set(TYPE primitiveValue);
+
     /**
      * TODO Business toString() presentation. @see com.pyx4j.entity.annotations.Format
      * 

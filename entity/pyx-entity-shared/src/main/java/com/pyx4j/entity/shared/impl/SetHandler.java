@@ -74,6 +74,11 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
     }
 
     @Override
+    public TYPE $() {
+        return EntityFactory.create(getValueClass());
+    }
+
+    @Override
     public Path getPath() {
         return new Path(this);
     }

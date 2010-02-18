@@ -47,6 +47,9 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
 
     public void setMemberValue(String memberName, Object value);
 
+    //TODO
+    //public <T extends IObject<?, ?>> void set(T member, T value);
+
     public Object removeMemberValue(String memberName);
 
     /**

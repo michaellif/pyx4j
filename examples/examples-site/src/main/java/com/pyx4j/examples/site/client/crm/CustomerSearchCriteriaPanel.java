@@ -51,6 +51,8 @@ public class CustomerSearchCriteriaPanel extends SimplePanel implements EntityCr
 
         { form.create(form.meta().name()) },
 
+        { form.create(form.meta().orders().$().status()) },
+
         };
 
         form.populate(null);
