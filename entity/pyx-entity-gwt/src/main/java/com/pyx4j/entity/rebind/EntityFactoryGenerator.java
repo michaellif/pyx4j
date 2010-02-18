@@ -42,7 +42,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -55,6 +54,7 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
@@ -409,7 +409,7 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("\", ");
             }
 
-            // boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded, int stringLength
+            // boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded, boolean indexed, int stringLength
             writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
@@ -420,6 +420,8 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf(embedded).toString());
+            writer.print(", ");
+            writer.print(Boolean.valueOf((method.getAnnotation(Unindexed.class) == null)).toString());
             writer.print(", ");
 
             StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);

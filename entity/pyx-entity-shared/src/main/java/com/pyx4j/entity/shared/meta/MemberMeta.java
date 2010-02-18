@@ -37,6 +37,16 @@ public interface MemberMeta {
     public String getFieldName();
 
     /**
+     * See com.pyx4j.entity.annotations.Caption
+     */
+    public String getCaption();
+
+    /**
+     * See com.pyx4j.entity.annotations.Caption
+     */
+    public String getDescription();
+
+    /**
      * See com.pyx4j.entity.annotations.Transient
      */
     public boolean isTransient();
@@ -45,6 +55,11 @@ public interface MemberMeta {
      * See com.pyx4j.entity.annotations.RpcTransient
      */
     public boolean isRpcTransient();
+
+    /**
+     * See com.pyx4j.entity.annotations.Unindexed
+     */
+    public boolean isIndexed();
 
     /**
      * See com.pyx4j.entity.annotations.Detached
@@ -60,16 +75,6 @@ public interface MemberMeta {
     public Class<?> getValueClass();
 
     public Class<? extends IObject<?, ?>> getObjectClass();
-
-    /**
-     * See com.pyx4j.entity.annotations.Caption
-     */
-    public String getCaption();
-
-    /**
-     * See com.pyx4j.entity.annotations.Caption
-     */
-    public String getDescription();
 
     /**
      * See com.pyx4j.entity.annotations.StringLength

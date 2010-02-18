@@ -44,6 +44,8 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final boolean embedded;
 
+    private final boolean indexed;
+
     private final boolean entity;
 
     private final Class<?> valueClass;
@@ -68,7 +70,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass, boolean entity, String fieldName, String caption,
             String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded,
-            int stringLength) {
+            boolean indexed, int stringLength) {
         super();
         this.fieldName = fieldName;
         this.entity = entity;
@@ -77,6 +79,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.detached = detached;
         this.ownedRelationships = ownedRelationships;
         this.embedded = embedded;
+        this.indexed = indexed;
         this.valueClass = valueClass;
         this.objectClass = objectClass;
         this.caption = caption;
@@ -122,6 +125,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public boolean isEmbedded() {
         return embedded;
+    }
+
+    @Override
+    public boolean isIndexed() {
+        return indexed;
     }
 
     @Override

@@ -50,7 +50,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -133,40 +132,44 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity<?> childIEntity) {
-        for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
+    private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity<?> childIEntity, boolean indexed) {
+        nextValue: for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
-                continue;
+                continue nextValue;
             }
             MemberMeta meta = childIEntity.getEntityMeta().getMemberMeta(me.getKey());
             if (meta.isTransient()) {
-                continue;
+                continue nextValue;
             }
             Object value = me.getValue();
             if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
                 if (meta.isEmbedded()) {
                     embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity<?>) childIEntity
-                            .getMember(me.getKey()));
+                            .getMember(me.getKey()), indexed && meta.isIndexed());
+                    continue nextValue;
                 } else {
                     String kind = EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getObjectClass()).getPersistenceName();
-                    Key key = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
-                    entity.setProperty(prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX, key);
+                    value = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
                 }
+            }
+            //TODO Allow to embed other types
+            String name = prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX;
+            if (indexed && meta.isIndexed()) {
+                entity.setProperty(name, value);
             } else {
-                //System.out.println(value + " + save as [" + prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX + "]");
-                entity.setProperty(prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX, value);
+                entity.setUnindexedProperty(name, value);
             }
         }
     }
 
     private void updateEntityProperties(Entity entity, IEntity<?> iEntity, boolean merge) {
-        for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
+        nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
-                continue;
+                continue nextValue;
             }
             MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(me.getKey());
             if (meta.isTransient()) {
-                continue;
+                continue nextValue;
             }
             Object value = me.getValue();
             if (value instanceof Map<?, ?>) {
@@ -176,8 +179,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     IEntity<?> childIEntity = (IEntity<?>) iEntity.getMember(me.getKey());
                     if (meta.isEmbedded()) {
-                        embedEntityProperties(entity, me.getKey(), "", childIEntity);
-                        continue;
+                        embedEntityProperties(entity, me.getKey(), "", childIEntity, meta.isEntity());
+                        continue nextValue;
                     } else {
                         value = persistImpl(childIEntity, merge);
                     }
@@ -201,7 +204,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     ISet<IEntity<?>> memberSet = (ISet<IEntity<?>>) iEntity.getMember(me.getKey());
                     if (meta.isEmbedded()) {
-                        Set childValue = new HashSet();
+                        Set<Object> childValue = new HashSet<Object>();
                         String singleMemeberName = null;
                         for (IEntity<?> childIEntity : memberSet) {
                             if (singleMemeberName == null) {
@@ -209,13 +212,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                             }
                             childValue.add(childIEntity.getMemberValue(singleMemeberName));
                         }
-                        entity.setProperty(me.getKey(), childValue);
-                        continue;
+                        value = childValue;
                     } else {
                         for (IEntity<?> childIEntity : memberSet) {
                             Key key = persistImpl(childIEntity, merge);
                             childKeys.add(key);
                         }
+                        value = childKeys;
                     }
                 } else {
                     for (Object el : (Set<?>) value) {
@@ -226,8 +229,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         childKeys.add(KeyFactory.createKey(
                                 EntityFactory.getEntityMeta((Class<? extends IEntity<?>>) meta.getValueClass()).getPersistenceName(), childKey));
                     }
+                    value = childKeys;
                 }
-                value = childKeys;
             } else if ((IList.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof List<?>)) {
                 Set<Key> childKeys = new HashSet<Key>();
                 Vector<Long> childKeysOrder = new Vector<Long>();
@@ -251,7 +254,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         childKeysOrder.add(childKey);
                     }
                 }
-                entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
+                entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
             } else if (value != null) {
                 if (value.getClass().isArray()) {
@@ -259,17 +262,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     value = new Blob((byte[]) value);
                 }
             }
-            entity.setProperty(me.getKey(), value);
+            if (meta.isIndexed()) {
+                entity.setProperty(me.getKey(), value);
+            } else {
+                entity.setUnindexedProperty(me.getKey(), value);
+            }
         }
     }
 
     private String getIEntityKind(IEntity<?> iEntity) {
         return iEntity.getEntityMeta().getPersistenceName();
     }
-
-    //    private <T extends IEntity<?>> String getIEntityKind(Class<T> entityClass) {
-    //        return entityClass.getName();
-    //    }
 
     @Override
     public void persist(IEntity<?> iEntity) {

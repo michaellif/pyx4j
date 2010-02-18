@@ -35,6 +35,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -60,6 +61,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final boolean ownedRelationships;
 
     private final boolean embedded;
+
+    private final boolean indexed;
 
     private final boolean entity;
 
@@ -134,6 +137,7 @@ public class MemberMetaImpl implements MemberMeta {
         embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
         ownedRelationships = embedded || (method.getAnnotation(Owned.class) != null);
         detached = (method.getAnnotation(Detached.class) != null);
+        indexed = (method.getAnnotation(Unindexed.class) == null);
     }
 
     @Override
@@ -174,6 +178,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public boolean isEmbedded() {
         return embedded;
+    }
+
+    @Override
+    public boolean isIndexed() {
+        return indexed;
     }
 
     @Override
