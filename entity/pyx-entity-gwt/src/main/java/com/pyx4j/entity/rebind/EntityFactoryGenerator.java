@@ -42,12 +42,14 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -429,6 +431,16 @@ public class EntityFactoryGenerator extends Generator {
                 writer.print(String.valueOf(stringLengthAnnotation.value()));
             } else {
                 writer.print("0");
+            }
+            writer.print(", ");
+
+            Format formatAnnotation = method.getAnnotation(Format.class);
+            if (formatAnnotation != null) {
+                writer.print("\"");
+                writer.print(formatAnnotation.value());
+                writer.print("\"");
+            } else {
+                writer.print("null");
             }
 
             writer.println(");");

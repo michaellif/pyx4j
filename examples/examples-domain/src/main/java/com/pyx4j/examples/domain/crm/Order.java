@@ -22,6 +22,7 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -53,6 +54,7 @@ public interface Order extends IEntity<Order> {
 
     IPrimitive<Status> status();
 
+    @Format("MMM d, yyyy")
     IPrimitive<Date> receivedDate();
 
     IPrimitive<Date> completedDate();

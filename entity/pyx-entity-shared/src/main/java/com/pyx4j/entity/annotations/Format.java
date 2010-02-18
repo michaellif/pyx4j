@@ -14,20 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 28, 2009
- * @author michaellif
+ * Created on Feb 18, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.shared;
+package com.pyx4j.entity.annotations;
 
-public interface IPrimitive<TYPE> extends IObject<IPrimitive<TYPE>, TYPE> {
+public @interface Format {
 
-    public Class<TYPE> getValueClass();
+    String value();
 
-    /**
-     * TODO Business toString() presentation. @see com.pyx4j.entity.annotations.Format
-     * 
-     * @return String value of member formated using annotation @Format
-     */
-    //public String getStringView();
 }

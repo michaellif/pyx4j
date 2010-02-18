@@ -64,13 +64,15 @@ public class ClientMemberMetaImpl implements MemberMeta {
      */
     private final int stringLength;
 
+    private final String format;
+
     private EditorType editorType;
 
     private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass, boolean entity, String fieldName, String caption,
             String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded,
-            boolean indexed, int stringLength) {
+            boolean indexed, int stringLength, String format) {
         super();
         this.fieldName = fieldName;
         this.entity = entity;
@@ -85,6 +87,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.caption = caption;
         this.description = description;
         this.stringLength = stringLength;
+        this.format = format;
     }
 
     @Override
@@ -150,6 +153,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public int getStringLength() {
         return stringLength;
+    }
+
+    @Override
+    public String getFormat() {
+        return format;
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
@@ -203,6 +204,16 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public int getStringLength() {
         return stringLength;
+    }
+
+    @Override
+    public String getFormat() {
+        Format formatAnnotation = method.getAnnotation(Format.class);
+        if (formatAnnotation != null) {
+            return formatAnnotation.value();
+        } else {
+            return null;
+        }
     }
 
     @Override

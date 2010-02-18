@@ -81,6 +81,11 @@ public interface MemberMeta {
      */
     public int getStringLength();
 
+    /**
+     * See com.pyx4j.entity.annotations.Format
+     */
+    public String getFormat();
+
     public EditorType getEditorType();
 
     public List<Validator> getValidators();

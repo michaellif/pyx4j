@@ -14,20 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 28, 2009
- * @author michaellif
+ * Created on Feb 18, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.shared;
+package com.pyx4j.entity.client.ui.datatable;
 
-public interface IPrimitive<TYPE> extends IObject<IPrimitive<TYPE>, TYPE> {
+import com.pyx4j.entity.shared.IEntity;
 
-    public Class<TYPE> getValueClass();
+public class MemberEntityColumnDescriptor<E extends IEntity<IEntity<?>>> extends ColumnDescriptor<E> {
 
-    /**
-     * TODO Business toString() presentation. @see com.pyx4j.entity.annotations.Format
-     * 
-     * @return String value of member formated using annotation @Format
-     */
-    //public String getStringView();
+    public MemberEntityColumnDescriptor(String columnName, String columnTitle) {
+        super(columnName, columnTitle);
+    }
+
+    @Override
+    public String convert(E entity) {
+        return ((IEntity<?>) entity.getMember(getColumnName())).getStringView();
+    }
+
 }
