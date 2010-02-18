@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.essentials.client.BaseSiteDispatcher;
 import com.pyx4j.examples.rpc.Sites;
 import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
@@ -57,7 +56,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
             GoogleAPI.setGoogleAPIKey("ABQIAAAAZuLUizjWCGkAYOfiIpZpgxT2nw7IAgYZCN3UZ-Glm95U7gTjpRTVD1pxXeXBpUR-ZQ5Z0YCQkesTkg");
         }
 
-        GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1");
+        GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1", ".pyx4j.com");
         CaptchaComposite.setPublicKey("6LdBxgoAAAAAAP7RdZ3kbHwVA99j1qKB97pdo6Mq");
 
         setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home"));

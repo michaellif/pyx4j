@@ -55,11 +55,29 @@ public class GoogleAnalytics {
 
     private static String googleAnalyticsTracker;
 
+    private static String domainName = null;
+
     public static void setGoogleAnalyticsTracker(String googleAnalyticsTracker) {
+        setGoogleAnalyticsTracker(googleAnalyticsTracker, null);
+    }
+
+    public static void setGoogleAnalyticsTracker(String googleAnalyticsTracker, String domainName) {
         String h = Window.Location.getHostName();
         if (!"localhost".equals(h) && !"127.1.1.1".equals(h)) {
             GoogleAnalytics.googleAnalyticsTracker = googleAnalyticsTracker;
+            GoogleAnalytics.domainName = domainName;
         }
+    }
+
+    /**
+     * Cross-Domain Tracking
+     * 
+     * "none" or ".example-petstore.com"
+     * 
+     * @see http://code.google.com/apis/analytics/docs/tracking/gaTrackingSite.html
+     */
+    public static void setDomainName(String domainName) {
+        GoogleAnalytics.domainName = domainName;
     }
 
     public static void track(final String actionName) {
@@ -70,6 +88,7 @@ public class GoogleAnalytics {
             // Allow for "Standard Setup" in html page
             if (isInstalled()) {
                 loaded = true;
+                configure();
             } else {
                 if (queuedActions == null) {
                     queuedActions = new Vector<String>();
@@ -78,28 +97,7 @@ public class GoogleAnalytics {
 
                 if (!alreadyInjected) {
                     alreadyInjected = true;
-                    injectJS();
-                    loadTimer = new Timer() {
-                        @Override
-                        public void run() {
-                            if (isInstalled()) {
-                                loaded = true;
-                                loadTimer.cancel();
-                                loadTimer = null;
-                                fireQueuedActions();
-                            } else {
-                                timeoutCountdown--;
-                                if (timeoutCountdown == 0) {
-                                    loadTimer.cancel();
-                                    loadTimer = null;
-                                    // Disable, GoogleAnalytics, probably working OffLine 
-                                    GoogleAnalytics.googleAnalyticsTracker = null;
-                                    log.error("GoogleAnalytics load timeout");
-                                }
-                            }
-                        }
-                    };
-                    loadTimer.scheduleRepeating(7 * 1000);
+                    load();
                 }
                 return;
             }
@@ -117,6 +115,32 @@ public class GoogleAnalytics {
         });
     }
 
+    private static void load() {
+        injectJS();
+        loadTimer = new Timer() {
+            @Override
+            public void run() {
+                if (isInstalled()) {
+                    loaded = true;
+                    loadTimer.cancel();
+                    loadTimer = null;
+                    configure();
+                    fireQueuedActions();
+                } else {
+                    timeoutCountdown--;
+                    if (timeoutCountdown == 0) {
+                        loadTimer.cancel();
+                        loadTimer = null;
+                        // Disable, GoogleAnalytics, probably working OffLine 
+                        GoogleAnalytics.googleAnalyticsTracker = null;
+                        log.error("GoogleAnalytics load timeout");
+                    }
+                }
+            }
+        };
+        loadTimer.scheduleRepeating(7 * 1000);
+    }
+
     private static void fireQueuedActions() {
         if (queuedActions != null) {
             for (String actionName : queuedActions) {
@@ -129,6 +153,12 @@ public class GoogleAnalytics {
             }
             queuedActions.clear();
             queuedActions = null;
+        }
+    }
+
+    private static void configure() {
+        if (domainName != null) {
+            setDomainName(googleAnalyticsTracker, domainName);
         }
     }
 
@@ -146,5 +176,8 @@ public class GoogleAnalytics {
 
     private static native void trackPageView(String tracker, String pageUrl)
     /*-{ $wnd._gat._getTracker(tracker)._trackPageview(pageUrl); }-*/;
+
+    private static native void setDomainName(String tracker, String domainName)
+    /*-{ $wnd._gat._getTracker(tracker)._setDomainName(domainName); }-*/;
 
 }
