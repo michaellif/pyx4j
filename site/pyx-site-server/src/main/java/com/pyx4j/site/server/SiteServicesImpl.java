@@ -141,7 +141,13 @@ public class SiteServicesImpl implements SiteServices {
             Site site = (Site) new EntityServicesImpl.RetrieveImpl().execute(criteria);
             if ((site != null) && (cache != null)) {
                 // Store for future use.
-                cache.put(KEY_PREFIX + request.getSiteId(), site);
+                try {
+                    cache.put(KEY_PREFIX + request.getSiteId(), site);
+                } catch (Throwable e) {
+                    // GAE read-only mode will produce "Policy prevented put operation"
+                    // TODO log once.
+                    log.error("Cache set error", e);
+                }
             }
 
             if (site != null) {
