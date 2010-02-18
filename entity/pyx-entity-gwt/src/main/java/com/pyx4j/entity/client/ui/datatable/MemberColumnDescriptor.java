@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class MemberColumnDescriptor<E extends IEntity<IEntity<?>>> extends ColumnDescriptor<E> {
+public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
     private String formatPattern;
 

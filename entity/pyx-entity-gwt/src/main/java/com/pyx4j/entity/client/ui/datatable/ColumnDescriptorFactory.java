@@ -22,7 +22,6 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import java.util.Date;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -31,18 +30,18 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class ColumnDescriptorFactory {
 
-    public static <T extends IEntity<IEntity<?>>> ColumnDescriptor<T> createColumnDescriptor(IObject<?, T> member) {
+    public static ColumnDescriptor<?> createColumnDescriptor(IObject member) {
         MemberMeta mm = member.getMeta();
         if (mm.isEntity()) {
-            return new MemberEntityColumnDescriptor<T>(mm.getFieldName(), mm.getCaption());
+            return new MemberEntityColumnDescriptor(mm.getFieldName(), mm.getCaption());
         } else if (mm.getValueClass().equals(Date.class)) {
-            return new MemberDateColumnDescriptor<T>(mm.getFieldName(), mm.getCaption(), mm.getFormat());
+            return new MemberDateColumnDescriptor(mm.getFieldName(), mm.getCaption(), mm.getFormat());
         } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
-            return new MemberEntityCollectionColumnDescriptor<T>(mm.getFieldName(), mm.getCaption());
+            return new MemberEntityCollectionColumnDescriptor(mm.getFieldName(), mm.getCaption());
         } else if (member instanceof IPrimitiveSet<?>) {
-            return new MemberCollectionColumnDescriptor<T>(mm.getFieldName(), mm.getCaption(), mm.getFormat());
+            return new MemberCollectionColumnDescriptor(mm.getFieldName(), mm.getCaption(), mm.getFormat());
         } else {
-            return new MemberColumnDescriptor<T>(mm.getFieldName(), mm.getCaption(), mm.getFormat());
+            return new MemberColumnDescriptor(mm.getFieldName(), mm.getCaption(), mm.getFormat());
         }
     }
 }

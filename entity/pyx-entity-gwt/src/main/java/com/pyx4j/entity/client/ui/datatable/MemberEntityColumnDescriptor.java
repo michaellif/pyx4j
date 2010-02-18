@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class MemberEntityColumnDescriptor<E extends IEntity<IEntity<?>>> extends ColumnDescriptor<E> {
+public class MemberEntityColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
     public MemberEntityColumnDescriptor(String columnName, String columnTitle) {
         super(columnName, columnTitle);
@@ -30,7 +30,7 @@ public class MemberEntityColumnDescriptor<E extends IEntity<IEntity<?>>> extends
 
     @Override
     public String convert(E entity) {
-        return ((IEntity<?>) entity.getMember(getColumnName())).getStringView();
+        return ((IEntity) entity.getMember(getColumnName())).getStringView();
     }
 
 }

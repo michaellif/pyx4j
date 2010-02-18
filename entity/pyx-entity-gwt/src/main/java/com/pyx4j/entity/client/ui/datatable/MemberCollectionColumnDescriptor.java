@@ -26,7 +26,7 @@ import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.IEntity;
 
-public class MemberCollectionColumnDescriptor<E extends IEntity<IEntity<?>>> extends ColumnDescriptor<E> {
+public class MemberCollectionColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
     private String formatPattern;
 

@@ -26,7 +26,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class MemberDateColumnDescriptor<E extends IEntity<IEntity<?>>> extends ColumnDescriptor<E> {
+public class MemberDateColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
     private String dateTimeFormatPattern;
 
