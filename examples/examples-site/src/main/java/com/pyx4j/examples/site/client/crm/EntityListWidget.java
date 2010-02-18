@@ -20,12 +20,20 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class EntityListWidget extends HTML {
+import com.pyx4j.entity.client.ui.EntityCriteriaPanel;
+import com.pyx4j.entity.shared.IEntity;
 
-    EntityListWidget() {
-        super("List");
+public class EntityListWidget<E extends IEntity<?>> extends DockPanel {
+
+    EntityListWidget(EntityCriteriaPanel<E> criteriaPanel, SearchResultsPanel searchResultsPanel) {
+        super();
+
+        add((Widget) criteriaPanel, DockPanel.NORTH);
+        add(searchResultsPanel, DockPanel.CENTER);
+
     }
 
 }

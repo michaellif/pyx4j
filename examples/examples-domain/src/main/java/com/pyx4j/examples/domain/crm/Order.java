@@ -23,6 +23,7 @@ package com.pyx4j.examples.domain.crm;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -49,6 +50,9 @@ public interface Order extends IEntity<Order> {
             return descr;
         }
     }
+
+    @Owner
+    Customer customer();
 
     IPrimitive<String> description();
 

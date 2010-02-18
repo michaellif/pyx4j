@@ -14,18 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
+ * Created on Feb 18, 2010
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.pyx4j.examples.domain.crm.Order;
+import com.google.gwt.user.client.ui.HTML;
 
-public class OrderListWidget extends EntityListWidget<Order> {
+public class SearchResultsPanel extends HTML {
 
-    public OrderListWidget() {
-        super(new OrderSearchCriteriaPanel(), new SearchResultsPanel());
+    public SearchResultsPanel() {
+        super("SearchResultsPanel");
+        getElement().getStyle().setBackgroundColor("red");
     }
-
 }

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 18, 2010
+ * Created on Feb 18, 2010
  * @author michaellif
  * @version $Id$
  */
@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -59,10 +60,6 @@ public class EntityForm<E extends IEntity<?>> {
 
     @SuppressWarnings("unchecked")
     private final ValueChangeHandler valuePropagation;
-
-    public static <T extends IEntity<?>> EntityForm<T> create(Class<T> clazz) {
-        return new EntityForm<T>(clazz);
-    }
 
     @SuppressWarnings("unchecked")
     private class ValuePropagation implements ValueChangeHandler {

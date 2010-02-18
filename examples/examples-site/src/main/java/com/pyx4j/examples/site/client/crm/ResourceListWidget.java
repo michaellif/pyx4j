@@ -20,6 +20,12 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-public class ResourceListWidget extends EntityListWidget {
+import com.pyx4j.examples.domain.crm.Resource;
+
+public class ResourceListWidget extends EntityListWidget<Resource> {
+
+    public ResourceListWidget() {
+        super(new ResourceSearchCriteriaPanel(), new SearchResultsPanel());
+    }
 
 }

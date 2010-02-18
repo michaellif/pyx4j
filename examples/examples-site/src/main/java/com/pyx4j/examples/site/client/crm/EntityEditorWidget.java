@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 public class EntityEditorWidget extends HTML {
 
     EntityEditorWidget() {
-        super("Editor");
+        super("EntityEditorWidget");
     }
 
 }

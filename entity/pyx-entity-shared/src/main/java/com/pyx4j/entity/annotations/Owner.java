@@ -14,18 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
- * @author michaellif
+ * Created on Jan 5, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.examples.domain.crm.Order;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class OrderListWidget extends EntityListWidget<Order> {
-
-    public OrderListWidget() {
-        super(new OrderSearchCriteriaPanel(), new SearchResultsPanel());
-    }
+/**
+ * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
+ */
+@Target( { ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Owner {
 
 }

@@ -14,18 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
+ * Created on Feb 18, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.entity.client.ui;
 
-import com.pyx4j.examples.domain.crm.Order;
+import com.pyx4j.entity.shared.IEntity;
 
-public class OrderListWidget extends EntityListWidget<Order> {
+public class EntityCriteriaForm<E extends IEntity<?>> extends EntityForm<E> {
 
-    public OrderListWidget() {
-        super(new OrderSearchCriteriaPanel(), new SearchResultsPanel());
+    public EntityCriteriaForm(Class<E> clazz) {
+        super(clazz);
+    }
+
+    public static <T extends IEntity<?>> EntityCriteriaForm<T> create(Class<T> clazz) {
+        return new EntityCriteriaForm<T>(clazz);
     }
 
 }
