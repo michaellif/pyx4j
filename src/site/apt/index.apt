@@ -20,11 +20,11 @@ pyx
 
     This is our approach to make data object and its metadata as one.
 
-    We slected this approach because we need
+    We selected this approach because we need
 
     * Refactoring safe domain
 
-    * The same domain objects in GWT cleint mode and on server side
+    * The same domain objects in GWT client mode and on server side
 
     * Type safety using Java 5 generics
 
@@ -38,14 +38,15 @@ public interface Car extends IEntity<Car> {
 }
 ---
 
-    Implemenation objects are created using bytecode manipulations (Javassist) on server and GWT rebind for client.
+    Implementation objects are created using bytecode manipulations (Javassist) on server and GWT rebind for client.
 
-    We can create Entity implemenation classes so bytecode manipulations can be avoided on production. This is the final step and optinal for application delopyment.
-Implemenations can be dynamicaly created at runtime during development.
+    Build-time bytecode enhancement are optional. Implementations can be dynamically created at run-time during development.
+We can create Entity implementation classes at build-time so bytecode manipulations can be avoided on production to speed up application start-up. This is the final step and optional for application deployment.
+
 
 * CComponent(s)
 
-    Forms and data binging detatched from DOM objects.
+    Forms and data binging detached from DOM objects.
 
 
 * Interesting alternatives
