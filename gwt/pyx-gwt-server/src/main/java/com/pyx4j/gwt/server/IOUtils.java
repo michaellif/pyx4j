@@ -20,9 +20,11 @@
  */
 package com.pyx4j.gwt.server;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class IOUtils {
@@ -72,4 +74,25 @@ public class IOUtils {
             IOUtils.closeQuietly(os);
         }
     }
+
+    public static String getTextResource(String name) throws IOException {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
+        if (in == null) {
+            return null;
+        }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        StringBuffer sb = new StringBuffer();
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+        } finally {
+            br.close();
+        }
+
+        return sb.toString();
+    }
+
 }
