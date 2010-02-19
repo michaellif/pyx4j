@@ -50,7 +50,7 @@ public class UnitTestResult implements Serializable {
         this.success = false;
         this.duration = duration;
         this.exceptionClassName = exception.getClass().getName();
-        this.exceptionMessage = exception.getClass().getName() + (exception.getMessage() == null ? "" : " " + exception.getMessage());
+        this.exceptionMessage = exception.getMessage();
     }
 
     public long getDuration() {
