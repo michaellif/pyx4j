@@ -22,22 +22,33 @@ package com.pyx4j.unit.client;
 
 public class GResult {
 
-    private long duration;
+    private final long duration;
 
-    private boolean success;
+    private final boolean success;
 
-    private String exceptionMessage;
+    private final String exceptionClassName;
 
-    /**
-     * @param duration
-     * @param success
-     * @param exceptionMessage
-     */
-    public GResult(boolean success, String exceptionMessage, long duration) {
-        super();
+    private final String exceptionMessage;
+
+    public GResult(long duration) {
+        this.duration = duration;
+        this.success = true;
+        this.exceptionClassName = null;
+        this.exceptionMessage = null;
+    }
+
+    public GResult(boolean success, String exceptionClassName, String exceptionMessage, long duration) {
         this.duration = duration;
         this.success = success;
+        this.exceptionClassName = exceptionClassName;
         this.exceptionMessage = exceptionMessage;
+    }
+
+    public GResult(Throwable exception, long duration) {
+        this.success = false;
+        this.duration = duration;
+        this.exceptionClassName = exception.getClass().getName();
+        this.exceptionMessage = exception.getMessage();
     }
 
     public long getDuration() {
@@ -49,6 +60,18 @@ public class GResult {
     }
 
     public String getMessage() {
+        if (getExceptionMessage() != null) {
+            return getExceptionClassName() + " [" + getExceptionMessage() + "]";
+        } else {
+            return getExceptionClassName();
+        }
+    }
+
+    public String getExceptionMessage() {
         return exceptionMessage;
+    }
+
+    public String getExceptionClassName() {
+        return exceptionClassName;
     }
 }

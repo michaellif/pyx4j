@@ -136,11 +136,11 @@ public abstract class UnitTestsServicesImpl {
             if (testResult.errorCount() > 0) {
                 TestFailure failure = testResult.errors().nextElement();
                 log.error("TestCase Failure {}", failure.thrownException());
-                return new UnitTestResult(false, failure.exceptionMessage(), duration);
+                return new UnitTestResult(failure.thrownException(), duration);
             } else if (testResult.failureCount() > 0) {
                 TestFailure failure = testResult.failures().nextElement();
                 log.error("TestCase Failure {}", failure.thrownException());
-                return new UnitTestResult(false, failure.exceptionMessage(), duration);
+                return new UnitTestResult(failure.thrownException(), duration);
             } else {
                 return new UnitTestResult(true, null, duration);
             }

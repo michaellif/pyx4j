@@ -25,10 +25,12 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.user.client.Timer;
-
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
 import com.pyx4j.unit.client.GResult;
@@ -36,7 +38,7 @@ import com.pyx4j.unit.client.TestAwareExceptionHandler;
 
 public abstract class AbstractGCaseMeta implements GCaseMeta {
 
-    //private static final Logger log = LoggerFactory.getLogger(AbstractGCaseMeta.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractGCaseMeta.class);
 
     private final Class<? extends TestCase> caseClass;
 
@@ -112,14 +114,10 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
 
         @Override
         public void onUncaughtException(Throwable t) {
-            String exceptionMessage = t.getClass().getName();
-            if (t.getMessage() != null) {
-                exceptionMessage += " [" + t.getMessage() + "]";
-            }
             if (dispose()) {
                 long duration = (startTime == 0) ? 0 : System.currentTimeMillis() - startTime;
-                //log.debug("onComplete called for UncaughtException");
-                callback.onComplete(new GResult(false, exceptionMessage, duration));
+                log.error("test execution UncaughtException", t);
+                callback.onComplete(new GResult(t, duration));
             }
         }
     }
@@ -132,7 +130,7 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
 
     @Override
     public void execute(GCaseResultAsyncCallback callback) {
-        String exceptionMessage = null;
+        Throwable exception = null;
         RunningCase rc = new RunningCase();
         rc.callback = callback;
         try {
@@ -145,17 +143,20 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
             rc.startTime = System.currentTimeMillis();
             run(rc.instance);
         } catch (Throwable t) {
-            exceptionMessage = t.getClass().getName();
-            if (t.getMessage() != null) {
-                exceptionMessage += " [" + t.getMessage() + "]";
-            }
+            log.error("test execution error", t);
+            exception = t;
         }
-        // delayTestFinish was not called
-        if ((rc.timeoutTimer == null) || (exceptionMessage != null)) {
+        if (exception != null) {
             if (rc.dispose()) {
                 long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
                 //log.debug("onComplete called");
-                callback.onComplete(new GResult(exceptionMessage == null, exceptionMessage, duration));
+                callback.onComplete(new GResult(exception, duration));
+            }
+        } else if (rc.timeoutTimer == null) { // delayTestFinish was not called
+            if (rc.dispose()) {
+                long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
+                //log.debug("onComplete called");
+                callback.onComplete(new GResult(duration));
             }
         }
     }
@@ -171,7 +172,7 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
                 if (rc.dispose()) {
                     long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
                     //log.debug("onComplete called for timeout");
-                    rc.callback.onComplete(new GResult(false, "Test timeout", duration));
+                    rc.callback.onComplete(new GResult(false, "Test timeout", null, duration));
                 }
             }
         };
@@ -188,7 +189,7 @@ public abstract class AbstractGCaseMeta implements GCaseMeta {
         if (rc.dispose()) {
             long duration = (rc.startTime == 0) ? 0 : System.currentTimeMillis() - rc.startTime;
             //log.debug("onComplete called for finishTest");
-            rc.callback.onComplete(new GResult(true, null, duration));
+            rc.callback.onComplete(new GResult(duration));
         }
     }
 

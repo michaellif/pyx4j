@@ -29,6 +29,8 @@ public class UnitTestResult implements Serializable {
 
     private boolean success;
 
+    private String exceptionClassName;
+
     private String exceptionMessage;
 
     public UnitTestResult() {
@@ -39,9 +41,16 @@ public class UnitTestResult implements Serializable {
     }
 
     public UnitTestResult(boolean success, String exceptionMessage, long duration) {
-        this.duration = duration;
         this.success = success;
+        this.duration = duration;
         this.exceptionMessage = exceptionMessage;
+    }
+
+    public UnitTestResult(Throwable exception, long duration) {
+        this.success = false;
+        this.duration = duration;
+        this.exceptionClassName = exception.getClass().getName();
+        this.exceptionMessage = exception.getClass().getName() + (exception.getMessage() == null ? "" : " " + exception.getMessage());
     }
 
     public long getDuration() {
@@ -50,6 +59,14 @@ public class UnitTestResult implements Serializable {
 
     public boolean isSuccess() {
         return success;
+    }
+
+    public String getExceptionClassName() {
+        return exceptionClassName;
+    }
+
+    public void setExceptionClassName(String exceptionClassName) {
+        this.exceptionClassName = exceptionClassName;
     }
 
     public String getExceptionMessage() {
@@ -67,4 +84,5 @@ public class UnitTestResult implements Serializable {
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
 }

@@ -21,7 +21,6 @@
 package com.pyx4j.unit.runner;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
@@ -56,11 +55,11 @@ public class ServerSideGCaseMeta implements GCaseMeta {
         final AsyncCallback<UnitTestResult> rpcCallback = new AsyncCallback<UnitTestResult>() {
 
             public void onFailure(Throwable t) {
-                callback.onComplete(new GResult(false, t.getMessage(), 0));
+                callback.onComplete(new GResult(t, 0));
             }
 
             public void onSuccess(UnitTestResult result) {
-                callback.onComplete(new GResult(result.isSuccess(), result.getExceptionMessage(), result.getDuration()));
+                callback.onComplete(new GResult(result.isSuccess(), result.getExceptionClassName(), result.getExceptionMessage(), result.getDuration()));
             }
         };
 
