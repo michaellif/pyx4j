@@ -26,4 +26,5 @@ public interface IPrimitiveSet<TYPE> extends IObject<IPrimitiveSet<TYPE>, Set<TY
 
     public Class<TYPE> getValueClass();
 
+    public void set(IPrimitiveSet<TYPE> typedSet);
 }

@@ -50,8 +50,8 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<IPrimitiveSet<TYPE>
     }
 
     @Override
-    public void set(IPrimitiveSet<TYPE> object) {
-        getParent().setMemberValue(getFieldName(), object);
+    public void set(IPrimitiveSet<TYPE> typedSet) {
+        getParent().setMemberValue(getFieldName(), typedSet);
     }
 
     @Override

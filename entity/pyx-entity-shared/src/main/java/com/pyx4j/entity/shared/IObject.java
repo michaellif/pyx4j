@@ -27,7 +27,7 @@ public interface IObject<OBJECT_TYPE extends IObject, VALUE_TYPE> {
 
     public boolean isNull();
 
-    public void set(OBJECT_TYPE entity);
+    //public void set(OBJECT_TYPE entity);
 
     public void setValue(VALUE_TYPE value);
 

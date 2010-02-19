@@ -89,8 +89,8 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
     }
 
     @Override
-    public void set(ISet<TYPE> entity) {
-        setValue(entity.getValue());
+    public void set(ISet<TYPE> typedSet) {
+        setValue(typedSet.getValue());
     }
 
     @SuppressWarnings("unchecked")

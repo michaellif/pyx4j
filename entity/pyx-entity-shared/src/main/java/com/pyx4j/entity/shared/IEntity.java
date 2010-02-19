@@ -47,8 +47,22 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
 
     public void setMemberValue(String memberName, Object value);
 
-    //TODO
-    //public <T extends IObject<?, ?>> void set(T member, T value);
+    /**
+     * Unsafe set entity value object.
+     * 
+     * @param entity
+     */
+    public void set(IEntity<?> entity);
+
+    /**
+     * Safer way to assign members value
+     * 
+     * @param <T>
+     * @param member
+     *            meta
+     * @param value
+     */
+    public <T extends IObject<?, ?>> void set(T member, T value);
 
     public Object removeMemberValue(String memberName);
 

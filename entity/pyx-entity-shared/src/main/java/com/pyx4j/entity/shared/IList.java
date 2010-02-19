@@ -27,6 +27,8 @@ public interface IList<TYPE extends IEntity<?>> extends IObject<IList<TYPE>, Lis
 
     public Class<TYPE> getValueClass();
 
+    public void set(IList<TYPE> typedList);
+
     /**
      * Create new instance of the Value object
      */

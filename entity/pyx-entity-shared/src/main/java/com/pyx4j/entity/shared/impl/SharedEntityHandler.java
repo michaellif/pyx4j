@@ -171,7 +171,8 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @Override
-    public void set(OBJECT_TYPE entity) {
+    public void set(IEntity<?> entity) {
+        //TODO at type safety at runtime.
         setValue(entity.getValue());
     }
 
@@ -240,6 +241,11 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     @Override
     public void setMemberValue(String memberName, Object value) {
         ensureValue().put(memberName, value);
+    }
+
+    @Override
+    public <T extends IObject<?, ?>> void set(T member, T value) {
+        ensureValue().put(member.getFieldName(), value.getValue());
     }
 
     private Object getMemberStringView(String memberName) {
