@@ -23,8 +23,6 @@ package com.pyx4j.entity.test.shared;
 import java.util.Iterator;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Department;
@@ -134,32 +132,6 @@ public class FactoryTest extends InitializerTestCase {
         employee2.setPrimaryKey(22L);
         employee3.setPrimaryKey(22L);
         assertTrue("contains mod Key(emp3(emp2))", department.employees().contains(employee3));
-    }
-
-    public void testPathCalculation() {
-        Path path = EntityFactory.create(Employee.class).firstName().getPath();
-
-        assertTrue("path is wrong", "Employee/firstName/".equals(path.toString()));
-
-        path = EntityFactory.create(Employee.class).homeAddress().streetName().getPath();
-
-        assertTrue("path is wrong", "Employee/homeAddress/streetName/".equals(path.toString()));
-
-    }
-
-    public void testGetByPath() {
-        Employee employee = EntityFactory.create(Employee.class);
-        employee.firstName().setValue("Firstname");
-
-        Address address = EntityFactory.create(Address.class);
-        employee.homeAddress().set(address);
-        address = employee.homeAddress();
-        address.streetName().setValue("Home Street");
-
-        Path path = EntityFactory.create(Employee.class).homeAddress().streetName().getPath();
-
-        IObject<?> object = employee.getMember(path);
-
     }
 
 }

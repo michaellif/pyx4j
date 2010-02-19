@@ -11,7 +11,7 @@
 
 ========= Install M2-Eclipse =========
 
-		http://m2eclipse.sonatype.org/update-dev/
+    http://m2eclipse.sonatype.org/sites/m2e
 
 ========= maven build =========
 
