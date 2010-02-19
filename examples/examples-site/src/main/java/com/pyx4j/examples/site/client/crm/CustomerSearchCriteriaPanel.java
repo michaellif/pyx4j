@@ -20,48 +20,85 @@
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.EntityCriteriaForm;
-import com.pyx4j.entity.client.ui.EntityCriteriaPanel;
+import com.pyx4j.entity.client.ui.EntitySearchCriteriaForm;
+import com.pyx4j.entity.client.ui.IEntitySearchCriteriaPanel;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CGroupBoxPanel;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
-public class CustomerSearchCriteriaPanel extends SimplePanel implements EntityCriteriaPanel<Customer> {
+public class CustomerSearchCriteriaPanel extends SimplePanel implements IEntitySearchCriteriaPanel<Customer> {
 
-    private final EntityCriteriaForm<Customer> form;
+    private final EntitySearchCriteriaForm<Customer> form;
 
     public CustomerSearchCriteriaPanel() {
-
-        getElement().getStyle().setPadding(30, Unit.PX);
-        getElement().getStyle().setPaddingRight(10, Unit.PX);
 
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        form = EntityCriteriaForm.create(Customer.class);
+        form = EntitySearchCriteriaForm.create(Customer.class);
 
-        CComponent<?>[][] components = new CComponent[][] {
+        {
 
-        { form.create(form.meta().name()) },
+            CComponent<?>[][] components = new CComponent[][] {
 
-        { form.create(form.meta().orders().$().status()) },
+            { form.create(form.meta().name()) },
 
-        };
+            { form.create(form.meta().street()) },
+
+            };
+
+            CGroupBoxPanel group = new CGroupBoxPanel("Customer Search", Layout.CHECKBOX_TOGGLE);
+            group.setExpended(true);
+            CForm form = new CForm(LabelAlignment.LEFT);
+            form.setComponents(components);
+            group.addComponent(form);
+            Widget basicSearchWidget = (Widget) group.initNativeComponent();
+            contentPanel.add(basicSearchWidget);
+        }
+
+        {
+            CComponent<?>[][] components = new CComponent[][] {
+
+            { form.create(form.meta().name()) },
+
+            { form.create(form.meta().orders().$().status()) },
+
+            };
+
+            CGroupBoxPanel group = new CGroupBoxPanel("Location Search", Layout.CHECKBOX_TOGGLE);
+            group.setExpended(true);
+            CForm form = new CForm(LabelAlignment.LEFT);
+            form.setComponents(components);
+            group.addComponent(form);
+            Widget basicSearchWidget = (Widget) group.initNativeComponent();
+            contentPanel.add(basicSearchWidget);
+        }
+
+        {
+            CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
+
+            { form.create(form.meta().name()) },
+
+            { form.create(form.meta().orders().$().status()) },
+
+            };
+
+            Widget advancedSearchWidget = CForm.createDecoratedFormWidget(LabelAlignment.LEFT, advancedSearchComponents, "Advanced", true, false);
+            contentPanel.add(advancedSearchWidget);
+        }
 
         form.populate(null);
 
-        Widget form = CForm.createFormWidget(LabelAlignment.TOP, components);
-        form.setWidth("500px");
-        contentPanel.add(form);
         Button viewButton = new Button("View");
-        viewButton.getElement().getStyle().setProperty("margin", "20px 0px 20px 150px");
+        viewButton.getElement().getStyle().setProperty("margin", "5px 0px 5px 150px");
         contentPanel.add(viewButton);
     }
 

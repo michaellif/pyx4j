@@ -22,7 +22,10 @@ package com.pyx4j.examples.site.client.crm;
 
 import com.google.gwt.user.client.ui.HTML;
 
-public class SearchResultsPanel extends HTML {
+import com.pyx4j.entity.client.ui.IEntitySearchResultsPanel;
+import com.pyx4j.entity.shared.IEntity;
+
+public class SearchResultsPanel<E extends IEntity> extends HTML implements IEntitySearchResultsPanel<E> {
 
     public SearchResultsPanel() {
         super("SearchResultsPanel");

@@ -26,6 +26,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.gwt.NativeForm;
+import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
 public class CForm extends CContainer {
 
@@ -72,7 +73,22 @@ public class CForm extends CContainer {
     }
 
     public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption) {
-        CGroupBoxPanel group = new CGroupBoxPanel(caption, false);
+        return createDecoratedFormWidget(allignment, components, caption, false, true);
+    }
+
+    public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption, boolean collapsible,
+            boolean expended) {
+        CGroupBoxPanel group = new CGroupBoxPanel(caption, collapsible);
+        group.setExpended(expended);
+        CForm form = new CForm(allignment);
+        form.setComponents(components);
+        group.addComponent(form);
+        return (Widget) group.initNativeComponent();
+    }
+
+    public static Widget createToggleFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption, boolean expended) {
+        CGroupBoxPanel group = new CGroupBoxPanel(caption, Layout.CHECKBOX_TOGGLE);
+        group.setExpended(expended);
         CForm form = new CForm(allignment);
         form.setComponents(components);
         group.addComponent(form);

@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel;
@@ -232,9 +233,9 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         panel.onExpended(expended);
         if (collapseImage != null) {
             if (expended) {
-                //TODO AppImages.getImages().groupBoxOpen().applyTo(collapseImage);
+                collapseImage.setResource(ImageFactory.getImages().groupBoxOpen());
             } else {
-                //TODO AppImages.getImages().groupBoxClose().applyTo(collapseImage);
+                collapseImage.setResource(ImageFactory.getImages().groupBoxClose());
             }
         } else if (collapseCheckBox != null) {
             collapseCheckBox.setValue(expended);

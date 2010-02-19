@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class ColumnDescriptorFactory {
 
-    public static ColumnDescriptor<?> createColumnDescriptor(IObject member) {
+    public static ColumnDescriptor createColumnDescriptor(IObject member) {
         MemberMeta mm = member.getMeta();
         if (mm.isEntity()) {
             return new MemberEntityColumnDescriptor(mm.getFieldName(), mm.getCaption());

@@ -14,27 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
+ * Created on Feb 18, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.entity.client.ui;
 
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.Widget;
-
-import com.pyx4j.entity.client.ui.IEntitySearchCriteriaPanel;
-import com.pyx4j.entity.client.ui.IEntitySearchResultsPanel;
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityListWidget<E extends IEntity> extends DockPanel {
-
-    EntityListWidget(IEntitySearchCriteriaPanel<E> criteriaPanel, IEntitySearchResultsPanel<E> resultsPanel) {
-        super();
-
-        add((Widget) criteriaPanel, DockPanel.NORTH);
-        add((Widget) resultsPanel, DockPanel.CENTER);
-
-    }
+public interface IEntitySearchResultsPanel<E extends IEntity> {
 
 }

@@ -22,14 +22,8 @@ package com.pyx4j.entity.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityCriteriaForm<E extends IEntity> extends EntityForm<E> {
+public interface IEntitySearchCriteriaPanel<E extends IEntity> {
 
-    public EntityCriteriaForm(Class<E> clazz) {
-        super(clazz);
-    }
-
-    public static <T extends IEntity> EntityCriteriaForm<T> create(Class<T> clazz) {
-        return new EntityCriteriaForm<T>(clazz);
-    }
+    void onView(E criteria);
 
 }

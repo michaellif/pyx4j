@@ -111,7 +111,9 @@ public class LightTheme extends SiteTheme {
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul li");
         style.addProperty(" list-style-type", "square");
+        style.addProperty(" list-style-image", "url(images/light_bullet.gif)");
         addStyle(style);
+
     }
 
     @Override

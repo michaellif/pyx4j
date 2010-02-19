@@ -26,16 +26,16 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.EntityCriteriaForm;
-import com.pyx4j.entity.client.ui.EntityCriteriaPanel;
+import com.pyx4j.entity.client.ui.EntitySearchCriteriaForm;
+import com.pyx4j.entity.client.ui.IEntitySearchCriteriaPanel;
 import com.pyx4j.examples.domain.crm.Resource;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public class ResourceSearchCriteriaPanel extends SimplePanel implements EntityCriteriaPanel<Resource> {
+public class ResourceSearchCriteriaPanel extends SimplePanel implements IEntitySearchCriteriaPanel<Resource> {
 
-    private final EntityCriteriaForm<Resource> form;
+    private final EntitySearchCriteriaForm<Resource> form;
 
     public ResourceSearchCriteriaPanel() {
 
@@ -45,7 +45,7 @@ public class ResourceSearchCriteriaPanel extends SimplePanel implements EntityCr
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        form = EntityCriteriaForm.create(Resource.class);
+        form = EntitySearchCriteriaForm.create(Resource.class);
 
         CComponent<?>[][] components = new CComponent[][] {
 

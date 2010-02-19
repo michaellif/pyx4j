@@ -67,4 +67,10 @@ public interface FormImages extends ClientBundle {
 
     ImageResource formTooltipWarn();
 
+    // ----
+
+    ImageResource groupBoxOpen();
+
+    ImageResource groupBoxClose();
+
 }

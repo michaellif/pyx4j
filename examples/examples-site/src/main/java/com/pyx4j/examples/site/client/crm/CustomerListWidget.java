@@ -25,7 +25,7 @@ import com.pyx4j.examples.domain.crm.Customer;
 public class CustomerListWidget extends EntityListWidget<Customer> {
 
     public CustomerListWidget() {
-        super(new CustomerSearchCriteriaPanel(), new SearchResultsPanel());
+        super(new CustomerSearchCriteriaPanel(), new CustomerSearchResultsPanel());
     }
 
 }
