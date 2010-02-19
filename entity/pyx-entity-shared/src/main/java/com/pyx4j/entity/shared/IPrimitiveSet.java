@@ -22,7 +22,7 @@ package com.pyx4j.entity.shared;
 
 import java.util.Set;
 
-public interface IPrimitiveSet<TYPE> extends IObject<IPrimitiveSet<TYPE>, Set<TYPE>>, Set<TYPE> {
+public interface IPrimitiveSet<TYPE> extends IObject<Set<TYPE>>, Set<TYPE> {
 
     public Class<TYPE> getValueClass();
 

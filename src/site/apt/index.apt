@@ -18,7 +18,7 @@ pyx
 
 * IEntity
 
-    This is our approach to make data object and its metadata as one.
+    This is our approach to make data object and its metadata in one declaration.
 
     We selected this approach because we need
 
@@ -31,11 +31,13 @@ pyx
     []
 
 ---
-public interface Car extends IEntity<Car> {
+public interface Car extends IEntity {
 
     IPrimitive<String> name();
 
 }
+...
+Car car = EntityFactory.create(Car.class);
 ---
 
     Implementation objects are created using bytecode manipulations (Javassist) on server and GWT rebind for client.

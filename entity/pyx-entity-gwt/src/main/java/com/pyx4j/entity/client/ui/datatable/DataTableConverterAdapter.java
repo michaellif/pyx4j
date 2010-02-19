@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class DataTableConverterAdapter<E extends IEntity<IEntity<?>>> implements DataTableConverter<E> {
+public class DataTableConverterAdapter<E extends IEntity> implements DataTableConverter<E> {
 
     private final List<ColumnDescriptor<E>> columnDescriptors;
 

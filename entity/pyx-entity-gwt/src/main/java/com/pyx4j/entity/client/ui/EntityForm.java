@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -48,7 +47,7 @@ import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 
-public class EntityForm<E extends IEntity<?>> {
+public class EntityForm<E extends IEntity> {
 
     private final E metaEntity;
 
@@ -82,7 +81,7 @@ public class EntityForm<E extends IEntity<?>> {
         return metaEntity;
     }
 
-    public CEditableComponent<?> create(IObject<?, ?> member) {
+    public CEditableComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         CEditableComponent<?> comp;
         EditorType editorType = mm.getEditorType();
@@ -145,7 +144,7 @@ public class EntityForm<E extends IEntity<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> CEditableComponent<T> get(IObject<?, T> member) {
+    public <T> CEditableComponent<T> get(IObject<T> member) {
         for (Map.Entry<CEditableComponent<?>, String> me : binding.entrySet()) {
             if (me.getValue().equals(member.getFieldName())) {
                 return (CEditableComponent<T>) me.getKey();

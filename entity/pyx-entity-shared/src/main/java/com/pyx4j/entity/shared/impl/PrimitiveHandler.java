@@ -24,12 +24,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
-@SuppressWarnings("serial")
-public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE> implements IPrimitive<TYPE> {
+public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
+
+    private static final long serialVersionUID = 5565143015625424503L;
 
     private final Class<TYPE> valueClass;
 
-    public PrimitiveHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
+    public PrimitiveHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
         super(IPrimitive.class, parent, fieldName);
         this.valueClass = valueClass;
     }
@@ -42,7 +43,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<IPrimitive<TYPE>, TYPE
 
     @Override
     public void setValue(TYPE value) {
-        ((SharedEntityHandler<?>) getParent()).ensureValue().put(getFieldName(), value);
+        ((SharedEntityHandler) getParent()).ensureValue().put(getFieldName(), value);
     }
 
     @Override

@@ -51,13 +51,13 @@ public class EntityServicesGWTTest extends TestCase {
         String countryName = "Canada_cs_" + System.currentTimeMillis();
         country.name().setValue(countryName);
 
-        final AsyncCallback<IEntity<?>> callback = new AsyncCallback<IEntity<?>>() {
+        final AsyncCallback<IEntity> callback = new AsyncCallback<IEntity>() {
 
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
-            public void onSuccess(IEntity<?> result) {
+            public void onSuccess(IEntity result) {
                 assertEquals("Result Class Value", country.getClass(), result.getClass());
                 assertEquals("Result Value", country.name().getValue(), ((Country) result).name().getValue());
                 assertNotNull("Result PK Value", ((Country) result).getPrimaryKey());
@@ -111,13 +111,13 @@ public class EntityServicesGWTTest extends TestCase {
             }
         };
 
-        final AsyncCallback<IEntity<?>> setUpCallback = new AsyncCallback<IEntity<?>>() {
+        final AsyncCallback<IEntity> setUpCallback = new AsyncCallback<IEntity>() {
 
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
-            public void onSuccess(IEntity<?> result) {
+            public void onSuccess(IEntity result) {
                 RPCManager.execute(EntityServices.Query.class, cc, callback);
             }
         };

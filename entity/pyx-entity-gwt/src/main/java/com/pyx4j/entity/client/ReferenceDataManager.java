@@ -44,12 +44,12 @@ public class ReferenceDataManager {
 
     private static final Logger log = LoggerFactory.getLogger(ReferenceDataManager.class);
 
-    private static final Map<EntityCriteria<?>, List<IEntity<?>>> cache = new HashMap<EntityCriteria<?>, List<IEntity<?>>>();
+    private static final Map<EntityCriteria<?>, List<? extends IEntity>> cache = new HashMap<EntityCriteria<?>, List<? extends IEntity>>();
 
     private static final Map<EntityCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityCriteria<?>, List<AsyncCallback<List<?>>>>();
 
     @SuppressWarnings("unchecked")
-    public static <T extends IEntity<T>> void obtain(EntityCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
+    public static <T extends IEntity> void obtain(EntityCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
         obtainImpl((EntityCriteria<?>) criteria, (AsyncCallback) handlingCallback, background);
     }
 
@@ -70,9 +70,9 @@ public class ReferenceDataManager {
                 return;
             }
 
-            AsyncCallback callback = new RecoverableAsyncCallback<List<IEntity<?>>>() {
+            AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
 
-                public void onSuccess(List<IEntity<?>> result) {
+                public void onSuccess(Vector<? extends IEntity> result) {
                     try {
                         cache.put(criteria, result);
                         List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(criteria);
@@ -117,10 +117,10 @@ public class ReferenceDataManager {
     /**
      * Update the reference data when Entity is modified by user.
      */
-    public static void update(IEntity<?> ent) {
-        for (Map.Entry<EntityCriteria<?>, List<IEntity<?>>> me : cache.entrySet()) {
+    public static void update(IEntity ent) {
+        for (Map.Entry<EntityCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
-                for (IEntity<?> item : me.getValue()) {
+                for (IEntity item : me.getValue()) {
                     if (ent.equals(item) && (item != ent)) {
                         // Replace item in List
                         item.setValue(ent.getValue());
@@ -131,8 +131,8 @@ public class ReferenceDataManager {
         }
     }
 
-    public static void remove(IEntity<?> ent) {
-        for (Map.Entry<EntityCriteria<?>, List<IEntity<?>>> me : cache.entrySet()) {
+    public static void remove(IEntity ent) {
+        for (Map.Entry<EntityCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
                 me.getValue().remove(ent);
             }

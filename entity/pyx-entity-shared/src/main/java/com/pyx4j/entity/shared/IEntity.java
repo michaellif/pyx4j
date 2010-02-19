@@ -27,7 +27,7 @@ import java.util.Map;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Object>>, Serializable {
+public interface IEntity extends IObject<Map<String, Object>>, Serializable {
 
     public static String PRIMARY_KEY = "id";
 
@@ -37,9 +37,9 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
 
     public void setPrimaryKey(Long pk);
 
-    public IObject<?, ?> getMember(String memberName);
+    public IObject<?> getMember(String memberName);
 
-    public IObject<?, ?> getMember(Path path);
+    public IObject<?> getMember(Path path);
 
     public Object getMemberValue(String memberName);
 
@@ -52,7 +52,7 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
      * 
      * @param entity
      */
-    public void set(IEntity<?> entity);
+    public void set(IEntity entity);
 
     /**
      * Safer way to assign members value
@@ -62,7 +62,7 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
      *            meta
      * @param value
      */
-    public <T extends IObject<?, ?>> void set(T member, T value);
+    public <T extends IObject<?>> void set(T member, T value);
 
     public Object removeMemberValue(String memberName);
 
@@ -81,5 +81,5 @@ public interface IEntity<E extends IEntity<?>> extends IObject<E, Map<String, Ob
      */
     public String getStringView();
 
-    public E cloneEntity();
+    public IEntity cloneEntity();
 }

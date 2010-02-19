@@ -127,7 +127,7 @@ public class AdminApplication implements IApplication {
             }
 
             public void onSuccess(Object result) {
-                MessageDialog.info("Save", "Object " + ((IEntity<?>) result).getEntityMeta().getCaption() + " saved");
+                MessageDialog.info("Save", "Object " + ((IEntity) result).getEntityMeta().getCaption() + " saved");
             }
         };
 

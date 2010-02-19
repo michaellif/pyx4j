@@ -147,7 +147,6 @@
         <module>essentials/pyx-essentials-gwt</module>
         <module>essentials/pyx-essentials-server</module>
 
-        <module>incubator/tester/tester-domain</module>
         <module>incubator/tester/tester-client</module>
         <module>incubator/tester/tester-gae-server</module>
 

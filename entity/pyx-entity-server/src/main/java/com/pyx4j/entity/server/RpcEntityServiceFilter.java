@@ -46,8 +46,8 @@ public class RpcEntityServiceFilter implements IServiceFilter {
     }
 
     protected void filterRpcTransient(Serializable value) {
-        if (value instanceof IEntity<?>) {
-            filterTransientMembers((IEntity<?>) value);
+        if (value instanceof IEntity) {
+            filterTransientMembers((IEntity) value);
         } else if (value instanceof Collection<?>) {
             for (Object v : (Collection<?>) value) {
                 if (v instanceof Serializable) {
@@ -57,7 +57,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         }
     }
 
-    protected void filterTransientMembers(IEntity<?> entity) {
+    protected void filterTransientMembers(IEntity entity) {
         if (entity.isNull()) {
             return;
         }
@@ -70,13 +70,13 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             if (em.getMemberMeta(memberName).isRpcTransient()) {
                 entity.removeMemberValue(memberName);
             } else if (memberMeta.isEntity()) {
-                filterTransientMembers((IEntity<?>) entity.getMember(memberName));
+                filterTransientMembers((IEntity) entity.getMember(memberName));
             } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                for (IEntity<?> value : (ISet<?>) entity.getMember(memberName)) {
+                for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
                     filterTransientMembers(value);
                 }
             } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                for (IEntity<?> value : (IList<?>) entity.getMember(memberName)) {
+                for (IEntity value : (IList<?>) entity.getMember(memberName)) {
                     filterTransientMembers(value);
                 }
             }

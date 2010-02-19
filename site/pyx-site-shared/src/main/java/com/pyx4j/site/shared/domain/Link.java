@@ -23,7 +23,7 @@ package com.pyx4j.site.shared.domain;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Link extends IEntity<Link> {
+public interface Link extends IEntity {
 
     IPrimitive<String> html();
 

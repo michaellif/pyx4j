@@ -42,7 +42,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
@@ -172,7 +171,7 @@ public class EntityFactoryGenerator extends Generator {
             writer.indent();
             writer.println("@SuppressWarnings(\"unchecked\")");
             writer.println("@Override");
-            writer.println("public <T extends IEntity<?>> T create(Class<T> clazz){");
+            writer.println("public <T extends IEntity> T create(Class<T> clazz){");
 
             writer.indent();
             writer.print("return (T)new ");
@@ -184,7 +183,7 @@ public class EntityFactoryGenerator extends Generator {
 
             writer.println();
             writer.println("@Override");
-            writer.println("public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz){");
+            writer.println("public EntityMeta createEntityMeta(Class<? extends IEntity> clazz){");
 
             writer.indent();
             writer.print("return new ");
@@ -337,14 +336,14 @@ public class EntityFactoryGenerator extends Generator {
             writer.print("(");
 
             JClassType valueClass;
-            // Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass,
+            // Class<?> valueClass, Class<? extends IObject<?>> objectClass,
             if (type.isAssignableTo(iPrimitiveInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?, ?>>)");
+                writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
             } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
@@ -353,7 +352,7 @@ public class EntityFactoryGenerator extends Generator {
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?, ?>>)");
+                writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
@@ -362,7 +361,7 @@ public class EntityFactoryGenerator extends Generator {
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?, ?>>)");
+                writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
             } else if (type.isAssignableTo(iListInterfaceType)) {
@@ -371,7 +370,7 @@ public class EntityFactoryGenerator extends Generator {
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?, ?>>)");
+                writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
@@ -487,7 +486,7 @@ public class EntityFactoryGenerator extends Generator {
         composer.addImport(interfaceType.getQualifiedSourceName());
         composer.addImport(IObject.class.getName());
         composer.addImport(IEntity.class.getName());
-        composer.setSuperclass(SharedEntityHandler.class.getName() + "<" + interfaceType.getName() + ">");
+        composer.setSuperclass(SharedEntityHandler.class.getName());
         composer.addImplementedInterface(interfaceType.getName());
         composer.addAnnotationDeclaration("@SuppressWarnings(\"serial\")");
 
@@ -514,7 +513,7 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("}");
 
         writer.println();
-        writer.println("public " + simpleName + "(IEntity<?> parent, String fieldName) { ");
+        writer.println("public " + simpleName + "(IEntity parent, String fieldName) { ");
         writer.indent();
         writer.print("super(");
         writer.print(interfaceType.getName());
@@ -526,7 +525,7 @@ public class EntityFactoryGenerator extends Generator {
 
         writer.println();
         writer.println("@Override");
-        writer.println("protected IObject<?, ?> lazyCreateMember(String name) {");
+        writer.println("protected IObject<?> lazyCreateMember(String name) {");
         writer.indent();
         for (JMethod method : interfaceType.getMethods()) {
             if (!isEntityMemeber(method)) {

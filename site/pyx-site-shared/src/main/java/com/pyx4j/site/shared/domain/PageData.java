@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
-public interface PageData extends IEntity<PageData> {
+public interface PageData extends IEntity {
 
     @StringLength(8192)
     IPrimitive<String> html();

@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @EmbeddedEntity
-public interface ResourceUri extends IEntity<ResourceUri> {
+public interface ResourceUri extends IEntity {
 
     public static String SITE_SEPARATOR = "&";
 

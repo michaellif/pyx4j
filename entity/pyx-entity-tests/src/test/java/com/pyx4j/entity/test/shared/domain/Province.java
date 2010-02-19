@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-public interface Province extends IEntity<Province> {
+public interface Province extends IEntity {
 
     IPrimitive<String> name();
 

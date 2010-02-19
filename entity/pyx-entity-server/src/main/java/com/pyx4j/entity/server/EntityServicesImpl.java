@@ -34,7 +34,7 @@ public class EntityServicesImpl {
     public static class SaveImpl implements EntityServices.Save {
 
         @Override
-        public IEntity<?> execute(IEntity<?> request) {
+        public IEntity execute(IEntity request) {
             if (request.getPrimaryKey() == null) {
                 SecurityController.assertPermission(EntityPermission.permissionCreate(request.getObjectClass()));
             } else {
@@ -51,9 +51,9 @@ public class EntityServicesImpl {
         @Override
         public Vector execute(EntityCriteria request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
-            List<IEntity<?>> rc = PersistenceServicesFactory.getPersistenceService().query(request);
-            Vector<IEntity<?>> v = new Vector<IEntity<?>>();
-            for (IEntity<?> ent : rc) {
+            List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(request);
+            Vector<IEntity> v = new Vector<IEntity>();
+            for (IEntity ent : rc) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
                 v.add(ent);
             }
@@ -65,9 +65,9 @@ public class EntityServicesImpl {
 
         @SuppressWarnings("unchecked")
         @Override
-        public IEntity<?> execute(EntityCriteria request) {
+        public IEntity execute(EntityCriteria request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
-            IEntity<?> ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
+            IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
             if (ent != null) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
             }

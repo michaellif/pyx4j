@@ -31,15 +31,16 @@ import java.util.Vector;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TYPE>, List<Map<String, Object>>> implements IList<TYPE> {
+public class ListHandler<TYPE extends IEntity> extends ObjectHandler<List<Map<String, Object>>> implements IList<TYPE> {
+
+    private static final long serialVersionUID = 6416411665137002645L;
 
     private final Class<TYPE> valueClass;
 
-    public ListHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
-        super(ISet.class, parent, fieldName);
+    public ListHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
+        super(IList.class, parent, fieldName);
         this.valueClass = valueClass;
     }
 
@@ -97,7 +98,6 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
         return value;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean add(TYPE entity) {
         return ensureValue().add(((SharedEntityHandler) entity).ensureValue());
@@ -131,10 +131,10 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
 
     @Override
     public boolean contains(Object o) {
-        if (o instanceof IEntity<?>) {
+        if (o instanceof IEntity) {
             List<?> value = getValue();
             if (value != null) {
-                return value.contains(((IEntity<?>) o).getValue());
+                return value.contains(((IEntity) o).getValue());
             }
         }
         return false;
@@ -161,10 +161,10 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
 
     @Override
     public int indexOf(Object o) {
-        if (o instanceof IEntity<?>) {
+        if (o instanceof IEntity) {
             List<?> value = getValue();
             if (value != null) {
-                return value.indexOf(((IEntity<?>) o).getValue());
+                return value.indexOf(((IEntity) o).getValue());
             } else {
                 return -1;
             }
@@ -251,10 +251,10 @@ public class ListHandler<TYPE extends IEntity<?>> extends ObjectHandler<IList<TY
 
     @Override
     public boolean remove(Object o) {
-        if ((o instanceof IEntity<?>) && (getValueClass().equals(((IEntity<?>) o).getObjectClass()))) {
+        if ((o instanceof IEntity) && (getValueClass().equals(((IEntity) o).getObjectClass()))) {
             List<?> value = getValue();
             if (value != null) {
-                return value.remove(((IEntity<?>) o).getValue());
+                return value.remove(((IEntity) o).getValue());
             } else {
                 return false;
             }

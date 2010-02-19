@@ -50,7 +50,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final Class<?> valueClass;
 
-    private final Class<? extends IObject<?, ?>> objectClass;
+    private final Class<? extends IObject<?>> objectClass;
 
     private final String caption;
 
@@ -70,7 +70,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private Set<Class<?>> annotations;
 
-    public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?, ?>> objectClass, boolean entity, String fieldName, String caption,
+    public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, String fieldName, String caption,
             String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded,
             boolean indexed, int stringLength, String format) {
         super();
@@ -146,7 +146,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
-    public Class<? extends IObject<?, ?>> getObjectClass() {
+    public Class<? extends IObject<?>> getObjectClass() {
         return objectClass;
     }
 

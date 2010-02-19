@@ -74,7 +74,7 @@ public interface MemberMeta {
 
     public Class<?> getValueClass();
 
-    public Class<? extends IObject<?, ?>> getObjectClass();
+    public Class<? extends IObject<?>> getObjectClass();
 
     /**
      * See com.pyx4j.entity.annotations.StringLength

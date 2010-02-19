@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface DataTableConverter<E extends IEntity<?>> {
+public interface DataTableConverter<E extends IEntity> {
 
     String[][] convert(List<E> list);
 

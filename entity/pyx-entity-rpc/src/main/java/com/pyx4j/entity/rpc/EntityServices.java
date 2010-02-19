@@ -29,27 +29,27 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface EntityServices {
 
-    public interface Save extends Service<IEntity<?>, IEntity<?>> {
+    public interface Save extends Service<IEntity, IEntity> {
 
     };
 
-    public interface Query extends Service<EntityCriteria, Vector> {
+    public interface Query extends Service<EntityCriteria<?>, Vector<? extends IEntity>> {
 
     };
 
-    public interface Retrieve extends Service<EntityCriteria, IEntity<?>> {
+    public interface Retrieve extends Service<EntityCriteria<?>, IEntity> {
 
     };
 
-    public interface Count extends Service<EntityCriteria, Long> {
+    public interface Count extends Service<EntityCriteria<?>, Long> {
 
     };
 
-    public interface Delete extends Service<IEntity<?>, VoidSerializable> {
+    public interface Delete extends Service<IEntity, VoidSerializable> {
 
     };
 
-    public interface DeleteQuery extends Service<EntityCriteria, VoidSerializable> {
+    public interface DeleteQuery extends Service<EntityCriteria<?>, VoidSerializable> {
 
     };
 }

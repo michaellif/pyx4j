@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.forms.client.ui.CListBox;
 
-public class CEntityListBox<E extends IEntity<E>> extends CListBox<E> {
+public class CEntityListBox<E extends IEntity> extends CListBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
 

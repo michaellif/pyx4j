@@ -22,7 +22,7 @@ package com.pyx4j.entity.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface EntityCriteriaPanel<E extends IEntity<?>> {
+public interface EntityCriteriaPanel<E extends IEntity> {
 
     void onView(E criteria);
 

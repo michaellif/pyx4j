@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
 @SuppressWarnings("serial")
-public class EntityCriteria<E extends IEntity<?>> implements Serializable {
+public class EntityCriteria<E extends IEntity> implements Serializable {
 
     private String domainName;
 
@@ -74,7 +74,7 @@ public class EntityCriteria<E extends IEntity<?>> implements Serializable {
         domainName = entityClass.getName();
     }
 
-    public static <T extends IEntity<?>> EntityCriteria<T> create(Class<T> entityClass) {
+    public static <T extends IEntity> EntityCriteria<T> create(Class<T> entityClass) {
         return new EntityCriteria<T>(entityClass);
     }
 

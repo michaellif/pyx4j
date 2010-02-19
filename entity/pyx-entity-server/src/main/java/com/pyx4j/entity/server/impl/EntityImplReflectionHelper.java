@@ -64,7 +64,7 @@ public class EntityImplReflectionHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static IObject<?, ?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler<?> implHandler, String memberName) {
+    public static IObject<?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler implHandler, String memberName) {
         Method method;
         try {
             method = interfaceClass.getMethod(memberName, (Class[]) null);
@@ -79,20 +79,20 @@ public class EntityImplReflectionHelper {
             return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
         } else if (ISet.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity<?>>) paramType);
+            return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity>) paramType);
         } else if (IList.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            return implHandler.lazyCreateMemberIList(method.getName(), (Class<IEntity<?>>) paramType);
+            return implHandler.lazyCreateMemberIList(method.getName(), (Class<IEntity>) paramType);
         } else if (IPrimitiveSet.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            return implHandler.lazyCreateMemberIPrimitiveSet(method.getName(), (Class<IEntity<?>>) paramType);
+            return implHandler.lazyCreateMemberIPrimitiveSet(method.getName(), (Class<IEntity>) paramType);
         } else {
             throw new RuntimeException("Unknown member type" + memberClass);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static IEntity<?> lazyCreateMemberIEntity(SharedEntityHandler<?> implHandler, String name, Class<?> valueClass) {
+    private static IEntity lazyCreateMemberIEntity(SharedEntityHandler implHandler, String name, Class<?> valueClass) {
         String handlerClassName = valueClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass;
         try {
@@ -102,7 +102,7 @@ public class EntityImplReflectionHelper {
         }
         try {
             Constructor childConstructor = handlerClass.getConstructor(IEntity.class, String.class);
-            return (IEntity<?>) childConstructor.newInstance(implHandler, name);
+            return (IEntity) childConstructor.newInstance(implHandler, name);
         } catch (Throwable e) {
             throw new RuntimeException(e.getMessage(), e);
         }

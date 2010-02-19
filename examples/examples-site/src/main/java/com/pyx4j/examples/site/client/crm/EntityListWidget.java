@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.EntityCriteriaPanel;
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityListWidget<E extends IEntity<?>> extends DockPanel {
+public class EntityListWidget<E extends IEntity> extends DockPanel {
 
     EntityListWidget(EntityCriteriaPanel<E> criteriaPanel, SearchResultsPanel searchResultsPanel) {
         super();

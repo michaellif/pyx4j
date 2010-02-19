@@ -34,7 +34,6 @@ public class ServiceRegistry {
 
     private static final Logger log = LoggerFactory.getLogger(ServiceRegistry.class);
 
-    @SuppressWarnings("unchecked")
     private static Map<String, Class<? extends Service<?, ?>>> services = new HashMap<String, Class<? extends Service<?, ?>>>();
 
     private ServiceRegistry() {
@@ -95,7 +94,6 @@ public class ServiceRegistry {
         }
     }
 
-    @SuppressWarnings("unchecked")
     static Class<? extends Service<?, ?>> getServiceClass(String serviceDescriptor) {
         return services.get(serviceDescriptor);
     }

@@ -51,11 +51,11 @@ public class SiteServicesImpl implements SiteServices {
     public static class SaveImpl implements SiteServices.Save {
 
         @Override
-        public IEntity<?> execute(IEntity<?> request) {
+        public IEntity execute(IEntity request) {
             if (request instanceof Site) {
                 ((Site) request).updateTimestamp().setValue(System.currentTimeMillis());
             }
-            IEntity<?> entity = new EntityServicesImpl.SaveImpl().execute(request);
+            IEntity entity = new EntityServicesImpl.SaveImpl().execute(request);
             //Update Cache and change updateTimestamp
             if (entity instanceof Site) {
                 Site site = PersistenceServicesFactory.getPersistenceService().retrieve(Site.class, entity.getPrimaryKey());

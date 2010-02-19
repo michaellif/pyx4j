@@ -30,11 +30,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.Path;
 
-public class PrimitiveSetHandler<TYPE> extends ObjectHandler<IPrimitiveSet<TYPE>, Set<TYPE>> implements IPrimitiveSet<TYPE> {
+public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implements IPrimitiveSet<TYPE> {
+
+    private static final long serialVersionUID = -1321079550481643142L;
 
     private final Class<TYPE> valueClass;
 
-    public PrimitiveSetHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
+    public PrimitiveSetHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
         super(IPrimitiveSet.class, parent, fieldName);
         this.valueClass = valueClass;
     }

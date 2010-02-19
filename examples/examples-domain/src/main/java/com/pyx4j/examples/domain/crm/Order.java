@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 
-public interface Order extends IEntity<Order> {
+public interface Order extends IEntity {
 
     public enum Status {
 

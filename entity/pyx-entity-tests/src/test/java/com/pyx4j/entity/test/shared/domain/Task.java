@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
-public interface Task extends IEntity<Task> {
+public interface Task extends IEntity {
 
     IPrimitive<Boolean> finished();
 

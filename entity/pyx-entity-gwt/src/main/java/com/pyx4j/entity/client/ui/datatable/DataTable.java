@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class DataTable<E extends IEntity<IEntity<?>>> extends FlexTable implements DataTableModelListener {
+public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
 
     private final DataTableModel<E> model;
 

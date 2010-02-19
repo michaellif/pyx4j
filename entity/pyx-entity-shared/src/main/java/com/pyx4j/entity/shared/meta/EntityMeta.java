@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.IEntity;
  */
 public interface EntityMeta {
 
-    public Class<? extends IEntity<?>> getEntityClass();
+    public Class<? extends IEntity> getEntityClass();
 
     /**
      * See com.pyx4j.entity.annotations.Table

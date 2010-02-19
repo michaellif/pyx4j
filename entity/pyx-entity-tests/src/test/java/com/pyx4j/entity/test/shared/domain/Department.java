@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-public interface Department extends IEntity<Department> {
+public interface Department extends IEntity {
 
     IPrimitive<String> name();
 

@@ -69,7 +69,7 @@ public class MemberMetaImpl implements MemberMeta {
 
     private final Class<?> valueClass;
 
-    private final Class<? extends IObject<?, ?>> objectClass;
+    private final Class<? extends IObject<?>> objectClass;
 
     private final String caption;
 
@@ -86,7 +86,7 @@ public class MemberMetaImpl implements MemberMeta {
     @SuppressWarnings("unchecked")
     public MemberMetaImpl(Method method) {
         this.method = method;
-        objectClass = (Class<? extends IObject<?, ?>>) method.getReturnType();
+        objectClass = (Class<? extends IObject<?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
             entity = false;
@@ -197,7 +197,7 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
-    public Class<? extends IObject<?, ?>> getObjectClass() {
+    public Class<? extends IObject<?>> getObjectClass() {
         return objectClass;
     }
 

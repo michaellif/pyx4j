@@ -23,11 +23,9 @@ package com.pyx4j.entity.shared;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 @SuppressWarnings("unchecked")
-public interface IObject<OBJECT_TYPE extends IObject, VALUE_TYPE> {
+public interface IObject<VALUE_TYPE> {
 
     public boolean isNull();
-
-    //public void set(OBJECT_TYPE entity);
 
     public void setValue(VALUE_TYPE value);
 
@@ -38,7 +36,7 @@ public interface IObject<OBJECT_TYPE extends IObject, VALUE_TYPE> {
     public Class<? extends IObject> getObjectClass();
 
     //Owned by parent
-    public IEntity<?> getParent();
+    public IEntity getParent();
 
     //In parent's map
     public String getFieldName();

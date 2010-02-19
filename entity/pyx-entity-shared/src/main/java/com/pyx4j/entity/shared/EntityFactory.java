@@ -36,11 +36,11 @@ public class EntityFactory {
         EntityFactory.impl = impl;
     }
 
-    public static <T extends IEntity<?>> T create(Class<T> clazz) {
+    public static <T extends IEntity> T create(Class<T> clazz) {
         return impl.create(clazz);
     }
 
-    public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity<?>> clazz) {
+    public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity> clazz) {
         assert (clazz != null) : "Get meta for null";
         EntityMeta meta = entityMetaCache.get(clazz);
         if (meta == null) {

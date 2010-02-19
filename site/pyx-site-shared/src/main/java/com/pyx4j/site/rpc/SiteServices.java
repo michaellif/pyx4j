@@ -26,7 +26,7 @@ import com.pyx4j.site.shared.domain.Site;
 
 public interface SiteServices {
 
-    public interface Save extends Service<IEntity<?>, IEntity<?>> {
+    public interface Save extends Service<IEntity, IEntity> {
 
     };
 

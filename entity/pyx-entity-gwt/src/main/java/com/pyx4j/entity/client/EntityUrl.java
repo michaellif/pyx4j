@@ -33,19 +33,19 @@ import com.pyx4j.entity.shared.IEntity;
  */
 public class EntityUrl {
 
-    private static Map<String, IEntity<?>> local = new HashMap<String, IEntity<?>>();
+    private static Map<String, IEntity> local = new HashMap<String, IEntity>();
 
     private static int localCount = 1;
 
-    public static String getHistoryParmeters(IEntity<?> entity) {
+    public static String getHistoryParmeters(IEntity entity) {
         //TODO convert actual members to name value pairs.
         String historyParmeters = "l" + (localCount++);
         local.put(historyParmeters, entity);
         return historyParmeters;
     }
 
-    public static <T extends IEntity<T>> void obtainEntityFromHistoryParmeters(Class<T> entityClass, String historyParmeters, AsyncCallback<T> handlingCallback) {
-        IEntity<?> ent = local.get(historyParmeters);
+    public static <T extends IEntity> void obtainEntityFromHistoryParmeters(Class<T> entityClass, String historyParmeters, AsyncCallback<T> handlingCallback) {
+        IEntity ent = local.get(historyParmeters);
         if (ent == null) {
             //TODO pars parameters and create entity, Use ReferenceDataManager to obtain reference data by values names.
             handlingCallback.onFailure(new RuntimeException("Not Found"));

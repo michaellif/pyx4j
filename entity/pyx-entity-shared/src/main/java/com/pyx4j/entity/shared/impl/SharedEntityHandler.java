@@ -37,8 +37,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extends ObjectHandler<OBJECT_TYPE, Map<String, Object>> implements
-        IEntity<OBJECT_TYPE>, IFullDebug {
+public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug {
 
     private static final long serialVersionUID = -7590484996971406115L;
 
@@ -46,24 +45,24 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
 
     private transient EntityMeta entityMeta;
 
-    protected transient HashMap<String, IObject<?, ?>> members;
+    protected transient HashMap<String, IObject<?>> members;
 
-    public SharedEntityHandler(Class<OBJECT_TYPE> clazz) {
+    public SharedEntityHandler(Class<? extends IEntity> clazz) {
         super(clazz);
     }
 
     /**
-     * Creation of Member object
+     * Creation of Member Entity
      * 
      * @param clazz
      * @param parent
      * @param fieldName
      */
-    public SharedEntityHandler(Class<? extends IObject<?, ?>> clazz, IEntity<?> parent, String fieldName) {
+    public SharedEntityHandler(Class<? extends IEntity> clazz, IEntity parent, String fieldName) {
         super(clazz, parent, fieldName);
     }
 
-    protected abstract IObject<?, ?> lazyCreateMember(String name);
+    protected abstract IObject<?> lazyCreateMember(String name);
 
     public <T> IPrimitive<T> lazyCreateMemberIPrimitive(String name, Class<T> primitiveValueClass) {
         return new PrimitiveHandler<T>(this, name, primitiveValueClass);
@@ -73,11 +72,11 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
         return new PrimitiveSetHandler<T>(this, name, primitiveValueClass);
     }
 
-    public <T extends IEntity<?>> ISet<T> lazyCreateMemberISet(String name, Class<T> setValueClass) {
+    public <T extends IEntity> ISet<T> lazyCreateMemberISet(String name, Class<T> setValueClass) {
         return new SetHandler<T>(this, name, setValueClass);
     }
 
-    public <T extends IEntity<?>> IList<T> lazyCreateMemberIList(String name, Class<T> setValueClass) {
+    public <T extends IEntity> IList<T> lazyCreateMemberIList(String name, Class<T> setValueClass) {
         return new ListHandler<T>(this, name, setValueClass);
     }
 
@@ -143,10 +142,10 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
             return true;
         }
         Map<String, Object> thisValue = this.getValue();
-        if ((other == null) || (thisValue == null) || (!(other instanceof IEntity<?>)) || (!this.getClass().equals(other.getClass()))) {
+        if ((other == null) || (thisValue == null) || (!(other instanceof IEntity)) || (!this.getClass().equals(other.getClass()))) {
             return false;
         }
-        return thisValue.equals(((IEntity<?>) other).getValue());
+        return thisValue.equals(((IEntity) other).getValue());
     }
 
     @Override
@@ -171,7 +170,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @Override
-    public void set(IEntity<?> entity) {
+    public void set(IEntity entity) {
         //TODO at type safety at runtime.
         setValue(entity.getValue());
     }
@@ -181,17 +180,17 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     public EntityMeta getEntityMeta() {
         if (entityMeta == null) {
             // Cache Meta for this class.
-            entityMeta = EntityFactory.getEntityMeta((Class<IEntity<?>>) getObjectClass());
+            entityMeta = EntityFactory.getEntityMeta((Class<IEntity>) getObjectClass());
         }
         return entityMeta;
     }
 
     @Override
-    public IObject<?, ?> getMember(String memberName) {
+    public IObject<?> getMember(String memberName) {
         if (members == null) {
-            members = new HashMap<String, IObject<?, ?>>();
+            members = new HashMap<String, IObject<?>>();
         }
-        IObject<?, ?> member = members.get(memberName);
+        IObject<?> member = members.get(memberName);
         if (member == null) {
             member = lazyCreateMember(memberName);
             members.put(memberName, member);
@@ -200,7 +199,7 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @Override
-    public IObject<?, ?> getMember(Path path) {
+    public IObject<?> getMember(Path path) {
         //TODO implement
         return null;
     }
@@ -244,13 +243,13 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @Override
-    public <T extends IObject<?, ?>> void set(T member, T value) {
+    public <T extends IObject<?>> void set(T member, T value) {
         ensureValue().put(member.getFieldName(), value.getValue());
     }
 
     private Object getMemberStringView(String memberName) {
         if (entityMeta.getMemberMeta(memberName).isEntity()) {
-            return ((IEntity<?>) getMember(memberName)).getStringView();
+            return ((IEntity) getMember(memberName)).getStringView();
         } else {
             return getMemberValue(memberName);
         }
@@ -292,8 +291,8 @@ public abstract class SharedEntityHandler<OBJECT_TYPE extends IEntity<?>> extend
     }
 
     @SuppressWarnings("unchecked")
-    public OBJECT_TYPE cloneEntity() {
-        OBJECT_TYPE entity = EntityFactory.create((Class<OBJECT_TYPE>) getObjectClass());
+    public IEntity cloneEntity() {
+        IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
         Map<String, Object> v = getValue();
         if (v != null) {
             Map<String, Object> data2 = new EntityValueMap();

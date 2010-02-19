@@ -24,7 +24,7 @@ public class Path {
 
     private String path = "";
 
-    public Path(IObject<?, ?> object) {
+    public Path(IObject<?> object) {
         while (object != null) {
             if (object.getFieldName() == null) {
                 this.path = getSimpleName(object.getObjectClass()) + "/" + this.path;

@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.IObject;
 
 public interface Validator {
 
-    public boolean isValid(IObject<?, ?> object);
+    public boolean isValid(IObject<?> object);
 
     //TODO
-    //public String getValidationMessage(IObject<?, ?> object);
+    //public String getValidationMessage(IObject<?> object);
 }

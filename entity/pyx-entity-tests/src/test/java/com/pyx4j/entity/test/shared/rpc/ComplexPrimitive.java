@@ -24,7 +24,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ComplexPrimitive extends IEntity<ComplexPrimitive> {
+public interface ComplexPrimitive extends IEntity {
 
     IPrimitive<String> name();
 

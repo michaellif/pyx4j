@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.INativeNativeComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public class CEntityComboBox<E extends IEntity<E>> extends CComboBox<E> {
+public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
 

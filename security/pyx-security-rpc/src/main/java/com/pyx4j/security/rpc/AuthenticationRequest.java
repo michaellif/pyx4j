@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface AuthenticationRequest extends IEntity<AuthenticationRequest> {
+public interface AuthenticationRequest extends IEntity {
 
     @Email
     @NotNull

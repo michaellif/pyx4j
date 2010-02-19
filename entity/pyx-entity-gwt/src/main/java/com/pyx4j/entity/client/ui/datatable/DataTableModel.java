@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 /*
  * RowData defines one row in a Sortable Table
  */
-public class DataTableModel<E extends IEntity<IEntity<?>>> implements TableListener {
+public class DataTableModel<E extends IEntity> implements TableListener {
 
     public static final int PAGE_SIZE = 10;
 

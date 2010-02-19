@@ -22,13 +22,13 @@ package com.pyx4j.entity.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityEditorForm<E extends IEntity<?>> extends EntityForm<E> {
+public class EntityEditorForm<E extends IEntity> extends EntityForm<E> {
 
     public EntityEditorForm(Class<E> clazz) {
         super(clazz);
     }
 
-    public static <T extends IEntity<?>> EntityEditorForm<T> create(Class<T> clazz) {
+    public static <T extends IEntity> EntityEditorForm<T> create(Class<T> clazz) {
         return new EntityEditorForm<T>(clazz);
     }
 

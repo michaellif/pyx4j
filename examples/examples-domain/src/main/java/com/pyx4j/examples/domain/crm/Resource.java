@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.examples.domain.User;
 
-public interface Resource extends IEntity<Resource> {
+public interface Resource extends IEntity {
 
     @NotNull
     IPrimitive<String> name();

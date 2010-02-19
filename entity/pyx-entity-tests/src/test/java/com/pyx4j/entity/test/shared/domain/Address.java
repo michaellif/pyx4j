@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Address extends IEntity<Address> {
+public interface Address extends IEntity {
 
     public static int TEST_DECLARED_MEMEBERS = 3;
 

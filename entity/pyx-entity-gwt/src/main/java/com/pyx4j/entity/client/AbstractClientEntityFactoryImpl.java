@@ -32,14 +32,14 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
  */
 public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryImpl {
 
-    private final Map<Class<? extends IEntity<?>>, IEntityFactoryImpl> implementationsMap;
+    private final Map<Class<? extends IEntity>, IEntityFactoryImpl> implementationsMap;
 
     protected AbstractClientEntityFactoryImpl() {
-        implementationsMap = new HashMap<Class<? extends IEntity<?>>, IEntityFactoryImpl>();
+        implementationsMap = new HashMap<Class<? extends IEntity>, IEntityFactoryImpl>();
     }
 
     @Override
-    public <T extends IEntity<?>> T create(Class<T> clazz) {
+    public <T extends IEntity> T create(Class<T> clazz) {
         IEntityFactoryImpl implCreator = implementationsMap.get(clazz);
         if (implCreator == null) {
             if (clazz == null) {
@@ -52,7 +52,7 @@ public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryI
     }
 
     @Override
-    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz) {
+    public EntityMeta createEntityMeta(Class<? extends IEntity> clazz) {
         IEntityFactoryImpl implCreator = implementationsMap.get(clazz);
         if (implCreator == null) {
             throw new Error("Class " + clazz.getName() + " implementation not found");
@@ -60,7 +60,7 @@ public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryI
         return implCreator.createEntityMeta(clazz);
     }
 
-    protected void addClassFactory(Class<? extends IEntity<?>> clazz, IEntityFactoryImpl implCreator) {
+    protected void addClassFactory(Class<? extends IEntity> clazz, IEntityFactoryImpl implCreator) {
         implementationsMap.put(clazz, implCreator);
     }
 }

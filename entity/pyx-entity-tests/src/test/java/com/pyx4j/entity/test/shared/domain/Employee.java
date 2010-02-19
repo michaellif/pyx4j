@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 @Caption(name = "Laborer")
-public interface Employee extends IEntity<Employee> {
+public interface Employee extends IEntity {
 
     public static int DECLARED_MEMEBERS = 15;
 

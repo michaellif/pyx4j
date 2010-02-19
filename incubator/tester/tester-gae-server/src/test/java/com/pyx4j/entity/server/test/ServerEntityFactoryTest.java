@@ -24,8 +24,8 @@ import junit.framework.TestCase;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.tester.domain.Address;
-import com.pyx4j.tester.domain.Country;
+import com.pyx4j.entity.test.shared.domain.Address;
+import com.pyx4j.entity.test.shared.domain.Country;
 
 public class ServerEntityFactoryTest extends TestCase {
 

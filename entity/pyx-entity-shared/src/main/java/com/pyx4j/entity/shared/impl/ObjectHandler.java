@@ -26,28 +26,30 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> implements IObject<OBJECT_TYPE, VALUE_TYPE>, Serializable {
+public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, Serializable {
 
     private static final long serialVersionUID = 335416094543053866L;
 
-    private transient final Class<? extends IObject> clazz;
+    private transient final Class<? extends IObject<VALUE_TYPE>> clazz;
 
-    private transient IEntity<?> parent;
+    private transient IEntity parent;
 
     private transient String fieldName;
 
-    public ObjectHandler(Class<OBJECT_TYPE> clazz) {
-        this.clazz = clazz;
+    @SuppressWarnings("unchecked")
+    public ObjectHandler(Class<? extends IObject> clazz) {
+        this.clazz = (Class<? extends IObject<VALUE_TYPE>>) clazz;
     }
 
-    public ObjectHandler(Class<? extends IObject> clazz, IEntity<?> parent, String fieldName) {
-        this.clazz = clazz;
+    @SuppressWarnings("unchecked")
+    public ObjectHandler(Class<? extends IObject> clazz, IEntity parent, String fieldName) {
+        this.clazz = (Class<? extends IObject<VALUE_TYPE>>) clazz;
         this.parent = parent;
         this.fieldName = fieldName;
     }
 
     @Override
-    public IEntity<?> getParent() {
+    public IEntity getParent() {
         return parent;
     }
 
@@ -62,7 +64,7 @@ public abstract class ObjectHandler<OBJECT_TYPE extends IObject, VALUE_TYPE> imp
     }
 
     @Override
-    public Class<? extends IObject> getObjectClass() {
+    public Class<? extends IObject<VALUE_TYPE>> getObjectClass() {
         assert (clazz != null) : this.getClass() + " objectClass is null";
         return clazz;
     }

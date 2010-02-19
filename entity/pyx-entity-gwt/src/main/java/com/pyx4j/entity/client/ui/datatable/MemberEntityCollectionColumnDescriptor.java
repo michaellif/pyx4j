@@ -28,9 +28,9 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class MemberEntityCollectionColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
-    private static class StringConverter implements ToStringConverter<IEntity<?>> {
+    private static class StringConverter implements ToStringConverter<IEntity> {
 
-        public String toString(IEntity<?> value) {
+        public String toString(IEntity value) {
             return value.getStringView();
         }
     }
@@ -46,7 +46,7 @@ public class MemberEntityCollectionColumnDescriptor<E extends IEntity> extends C
         if (value == null) {
             return "";
         } else if (value instanceof Collection<?>) {
-            return ConverterUtils.convertCollection((Collection<IEntity<?>>) value, new StringConverter());
+            return ConverterUtils.convertCollection((Collection<IEntity>) value, new StringConverter());
         } else {
             return value.toString();
         }

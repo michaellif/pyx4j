@@ -23,7 +23,7 @@ package com.pyx4j.examples.domain;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface User extends IEntity<User> {
+public interface User extends IEntity {
 
     IPrimitive<String> email();
 

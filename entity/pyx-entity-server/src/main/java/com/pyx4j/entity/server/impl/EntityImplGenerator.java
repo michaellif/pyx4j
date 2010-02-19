@@ -176,10 +176,10 @@ public class EntityImplGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<IEntity<?>> generateImplementation(String interfaceName) {
-        Class<IEntity<?>> interfaceClass;
+    public Class<IEntity> generateImplementation(String interfaceName) {
+        Class<IEntity> interfaceClass;
         try {
-            interfaceClass = (Class<IEntity<?>>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+            interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
             throw new Error(interfaceName + " not available");
         }
@@ -187,7 +187,7 @@ public class EntityImplGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity<?>> Class<T> generateImplementation(Class<T> interfaceClass) {
+    public <T extends IEntity> Class<T> generateImplementation(Class<T> interfaceClass) {
         try {
             return createImplementationClass(interfaceClass).toClass();
         } catch (CannotCompileException e) {
@@ -196,17 +196,18 @@ public class EntityImplGenerator {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public CtClass createImplementation(String interfaceName) {
-        Class<IEntity<?>> interfaceClass;
+        Class<IEntity> interfaceClass;
         try {
-            interfaceClass = (Class<IEntity<?>>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
+            interfaceClass = (Class<IEntity>) Class.forName(interfaceName, true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
             throw new Error(interfaceName + " not available");
         }
         return createImplementationClass(interfaceClass);
     }
 
-    public <T extends IEntity<?>> CtClass createImplementationClass(Class<T> interfaceClass) {
+    public <T extends IEntity> CtClass createImplementationClass(Class<T> interfaceClass) {
         String interfaceName = interfaceClass.getName();
         String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         try {

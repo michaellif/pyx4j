@@ -158,7 +158,7 @@ public class FactoryTest extends InitializerTestCase {
 
         Path path = EntityFactory.create(Employee.class).homeAddress().streetName().getPath();
 
-        IObject object = employee.getMember(path);
+        IObject<?> object = employee.getMember(path);
 
     }
 

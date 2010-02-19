@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.examples.domain.User;
 
-public interface Customer extends IEntity<Customer> {
+public interface Customer extends IEntity {
 
     @NotNull
     IPrimitive<String> name();

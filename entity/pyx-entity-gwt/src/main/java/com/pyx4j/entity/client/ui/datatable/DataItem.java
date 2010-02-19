@@ -25,7 +25,7 @@ import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class DataItem<E extends IEntity<IEntity<?>>> {
+public class DataItem<E extends IEntity> {
 
     private final Map<ColumnDescriptor<E>, Object> dataMap = new HashMap<ColumnDescriptor<E>, Object>();
 

@@ -34,7 +34,7 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity<?>> T create(Class<T> clazz) {
+    public <T extends IEntity> T create(Class<T> clazz) {
         String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass;
         try {
@@ -51,7 +51,7 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
     }
 
     @Override
-    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz) {
+    public EntityMeta createEntityMeta(Class<? extends IEntity> clazz) {
         return new EntityMetaImpl(clazz);
     }
 

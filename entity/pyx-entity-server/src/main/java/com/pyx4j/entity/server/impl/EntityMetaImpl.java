@@ -42,7 +42,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityMetaImpl implements EntityMeta {
 
-    private final Class<? extends IEntity<?>> entityClass;
+    private final Class<? extends IEntity> entityClass;
 
     private final String persistenceName;
 
@@ -60,7 +60,7 @@ public class EntityMetaImpl implements EntityMeta {
 
     private List<String> toStringMemberNames;
 
-    public EntityMetaImpl(Class<? extends IEntity<?>> clazz) {
+    public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
         Table tableAnnotation = entityClass.getAnnotation(Table.class);
         if (tableAnnotation != null) {
@@ -86,7 +86,7 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity<?>> getEntityClass() {
+    public Class<? extends IEntity> getEntityClass() {
         return entityClass;
     }
 

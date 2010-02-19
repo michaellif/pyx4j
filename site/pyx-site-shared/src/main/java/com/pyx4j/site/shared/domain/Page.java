@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Page extends IEntity<Page> {
+public interface Page extends IEntity {
 
     @Owned
     ResourceUri uri();

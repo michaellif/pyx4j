@@ -34,7 +34,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE>, Set<Map<String, Object>>> implements ISet<TYPE> {
+public class SetHandler<TYPE extends IEntity> extends ObjectHandler<Set<Map<String, Object>>> implements ISet<TYPE> {
+
+    private static final long serialVersionUID = 1940065645661650951L;
 
     private final Class<TYPE> valueClass;
 
@@ -63,7 +65,7 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     }
 
-    public SetHandler(IEntity<?> parent, String fieldName, Class<TYPE> valueClass) {
+    public SetHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
         super(ISet.class, parent, fieldName);
         this.valueClass = valueClass;
     }
@@ -125,7 +127,6 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
         return value;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean add(TYPE entity) {
         return ensureValue().add(((SharedEntityHandler) entity).ensureValue());
@@ -147,10 +148,10 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     @Override
     public boolean contains(Object o) {
-        if (o instanceof IEntity<?>) {
+        if (o instanceof IEntity) {
             Set<?> set = getValue();
             if (set != null) {
-                return set.contains(((IEntity<?>) o).getValue());
+                return set.contains(((IEntity) o).getValue());
             }
         }
         return false;
@@ -222,10 +223,10 @@ public class SetHandler<TYPE extends IEntity<?>> extends ObjectHandler<ISet<TYPE
 
     @Override
     public boolean remove(Object o) {
-        if ((o instanceof IEntity<?>) && (getValueClass().equals(((IEntity<?>) o).getObjectClass()))) {
+        if ((o instanceof IEntity) && (getValueClass().equals(((IEntity) o).getObjectClass()))) {
             Set<?> set = getValue();
             if (set != null) {
-                return set.remove(((IEntity<?>) o).getValue());
+                return set.remove(((IEntity) o).getValue());
             } else {
                 return false;
             }

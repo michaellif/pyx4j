@@ -39,22 +39,22 @@ public abstract class AbstractDataPreloader implements DataPreloader {
 
     }
 
-    protected static <T extends IEntity<?>> String deleteAll(Class<T> entityClass) {
+    protected static <T extends IEntity> String deleteAll(Class<T> entityClass) {
         EntityCriteria<T> criteria = new EntityCriteria<T>(entityClass);
         int count = PersistenceServicesFactory.getPersistenceService().delete(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         return "Removed " + count + " " + entityMeta.getCaption() + "(s)";
     }
 
-    protected static String deleteAll(Class<? extends IEntity<?>>... entityClass) {
+    protected static String deleteAll(Class<? extends IEntity>... entityClass) {
         StringBuilder b = new StringBuilder();
-        for (Class<? extends IEntity<?>> ec : entityClass) {
+        for (Class<? extends IEntity> ec : entityClass) {
             b.append(deleteAll(ec)).append('\n');
         }
         return b.toString();
     }
 
-    public static <T extends IEntity<?>> T createNamed(Class<T> clazz, String name) {
+    public static <T extends IEntity> T createNamed(Class<T> clazz, String name) {
         T ent = EntityFactory.create(clazz);
         ent.setMemberValue("name", name);
         PersistenceServicesFactory.getPersistenceService().persist(ent);

@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public abstract class ClientEntityMetaImpl implements EntityMeta {
 
-    private final Class<? extends IEntity<?>> entityClass;
+    private final Class<? extends IEntity> entityClass;
 
     private final String caption;
 
@@ -45,7 +45,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final List<String> toStringMemberNames;
 
-    public ClientEntityMetaImpl(Class<? extends IEntity<?>> entityClass, String caption, String description, boolean persistenceTransient,
+    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient,
             boolean rpcTransient, String[] membersNames, String[] memberNamesToString) {
         this.entityClass = entityClass;
         this.caption = caption;
@@ -59,7 +59,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity<?>> getEntityClass() {
+    public Class<? extends IEntity> getEntityClass() {
         return entityClass;
     }
 

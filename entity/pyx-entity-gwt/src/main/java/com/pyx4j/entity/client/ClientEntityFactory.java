@@ -50,7 +50,7 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
         }
     }
 
-    public <T extends IEntity<?>> T create(Class<T> clazz) {
+    public <T extends IEntity> T create(Class<T> clazz) {
         if (singleFactory == null) {
             synchronized (ClientEntityFactory.class) {
                 singleFactory = GWT.create(IEntityFactoryImpl.class);
@@ -60,7 +60,7 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
     }
 
     @Override
-    public EntityMeta createEntityMeta(Class<? extends IEntity<?>> clazz) {
+    public EntityMeta createEntityMeta(Class<? extends IEntity> clazz) {
         if (singleFactory == null) {
             synchronized (ClientEntityFactory.class) {
                 singleFactory = GWT.create(IEntityFactoryImpl.class);

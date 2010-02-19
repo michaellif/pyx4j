@@ -23,7 +23,7 @@ package com.pyx4j.entity.shared;
 import java.util.List;
 import java.util.Map;
 
-public interface IList<TYPE extends IEntity<?>> extends IObject<IList<TYPE>, List<Map<String, Object>>>, List<TYPE> {
+public interface IList<TYPE extends IEntity> extends IObject<List<Map<String, Object>>>, List<TYPE> {
 
     public Class<TYPE> getValueClass();
 
