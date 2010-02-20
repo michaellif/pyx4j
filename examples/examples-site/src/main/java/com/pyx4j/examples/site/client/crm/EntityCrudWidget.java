@@ -35,7 +35,7 @@ public class EntityCrudWidget extends InlineWidget {
 
     private final Widget editorWidget;
 
-    EntityCrudWidget(EntityListWidget listWidget, EntityEditorWidget editorWidget) {
+    public EntityCrudWidget(EntityListWidget listWidget, EntityEditorWidget editorWidget) {
         this.listWidget = listWidget;
         this.editorWidget = editorWidget;
 

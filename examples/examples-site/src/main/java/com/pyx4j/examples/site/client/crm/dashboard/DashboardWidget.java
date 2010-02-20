@@ -14,22 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 19, 2010
- * @author michaellif
+ * Created on Dec 29, 2009
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.examples.site.client.crm.dashboard;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.pyx4j.site.client.InlineWidget;
 
-import com.pyx4j.entity.client.ui.IEntitySearchResultsPanel;
-import com.pyx4j.examples.domain.crm.Customer;
+public class DashboardWidget extends InlineWidget {
 
-public class CustomerSearchResultsPanel extends HorizontalPanel implements IEntitySearchResultsPanel<Customer> {
-
-    public CustomerSearchResultsPanel() {
-        super();
-        add(new CustomersListPanel());
-        add(new MapPanel());
+    public DashboardWidget() {
     }
+
 }

@@ -18,12 +18,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.examples.site.client.crm.customer;
 
-public class OrdersWidget extends EntityCrudWidget {
+import com.pyx4j.examples.site.client.crm.EntityCrudWidget;
 
-    public OrdersWidget() {
-        super(new OrderListWidget(), new OrderEditorWidget());
+public class CustomersWidget extends EntityCrudWidget {
+
+    public CustomersWidget() {
+        super(new CustomerListWidget(), new CustomerEditorWidget());
     }
 
 }

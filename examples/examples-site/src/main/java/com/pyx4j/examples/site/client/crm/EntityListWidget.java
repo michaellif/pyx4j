@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class EntityListWidget<E extends IEntity> extends DockPanel {
 
-    EntityListWidget(IEntitySearchCriteriaPanel<E> criteriaPanel, IEntitySearchResultsPanel<E> resultsPanel) {
+    public EntityListWidget(IEntitySearchCriteriaPanel<E> criteriaPanel, IEntitySearchResultsPanel<E> resultsPanel) {
         super();
 
         add((Widget) criteriaPanel, DockPanel.NORTH);

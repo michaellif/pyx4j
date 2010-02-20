@@ -18,13 +18,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.examples.site.client.crm.resource;
 
-import com.pyx4j.site.client.InlineWidget;
+import com.pyx4j.examples.site.client.crm.EntityCrudWidget;
 
-public class DashboardWidget extends InlineWidget {
+public class ResourcesWidget extends EntityCrudWidget {
 
-    public DashboardWidget() {
+    public ResourcesWidget() {
+        super(new ResourceListWidget(), new ResourceEditorWidget());
     }
 
 }

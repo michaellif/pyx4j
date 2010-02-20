@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.examples.site.client.crm.order;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
@@ -28,16 +28,16 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.EntitySearchCriteriaForm;
 import com.pyx4j.entity.client.ui.IEntitySearchCriteriaPanel;
-import com.pyx4j.examples.domain.crm.Resource;
+import com.pyx4j.examples.domain.crm.Order;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public class ResourceSearchCriteriaPanel extends SimplePanel implements IEntitySearchCriteriaPanel<Resource> {
+public class OrderSearchCriteriaPanel extends SimplePanel implements IEntitySearchCriteriaPanel<Order> {
 
-    private final EntitySearchCriteriaForm<Resource> form;
+    private final EntitySearchCriteriaForm<Order> form;
 
-    public ResourceSearchCriteriaPanel() {
+    public OrderSearchCriteriaPanel() {
 
         getElement().getStyle().setPadding(30, Unit.PX);
         getElement().getStyle().setPaddingRight(10, Unit.PX);
@@ -45,11 +45,11 @@ public class ResourceSearchCriteriaPanel extends SimplePanel implements IEntityS
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        form = EntitySearchCriteriaForm.create(Resource.class);
+        form = EntitySearchCriteriaForm.create(Order.class);
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { form.create(form.meta().name()) },
+        { form.create(form.meta().customer().name()) },
 
         };
 
@@ -64,7 +64,7 @@ public class ResourceSearchCriteriaPanel extends SimplePanel implements IEntityS
     }
 
     @Override
-    public void onView(Resource criteria) {
+    public void onView(Order criteria) {
         // TODO Auto-generated method stub
 
     }

@@ -18,8 +18,15 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.examples.site.client.crm.customer;
 
-public class ResourceEditorWidget extends EntityEditorWidget {
+import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.site.client.crm.EntityListWidget;
+
+public class CustomerListWidget extends EntityListWidget<Customer> {
+
+    public CustomerListWidget() {
+        super(new CustomerSearchCriteriaPanel(), new CustomerSearchResultsPanel());
+    }
 
 }

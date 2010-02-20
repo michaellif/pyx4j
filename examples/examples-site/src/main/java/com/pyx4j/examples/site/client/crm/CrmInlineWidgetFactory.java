@@ -21,6 +21,10 @@
 package com.pyx4j.examples.site.client.crm;
 
 import com.pyx4j.examples.rpc.Widgets;
+import com.pyx4j.examples.site.client.crm.customer.CustomersWidget;
+import com.pyx4j.examples.site.client.crm.dashboard.DashboardWidget;
+import com.pyx4j.examples.site.client.crm.order.OrdersWidget;
+import com.pyx4j.examples.site.client.crm.resource.ResourcesWidget;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 
