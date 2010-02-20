@@ -62,7 +62,7 @@ public class FactoryTest extends InitializerTestCase {
         address.streetName().setValue("Home Street");
 
         assertEquals("streetName is wrong", "Home Street", employee.homeAddress().streetName().getValue());
-        assertTrue("path is wrong", "Employee/".equals(address.getParent().getPath().toString()));
+        assertTrue("path is wrong", "Employee/".equals(address.getOwner().getPath().toString()));
         assertTrue("path is " + address.getPath(), "Employee/homeAddress/".equals(address.getPath().toString()));
 
     }

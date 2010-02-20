@@ -14,17 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 30, 2009
- * @author michaellif
+ * Created on Feb 20, 2010
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.shared;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
 
-public interface ISet<TYPE extends IEntity> extends ICollection<TYPE, Set<Map<String, Object>>>, Set<TYPE> {
+/**
+ * This represents AbstractCollection. Do not use this type for IEntity declarations, Use
+ * concrete types ISet or IList.
+ */
+public interface ICollection<TYPE extends IEntity, VALUE_TYPE> extends IObject<VALUE_TYPE>, Collection<TYPE> {
 
-    public void set(ISet<TYPE> typedSet);
+    public Class<TYPE> getValueClass();
+
+    /**
+     * Create new instance of the Value object
+     */
+    public TYPE $();
 
 }

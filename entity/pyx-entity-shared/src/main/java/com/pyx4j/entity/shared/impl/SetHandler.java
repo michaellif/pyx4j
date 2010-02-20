@@ -29,16 +29,12 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.Path;
 
-public class SetHandler<TYPE extends IEntity> extends ObjectHandler<Set<Map<String, Object>>> implements ISet<TYPE> {
+public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<TYPE, Set<Map<String, Object>>> implements ISet<TYPE> {
 
     private static final long serialVersionUID = 1940065645661650951L;
-
-    private final Class<TYPE> valueClass;
 
     //TODO probably we don't need it now. Remove.
     @SuppressWarnings("serial")
@@ -66,23 +62,7 @@ public class SetHandler<TYPE extends IEntity> extends ObjectHandler<Set<Map<Stri
     }
 
     public SetHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
-        super(ISet.class, parent, fieldName);
-        this.valueClass = valueClass;
-    }
-
-    @Override
-    public Class<TYPE> getValueClass() {
-        return valueClass;
-    }
-
-    @Override
-    public TYPE $() {
-        return EntityFactory.create(getValueClass());
-    }
-
-    @Override
-    public Path getPath() {
-        return new Path(this);
+        super(ISet.class, valueClass, parent, fieldName);
     }
 
     @Override
@@ -98,7 +78,7 @@ public class SetHandler<TYPE extends IEntity> extends ObjectHandler<Set<Map<Stri
     @SuppressWarnings("unchecked")
     @Override
     public Set<Map<String, Object>> getValue() {
-        Map<String, Object> data = getParent().getValue();
+        Map<String, Object> data = getOwner().getValue();
         if (data == null) {
             return null;
         } else {
@@ -111,7 +91,7 @@ public class SetHandler<TYPE extends IEntity> extends ObjectHandler<Set<Map<Stri
         if ((value != null) && !(value instanceof TreeSet<?>)) {
             throw new ClassCastException("Set expects TreeSet as value");
         }
-        getParent().setMemberValue(getFieldName(), value);
+        getOwner().setMemberValue(getFieldName(), value);
     }
 
     /**
@@ -209,7 +189,7 @@ public class SetHandler<TYPE extends IEntity> extends ObjectHandler<Set<Map<Stri
             @Override
             public TYPE next() {
                 Map<String, Object> entityValue = iter.next();
-                TYPE entity = EntityFactory.create(getValueClass());
+                TYPE entity = $();
                 entity.setValue(entityValue);
                 return entity;
             }

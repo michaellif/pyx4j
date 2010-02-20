@@ -37,7 +37,11 @@ public class EntityFactory {
     }
 
     public static <T extends IEntity> T create(Class<T> clazz) {
-        return impl.create(clazz);
+        return impl.create(clazz, null, null);
+    }
+
+    public static <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
+        return impl.create(clazz, parent, fieldName);
     }
 
     public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity> clazz) {

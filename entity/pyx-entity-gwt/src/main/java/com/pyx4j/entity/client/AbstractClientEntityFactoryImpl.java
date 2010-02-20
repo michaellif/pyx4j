@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
@@ -39,7 +40,7 @@ public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryI
     }
 
     @Override
-    public <T extends IEntity> T create(Class<T> clazz) {
+    public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
         IEntityFactoryImpl implCreator = implementationsMap.get(clazz);
         if (implCreator == null) {
             if (clazz == null) {
@@ -48,7 +49,7 @@ public abstract class AbstractClientEntityFactoryImpl implements IEntityFactoryI
                 throw new Error("Class " + clazz.getName() + " implementation not found");
             }
         }
-        return implCreator.create(clazz);
+        return implCreator.create(clazz, parent, fieldName);
     }
 
     @Override

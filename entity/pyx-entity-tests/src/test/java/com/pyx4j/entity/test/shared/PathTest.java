@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Task;
 
 public class PathTest extends InitializerTestCase {
 
@@ -35,11 +36,11 @@ public class PathTest extends InitializerTestCase {
 
         assertEquals("set path", "Employee/tasks/", emp.tasks().getPath().toString());
 
-        //assertEquals("set path", "Employee/tasks[]", emp.tasks().$().getPath().toString());
-        //assertEquals("set path", "Employee/tasks[]/deadLine", emp.tasks().$().deadLine().getPath().toString());
+        assertEquals("set path", "Employee/tasks/[]", emp.tasks().$().getPath().toString());
+        assertEquals("set path", "Employee/tasks/[]deadLine/", emp.tasks().$().deadLine().getPath().toString());
 
-        //emp.tasks().add(EntityFactory.create(Task.class));
-        //assertEquals("set path", "Employee/tasks[]", emp.tasks().iterator().next().getPath().toString());
+        emp.tasks().add(EntityFactory.create(Task.class));
+        assertEquals("set path", "Employee/tasks/[]", emp.tasks().iterator().next().getPath().toString());
     }
 
     public void testGetByPath() {

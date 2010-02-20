@@ -21,12 +21,12 @@
 package com.pyx4j.entity.server.impl;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -76,7 +76,7 @@ public class EntityImplReflectionHelper {
             Class<?> paramType = primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
             return implHandler.lazyCreateMemberIPrimitive(method.getName(), paramType);
         } else if (IEntity.class.isAssignableFrom(memberClass)) {
-            return lazyCreateMemberIEntity(implHandler, method.getName(), method.getReturnType());
+            return EntityFactory.create((Class<IEntity>) method.getReturnType(), implHandler, method.getName());
         } else if (ISet.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity>) paramType);
@@ -91,20 +91,4 @@ public class EntityImplReflectionHelper {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static IEntity lazyCreateMemberIEntity(SharedEntityHandler implHandler, String name, Class<?> valueClass) {
-        String handlerClassName = valueClass.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
-        Class<?> handlerClass;
-        try {
-            handlerClass = Class.forName(handlerClassName, true, Thread.currentThread().getContextClassLoader());
-        } catch (ClassNotFoundException e1) {
-            handlerClass = EntityImplGenerator.instance().generateImplementation((Class<IEntity>) valueClass);
-        }
-        try {
-            Constructor childConstructor = handlerClass.getConstructor(IEntity.class, String.class);
-            return (IEntity) childConstructor.newInstance(implHandler, name);
-        } catch (Throwable e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
 }

@@ -217,12 +217,12 @@ public class EntityImplGenerator {
             // Constructors
             // N.B. transient fields are not initialized during deserialization 
             CtConstructor defaultConstructor = new CtConstructor(null, cc);
-            defaultConstructor.setBody("super(" + interfaceName + ".class);");
+            defaultConstructor.setBody("super(" + interfaceName + ".class, null, null);");
             cc.addConstructor(defaultConstructor);
 
             CtClass ctStringClass = pool.get(String.class.getName());
 
-            CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IEntity.class.getName()), ctStringClass }, cc);
+            CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IObject.class.getName()), ctStringClass }, cc);
             memberConstructor.setBody("super(" + interfaceName + ".class, $1, $2);");
             cc.addConstructor(memberConstructor);
 

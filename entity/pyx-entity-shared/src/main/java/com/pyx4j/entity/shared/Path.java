@@ -26,7 +26,9 @@ public class Path {
 
     public Path(IObject<?> object) {
         while (object != null) {
-            if (object.getFieldName() == null) {
+            if (object.getParent() instanceof ICollection) {
+                this.path = "[]" + this.path;
+            } else if (object.getFieldName() == null) {
                 this.path = getSimpleName(object.getObjectClass()) + "/" + this.path;
             } else {
                 this.path = object.getFieldName() + "/" + this.path;

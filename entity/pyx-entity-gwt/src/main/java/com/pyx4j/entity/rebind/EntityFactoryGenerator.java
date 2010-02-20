@@ -101,6 +101,7 @@ public class EntityFactoryGenerator extends Generator {
 
             composer.setSuperclass(AbstractClientEntityFactoryImpl.class.getName());
             composer.addImport(IEntity.class.getName());
+            composer.addImport(IObject.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -171,12 +172,12 @@ public class EntityFactoryGenerator extends Generator {
             writer.indent();
             writer.println("@SuppressWarnings(\"unchecked\")");
             writer.println("@Override");
-            writer.println("public <T extends IEntity> T create(Class<T> clazz){");
+            writer.println("public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName){");
 
             writer.indent();
             writer.print("return (T)new ");
             writer.print(interfaceType.getQualifiedSourceName());
-            writer.println(IMPL + "();");
+            writer.println(IMPL + "(parent, fieldName);");
             writer.outdent();
 
             writer.println("}");
@@ -508,12 +509,12 @@ public class EntityFactoryGenerator extends Generator {
         writer.indent();
         writer.print("super(");
         writer.print(interfaceType.getName());
-        writer.println(".class);");
+        writer.println(".class, null, null);");
         writer.outdent();
         writer.println("}");
 
         writer.println();
-        writer.println("public " + simpleName + "(IEntity parent, String fieldName) { ");
+        writer.println("public " + simpleName + "(IObject<?> parent, String fieldName) { ");
         writer.indent();
         writer.print("super(");
         writer.print(interfaceType.getName());

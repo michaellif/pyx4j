@@ -33,10 +33,17 @@ public interface IObject<VALUE_TYPE> {
 
     public Path getPath();
 
+    public Class<?> getValueClass();
+
     public Class<? extends IObject> getObjectClass();
 
     //Owned by parent
-    public IEntity getParent();
+    public IEntity getOwner();
+
+    /**
+     * This may be ICollection or IEntity
+     */
+    public IObject<?> getParent();
 
     //In parent's map
     public String getFieldName();

@@ -47,19 +47,28 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     protected transient HashMap<String, IObject<?>> members;
 
-    public SharedEntityHandler(Class<? extends IEntity> clazz) {
-        super(clazz);
-    }
+    /**
+     * N.B. Default initialization during serialization to 'false'.
+     */
+    private transient final boolean delegateValue;
 
     /**
-     * Creation of Member Entity
+     * Creation of stand alone or member Entity
      * 
      * @param clazz
      * @param parent
      * @param fieldName
      */
-    public SharedEntityHandler(Class<? extends IEntity> clazz, IEntity parent, String fieldName) {
+    @SuppressWarnings("unchecked")
+    public SharedEntityHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
+        delegateValue = (parent != null) && (getOwner() == parent);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends IEntity> getValueClass() {
+        return (Class<? extends IEntity>) getObjectClass();
     }
 
     protected abstract IObject<?> lazyCreateMember(String name);
@@ -109,8 +118,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, Object> getValue() {
-        if (getParent() != null) {
-            Map<String, Object> v = getParent().getValue();
+        if (delegateValue) {
+            Map<String, Object> v = getOwner().getValue();
             if (v == null) {
                 return null;
             } else {
@@ -126,8 +135,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if ((value != null) && !(value instanceof EntityValueMap)) {
             throw new ClassCastException("Entity expects EntityValueMap as value");
         }
-        if (getParent() != null) {
-            ((SharedEntityHandler) getParent()).ensureValue().put(getFieldName(), value);
+        if (delegateValue) {
+            ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
         } else {
             this.data = value;
         }
@@ -156,11 +165,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         } else {
             return thisValue.hashCode();
         }
-    }
-
-    @Override
-    public Path getPath() {
-        return new Path(this);
     }
 
     @Override

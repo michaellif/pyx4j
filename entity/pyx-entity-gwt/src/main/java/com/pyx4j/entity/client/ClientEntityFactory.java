@@ -21,9 +21,9 @@
 package com.pyx4j.entity.client;
 
 import com.google.gwt.core.client.GWT;
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
@@ -50,13 +50,13 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
         }
     }
 
-    public <T extends IEntity> T create(Class<T> clazz) {
+    public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
         if (singleFactory == null) {
             synchronized (ClientEntityFactory.class) {
                 singleFactory = GWT.create(IEntityFactoryImpl.class);
             }
         }
-        return singleFactory.create(clazz);
+        return singleFactory.create(clazz, parent, fieldName);
     }
 
     @Override

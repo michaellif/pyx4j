@@ -20,12 +20,15 @@
  */
 package com.pyx4j.entity.server;
 
+import java.lang.reflect.Constructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.server.impl.EntityMetaImpl;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
@@ -34,7 +37,7 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> T create(Class<T> clazz) {
+    public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
         String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass;
         try {
@@ -43,7 +46,12 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
             handlerClass = EntityImplGenerator.instance().generateImplementation(clazz.getName());
         }
         try {
-            return (T) handlerClass.newInstance();
+            if ((parent == null) && (fieldName == null)) {
+                return (T) handlerClass.newInstance();
+            } else {
+                Constructor childConstructor = handlerClass.getConstructor(IObject.class, String.class);
+                return (T) childConstructor.newInstance(parent, fieldName);
+            }
         } catch (Throwable e) {
             log.error(handlerClassName + " instantiation error", e);
             throw new Error(e.getMessage());

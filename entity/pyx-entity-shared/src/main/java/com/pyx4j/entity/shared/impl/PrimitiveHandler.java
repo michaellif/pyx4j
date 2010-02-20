@@ -22,7 +22,6 @@ package com.pyx4j.entity.shared.impl;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.Path;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
 
@@ -38,22 +37,17 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     @SuppressWarnings("unchecked")
     @Override
     public TYPE getValue() {
-        return (TYPE) getParent().getMemberValue(getFieldName());
+        return (TYPE) getOwner().getMemberValue(getFieldName());
     }
 
     @Override
     public void setValue(TYPE value) {
-        ((SharedEntityHandler) getParent()).ensureValue().put(getFieldName(), value);
+        ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
     }
 
     @Override
     public Class<TYPE> getValueClass() {
         return valueClass;
-    }
-
-    @Override
-    public Path getPath() {
-        return new Path(this);
     }
 
     @Override

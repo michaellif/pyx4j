@@ -22,8 +22,10 @@ package com.pyx4j.entity.shared.impl;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, Serializable {
@@ -32,30 +34,42 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
 
     private transient final Class<? extends IObject<VALUE_TYPE>> clazz;
 
-    private transient IEntity parent;
+    private transient IEntity owner;
 
-    private transient String fieldName;
+    private transient final IObject<?> parent;
 
-    @SuppressWarnings("unchecked")
-    public ObjectHandler(Class<? extends IObject> clazz) {
-        this.clazz = (Class<? extends IObject<VALUE_TYPE>>) clazz;
-    }
+    private transient final String fieldName;
 
     @SuppressWarnings("unchecked")
-    public ObjectHandler(Class<? extends IObject> clazz, IEntity parent, String fieldName) {
+    public ObjectHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
         this.clazz = (Class<? extends IObject<VALUE_TYPE>>) clazz;
         this.parent = parent;
+        if (parent instanceof ICollection<?, ?>) {
+            this.owner = parent.getOwner();
+        } else {
+            this.owner = (IEntity) parent;
+        }
         this.fieldName = fieldName;
     }
 
     @Override
-    public IEntity getParent() {
+    public IObject<?> getParent() {
         return parent;
     }
 
     @Override
+    public IEntity getOwner() {
+        return owner;
+    }
+
+    @Override
+    public Path getPath() {
+        return new Path(this);
+    }
+
+    @Override
     public MemberMeta getMeta() {
-        return getParent().getEntityMeta().getMemberMeta(getFieldName());
+        return getOwner().getEntityMeta().getMemberMeta(getFieldName());
     }
 
     @Override

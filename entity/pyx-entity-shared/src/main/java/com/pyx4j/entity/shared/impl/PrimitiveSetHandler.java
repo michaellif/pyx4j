@@ -28,7 +28,6 @@ import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.Path;
 
 public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implements IPrimitiveSet<TYPE> {
 
@@ -47,13 +46,8 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     }
 
     @Override
-    public Path getPath() {
-        return new Path(this);
-    }
-
-    @Override
     public void set(IPrimitiveSet<TYPE> typedSet) {
-        getParent().setMemberValue(getFieldName(), typedSet);
+        getOwner().setMemberValue(getFieldName(), typedSet);
     }
 
     @Override
@@ -64,12 +58,12 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     @SuppressWarnings("unchecked")
     @Override
     public Set<TYPE> getValue() {
-        return (Set<TYPE>) getParent().getMemberValue(getFieldName());
+        return (Set<TYPE>) getOwner().getMemberValue(getFieldName());
     }
 
     @Override
     public void setValue(Set<TYPE> value) {
-        getParent().setMemberValue(getFieldName(), value);
+        getOwner().setMemberValue(getFieldName(), value);
     }
 
     /**

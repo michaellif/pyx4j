@@ -66,6 +66,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable {
 
     public Object removeMemberValue(String memberName);
 
+    public Class<? extends IEntity> getValueClass();
+
     /**
      * A single instance of MemeberMeta is shared between all instances of the IEntity
      * inside EntityMeta.

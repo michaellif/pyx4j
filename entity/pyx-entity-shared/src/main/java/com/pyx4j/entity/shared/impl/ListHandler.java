@@ -28,35 +28,15 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.Path;
 
-public class ListHandler<TYPE extends IEntity> extends ObjectHandler<List<Map<String, Object>>> implements IList<TYPE> {
+public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler<TYPE, List<Map<String, Object>>> implements IList<TYPE> {
 
     private static final long serialVersionUID = 6416411665137002645L;
 
-    private final Class<TYPE> valueClass;
-
     public ListHandler(IEntity parent, String fieldName, Class<TYPE> valueClass) {
-        super(IList.class, parent, fieldName);
-        this.valueClass = valueClass;
-    }
-
-    @Override
-    public Class<TYPE> getValueClass() {
-        return valueClass;
-    }
-
-    @Override
-    public TYPE $() {
-        return EntityFactory.create(getValueClass());
-    }
-
-    @Override
-    public Path getPath() {
-        return new Path(this);
+        super(IList.class, valueClass, parent, fieldName);
     }
 
     @Override
@@ -72,7 +52,7 @@ public class ListHandler<TYPE extends IEntity> extends ObjectHandler<List<Map<St
     @SuppressWarnings("unchecked")
     @Override
     public List<Map<String, Object>> getValue() {
-        Map<String, Object> data = getParent().getValue();
+        Map<String, Object> data = getOwner().getValue();
         if (data == null) {
             return null;
         } else {
@@ -82,7 +62,7 @@ public class ListHandler<TYPE extends IEntity> extends ObjectHandler<List<Map<St
 
     @Override
     public void setValue(List<Map<String, Object>> value) {
-        getParent().setMemberValue(getFieldName(), value);
+        getOwner().setMemberValue(getFieldName(), value);
     }
 
     /**
@@ -151,7 +131,7 @@ public class ListHandler<TYPE extends IEntity> extends ObjectHandler<List<Map<St
         List<Map<String, Object>> value = getValue();
         if (value != null) {
             Map<String, Object> entityValue = value.get(index);
-            TYPE entity = EntityFactory.create(getValueClass());
+            TYPE entity = $();
             entity.setValue(entityValue);
             return entity;
         } else {
@@ -219,7 +199,7 @@ public class ListHandler<TYPE extends IEntity> extends ObjectHandler<List<Map<St
             @Override
             public TYPE next() {
                 Map<String, Object> entityValue = iter.next();
-                TYPE entity = EntityFactory.create(getValueClass());
+                TYPE entity = $();
                 entity.setValue(entityValue);
                 return entity;
             }

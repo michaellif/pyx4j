@@ -23,14 +23,8 @@ package com.pyx4j.entity.shared;
 import java.util.List;
 import java.util.Map;
 
-public interface IList<TYPE extends IEntity> extends IObject<List<Map<String, Object>>>, List<TYPE> {
-
-    public Class<TYPE> getValueClass();
+public interface IList<TYPE extends IEntity> extends ICollection<TYPE, List<Map<String, Object>>>, List<TYPE> {
 
     public void set(IList<TYPE> typedList);
 
-    /**
-     * Create new instance of the Value object
-     */
-    public TYPE $();
 }
