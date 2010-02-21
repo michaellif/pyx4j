@@ -20,6 +20,8 @@
  */
 package com.pyx4j.examples.site.client.pub;
 
+import java.util.Map;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -30,10 +32,11 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.site.client.InlineWidget;
 
-public class TechnologyWidget extends InlineWidget {
+public class TechnologyWidget extends SimplePanel implements InlineWidget {
 
     private final VerticalPanel contentPanel;
 
@@ -90,5 +93,11 @@ public class TechnologyWidget extends InlineWidget {
                 image.setUrl(defaultLogo);
             }
         });
+    }
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
     }
 }

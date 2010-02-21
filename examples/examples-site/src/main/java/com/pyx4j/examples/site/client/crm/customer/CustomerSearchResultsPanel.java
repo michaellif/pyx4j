@@ -22,15 +22,14 @@ package com.pyx4j.examples.site.client.crm.customer;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.entity.client.ui.IEntitySearchResultsPanel;
+import com.pyx4j.entity.client.ui.crud.IEntitySearchResultsPanel;
 import com.pyx4j.examples.domain.crm.Customer;
-import com.pyx4j.examples.site.client.crm.MapPanel;
 
 public class CustomerSearchResultsPanel extends HorizontalPanel implements IEntitySearchResultsPanel<Customer> {
 
     public CustomerSearchResultsPanel() {
         super();
-        add(new CustomersListPanel());
-        add(new MapPanel());
+        add(new CustomerListPanel());
+        add(new CustomerListMapPanel());
     }
 }

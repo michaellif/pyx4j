@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Portlet;
@@ -67,7 +68,7 @@ public class PortletWidget extends VerticalPanel {
                     inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
                 }
                 if (root != null && inlineWidget != null) {
-                    root.add(inlineWidget);
+                    root.add((Widget) inlineWidget);
                     inlineWidgets.add(inlineWidget);
                 } else {
                     log.warn("Failed to add inline widget " + widgetId + " to portlet.");

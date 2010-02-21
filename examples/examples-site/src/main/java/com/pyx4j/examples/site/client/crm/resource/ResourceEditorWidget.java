@@ -20,8 +20,9 @@
  */
 package com.pyx4j.examples.site.client.crm.resource;
 
-import com.pyx4j.examples.site.client.crm.EntityEditorWidget;
+import com.pyx4j.entity.client.ui.crud.EntityEditorWidget;
+import com.pyx4j.examples.domain.crm.Resource;
 
-public class ResourceEditorWidget extends EntityEditorWidget {
+public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
 
 }

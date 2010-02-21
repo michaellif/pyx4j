@@ -20,8 +20,8 @@
  */
 package com.pyx4j.examples.site.client.crm.resource;
 
+import com.pyx4j.entity.client.ui.crud.EntityListWidget;
 import com.pyx4j.examples.domain.crm.Resource;
-import com.pyx4j.examples.site.client.crm.EntityListWidget;
 import com.pyx4j.examples.site.client.crm.SearchResultsPanel;
 
 public class ResourceListWidget extends EntityListWidget<Resource> {

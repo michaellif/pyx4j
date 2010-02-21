@@ -20,8 +20,9 @@
  */
 package com.pyx4j.examples.site.client.crm.order;
 
-import com.pyx4j.examples.site.client.crm.EntityEditorWidget;
+import com.pyx4j.entity.client.ui.crud.EntityEditorWidget;
+import com.pyx4j.examples.domain.crm.Order;
 
-public class OrderEditorWidget extends EntityEditorWidget {
+public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
 }

@@ -18,10 +18,10 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui;
+package com.pyx4j.entity.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IEntitySearchResultsPanel<E extends IEntity> {
+public interface IEntityEditorPanel<E extends IEntity> {
 
 }

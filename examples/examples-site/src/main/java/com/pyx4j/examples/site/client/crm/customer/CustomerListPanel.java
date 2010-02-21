@@ -32,9 +32,9 @@ import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 
-public class CustomersListPanel extends HorizontalPanel {
+public class CustomerListPanel extends HorizontalPanel {
 
-    public CustomersListPanel() {
+    public CustomerListPanel() {
 
         Customer metaCastomer = EntityFactory.create(Customer.class);
 
@@ -44,7 +44,7 @@ public class CustomersListPanel extends HorizontalPanel {
 
         DataTableModel<Customer> dataTableModel = new DataTableModel<Customer>(metaCastomer.getEntityMeta(), columnDescriptors);
 
-        DataTable dataTable = new DataTable(dataTableModel, true);
+        DataTable<Customer> dataTable = new DataTable<Customer>(dataTableModel, true);
 
         add(dataTable);
 

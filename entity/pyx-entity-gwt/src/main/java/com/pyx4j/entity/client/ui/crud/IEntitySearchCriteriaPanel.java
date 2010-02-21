@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui;
+package com.pyx4j.entity.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
 

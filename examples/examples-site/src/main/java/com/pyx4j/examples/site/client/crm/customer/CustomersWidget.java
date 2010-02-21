@@ -20,12 +20,22 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import com.pyx4j.examples.site.client.crm.EntityCrudWidget;
+import java.util.Map;
 
-public class CustomersWidget extends EntityCrudWidget {
+import com.pyx4j.entity.client.ui.crud.EntityCrudWidget;
+import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.site.client.InlineWidget;
+
+public class CustomersWidget extends EntityCrudWidget<Customer> implements InlineWidget {
 
     public CustomersWidget() {
         super(new CustomerListWidget(), new CustomerEditorWidget());
+    }
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -18,40 +18,36 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.entity.client.ui.crud;
 
-import java.util.Map;
-
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.InlineWidget;
+import com.pyx4j.entity.shared.IEntity;
 
-public class EntityCrudWidget extends InlineWidget {
+public class EntityCrudWidget<E extends IEntity> extends SimplePanel {
 
     private final TabPanel cards;
 
-    private final EntityListWidget listWidget;
+    private final EntityListWidget<E> listWidget;
 
-    private final Widget editorWidget;
+    private final IEntityEditorPanel<E> editorWidget;
 
-    public EntityCrudWidget(EntityListWidget listWidget, EntityEditorWidget editorWidget) {
+    public EntityCrudWidget(EntityListWidget<E> listWidget, IEntityEditorPanel<E> editorWidget) {
         this.listWidget = listWidget;
+        //listWidget.setCrudContainer(this);
         this.editorWidget = editorWidget;
+        //editorWidget.setCrudContainer(this);
 
         cards = new TabPanel();
 
         cards.add(listWidget, "list");
 
-        cards.add(editorWidget, "editor");
+        cards.add((Widget) editorWidget, "editor");
 
         setWidget(cards);
         cards.selectTab(0);
-
-    }
-
-    @Override
-    public void populate(Map<String, String> args) {
 
     }
 

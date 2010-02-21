@@ -14,22 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 18, 2010
+ * Created on Feb 16, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui;
+package com.pyx4j.entity.client.ui.crud;
+
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntitySearchCriteriaForm<E extends IEntity> extends EntityForm<E> {
+public class EntityListWidget<E extends IEntity> extends DockPanel {
 
-    public EntitySearchCriteriaForm(Class<E> clazz) {
-        super(clazz);
-    }
+    public EntityListWidget(IEntitySearchCriteriaPanel<E> criteriaPanel, IEntitySearchResultsPanel<E> resultsPanel) {
+        super();
 
-    public static <T extends IEntity> EntitySearchCriteriaForm<T> create(Class<T> clazz) {
-        return new EntitySearchCriteriaForm<T>(clazz);
+        add((Widget) criteriaPanel, DockPanel.NORTH);
+        add((Widget) resultsPanel, DockPanel.CENTER);
+
     }
 
 }

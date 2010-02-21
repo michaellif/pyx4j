@@ -20,8 +20,8 @@
  */
 package com.pyx4j.examples.site.client.crm.order;
 
+import com.pyx4j.entity.client.ui.crud.EntityListWidget;
 import com.pyx4j.examples.domain.crm.Order;
-import com.pyx4j.examples.site.client.crm.EntityListWidget;
 import com.pyx4j.examples.site.client.crm.SearchResultsPanel;
 
 public class OrderListWidget extends EntityListWidget<Order> {

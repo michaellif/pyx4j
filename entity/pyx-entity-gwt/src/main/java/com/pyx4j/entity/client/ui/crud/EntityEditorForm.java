@@ -14,18 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
+ * Created on Jan 18, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.entity.client.ui.crud;
 
-import com.google.gwt.user.client.ui.HTML;
+import com.pyx4j.entity.client.ui.EntityForm;
+import com.pyx4j.entity.shared.IEntity;
 
-public class EntityEditorWidget extends HTML {
+public class EntityEditorForm<E extends IEntity> extends EntityForm<E> {
 
-    public EntityEditorWidget() {
-        super("EntityEditorWidget");
+    public EntityEditorForm(Class<E> clazz) {
+        super(clazz);
+    }
+
+    public static <T extends IEntity> EntityEditorForm<T> create(Class<T> clazz) {
+        return new EntityEditorForm<T>(clazz);
     }
 
 }

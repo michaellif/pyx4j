@@ -18,24 +18,22 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm;
+package com.pyx4j.examples.site.client.crm.customer;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.overlay.StreetviewOverlay;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.site.client.InlineWidget;
-
-public class MapPanel extends InlineWidget {
+public class CustomerEditorMapPanel extends SimplePanel {
 
     private MapWidget map;
 
-    public MapPanel() {
+    public CustomerEditorMapPanel() {
         final VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 

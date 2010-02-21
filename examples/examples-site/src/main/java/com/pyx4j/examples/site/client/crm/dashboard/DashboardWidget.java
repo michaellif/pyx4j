@@ -20,11 +20,21 @@
  */
 package com.pyx4j.examples.site.client.crm.dashboard;
 
+import java.util.Map;
+
+import com.google.gwt.user.client.ui.SimplePanel;
+
 import com.pyx4j.site.client.InlineWidget;
 
-public class DashboardWidget extends InlineWidget {
+public class DashboardWidget extends SimplePanel implements InlineWidget {
 
     public DashboardWidget() {
+    }
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -31,7 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.client.ui.EntityEditorForm;
+import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;

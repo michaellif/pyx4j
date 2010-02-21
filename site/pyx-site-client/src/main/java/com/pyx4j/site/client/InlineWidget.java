@@ -22,15 +22,7 @@ package com.pyx4j.site.client;
 
 import java.util.Map;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+public interface InlineWidget {
 
-public class InlineWidget extends SimplePanel {
-
-    public InlineWidget() {
-
-    }
-
-    public void populate(Map<String, String> args) {
-
-    }
+    public void populate(Map<String, String> args);
 }

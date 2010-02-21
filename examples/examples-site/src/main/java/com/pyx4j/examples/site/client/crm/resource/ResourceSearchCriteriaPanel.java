@@ -26,8 +26,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.EntitySearchCriteriaForm;
-import com.pyx4j.entity.client.ui.IEntitySearchCriteriaPanel;
+import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
+import com.pyx4j.entity.client.ui.crud.IEntitySearchCriteriaPanel;
 import com.pyx4j.examples.domain.crm.Resource;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;

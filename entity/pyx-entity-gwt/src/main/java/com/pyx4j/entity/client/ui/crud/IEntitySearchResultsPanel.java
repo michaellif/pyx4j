@@ -14,28 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
- * @author vlads
+ * Created on Feb 18, 2010
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm.order;
+package com.pyx4j.entity.client.ui.crud;
 
-import java.util.Map;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.pyx4j.entity.client.ui.crud.EntityCrudWidget;
-import com.pyx4j.examples.domain.crm.Order;
-import com.pyx4j.site.client.InlineWidget;
-
-public class OrdersWidget extends EntityCrudWidget<Order> implements InlineWidget {
-
-    public OrdersWidget() {
-        super(new OrderListWidget(), new OrderEditorWidget());
-    }
-
-    @Override
-    public void populate(Map<String, String> args) {
-        // TODO Auto-generated method stub
-
-    }
+public interface IEntitySearchResultsPanel<E extends IEntity> {
 
 }

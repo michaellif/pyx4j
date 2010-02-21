@@ -20,8 +20,8 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import com.pyx4j.entity.client.ui.crud.EntityListWidget;
 import com.pyx4j.examples.domain.crm.Customer;
-import com.pyx4j.examples.site.client.crm.EntityListWidget;
 
 public class CustomerListWidget extends EntityListWidget<Customer> {
 

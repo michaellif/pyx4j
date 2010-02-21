@@ -20,8 +20,20 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import com.pyx4j.examples.site.client.crm.EntityEditorWidget;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class CustomerEditorWidget extends EntityEditorWidget {
+import com.pyx4j.entity.client.ui.crud.IEntityEditorPanel;
+import com.pyx4j.examples.domain.crm.Customer;
+
+public class CustomerEditorWidget extends HorizontalPanel implements IEntityEditorPanel<Customer> {
+
+    public CustomerEditorWidget() {
+        VerticalPanel editorContent = new VerticalPanel();
+        add(editorContent);
+
+        CustomerEditorMapPanel maps = new CustomerEditorMapPanel();
+        add(maps);
+    }
 
 }
