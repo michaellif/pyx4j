@@ -36,11 +36,11 @@ public class PathTest extends InitializerTestCase {
 
         assertEquals("set path", "Employee/tasks/", emp.tasks().getPath().toString());
 
-        assertEquals("set path", "Employee/tasks/[]", emp.tasks().$().getPath().toString());
-        assertEquals("set path", "Employee/tasks/[]deadLine/", emp.tasks().$().deadLine().getPath().toString());
+        assertEquals("set path", "Employee/tasks/[]/", emp.tasks().$().getPath().toString());
+        assertEquals("set path", "Employee/tasks/[]/deadLine/", emp.tasks().$().deadLine().getPath().toString());
 
         emp.tasks().add(EntityFactory.create(Task.class));
-        assertEquals("set path", "Employee/tasks/[]", emp.tasks().iterator().next().getPath().toString());
+        assertEquals("set path", "Employee/tasks/[]/", emp.tasks().iterator().next().getPath().toString());
     }
 
     public void testGetByPath() {
@@ -50,11 +50,38 @@ public class PathTest extends InitializerTestCase {
         Address address = EntityFactory.create(Address.class);
         employee.homeAddress().set(address);
         address = employee.homeAddress();
-        address.streetName().setValue("Home Street");
+        final String streetNameValue = "Home Street";
+        address.streetName().setValue(streetNameValue);
 
         Path path = EntityFactory.create(Employee.class).homeAddress().streetName().getPath();
 
-        IObject<?> object = employee.getMember(path);
+        try {
+            address.getMember(path);
+            fail("Allow invalid access to path");
+        } catch (IllegalArgumentException ok) {
+        }
 
+        IObject<?> object = employee.getMember(path);
+        assertEquals("member by Path FieldName", "streetName", object.getFieldName());
+        assertEquals("member by Path Value", streetNameValue, employee.getValue(path));
+        assertNull("member by Path null", employee.getValue(EntityFactory.create(Employee.class).department().name().getPath()));
+    }
+
+    public void testSetByPathLevel1() {
+        Employee emp = EntityFactory.create(Employee.class);
+        Employee empMeta = EntityFactory.create(Employee.class);
+
+        final String nameValue = "Bob 21";
+        emp.setValue(empMeta.firstName().getPath(), nameValue);
+        assertEquals("member Value", nameValue, emp.firstName().getValue());
+    }
+
+    public void testSetByPathLevel2() {
+        Employee emp = EntityFactory.create(Employee.class);
+        Employee empMeta = EntityFactory.create(Employee.class);
+
+        final String streetNameValue = "Home Street";
+        emp.setValue(empMeta.homeAddress().streetName().getPath(), streetNameValue);
+        assertEquals("member Value", streetNameValue, emp.homeAddress().streetName().getValue());
     }
 }
