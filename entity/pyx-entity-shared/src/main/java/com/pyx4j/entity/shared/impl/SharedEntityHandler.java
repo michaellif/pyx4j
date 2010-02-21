@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IFullDebug;
+import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -202,12 +204,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return member;
     }
 
-    @Override
-    public IObject<?> getMember(Path path) {
-        //TODO implement
-        return null;
-    }
-
     /**
      * Use data map directly. No need to create Member
      */
@@ -232,10 +228,66 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
+    private final void assertPath(Path path) {
+        if (!GWTJava5Helper.getSimpleName(this.getObjectClass()).equals(path.getRootObjectClassName())) {
+            throw new IllegalArgumentException("Path of " + path.getRootObjectClassName() + " expected");
+        }
+    }
+
     @Override
-    public Object getMemberValue(Path path) {
-        //TODO implement
-        return null;
+    public IObject<?> getMember(Path path) {
+        assertPath(path);
+        IObject<?> obj = this;
+        for (String memberName : path.getPathMembers()) {
+            //TODO ICollection support
+            if (!(obj instanceof IEntity)) {
+                throw new RuntimeException("Invalid member in path " + memberName);
+            }
+            obj = ((IEntity) obj).getMember(memberName);
+        }
+        return obj;
+    }
+
+    @Override
+    public Object getValue(Path path) {
+        assertPath(path);
+        Object value = this.getValue();
+        for (String memberName : path.getPathMembers()) {
+            if (value == null) {
+                return null;
+            }
+            //TODO ICollection support
+            if (!(value instanceof Map<?, ?>)) {
+                throw new RuntimeException("Invalid member in path " + memberName);
+            }
+            value = ((Map<String, Object>) value).get(memberName);
+        }
+        return value;
+    }
+
+    @Override
+    public void setValue(Path path, Object value) {
+        assertPath(path);
+        Map<String, Object> ownerValueMap = ensureValue();
+        LoopCounter c = new LoopCounter(path.getPathMembers());
+        for (String memberName : path.getPathMembers()) {
+            switch (c.next()) {
+            case SINGLE:
+            case LAST:
+                ownerValueMap.put(memberName, value);
+                break;
+            default:
+                Object ownerValue = ownerValueMap.get(memberName);
+                if (ownerValue instanceof Map<?, ?>) {
+                    ownerValueMap = (Map<String, Object>) ownerValue;
+                } else {
+                    // ensureValue
+                    // TODO ICollection support
+                    ownerValueMap.put(memberName, ownerValue = new EntityValueMap());
+                    ownerValueMap = (Map<String, Object>) ownerValue;
+                }
+            }
+        }
     }
 
     /**

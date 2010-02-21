@@ -20,38 +20,61 @@
  */
 package com.pyx4j.entity.shared;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
+
+import com.pyx4j.commons.GWTJava5Helper;
+
 public class Path {
 
     private String path = "";
 
+    private String rootObjectClassName;
+
+    private final List<String> pathMembers;
+
+    //    public Path(String path) {
+    //        //TODO the path parsing.
+    //    }
+
     public Path(IObject<?> object) {
+        List<String> members = new Vector<String>();
         while (object != null) {
+            String pathElement = null;
             if (object.getParent() instanceof ICollection) {
-                this.path = "[]" + this.path;
+                pathElement = "[]";
             } else if (object.getFieldName() == null) {
-                this.path = getSimpleName(object.getObjectClass()) + "/" + this.path;
+                rootObjectClassName = GWTJava5Helper.getSimpleName(object.getObjectClass());
+                this.path = rootObjectClassName + "/" + this.path;
             } else {
-                this.path = object.getFieldName() + "/" + this.path;
+                pathElement = object.getFieldName();
+
+            }
+            if (pathElement != null) {
+                this.path = pathElement + "/" + this.path;
+                if (members.size() == 0) {
+                    members.add(pathElement);
+                } else {
+                    members.add(0, pathElement);
+                }
             }
             object = object.getParent();
         }
+        pathMembers = Collections.unmodifiableList(members);
+    }
 
+    public String getRootObjectClassName() {
+        return rootObjectClassName;
+    }
+
+    public List<String> getPathMembers() {
+        return pathMembers;
     }
 
     @Override
     public String toString() {
         return path;
-    }
-
-    /**
-     * TODO remove in GWT 2.0.1 since klass.getSimpleName() should be implemented then.
-     */
-    private static String getSimpleName(Class<?> klass) {
-        // Java 1.5
-        // klass.getSimpleName()
-        String simpleName = klass.getName();
-        // strip the package name
-        return simpleName.substring(simpleName.lastIndexOf(".") + 1);
     }
 
 }

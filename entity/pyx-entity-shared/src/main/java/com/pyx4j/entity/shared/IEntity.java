@@ -39,13 +39,15 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable {
 
     public IObject<?> getMember(String memberName);
 
-    public IObject<?> getMember(Path path);
+    public IObject<?> getMember(Path path) throws IllegalArgumentException;
 
     public Object getMemberValue(String memberName);
 
-    public Object getMemberValue(Path path);
-
     public void setMemberValue(String memberName, Object value);
+
+    public Object getValue(Path path);
+
+    public void setValue(Path path, Object value);
 
     /**
      * Unsafe set entity value object.

@@ -27,7 +27,7 @@ public interface IObject<VALUE_TYPE> {
 
     public boolean isNull();
 
-    public void setValue(VALUE_TYPE value);
+    public void setValue(VALUE_TYPE value) throws ClassCastException;
 
     public VALUE_TYPE getValue();
 
