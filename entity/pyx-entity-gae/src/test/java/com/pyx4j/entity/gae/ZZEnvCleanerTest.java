@@ -14,27 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on Feb 21, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.gae;
 
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.test.server.EnvCleanerTestCase;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public interface Department extends IEntity {
+public class ZZEnvCleanerTest extends EnvCleanerTestCase {
 
-    IPrimitive<String> name();
-
-    ISet<Employee> employees();
-
-    @Owner
-    Organization organization();
-
-    @Transient
-    IPrimitive<String> transientStuff();
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
+    }
 }

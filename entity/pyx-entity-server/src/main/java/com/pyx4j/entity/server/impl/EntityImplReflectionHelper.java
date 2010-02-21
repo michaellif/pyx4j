@@ -26,7 +26,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -76,7 +75,7 @@ public class EntityImplReflectionHelper {
             Class<?> paramType = primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
             return implHandler.lazyCreateMemberIPrimitive(method.getName(), paramType);
         } else if (IEntity.class.isAssignableFrom(memberClass)) {
-            return EntityFactory.create((Class<IEntity>) method.getReturnType(), implHandler, method.getName());
+            return implHandler.lazyCreateMemberIEntity(method.getName(), (Class<IEntity>) method.getReturnType());
         } else if (ISet.class.equals(memberClass)) {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             return implHandler.lazyCreateMemberISet(method.getName(), (Class<IEntity>) paramType);

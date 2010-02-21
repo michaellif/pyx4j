@@ -20,11 +20,18 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Country;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
@@ -68,5 +75,20 @@ public class EntityMetaTest extends InitializerTestCase {
         address.city().set(city);
 
         assertEquals("Address StringView", "1 Bloor St. " + cityName + " " + countryName, address.getStringView());
+    }
+
+    @Transient
+    @RpcTransient
+    @Owned
+    @Owner
+    @Detached
+    @Unindexed
+    public void testAnnotations() {
+        assertTrue("@Transient", EntityFactory.create(Department.class).transientStuff().getMeta().isTransient());
+        assertTrue("@RpcTransient", EntityFactory.create(Employee.class).accessStatus().getMeta().isRpcTransient());
+        assertTrue("@Owned", EntityFactory.create(Employee.class).homeAddress().getMeta().isOwnedRelationships());
+        assertTrue("@Owner", EntityFactory.create(Department.class).organization().getMeta().isOwner());
+        assertFalse("@Detached", EntityFactory.create(Employee.class).homeAddress().getMeta().isDetached());
+        assertFalse("@Unindexed", EntityFactory.create(Employee.class).holidays().getMeta().isIndexed());
     }
 }

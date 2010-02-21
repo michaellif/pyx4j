@@ -75,20 +75,29 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     protected abstract IObject<?> lazyCreateMember(String name);
 
-    public <T> IPrimitive<T> lazyCreateMemberIPrimitive(String name, Class<T> primitiveValueClass) {
-        return new PrimitiveHandler<T>(this, name, primitiveValueClass);
+    public <T> IPrimitive<T> lazyCreateMemberIPrimitive(String memberName, Class<T> primitiveValueClass) {
+        return new PrimitiveHandler<T>(this, memberName, primitiveValueClass);
     }
 
-    public <T> IPrimitiveSet<T> lazyCreateMemberIPrimitiveSet(String name, Class<T> primitiveValueClass) {
-        return new PrimitiveSetHandler<T>(this, name, primitiveValueClass);
+    public <T> IPrimitiveSet<T> lazyCreateMemberIPrimitiveSet(String memberName, Class<T> primitiveValueClass) {
+        return new PrimitiveSetHandler<T>(this, memberName, primitiveValueClass);
     }
 
-    public <T extends IEntity> ISet<T> lazyCreateMemberISet(String name, Class<T> setValueClass) {
-        return new SetHandler<T>(this, name, setValueClass);
+    @SuppressWarnings("unchecked")
+    public <T extends IEntity> T lazyCreateMemberIEntity(String memberName, Class<T> valueClass) {
+        // Is Bidirectional Relationship ?
+        if ((getOwner() != null) && (getEntityMeta().getMemberMeta(memberName).isOwner())) {
+            return (T) getOwner();
+        }
+        return EntityFactory.create(valueClass, this, memberName);
     }
 
-    public <T extends IEntity> IList<T> lazyCreateMemberIList(String name, Class<T> setValueClass) {
-        return new ListHandler<T>(this, name, setValueClass);
+    public <T extends IEntity> ISet<T> lazyCreateMemberISet(String memberName, Class<T> setValueClass) {
+        return new SetHandler<T>(this, memberName, setValueClass);
+    }
+
+    public <T extends IEntity> IList<T> lazyCreateMemberIList(String memberName, Class<T> setValueClass) {
+        return new ListHandler<T>(this, memberName, setValueClass);
     }
 
     /**

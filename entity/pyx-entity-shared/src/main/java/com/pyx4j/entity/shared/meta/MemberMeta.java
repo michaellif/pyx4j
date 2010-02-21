@@ -68,6 +68,14 @@ public interface MemberMeta {
 
     public boolean isOwnedRelationships();
 
+    /**
+     * See com.pyx4j.entity.annotations.Owner
+     */
+    public boolean isOwner();
+
+    /**
+     * See com.pyx4j.entity.annotations.EmbeddedEntity
+     */
     public boolean isEmbedded();
 
     public boolean isEntity();

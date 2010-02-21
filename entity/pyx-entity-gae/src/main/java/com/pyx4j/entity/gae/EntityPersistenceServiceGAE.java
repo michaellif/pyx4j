@@ -144,8 +144,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             Object value = me.getValue();
             if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
                 if (meta.isEmbedded()) {
-                    embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity
-                            .getMember(me.getKey()), indexed && meta.isIndexed());
+                    embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity.getMember(me.getKey()),
+                            indexed && meta.isIndexed());
                     continue nextValue;
                 } else {
                     String kind = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName();
@@ -189,8 +189,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     if (childKey == null) {
                         throw new Error("Saving non persisted reference " + meta.getCaption());
                     }
-                    value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(),
-                            childKey);
+                    value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKey);
                 }
             } else if (value instanceof String) {
                 if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
@@ -226,8 +225,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         if (childKey == null) {
                             throw new Error("Saving non persisted reference " + meta.getCaption());
                         }
-                        childKeys.add(KeyFactory.createKey(
-                                EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass()).getPersistenceName(), childKey));
+                        childKeys.add(KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass()).getPersistenceName(),
+                                childKey));
                     }
                     value = childKeys;
                 }
@@ -268,6 +267,20 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setUnindexedProperty(me.getKey(), value);
             }
         }
+
+        //        // Special case for values not present in Map
+        //        for (String memberName : iEntity.getEntityMeta().getMemberNames()) {
+        //            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(memberName);
+        //            if (meta.isOwner()) {
+        //                IEntity ownerEntity = (IEntity) iEntity.getMember(memberName);
+        //                Object value = ownerEntity.getPrimaryKey();
+        //                if (meta.isIndexed()) {
+        //                    entity.setProperty(memberName, value);
+        //                } else {
+        //                    entity.setUnindexedProperty(memberName, value);
+        //                }
+        //            }
+        //        }
     }
 
     private String getIEntityKind(IEntity iEntity) {

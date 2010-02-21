@@ -50,6 +50,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
@@ -411,7 +412,7 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("\", ");
             }
 
-            // boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean embedded, boolean indexed, int stringLength
+            // persistenceTransient, rpcTransient, detached, ownedRelationships, owner, embedded, indexed, stringLength
             writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
@@ -420,6 +421,8 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(", ");
             boolean embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
             writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());
+            writer.print(", ");
+            writer.print(Boolean.valueOf((method.getAnnotation(Owner.class) != null)).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf(embedded).toString());
             writer.print(", ");
@@ -560,7 +563,7 @@ public class EntityFactoryGenerator extends Generator {
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIList(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
-                writer.println("return new " + type.getQualifiedSourceName() + IMPL + "(this, \"" + method.getName() + "\");");
+                writer.println("return lazyCreateMemberIEntity(\"" + method.getName() + "\", " + type.getQualifiedSourceName() + ".class);");
             } else {
                 throw new RuntimeException("Unknown member type" + method.getReturnType());
             }

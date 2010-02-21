@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -47,6 +48,7 @@ public interface Employee extends IEntity {
 
     IPrimitive<Boolean> reliable();
 
+    @Unindexed
     IPrimitive<Long> holidays();
 
     IPrimitive<Integer> rating();
