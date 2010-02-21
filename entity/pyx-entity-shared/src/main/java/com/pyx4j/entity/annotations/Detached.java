@@ -26,7 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation specifies that the Member is not serialized together with Owner Entity.
+ * This annotation specifies that the Member is not retrieved and serialized together with
+ * Owner Entity.
  * 
  * Separate PersistenceService of RPC call is required to retrieve such members.
  */

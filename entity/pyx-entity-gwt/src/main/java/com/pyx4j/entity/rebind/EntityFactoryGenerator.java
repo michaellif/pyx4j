@@ -417,7 +417,7 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(Detached.class) != null)).toString());
+            writer.print(Boolean.valueOf((method.getAnnotation(Detached.class) != null) || (method.getAnnotation(Owner.class) != null)).toString());
             writer.print(", ");
             boolean embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
             writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());

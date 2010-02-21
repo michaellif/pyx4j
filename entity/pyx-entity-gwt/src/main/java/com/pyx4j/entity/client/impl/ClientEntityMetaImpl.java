@@ -45,8 +45,8 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final List<String> toStringMemberNames;
 
-    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient,
-            boolean rpcTransient, String[] membersNames, String[] memberNamesToString) {
+    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient, boolean rpcTransient,
+            String[] membersNames, String[] memberNamesToString) {
         this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
@@ -111,5 +111,10 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public List<String> getToStringMemberNames() {
         return toStringMemberNames;
+    }
+
+    @Override
+    public List<String> getBidirectionalReferenceMemberNames() {
+        throw new UnsupportedOperationException();
     }
 }

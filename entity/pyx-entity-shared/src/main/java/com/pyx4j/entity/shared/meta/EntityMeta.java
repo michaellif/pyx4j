@@ -67,4 +67,9 @@ public interface EntityMeta {
 
     public List<String> getToStringMemberNames();
 
+    /**
+     * Return the member that @Owner annotation referred to this Object. See
+     * com.pyx4j.entity.annotations.Owner
+     */
+    public List<String> getBidirectionalReferenceMemberNames();
 }

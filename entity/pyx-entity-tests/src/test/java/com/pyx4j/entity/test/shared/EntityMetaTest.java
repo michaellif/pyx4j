@@ -88,6 +88,7 @@ public class EntityMetaTest extends InitializerTestCase {
         assertTrue("@RpcTransient", EntityFactory.create(Employee.class).accessStatus().getMeta().isRpcTransient());
         assertTrue("@Owned", EntityFactory.create(Employee.class).homeAddress().getMeta().isOwnedRelationships());
         assertTrue("@Owner", EntityFactory.create(Department.class).organization().getMeta().isOwner());
+        assertTrue("@Owner is Detached", EntityFactory.create(Department.class).organization().getMeta().isDetached());
         assertFalse("@Detached", EntityFactory.create(Employee.class).homeAddress().getMeta().isDetached());
         assertFalse("@Unindexed", EntityFactory.create(Employee.class).holidays().getMeta().isIndexed());
     }

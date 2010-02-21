@@ -60,6 +60,8 @@ public class EntityMetaImpl implements EntityMeta {
 
     private List<String> toStringMemberNames;
 
+    private List<String> bidirectionalReferenceMemberNames;
+
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
         Table tableAnnotation = entityClass.getAnnotation(Table.class);
@@ -158,6 +160,7 @@ public class EntityMetaImpl implements EntityMeta {
 
     @Override
     public synchronized List<String> getToStringMemberNames() {
+        //TODO move this list creation to EntityImplGenerator for better performance
         if (toStringMemberNames == null) {
             toStringMemberNames = new Vector<String>();
             final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
@@ -180,5 +183,20 @@ public class EntityMetaImpl implements EntityMeta {
             }
         }
         return toStringMemberNames;
+    }
+
+    @Override
+    public synchronized List<String> getBidirectionalReferenceMemberNames() {
+        //TODO move this list creation to EntityImplGenerator for better performance
+        if (bidirectionalReferenceMemberNames == null) {
+            bidirectionalReferenceMemberNames = new Vector<String>();
+            for (String memberName : getMemberNames()) {
+                MemberMeta meta = getMemberMeta(memberName);
+                if (meta.isOwner()) {
+                    bidirectionalReferenceMemberNames.add(memberName);
+                }
+            }
+        }
+        return bidirectionalReferenceMemberNames;
     }
 }

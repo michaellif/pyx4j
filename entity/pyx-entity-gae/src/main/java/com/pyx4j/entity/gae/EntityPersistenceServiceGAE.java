@@ -185,11 +185,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         value = persistImpl(childIEntity, merge);
                     }
                 } else {
-                    Long childKey = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
-                    if (childKey == null) {
+                    Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
+                    if (childKeyId == null) {
                         throw new Error("Saving non persisted reference " + meta.getCaption());
                     }
-                    value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKey);
+                    value = KeyFactory
+                            .createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKeyId);
                 }
             } else if (value instanceof String) {
                 if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
@@ -268,19 +269,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
         }
 
-        //        // Special case for values not present in Map
-        //        for (String memberName : iEntity.getEntityMeta().getMemberNames()) {
-        //            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(memberName);
-        //            if (meta.isOwner()) {
-        //                IEntity ownerEntity = (IEntity) iEntity.getMember(memberName);
-        //                Object value = ownerEntity.getPrimaryKey();
-        //                if (meta.isIndexed()) {
-        //                    entity.setProperty(memberName, value);
-        //                } else {
-        //                    entity.setUnindexedProperty(memberName, value);
-        //                }
-        //            }
-        //        }
+        // Special case for values not present in Map
+        for (String memberName : iEntity.getEntityMeta().getBidirectionalReferenceMemberNames()) {
+            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(memberName);
+            IEntity ownerEntity = (IEntity) iEntity.getMember(memberName);
+            if (ownerEntity.isNull()) {
+                continue;
+            }
+            Object ownerId = ownerEntity.getPrimaryKey();
+            if (ownerId == null) {
+                throw new Error("Saving non persisted reference " + ownerEntity.getEntityMeta().getCaption());
+            }
+            Key ownerKey = KeyFactory.createKey(EntityFactory.getEntityMeta(ownerEntity.getValueClass()).getPersistenceName(), (Long) ownerId);
+            if (meta.isIndexed()) {
+                entity.setProperty(memberName, ownerKey);
+            } else {
+                entity.setUnindexedProperty(memberName, ownerKey);
+            }
+        }
     }
 
     private String getIEntityKind(IEntity iEntity) {
@@ -297,13 +303,35 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         persistImpl(iEntity, true);
     }
 
+    private boolean isBidirectionalReferenceRequired(IEntity iEntity) {
+        EntityMeta entityMeta = iEntity.getEntityMeta();
+        for (String memberName : entityMeta.getMemberNames()) {
+            MemberMeta meta = entityMeta.getMemberMeta(memberName);
+            if (IEntity.class.isAssignableFrom(meta.getValueClass())) {
+                EntityMeta childEntityMeta = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass());
+                for (String childMemberName : childEntityMeta.getBidirectionalReferenceMemberNames()) {
+                    if (childEntityMeta.getMemberMeta(childMemberName).getValueClass().equals(entityMeta.getEntityClass())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private Key persistImpl(IEntity iEntity, boolean merge) {
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't persist Transient Entity");
         }
         Entity entity;
         if (iEntity.getPrimaryKey() == null) {
-            entity = new Entity(getIEntityKind(iEntity));
+            if (isBidirectionalReferenceRequired(iEntity)) {
+                datastoreCallStats.get().count++;
+                entity = new Entity(datastore.allocateIds(getIEntityKind(iEntity), 1).getStart());
+                iEntity.setPrimaryKey(entity.getKey().getId());
+            } else {
+                entity = new Entity(getIEntityKind(iEntity));
+            }
         } else {
             Key key = KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey());
             if (merge) {
@@ -397,7 +425,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 if (childIEntity.getMeta().isDetached()) {
                     childIEntity.setPrimaryKey(((Key) value).getId());
                 } else {
-                    retrieveEntity(childIEntity, (Key) value, retrievedMap);
+                    if ((iEntity.getOwner() != null) && (iEntity.getEntityMeta().getMemberMeta(keyName).isOwner())) {
+                        // Do not retrieve Owner
+                    } else {
+                        retrieveEntity(childIEntity, (Key) value, retrievedMap);
+                    }
                 }
                 continue;
             } else if (value instanceof String) {
@@ -495,8 +527,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } catch (EntityNotFoundException e) {
                 throw new RuntimeException("EntityNotFound");
             }
-            updateIEntity(iEntity, entity, retrievedMap);
             retrievedMap.put(key, iEntity);
+            updateIEntity(iEntity, entity, retrievedMap);
         }
     }
 

@@ -43,6 +43,9 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertFalse("Owned now", orgDepartment.organization().isNull());
         assertTrue("Owned properly", orgDepartment.organization() == org);
         assertNull("Direct value access", orgDepartment.getMemberValue("organization"));
+
+        // Test Recursive print
+        System.out.println(orgDepartment.toString());
     }
 
 }

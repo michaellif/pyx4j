@@ -41,6 +41,10 @@ public class EntityCriteria<E extends IEntity> implements Serializable {
 
     private List<Sort> sorts;
 
+    private transient Class<E> entityClass;
+
+    private transient E metaEntity;
+
     public static class Sort implements Serializable {
 
         private String propertyName;
@@ -71,11 +75,19 @@ public class EntityCriteria<E extends IEntity> implements Serializable {
     }
 
     public EntityCriteria(Class<E> entityClass) {
-        domainName = entityClass.getName();
+        this.entityClass = entityClass;
+        this.domainName = entityClass.getName();
     }
 
     public static <T extends IEntity> EntityCriteria<T> create(Class<T> entityClass) {
         return new EntityCriteria<T>(entityClass);
+    }
+
+    public E meta() {
+        if (metaEntity == null) {
+            metaEntity = EntityFactory.create(entityClass);
+        }
+        return metaEntity;
     }
 
     public EntityCriteria<E> add(Criterion criterion) {
