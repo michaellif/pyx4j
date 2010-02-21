@@ -26,6 +26,12 @@ public class GoogleAPI {
 
     private static String apiKey;
 
+    /**
+     * Delegate map key configuration to the main entry and configuration point. You still
+     * need to call GoogleAPI.ensureInitialized() before using Google Maps.
+     * 
+     * @param apiKey
+     */
     public static void setGoogleAPIKey(String apiKey) {
         GoogleAPI.apiKey = apiKey;
     }

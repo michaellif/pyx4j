@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.examples.site.client.GoogleAPI;
 
 public class CustomerEditorMapPanel extends SimplePanel {
 
@@ -37,6 +38,7 @@ public class CustomerEditorMapPanel extends SimplePanel {
         final VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
+        GoogleAPI.ensureInitialized();
         AjaxLoader.loadApi("maps", "2", new Runnable() {
             public void run() {
                 mapsLoaded(contentPanel);
