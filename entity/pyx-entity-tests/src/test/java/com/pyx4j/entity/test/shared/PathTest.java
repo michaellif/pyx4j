@@ -41,6 +41,19 @@ public class PathTest extends InitializerTestCase {
 
         emp.tasks().add(EntityFactory.create(Task.class));
         assertEquals("set path", "Employee/tasks/[]/", emp.tasks().iterator().next().getPath().toString());
+
+    }
+
+    public void testPathParsing() {
+        Path p = new Path("Employee/tasks/");
+        assertEquals("path Root", "Employee", p.getRootObjectClassName());
+        assertEquals("path Root", "tasks", p.getPathMembers().get(0));
+
+        Path p2 = new Path("Employee/tasks/[]/deadLine/");
+        assertEquals("path Root", "Employee", p2.getRootObjectClassName());
+        assertEquals("path Root", "tasks", p2.getPathMembers().get(0));
+        assertEquals("path Root", "[]", p2.getPathMembers().get(1));
+        assertEquals("path Root", "deadLine", p2.getPathMembers().get(2));
     }
 
     public void testGetByPath() {
