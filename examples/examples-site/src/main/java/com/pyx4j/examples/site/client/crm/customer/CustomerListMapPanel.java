@@ -59,7 +59,7 @@ public class CustomerListMapPanel extends SimplePanel {
 
     private void mapsLoaded(VerticalPanel contentPanel) {
 
-        LatLng pos = LatLng.newInstance(43, -79);
+        LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
         map = new MapWidget(pos, 2);
         map.setSize("400px", "400px");
@@ -103,12 +103,12 @@ public class CustomerListMapPanel extends SimplePanel {
                 public void onClick(MarkerClickEvent event) {
                     map.getInfoWindow().open(
                             marker,
-                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px; height:160px;'><a href=''>"
-                                    + customer.name().getValue() + "</a><br>"
+                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href=''><b>"
+                                    + customer.name().getValue() + "</b></a><br>"
 
-                                    + "<b>" + customer.street().getValue()
+                                    + customer.street().getValue()
 
-                                    + "</b><br>" + "</div>"));
+                                    + "</div>"));
                 }
             });
             return marker;
