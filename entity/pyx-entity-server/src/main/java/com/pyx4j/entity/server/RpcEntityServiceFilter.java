@@ -22,6 +22,8 @@ package com.pyx4j.entity.server;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,49 +37,50 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
     @Override
     public Serializable filterIncomming(Class<? extends Service<?, ?>> serviceClass, Serializable request) {
-        filterRpcTransient(request);
+        filterRpcTransient(request, new HashSet<Serializable>());
         return request;
     }
 
     @Override
     public Serializable filterOutgoing(Class<? extends Service<?, ?>> serviceClass, Serializable response) {
-        filterRpcTransient(response);
+        filterRpcTransient(response, new HashSet<Serializable>());
         return response;
     }
 
-    protected void filterRpcTransient(Serializable value) {
+    protected void filterRpcTransient(Serializable value, Set<Serializable> processed) {
         if (value instanceof IEntity) {
-            filterTransientMembers((IEntity) value);
+            filterTransientMembers((IEntity) value, processed);
         } else if (value instanceof Collection<?>) {
             for (Object v : (Collection<?>) value) {
                 if (v instanceof Serializable) {
-                    filterRpcTransient((Serializable) v);
+                    filterRpcTransient((Serializable) v, processed);
                 }
             }
         }
     }
 
-    protected void filterTransientMembers(IEntity entity) {
-        if (entity.isNull()) {
+    protected void filterTransientMembers(IEntity entity, Set<Serializable> processed) {
+        if (entity.isNull() || processed.contains(entity)) {
             return;
         }
         EntityMeta em = entity.getEntityMeta();
         if (em.isRpcTransient()) {
             throw new Error("Should not serialize " + entity.getObjectClass());
         }
+        processed.add(entity);
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (em.getMemberMeta(memberName).isRpcTransient()) {
                 entity.removeMemberValue(memberName);
             } else if (memberMeta.isEntity()) {
-                filterTransientMembers((IEntity) entity.getMember(memberName));
+                filterTransientMembers((IEntity) entity.getMember(memberName), processed);
             } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
-                    filterTransientMembers(value);
+                    filterTransientMembers(value, processed);
                 }
             } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 for (IEntity value : (IList<?>) entity.getMember(memberName)) {
-                    filterTransientMembers(value);
+                    filterTransientMembers(value, processed);
                 }
             }
         }
