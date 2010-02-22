@@ -20,6 +20,9 @@
  */
 package com.pyx4j.examples.server.preloader.crm;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -30,31 +33,27 @@ import com.pyx4j.examples.domain.crm.Order.Status;
 
 public class PreloadCrmDemo extends AbstractDataPreloader {
 
-    private int resourceCount;
-
     private int customerCount;
 
     private int orderCount;
 
-    private final Resource r[] = new Resource[4];
-
-    private final String[] streets = new String[] { "Victoria Park Avenue", "Jarvis Street", "Bloor Street", "Don Mills Road" };
+    private final List<Resource> r = new Vector<Resource>();
 
     @Override
     public String create() {
-        resourceCount = 0;
         customerCount = 0;
         orderCount = 0;
 
-        r[resourceCount++] = createNamed(Resource.class, "Heavy duty track");
-        r[resourceCount++] = createNamed(Resource.class, "Bob");
-        r[resourceCount++] = createNamed(Resource.class, "John");
-        r[resourceCount++] = createNamed(Resource.class, "Alex");
-
-        createCustomer("Anna");
-        createCustomer("Basia");
-        createCustomer("Diana");
-        createCustomer("Vika");
+        r.add(createNamed(Resource.class, "Heavy duty track"));
+        r.add(createNamed(Resource.class, "Bob"));
+        r.add(createNamed(Resource.class, "John"));
+        r.add(createNamed(Resource.class, "Alex"));
+        r.add(createNamed(Resource.class, "Isaac"));
+        r.add(createNamed(Resource.class, "Owen"));
+        r.add(createNamed(Resource.class, "Richard"));
+        r.add(createNamed(Resource.class, "William"));
+        r.add(createNamed(Resource.class, "Thomas"));
+        r.add(createNamed(Resource.class, "Adam"));
 
         createCustomer("Jordan  Desai", "280 Willow Ave, Toronto, ON, Canada", "905-762-8993", 43.678425, -79.288309);
         createCustomer("Michael Smith", "336 Walmer Rd, Toronto, ON, Canada", "905-884-8935", 43.6699245, -79.4069179);
@@ -96,35 +95,29 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         createCustomer("Denis Gerstein", "10 Minford Ave, Toronto, ON, Canada", "905-891-0024", 43.7373197, -79.2901801);
         createCustomer("Jake Krebs", "76 Havelock Gate, Markham, ON, Canada", "905-002-7326", 43.8543271, -79.245133);
 
-        {
-            Customer customer = EntityFactory.create(Customer.class);
-            customer.name().setValue("Anna");
-
-            PersistenceServicesFactory.getPersistenceService().persist(customer);
-            customerCount++;
-        }
-
         StringBuilder b = new StringBuilder();
-        b.append("Created " + resourceCount + " Resources").append('\n');
+        b.append("Created " + r.size() + " Resources").append('\n');
         b.append("Created " + customerCount + " Customers").append('\n');
         b.append("Created " + orderCount + " Orders");
         return b.toString();
     }
 
     private Resource selectResource(int number) {
-        if (r.length >= number) {
-            return r[r.length % number];
+        if (number < r.size()) {
+            return r.get(number);
         } else {
-            return r[number];
+            return r.get((r.size() - 1) % number);
         }
     }
 
-    private void createCustomer(String name) {
+    private void createCustomer(String name, String street, String phone, Double latitude, Double longitude) {
         Customer customer = EntityFactory.create(Customer.class);
         customer.name().setValue(name);
-        customer.phone().add("647-123-456" + customerCount);
-        customer.street().setValue(streets[customerCount]);
-        customer.notes().add("Somthing important");
+        customer.phone().add(phone);
+        customer.street().setValue(street);
+        customer.latitude().setValue(latitude);
+        customer.longitude().setValue(longitude);
+        customer.notes().add("Somthing important #" + customerCount);
 
         Order o1 = EntityFactory.create(Order.class);
         o1.description().setValue("Cat " + customerCount);
@@ -137,22 +130,12 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         o2.description().setValue("Dog " + customerCount);
         o2.status().setValue(Status.COMPLETED);
         o2.resources().add(selectResource(customerCount + 1));
-        o2.resources().add(r[0]);
+        o2.resources().add(r.get(0));
         customer.orders().add(o2);
         orderCount++;
 
         PersistenceServicesFactory.getPersistenceService().persist(customer);
         customerCount++;
-    }
-
-    private void createCustomer(String name, String street, String phone, Double latitude, Double longitude) {
-        Customer customer = EntityFactory.create(Customer.class);
-        customer.name().setValue(name);
-        customer.phone().add(phone);
-        customer.street().setValue(street);
-        customer.latitude().setValue(latitude);
-        customer.longitude().setValue(longitude);
-        PersistenceServicesFactory.getPersistenceService().persist(customer);
     }
 
     @SuppressWarnings("unchecked")
