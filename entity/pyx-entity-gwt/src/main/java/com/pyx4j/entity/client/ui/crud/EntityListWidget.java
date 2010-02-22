@@ -20,18 +20,18 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityListWidget<E extends IEntity> extends DockPanel {
+public class EntityListWidget<E extends IEntity> extends VerticalPanel {
 
     public EntityListWidget(IEntitySearchCriteriaPanel<E> criteriaPanel, IEntitySearchResultsPanel<E> resultsPanel) {
         super();
 
-        add((Widget) criteriaPanel, DockPanel.NORTH);
-        add((Widget) resultsPanel, DockPanel.CENTER);
+        add((Widget) criteriaPanel);
+        add((Widget) resultsPanel);
 
     }
 

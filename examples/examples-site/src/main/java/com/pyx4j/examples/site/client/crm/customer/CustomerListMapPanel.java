@@ -28,6 +28,9 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.geom.Point;
+import com.google.gwt.maps.client.geom.Size;
+import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -46,18 +49,16 @@ public class CustomerListMapPanel extends SimplePanel {
     private List<Customer> entities;
 
     public CustomerListMapPanel() {
-        final VerticalPanel contentPanel = new VerticalPanel();
-        setWidget(contentPanel);
 
         GoogleAPI.ensureInitialized();
         AjaxLoader.loadApi("maps", "2", new Runnable() {
             public void run() {
-                mapsLoaded(contentPanel);
+                mapsLoaded();
             }
         }, null);
     }
 
-    private void mapsLoaded(VerticalPanel contentPanel) {
+    private void mapsLoaded() {
 
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
@@ -67,8 +68,7 @@ public class CustomerListMapPanel extends SimplePanel {
 
         map.addControl(new LargeMapControl());
 
-        contentPanel.add(map);
-        contentPanel.setCellHorizontalAlignment(map, DockPanel.ALIGN_CENTER);
+        setWidget(map);
 
         mapLoadComplete = true;
 
@@ -94,6 +94,14 @@ public class CustomerListMapPanel extends SimplePanel {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(customer.name().getValue());
 
+        Icon icon = Icon.newInstance("images/house.png");
+        icon.setShadowURL("images/house_shadow.png");
+        icon.setIconSize(Size.newInstance(30, 30));
+        icon.setShadowSize(Size.newInstance(44, 35));
+        icon.setIconAnchor(Point.newInstance(6, 20));
+        icon.setInfoWindowAnchor(Point.newInstance(15, 5));
+        markerOptions.setIcon(icon);
+
         if (customer.latitude().getValue() != null && customer.longitude().getValue() != null) {
 
             final Marker marker = new Marker(LatLng.newInstance(customer.latitude().getValue(), customer.longitude().getValue()), markerOptions);
@@ -103,7 +111,7 @@ public class CustomerListMapPanel extends SimplePanel {
                 public void onClick(MarkerClickEvent event) {
                     map.getInfoWindow().open(
                             marker,
-                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href=''><b>"
+                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href='#crm&orders'><b>"
                                     + customer.name().getValue() + "</b></a><br>"
 
                                     + customer.street().getValue()

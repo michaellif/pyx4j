@@ -47,6 +47,7 @@ public class EntityCrudWidget<E extends IEntity> extends SimplePanel {
         cards.add((Widget) editorWidget, "editor");
 
         setWidget(cards);
+
         cards.selectTab(0);
 
     }
