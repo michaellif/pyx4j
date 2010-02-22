@@ -20,16 +20,51 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.entity.client.ui.crud.IEntitySearchResultsPanel;
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 
 public class CustomerSearchResultsPanel extends HorizontalPanel implements IEntitySearchResultsPanel<Customer> {
 
+    private final CustomerListPanel customerListPanel;
+
+    private final CustomerListMapPanel customerListMapPanel;
+
     public CustomerSearchResultsPanel() {
         super();
-        add(new CustomerListPanel());
-        add(new CustomerListMapPanel());
+        customerListPanel = new CustomerListPanel();
+        add(customerListPanel);
+        customerListMapPanel = new CustomerListMapPanel();
+        add(customerListMapPanel);
+
+        AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
+
+            public void onSuccess(Vector<? extends IEntity> result) {
+                List<Customer> entities = new ArrayList<Customer>();
+                for (IEntity entity : result) {
+                    if (entity instanceof Customer) {
+                        entities.add((Customer) entity);
+                    }
+                }
+                customerListPanel.populateData(entities);
+                customerListMapPanel.populateData(entities);
+            }
+
+            public void onFailure(Throwable caught) {
+            }
+        };
+
+        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Customer.class), callback);
     }
 }

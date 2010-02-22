@@ -49,7 +49,7 @@ public class OrderSearchCriteriaPanel extends SimplePanel implements IEntitySear
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { form.create(form.meta().customer().name()) },
+        //        { form.create(form.meta().customer().name()) },
 
         };
 

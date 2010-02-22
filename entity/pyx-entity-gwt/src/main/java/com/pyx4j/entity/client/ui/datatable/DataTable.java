@@ -60,11 +60,11 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     }
 
     private void renderBody() {
-        List<DataItem> data = model.getData();
+        List<DataItem<E>> data = model.getData();
         List<ColumnDescriptor<E>> columnDescriptors = model.getColumnDescriptors();
 
         int rowIndex = 1;
-        for (DataItem dataItem : data) {
+        for (DataItem<E> dataItem : data) {
             int colIndex = 0;
             if (checkboxColumnShown) {
                 SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
@@ -76,7 +76,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 colIndex = 1;
             }
 
-            for (ColumnDescriptor<?> columnDescriptor : columnDescriptors) {
+            for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
                 Object value = dataItem.getCellValue(columnDescriptor);
                 if (value == null || value.equals("")) {
                     this.setHTML(rowIndex, colIndex, "&nbsp;");

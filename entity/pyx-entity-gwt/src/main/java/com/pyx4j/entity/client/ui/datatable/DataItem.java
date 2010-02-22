@@ -20,21 +20,16 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataItem<E extends IEntity> {
 
-    private final Map<ColumnDescriptor<E>, Object> dataMap = new HashMap<ColumnDescriptor<E>, Object>();
-
     private boolean checked;
 
-    private final DataTableModel<E> model;
+    private final E entity;
 
-    public DataItem(DataTableModel<E> model) {
-        this.model = model;
+    public DataItem(E entity) {
+        this.entity = entity;
     }
 
     public boolean isChecked() {
@@ -45,16 +40,8 @@ public class DataItem<E extends IEntity> {
         this.checked = checked;
     }
 
-    public void setCellValue(String columnName, Object value) {
-        ColumnDescriptor<E> columnDescriptor = model.getColumnDescriptor(columnName);
-        if (columnDescriptor == null) {
-            throw new IllegalArgumentException("No column with name " + columnName + " is found.");
-        }
-        dataMap.put(columnDescriptor, value);
-    }
-
     public Object getCellValue(ColumnDescriptor<E> descriptor) {
-        return dataMap.get(descriptor);
+        return descriptor.convert(entity);
     }
 
 }

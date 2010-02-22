@@ -40,7 +40,7 @@ public class DataTableModel<E extends IEntity> implements TableListener {
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
 
-    private final ArrayList<DataItem> data = new ArrayList<DataItem>();
+    private final ArrayList<DataItem<E>> data = new ArrayList<DataItem<E>>();
 
     private final List<ColumnDescriptor<E>> columnDescriptors;
 
@@ -148,14 +148,14 @@ public class DataTableModel<E extends IEntity> implements TableListener {
         this.secondarySortColumn = sortColumn;
     }
 
-    public ArrayList<DataItem> getData() {
+    public ArrayList<DataItem<E>> getData() {
         return data;
     }
 
-    public void populateData(List<DataItem> dataItems, int pageNumber, int totalRows) {
+    public void populateData(List<DataItem<E>> dataItems, int pageNumber, int totalRows) {
         data.clear();
         if (dataItems != null) {
-            for (DataItem dataItem : dataItems) {
+            for (DataItem<E> dataItem : dataItems) {
                 data.add(dataItem);
             }
         }
