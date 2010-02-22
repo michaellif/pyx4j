@@ -314,7 +314,7 @@
 		    <dependency>
 			    <groupId>com.google.gwt.google-apis</groupId>
 			    <artifactId>gwt-maps</artifactId>
-			    <version>1.0.5-20100219</version>
+			    <version>1.0.4</version>
 			    <exclusions>
 				    <exclusion>
 					    <groupId>com.google.gwt</groupId>
