@@ -47,6 +47,10 @@ public interface Customer extends IEntity {
 
     IPrimitive<Double> longitude();
 
+    IPrimitive<String> panoId();
+
+    IPrimitive<Double> panoYaw();
+
     @Owned
     ISet<Order> orders();
 
