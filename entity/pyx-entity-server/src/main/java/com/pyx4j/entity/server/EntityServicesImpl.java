@@ -23,6 +23,7 @@ package com.pyx4j.entity.server;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityCriteria;
@@ -74,4 +75,20 @@ public class EntityServicesImpl {
             return ent;
         }
     }
+
+    public static class RetrieveByPKImpl implements EntityServices.RetrieveByPK {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public IEntity execute(EntityCriteriaByPK request) {
+            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+            IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
+                    request.getPrimaryKey());
+            if (ent != null) {
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+            }
+            return ent;
+        }
+    }
+
 }

@@ -58,6 +58,15 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T extends IEntity> Class<T> entityClass(String domainName) {
+        try {
+            return (Class<T>) Class.forName(domainName, true, Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Not an Entity");
+        }
+    }
+
     @Override
     public EntityMeta createEntityMeta(Class<? extends IEntity> clazz) {
         return new EntityMetaImpl(clazz);

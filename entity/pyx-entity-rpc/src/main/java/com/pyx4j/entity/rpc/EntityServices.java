@@ -41,6 +41,10 @@ public interface EntityServices {
 
     };
 
+    public interface RetrieveByPK extends Service<EntityCriteriaByPK<?>, IEntity> {
+
+    };
+
     public interface Count extends Service<EntityCriteria<?>, Long> {
 
     };

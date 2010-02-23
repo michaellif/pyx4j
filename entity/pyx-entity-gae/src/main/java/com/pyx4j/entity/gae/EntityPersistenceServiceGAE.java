@@ -53,6 +53,7 @@ import com.google.appengine.api.datastore.Text;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -559,6 +560,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return iEntity;
     }
 
+    private <T extends IEntity> Class<T> entityClass(EntityCriteria<T> criteria) {
+        return ServerEntityFactory.entityClass(criteria.getDomainName());
+    }
+
     public static Query.FilterOperator operator(PropertyCriterion.Restriction restriction) {
         switch (restriction) {
         case LESS_THAN:
@@ -580,27 +585,31 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    public static Object datastoreValue(Serializable value) {
+    @SuppressWarnings("unchecked")
+    public static Object datastoreValue(EntityMeta entityMeta, String propertyName, Serializable value) {
         if (value instanceof Enum<?>) {
             return ((Enum<?>) value).name();
         } else if (value instanceof IEntity) {
             return KeyFactory.createKey(((IEntity) value).getEntityMeta().getPersistenceName(), ((IEntity) value).getPrimaryKey());
+        } else if (value instanceof Long) {
+            if (propertyName.equals(IEntity.PRIMARY_KEY)) {
+                return KeyFactory.createKey(entityMeta.getPersistenceName(), (Long) value);
+            } else {
+                MemberMeta mm = entityMeta.getMemberMeta(propertyName);
+                if (mm.isEntity()) {
+                    return KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) mm.getValueClass()).getPersistenceName(), (Long) value);
+                } else {
+                    return value;
+                }
+            }
         } else {
             return value;
         }
     }
 
-    private void addFilter(Query query, PropertyCriterion propertyCriterion) {
-        query.addFilter(propertyCriterion.getPropertyName(), operator(propertyCriterion.getRestriction()), datastoreValue(propertyCriterion.getValue()));
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends IEntity> Class<T> entityClass(EntityCriteria<T> criteria) {
-        try {
-            return (Class<T>) Class.forName(criteria.getDomainName(), true, Thread.currentThread().getContextClassLoader());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Not an Entity");
-        }
+    private void addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
+        query.addFilter(propertyCriterion.getPropertyName(), operator(propertyCriterion.getRestriction()), datastoreValue(entityMeta, propertyCriterion
+                .getPropertyName(), propertyCriterion.getValue()));
     }
 
     private <T extends IEntity> Query buildQuery(EntityMeta entityMeta, EntityCriteria<T> criteria) {
@@ -608,7 +617,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
-                    addFilter(query, (PropertyCriterion) cr);
+                    addFilter(query, entityMeta, (PropertyCriterion) cr);
                 }
             }
         }
