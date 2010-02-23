@@ -55,12 +55,12 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         r.add(createNamed(Resource.class, "Thomas"));
         r.add(createNamed(Resource.class, "Adam"));
 
-        createCustomer("Michael Lifshits", "93 Crestwood Road, Toronto, ON, Canada", "905-762-3333", 43.678425, -79.288309, "zTjkzWpfief8_5_qRPRXNg", 0.0);
         createCustomer("Jordan  Desai", "280 Willow Ave, Toronto, ON, Canada", "905-762-8993", 43.678425, -79.288309, "zTjkzWpfief8_5_qRPRXNg", 0.0);
         createCustomer("Michael Smith", "336 Walmer Rd, Toronto, ON, Canada", "905-884-8935", 43.6699245, -79.4069179, "c2uz0sLNVRTt7ns8we04SQ", 0.0);
         createCustomer("Elina Belso", "142 Inglewood Dr, Toronto, ON, Canada", "905-789-4328", 43.856316, -79.245758, "Vv_-2MF_pRa2CioSQ8n5GQ", 0.0);
         createCustomer("Melissa Boroda", "68 Hillcroft Dr, Markham, ON, Canada", "905-786-6782", 43.8347269, -79.2804875, "gd3vuyTCTVI_sWme9e3XtQ", 0.0);
         createCustomer("Karen Slater", "32 Roosevelt Dr, Richmond Hill, ON, Canada", "905-436-6873", 43.8416335, -79.4345507, "aMX7PEQiwHGr7s9Drb8izQ", 0.0);
+        createCustomer("Michael Lifshits", "93 Crestwood Road, Toronto, ON, Canada", "905-762-3333", 43.7987419, -79.4303477, "CtvPWRDBcLG4DFyGOL6MVw", 0.0);
         createCustomer("Corben Garnet", "112 Cayuga Ave, Toronto, ON, Canada", "905-785-1222", 43.6785793, -79.4792064, "sFjyj3QuReGVP6mIuTYZyw", 0.0);
         createCustomer("Madison Ronen", "16 Estoril St, Richmond Hill, ON, Canada", "905-785-0099", 43.8559356, -79.4250644, "Qdcvg04dx-4DfW3kGb7R5g", 0.0);
         createCustomer("Hannah Kim", "3438 Africa Crescent, Mississauga, ON, Canada", "905-112-6563", 43.5801851, -79.6409809, "c5EMP1IvQ1-uHrocBtMGqA", 0.0);
