@@ -48,11 +48,11 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         searchCriteriaPanel.getElement().getStyle().setBackgroundColor("#F8F8F8");
         searchCriteriaPanel.getElement().getStyle().setProperty("padding", "10px 40px 10px 10px");
         searchCriteriaPanel.getElement().getStyle().setProperty("marginBottom", "10px");
-        searchCriteriaPanel.setWidth("920px");
+        searchCriteriaPanel.setWidth("925px");
         searchCriteriaPanel.getElement().getStyle().setProperty("border", "solid 1px #F0F0F0");
 
         add(searchCriteriaPanel);
-        setCellWidth(searchCriteriaPanel, "920px");
+        setCellWidth(searchCriteriaPanel, "925px");
         searchResultsPanel = new CustomerSearchResultsPanel();
         add(searchResultsPanel);
     }
