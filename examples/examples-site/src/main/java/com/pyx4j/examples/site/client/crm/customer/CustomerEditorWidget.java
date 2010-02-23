@@ -20,26 +20,60 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.InlineWidget;
 
-public class CustomerEditorWidget extends HorizontalPanel implements InlineWidget {
+public class CustomerEditorWidget extends VerticalPanel implements InlineWidget {
+
+    private final CustomerEditorPanel editorPanel;
+
+    private final CustomerEditorMapPanel map;
 
     public CustomerEditorWidget() {
-        VerticalPanel editorContent = new VerticalPanel();
-        add(editorContent);
+        editorPanel = new CustomerEditorPanel();
+        add(editorPanel);
 
-        CustomerEditorMapPanel maps = new CustomerEditorMapPanel();
-        add(maps);
+        map = new CustomerEditorMapPanel();
+        add(map);
     }
 
     @Override
     public void populate(Map<String, String> args) {
-        // TODO Auto-generated method stub
+
+        final long customerId = Long.parseLong(args.get("entity_id"));
+
+        AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
+
+            public void onSuccess(Vector<? extends IEntity> result) {
+                for (IEntity entity : result) {
+                    if (entity instanceof Customer && entity.getPrimaryKey() == customerId) {
+                        editorPanel.populate((Customer) entity);
+                        map.populate((Customer) entity);
+                    }
+                }
+            }
+
+            public void onFailure(Throwable caught) {
+            }
+        };
+
+        EntityCriteria<Customer> criteria = EntityCriteria.create(Customer.class);
+        //TODO add customerId to criteria
+
+        RPCManager.execute(EntityServices.Query.class, criteria, callback);
 
     }
 
