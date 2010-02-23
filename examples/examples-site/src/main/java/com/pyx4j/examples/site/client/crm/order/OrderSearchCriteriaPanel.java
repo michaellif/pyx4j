@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
 import com.pyx4j.entity.client.ui.crud.IEntitySearchCriteriaPanel;
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.examples.domain.crm.Order;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -64,8 +65,15 @@ public class OrderSearchCriteriaPanel extends SimplePanel implements IEntitySear
     }
 
     @Override
-    public void onView(Order criteria) {
+    public EntityCriteria<Order> getEntityCriteria() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void populateEntityCriteria(EntityCriteria<Order> criteria) {
         // TODO Auto-generated method stub
 
     }
+
 }

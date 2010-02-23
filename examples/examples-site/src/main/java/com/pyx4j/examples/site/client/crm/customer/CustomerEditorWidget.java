@@ -20,13 +20,14 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.Map;
+
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.ui.crud.IEntityEditorPanel;
-import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.site.client.InlineWidget;
 
-public class CustomerEditorWidget extends HorizontalPanel implements IEntityEditorPanel<Customer> {
+public class CustomerEditorWidget extends HorizontalPanel implements InlineWidget {
 
     public CustomerEditorWidget() {
         VerticalPanel editorContent = new VerticalPanel();
@@ -34,6 +35,12 @@ public class CustomerEditorWidget extends HorizontalPanel implements IEntityEdit
 
         CustomerEditorMapPanel maps = new CustomerEditorMapPanel();
         add(maps);
+    }
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
     }
 
 }

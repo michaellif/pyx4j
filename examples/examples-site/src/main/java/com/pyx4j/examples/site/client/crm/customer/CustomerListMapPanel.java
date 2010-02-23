@@ -111,7 +111,7 @@ public class CustomerListMapPanel extends SimplePanel {
                 public void onClick(MarkerClickEvent event) {
                     map.getInfoWindow().open(
                             marker,
-                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href='#crm&orders'><b>"
+                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href='#crm&customer$editor'><b>"
                                     + customer.name().getValue() + "</b></a><br>"
 
                                     + customer.street().getValue()

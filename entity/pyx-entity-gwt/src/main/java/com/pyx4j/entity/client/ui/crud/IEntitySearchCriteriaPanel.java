@@ -20,10 +20,13 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface IEntitySearchCriteriaPanel<E extends IEntity> {
 
-    void onView(E criteria);
+    EntityCriteria<E> getEntityCriteria();
+
+    void populateEntityCriteria(EntityCriteria<E> criteria);
 
 }

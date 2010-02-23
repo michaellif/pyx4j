@@ -36,7 +36,9 @@ public enum Widgets {
 
     crm$dashboardWidget,
 
-    crm$customersWidget,
+    crm$customerListWidget,
+
+    crm$customerEditorWidget,
 
     crm$ordersWidget,
 

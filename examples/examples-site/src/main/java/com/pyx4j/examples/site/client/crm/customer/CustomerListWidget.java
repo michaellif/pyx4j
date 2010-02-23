@@ -20,13 +20,63 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import com.pyx4j.entity.client.ui.crud.EntityListWidget;
-import com.pyx4j.examples.domain.crm.Customer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
-public class CustomerListWidget extends EntityListWidget<Customer> {
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.client.RecoverableAsyncCallback;
+import com.pyx4j.site.client.InlineWidget;
+
+public class CustomerListWidget extends VerticalPanel implements InlineWidget {
+
+    private final CustomerSearchCriteriaPanel searchCriteriaPanel;
+
+    private final CustomerSearchResultsPanel searchResultsPanel;
 
     public CustomerListWidget() {
-        super(new CustomerSearchCriteriaPanel(), new CustomerSearchResultsPanel());
+        searchCriteriaPanel = new CustomerSearchCriteriaPanel(this);
+        add(searchCriteriaPanel);
+        searchResultsPanel = new CustomerSearchResultsPanel();
+        add(searchResultsPanel);
+    }
+
+    @Override
+    public void populate(Map<String, String> args) {
+
+        //Execute default query if EntityCriteria is not set
+        if (searchCriteriaPanel.getEntityCriteria() == null) {
+            view();
+        }
+    }
+
+    public void view() {
+        AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
+
+            public void onSuccess(Vector<? extends IEntity> result) {
+                List<Customer> entities = new ArrayList<Customer>();
+                for (IEntity entity : result) {
+                    if (entity instanceof Customer) {
+                        entities.add((Customer) entity);
+                    }
+                }
+                searchResultsPanel.populateData(entities);
+            }
+
+            public void onFailure(Throwable caught) {
+            }
+        };
+
+        //TODO getSearchCriteria from searchCriteriaPanel (default if null)
+        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Customer.class), callback);
     }
 
 }

@@ -149,8 +149,12 @@ public class PreloadSites extends AbstractSitesDataPreloader {
                         new String[] { Widgets.crm$dashboardWidget.name() }));
 
         site.pages().add(
-                createPage("Customers", PageType.crm$customers, "<div id='" + Widgets.crm$customersWidget + "'></div>", null, null,
-                        new String[] { Widgets.crm$customersWidget.name() }));
+                createPage("Customers", PageType.crm$customer, "<div id='" + Widgets.crm$customerListWidget + "'></div>", null, null,
+                        new String[] { Widgets.crm$customerListWidget.name() }));
+
+        site.pages().add(
+                createPage("Edit Customer", PageType.crm$customer$editor, "<div id='" + Widgets.crm$customerEditorWidget + "'></div>", null, null,
+                        new String[] { Widgets.crm$customerEditorWidget.name() }));
 
         site.pages().add(
                 createPage("Orders", PageType.crm$orders, "</div><div id='" + Widgets.crm$ordersWidget + "'></div>", null, null,

@@ -20,12 +20,15 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
 import com.pyx4j.entity.client.ui.crud.IEntitySearchCriteriaPanel;
+import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -37,7 +40,10 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
 
     private final EntitySearchCriteriaForm<Customer> form;
 
-    public CustomerSearchCriteriaPanel() {
+    private final CustomerListWidget customerListWidget;
+
+    public CustomerSearchCriteriaPanel(CustomerListWidget listWidget) {
+        this.customerListWidget = listWidget;
 
         form = EntitySearchCriteriaForm.create(Customer.class);
 
@@ -94,13 +100,28 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
         form.populate(null);
 
         Button viewButton = new Button("View");
+        viewButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                customerListWidget.view();
+
+            }
+        });
         viewButton.getElement().getStyle().setProperty("margin", "5px 0px 5px 150px");
         add(viewButton);
     }
 
     @Override
-    public void onView(Customer criteria) {
+    public EntityCriteria<Customer> getEntityCriteria() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void populateEntityCriteria(EntityCriteria<Customer> criteria) {
         // TODO Auto-generated method stub
 
     }
+
 }
