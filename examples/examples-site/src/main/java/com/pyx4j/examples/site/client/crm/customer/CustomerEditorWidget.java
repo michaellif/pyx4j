@@ -21,21 +21,23 @@
 package com.pyx4j.examples.site.client.crm.customer;
 
 import java.util.Map;
-import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
+import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.InlineWidget;
 
 public class CustomerEditorWidget extends VerticalPanel implements InlineWidget {
+
+    private static Logger log = LoggerFactory.getLogger(CustomerEditorWidget.class);
 
     private final CustomerEditorPanel editorPanel;
 
@@ -60,6 +62,8 @@ public class CustomerEditorWidget extends VerticalPanel implements InlineWidget 
                 if (result != null) {
                     editorPanel.populateForm((Customer) result);
                     map.populate((Customer) result);
+                } else {
+                    log.warn("Customer not found");
                 }
             }
 
@@ -67,9 +71,7 @@ public class CustomerEditorWidget extends VerticalPanel implements InlineWidget 
             }
         };
 
-        EntityCriteria<Customer> criteria = EntityCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, customerId));
-        RPCManager.execute(EntityServices.Retrieve.class, criteria, callback);
+        RPCManager.execute(EntityServices.RetrieveByPK.class, EntityCriteriaByPK.create(Customer.class, customerId), callback);
 
     }
 

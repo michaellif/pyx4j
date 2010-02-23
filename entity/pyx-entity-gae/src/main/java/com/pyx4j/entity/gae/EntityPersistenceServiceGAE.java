@@ -608,8 +608,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
-        query.addFilter(propertyCriterion.getPropertyName(), operator(propertyCriterion.getRestriction()), datastoreValue(entityMeta, propertyCriterion
-                .getPropertyName(), propertyCriterion.getValue()));
+        String propertyName = propertyCriterion.getPropertyName();
+        Object value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
+        if (propertyName.equals(IEntity.PRIMARY_KEY)) {
+            propertyName = Entity.KEY_RESERVED_PROPERTY;
+        }
+        query.addFilter(propertyName, operator(propertyCriterion.getRestriction()), value);
     }
 
     private <T extends IEntity> Query buildQuery(EntityMeta entityMeta, EntityCriteria<T> criteria) {

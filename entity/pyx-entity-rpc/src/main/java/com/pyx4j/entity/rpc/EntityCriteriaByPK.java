@@ -25,7 +25,7 @@ import java.io.Serializable;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
- * Special case criteria for RetrieveByPK service.
+ * Special case criteria for EntityServices.RetrieveByPK service.
  */
 @SuppressWarnings("serial")
 public class EntityCriteriaByPK<E extends IEntity> implements Serializable {
@@ -44,6 +44,12 @@ public class EntityCriteriaByPK<E extends IEntity> implements Serializable {
 
     public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass) {
         return new EntityCriteriaByPK<T>(entityClass);
+    }
+
+    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, long primaryKey) {
+        EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>(entityClass);
+        c.setPrimaryKey(primaryKey);
+        return c;
     }
 
     @SuppressWarnings("unchecked")

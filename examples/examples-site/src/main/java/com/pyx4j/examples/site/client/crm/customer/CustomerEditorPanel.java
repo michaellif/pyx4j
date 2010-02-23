@@ -22,7 +22,6 @@ package com.pyx4j.examples.site.client.crm.customer;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
 import com.pyx4j.entity.client.ui.crud.IEntityEditorPanel;
 import com.pyx4j.examples.domain.crm.Customer;
@@ -42,7 +41,12 @@ public class CustomerEditorPanel extends VerticalPanel implements IEntityEditorP
 
         { form.create(form.meta().name()) },
 
-        { form.create(form.meta().orders().$().status()) },
+        // TODO Should probably use textarea 
+                //{ form.create(form.meta().phone()) },
+
+                { form.create(form.meta().street()) },
+
+                { form.create(form.meta().zip()) },
 
         };
 

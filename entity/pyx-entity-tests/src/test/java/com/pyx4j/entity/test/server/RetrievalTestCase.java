@@ -28,6 +28,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
@@ -39,6 +40,20 @@ import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class RetrievalTestCase extends DatastoreTestBase {
+
+    public void testRetrieveByPk() {
+        Employee emp = EntityFactory.create(Employee.class);
+        String empName = "Bob " + uniqueString();
+        emp.firstName().setValue(empName);
+
+        srv.persist(emp);
+
+        EntityCriteria<Employee> criteria1 = EntityCriteria.create(Employee.class);
+        criteria1.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, emp.getPrimaryKey()));
+        Employee emp1 = srv.retrieve(criteria1);
+        Assert.assertNotNull("retrieve", emp1);
+        Assert.assertEquals("Value", empName, emp1.firstName().getValue());
+    }
 
     public void testOwnedSet() {
         Employee emp = EntityFactory.create(Employee.class);
