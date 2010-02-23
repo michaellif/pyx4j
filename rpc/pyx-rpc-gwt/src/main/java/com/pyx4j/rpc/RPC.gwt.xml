@@ -15,5 +15,6 @@
 	<extend-configuration-property name="rpc.blacklist" value="com.google.gwt.widgetideas.*" />
 	<extend-configuration-property name="rpc.blacklist" value="com.google.gwt.resources.*" />
 	<extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.SerializableException" />
+    <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.ajaxloader.*" />
     <extend-configuration-property name="rpc.blacklist" value="java.util.Random" />
 </module>
