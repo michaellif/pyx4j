@@ -70,7 +70,7 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
 
         map.addControl(new LargeMapControl());
 
-        MarkerOptions markerOptions = MarkerOptions.newInstance();
+        markerOptions = MarkerOptions.newInstance();
 
         Icon icon = Icon.newInstance("images/house.png");
         icon.setShadowURL("images/house_shadow.png");
