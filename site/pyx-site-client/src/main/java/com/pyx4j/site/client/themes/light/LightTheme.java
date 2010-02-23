@@ -68,15 +68,15 @@ public class LightTheme extends SiteTheme {
     protected void initMainPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_MainPanel.name());
         style.addProperty("background", "transparent url(images/container-main.gif) repeat-y");
-        style.addProperty("padding-left", "20px");
-        style.addProperty("padding-right", "20px");
+        style.addProperty("padding-left", "10px");
+        style.addProperty("padding-right", "10px");
         addStyle(style);
     }
 
     @Override
     protected void initPageWidgetStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name());
-        style.addProperty("padding", "20px");
+        style.addProperty("padding", "10px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " h1, h2, h3, h4 ,h5");
