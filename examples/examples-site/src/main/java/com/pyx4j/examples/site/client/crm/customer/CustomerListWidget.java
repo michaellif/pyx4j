@@ -52,9 +52,10 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         searchCriteriaPanel.getElement().getStyle().setProperty("border", "solid 1px #F0F0F0");
 
         add(searchCriteriaPanel);
-        setCellWidth(searchCriteriaPanel, "925px");
+        setCellWidth(searchCriteriaPanel, "100%");
         searchResultsPanel = new CustomerSearchResultsPanel();
         add(searchResultsPanel);
+        setCellWidth(searchResultsPanel, "100%");
     }
 
     @Override
