@@ -20,8 +20,6 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -31,6 +29,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -55,14 +54,12 @@ public class CustomerEditorWidget extends VerticalPanel implements InlineWidget 
 
         final long customerId = Long.parseLong(args.get("entity_id"));
 
-        AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
+        AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
 
-            public void onSuccess(Vector<? extends IEntity> result) {
-                for (IEntity entity : result) {
-                    if (entity instanceof Customer && entity.getPrimaryKey() == customerId) {
-                        editorPanel.populate((Customer) entity);
-                        map.populate((Customer) entity);
-                    }
+            public void onSuccess(IEntity result) {
+                if (result != null) {
+                    editorPanel.populateForm((Customer) result);
+                    map.populate((Customer) result);
                 }
             }
 
@@ -71,9 +68,8 @@ public class CustomerEditorWidget extends VerticalPanel implements InlineWidget 
         };
 
         EntityCriteria<Customer> criteria = EntityCriteria.create(Customer.class);
-        //TODO add customerId to criteria
-
-        RPCManager.execute(EntityServices.Query.class, criteria, callback);
+        criteria.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, customerId));
+        RPCManager.execute(EntityServices.Retrieve.class, criteria, callback);
 
     }
 

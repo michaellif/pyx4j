@@ -20,9 +20,18 @@
  */
 package com.pyx4j.examples.site.client.crm.resource;
 
-import com.pyx4j.entity.client.ui.crud.EntityEditorWidget;
-import com.pyx4j.examples.domain.crm.Resource;
+import java.util.Map;
 
-public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.pyx4j.site.client.InlineWidget;
+
+public class ResourceEditorWidget extends VerticalPanel implements InlineWidget {
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

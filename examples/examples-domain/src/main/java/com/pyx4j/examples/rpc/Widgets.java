@@ -40,9 +40,13 @@ public enum Widgets {
 
     crm$customerEditorWidget,
 
-    crm$ordersWidget,
+    crm$orderListWidget,
 
-    crm$resourcesWidget,
+    crm$orderEditorWidget,
+
+    crm$resourceListWidget,
+
+    crm$resourceEditorWidget,
 
     //----headless-----//
 

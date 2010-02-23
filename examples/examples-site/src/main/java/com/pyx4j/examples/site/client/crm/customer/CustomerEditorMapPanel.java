@@ -21,12 +21,8 @@
 package com.pyx4j.examples.site.client.crm.customer;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
-import com.google.gwt.maps.client.event.MarkerClickHandler;
-import com.google.gwt.maps.client.event.MarkerClickHandler.MarkerClickEvent;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;

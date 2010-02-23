@@ -24,4 +24,8 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IEntityEditorPanel<E extends IEntity> {
 
+    void populateForm(E entity);
+
+    E getEntity();
+
 }

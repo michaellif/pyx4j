@@ -24,12 +24,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
+import com.pyx4j.entity.client.ui.crud.IEntityEditorPanel;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public class CustomerEditorPanel extends VerticalPanel {
+public class CustomerEditorPanel extends VerticalPanel implements IEntityEditorPanel<Customer> {
 
     private final EntityEditorForm<Customer> form;
 
@@ -49,7 +50,13 @@ public class CustomerEditorPanel extends VerticalPanel {
         add(formWidget);
     }
 
-    public void populate(Customer customer) {
+    @Override
+    public void populateForm(Customer customer) {
         form.populate(customer);
+    }
+
+    @Override
+    public Customer getEntity() {
+        return form.getValue();
     }
 }

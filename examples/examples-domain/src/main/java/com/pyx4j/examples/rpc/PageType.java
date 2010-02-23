@@ -43,13 +43,17 @@ public enum PageType {
 
     crm$dashboard(ResourceUriUtil.createResourceUri(Sites.crm.name(), "dashboard")),
 
-    crm$customer(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customer")),
+    crm$customers(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customers")),
 
-    crm$customer$editor(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customer", "editor")),
+    crm$customers$editor(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customer", "editor")),
 
     crm$orders(ResourceUriUtil.createResourceUri(Sites.crm.name(), "orders")),
 
+    crm$orders$editor(ResourceUriUtil.createResourceUri(Sites.crm.name(), "orders", "editor")),
+
     crm$resources(ResourceUriUtil.createResourceUri(Sites.crm.name(), "resources")),
+
+    crm$resources$editor(ResourceUriUtil.createResourceUri(Sites.crm.name(), "resources", "editor")),
 
     crm$home$contactUs(ResourceUriUtil.createResourceUri(Sites.crm.name(), "home", "contactUs")),
 

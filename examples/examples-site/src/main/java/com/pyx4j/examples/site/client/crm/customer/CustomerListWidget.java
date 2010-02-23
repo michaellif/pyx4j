@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 

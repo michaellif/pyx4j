@@ -20,14 +20,18 @@
  */
 package com.pyx4j.examples.site.client.crm.order;
 
-import com.pyx4j.entity.client.ui.crud.EntityListWidget;
-import com.pyx4j.examples.domain.crm.Order;
-import com.pyx4j.examples.site.client.crm.SearchResultsPanel;
+import java.util.Map;
 
-public class OrderListWidget extends EntityListWidget<Order> {
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-    public OrderListWidget() {
-        super(new OrderSearchCriteriaPanel(), new SearchResultsPanel());
+import com.pyx4j.site.client.InlineWidget;
+
+public class OrderListWidget extends VerticalPanel implements InlineWidget {
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -144,25 +144,19 @@ public class PreloadSites extends AbstractSitesDataPreloader {
         String siteId = Sites.crm.name();
         Site site = createSite(siteId, "PYXExample.com");
 
-        site.pages().add(
-                createPage("Dashboard", PageType.crm$dashboard, "<div id='" + Widgets.crm$dashboardWidget + "'></div>", null, null,
-                        new String[] { Widgets.crm$dashboardWidget.name() }));
+        site.pages().add(createSingleWidgetPage("Dashboard", PageType.crm$dashboard, Widgets.crm$dashboardWidget.name()));
 
-        site.pages().add(
-                createPage("Customers", PageType.crm$customer, "<div id='" + Widgets.crm$customerListWidget + "'></div>", null, null,
-                        new String[] { Widgets.crm$customerListWidget.name() }));
+        site.pages().add(createSingleWidgetPage("Customers", PageType.crm$customers, Widgets.crm$customerListWidget.name()));
 
-        site.pages().add(
-                createPage("Edit Customer", PageType.crm$customer$editor, "<div id='" + Widgets.crm$customerEditorWidget + "'></div>", null, null,
-                        new String[] { Widgets.crm$customerEditorWidget.name() }));
+        site.pages().add(createSingleWidgetPage("Edit Customer", PageType.crm$customers$editor, Widgets.crm$customerEditorWidget.name()));
 
-        site.pages().add(
-                createPage("Orders", PageType.crm$orders, "</div><div id='" + Widgets.crm$ordersWidget + "'></div>", null, null,
-                        new String[] { Widgets.crm$ordersWidget.name() }));
+        site.pages().add(createSingleWidgetPage("Orders", PageType.crm$orders, Widgets.crm$orderListWidget.name()));
 
-        site.pages().add(
-                createPage("Resources", PageType.crm$resources, "</div><div id='" + Widgets.crm$resourcesWidget + "'></div>", null, null,
-                        new String[] { Widgets.crm$resourcesWidget.name() }));
+        site.pages().add(createSingleWidgetPage("Edit Order", PageType.crm$orders$editor, Widgets.crm$orderEditorWidget.name()));
+
+        site.pages().add(createSingleWidgetPage("Resources", PageType.crm$resources, Widgets.crm$resourceListWidget.name()));
+
+        site.pages().add(createSingleWidgetPage("Edit Resource", PageType.crm$resources, Widgets.crm$resourceEditorWidget.name()));
 
         site.pages().add(createPage("Contact Us", PageType.crm$home$contactUs, null));
 
@@ -206,6 +200,10 @@ public class PreloadSites extends AbstractSitesDataPreloader {
 
     private Page createPage(String caption, PageType pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
         return createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
+    }
+
+    private Page createSingleWidgetPage(String caption, PageType pageType, String inlineWidget) {
+        return createPage(caption, pageType.getUri(), "</div><div id='" + inlineWidget + "'></div>", null, null, new String[] { inlineWidget });
     }
 
 }

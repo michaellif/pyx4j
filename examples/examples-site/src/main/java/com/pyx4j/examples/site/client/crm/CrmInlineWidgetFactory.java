@@ -24,8 +24,10 @@ import com.pyx4j.examples.rpc.Widgets;
 import com.pyx4j.examples.site.client.crm.customer.CustomerEditorWidget;
 import com.pyx4j.examples.site.client.crm.customer.CustomerListWidget;
 import com.pyx4j.examples.site.client.crm.dashboard.DashboardWidget;
-import com.pyx4j.examples.site.client.crm.order.OrdersWidget;
-import com.pyx4j.examples.site.client.crm.resource.ResourcesWidget;
+import com.pyx4j.examples.site.client.crm.order.OrderEditorWidget;
+import com.pyx4j.examples.site.client.crm.order.OrderListWidget;
+import com.pyx4j.examples.site.client.crm.resource.ResourceEditorWidget;
+import com.pyx4j.examples.site.client.crm.resource.ResourceListWidget;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 
@@ -39,10 +41,14 @@ public class CrmInlineWidgetFactory extends InlineWidgetFactory {
             return new CustomerListWidget();
         } else if (Widgets.crm$customerEditorWidget.name().equals(widgetId)) {
             return new CustomerEditorWidget();
-        } else if (Widgets.crm$ordersWidget.name().equals(widgetId)) {
-            return new OrdersWidget();
-        } else if (Widgets.crm$resourcesWidget.name().equals(widgetId)) {
-            return new ResourcesWidget();
+        } else if (Widgets.crm$orderListWidget.name().equals(widgetId)) {
+            return new OrderListWidget();
+        } else if (Widgets.crm$orderEditorWidget.name().equals(widgetId)) {
+            return new OrderEditorWidget();
+        } else if (Widgets.crm$resourceListWidget.name().equals(widgetId)) {
+            return new ResourceListWidget();
+        } else if (Widgets.crm$resourceEditorWidget.name().equals(widgetId)) {
+            return new ResourceEditorWidget();
         } else {
             return null;
         }

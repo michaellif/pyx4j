@@ -20,14 +20,18 @@
  */
 package com.pyx4j.examples.site.client.crm.resource;
 
-import com.pyx4j.entity.client.ui.crud.EntityListWidget;
-import com.pyx4j.examples.domain.crm.Resource;
-import com.pyx4j.examples.site.client.crm.SearchResultsPanel;
+import java.util.Map;
 
-public class ResourceListWidget extends EntityListWidget<Resource> {
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-    public ResourceListWidget() {
-        super(new ResourceSearchCriteriaPanel(), new SearchResultsPanel());
+import com.pyx4j.site.client.InlineWidget;
+
+public class ResourceListWidget extends VerticalPanel implements InlineWidget {
+
+    @Override
+    public void populate(Map<String, String> args) {
+        // TODO Auto-generated method stub
+
     }
 
 }
