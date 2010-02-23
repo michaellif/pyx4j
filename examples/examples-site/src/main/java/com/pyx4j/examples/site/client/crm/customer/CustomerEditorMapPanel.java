@@ -66,7 +66,7 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
 
         map = new MapWidget(pos, 2);
         map.setSize("400px", "400px");
-        map.setCenter(pos, 10);
+        map.setCenter(pos, 15);
 
         map.addControl(new LargeMapControl());
 
@@ -113,9 +113,13 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
             }
 
             streetViewHolder.clear();
-            HTML streetView = new HTML(
-                    "<object type='application/x-shockwave-flash' name='panoflash1' id='panoflash1' align='middle' style='position: relative; visibility: visible; ' data='http://maps.gstatic.com/intl/en_ALL/mapfiles/cb/googlepano.104.swf' width='400' height='400'><param name='allowscriptaccess' value='always'><param name='scale' value='noScale'><param name='salign' value='lt'><param name='allowfullscreen' value='true'><param name='swliveconnect' value='false'><param name='wmode' value=''><param name='quality' value='high'><param name='bgcolor' value='#000000'><param name='flashvars' value='panoId=l3-YA_-GMcjy2yTsYx-GOg&amp;directionMap=N:N,W:W,S:S,E:E,NW:NW,NE:NE,SW:SW,SE:SE&amp;yaw=150.67939649880157&amp;zoom=0&amp;pitch=-10&amp;viewerId=1&amp;context=api&amp;useSsl=false&amp;csiCallback=&amp;userPhotoRepositories=all&amp;rtfArgs=hl:en,gl:,fs:1,sv:1,ph:0'></object>");
-            streetViewHolder.setWidget(streetView);
+            if (customer.panoId().getValue() != null) {
+                HTML streetView = new HTML(
+                        "<object type='application/x-shockwave-flash' name='panoflash1' id='panoflash1' align='middle' style='position: relative; visibility: visible; ' data='http://maps.gstatic.com/intl/en_ALL/mapfiles/cb/googlepano.104.swf' width='400' height='400'><param name='allowscriptaccess' value='always'><param name='scale' value='noScale'><param name='salign' value='lt'><param name='allowfullscreen' value='true'><param name='swliveconnect' value='false'><param name='wmode' value=''><param name='quality' value='high'><param name='bgcolor' value='#000000'><param name='flashvars' value='panoId="
+                                + customer.panoId().getValue()
+                                + "&amp;directionMap=N:N,W:W,S:S,E:E,NW:NW,NE:NE,SW:SW,SE:SE&amp;yaw=150.67939649880157&amp;zoom=0&amp;pitch=-10&amp;viewerId=1&amp;context=api&amp;useSsl=false&amp;csiCallback=&amp;userPhotoRepositories=all&amp;rtfArgs=hl:en,gl:,fs:1,sv:1,ph:0'></object>");
+                streetViewHolder.setWidget(streetView);
+            }
         }
 
     }

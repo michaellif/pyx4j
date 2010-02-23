@@ -100,7 +100,7 @@ public class NavigationBar extends ComplexPanel {
 
     public void setSelected(ResourceUri uri) {
         for (NavigationTab tab : tabs) {
-            tab.setSelected(ResourceUriUtil.isContained(uri, tab.uri));
+            tab.setSelected(ResourceUriUtil.isContained(tab.uri, uri));
         }
     }
 

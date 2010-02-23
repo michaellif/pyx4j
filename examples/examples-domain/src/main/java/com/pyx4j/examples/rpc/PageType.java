@@ -45,7 +45,7 @@ public enum PageType {
 
     crm$customers(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customers")),
 
-    crm$customers$editor(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customer", "editor")),
+    crm$customers$editor(ResourceUriUtil.createResourceUri(Sites.crm.name(), "customers", "editor")),
 
     crm$orders(ResourceUriUtil.createResourceUri(Sites.crm.name(), "orders")),
 

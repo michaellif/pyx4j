@@ -55,6 +55,7 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         r.add(createNamed(Resource.class, "Thomas"));
         r.add(createNamed(Resource.class, "Adam"));
 
+        createCustomer("Michael Lifshits", "93 Crestwood Road, Toronto, ON, Canada", "905-762-3333", 43.678425, -79.288309, "zTjkzWpfief8_5_qRPRXNg", 0.0);
         createCustomer("Jordan  Desai", "280 Willow Ave, Toronto, ON, Canada", "905-762-8993", 43.678425, -79.288309, "zTjkzWpfief8_5_qRPRXNg", 0.0);
         createCustomer("Michael Smith", "336 Walmer Rd, Toronto, ON, Canada", "905-884-8935", 43.6699245, -79.4069179, "c2uz0sLNVRTt7ns8we04SQ", 0.0);
         createCustomer("Elina Belso", "142 Inglewood Dr, Toronto, ON, Canada", "905-789-4328", 43.856316, -79.245758, "Vv_-2MF_pRa2CioSQ8n5GQ", 0.0);

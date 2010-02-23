@@ -54,7 +54,7 @@ public class ResourceUriUtil {
         String childValue = child.uri().getValue();
         String parentValue = parent.uri().getValue();
 
-        return parent != null && child != null && (childValue.equals(parentValue) || childValue.startsWith(parentValue + "PAGE_SEPARATOR"));
+        return childValue.equals(parentValue) || childValue.startsWith(parentValue + PAGE_SEPARATOR);
     }
 
     public static boolean areEqual(ResourceUri uri1, ResourceUri uri2) {

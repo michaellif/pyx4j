@@ -36,6 +36,7 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.rpc.PageType;
 import com.pyx4j.examples.site.client.GoogleAPI;
 
 public class CustomerListMapPanel extends SimplePanel {
@@ -109,8 +110,9 @@ public class CustomerListMapPanel extends SimplePanel {
                 public void onClick(MarkerClickEvent event) {
                     map.getInfoWindow().open(
                             marker,
-                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href='#crm&customer$editor?entity_id="
-                                    + customer.getPrimaryKey() + "'><b>" + customer.name().getValue() + "</b></a><br>"
+                            new InfoWindowContent("<div style='font-size:12pt;background-color:white; padding:2px;'><a href='#"
+                                    + PageType.crm$customers$editor.getUri().uri().getValue() + "?entity_id=" + customer.getPrimaryKey() + "'><b>"
+                                    + customer.name().getValue() + "</b></a><br>"
 
                                     + customer.street().getValue()
 

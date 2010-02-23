@@ -156,7 +156,7 @@ public class PreloadSites extends AbstractSitesDataPreloader {
 
         site.pages().add(createSingleWidgetPage("Resources", PageType.crm$resources, Widgets.crm$resourceListWidget.name()));
 
-        site.pages().add(createSingleWidgetPage("Edit Resource", PageType.crm$resources, Widgets.crm$resourceEditorWidget.name()));
+        site.pages().add(createSingleWidgetPage("Edit Resource", PageType.crm$resources$editor, Widgets.crm$resourceEditorWidget.name()));
 
         site.pages().add(createPage("Contact Us", PageType.crm$home$contactUs, null));
 
