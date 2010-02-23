@@ -25,9 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,6 +39,8 @@ import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.InlineWidget;
 
 public class CustomerListWidget extends VerticalPanel implements InlineWidget {
+
+    private static Logger log = LoggerFactory.getLogger(CustomerListWidget.class);
 
     private final CustomerSearchCriteriaPanel searchCriteriaPanel;
 
@@ -67,16 +71,21 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
     }
 
     public void view() {
+        final long start = System.currentTimeMillis();
+
         AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
 
             public void onSuccess(Vector<? extends IEntity> result) {
+                log.debug("Loaded Customers in {} msec ", System.currentTimeMillis() - start);
                 List<Customer> entities = new ArrayList<Customer>();
                 for (IEntity entity : result) {
                     if (entity instanceof Customer) {
                         entities.add((Customer) entity);
                     }
                 }
+                long startPopulate = System.currentTimeMillis();
                 searchResultsPanel.populateData(entities);
+                log.debug("Populated Customers in {} msec ", System.currentTimeMillis() - startPopulate);
             }
 
             public void onFailure(Throwable caught) {
