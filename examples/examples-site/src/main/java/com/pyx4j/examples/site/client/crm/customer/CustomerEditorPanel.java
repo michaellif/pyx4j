@@ -69,7 +69,7 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
             }
         });
-        viewButton.getElement().getStyle().setProperty("margin", "5px 0px 5px 150px");
+        viewButton.getElement().getStyle().setProperty("margin", "8px 0px 3px 0px");
         contentPanel.add(viewButton);
 
     }

@@ -339,7 +339,7 @@ public class LightTheme extends SiteTheme {
         style.addProperty("cursor", "hand");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even");
-        style.addProperty("background-color", "#F8F8F8");
+        style.addProperty("background-color", "#F4F4F4");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd");
         style.addProperty("background-color", "white");

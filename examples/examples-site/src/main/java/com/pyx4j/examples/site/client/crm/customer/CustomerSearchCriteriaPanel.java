@@ -111,7 +111,7 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             }
         });
-        viewButton.getElement().getStyle().setProperty("margin", "5px 0px 5px 150px");
+        viewButton.getElement().getStyle().setProperty("margin", "3px 0px 3px 8px");
         contentPanel.add(viewButton);
     }
 
