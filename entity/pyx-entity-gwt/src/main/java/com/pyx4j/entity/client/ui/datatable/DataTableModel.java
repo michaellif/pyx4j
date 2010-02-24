@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.SourcesTableEvents;
 import com.google.gwt.user.client.ui.TableListener;
 
@@ -33,7 +35,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 /*
  * RowData defines one row in a Sortable Table
  */
-public class DataTableModel<E extends IEntity> implements TableListener {
+public class DataTableModel<E extends IEntity> {
 
     public static final int PAGE_SIZE = 10;
 
@@ -193,21 +195,6 @@ public class DataTableModel<E extends IEntity> implements TableListener {
 
     public void setTotalRows(int totalRows) {
         this.totalRows = totalRows;
-    }
-
-    /*
-     * onCellClicked
-     * 
-     * Implementation of Table Listener Interface, this method decribes what to do when a
-     * cell is clicked
-     * 
-     * @param sender (SourcesTableEvents)
-     * 
-     * @param rowIndex (int)
-     * 
-     * @param colIndex (int)
-     */
-    public void onCellClicked(SourcesTableEvents sender, int row, int col) {
     }
 
     public void setRowChecked(boolean checked, int rowIndex) {

@@ -23,7 +23,11 @@ package com.pyx4j.examples.site.client.crm.customer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
@@ -32,6 +36,8 @@ import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.rpc.PageType;
+import com.pyx4j.examples.site.client.ExamplesSiteDispatcher;
 
 public class CustomerListPanel extends HorizontalPanel {
 
@@ -52,7 +58,18 @@ public class CustomerListPanel extends HorizontalPanel {
 
         dataTableModel = new DataTableModel<Customer>(metaCastomer.getEntityMeta(), columnDescriptors);
 
-        DataTable<Customer> dataTable = new DataTable<Customer>(dataTableModel, true);
+        final DataTable<Customer> dataTable = new DataTable<Customer>(dataTableModel, false);
+
+        dataTable.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                Cell cell = dataTable.getCellForEvent(event);
+                Customer customer = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
+                String uri = PageType.crm$customers$editor.getUri().uri().getValue() + "?entity_id=" + customer.getPrimaryKey();
+                History.newItem(uri);
+            }
+        });
 
         add(dataTable);
 

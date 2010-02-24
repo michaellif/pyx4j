@@ -23,17 +23,25 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.UIObject;
 
+import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
+
+    private static final Logger log = LoggerFactory.getLogger(DataTable.class);
 
     private final DataTableModel<E> model;
 
@@ -53,8 +61,22 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         super();
         this.checkboxColumnShown = checkboxColumnShown;
         this.model = model;
-        this.addTableListener(model);
+        this.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                Cell cell = getCellForEvent(event);
+                if (selectedRow >= 0) {
+                    Element previous = getRowFormatter().getElement(selectedRow);
+                    UIObject.setStyleName(previous, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-selected", false);
+                }
+                selectedRow = cell.getRowIndex();
+                Element current = getRowFormatter().getElement(selectedRow);
+                UIObject.setStyleName(current, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-selected", true);
+            }
+        });
         model.addDataTableModelListener(this);
+        setStyleName(EntityCSSClass.pyx4j_Entity_DataTable.name());
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
         renderTable();
     }
@@ -71,22 +93,30 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 selectionCheckBoxes.add(selectionCheckBox);
 
                 selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
-                this.setWidget(rowIndex, 0, selectionCheckBox);
-                this.getCellFormatter().setWidth(rowIndex, 0, CHECK_MARK_COLUMN_SIZE);
+                setWidget(rowIndex, 0, selectionCheckBox);
+                getCellFormatter().setWidth(rowIndex, 0, CHECK_MARK_COLUMN_SIZE);
                 colIndex = 1;
             }
 
             for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
                 Object value = dataItem.getCellValue(columnDescriptor);
                 if (value == null || value.equals("")) {
-                    this.setHTML(rowIndex, colIndex, "&nbsp;");
+                    setHTML(rowIndex, colIndex, "&nbsp;");
                 } else {
-                    this.setHTML(rowIndex, colIndex, value.toString());
+                    setHTML(rowIndex, colIndex, value.toString());
                 }
-                this.getCellFormatter().setWidth(rowIndex, colIndex, columnDescriptor.getWidth());
-                this.getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
+                getCellFormatter().setWidth(rowIndex, colIndex, columnDescriptor.getWidth());
+                getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
                 colIndex++;
             }
+            Element rowElement = getRowFormatter().getElement(rowIndex);
+            UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name());
+            if (rowIndex % 2 == 0) {
+                UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even", true);
+            } else {
+                UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd", true);
+            }
+
             rowIndex++;
         }
         this.ensureDebugId(model.getDebugId());
@@ -130,6 +160,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             cellFormatter.setAlignment(0, colIndex, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
             colIndex++;
         }
+        Element rowElement = getRowFormatter().getElement(0);
+        UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
 
     }
 
@@ -166,27 +198,27 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
         public SelectionCheckBox(final int rowIndex, boolean checked) {
             super();
-            setChecked(checked);
-            addClickListener(new ClickListener() {
-
-                public void onClick(Widget sender) {
+            setValue(checked);
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
                     if (rowIndex == HEADER_RAW_INDEX) {
                         for (DataItem dataItem : model.getData()) {
-                            dataItem.setChecked(isChecked());
+                            dataItem.setChecked(getValue());
                             for (SelectionCheckBox selectionCheckBox : selectionCheckBoxes) {
-                                selectionCheckBox.setChecked(isChecked());
+                                selectionCheckBox.setValue(getValue());
                             }
                         }
                     } else {
                         boolean allChecked = true;
-                        model.setRowChecked(isChecked(), rowIndex - 1);
+                        model.setRowChecked(getValue(), rowIndex - 1);
                         for (SelectionCheckBox selectionCheckBox : selectionCheckBoxes) {
-                            if (!selectionCheckBox.isChecked()) {
+                            if (!selectionCheckBox.getValue()) {
                                 allChecked = false;
                                 break;
                             }
                         }
-                        selectionCheckBoxAll.setChecked(allChecked);
+                        selectionCheckBoxAll.setValue(allChecked);
                     }
                 }
             });

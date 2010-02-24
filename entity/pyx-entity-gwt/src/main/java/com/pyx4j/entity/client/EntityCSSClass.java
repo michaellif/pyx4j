@@ -27,4 +27,11 @@ public enum EntityCSSClass {
 
     pyx4j_Entity_EntitySearchCriteria,
 
+    //DataTable
+    pyx4j_Entity_DataTable,
+
+    pyx4j_Entity_DataTableRow,
+
+    pyx4j_Entity_DataTableHeader,
+
 }

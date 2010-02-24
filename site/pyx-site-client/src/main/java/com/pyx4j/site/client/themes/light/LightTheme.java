@@ -329,4 +329,24 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
     }
 
+    @Override
+    protected void initEntityDataTableStyles() {
+        Style style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTable.name());
+        style.addProperty("margin", "2px");
+        addStyle(style);
+        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name());
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
+        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even");
+        style.addProperty("background-color", "#F8F8F8");
+        addStyle(style);
+        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
+        style.addProperty("background-color", "#F0F0F0");
+        addStyle(style);
+    }
+
 }

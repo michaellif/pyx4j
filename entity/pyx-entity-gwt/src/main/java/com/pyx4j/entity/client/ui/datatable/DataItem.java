@@ -32,6 +32,10 @@ public class DataItem<E extends IEntity> {
         this.entity = entity;
     }
 
+    public E getEntity() {
+        return entity;
+    }
+
     public boolean isChecked() {
         return checked;
     }
