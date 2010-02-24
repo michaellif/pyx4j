@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -33,6 +34,7 @@ import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -55,7 +57,7 @@ public class EntityForm<E extends IEntity> {
 
     private E editableEntity;
 
-    private final HashMap<CEditableComponent<?>, String> binding = new HashMap<CEditableComponent<?>, String>();
+    private final HashMap<CEditableComponent<?>, Path> binding = new HashMap<CEditableComponent<?>, Path>();
 
     @SuppressWarnings("unchecked")
     private final ValueChangeHandler valuePropagation;
@@ -65,9 +67,9 @@ public class EntityForm<E extends IEntity> {
 
         @Override
         public void onValueChange(ValueChangeEvent event) {
-            String memberName = binding.get(event.getSource());
-            if ((memberName != null) && (editableEntity != null)) {
-                editableEntity.setMemberValue(memberName, event.getValue());
+            Path memberPath = binding.get(event.getSource());
+            if ((memberPath != null) && (editableEntity != null)) {
+                editableEntity.setValue(memberPath, event.getValue());
             }
         }
     }
@@ -139,14 +141,14 @@ public class EntityForm<E extends IEntity> {
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
             comp.setMandatory(true);
         }
-        bind(comp, mm.getFieldName());
+        bind(comp, member.getPath());
         return comp;
     }
 
     @SuppressWarnings("unchecked")
     public <T> CEditableComponent<T> get(IObject<T> member) {
-        for (Map.Entry<CEditableComponent<?>, String> me : binding.entrySet()) {
-            if (me.getValue().equals(member.getFieldName())) {
+        for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
+            if (me.getValue().equals(member.getPath())) {
                 return (CEditableComponent<T>) me.getKey();
             }
         }
@@ -154,7 +156,7 @@ public class EntityForm<E extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    public void bind(CEditableComponent<?> component, String path) {
+    public void bind(CEditableComponent<?> component, Path path) {
         binding.put(component, path);
         component.addValueChangeHandler(valuePropagation);
     }
@@ -169,8 +171,8 @@ public class EntityForm<E extends IEntity> {
         }
 
         for (CEditableComponent component : binding.keySet()) {
-            String memberName = binding.get(component);
-            component.setValue(editableEntity.getMemberValue(memberName));
+            Path memberPath = binding.get(component);
+            component.setValue(editableEntity.getValue(memberPath));
         }
     }
 

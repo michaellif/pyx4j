@@ -109,6 +109,19 @@ public class Path implements Serializable {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Path)) {
+            return false;
+        }
+        return path.equals(((Path) other).path);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.path.hashCode();
+    }
+
+    @Override
     public String toString() {
         return path;
     }
