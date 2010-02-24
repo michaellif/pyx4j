@@ -147,8 +147,9 @@ public class EntityForm<E extends IEntity> {
 
     @SuppressWarnings("unchecked")
     public <T> CEditableComponent<T> get(IObject<T> member) {
+        Path memberPath = member.getPath();
         for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
-            if (me.getValue().equals(member.getPath())) {
+            if (me.getValue().equals(memberPath)) {
                 return (CEditableComponent<T>) me.getKey();
             }
         }
