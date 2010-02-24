@@ -50,7 +50,7 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
         CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
 
-        { form.create(form.meta().name()) },
+        { form.create(form.meta().name()), null },
 
         { form.create(form.meta().phone()), notesEditor },
 
