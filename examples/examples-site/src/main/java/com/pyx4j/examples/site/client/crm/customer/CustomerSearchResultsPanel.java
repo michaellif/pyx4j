@@ -22,6 +22,7 @@ package com.pyx4j.examples.site.client.crm.customer;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.entity.client.ui.crud.IEntitySearchResultsPanel;
@@ -35,10 +36,12 @@ public class CustomerSearchResultsPanel extends HorizontalPanel implements IEnti
 
     public CustomerSearchResultsPanel() {
         super();
+        setWidth("100%");
         customerListPanel = new CustomerListPanel();
         add(customerListPanel);
         customerListMapPanel = new CustomerListMapPanel();
         add(customerListMapPanel);
+        setCellHorizontalAlignment(customerListMapPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 
     }
 
