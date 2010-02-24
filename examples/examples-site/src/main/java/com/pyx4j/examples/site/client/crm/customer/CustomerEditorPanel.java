@@ -20,6 +20,9 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
@@ -56,6 +59,19 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
         Widget formWidget = CForm.createFormWidget(LabelAlignment.LEFT, advancedSearchComponents);
         contentPanel.add(formWidget);
+
+        Button viewButton = new Button("Save");
+        viewButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                //TODO
+
+            }
+        });
+        viewButton.getElement().getStyle().setProperty("margin", "5px 0px 5px 150px");
+        contentPanel.add(viewButton);
+
     }
 
     @Override
