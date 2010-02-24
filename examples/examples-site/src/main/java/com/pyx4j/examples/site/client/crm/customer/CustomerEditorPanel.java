@@ -23,17 +23,21 @@ package com.pyx4j.examples.site.client.crm.customer;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
-import com.pyx4j.entity.client.ui.crud.IEntityEditorPanel;
+import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public class CustomerEditorPanel extends VerticalPanel implements IEntityEditorPanel<Customer> {
+public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
     private final EntityEditorForm<Customer> form;
 
     CustomerEditorPanel() {
+
+        VerticalPanel contentPanel = new VerticalPanel();
+
+        setWidget(contentPanel);
 
         form = EntityEditorForm.create(Customer.class);
 
@@ -51,7 +55,7 @@ public class CustomerEditorPanel extends VerticalPanel implements IEntityEditorP
         };
 
         Widget formWidget = CForm.createFormWidget(LabelAlignment.LEFT, advancedSearchComponents);
-        add(formWidget);
+        contentPanel.add(formWidget);
     }
 
     @Override

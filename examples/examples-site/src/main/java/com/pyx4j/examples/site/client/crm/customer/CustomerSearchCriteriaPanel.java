@@ -26,8 +26,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
-import com.pyx4j.entity.client.ui.crud.IEntitySearchCriteriaPanel;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.CGroupBoxPanel;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
-public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntitySearchCriteriaPanel<Customer> {
+public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<Customer> {
 
     private final EntitySearchCriteriaForm<Customer> form;
 
@@ -44,6 +44,9 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
 
     public CustomerSearchCriteriaPanel(CustomerListWidget listWidget) {
         this.customerListWidget = listWidget;
+
+        VerticalPanel contentPanel = new VerticalPanel();
+        setWidget(contentPanel);
 
         form = EntitySearchCriteriaForm.create(Customer.class);
 
@@ -63,7 +66,7 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
             form.setComponents(components);
             group.addComponent(form);
             Widget basicSearchWidget = (Widget) group.initNativeComponent();
-            add(basicSearchWidget);
+            contentPanel.add(basicSearchWidget);
         }
 
         {
@@ -81,7 +84,7 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
             form.setComponents(components);
             group.addComponent(form);
             Widget basicSearchWidget = (Widget) group.initNativeComponent();
-            add(basicSearchWidget);
+            contentPanel.add(basicSearchWidget);
         }
 
         {
@@ -94,7 +97,7 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
             };
 
             Widget advancedSearchWidget = CForm.createDecoratedFormWidget(LabelAlignment.LEFT, advancedSearchComponents, "Advanced", true, false);
-            add(advancedSearchWidget);
+            contentPanel.add(advancedSearchWidget);
         }
 
         form.populate(null);
@@ -109,7 +112,7 @@ public class CustomerSearchCriteriaPanel extends VerticalPanel implements IEntit
             }
         });
         viewButton.getElement().getStyle().setProperty("margin", "5px 0px 5px 150px");
-        add(viewButton);
+        contentPanel.add(viewButton);
     }
 
     @Override

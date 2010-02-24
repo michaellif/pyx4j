@@ -22,19 +22,18 @@ package com.pyx4j.examples.site.client.crm.order;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
-import com.pyx4j.entity.client.ui.crud.IEntitySearchCriteriaPanel;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.examples.domain.crm.Order;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public class OrderSearchCriteriaPanel extends SimplePanel implements IEntitySearchCriteriaPanel<Order> {
+public class OrderSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<Order> {
 
     private final EntitySearchCriteriaForm<Order> form;
 

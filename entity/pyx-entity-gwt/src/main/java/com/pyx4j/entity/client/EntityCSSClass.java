@@ -14,19 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 18, 2010
+ * Created on Jan 7, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client.ui.crud;
+package com.pyx4j.entity.client;
 
-import com.pyx4j.entity.shared.EntityCriteria;
-import com.pyx4j.entity.shared.IEntity;
+public enum EntityCSSClass {
 
-public interface IEntitySearchCriteriaPanel<E extends IEntity> {
+    //Entity CRUD
+    pyx4j_Entity_EntityEditor,
 
-    EntityCriteria<E> getEntityCriteria();
-
-    void populateEntityCriteria(EntityCriteria<E> criteria);
+    pyx4j_Entity_EntitySearchCriteria,
 
 }

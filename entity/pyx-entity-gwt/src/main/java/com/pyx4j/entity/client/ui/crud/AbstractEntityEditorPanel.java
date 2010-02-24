@@ -14,25 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
+ * Created on Feb 18, 2010
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui.crud;
 
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityListWidget<E extends IEntity> extends VerticalPanel {
+public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel {
 
-    public EntityListWidget(AbstractEntitySearchCriteriaPanel<E> criteriaPanel, IEntitySearchResultsPanel<E> resultsPanel) {
+    public AbstractEntityEditorPanel() {
         super();
-
-        add(criteriaPanel);
-        add((Widget) resultsPanel);
-
+        setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
+    public abstract void populateForm(E entity);
+
+    public abstract E getEntity();
+
+    @Override
+    public void setWidget(Widget w) {
+        super.setWidget(w);
+        w.setWidth("100%");
+    }
 }

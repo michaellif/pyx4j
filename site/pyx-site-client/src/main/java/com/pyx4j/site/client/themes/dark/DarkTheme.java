@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.themes.dark;
 
+import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.SiteTheme;
 import com.pyx4j.widgets.client.style.Style;
@@ -288,6 +289,24 @@ public class DarkTheme extends SiteTheme {
         style.addProperty("text-decoration", "underline");
         addStyle(style);
 
+    }
+
+    @Override
+    protected void initEntityCRUDStyles() {
+        Style style = new Style("." + EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
+        style.addProperty("width", "875px");
+        style.addProperty("background-color", "#F8F8F8");
+        style.addProperty("padding", "10px 40px 10px 10px");
+        style.addProperty("margin-bottom", "10px");
+        style.addProperty("border", "solid 1px #F0F0F0");
+        addStyle(style);
+        style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
+        style.addProperty("width", "875px");
+        style.addProperty("background-color", "#F8F8F8");
+        style.addProperty("padding", "10px 40px 10px 10px");
+        style.addProperty("margin-bottom", "10px");
+        style.addProperty("border", "solid 1px #F0F0F0");
+        addStyle(style);
     }
 
 }
