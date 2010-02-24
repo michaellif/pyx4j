@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.rpc.client.RPCManager;
@@ -57,11 +57,8 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
 
     @Override
     public void populate(Map<String, String> args) {
-
-        //Execute default query if EntityCriteria is not set
-        if (searchCriteriaPanel.getEntityCriteria() == null) {
-            view();
-        }
+        //Execute default query
+        view();
     }
 
     public void view() {
@@ -86,8 +83,7 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
             }
         };
 
-        //TODO getSearchCriteria from searchCriteriaPanel (default if null)
-        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Customer.class), callback);
+        RPCManager.execute(EntityServices.Search.class, searchCriteriaPanel.getEntityCriteria(), callback);
     }
 
 }

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.EnumSet;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -28,8 +30,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
-import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.domain.crm.Order.Status;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel;
@@ -58,6 +63,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             { form.create(form.meta().street()) },
 
+            { form.create(form.meta().phone()) },
+
             };
 
             CGroupBoxPanel group = new CGroupBoxPanel("Customer Search", Layout.CHECKBOX_TOGGLE);
@@ -72,9 +79,10 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         {
             CComponent<?>[][] components = new CComponent[][] {
 
-            { form.create(form.meta().name()) },
+            // TODO Use location object here once available.
+                    { form.create("Area Zip", form.meta().latitude(), "zip") },
 
-            { form.create(form.meta().orders().$().status()) },
+                    { form.create("Area Radius", form.meta().latitude(), "radius") },
 
             };
 
@@ -88,15 +96,19 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         }
 
         {
+            CComboBox<Status> orderStatus = new CComboBox<Status>("Order Status");
+            form.bind(orderStatus, new PathSearch(form.meta().orders().$().status(), null));
+            orderStatus.setOptions(EnumSet.allOf(Status.class));
+
             CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
 
-            { form.create(form.meta().name()) },
+            { orderStatus },
 
-            { form.create(form.meta().orders().$().status()) },
+            { form.create(form.meta().orders().$().dueDate()) },
 
             };
 
-            Widget advancedSearchWidget = CForm.createDecoratedFormWidget(LabelAlignment.LEFT, advancedSearchComponents, "Advanced", true, false);
+            Widget advancedSearchWidget = CForm.createDecoratedFormWidget(LabelAlignment.LEFT, advancedSearchComponents, "Advanced By Orders", true, false);
             contentPanel.add(advancedSearchWidget);
         }
 
@@ -116,15 +128,13 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
     }
 
     @Override
-    public EntityCriteria<Customer> getEntityCriteria() {
-        // TODO Auto-generated method stub
-        return null;
+    public EntitySearchCriteria<Customer> getEntityCriteria() {
+        return form.getValue();
     }
 
     @Override
-    public void populateEntityCriteria(EntityCriteria<Customer> criteria) {
-        // TODO Auto-generated method stub
-
+    public void populateEntityCriteria(EntitySearchCriteria<Customer> criteria) {
+        form.populate(criteria);
     }
 
 }

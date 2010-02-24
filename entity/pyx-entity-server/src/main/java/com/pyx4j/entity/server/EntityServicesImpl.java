@@ -28,6 +28,7 @@ import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
@@ -53,6 +54,26 @@ public class EntityServicesImpl {
         public Vector execute(EntityCriteria request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
             List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(request);
+            Vector<IEntity> v = new Vector<IEntity>();
+            for (IEntity ent : rc) {
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                v.add(ent);
+            }
+            return v;
+        }
+    }
+
+    public static class SearchImpl implements EntityServices.Search {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Vector execute(EntitySearchCriteria request) {
+            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+
+            Class<IEntity> entityClass = ServerEntityFactory.entityClass(request.getDomainName());
+            EntityCriteria criteria = new EntityCriteria(entityClass);
+
+            List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
             Vector<IEntity> v = new Vector<IEntity>();
             for (IEntity ent : rc) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));

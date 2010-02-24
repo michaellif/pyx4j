@@ -20,17 +20,116 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
-import com.pyx4j.entity.client.ui.EntityForm;
-import com.pyx4j.entity.shared.IEntity;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class EntitySearchCriteriaForm<E extends IEntity> extends EntityForm<E> {
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
+import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PathSearch;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CTextField;
+
+public class EntitySearchCriteriaForm<E extends IEntity> {
+
+    private final E metaEntity;
+
+    private EntitySearchCriteria<E> editableCriteria;
+
+    private final HashMap<CEditableComponent<?>, PathSearch> binding = new HashMap<CEditableComponent<?>, PathSearch>();
+
+    @SuppressWarnings("unchecked")
+    private final ValueChangeHandler valuePropagation;
+
+    @SuppressWarnings("unchecked")
+    private class ValuePropagation implements ValueChangeHandler {
+
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            PathSearch path = binding.get(event.getSource());
+            if ((path != null) && (editableCriteria != null)) {
+                editableCriteria.setValue(path, event.getValue());
+            }
+        }
+    }
 
     public EntitySearchCriteriaForm(Class<E> clazz) {
-        super(clazz);
+        metaEntity = EntityFactory.create(clazz);
+        valuePropagation = new ValuePropagation();
+    }
+
+    public E meta() {
+        return metaEntity;
     }
 
     public static <T extends IEntity> EntitySearchCriteriaForm<T> create(Class<T> clazz) {
         return new EntitySearchCriteriaForm<T>(clazz);
     }
 
+    public CEditableComponent<?> create(IObject<?> member) {
+        return create(null, member, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public CEditableComponent<?> create(String name, IObject<?> member, String pathProperty) {
+        MemberMeta mm = member.getMeta();
+        CEditableComponent<?> comp;
+        if (mm.isEntity()) {
+            comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+        } else if (mm.getValueClass().isEnum()) {
+            comp = new CComboBox();
+        } else if (mm.getValueClass().equals(Date.class)) {
+            comp = new CDatePicker();
+        } else {
+            comp = new CTextField();
+        }
+        comp.setTitle((name == null) ? mm.getCaption() : name);
+        bind(comp, new PathSearch(member, pathProperty));
+        return comp;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void bind(CEditableComponent<?> component, PathSearch path) {
+        binding.put(component, path);
+        component.addValueChangeHandler(valuePropagation);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> CEditableComponent<T> get(IObject<T> member, String pathProperty) {
+        PathSearch memberPath = new PathSearch(member, pathProperty);
+        for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
+            if (me.getValue().equals(memberPath)) {
+                return (CEditableComponent<T>) me.getKey();
+            }
+        }
+        throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
+    }
+
+    @SuppressWarnings("unchecked")
+    public void populate(EntitySearchCriteria<E> entity) {
+        if (entity != null) {
+            // TODO use clone
+            this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) metaEntity.getValueClass());
+        } else {
+            this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) metaEntity.getValueClass());
+        }
+
+        for (CEditableComponent component : binding.keySet()) {
+            PathSearch path = binding.get(component);
+            component.setValue(editableCriteria.getValue(path));
+        }
+    }
+
+    public EntitySearchCriteria<E> getValue() {
+        return editableCriteria;
+    }
 }

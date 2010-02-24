@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
-import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.examples.domain.crm.Order;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -64,13 +64,13 @@ public class OrderSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<
     }
 
     @Override
-    public EntityCriteria<Order> getEntityCriteria() {
+    public EntitySearchCriteria<Order> getEntityCriteria() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void populateEntityCriteria(EntityCriteria<Order> criteria) {
+    public void populateEntityCriteria(EntitySearchCriteria<Order> criteria) {
         // TODO Auto-generated method stub
 
     }

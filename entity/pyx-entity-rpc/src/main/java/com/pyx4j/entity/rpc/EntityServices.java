@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -34,6 +35,10 @@ public interface EntityServices {
     };
 
     public interface Query extends Service<EntityCriteria<?>, Vector<? extends IEntity>> {
+
+    };
+
+    public interface Search extends Service<EntitySearchCriteria<?>, Vector<? extends IEntity>> {
 
     };
 

@@ -23,9 +23,9 @@ package com.pyx4j.entity.client.ui.crud;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityCriteria;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.client.EntityCSSClass;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> extends SimplePanel {
 
@@ -34,9 +34,9 @@ public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> exten
         setStyleName(EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
     }
 
-    public abstract EntityCriteria<E> getEntityCriteria();
+    public abstract EntitySearchCriteria<E> getEntityCriteria();
 
-    public abstract void populateEntityCriteria(EntityCriteria<E> criteria);
+    public abstract void populateEntityCriteria(EntitySearchCriteria<E> criteria);
 
     @Override
     public void setWidget(Widget w) {
