@@ -119,13 +119,13 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
     private void createCustomer(String name, String street, String phone, Double latitude, Double longitude, String panoId, Double panoYaw) {
         Customer customer = EntityFactory.create(Customer.class);
         customer.name().setValue(name);
-        customer.phone().add(phone);
+        customer.phone().setValue(phone);
         customer.street().setValue(street);
         customer.latitude().setValue(latitude);
         customer.longitude().setValue(longitude);
         customer.panoId().setValue(panoId);
         customer.panoYaw().setValue(panoYaw);
-        customer.notes().add("Somthing important #" + customerCount);
+        customer.note().setValue("Somthing important #" + customerCount);
 
         Order o1 = EntityFactory.create(Order.class);
         o1.description().setValue("Cat " + customerCount);

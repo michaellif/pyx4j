@@ -25,10 +25,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
+
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
+import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
@@ -44,16 +46,17 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
         form = EntityEditorForm.create(Customer.class);
 
+        CEditableComponent<?> notesEditor = form.create(form.meta().note());
+
         CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
 
         { form.create(form.meta().name()) },
 
-        // TODO Should probably use textarea 
-                //{ form.create(form.meta().phone()) },
+        { form.create(form.meta().phone()), notesEditor },
 
-                { form.create(form.meta().street()) },
+        { form.create(form.meta().street()), notesEditor },
 
-                { form.create(form.meta().zip()) },
+        { form.create(form.meta().zip()), notesEditor },
 
         };
 
