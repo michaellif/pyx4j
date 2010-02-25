@@ -125,7 +125,7 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         customer.longitude().setValue(longitude);
         customer.panoId().setValue(panoId);
         customer.panoYaw().setValue(panoYaw);
-        customer.note().setValue("Somthing important #" + customerCount);
+        customer.note().setValue("Something important #" + customerCount);
 
         Order o1 = EntityFactory.create(Order.class);
         o1.description().setValue("Cat " + customerCount);
