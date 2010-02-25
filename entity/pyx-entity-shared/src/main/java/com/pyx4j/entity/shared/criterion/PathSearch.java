@@ -55,6 +55,11 @@ public class PathSearch extends Path {
         return pathProperty;
     }
 
+    //TODO use better function name and probably in Path itself.
+    public String getPathString() {
+        return super.toString();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof PathSearch)) {

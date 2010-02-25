@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +44,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.geo.GeoCell;
+import com.pyx4j.geo.GeoCircle;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
@@ -92,6 +96,9 @@ public class EntityServicesImpl {
             boolean limitToOneIndex = true; // For GAE
             boolean hasInequalityFilter = false;
 
+            // TODO use groups in EntitySearchCriteria
+            Set<MemberMeta> processed = new HashSet<MemberMeta>();
+
             EntityQueryCriteria criteria = new EntityQueryCriteria(entityClass);
             for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
                 if (me.getValue() == null) {
@@ -104,6 +111,9 @@ public class EntityServicesImpl {
                     continue;
                 }
                 MemberMeta mm = meta.getMemberMeta(path);
+                if (processed.contains(mm)) {
+                    continue;
+                }
                 if (String.class.isAssignableFrom(mm.getValueClass())) {
                     String str = me.getValue().toString().trim();
                     if (!CommonsStringUtils.isStringSet(str)) {
@@ -136,6 +146,14 @@ public class EntityServicesImpl {
                         criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
                         hasInequalityFilter = true;
                     }
+                } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
+                    Integer areaRadius = (Integer) request.getValue(new PathSearch(path.getPathString(), "radius"));
+                    GeoPoint geoPoint = (GeoPoint) request.getValue(new PathSearch(path.getPathString(), "from"));
+                    if ((areaRadius != null) && (geoPoint != null)) {
+                        List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPoint, areaRadius.intValue() * 1000));
+                        criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.IN, (Serializable) keys));
+                    }
+                    processed.add(mm);
                 } else {
                     log.warn("Search by class {} not implemented", mm.getValueClass());
                 }
