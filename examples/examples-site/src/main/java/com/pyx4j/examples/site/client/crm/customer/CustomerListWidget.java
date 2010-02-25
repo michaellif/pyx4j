@@ -84,7 +84,7 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         };
 
         EntitySearchCriteria<Customer> criteria = searchCriteriaPanel.getEntityCriteria();
-        criteria.setPageSize(10);
+        criteria.setPageSize(20);
         // TODO CustomerListPanel get page ?
         criteria.setPageNumber(0);
         RPCManager.execute(EntityServices.Search.class, criteria, callback);

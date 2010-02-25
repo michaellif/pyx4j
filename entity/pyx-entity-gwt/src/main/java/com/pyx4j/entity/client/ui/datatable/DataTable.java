@@ -32,6 +32,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.UIObject;
@@ -101,9 +102,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             for (ColumnDescriptor<E> columnDescriptor : columnDescriptors) {
                 Object value = dataItem.getCellValue(columnDescriptor);
                 if (value == null || value.equals("")) {
-                    setHTML(rowIndex, colIndex, "&nbsp;");
+                    setWidget(rowIndex, colIndex, new HTML("&nbsp;"));
                 } else {
-                    setHTML(rowIndex, colIndex, value.toString());
+                    HTML contentHtml = new HTML(value.toString());
+                    if (!columnDescriptor.isWordWrap()) {
+                        contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
+                    }
+                    setWidget(rowIndex, colIndex, contentHtml);
                 }
                 getCellFormatter().setWidth(rowIndex, colIndex, columnDescriptor.getWidth());
                 getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());

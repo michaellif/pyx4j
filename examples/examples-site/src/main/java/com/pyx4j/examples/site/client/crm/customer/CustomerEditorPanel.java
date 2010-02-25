@@ -32,6 +32,7 @@ import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
 public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
@@ -46,17 +47,16 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
         form = EntityEditorForm.create(Customer.class);
 
-        CEditableComponent<?> notesEditor = form.create(form.meta().note());
+        CTextArea notesEditor = (CTextArea) form.create(form.meta().note());
+        notesEditor.setColumns(80);
 
         CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
 
-        { form.create(form.meta().name()), null },
+        { form.create(form.meta().name()), form.create(form.meta().phone()) },
 
-        { form.create(form.meta().phone()), notesEditor },
+        { form.create(form.meta().street()), form.create(form.meta().zip()) },
 
-        { form.create(form.meta().street()), notesEditor },
-
-        { form.create(form.meta().zip()), notesEditor },
+        { notesEditor, notesEditor },
 
         };
 

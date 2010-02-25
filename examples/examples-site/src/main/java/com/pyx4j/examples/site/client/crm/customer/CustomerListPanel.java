@@ -52,9 +52,11 @@ public class CustomerListPanel extends VerticalPanel {
 
         ColumnDescriptor<Customer> name = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.name());
         name.setWidth("150px");
+        name.setWordWrap(false);
         columnDescriptors.add(name);
         ColumnDescriptor<Customer> street = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.street());
         street.setWidth("400px");
+        street.setWordWrap(false);
         columnDescriptors.add(street);
 
         dataTableModel = new DataTableModel<Customer>(metaCastomer.getEntityMeta(), columnDescriptors);
@@ -72,6 +74,8 @@ public class CustomerListPanel extends VerticalPanel {
             }
         });
 
+        dataTable.setWidth("550px");
+
         add(new DataTableActionsBar(dataTable));
         add(dataTable);
         add(new DataTableActionsBar(dataTable));
@@ -83,6 +87,6 @@ public class CustomerListPanel extends VerticalPanel {
         for (Customer customer : customers) {
             dataItems.add(new DataItem<Customer>(customer));
         }
-        dataTableModel.populateData(dataItems, 0, 10);
+        dataTableModel.populateData(dataItems, 0, 20);
     }
 }
