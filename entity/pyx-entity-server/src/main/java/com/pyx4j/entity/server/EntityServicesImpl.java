@@ -32,9 +32,9 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -65,7 +65,7 @@ public class EntityServicesImpl {
 
         @SuppressWarnings("unchecked")
         @Override
-        public Vector execute(EntityCriteria request) {
+        public Vector execute(EntityQueryCriteria request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
             List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(request);
             Vector<IEntity> v = new Vector<IEntity>();
@@ -87,7 +87,7 @@ public class EntityServicesImpl {
             Class<IEntity> entityClass = ServerEntityFactory.entityClass(request.getDomainName());
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
 
-            EntityCriteria criteria = new EntityCriteria(entityClass);
+            EntityQueryCriteria criteria = new EntityQueryCriteria(entityClass);
             for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
                 if (me.getValue() == null) {
                     continue;
@@ -133,7 +133,7 @@ public class EntityServicesImpl {
 
         @SuppressWarnings("unchecked")
         @Override
-        public IEntity execute(EntityCriteria request) {
+        public IEntity execute(EntityQueryCriteria request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
             IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
             if (ent != null) {

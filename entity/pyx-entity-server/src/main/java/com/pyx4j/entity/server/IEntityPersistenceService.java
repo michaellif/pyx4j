@@ -22,8 +22,8 @@ package com.pyx4j.entity.server;
 
 import java.util.List;
 
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public interface IEntityPersistenceService {
 
@@ -33,18 +33,18 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey);
 
-    public <T extends IEntity> T retrieve(EntityCriteria<T> criteria);
+    public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> List<T> query(EntityCriteria<T> criteria);
+    public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> List<String> queryKeys(EntityCriteria<T> criteria);
+    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> int count(EntityCriteria<T> criteria);
+    public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 
     public void delete(IEntity entity);
 
     public void delete(Class<IEntity> entityClass, long primaryKey);
 
-    public <T extends IEntity> int delete(EntityCriteria<T> criteria);
+    public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria);
 
 }

@@ -34,8 +34,8 @@ import com.google.apphosting.api.ApiProxy.CapabilityDisabledException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.examples.domain.User;
@@ -76,7 +76,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
             AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
 
             final User userMeta = EntityFactory.create(User.class);
-            EntityCriteria<User> criteria = new EntityCriteria<User>(User.class);
+            EntityQueryCriteria<User> criteria = new EntityQueryCriteria<User>(User.class);
 
             criteria.add(PropertyCriterion.eq(userMeta.email(), request.email().getValue()));
             List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
@@ -90,7 +90,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
             User user = users.get(0);
 
             final UserCredential userCredentialMeta = EntityFactory.create(UserCredential.class);
-            EntityCriteria<UserCredential> crCriteria = new EntityCriteria<UserCredential>(UserCredential.class);
+            EntityQueryCriteria<UserCredential> crCriteria = new EntityQueryCriteria<UserCredential>(UserCredential.class);
             crCriteria.add(PropertyCriterion.eq(userCredentialMeta.user(), user));
             List<UserCredential> crs = PersistenceServicesFactory.getPersistenceService().query(crCriteria);
             if (crs.size() != 1) {

@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.rpc.SiteRequest;
 import com.pyx4j.site.rpc.SiteServices;
@@ -62,7 +62,7 @@ public class SiteServicesImpl implements SiteServices {
                 setCache(site);
                 entity = site;
             } else {
-                EntityCriteria<Site> criteria = EntityCriteria.create(Site.class);
+                EntityQueryCriteria<Site> criteria = EntityQueryCriteria.create(Site.class);
                 List<Site> sites = PersistenceServicesFactory.getPersistenceService().query(criteria);
                 for (Site site : sites) {
                     boolean updated = false;
@@ -135,7 +135,7 @@ public class SiteServicesImpl implements SiteServices {
                 log.error("Cache access error", e);
             }
 
-            EntityCriteria<Site> criteria = EntityCriteria.create(Site.class);
+            EntityQueryCriteria<Site> criteria = EntityQueryCriteria.create(Site.class);
             Site siteMeta = EntityFactory.create(Site.class);
             criteria.add(PropertyCriterion.eq(siteMeta.siteId(), request.getSiteId()));
             Site site = (Site) new EntityServicesImpl.RetrieveImpl().execute(criteria);

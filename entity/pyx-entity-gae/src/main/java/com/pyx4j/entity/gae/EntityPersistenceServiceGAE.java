@@ -54,7 +54,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -62,6 +61,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -560,7 +560,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return iEntity;
     }
 
-    private <T extends IEntity> Class<T> entityClass(EntityCriteria<T> criteria) {
+    private <T extends IEntity> Class<T> entityClass(EntityQueryCriteria<T> criteria) {
         return ServerEntityFactory.entityClass(criteria.getDomainName());
     }
 
@@ -616,7 +616,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         query.addFilter(propertyName, operator(propertyCriterion.getRestriction()), value);
     }
 
-    private <T extends IEntity> Query buildQuery(EntityMeta entityMeta, EntityCriteria<T> criteria) {
+    private <T extends IEntity> Query buildQuery(EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
         Query query = new Query(entityMeta.getPersistenceName());
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
@@ -629,7 +629,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> T retrieve(EntityCriteria<T> criteria) {
+    public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
@@ -661,7 +661,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> List<T> query(EntityCriteria<T> criteria) {
+    public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
@@ -690,7 +690,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
-    public <T extends IEntity> List<String> queryKeys(EntityCriteria<T> criteria) {
+    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
@@ -717,7 +717,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
-    public <T extends IEntity> int count(EntityCriteria<T> criteria) {
+    public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
@@ -738,7 +738,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
-    public <T extends IEntity> int delete(EntityCriteria<T> criteria) {
+    public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {

@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -44,19 +44,19 @@ public class ReferenceDataManager {
 
     private static final Logger log = LoggerFactory.getLogger(ReferenceDataManager.class);
 
-    private static final Map<EntityCriteria<?>, List<? extends IEntity>> cache = new HashMap<EntityCriteria<?>, List<? extends IEntity>>();
+    private static final Map<EntityQueryCriteria<?>, List<? extends IEntity>> cache = new HashMap<EntityQueryCriteria<?>, List<? extends IEntity>>();
 
-    private static final Map<EntityCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityCriteria<?>, List<AsyncCallback<List<?>>>>();
+    private static final Map<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>> concurrentLoad = new HashMap<EntityQueryCriteria<?>, List<AsyncCallback<List<?>>>>();
 
     @SuppressWarnings("unchecked")
-    public static <T extends IEntity> void obtain(EntityCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
-        obtainImpl((EntityCriteria<?>) criteria, (AsyncCallback) handlingCallback, background);
+    public static <T extends IEntity> void obtain(EntityQueryCriteria<T> criteria, AsyncCallback<List<T>> handlingCallback, boolean background) {
+        obtainImpl((EntityQueryCriteria<?>) criteria, (AsyncCallback) handlingCallback, background);
     }
 
     /**
      * The second function to avoid Generics problem
      */
-    private static void obtainImpl(final EntityCriteria<?> criteria, AsyncCallback<List<?>> handlingCallback, boolean background) {
+    private static void obtainImpl(final EntityQueryCriteria<?> criteria, AsyncCallback<List<?>> handlingCallback, boolean background) {
         final boolean inCache = cache.containsKey(criteria);
         if (!inCache) {
             // Handle concurrent load
@@ -110,7 +110,7 @@ public class ReferenceDataManager {
         }
     }
 
-    public static boolean isCached(EntityCriteria<?> criteria) {
+    public static boolean isCached(EntityQueryCriteria<?> criteria) {
         return cache.containsKey(criteria);
     }
 
@@ -118,7 +118,7 @@ public class ReferenceDataManager {
      * Update the reference data when Entity is modified by user.
      */
     public static void update(IEntity ent) {
-        for (Map.Entry<EntityCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
+        for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
                 for (IEntity item : me.getValue()) {
                     if (ent.equals(item) && (item != ent)) {
@@ -132,7 +132,7 @@ public class ReferenceDataManager {
     }
 
     public static void remove(IEntity ent) {
-        for (Map.Entry<EntityCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
+        for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
                 me.getValue().remove(ent);
             }
@@ -140,9 +140,9 @@ public class ReferenceDataManager {
     }
 
     public static void invalidate(String domain) {
-        Iterator<EntityCriteria<?>> it = cache.keySet().iterator();
+        Iterator<EntityQueryCriteria<?>> it = cache.keySet().iterator();
         while (it.hasNext()) {
-            EntityCriteria<?> terms = it.next();
+            EntityQueryCriteria<?> terms = it.next();
             if (terms.getDomainName().equals(domain)) {
                 it.remove();
             }

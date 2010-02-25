@@ -20,8 +20,8 @@
  */
 package com.pyx4j.entity.test.server;
 
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -37,7 +37,7 @@ import com.pyx4j.entity.test.shared.domain.Task;
 public abstract class EnvCleanerTestCase extends DatastoreTestBase {
 
     public <T extends IEntity> void deleteAll(Class<T> entityClass) {
-        EntityCriteria<T> criteria = new EntityCriteria<T>(entityClass);
+        EntityQueryCriteria<T> criteria = new EntityQueryCriteria<T>(entityClass);
         srv.delete(criteria);
     }
 

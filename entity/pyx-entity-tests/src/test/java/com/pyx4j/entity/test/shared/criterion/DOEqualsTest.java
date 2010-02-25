@@ -22,7 +22,7 @@ package com.pyx4j.entity.test.shared.criterion;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.test.shared.domain.City;
@@ -56,9 +56,9 @@ public class DOEqualsTest extends TestCase {
     }
 
     public void testEntityCriteria() {
-        EntityCriteria<City> d1 = EntityCriteria.create(City.class);
+        EntityQueryCriteria<City> d1 = EntityQueryCriteria.create(City.class);
         {
-            EntityCriteria<City> d2 = EntityCriteria.create(City.class);
+            EntityQueryCriteria<City> d2 = EntityQueryCriteria.create(City.class);
             assertTrue("DO are the same", d1.equals(d2));
             assertEquals("DO are the same", d1.hashCode(), d2.hashCode());
 
@@ -73,7 +73,7 @@ public class DOEqualsTest extends TestCase {
         }
 
         {
-            EntityCriteria<Province> d2 = EntityCriteria.create(Province.class);
+            EntityQueryCriteria<Province> d2 = EntityQueryCriteria.create(Province.class);
             assertFalse("DO are different", d1.equals(d2));
         }
     }

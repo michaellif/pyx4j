@@ -34,9 +34,9 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.client.ReferenceDataManager;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -49,7 +49,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
 
-    private EntityCriteria<E> criteria;
+    private EntityQueryCriteria<E> criteria;
 
     private OptionsFilter<E> optionsFilter;
 
@@ -73,14 +73,14 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
 
     public CEntityComboBox(String title, Class<E> entityClass) {
         this(title, (NotInOptionsPolicy) null);
-        this.criteria = new EntityCriteria<E>(entityClass);
+        this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 
     public CEntityComboBox(String title, NotInOptionsPolicy policy) {
         super(title, policy);
     }
 
-    public EntityCriteria<E> addCriterion(Criterion criterion) {
+    public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
         if (optionsLoaded) {
             throw new RuntimeException();
         }

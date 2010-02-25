@@ -22,8 +22,8 @@ package com.pyx4j.entity.rpc;
 
 import java.util.Vector;
 
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -34,7 +34,7 @@ public interface EntityServices {
 
     };
 
-    public interface Query extends Service<EntityCriteria<?>, Vector<? extends IEntity>> {
+    public interface Query extends Service<EntityQueryCriteria<?>, Vector<? extends IEntity>> {
 
     };
 
@@ -42,7 +42,7 @@ public interface EntityServices {
 
     };
 
-    public interface Retrieve extends Service<EntityCriteria<?>, IEntity> {
+    public interface Retrieve extends Service<EntityQueryCriteria<?>, IEntity> {
 
     };
 
@@ -50,7 +50,7 @@ public interface EntityServices {
 
     };
 
-    public interface Count extends Service<EntityCriteria<?>, Long> {
+    public interface Count extends Service<EntityQueryCriteria<?>, Long> {
 
     };
 
@@ -58,7 +58,7 @@ public interface EntityServices {
 
     };
 
-    public interface DeleteQuery extends Service<EntityCriteria<?>, VoidSerializable> {
+    public interface DeleteQuery extends Service<EntityQueryCriteria<?>, VoidSerializable> {
 
     };
 }

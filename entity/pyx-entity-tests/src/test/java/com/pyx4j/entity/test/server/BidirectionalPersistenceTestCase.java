@@ -21,8 +21,8 @@
 package com.pyx4j.entity.test.server;
 
 import com.pyx4j.commons.IFullDebug;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Organization;
@@ -45,7 +45,7 @@ public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase
         assertFalse("Owned now", department1.organization().isNull());
 
         //retrieve department by Organization
-        EntityCriteria<Department> criteria = EntityCriteria.create(Department.class);
+        EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
         criteria.add(PropertyCriterion.eq(criteria.meta().organization(), org));
         Department department2 = srv.retrieve(criteria);
         assertNotNull("found by owner", department2);

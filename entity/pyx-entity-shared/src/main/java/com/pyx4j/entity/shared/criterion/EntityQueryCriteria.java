@@ -18,14 +18,15 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.shared;
+package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 
 /**
  * Representation of a query criterion.
@@ -33,7 +34,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
 @SuppressWarnings("serial")
-public class EntityCriteria<E extends IEntity> implements Serializable {
+public class EntityQueryCriteria<E extends IEntity> implements Serializable {
 
     private String domainName;
 
@@ -70,17 +71,17 @@ public class EntityCriteria<E extends IEntity> implements Serializable {
 
     }
 
-    protected EntityCriteria() {
+    protected EntityQueryCriteria() {
 
     }
 
-    public EntityCriteria(Class<E> entityClass) {
+    public EntityQueryCriteria(Class<E> entityClass) {
         this.entityClass = entityClass;
         this.domainName = entityClass.getName();
     }
 
-    public static <T extends IEntity> EntityCriteria<T> create(Class<T> entityClass) {
-        return new EntityCriteria<T>(entityClass);
+    public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass) {
+        return new EntityQueryCriteria<T>(entityClass);
     }
 
     public E meta() {
@@ -90,7 +91,7 @@ public class EntityCriteria<E extends IEntity> implements Serializable {
         return metaEntity;
     }
 
-    public EntityCriteria<E> add(Criterion criterion) {
+    public EntityQueryCriteria<E> add(Criterion criterion) {
         if (filters == null) {
             filters = new Vector<Criterion>();
         }
@@ -98,15 +99,15 @@ public class EntityCriteria<E extends IEntity> implements Serializable {
         return this;
     }
 
-    public EntityCriteria<E> asc(String propertyName) {
+    public EntityQueryCriteria<E> asc(String propertyName) {
         return sort(new Sort(propertyName, false));
     }
 
-    public EntityCriteria<E> desc(String propertyName) {
+    public EntityQueryCriteria<E> desc(String propertyName) {
         return sort(new Sort(propertyName, true));
     }
 
-    public EntityCriteria<E> sort(Sort sort) {
+    public EntityQueryCriteria<E> sort(Sort sort) {
         if (sorts == null) {
             sorts = new Vector<Sort>();
         }
@@ -133,13 +134,13 @@ public class EntityCriteria<E extends IEntity> implements Serializable {
             return true;
         }
 
-        if (!(o instanceof EntityCriteria)) {
+        if (!(o instanceof EntityQueryCriteria)) {
             return false;
         }
-        return equals((EntityCriteria<E>) o);
+        return equals((EntityQueryCriteria<E>) o);
     }
 
-    public boolean equals(EntityCriteria<E> t) {
+    public boolean equals(EntityQueryCriteria<E> t) {
         if (t == this) {
             return true;
         }

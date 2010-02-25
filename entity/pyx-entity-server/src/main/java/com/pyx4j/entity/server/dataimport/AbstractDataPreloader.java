@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public abstract class AbstractDataPreloader implements DataPreloader {
@@ -40,7 +40,7 @@ public abstract class AbstractDataPreloader implements DataPreloader {
     }
 
     protected static <T extends IEntity> String deleteAll(Class<T> entityClass) {
-        EntityCriteria<T> criteria = new EntityCriteria<T>(entityClass);
+        EntityQueryCriteria<T> criteria = new EntityQueryCriteria<T>(entityClass);
         int count = PersistenceServicesFactory.getPersistenceService().delete(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         return "Removed " + count + " " + entityMeta.getCaption() + "(s)";

@@ -26,9 +26,9 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
@@ -48,7 +48,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
 
-        EntityCriteria<Employee> criteria1 = EntityCriteria.create(Employee.class);
+        EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
         criteria1.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, emp.getPrimaryKey()));
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);
@@ -99,7 +99,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         srv.persist(department);
 
         {
-            EntityCriteria<Department> criteria1 = EntityCriteria.create(Department.class);
+            EntityQueryCriteria<Department> criteria1 = EntityQueryCriteria.create(Department.class);
             criteria1.add(PropertyCriterion.eq(department.name(), deptName));
             List<Department> departments1 = srv.query(criteria1);
             Assert.assertEquals("Retr 1. List size", 1, departments1.size());
@@ -107,7 +107,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         }
 
         {
-            EntityCriteria<Department> criteria2 = EntityCriteria.create(Department.class);
+            EntityQueryCriteria<Department> criteria2 = EntityQueryCriteria.create(Department.class);
             criteria2.add(PropertyCriterion.eq(department.employees(), employee2));
             List<Department> departments2 = srv.query(criteria2);
             Assert.assertEquals("Retr 2. List size", 1, departments2.size());
@@ -198,7 +198,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         }
 
         {
-            EntityCriteria<Province> criteria1 = EntityCriteria.create(Province.class);
+            EntityQueryCriteria<Province> criteria1 = EntityQueryCriteria.create(Province.class);
             criteria1.add(PropertyCriterion.eq(prov.cities(), city1.name().getValue()));
             List<Province> provs = srv.query(criteria1);
             Assert.assertEquals("Retr 1. List size", 1, provs.size());

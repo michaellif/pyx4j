@@ -35,8 +35,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.ria.client.FolderSectionPanel;
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
@@ -105,7 +105,7 @@ public class AdminApplication implements IApplication {
                 siteMapView.update();
             }
         };
-        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Site.class), (AsyncCallback) rpcCallback);
+        RPCManager.execute(EntityServices.Query.class, EntityQueryCriteria.create(Site.class), (AsyncCallback) rpcCallback);
 
         final AsyncCallback rpcCallbackPortlet = new AsyncCallback<Vector<Portlet>>() {
 
@@ -118,7 +118,7 @@ public class AdminApplication implements IApplication {
                 portletsView.update();
             }
         };
-        RPCManager.execute(EntityServices.Query.class, EntityCriteria.create(Portlet.class), rpcCallbackPortlet);
+        RPCManager.execute(EntityServices.Query.class, EntityQueryCriteria.create(Portlet.class), rpcCallbackPortlet);
 
         final AsyncCallback rpcSaveCallback = new AsyncCallback() {
 

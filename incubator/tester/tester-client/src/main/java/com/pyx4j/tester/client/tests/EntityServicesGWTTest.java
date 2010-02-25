@@ -28,9 +28,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.EntityCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.rpc.client.RPCManager;
@@ -69,7 +69,7 @@ public class EntityServicesGWTTest extends TestCase {
     }
 
     public void testEmptyQuery() {
-        EntityCriteria<Country> cc = new EntityCriteria<Country>(Country.class);
+        EntityQueryCriteria<Country> cc = new EntityQueryCriteria<Country>(Country.class);
 
         final Country countryMeta = EntityFactory.create(Country.class);
         cc.add(PropertyCriterion.eq(countryMeta.name(), "Neverland"));
@@ -94,7 +94,7 @@ public class EntityServicesGWTTest extends TestCase {
         final String countryName = "Canada_cq_" + System.currentTimeMillis();
         country.name().setValue(countryName);
 
-        final EntityCriteria<Country> cc = new EntityCriteria<Country>(Country.class);
+        final EntityQueryCriteria<Country> cc = new EntityQueryCriteria<Country>(Country.class);
         Country countryMeta = EntityFactory.create(Country.class);
         cc.add(PropertyCriterion.eq(countryMeta.name(), countryName));
 
