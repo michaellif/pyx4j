@@ -34,12 +34,20 @@ public class GeoPoint implements Serializable {
 
     private transient List<String> cells;
 
+    protected GeoPoint() {
+    }
+
     public GeoPoint(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
 
     }
 
+    /**
+     * latitude
+     * 
+     * @return
+     */
     public double getLat() {
         return lat;
     }
@@ -48,6 +56,11 @@ public class GeoPoint implements Serializable {
         this.lat = lat;
     }
 
+    /**
+     * longitude
+     * 
+     * @return
+     */
     public double getLng() {
         return lng;
     }

@@ -30,6 +30,10 @@ public class GeoCircle implements Serializable {
 
     private double radius;
 
+    protected GeoCircle() {
+
+    }
+
     public GeoCircle(GeoPoint center, double radius) {
         super();
         this.center = center;

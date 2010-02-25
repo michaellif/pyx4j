@@ -30,6 +30,7 @@ import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.Order;
 import com.pyx4j.examples.domain.crm.Resource;
 import com.pyx4j.examples.domain.crm.Order.Status;
+import com.pyx4j.geo.GeoPoint;
 
 public class PreloadCrmDemo extends AbstractDataPreloader {
 
@@ -121,8 +122,7 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         customer.name().setValue(name);
         customer.phone().setValue(phone);
         customer.street().setValue(street);
-        customer.latitude().setValue(latitude);
-        customer.longitude().setValue(longitude);
+        customer.location().setValue(new GeoPoint(latitude, longitude));
         customer.panoId().setValue(panoId);
         customer.panoYaw().setValue(panoYaw);
         customer.note().setValue("Something important #" + customerCount);

@@ -23,8 +23,9 @@ package com.pyx4j.examples.site.client.crm.customer;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.maps.client.geocode.Geocoder;
 import com.google.gwt.maps.client.geocode.LatLngCallback;
-
+import com.google.gwt.maps.client.geom.LatLng;
 import com.pyx4j.examples.site.client.GoogleAPI;
+import com.pyx4j.geo.GeoPoint;
 
 public class MapUtils {
 
@@ -39,4 +40,11 @@ public class MapUtils {
         }, null);
     }
 
+    public static LatLng newLatLngInstance(GeoPoint geoPoint) {
+        return LatLng.newInstance(geoPoint.getLat(), geoPoint.getLng());
+    }
+
+    public static GeoPoint newGeoPointInstance(LatLng latLng) {
+        return new GeoPoint(latLng.getLatitude(), latLng.getLongitude());
+    }
 }

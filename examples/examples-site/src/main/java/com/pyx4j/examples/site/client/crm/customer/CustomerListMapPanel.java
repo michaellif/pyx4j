@@ -38,7 +38,6 @@ import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.SimplePanel;
-
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.rpc.PageType;
 import com.pyx4j.examples.site.client.GoogleAPI;
@@ -139,9 +138,8 @@ public class CustomerListMapPanel extends SimplePanel {
         icon.setInfoWindowAnchor(Point.newInstance(15, 5));
         markerOptions.setIcon(icon);
 
-        if (customer.latitude().getValue() != null && customer.longitude().getValue() != null) {
-
-            final Marker marker = new Marker(LatLng.newInstance(customer.latitude().getValue(), customer.longitude().getValue()), markerOptions);
+        if (!customer.location().isNull()) {
+            final Marker marker = new Marker(MapUtils.newLatLngInstance(customer.location().getValue()), markerOptions);
 
             marker.addMarkerClickHandler(new MarkerClickHandler() {
 

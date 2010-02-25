@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.examples.domain.User;
+import com.pyx4j.geo.GeoPoint;
 
 public interface Customer extends IEntity {
 
@@ -49,9 +50,8 @@ public interface Customer extends IEntity {
     @Caption(name = "Zip/Postal")
     IPrimitive<String> zip();
 
-    IPrimitive<Double> latitude();
-
-    IPrimitive<Double> longitude();
+    @Indexed
+    IPrimitive<GeoPoint> location();
 
     IPrimitive<String> panoId();
 

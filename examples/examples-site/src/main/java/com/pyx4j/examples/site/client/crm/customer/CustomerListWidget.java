@@ -34,7 +34,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.InlineWidget;
@@ -91,8 +93,11 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         RPCManager.execute(EntityServices.Search.class, criteria, callback);
 
         //call Distance Overlay
-        Integer areaRadius = searchCriteriaPanel.getAreaRadius();
-        searchResultsPanel.setDistanceOverlay(searchCriteriaPanel.getFromLocationCoordinates(), areaRadius == null ? 0 : areaRadius);
+        Integer areaRadius = (Integer) criteria.getValue(new PathSearch(criteria.meta().location(), "radius"));
+        if (areaRadius != null) {
+            GeoPoint geoPoint = (GeoPoint) criteria.getValue(new PathSearch(criteria.meta().location(), "from"));
+            LatLng fromCoordinates = MapUtils.newLatLngInstance(geoPoint);
+            searchResultsPanel.setDistanceOverlay(fromCoordinates, areaRadius);
+        }
     }
-
 }

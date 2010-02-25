@@ -30,6 +30,10 @@ public class GeoBox implements Serializable {
 
     private GeoPoint southWest;
 
+    protected GeoBox() {
+
+    }
+
     public GeoBox(double north, double east, double south, double west) {
         if (south > north) {
             double tmp = north;

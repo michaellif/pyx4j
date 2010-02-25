@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 public class EntitySearchCriteria<E extends IEntity> implements Serializable {
@@ -31,6 +32,10 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
     private static final long serialVersionUID = 7483364285263499506L;
 
     private String domainName;
+
+    private transient Class<E> entityClass;
+
+    private transient E metaEntity;
 
     private int pageNumber;
 
@@ -43,6 +48,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
     }
 
     public EntitySearchCriteria(Class<E> entityClass) {
+        this.entityClass = entityClass;
         this.domainName = entityClass.getName();
     }
 
@@ -52,6 +58,13 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
 
     public String getDomainName() {
         return domainName;
+    }
+
+    public E meta() {
+        if (metaEntity == null) {
+            metaEntity = EntityFactory.create(entityClass);
+        }
+        return metaEntity;
     }
 
     public Map<PathSearch, Serializable> getFilters() {

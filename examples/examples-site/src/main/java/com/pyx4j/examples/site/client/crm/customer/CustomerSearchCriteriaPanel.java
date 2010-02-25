@@ -32,7 +32,6 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
@@ -45,7 +44,6 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel;
 import com.pyx4j.forms.client.ui.CIntegerField;
-import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
@@ -62,9 +60,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
     private CTextField fromLocationZipField;
 
-    private LatLng fromCoordinates;
-
     public CustomerSearchCriteriaPanel(CustomerListWidget listWidget) {
+
         this.customerListWidget = listWidget;
 
         VerticalPanel contentPanel = new VerticalPanel();
@@ -94,18 +91,21 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
         {
 
-            areaRadiusField = new CIntegerField("Area Radius");
+            areaRadiusField = new CIntegerField("Area Radius (km)");
 
             fromLocationZipField = new CTextField("From Location (Zip)");
 
             CComponent<?>[][] components = new CComponent[][] {
 
-            // TODO Use location object here once available.
-                    { fromLocationZipField },
+            { fromLocationZipField },
 
-                    { areaRadiusField },
+            { areaRadiusField },
 
             };
+
+            form.bind(areaRadiusField, new PathSearch(form.meta().location(), "radius"));
+
+            form.bind(fromLocationZipField, new PathSearch(form.meta().location(), "zip"));
 
             CGroupBoxPanel group = new CGroupBoxPanel("Location Search", Layout.CHECKBOX_TOGGLE);
             group.setExpended(true);
@@ -145,7 +145,7 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
                         @Override
                         public void onSuccess(LatLng fromCoordinates) {
-                            CustomerSearchCriteriaPanel.this.fromCoordinates = fromCoordinates;
+                            form.setPropertyValue(new PathSearch(form.meta().location(), "from"), MapUtils.newGeoPointInstance(fromCoordinates));
                             customerListWidget.view();
                         }
 
@@ -166,21 +166,12 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
     @Override
     public EntitySearchCriteria<Customer> getEntityCriteria() {
-        //Add distance criteria
         return form.getValue();
     }
 
     @Override
     public void populateEntityCriteria(EntitySearchCriteria<Customer> criteria) {
         form.populate(criteria);
-    }
-
-    Integer getAreaRadius() {
-        return areaRadiusField.getValue();
-    }
-
-    LatLng getFromLocationCoordinates() {
-        return fromCoordinates;
     }
 
     private boolean hasDistanceCriteria() {

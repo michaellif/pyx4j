@@ -32,7 +32,6 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.site.client.GoogleAPI;
 
@@ -104,9 +103,9 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
         this.customer = customer;
         if (mapLoadComplete) {
             map.removeOverlay(marker);
-            if (customer.latitude().getValue() != null && customer.longitude().getValue() != null) {
+            if (!customer.location().isNull()) {
                 markerOptions.setTitle(customer.name().getValue());
-                LatLng latLng = LatLng.newInstance(customer.latitude().getValue(), customer.longitude().getValue());
+                LatLng latLng = MapUtils.newLatLngInstance(customer.location().getValue());
                 marker.setLatLng(latLng);
                 map.setCenter(latLng);
                 map.addOverlay(marker);

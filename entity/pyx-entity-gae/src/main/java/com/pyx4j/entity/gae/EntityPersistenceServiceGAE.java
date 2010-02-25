@@ -45,6 +45,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -67,6 +68,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.IOUtils;
 
 /**
@@ -198,6 +200,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (value instanceof String) {
                 if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                     value = new Text((String) value);
+                } else {
+                    Indexed index = meta.getAnnotation(Indexed.class);
+                    if ((index != null) && (index.keywordLenght() > 0)) {
+                        entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createStringKeywordIndex(index.keywordLenght(), (String) value));
+                    }
                 }
             } else if (value instanceof Enum<?>) {
                 value = ((Enum<?>) value).name();
@@ -259,6 +266,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
+            } else if (value instanceof GeoPoint) {
+                GeoPoint geoPoint = (GeoPoint) value;
+                value = new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
+                Indexed index = meta.getAnnotation(Indexed.class);
+                if (index != null) {
+                    entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, geoPoint.getCells());
+                }
             } else if (value != null) {
                 if (value.getClass().isArray()) {
                     //TODO support more arrays
@@ -267,12 +281,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             if (meta.isIndexed()) {
                 entity.setProperty(me.getKey(), value);
-                Indexed index = meta.getAnnotation(Indexed.class);
-                if (index != null) {
-                    if (String.class.isAssignableFrom(meta.getValueClass()) && (index.keywordLenght() > 0)) {
-                        entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createStringKeywordIndex(index.keywordLenght(), (String) value));
-                    }
-                }
             } else {
                 entity.setUnindexedProperty(me.getKey(), value);
             }
@@ -504,6 +512,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (value instanceof Blob) {
                 value = ((Blob) value).getBytes();
                 //TODO support more types.
+            } else if (value instanceof GeoPt) {
+                value = new GeoPoint(((GeoPt) value).getLatitude(), ((GeoPt) value).getLongitude());
             }
             iEntity.setMemberValue(keyName, value);
         }

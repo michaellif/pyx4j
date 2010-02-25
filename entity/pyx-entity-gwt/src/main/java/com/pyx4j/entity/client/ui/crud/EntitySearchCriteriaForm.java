@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -57,7 +56,7 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
         public void onValueChange(ValueChangeEvent event) {
             PathSearch path = binding.get(event.getSource());
             if ((path != null) && (editableCriteria != null)) {
-                editableCriteria.setValue(path, event.getValue());
+                setPropertyValue(path, event.getValue());
             }
         }
     }
@@ -127,6 +126,10 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
             PathSearch path = binding.get(component);
             component.setValue(editableCriteria.getValue(path));
         }
+    }
+
+    public void setPropertyValue(PathSearch path, Object value) {
+        editableCriteria.setValue(path, value);
     }
 
     public EntitySearchCriteria<E> getValue() {
