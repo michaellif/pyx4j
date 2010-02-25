@@ -33,8 +33,13 @@ public class DataTableActionsBar extends SimplePanel {
         this.dataTable = dataTable;
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
 
-        setWidget(new HTML(
-                "<span style='font-size: 0.81em;'><a href=''>&nbsp;&lt;&lt;&nbsp;First&nbsp;</a><a href=''>&nbsp;&lt;&nbsp;Previous&nbsp;</a><span style='padding: 0px 3px 0px 3px;'><b>1</b> - <b>10</b> of <b>56</b></span><a href=''>&nbsp;Next&nbsp;&gt;&nbsp;</a><a href=''>&nbsp;Last&nbsp;&gt;&gt;&nbsp;</a><span>"));
+        setWidget(new HTML("<span style='font-size: 0.81em;'>"
+
+        + "<a href=''>&nbsp;&lt;&nbsp;Prev&nbsp;20</a>"
+
+        + "<span style='padding: 0px 5px 0px 5px;'><b>1</b> - <b>20</b></span>"
+
+        + "<a href=''>&nbsp;Next&nbsp;20&nbsp;&gt;</a><span>"));
         getElement().getStyle().setProperty("textAlign", "right");
         setHeight("40px");
     }

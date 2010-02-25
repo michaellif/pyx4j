@@ -55,6 +55,7 @@ public class CustomerListPanel extends VerticalPanel {
         columnDescriptors.add(name);
         ColumnDescriptor<Customer> street = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.street());
         street.setWidth("400px");
+        street.setWordWrap(false);
         columnDescriptors.add(street);
 
         dataTableModel = new DataTableModel<Customer>(metaCastomer.getEntityMeta(), columnDescriptors);
