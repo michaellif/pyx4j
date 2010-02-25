@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -106,6 +107,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
             membersMeta.put(memberName, memberMeta);
         }
         return memberMeta;
+    }
+
+    public MemberMeta getMemberMeta(Path path) {
+        //TODO
+        throw new Error("TODO: Not implemented in client yet");
     }
 
     @Override

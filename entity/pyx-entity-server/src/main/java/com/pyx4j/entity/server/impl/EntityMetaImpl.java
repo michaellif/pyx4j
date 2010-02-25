@@ -36,7 +36,9 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -132,6 +134,27 @@ public class EntityMetaImpl implements EntityMeta {
             membersMeta.put(memberName, memberMeta);
         }
         return memberMeta;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public MemberMeta getMemberMeta(Path path) {
+        //assertPath(path);
+        EntityMeta em = this;
+        MemberMeta mm = null;
+        for (String memberName : path.getPathMembers()) {
+            //TODO ICollection support
+            if (mm != null) {
+                Class<?> valueClass = mm.getValueClass();
+                if (!(IEntity.class.isAssignableFrom(valueClass))) {
+                    throw new RuntimeException("Invalid member in path " + memberName);
+                } else {
+                    em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
+                }
+            }
+            mm = em.getMemberMeta(memberName);
+        }
+        return mm;
     }
 
     private void lazyCreateMembersNamesList() {

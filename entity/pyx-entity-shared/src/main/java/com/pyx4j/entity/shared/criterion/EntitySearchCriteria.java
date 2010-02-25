@@ -32,7 +32,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
 
     private String domainName;
 
-    private final Map<PathSearch, Serializable> filters = new HashMap<PathSearch, Serializable>();
+    private Map<PathSearch, Serializable> filters = new HashMap<PathSearch, Serializable>();
 
     protected EntitySearchCriteria() {
 
@@ -54,8 +54,12 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
         return filters;
     }
 
+    protected void setFilters(Map<PathSearch, Serializable> filters) {
+        this.filters = filters;
+    }
+
     public void setValue(PathSearch path, Object value) {
-        if (value instanceof Serializable) {
+        if ((value instanceof Serializable) || (value == null)) {
             filters.put(path, (Serializable) value);
         } else {
             throw new IllegalArgumentException("Serializable expected fopr path " + path.toString());

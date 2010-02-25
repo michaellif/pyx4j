@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 
 /**
  * Represent the Meta data denoted using annotation. For consistency it is better to use
@@ -64,6 +65,8 @@ public interface EntityMeta {
     public Set<String> getMemberNames();
 
     public MemberMeta getMemberMeta(String memberName);
+
+    public MemberMeta getMemberMeta(Path path);
 
     public List<String> getToStringMemberNames();
 

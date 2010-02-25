@@ -20,18 +20,32 @@
  */
 package com.pyx4j.entity.server;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityCriteria;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PathSearch;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
+
+    private static final Logger log = LoggerFactory.getLogger(EntityServicesImpl.class);
 
     public static class SaveImpl implements EntityServices.Save {
 
@@ -67,11 +81,43 @@ public class EntityServicesImpl {
 
         @SuppressWarnings("unchecked")
         @Override
-        public Vector execute(EntitySearchCriteria request) {
+        public Vector execute(EntitySearchCriteria<?> request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
 
             Class<IEntity> entityClass = ServerEntityFactory.entityClass(request.getDomainName());
+            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+
             EntityCriteria criteria = new EntityCriteria(entityClass);
+            for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
+                if (me.getValue() == null) {
+                    continue;
+                }
+                PathSearch path = me.getKey();
+                if (path.getPathMembers().size() > 1) {
+                    // TODO
+                    log.warn("Ignore path {} not implemented", path);
+                    continue;
+                }
+                MemberMeta mm = meta.getMemberMeta(path);
+                if (String.class.isAssignableFrom(mm.getValueClass())) {
+                    String str = me.getValue().toString().trim();
+                    if (!CommonsStringUtils.isStringSet(str)) {
+                        continue;
+                    }
+                    //TODO if indexed by keywords ?
+                    // Simple like implementation
+                    char firstChar = str.charAt(0);
+                    if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
+                        str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
+                    }
+                    String from = str;
+                    String to = from + "z";
+                    criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.GREATER_THAN_OR_EQUAL, from));
+                    criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
+                } else {
+                    log.warn("Search by class {} not implemented", mm.getValueClass());
+                }
+            }
 
             List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
             Vector<IEntity> v = new Vector<IEntity>();
