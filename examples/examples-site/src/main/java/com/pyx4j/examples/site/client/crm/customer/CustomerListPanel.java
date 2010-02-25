@@ -26,20 +26,21 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.client.ui.datatable.DataItem;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
+import com.pyx4j.entity.client.ui.datatable.DataTableActionsBar;
 import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.rpc.PageType;
-import com.pyx4j.examples.site.client.ExamplesSiteDispatcher;
 
-public class CustomerListPanel extends HorizontalPanel {
+public class CustomerListPanel extends VerticalPanel {
 
     private final DataTableModel<Customer> dataTableModel;
 
@@ -50,10 +51,10 @@ public class CustomerListPanel extends HorizontalPanel {
         List<ColumnDescriptor<Customer>> columnDescriptors = new ArrayList<ColumnDescriptor<Customer>>();
 
         ColumnDescriptor<Customer> name = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.name());
-        name.setWidth("120px");
+        name.setWidth("150px");
         columnDescriptors.add(name);
         ColumnDescriptor<Customer> street = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.street());
-        street.setWidth("300px");
+        street.setWidth("400px");
         columnDescriptors.add(street);
 
         dataTableModel = new DataTableModel<Customer>(metaCastomer.getEntityMeta(), columnDescriptors);
@@ -71,7 +72,9 @@ public class CustomerListPanel extends HorizontalPanel {
             }
         });
 
+        add(new DataTableActionsBar(dataTable));
         add(dataTable);
+        add(new DataTableActionsBar(dataTable));
 
     }
 

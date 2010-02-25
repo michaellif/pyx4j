@@ -20,17 +20,25 @@
  */
 package com.pyx4j.examples.server.preloader;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.essentials.server.preloader.AbstractSitesDataPreloader;
 import com.pyx4j.examples.rpc.PageType;
 import com.pyx4j.examples.rpc.Sites;
 import com.pyx4j.examples.rpc.Widgets;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
 
 public class PreloadSites extends AbstractSitesDataPreloader {
+
+    private static final Logger log = LoggerFactory.getLogger(PreloadSites.class);
 
     private Portlet mantraPortlet;
 
@@ -101,21 +109,15 @@ public class PreloadSites extends AbstractSitesDataPreloader {
         String siteId = Sites.pub.name();
         Site site = createSite(siteId, "pyx4j.com");
 
-        site
-                .pages()
-                .add(
-                        createPage(
-                                "Home",
-                                PageType.pub$home,
-                                "<t2>Develop amazing web apps built on Google framework. PYX is a platform for rapid development of cross-browser web apps. PYX helps you build sustainable applications faster than ever.</t2>",
+        site.pages().add(createPage("Home", PageType.pub$home, getPageContent(PageType.pub$home),
 
-                                null,
+        null,
 
-                                new Portlet[] { partnersListPortlet, slogan1Portlet },
+        new Portlet[] { partnersListPortlet, slogan1Portlet },
 
-                                new String[] { Widgets.pub$searchWidget.name() }));
+        new String[] { Widgets.pub$searchWidget.name() }));
 
-        site.pages().add(createPage("Examples", ResourceUriUtil.createResourceUri(siteId, "advice"), null,
+        site.pages().add(createPage("Examples", PageType.pub$examples, getPageContent(PageType.pub$contactUs),
 
         null,
 
@@ -123,7 +125,7 @@ public class PreloadSites extends AbstractSitesDataPreloader {
 
         null));
 
-        site.pages().add(createPage("Contact Us", PageType.pub$home$contactUs, null,
+        site.pages().add(createPage("Contact Us", PageType.pub$contactUs, getPageContent(PageType.pub$contactUs),
 
         new Portlet[] { slogan1Portlet },
 
@@ -204,6 +206,16 @@ public class PreloadSites extends AbstractSitesDataPreloader {
 
     private Page createSingleWidgetPage(String caption, PageType pageType, String inlineWidget) {
         return createPage(caption, pageType.getUri(), "</div><div id='" + inlineWidget + "'></div>", null, null, new String[] { inlineWidget });
+    }
+
+    private String getPageContent(PageType page) {
+        try {
+            return IOUtils.getTextResource("preloader/" + page.getUri().uri().getValue() + ".txt");
+        } catch (IOException e) {
+            log.warn("Page text for page " + page + " is not found.");
+            return null;
+        }
+
     }
 
 }

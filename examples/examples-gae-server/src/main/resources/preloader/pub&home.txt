@@ -1,0 +1,29 @@
+<h2>Our company</h2>
+<p>The philosophy of our company is to provide office automation services
+and create web presence for businesses irrespective of their size.
+Using state-of-the-art software technologies, we can provide solutions
+to a wide range of problems within a fraction of time, and for a
+fraction of cost
+normally associated with such services. No task is too small for us,
+and no task is too big: we address the needs of our customers
+individually, creating
+comprehensive and cost-efficient solutions.</p>
+
+<h2>Software as a service</h2>
+<p>Rapid advancements in software technologies made it possible to
+implement and run programs "in the cloud". You don't need to own and
+maintain your computational resources any longer - cloud operator does it for you
+for a very low price. This creates almost unlimited possibilities for
+office automation. No more excel scripts, fragmented sets of obsolete legacy programs,
+constant hassles of backup and fears of losing your data, fixing
+corrupted disks... -
+all of these problems (and many more) can now be solved instantly, by
+switching to cloud computing platform. Need a website? Want to make
+sure people googling for services find you? Maps, video, demos, advertisements on
+your web-page? Just look at our examples.</p>
+
+<h2>Who we are</h2>
+<p>We are a group of software professionals with extensive industry
+experience. Before forming the company, we worked in different areas
+of software technology, providing
+services to world leading corporations.</p>

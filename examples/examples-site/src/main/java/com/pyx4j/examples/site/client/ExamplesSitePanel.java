@@ -20,6 +20,7 @@
  */
 package com.pyx4j.examples.site.client;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.security.client.ClientContext;
@@ -70,6 +71,7 @@ public abstract class ExamplesSitePanel extends SitePanel {
                     @Override
                     public void onLogInComplete() {
                         dialog.hide();
+                        History.newItem("crm&customers");
                     }
 
                 };

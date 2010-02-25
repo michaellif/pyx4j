@@ -34,4 +34,6 @@ public enum EntityCSSClass {
 
     pyx4j_Entity_DataTableHeader,
 
+    pyx4j_Entity_DataTableActionsBar,
+
 }

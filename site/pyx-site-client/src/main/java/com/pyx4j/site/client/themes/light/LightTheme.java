@@ -345,7 +345,12 @@ public class LightTheme extends SiteTheme {
         style.addProperty("background-color", "white");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
+        style.addProperty("background-color", "#A0A0A0");
+        style.addProperty("color", "white");
+        addStyle(style);
+        style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
         style.addProperty("background-color", "#F0F0F0");
+        style.addProperty("margin", "4px");
         addStyle(style);
     }
 

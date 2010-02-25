@@ -46,7 +46,7 @@ public class ExamplesPublicSitePanel extends ExamplesSitePanel {
         addFooterLink(new PageLink("Technical Support", PageType.pub$home$technicalSupport.getUri()), false);
         addFooterLink(new PageLink("Privacy Policy", PageType.pub$home$privacyPolicy.getUri()), true);
         addFooterLink(new PageLink("Terms of Use", PageType.pub$home$termsOfUse.getUri()), true);
-        addFooterLink(new PageLink("Contact Us", PageType.pub$home$contactUs.getUri()), true);
+        addFooterLink(new PageLink("Contact Us", PageType.pub$contactUs.getUri()), true);
 
     }
 

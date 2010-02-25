@@ -33,7 +33,6 @@ import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
-import com.google.gwt.maps.client.overlay.Polygon;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.examples.domain.crm.Customer;
@@ -63,7 +62,7 @@ public class CustomerListMapPanel extends SimplePanel {
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
         map = new MapWidget(pos, 2);
-        map.setSize("400px", "400px");
+        map.setSize("350px", "400px");
         map.setCenter(pos, 10);
 
         map.addControl(new LargeMapControl());
