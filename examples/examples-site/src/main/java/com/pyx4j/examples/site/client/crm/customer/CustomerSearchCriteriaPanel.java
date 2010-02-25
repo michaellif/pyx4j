@@ -36,8 +36,12 @@ import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.Order.Status;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel;
+import com.pyx4j.forms.client.ui.CIntegerField;
+import com.pyx4j.forms.client.ui.CNumberField;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
@@ -46,6 +50,10 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
     private final EntitySearchCriteriaForm<Customer> form;
 
     private final CustomerListWidget customerListWidget;
+
+    private CIntegerField areaRadiusField;
+
+    private CTextField fromLocationZipField;
 
     public CustomerSearchCriteriaPanel(CustomerListWidget listWidget) {
         this.customerListWidget = listWidget;
@@ -56,14 +64,13 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         form = EntitySearchCriteriaForm.create(Customer.class);
 
         {
+            CEditableComponent<?> street = form.create(form.meta().street());
 
             CComponent<?>[][] components = new CComponent[][] {
 
-            { form.create(form.meta().name()) },
+            { form.create(form.meta().name()), form.create(form.meta().phone()) },
 
-            { form.create(form.meta().street()) },
-
-            { form.create(form.meta().phone()) },
+            { street, null },
 
             };
 
@@ -77,12 +84,17 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         }
 
         {
+
+            areaRadiusField = new CIntegerField("Area Radius");
+
+            fromLocationZipField = new CTextField("From Location (Zip)");
+
             CComponent<?>[][] components = new CComponent[][] {
 
             // TODO Use location object here once available.
-                    { form.create("Area Zip", form.meta().latitude(), "zip") },
+                    { fromLocationZipField },
 
-                    { form.create("Area Radius", form.meta().latitude(), "radius") },
+                    { areaRadiusField },
 
             };
 
@@ -120,7 +132,6 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
             @Override
             public void onClick(ClickEvent event) {
                 customerListWidget.view();
-
             }
         });
         viewButton.getElement().getStyle().setProperty("margin", "3px 0px 3px 8px");
@@ -137,4 +148,11 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         form.populate(criteria);
     }
 
+    Integer getAreaRadius() {
+        return areaRadiusField.getValue();
+    }
+
+    String getFromLocationZip() {
+        return fromLocationZipField.getValue();
+    }
 }

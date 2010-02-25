@@ -49,4 +49,8 @@ public class CustomerSearchResultsPanel extends HorizontalPanel implements IEnti
         customerListPanel.populateData(entities);
         customerListMapPanel.populateData(entities);
     }
+
+    public void setDistanceOverlay(String zip, double distance) {
+        customerListMapPanel.setDistanceOverlay(zip, distance);
+    }
 }

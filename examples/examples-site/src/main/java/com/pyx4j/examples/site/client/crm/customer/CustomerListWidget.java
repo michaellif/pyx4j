@@ -28,6 +28,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -88,6 +89,10 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         // TODO CustomerListPanel get page ?
         criteria.setPageNumber(0);
         RPCManager.execute(EntityServices.Search.class, criteria, callback);
+
+        //call Distance Overlay
+        Integer areaRadius = searchCriteriaPanel.getAreaRadius();
+        searchResultsPanel.setDistanceOverlay(searchCriteriaPanel.getFromLocationZip(), areaRadius == null ? 0 : areaRadius);
     }
 
 }

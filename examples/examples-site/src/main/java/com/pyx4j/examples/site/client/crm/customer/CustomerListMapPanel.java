@@ -20,13 +20,20 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
+import com.google.gwt.maps.client.geocode.GeocodeCache;
+import com.google.gwt.maps.client.geocode.Geocoder;
+import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
@@ -41,11 +48,21 @@ import com.pyx4j.examples.site.client.GoogleAPI;
 
 public class CustomerListMapPanel extends SimplePanel {
 
+    private static Logger log = LoggerFactory.getLogger(CustomerListMapPanel.class);
+
     private MapWidget map;
 
     private boolean mapLoadComplete = false;
 
     private List<Customer> entities;
+
+    private String zip;
+
+    private double distance;
+
+    private CircleOverlay distanceOverlay;
+
+    private final List<Marker> markers = new ArrayList<Marker>();
 
     public CustomerListMapPanel() {
 
@@ -67,8 +84,6 @@ public class CustomerListMapPanel extends SimplePanel {
 
         map.addControl(new LargeMapControl());
 
-        map.addOverlay(new CircleOverlay(LatLng.newInstance(43.7571145, -79.5082499), 15, "green", 2, 0.4, "green", 0.1));
-
         setWidget(map);
 
         mapLoadComplete = true;
@@ -77,16 +92,52 @@ public class CustomerListMapPanel extends SimplePanel {
             populateData(entities);
         }
 
+        if (zip != null) {
+            setDistanceOverlay(zip, distance);
+        }
+
     }
 
     public void populateData(List<Customer> entities) {
         this.entities = entities;
         if (mapLoadComplete) {
+            for (Marker marker : markers) {
+                map.removeOverlay(marker);
+            }
+            markers.clear();
             for (Customer entity : entities) {
                 Marker marker = createMarker(entity);
                 if (marker != null) {
                     map.addOverlay(marker);
+                    markers.add(marker);
                 }
+            }
+        }
+    }
+
+    public void setDistanceOverlay(String zip, final double distance) {
+        this.zip = zip;
+        this.distance = distance;
+        if (mapLoadComplete) {
+            if (distanceOverlay != null) {
+                map.removeOverlay(distanceOverlay);
+                distanceOverlay = null;
+            }
+            if (zip != null && distance != 0) {
+                new Geocoder().getLatLng(zip, new LatLngCallback() {
+
+                    @Override
+                    public void onSuccess(LatLng point) {
+                        distanceOverlay = new CircleOverlay(point, distance, "green", 2, 0.4, "green", 0.1);
+                        map.addOverlay(distanceOverlay);
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        log.warn("Can't find LatLng for distanceOverlay");
+                    }
+                });
+
             }
         }
     }
