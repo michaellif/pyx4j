@@ -14,28 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Feb 25, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.server;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * Define a index in RDBMS or indexed property (optional) in App Engine persistent
- * storage.
- * 
- * @see Unindexed for GAE persistance.
- */
-@Target( { ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Indexed {
+public class IndexString {
 
-    String name() default "";
-
-    int keywordLenght() default 0;
+    public static Set<String> getIndexValues(int keywordLenght, String searchCriteria) {
+        Set<String> set = new HashSet<String>();
+        for (String word : searchCriteria.split("[\\W,.-]")) {
+            word = word.toLowerCase();
+            if (word.length() > keywordLenght) {
+                set.add(word.substring(0, keywordLenght));
+            } else {
+                set.add(word);
+            }
+        }
+        return set;
+    }
 }

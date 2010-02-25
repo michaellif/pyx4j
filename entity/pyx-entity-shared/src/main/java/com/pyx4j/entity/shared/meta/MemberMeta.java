@@ -89,6 +89,14 @@ public interface MemberMeta {
      */
     public int getStringLength();
 
+    /*
+     * Works only on server side.
+     * 
+     * Returns this element's annotation for the specified type if such an annotation is
+     * present, else null.
+     */
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
+
     /**
      * See com.pyx4j.entity.annotations.Format
      */

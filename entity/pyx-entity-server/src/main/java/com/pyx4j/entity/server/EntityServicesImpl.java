@@ -23,12 +23,14 @@ package com.pyx4j.entity.server;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
@@ -107,21 +109,33 @@ public class EntityServicesImpl {
                     if (!CommonsStringUtils.isStringSet(str)) {
                         continue;
                     }
-                    //TODO if indexed by keywords ?
-                    // Simple like implementation
-                    if (hasInequalityFilter && limitToOneIndex) {
-                        // TODO Add to in memory filters
-                        continue;
+                    Indexed index = mm.getAnnotation(Indexed.class);
+                    //If indexed by keywords
+                    if ((index != null) && (index.keywordLenght() > 0)) {
+                        Set<String> keys = IndexString.getIndexValues(index.keywordLenght(), str);
+                        for (String key : keys) {
+                            // TODO use SECONDARY_PRROPERTY_SUFIX or identify use of index in any other way
+                            criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.EQUAL, key));
+                        }
+                        if (str.length() > index.keywordLenght()) {
+                            //TODO use secondary filter
+                        }
+                    } else {
+                        // Simple like implementation
+                        if (hasInequalityFilter && limitToOneIndex) {
+                            // TODO Add to in memory filters
+                            continue;
+                        }
+                        char firstChar = str.charAt(0);
+                        if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
+                            str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
+                        }
+                        String from = str;
+                        String to = from + "z";
+                        criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.GREATER_THAN_OR_EQUAL, from));
+                        criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
+                        hasInequalityFilter = true;
                     }
-                    char firstChar = str.charAt(0);
-                    if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
-                        str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
-                    }
-                    String from = str;
-                    String to = from + "z";
-                    criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.GREATER_THAN_OR_EQUAL, from));
-                    criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
-                    hasInequalityFilter = true;
                 } else {
                     log.warn("Search by class {} not implemented", mm.getValueClass());
                 }

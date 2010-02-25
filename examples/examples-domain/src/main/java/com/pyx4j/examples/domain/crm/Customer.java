@@ -23,6 +23,7 @@ package com.pyx4j.examples.domain.crm;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -34,12 +35,15 @@ import com.pyx4j.examples.domain.User;
 public interface Customer extends IEntity {
 
     @NotNull
+    @Indexed(keywordLenght = 2)
     IPrimitive<String> name();
 
+    @Indexed(keywordLenght = 2)
     // TODO Use IPrimitiveSet<String>
     IPrimitive<String> phone();
 
     @Caption(name = "Address")
+    @Indexed(keywordLenght = 2)
     IPrimitive<String> street();
 
     @Caption(name = "Zip/Postal")

@@ -216,6 +216,11 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+        return method.getAnnotation(annotationClass);
+    }
+
+    @Override
     public String getFormat() {
         Format formatAnnotation = method.getAnnotation(Format.class);
         if (formatAnnotation != null) {

@@ -51,7 +51,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IEntityPersistenceService;
+import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -265,12 +267,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             if (meta.isIndexed()) {
                 entity.setProperty(me.getKey(), value);
+                Indexed index = meta.getAnnotation(Indexed.class);
+                if (index != null) {
+                    if (String.class.isAssignableFrom(meta.getValueClass()) && (index.keywordLenght() > 0)) {
+                        entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createStringKeywordIndex(index.keywordLenght(), (String) value));
+                    }
+                }
             } else {
                 entity.setUnindexedProperty(me.getKey(), value);
             }
         }
 
-        // Special case for values not present in Map
+        // Special case for values not present in Map, e.g. owner reference
         for (String memberName : iEntity.getEntityMeta().getBidirectionalReferenceMemberNames()) {
             MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(memberName);
             IEntity ownerEntity = (IEntity) iEntity.getMember(memberName);
@@ -288,6 +296,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setUnindexedProperty(memberName, ownerKey);
             }
         }
+    }
+
+    private Object createStringKeywordIndex(int keywordLenght, String value) {
+        return IndexString.getIndexValues(keywordLenght, value);
     }
 
     private String getIEntityKind(IEntity iEntity) {

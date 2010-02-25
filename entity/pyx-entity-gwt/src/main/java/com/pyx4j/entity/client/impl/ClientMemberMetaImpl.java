@@ -163,6 +163,10 @@ public class ClientMemberMetaImpl implements MemberMeta {
         return stringLength;
     }
 
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public String getFormat() {
         return format;
