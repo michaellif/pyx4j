@@ -22,6 +22,7 @@ package com.pyx4j.examples.site.client.crm.customer;
 
 import java.util.List;
 
+import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
@@ -50,7 +51,7 @@ public class CustomerSearchResultsPanel extends HorizontalPanel implements IEnti
         customerListMapPanel.populateData(entities);
     }
 
-    public void setDistanceOverlay(String zip, double distance) {
-        customerListMapPanel.setDistanceOverlay(zip, distance);
+    public void setDistanceOverlay(LatLng latLng, double distance) {
+        customerListMapPanel.setDistanceOverlay(latLng, distance);
     }
 }

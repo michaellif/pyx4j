@@ -22,8 +22,13 @@ package com.pyx4j.examples.site.client.crm.customer;
 
 import java.util.EnumSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.maps.client.geocode.LatLngCallback;
+import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,6 +52,8 @@ import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
 public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<Customer> {
 
+    private static Logger log = LoggerFactory.getLogger(CustomerSearchCriteriaPanel.class);
+
     private final EntitySearchCriteriaForm<Customer> form;
 
     private final CustomerListWidget customerListWidget;
@@ -54,6 +61,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
     private CIntegerField areaRadiusField;
 
     private CTextField fromLocationZipField;
+
+    private LatLng fromCoordinates;
 
     public CustomerSearchCriteriaPanel(CustomerListWidget listWidget) {
         this.customerListWidget = listWidget;
@@ -131,8 +140,25 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             @Override
             public void onClick(ClickEvent event) {
-                customerListWidget.view();
+                if (hasDistanceCriteria()) {
+                    MapUtils.obtainLatLang(fromLocationZipField.getValue(), new LatLngCallback() {
+
+                        @Override
+                        public void onSuccess(LatLng fromCoordinates) {
+                            CustomerSearchCriteriaPanel.this.fromCoordinates = fromCoordinates;
+                            customerListWidget.view();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            log.warn("Can't find LatLng for distanceOverlay");
+                        }
+                    });
+                } else {
+                    customerListWidget.view();
+                }
             }
+
         });
         viewButton.getElement().getStyle().setProperty("margin", "3px 0px 3px 8px");
         contentPanel.add(viewButton);
@@ -140,6 +166,7 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
     @Override
     public EntitySearchCriteria<Customer> getEntityCriteria() {
+        //Add distance criteria
         return form.getValue();
     }
 
@@ -152,7 +179,12 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         return areaRadiusField.getValue();
     }
 
-    String getFromLocationZip() {
-        return fromLocationZipField.getValue();
+    LatLng getFromLocationCoordinates() {
+        return fromCoordinates;
     }
+
+    private boolean hasDistanceCriteria() {
+        return areaRadiusField.getValue() != null && areaRadiusField.getValue() > 0 && !fromLocationZipField.isValueEmpty();
+    }
+
 }

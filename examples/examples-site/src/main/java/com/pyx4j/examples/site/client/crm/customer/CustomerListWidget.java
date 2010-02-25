@@ -92,7 +92,7 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
 
         //call Distance Overlay
         Integer areaRadius = searchCriteriaPanel.getAreaRadius();
-        searchResultsPanel.setDistanceOverlay(searchCriteriaPanel.getFromLocationZip(), areaRadius == null ? 0 : areaRadius);
+        searchResultsPanel.setDistanceOverlay(searchCriteriaPanel.getFromLocationCoordinates(), areaRadius == null ? 0 : areaRadius);
     }
 
 }

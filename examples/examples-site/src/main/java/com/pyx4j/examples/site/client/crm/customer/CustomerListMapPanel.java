@@ -31,9 +31,6 @@ import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
-import com.google.gwt.maps.client.geocode.GeocodeCache;
-import com.google.gwt.maps.client.geocode.Geocoder;
-import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
@@ -56,7 +53,7 @@ public class CustomerListMapPanel extends SimplePanel {
 
     private List<Customer> entities;
 
-    private String zip;
+    private LatLng latLng;
 
     private double distance;
 
@@ -92,8 +89,8 @@ public class CustomerListMapPanel extends SimplePanel {
             populateData(entities);
         }
 
-        if (zip != null) {
-            setDistanceOverlay(zip, distance);
+        if (latLng != null) {
+            setDistanceOverlay(latLng, distance);
         }
 
     }
@@ -115,29 +112,17 @@ public class CustomerListMapPanel extends SimplePanel {
         }
     }
 
-    public void setDistanceOverlay(String zip, final double distance) {
-        this.zip = zip;
+    public void setDistanceOverlay(LatLng latLng, final double distance) {
+        this.latLng = latLng;
         this.distance = distance;
         if (mapLoadComplete) {
             if (distanceOverlay != null) {
                 map.removeOverlay(distanceOverlay);
                 distanceOverlay = null;
             }
-            if (zip != null && distance != 0) {
-                new Geocoder().getLatLng(zip, new LatLngCallback() {
-
-                    @Override
-                    public void onSuccess(LatLng point) {
-                        distanceOverlay = new CircleOverlay(point, distance, "green", 2, 0.4, "green", 0.1);
-                        map.addOverlay(distanceOverlay);
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        log.warn("Can't find LatLng for distanceOverlay");
-                    }
-                });
-
+            if (latLng != null && distance != 0) {
+                distanceOverlay = new CircleOverlay(latLng, distance, "green", 2, 0.4, "green", 0.1);
+                map.addOverlay(distanceOverlay);
             }
         }
     }
