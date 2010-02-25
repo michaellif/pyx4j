@@ -30,9 +30,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -83,7 +83,11 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
             }
         };
 
-        RPCManager.execute(EntityServices.Search.class, searchCriteriaPanel.getEntityCriteria(), callback);
+        EntitySearchCriteria<Customer> criteria = searchCriteriaPanel.getEntityCriteria();
+        criteria.setPageSize(10);
+        // TODO CustomerListPanel get page ?
+        criteria.setPageNumber(0);
+        RPCManager.execute(EntityServices.Search.class, criteria, callback);
     }
 
 }

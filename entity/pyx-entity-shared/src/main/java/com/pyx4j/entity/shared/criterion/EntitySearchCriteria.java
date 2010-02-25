@@ -32,6 +32,10 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
 
     private String domainName;
 
+    private int pageNumber;
+
+    private int pageSize = -1;
+
     private Map<PathSearch, Serializable> filters = new HashMap<PathSearch, Serializable>();
 
     protected EntitySearchCriteria() {
@@ -70,4 +74,19 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
         return filters.get(path);
     }
 
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 }

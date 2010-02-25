@@ -87,6 +87,9 @@ public class EntityServicesImpl {
             Class<IEntity> entityClass = ServerEntityFactory.entityClass(request.getDomainName());
             EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
 
+            boolean limitToOneIndex = true; // For GAE
+            boolean hasInequalityFilter = false;
+
             EntityQueryCriteria criteria = new EntityQueryCriteria(entityClass);
             for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
                 if (me.getValue() == null) {
@@ -106,6 +109,10 @@ public class EntityServicesImpl {
                     }
                     //TODO if indexed by keywords ?
                     // Simple like implementation
+                    if (hasInequalityFilter && limitToOneIndex) {
+                        // TODO Add to in memory filters
+                        continue;
+                    }
                     char firstChar = str.charAt(0);
                     if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
                         str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
@@ -114,16 +121,33 @@ public class EntityServicesImpl {
                     String to = from + "z";
                     criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.GREATER_THAN_OR_EQUAL, from));
                     criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
+                    hasInequalityFilter = true;
                 } else {
                     log.warn("Search by class {} not implemented", mm.getValueClass());
                 }
             }
 
             List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            int maxResults = Integer.MAX_VALUE;
+            int firstResult = -1;
+            if (request.getPageSize() > 0) {
+                maxResults = request.getPageSize();
+                firstResult = request.getPageSize() * (request.getPageNumber() - 1);
+            }
+
             Vector<IEntity> v = new Vector<IEntity>();
+            int count = 0;
             for (IEntity ent : rc) {
+                if (count < firstResult) {
+                    count++;
+                    continue;
+                }
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
                 v.add(ent);
+                count++;
+                if (v.size() >= maxResults) {
+                    break;
+                }
             }
             return v;
         }
