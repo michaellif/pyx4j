@@ -26,8 +26,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
-import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.examples.domain.crm.Resource;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -35,17 +33,13 @@ import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
 public class ResourceSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<Resource> {
 
-    private final EntitySearchCriteriaForm<Resource> form;
-
     public ResourceSearchCriteriaPanel() {
-
+        super(Resource.class);
         getElement().getStyle().setPadding(30, Unit.PX);
         getElement().getStyle().setPaddingRight(10, Unit.PX);
 
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
-
-        form = EntitySearchCriteriaForm.create(Resource.class);
 
         CComponent<?>[][] components = new CComponent[][] {
 
@@ -61,18 +55,6 @@ public class ResourceSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         Button viewButton = new Button("View");
         viewButton.getElement().getStyle().setProperty("margin", "20px 0px 20px 150px");
         contentPanel.add(viewButton);
-    }
-
-    @Override
-    public EntitySearchCriteria<Resource> getEntityCriteria() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void populateEntityCriteria(EntitySearchCriteria<Resource> criteria) {
-        // TODO Auto-generated method stub
-
     }
 
 }

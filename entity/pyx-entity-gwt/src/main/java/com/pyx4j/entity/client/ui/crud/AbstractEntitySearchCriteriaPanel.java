@@ -29,14 +29,21 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
 public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> extends SimplePanel {
 
-    public AbstractEntitySearchCriteriaPanel() {
+    protected final EntitySearchCriteriaForm<E> form;
+
+    public AbstractEntitySearchCriteriaPanel(Class<E> clazz) {
         super();
+        form = EntitySearchCriteriaForm.create(clazz);
         setStyleName(EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
     }
 
-    public abstract EntitySearchCriteria<E> getEntityCriteria();
+    public EntitySearchCriteria<E> getEntityCriteria() {
+        return form.getValue();
+    }
 
-    public abstract void populateEntityCriteria(EntitySearchCriteria<E> criteria);
+    public void populateEntityCriteria(EntitySearchCriteria<E> criteria) {
+        form.populate(criteria);
+    }
 
     @Override
     public void setWidget(Widget w) {

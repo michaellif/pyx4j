@@ -32,9 +32,8 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
-import com.pyx4j.entity.client.ui.crud.EntitySearchCriteriaForm;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.Order.Status;
@@ -52,8 +51,6 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
     private static Logger log = LoggerFactory.getLogger(CustomerSearchCriteriaPanel.class);
 
-    private final EntitySearchCriteriaForm<Customer> form;
-
     private final CustomerListWidget customerListWidget;
 
     private CIntegerField areaRadiusField;
@@ -61,13 +58,11 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
     private CTextField fromLocationZipField;
 
     public CustomerSearchCriteriaPanel(CustomerListWidget listWidget) {
-
+        super(Customer.class);
         this.customerListWidget = listWidget;
 
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
-
-        form = EntitySearchCriteriaForm.create(Customer.class);
 
         {
             CEditableComponent<?> street = form.create(form.meta().street());
@@ -162,16 +157,6 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
         });
         viewButton.getElement().getStyle().setProperty("margin", "3px 0px 3px 8px");
         contentPanel.add(viewButton);
-    }
-
-    @Override
-    public EntitySearchCriteria<Customer> getEntityCriteria() {
-        return form.getValue();
-    }
-
-    @Override
-    public void populateEntityCriteria(EntitySearchCriteria<Customer> criteria) {
-        form.populate(criteria);
     }
 
     private boolean hasDistanceCriteria() {
