@@ -38,9 +38,16 @@ import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.SimplePanel;
+
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.rpc.PageType;
-import com.pyx4j.examples.site.client.GoogleAPI;
+import com.pyx4j.geo.GeoCell;
+import com.pyx4j.geo.GeoCircle;
+import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.geo.CircleOverlay;
+import com.pyx4j.gwt.geo.GeoBoxOverlay;
+import com.pyx4j.gwt.geo.GoogleAPI;
+import com.pyx4j.gwt.geo.MapUtils;
 
 public class CustomerListMapPanel extends SimplePanel {
 
@@ -57,6 +64,8 @@ public class CustomerListMapPanel extends SimplePanel {
     private double distance;
 
     private CircleOverlay distanceOverlay;
+
+    private final List<GeoBoxOverlay> geoBoxOverlayList = new ArrayList<GeoBoxOverlay>();
 
     private final List<Marker> markers = new ArrayList<Marker>();
 
@@ -119,9 +128,21 @@ public class CustomerListMapPanel extends SimplePanel {
                 map.removeOverlay(distanceOverlay);
                 distanceOverlay = null;
             }
+            for (GeoBoxOverlay geoBoxOverlay : geoBoxOverlayList) {
+                map.removeOverlay(geoBoxOverlay);
+            }
+            geoBoxOverlayList.clear();
             if (latLng != null && distance != 0) {
                 distanceOverlay = new CircleOverlay(latLng, distance, "green", 2, 0.4, "green", 0.1);
                 map.addOverlay(distanceOverlay);
+                List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(new GeoPoint(latLng.getLatitude(), latLng.getLongitude()), distance * 1000));
+                for (String geoBox : keys) {
+                    if (false) {
+                        GeoBoxOverlay geoBoxOverlay = new GeoBoxOverlay(geoBox);
+                        map.addOverlay(geoBoxOverlay);
+                        geoBoxOverlayList.add(geoBoxOverlay);
+                    }
+                }
             }
         }
     }

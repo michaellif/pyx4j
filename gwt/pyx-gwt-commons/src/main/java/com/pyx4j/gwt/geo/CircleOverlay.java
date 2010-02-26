@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm.customer;
+package com.pyx4j.gwt.geo;
 
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Polygon;

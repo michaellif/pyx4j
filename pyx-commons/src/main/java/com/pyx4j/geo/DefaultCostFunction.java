@@ -26,7 +26,7 @@ public class DefaultCostFunction implements IAreaCostFunction {
     public double getCost(int numCells, int resolution) {
         // TODO Auto-generated method stub
         int n = GeoCell.GEOCELL_GRID_SIZE;
-        if (numCells > n * n)
+        if (numCells > GeoCell.MAX_FEASIBLE_BBOX_SEARCH_CELLS - 1)
             return 1.0e10;
         return 0;
 

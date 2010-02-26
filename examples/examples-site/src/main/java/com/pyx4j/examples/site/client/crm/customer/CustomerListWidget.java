@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.InlineWidget;

@@ -5,8 +5,8 @@
 <module rename-to='site'>
 	<inherits name='com.google.gwt.user.User'/>
 	<inherits name="com.google.gwt.i18n.I18N"/>
-	<inherits name="com.google.gwt.maps.GoogleMaps" />
     <inherits name='com.pyx4j.essentials.Essentials' />
+    <inherits name='com.pyx4j.gwt.GwtGeo' />
     <inherits name='com.pyx4j.examples.ExamplesDomain' />
     <inherits name='com.pyx4j.examples.ExamplesRpc' />
     <inherits name='com.pyx4j.security.Security' />

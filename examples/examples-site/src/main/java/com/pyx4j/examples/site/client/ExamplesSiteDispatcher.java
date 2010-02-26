@@ -33,6 +33,7 @@ import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
 import com.pyx4j.examples.site.client.headless.ExamplesHeadlessSitePanel;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSitePanel;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.site.client.SiteCache;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Site;

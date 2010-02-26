@@ -46,6 +46,7 @@ import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
+import com.pyx4j.gwt.geo.MapUtils;
 
 public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<Customer> {
 

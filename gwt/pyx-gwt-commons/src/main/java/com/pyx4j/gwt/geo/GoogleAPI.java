@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client;
+package com.pyx4j.gwt.geo;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 

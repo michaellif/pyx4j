@@ -63,8 +63,10 @@ public class GeoCircle implements Serializable {
     public GeoBox getMinBox() {
         // each degree of latitude is 111 km
         double radiusInDegreesLat = radius / 111000.0;
-        GeoPoint ne = new GeoPoint(center.getLat() + radiusInDegreesLat, center.getLng() + radiusInDegreesLat * 2);
-        GeoPoint sw = new GeoPoint(center.getLat() - radiusInDegreesLat, center.getLng() - radiusInDegreesLat * 2);
+        double latInRadians = (Math.PI / 180) * center.getLat();
+        double radiusInDegreesLng = radiusInDegreesLat / Math.cos(latInRadians);
+        GeoPoint ne = new GeoPoint(center.getLat() + radiusInDegreesLat, center.getLng() + radiusInDegreesLng);
+        GeoPoint sw = new GeoPoint(center.getLat() - radiusInDegreesLat, center.getLng() - radiusInDegreesLng);
         GeoBox box = new GeoBox(ne, sw);
         box.normalize();
         return box;

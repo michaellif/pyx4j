@@ -37,6 +37,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.gwt.google-apis</groupId>
+            <artifactId>gwt-maps</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->

@@ -22,22 +22,21 @@ package com.pyx4j.geo;
 
 public class GeoUtils {
 
-    public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
-        double earthRadius = 3958.75;
+    public static final double EARTH_RADIUS_KM = 6371;
+
+    public static double distance(double lat1, double lng1, double lat2, double lng2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLng = Math.toRadians(lng2 - lng1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLng / 2)
                 * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double dist = earthRadius * c;
+        double dist = EARTH_RADIUS_KM * c;
 
-        double meterConversion = 1609;
-
-        return dist * meterConversion;
+        return dist;
     }
 
     public static double distance(GeoPoint p1, GeoPoint p2) {
-        return distFrom(p1.getLat(), p1.getLng(), p2.getLat(), p2.getLng());
+        return distance(p1.getLat(), p1.getLng(), p2.getLat(), p2.getLng());
     }
 
 }

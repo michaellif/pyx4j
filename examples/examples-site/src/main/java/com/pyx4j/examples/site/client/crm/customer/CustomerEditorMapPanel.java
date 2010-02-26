@@ -33,7 +33,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.examples.domain.crm.Customer;
-import com.pyx4j.examples.site.client.GoogleAPI;
+import com.pyx4j.gwt.geo.GoogleAPI;
+import com.pyx4j.gwt.geo.MapUtils;
 
 public class CustomerEditorMapPanel extends HorizontalPanel {
 

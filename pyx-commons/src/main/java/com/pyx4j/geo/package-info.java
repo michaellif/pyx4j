@@ -20,7 +20,7 @@
  */
 /**
  * <pre>
- * package provides classes to facilitate search based on geographic location.
+ * Package provides classes to facilitate search based on geographic location.
  * This is done by partitioning the globe into cells on different resolution levels.
  * Resolution level 1 corresponds to 16 "squares" for the whole globe
  * Resolution level 2 corresponds to 64 squares (obtained by partitioning each big square into 4 smaller squares).

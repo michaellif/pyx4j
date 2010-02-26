@@ -92,7 +92,7 @@ public class GeoCell {
     public final static int MAX_GEOCELL_RESOLUTION = 8;
 
     // The maximum number of geocells to consider for a bounding box search.
-    public final static int MAX_FEASIBLE_BBOX_SEARCH_CELLS = 300;
+    public final static int MAX_FEASIBLE_BBOX_SEARCH_CELLS = 600;
 
     // Direction enumerations.
     public final static int[] NORTHWEST = new int[] { -1, 1 };
