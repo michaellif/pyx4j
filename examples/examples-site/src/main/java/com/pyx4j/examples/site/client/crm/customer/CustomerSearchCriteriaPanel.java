@@ -41,11 +41,9 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CGroupBoxPanel;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
-import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.pyx4j.gwt.geo.MapUtils;
 
 public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPanel<Customer> {
@@ -76,13 +74,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             };
 
-            CGroupBoxPanel group = new CGroupBoxPanel("Customer Search", Layout.CHECKBOX_TOGGLE);
-            group.setExpended(true);
-            CForm form = new CForm(LabelAlignment.LEFT);
-            form.setComponents(components);
-            group.addComponent(form);
-            Widget basicSearchWidget = (Widget) group.initNativeComponent();
-            contentPanel.add(basicSearchWidget);
+            Widget searchForm = CForm.createDecoratedFormWidget(LabelAlignment.LEFT, components, "Customer Search");
+            contentPanel.add(searchForm);
         }
 
         {
@@ -93,9 +86,7 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             CComponent<?>[][] components = new CComponent[][] {
 
-            { fromLocationZipField },
-
-            { areaRadiusField },
+            { fromLocationZipField, areaRadiusField },
 
             };
 
@@ -103,13 +94,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             form.bind(fromLocationZipField, new PathSearch(form.meta().location(), "zip"));
 
-            CGroupBoxPanel group = new CGroupBoxPanel("Location Search", Layout.CHECKBOX_TOGGLE);
-            group.setExpended(true);
-            CForm form = new CForm(LabelAlignment.LEFT);
-            form.setComponents(components);
-            group.addComponent(form);
-            Widget basicSearchWidget = (Widget) group.initNativeComponent();
-            contentPanel.add(basicSearchWidget);
+            Widget searchForm = CForm.createToggleFormWidget(LabelAlignment.LEFT, components, "Location Search", false);
+            contentPanel.add(searchForm);
         }
 
         {
@@ -125,8 +111,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
 
             };
 
-            Widget advancedSearchWidget = CForm.createDecoratedFormWidget(LabelAlignment.LEFT, advancedSearchComponents, "Advanced By Orders", true, false);
-            contentPanel.add(advancedSearchWidget);
+            Widget searchForm = CForm.createToggleFormWidget(LabelAlignment.LEFT, advancedSearchComponents, "Advanced By Orders", false);
+            contentPanel.add(searchForm);
         }
 
         form.populate(null);

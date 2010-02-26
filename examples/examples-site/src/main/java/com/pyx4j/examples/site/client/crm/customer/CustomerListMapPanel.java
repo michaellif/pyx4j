@@ -155,7 +155,7 @@ public class CustomerListMapPanel extends SimplePanel {
         icon.setShadowURL("images/house_shadow.png");
         icon.setIconSize(Size.newInstance(30, 30));
         icon.setShadowSize(Size.newInstance(44, 35));
-        icon.setIconAnchor(Point.newInstance(6, 20));
+        icon.setIconAnchor(Point.newInstance(15, 20));
         icon.setInfoWindowAnchor(Point.newInstance(15, 5));
         markerOptions.setIcon(icon);
 

@@ -37,6 +37,7 @@ import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
@@ -47,6 +48,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoCell;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.geo.GeoUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
@@ -99,6 +101,12 @@ public class EntityServicesImpl {
             // TODO use groups in EntitySearchCriteria
             Set<MemberMeta> processed = new HashSet<MemberMeta>();
 
+            //TODO temp solution for filtering by distance
+            Integer areaRadius = null;
+            GeoPoint geoPointFrom = null;
+            String pathWithGeoPointData = null;
+            //////////////////////////////////////////////
+
             EntityQueryCriteria criteria = new EntityQueryCriteria(entityClass);
             for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
                 if (me.getValue() == null) {
@@ -147,10 +155,11 @@ public class EntityServicesImpl {
                         hasInequalityFilter = true;
                     }
                 } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
-                    Integer areaRadius = (Integer) request.getValue(new PathSearch(path.getPathString(), "radius"));
-                    GeoPoint geoPoint = (GeoPoint) request.getValue(new PathSearch(path.getPathString(), "from"));
-                    if ((areaRadius != null) && (geoPoint != null)) {
-                        List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPoint, areaRadius.intValue() * 1000));
+                    pathWithGeoPointData = path.getPathString();
+                    areaRadius = (Integer) request.getValue(new PathSearch(pathWithGeoPointData, "radius"));
+                    geoPointFrom = (GeoPoint) request.getValue(new PathSearch(pathWithGeoPointData, "from"));
+                    if ((areaRadius != null) && (geoPointFrom != null)) {
+                        List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue() * 1000));
                         criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.IN, (Serializable) keys));
                     }
                     processed.add(mm);
@@ -170,6 +179,14 @@ public class EntityServicesImpl {
             Vector<IEntity> v = new Vector<IEntity>();
             int count = 0;
             for (IEntity ent : rc) {
+
+                if (pathWithGeoPointData != null) {
+                    GeoPoint geoPoint = (GeoPoint) ent.getValue(new Path(pathWithGeoPointData));
+                    if (GeoUtils.distance(geoPoint, geoPointFrom) > areaRadius) {
+                        continue;
+                    }
+                }
+
                 if (count < firstResult) {
                     count++;
                     continue;
