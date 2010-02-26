@@ -158,9 +158,9 @@
     </modules>
 
     <repositories>
-        <repository>
+        <!--repository>
             <id>google-gae-googlecode-repository</id>
-            <!-- url>http://jclouds.googlecode.com/svn/repo</url -->
+            <urlX>http://jclouds.googlecode.com/svn/repo</urlX>
             <url>http://mvn.twig-persist.googlecode.com/hg</url>
             <snapshots>
                 <enabled>false</enabled>
@@ -168,7 +168,7 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
-        </repository>
+        </repository-->
 
         <repository>
             <id>pyx4j-internal</id>
