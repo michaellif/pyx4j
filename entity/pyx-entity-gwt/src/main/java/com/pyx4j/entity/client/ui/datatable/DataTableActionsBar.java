@@ -41,6 +41,6 @@ public class DataTableActionsBar extends SimplePanel {
 
         + "<a href=''>&nbsp;Next&nbsp;20&nbsp;&gt;</a><span>"));
         getElement().getStyle().setProperty("textAlign", "right");
-        setHeight("40px");
+        getElement().getStyle().setProperty("padding", "10px");
     }
 }

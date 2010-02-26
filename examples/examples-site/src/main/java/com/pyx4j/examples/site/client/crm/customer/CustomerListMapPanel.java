@@ -85,6 +85,8 @@ public class CustomerListMapPanel extends SimplePanel {
 
         map = new MapWidget(pos, 2);
         map.setSize("350px", "400px");
+        map.getElement().getStyle().setProperty("border", "1px solid #CCC");
+
         map.setCenter(pos, 10);
 
         map.addControl(new LargeMapControl());
