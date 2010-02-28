@@ -109,8 +109,11 @@ public class IndexedEntitySearch {
                         queryCriteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.EQUAL, key));
                     }
                     //use secondary filter if required
-                    if (str.length() > index.keywordLenght()) {
-                        inMemoryFilters.add(new StringInMemoryFilter(path, str));
+                    for (String word : str.split(IndexString.KEYWORD_SPLIT_PATTERN)) {
+                        word = word.toLowerCase();
+                        if (word.length() > index.keywordLenght()) {
+                            inMemoryFilters.add(new StringInMemoryFilter(path, word));
+                        }
                     }
                 } else {
                     // Simple like implementation

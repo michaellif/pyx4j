@@ -25,9 +25,11 @@ import java.util.Set;
 
 public class IndexString {
 
+    public static String KEYWORD_SPLIT_PATTERN = "[\\W,.;\\-]";
+
     public static Set<String> getIndexValues(int keywordLenght, String searchCriteria) {
         Set<String> set = new HashSet<String>();
-        for (String word : searchCriteria.split("[\\W,.;\\-]")) {
+        for (String word : searchCriteria.split(KEYWORD_SPLIT_PATTERN)) {
             word = word.toLowerCase();
             if (word.length() > keywordLenght) {
                 set.add(word.substring(0, keywordLenght));
