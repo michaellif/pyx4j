@@ -14,27 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 25, 2010
+ * Created on Feb 28, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.server;
+package com.pyx4j.entity.server.search;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 
-public class IndexString {
+public abstract class InMemoryFilter {
 
-    public static Set<String> getIndexValues(int keywordLenght, String searchCriteria) {
-        Set<String> set = new HashSet<String>();
-        for (String word : searchCriteria.split("[\\W,.;\\-]")) {
-            word = word.toLowerCase();
-            if (word.length() > keywordLenght) {
-                set.add(word.substring(0, keywordLenght));
-            } else {
-                set.add(word);
-            }
-        }
-        return set;
+    protected Path propertyPath;
+
+    InMemoryFilter(Path propertyPath) {
+        this.propertyPath = propertyPath;
     }
+
+    protected abstract boolean accept(IEntity entity);
+
 }

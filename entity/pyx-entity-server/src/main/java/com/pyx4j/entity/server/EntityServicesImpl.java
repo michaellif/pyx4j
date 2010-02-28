@@ -20,35 +20,19 @@
  */
 package com.pyx4j.entity.server;
 
-import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.server.search.IndexedEntitySearch;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-import com.pyx4j.entity.shared.criterion.PathSearch;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
-import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.geo.GeoCell;
-import com.pyx4j.geo.GeoCircle;
-import com.pyx4j.geo.GeoPoint;
-import com.pyx4j.geo.GeoUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
@@ -85,121 +69,23 @@ public class EntityServicesImpl {
         }
     }
 
+    /**
+     * Implementations is application specific and in most cases should be overridden.
+     * Class IndexedEntitySearch was made the most generic and its logic should be
+     * reusable.
+     */
     public static class SearchImpl implements EntityServices.Search {
 
         @SuppressWarnings("unchecked")
         @Override
         public Vector execute(EntitySearchCriteria<?> request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
-
-            Class<IEntity> entityClass = ServerEntityFactory.entityClass(request.getDomainName());
-            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-
-            boolean limitToOneIndex = true; // For GAE
-            boolean hasInequalityFilter = false;
-
-            // TODO use groups in EntitySearchCriteria
-            Set<MemberMeta> processed = new HashSet<MemberMeta>();
-
-            //TODO temp solution for filtering by distance
-            Integer areaRadius = null;
-            GeoPoint geoPointFrom = null;
-            String pathWithGeoPointData = null;
-            //////////////////////////////////////////////
-
-            EntityQueryCriteria criteria = new EntityQueryCriteria(entityClass);
-            for (Map.Entry<PathSearch, Serializable> me : request.getFilters().entrySet()) {
-                if (me.getValue() == null) {
-                    continue;
-                }
-                PathSearch path = me.getKey();
-                if (path.getPathMembers().size() > 1) {
-                    // TODO
-                    log.warn("Ignore path {} not implemented", path);
-                    continue;
-                }
-                MemberMeta mm = meta.getMemberMeta(path);
-                if (processed.contains(mm)) {
-                    continue;
-                }
-                if (String.class.isAssignableFrom(mm.getValueClass())) {
-                    String str = me.getValue().toString().trim();
-                    if (!CommonsStringUtils.isStringSet(str)) {
-                        continue;
-                    }
-                    Indexed index = mm.getAnnotation(Indexed.class);
-                    //If indexed by keywords
-                    if ((index != null) && (index.keywordLenght() > 0)) {
-                        Set<String> keys = IndexString.getIndexValues(index.keywordLenght(), str);
-                        for (String key : keys) {
-                            // TODO use SECONDARY_PRROPERTY_SUFIX or identify use of index in any other way
-                            criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.EQUAL, key));
-                        }
-                        if (str.length() > index.keywordLenght()) {
-                            //TODO use secondary filter
-                        }
-                    } else {
-                        // Simple like implementation
-                        if (hasInequalityFilter && limitToOneIndex) {
-                            // TODO Add to in memory filters
-                            continue;
-                        }
-                        char firstChar = str.charAt(0);
-                        if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
-                            str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
-                        }
-                        String from = str;
-                        String to = from + "z";
-                        criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.GREATER_THAN_OR_EQUAL, from));
-                        criteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
-                        hasInequalityFilter = true;
-                    }
-                } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
-                    pathWithGeoPointData = path.getPathString();
-                    areaRadius = (Integer) request.getValue(new PathSearch(pathWithGeoPointData, "radius"));
-                    geoPointFrom = (GeoPoint) request.getValue(new PathSearch(pathWithGeoPointData, "from"));
-                    if ((areaRadius != null) && (geoPointFrom != null)) {
-                        log.debug("GEO search {} {}", geoPointFrom, areaRadius);
-                        List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue() * 1000));
-                        criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.IN, (Serializable) keys));
-                    } else {
-                        pathWithGeoPointData = null;
-                    }
-                    processed.add(mm);
-                } else {
-                    log.warn("Search by class {} not implemented", mm.getValueClass());
-                }
-            }
-
-            List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
-            int maxResults = Integer.MAX_VALUE;
-            int firstResult = -1;
-            if (request.getPageSize() > 0) {
-                maxResults = request.getPageSize();
-                firstResult = request.getPageSize() * (request.getPageNumber() - 1);
-            }
-
+            IndexedEntitySearch search = new IndexedEntitySearch(request);
+            search.buildQueryCriteria();
             Vector<IEntity> v = new Vector<IEntity>();
-            int count = 0;
-            for (IEntity ent : rc) {
-
-                if (pathWithGeoPointData != null) {
-                    GeoPoint geoPoint = (GeoPoint) ent.getValue(new Path(pathWithGeoPointData));
-                    if (GeoUtils.distance(geoPoint, geoPointFrom) > areaRadius) {
-                        continue;
-                    }
-                }
-
-                if (count < firstResult) {
-                    count++;
-                    continue;
-                }
+            for (IEntity ent : search.getResult()) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
                 v.add(ent);
-                count++;
-                if (v.size() >= maxResults) {
-                    break;
-                }
             }
             return v;
         }

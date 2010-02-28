@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -666,18 +665,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
         T iEntity = null;
-        Iterator<Entity> iterable = pq.asIterable().iterator();
-        if (iterable.hasNext()) {
-            Entity entity = iterable.next();
+        Entity entity = pq.asSingleEntity();
+        if (entity != null) {
             iEntity = EntityFactory.create(entityClass);
             updateIEntity(iEntity, entity, retrievedMap);
         }
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().count - initCount;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running retrieve query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("retrieve query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         }
         return iEntity;
     }
