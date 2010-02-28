@@ -99,6 +99,8 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
             GeoPoint geoPoint = (GeoPoint) criteria.getValue(new PathSearch(criteria.meta().location(), "from"));
             LatLng fromCoordinates = MapUtils.newLatLngInstance(geoPoint);
             searchResultsPanel.setDistanceOverlay(fromCoordinates, areaRadius);
+        } else {
+            searchResultsPanel.setDistanceOverlay(null, 0);
         }
     }
 }
