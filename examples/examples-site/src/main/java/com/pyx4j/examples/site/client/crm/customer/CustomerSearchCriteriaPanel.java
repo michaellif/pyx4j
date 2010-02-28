@@ -32,7 +32,6 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.examples.domain.crm.Customer;
@@ -137,6 +136,7 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
                         }
                     });
                 } else {
+                    form.removePropertyValue(new PathSearch(form.meta().location(), "from"));
                     customerListWidget.view();
                 }
             }
@@ -147,7 +147,8 @@ public class CustomerSearchCriteriaPanel extends AbstractEntitySearchCriteriaPan
     }
 
     private boolean hasDistanceCriteria() {
-        return areaRadiusField.getValue() != null && areaRadiusField.getValue() > 0 && !fromLocationZipField.isValueEmpty();
+        return fromLocationZipField.isEnabled() && fromLocationZipField.isVisible() && areaRadiusField.getValue() != null && areaRadiusField.getValue() > 0
+                && !fromLocationZipField.isValueEmpty();
     }
 
 }

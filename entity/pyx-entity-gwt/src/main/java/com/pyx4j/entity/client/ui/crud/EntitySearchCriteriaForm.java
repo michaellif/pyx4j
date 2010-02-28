@@ -33,6 +33,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -49,8 +51,10 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
     @SuppressWarnings("unchecked")
     private final ValueChangeHandler valuePropagation;
 
+    private final PropertyChangeHandler visibilityPropagation;
+
     @SuppressWarnings("unchecked")
-    private class ValuePropagation implements ValueChangeHandler {
+    private class ValuePropagationHandler implements ValueChangeHandler {
 
         @Override
         public void onValueChange(ValueChangeEvent event) {
@@ -61,9 +65,30 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
         }
     }
 
+    private class VisibilityPropagationHandler implements PropertyChangeHandler {
+
+        @Override
+        public void onPropertyChange(PropertyChangeEvent event) {
+            if ((event.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY)
+                    || (event.getPropertyName() == PropertyChangeEvent.PropertyName.ENABLED_PROPERTY)) {
+                PathSearch path = binding.get(event.getSource());
+                if ((path != null) && (editableCriteria != null)) {
+                    CEditableComponent<?> component = (CEditableComponent<?>) event.getSource();
+                    if (component.isVisible() && component.isEnabled()) {
+                        setPropertyValue(path, component.getValue());
+                    } else {
+                        editableCriteria.removeValue(path);
+                    }
+                }
+            }
+        }
+
+    }
+
     public EntitySearchCriteriaForm(Class<E> clazz) {
         metaEntity = EntityFactory.create(clazz);
-        valuePropagation = new ValuePropagation();
+        valuePropagation = new ValuePropagationHandler();
+        visibilityPropagation = new VisibilityPropagationHandler();
     }
 
     public E meta() {
@@ -100,6 +125,7 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
     public void bind(CEditableComponent<?> component, PathSearch path) {
         binding.put(component, path);
         component.addValueChangeHandler(valuePropagation);
+        component.addPropertyChangeHandler(visibilityPropagation);
     }
 
     @SuppressWarnings("unchecked")
@@ -122,14 +148,17 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
             this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) metaEntity.getValueClass());
         }
 
-        for (CEditableComponent component : binding.keySet()) {
-            PathSearch path = binding.get(component);
-            component.setValue(editableCriteria.getValue(path));
+        for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
+            ((CEditableComponent) me.getKey()).setValue(editableCriteria.getValue(me.getValue()));
         }
     }
 
     public void setPropertyValue(PathSearch path, Object value) {
         editableCriteria.setValue(path, value);
+    }
+
+    public void removePropertyValue(PathSearch path) {
+        editableCriteria.removeValue(path);
     }
 
     public EntitySearchCriteria<E> getValue() {

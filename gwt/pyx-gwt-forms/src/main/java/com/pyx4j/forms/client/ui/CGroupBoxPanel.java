@@ -26,7 +26,6 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.gwt.NativeGroupBoxPanel;
 
@@ -38,7 +37,18 @@ import com.pyx4j.forms.client.gwt.NativeGroupBoxPanel;
 public class CGroupBoxPanel extends CContainer {
 
     public static enum Layout {
-        PLAIN, COLLAPSIBLE, CHECKBOX_TOGGLE;
+
+        PLAIN,
+
+        /**
+         * Child visibility does not changes on collapse and expand.
+         */
+        COLLAPSIBLE,
+
+        /**
+         * Child would become invisible when panel is Collapsed.
+         */
+        CHECKBOX_TOGGLE;
     }
 
     private final Layout layout;
@@ -114,7 +124,20 @@ public class CGroupBoxPanel extends CContainer {
         componentCollection.clear();
         componentCollection.add(this.component);
         component.setParent(this);
+    }
 
+    @Override
+    public IAccessAdapter getContainerAccessAdapter() {
+        if (layout == Layout.CHECKBOX_TOGGLE) {
+            return new ContainerAccessAdapter(this) {
+                @Override
+                public boolean isVisible(CComponent<?> component) {
+                    return expended && super.isVisible(component);
+                }
+            };
+        } else {
+            return super.getContainerAccessAdapter();
+        }
     }
 
     public void addAllComponents(CComponent<?>[] componentsArray) {
@@ -133,6 +156,8 @@ public class CGroupBoxPanel extends CContainer {
         }
         if (nativePanel != null && isCollapsible()) {
             nativePanel.setExpanded(expended);
+        } else if ((layout == Layout.CHECKBOX_TOGGLE) && (component != null)) {
+            component.applyVisibilityRules();
         }
     }
 
@@ -146,6 +171,9 @@ public class CGroupBoxPanel extends CContainer {
             initInnerComponent();
         }
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.EXPENDED_PROPERTY);
+        if ((layout == Layout.CHECKBOX_TOGGLE) && (component != null)) {
+            component.applyVisibilityRules();
+        }
     }
 
     public boolean isCollapsible() {

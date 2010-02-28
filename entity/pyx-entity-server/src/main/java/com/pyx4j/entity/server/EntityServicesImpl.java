@@ -159,6 +159,7 @@ public class EntityServicesImpl {
                     areaRadius = (Integer) request.getValue(new PathSearch(pathWithGeoPointData, "radius"));
                     geoPointFrom = (GeoPoint) request.getValue(new PathSearch(pathWithGeoPointData, "from"));
                     if ((areaRadius != null) && (geoPointFrom != null)) {
+                        log.debug("GEO search {} {}", geoPointFrom, areaRadius);
                         List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue() * 1000));
                         criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.IN, (Serializable) keys));
                     } else {

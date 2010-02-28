@@ -83,6 +83,10 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
         }
     }
 
+    public void removeValue(PathSearch path) {
+        filters.remove(path);
+    }
+
     public Object getValue(PathSearch path) {
         return filters.get(path);
     }
