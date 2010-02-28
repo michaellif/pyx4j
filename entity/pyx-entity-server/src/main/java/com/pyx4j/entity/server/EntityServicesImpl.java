@@ -161,6 +161,8 @@ public class EntityServicesImpl {
                     if ((areaRadius != null) && (geoPointFrom != null)) {
                         List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue() * 1000));
                         criteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.IN, (Serializable) keys));
+                    } else {
+                        pathWithGeoPointData = null;
                     }
                     processed.add(mm);
                 } else {
