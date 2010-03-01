@@ -66,4 +66,6 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria);
 
+    public int getDatastoreCallCount();
+
 }

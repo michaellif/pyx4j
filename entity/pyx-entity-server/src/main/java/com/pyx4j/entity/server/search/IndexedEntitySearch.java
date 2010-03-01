@@ -37,6 +37,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
@@ -151,10 +152,7 @@ public class IndexedEntitySearch {
     }
 
     public Iterable<IEntity> getResult() {
-
-        List<? extends IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(queryCriteria);
-
-        final Iterator<? extends IEntity> unfiltered = rc.iterator();
+        final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(null, queryCriteria);
         final int maxResults;
         final int firstResult;
         if (searchCriteria.getPageSize() > 0) {
@@ -173,6 +171,8 @@ public class IndexedEntitySearch {
                     int count = 0;
 
                     IEntity next;
+
+                    IEntity last;
 
                     @Override
                     public boolean hasNext() {
@@ -209,13 +209,18 @@ public class IndexedEntitySearch {
                         try {
                             return next;
                         } finally {
+                            last = next;
                             next = null;
                         }
                     }
 
                     @Override
                     public void remove() {
-                        throw new UnsupportedOperationException();
+                        if (last == null) {
+                            throw new NoSuchElementException();
+                        }
+                        PersistenceServicesFactory.getPersistenceService().delete(last);
+                        last = null;
                     }
                 };
             }

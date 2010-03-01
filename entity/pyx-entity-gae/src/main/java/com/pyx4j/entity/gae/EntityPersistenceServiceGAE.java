@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +51,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -720,7 +722,54 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
-        return null;
+        long start = System.nanoTime();
+        int initCount = datastoreCallStats.get().count;
+        final Class<T> entityClass = entityClass(criteria);
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        Query query = buildQuery(entityMeta, criteria);
+        datastoreCallStats.get().count++;
+        PreparedQuery pq = datastore.prepare(query);
+
+        final Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
+
+        final Iterator<Entity> iterator = pq.asIterator();
+        long duration = System.nanoTime() - start;
+        int callsCount = datastoreCallStats.get().count - initCount;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running query iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("query iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        }
+
+        return new ICursorIterator<T>() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public T next() {
+                Entity entity = iterator.next();
+                T iEntity = EntityFactory.create(entityClass);
+                updateIEntity(iEntity, entity, retrievedMap);
+                return iEntity;
+            }
+
+            @Override
+            public void remove() {
+                iterator.remove();
+            }
+
+            @Override
+            public String encodedCursorRefference() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        };
     }
 
     @Override
@@ -790,5 +839,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastoreCallStats.get().count++;
         datastore.delete(keys);
         return keys.size();
+    }
+
+    public int getDatastoreCallCount() {
+        return datastoreCallStats.get().count;
     }
 }
