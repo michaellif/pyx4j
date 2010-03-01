@@ -23,10 +23,10 @@ package com.pyx4j.forms.client.gwt;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.TextArea;
 
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.widgets.client.TextArea;
 
 public class NativeTextArea extends TextArea implements INativeEditableComponent<String> {
 
