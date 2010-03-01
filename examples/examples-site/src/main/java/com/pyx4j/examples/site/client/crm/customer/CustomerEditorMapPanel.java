@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.site.client.themes.SiteCSSClass;
 
 public class CustomerEditorMapPanel extends HorizontalPanel {
 
@@ -66,7 +67,7 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
 
         map = new MapWidget(pos, 2);
         map.setSize("400px", "400px");
-        map.getElement().getStyle().setProperty("border", "1px solid #CCC");
+        map.setStyleName(SiteCSSClass.pyx4j_Site_Map.name());
         map.setCenter(pos, 15);
 
         map.addControl(new LargeMapControl());

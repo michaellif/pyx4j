@@ -48,6 +48,7 @@ import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.GeoBoxOverlay;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
+import com.pyx4j.site.client.themes.SiteCSSClass;
 
 public class CustomerListMapPanel extends SimplePanel {
 
@@ -85,7 +86,7 @@ public class CustomerListMapPanel extends SimplePanel {
 
         map = new MapWidget(pos, 10);
         map.setSize("350px", "400px");
-        map.getElement().getStyle().setProperty("border", "1px solid #CCC");
+        map.setStyleName(SiteCSSClass.pyx4j_Site_Map.name());
 
         map.addControl(new LargeMapControl());
 
@@ -144,7 +145,12 @@ public class CustomerListMapPanel extends SimplePanel {
                     }
                 }
             }
-            map.setCenter(latLng, 10);
+            if (latLng != null) {
+                map.setCenter(latLng, 14 - (int) Math.ceil(Math.log(distance) / Math.log(2)));
+            } else {
+                LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
+                map.setCenter(pos, 10);
+            }
         }
     }
 

@@ -44,6 +44,7 @@ public abstract class SiteTheme extends WindowsTheme {
         initHtmlPortletStyles();
         initEntityCRUDStyles();
         initEntityDataTableStyles();
+        initMapStyles();
     }
 
     protected void initGeneralStyles() {
@@ -116,4 +117,5 @@ public abstract class SiteTheme extends WindowsTheme {
 
     protected abstract void initEntityDataTableStyles();
 
+    protected abstract void initMapStyles();
 }

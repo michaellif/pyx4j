@@ -31,7 +31,18 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initThemeColors() {
         super.initThemeColors();
-        putThemeColor(ThemeColor.BORDER, "#cccccc");
+        putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
+        putThemeColor(ThemeColor.OBJECT_TONE2, "#F6F9FF");
+        putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
+        putThemeColor(ThemeColor.BORDER, "#E5ECF9");
+        putThemeColor(ThemeColor.SELECTION, "#86adc4");
+        putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
+        putThemeColor(ThemeColor.TEXT, "#000000");
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, "#ffffff");
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, "#fafafa");
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
+        putThemeColor(ThemeColor.SEPARATOR, "#eeeeee");
     }
 
     @Override
@@ -318,14 +329,16 @@ public class LightTheme extends SiteTheme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "10px 40px 10px 10px");
         style.addProperty("margin-bottom", "10px");
-        style.addProperty("border", "solid 1px #CCC");
+        style.addProperty("border", "solid 1px");
+        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
         style.addProperty("width", "875px");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "10px 40px 10px 10px");
         style.addProperty("margin-bottom", "10px");
-        style.addProperty("border", "solid 1px #CCC");
+        style.addProperty("border", "solid 1px");
+        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
     }
 
@@ -350,7 +363,16 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("border", "1px solid #CCC");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
+        addStyle(style);
+    }
+
+    @Override
+    protected void initMapStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_Map.name());
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
     }
 
