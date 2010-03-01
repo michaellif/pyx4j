@@ -68,6 +68,16 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     }
 
     @Override
+    protected void onAfterLogOut() {
+        super.onAfterLogOut();
+        if (getCurrentSitePanel() != null) {
+            if (getCurrentSitePanel().equals(getSitePanels().get(Sites.crm.name()))) {
+                History.newItem(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home").uri().getValue());
+            }
+        }
+    }
+
+    @Override
     protected void obtainSite(final String siteName, final AsyncCallback<SitePanel> callback) {
 
         if (!getSitePanels().containsKey(siteName)) {

@@ -60,12 +60,12 @@ public class ExamplesCrmSitePanel extends ExamplesSitePanel {
         removeAllHeaderLinks();
         welcomeMessage = new LinkBarMessage("<b>Welcome, " + ClientContext.getUserVisit().getName() + "</b>");
         addHeaderLink(welcomeMessage, false);
-        //addHeaderLink(getLogOutLink(), true);
+        addHeaderLink(getLogOutLink(), true);
     }
 
     private void removeAllHeaderLinks() {
         removeHeaderLink(welcomeMessage);
-        //removeHeaderLink(getLogOutLink());
+        removeHeaderLink(getLogOutLink());
 
     }
 
