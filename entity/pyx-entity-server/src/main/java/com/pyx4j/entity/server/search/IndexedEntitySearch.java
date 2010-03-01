@@ -105,8 +105,8 @@ public class IndexedEntitySearch {
                 if ((index != null) && (index.keywordLenght() > 0)) {
                     Set<String> keys = IndexString.getIndexValues(index.keywordLenght(), str);
                     for (String key : keys) {
-                        // TODO use constant SECONDARY_PRROPERTY_SUFIX or identify how use index name in any other way
-                        queryCriteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.EQUAL, key));
+                        queryCriteria.add(new PropertyCriterion(PersistenceServicesFactory.getPersistenceService().getIndexedPropertyName(mm),
+                                Restriction.EQUAL, key));
                     }
                     //use secondary filter if required
                     for (String word : str.split(IndexString.KEYWORD_SPLIT_PATTERN)) {
@@ -139,7 +139,8 @@ public class IndexedEntitySearch {
                 if ((areaRadius != null) && (geoPointFrom != null)) {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue() * 1000));
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
-                    queryCriteria.add(new PropertyCriterion(mm.getFieldName() + "-s", Restriction.IN, (Serializable) keys));
+                    queryCriteria.add(new PropertyCriterion(PersistenceServicesFactory.getPersistenceService().getIndexedPropertyName(mm), Restriction.IN,
+                            (Serializable) keys));
                     inMemoryFilters.add(new GeoDistanceInMemoryFilter(new Path(pathWithGeoPointData), geoPointFrom, areaRadius.doubleValue()));
                 }
                 processed.add(mm);

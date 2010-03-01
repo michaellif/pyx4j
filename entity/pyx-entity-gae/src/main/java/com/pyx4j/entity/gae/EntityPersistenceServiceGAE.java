@@ -202,7 +202,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 } else {
                     Indexed index = meta.getAnnotation(Indexed.class);
                     if ((index != null) && (index.keywordLenght() > 0)) {
-                        entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createStringKeywordIndex(index.keywordLenght(), (String) value));
+                        entity.setProperty(getIndexedPropertyName(meta), createStringKeywordIndex(index.keywordLenght(), (String) value));
                     }
                 }
             } else if (value instanceof Enum<?>) {
@@ -270,7 +270,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
                 Indexed index = meta.getAnnotation(Indexed.class);
                 if (index != null) {
-                    entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, geoPoint.getCells());
+                    entity.setProperty(getIndexedPropertyName(meta), geoPoint.getCells());
                 }
             } else if (value != null) {
                 if (value.getClass().isArray()) {
@@ -303,6 +303,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setUnindexedProperty(memberName, ownerKey);
             }
         }
+    }
+
+    /**
+     * We store the indexed values in the same entity
+     */
+    @Override
+    public String getIndexedPropertyName(MemberMeta memberMeta) {
+        return memberMeta.getFieldName() + SECONDARY_PRROPERTY_SUFIX;
     }
 
     private Object createStringKeywordIndex(int keywordLenght, String value) {
@@ -585,7 +593,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return ServerEntityFactory.entityClass(criteria.getDomainName());
     }
 
-    public static Query.FilterOperator operator(PropertyCriterion.Restriction restriction) {
+    private static Query.FilterOperator operator(PropertyCriterion.Restriction restriction) {
         switch (restriction) {
         case LESS_THAN:
             return Query.FilterOperator.LESS_THAN;
@@ -607,7 +615,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @SuppressWarnings("unchecked")
-    public static Object datastoreValue(EntityMeta entityMeta, String propertyName, Serializable value) {
+    private static Object datastoreValue(EntityMeta entityMeta, String propertyName, Serializable value) {
         if (value instanceof Enum<?>) {
             return ((Enum<?>) value).name();
         } else if (value instanceof IEntity) {
@@ -710,9 +718,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
-    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria) {
+    @Override
+    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+        return null;
+    }
+
+    @Override
+    public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        int initCount = datastoreCallStats.get().count;
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
@@ -723,12 +736,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
 
-        List<String> rc = new Vector<String>();
+        List<Long> rc = new Vector<Long>();
         for (Entity entity : pq.asIterable()) {
-            rc.add(KeyFactory.keyToString(entity.getKey()));
+            rc.add(entity.getKey().getId());
         }
         long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().count - initCount;
         if (duration > Consts.SEC2NANO) {
             log.warn("Long running queryKeys {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         } else {
@@ -737,6 +749,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
+    @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         Class<T> entityClass = entityClass(criteria);
@@ -758,6 +771,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
+    @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);

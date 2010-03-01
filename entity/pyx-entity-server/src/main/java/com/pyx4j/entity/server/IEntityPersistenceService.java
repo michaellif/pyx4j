@@ -20,12 +20,24 @@
  */
 package com.pyx4j.entity.server;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public interface IEntityPersistenceService {
+
+    public interface ICursorIterator<T extends IEntity> extends Iterator<T> {
+
+        /**
+         * @see com.google.appengine.api.datastore.Cursor.toWebSafeString()
+         * @return
+         */
+        public String encodedCursorRefference();
+
+    }
 
     public void persist(IEntity entity);
 
@@ -35,9 +47,16 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
+    /**
+     * This may be a join with secondary table in RDBMS
+     */
+    public String getIndexedPropertyName(MemberMeta memberMeta);
+
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
 
-    public <T extends IEntity> List<String> queryKeys(EntityQueryCriteria<T> criteria);
+    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
+
+    public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 
