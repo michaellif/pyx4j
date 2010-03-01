@@ -1,0 +1,3 @@
+<div class="email">
+    E-mail: <a href="mailto:support@pyx4j.com">support@pyx4j.com</a>
+</div>

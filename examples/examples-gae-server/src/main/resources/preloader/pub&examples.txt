@@ -1,1 +1,4 @@
-EXA
+<h2>Mini CRM Example</h2>
+Use "Sign In" link above<p/>
+Enter user name: "emp001@pyx4j.com" and the same password.<p/>
+Or Press "Ctrl" + E in login form.

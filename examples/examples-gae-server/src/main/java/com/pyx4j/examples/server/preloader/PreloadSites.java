@@ -34,7 +34,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.util.ResourceUriUtil;
 
 public class PreloadSites extends AbstractSitesDataPreloader {
 
@@ -117,7 +116,7 @@ public class PreloadSites extends AbstractSitesDataPreloader {
 
         new String[] { Widgets.pub$searchWidget.name() }));
 
-        site.pages().add(createPage("Examples", PageType.pub$examples, getPageContent(PageType.pub$contactUs),
+        site.pages().add(createPage("Examples", PageType.pub$examples, getPageContent(PageType.pub$examples),
 
         null,
 
@@ -185,9 +184,9 @@ public class PreloadSites extends AbstractSitesDataPreloader {
                 createPage("E-mail Validation", PageType.headless$headless$activation, "</div><div id='" + Widgets.headless$activation + "'></div>", null,
                         null, new String[] { Widgets.headless$activation.name() }));
 
-        site.pages().add(createPage("Contact Us", PageType.headless$headless$contactUs, null));
+        site.pages().add(createPage("Contact Us", PageType.headless$headless$contactUs, getPageContent(PageType.pub$contactUs)));
 
-        site.pages().add(createPage("Technical Support", PageType.headless$headless$technicalSupport, null));
+        site.pages().add(createPage("Technical Support", PageType.headless$headless$technicalSupport, getPageContent(PageType.pub$contactUs)));
 
         site.pages().add(createPage("Privacy policy", PageType.headless$headless$privacyPolicy, null));
 
