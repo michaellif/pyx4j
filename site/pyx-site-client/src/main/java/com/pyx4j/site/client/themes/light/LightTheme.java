@@ -315,24 +315,24 @@ public class LightTheme extends SiteTheme {
     protected void initEntityCRUDStyles() {
         Style style = new Style("." + EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
         style.addProperty("width", "875px");
-        style.addProperty("background-color", "#F8F8F8");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "10px 40px 10px 10px");
         style.addProperty("margin-bottom", "10px");
-        style.addProperty("border", "solid 1px #F0F0F0");
+        style.addProperty("border", "solid 1px #CCC");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
         style.addProperty("width", "875px");
-        style.addProperty("background-color", "#F8F8F8");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "10px 40px 10px 10px");
         style.addProperty("margin-bottom", "10px");
-        style.addProperty("border", "solid 1px #F0F0F0");
+        style.addProperty("border", "solid 1px #CCC");
         addStyle(style);
     }
 
     @Override
     protected void initEntityDataTableStyles() {
         Style style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTable.name());
-        style.addProperty("margin", "2px");
+        style.addProperty("margin", "2px 0px 2px 0px");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableRow.name());
         style.addProperty("cursor", "pointer");
@@ -349,8 +349,8 @@ public class LightTheme extends SiteTheme {
         style.addProperty("color", "white");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
-        style.addProperty("background-color", "#F0F0F0");
-        style.addProperty("margin", "4px");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("border", "1px solid #CCC");
         addStyle(style);
     }
 
