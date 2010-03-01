@@ -169,6 +169,11 @@ public class DataTableModel<E extends IEntity> {
         fireTableChanged(new DataTableModelEvent());
     }
 
+    public void clearData() {
+        data.clear();
+        fireTableChanged(new DataTableModelEvent());
+    }
+
     public int getRowCount() {
         return data.size();
     }

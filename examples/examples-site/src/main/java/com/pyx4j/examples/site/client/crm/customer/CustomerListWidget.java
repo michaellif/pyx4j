@@ -66,6 +66,7 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
     }
 
     public void view() {
+        searchResultsPanel.clearData();
         final long start = System.currentTimeMillis();
 
         AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {

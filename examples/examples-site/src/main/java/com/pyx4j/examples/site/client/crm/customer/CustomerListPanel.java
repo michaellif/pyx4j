@@ -89,4 +89,8 @@ public class CustomerListPanel extends VerticalPanel {
         }
         dataTableModel.populateData(dataItems, 0, 20);
     }
+
+    public void clearData() {
+        dataTableModel.clearData();
+    }
 }

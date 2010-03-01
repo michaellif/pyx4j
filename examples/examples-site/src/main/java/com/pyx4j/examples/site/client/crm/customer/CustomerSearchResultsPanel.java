@@ -54,4 +54,9 @@ public class CustomerSearchResultsPanel extends HorizontalPanel implements IEnti
     public void setDistanceOverlay(LatLng latLng, double distance) {
         customerListMapPanel.setDistanceOverlay(latLng, distance);
     }
+
+    public void clearData() {
+        customerListPanel.clearData();
+        customerListMapPanel.clearData();
+    }
 }

@@ -83,11 +83,9 @@ public class CustomerListMapPanel extends SimplePanel {
 
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
-        map = new MapWidget(pos, 2);
+        map = new MapWidget(pos, 10);
         map.setSize("350px", "400px");
         map.getElement().getStyle().setProperty("border", "1px solid #CCC");
-
-        map.setCenter(pos, 10);
 
         map.addControl(new LargeMapControl());
 
@@ -146,6 +144,7 @@ public class CustomerListMapPanel extends SimplePanel {
                     }
                 }
             }
+            map.setCenter(latLng, 10);
         }
     }
 
@@ -181,6 +180,24 @@ public class CustomerListMapPanel extends SimplePanel {
             return marker;
         } else {
             return null;
+        }
+    }
+
+    public void clearData() {
+        if (mapLoadComplete) {
+            for (Marker marker : markers) {
+                map.removeOverlay(marker);
+            }
+            markers.clear();
+            if (distanceOverlay != null) {
+                map.removeOverlay(distanceOverlay);
+                distanceOverlay = null;
+            }
+            for (GeoBoxOverlay geoBoxOverlay : geoBoxOverlayList) {
+                map.removeOverlay(geoBoxOverlay);
+            }
+            geoBoxOverlayList.clear();
+
         }
     }
 }
