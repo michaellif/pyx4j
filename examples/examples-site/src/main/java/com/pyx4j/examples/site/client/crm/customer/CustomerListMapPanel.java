@@ -136,7 +136,7 @@ public class CustomerListMapPanel extends SimplePanel {
             if (latLng != null && distance != 0) {
                 distanceOverlay = new CircleOverlay(latLng, distance, "green", 2, 0.4, "green", 0.1);
                 map.addOverlay(distanceOverlay);
-                List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(new GeoPoint(latLng.getLatitude(), latLng.getLongitude()), distance * 1000));
+                List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(new GeoPoint(latLng.getLatitude(), latLng.getLongitude()), distance));
                 for (String geoBox : keys) {
                     if (false) {
                         GeoBoxOverlay geoBoxOverlay = new GeoBoxOverlay(geoBox);

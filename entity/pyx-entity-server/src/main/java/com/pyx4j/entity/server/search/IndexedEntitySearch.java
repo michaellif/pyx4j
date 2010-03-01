@@ -137,7 +137,7 @@ public class IndexedEntitySearch {
                 Integer areaRadius = (Integer) searchCriteria.getValue(new PathSearch(pathWithGeoPointData, "radius"));
                 GeoPoint geoPointFrom = (GeoPoint) searchCriteria.getValue(new PathSearch(pathWithGeoPointData, "from"));
                 if ((areaRadius != null) && (geoPointFrom != null)) {
-                    List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue() * 1000));
+                    List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
                     queryCriteria.add(new PropertyCriterion(PersistenceServicesFactory.getPersistenceService().getIndexedPropertyName(mm), Restriction.IN,
                             (Serializable) keys));

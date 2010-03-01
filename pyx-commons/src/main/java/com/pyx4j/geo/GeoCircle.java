@@ -26,18 +26,20 @@ public class GeoCircle implements Serializable {
 
     private static final long serialVersionUID = 8531522974408382863L;
 
+    public static final double KM_IN_LAT_DEGREE = 111.325;
+
     private GeoPoint center;
 
-    private double radius;
+    private double radiusKm;
 
     protected GeoCircle() {
 
     }
 
-    public GeoCircle(GeoPoint center, double radius) {
+    public GeoCircle(GeoPoint center, double radiusKm) {
         super();
         this.center = center;
-        this.radius = radius;
+        this.radiusKm = radiusKm;
     }
 
     public GeoPoint getCenter() {
@@ -49,20 +51,19 @@ public class GeoCircle implements Serializable {
     }
 
     public double getRadius() {
-        return radius;
+        return radiusKm;
     }
 
-    public void setRadius(double radius) {
-        this.radius = radius;
+    public void setRadius(double radiusKm) {
+        this.radiusKm = radiusKm;
     }
 
     public boolean contains(GeoPoint point) {
-        return GeoUtils.distance(center, point) <= radius;
+        return GeoUtils.distance(center, point) <= radiusKm;
     }
 
     public GeoBox getMinBox() {
-        // each degree of latitude is 111 km
-        double radiusInDegreesLat = radius / 111000.0;
+        double radiusInDegreesLat = radiusKm / KM_IN_LAT_DEGREE;
         double latInRadians = (Math.PI / 180) * center.getLat();
         double radiusInDegreesLng = radiusInDegreesLat / Math.cos(latInRadians);
         GeoPoint ne = new GeoPoint(center.getLat() + radiusInDegreesLat, center.getLng() + radiusInDegreesLng);
