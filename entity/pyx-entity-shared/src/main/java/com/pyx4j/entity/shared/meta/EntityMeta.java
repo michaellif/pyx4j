@@ -73,6 +73,22 @@ public interface EntityMeta {
     /**
      * Return the member that @Owner annotation referred to this Object. See
      * com.pyx4j.entity.annotations.Owner
+     * 
+     * 
      */
+    //TODO Do we need this ever on client ?
     public List<String> getBidirectionalReferenceMemberNames();
+
+    /*
+     * Works only on server side.
+     */
+    //TODO Do we need this ever on client ?
+    public String getCreatedTimestampMember();
+
+    /*
+     * Works only on server side.
+     */
+    //TODO Do we need this ever on client ?
+    public String getUpdatedTimestampMember();
+
 }

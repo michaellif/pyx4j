@@ -20,11 +20,14 @@
  */
 package com.pyx4j.examples.domain.crm;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -56,6 +59,9 @@ public interface Customer extends IEntity {
     IPrimitive<String> panoId();
 
     IPrimitive<Double> panoYaw();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @Owned
     ISet<Order> orders();

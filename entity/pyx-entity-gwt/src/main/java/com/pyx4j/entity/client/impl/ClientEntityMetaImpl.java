@@ -121,6 +121,19 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     @Override
     public List<String> getBidirectionalReferenceMemberNames() {
+        //TODO do we need this ever on client ?
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getCreatedTimestampMember() {
+        //TODO do we need this ever on client ?
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getUpdatedTimestampMember() {
+        //TODO do we need this ever on client ?
         throw new UnsupportedOperationException();
     }
 }

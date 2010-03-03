@@ -34,6 +34,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -63,6 +64,10 @@ public class EntityMetaImpl implements EntityMeta {
     private List<String> toStringMemberNames;
 
     private List<String> bidirectionalReferenceMemberNames;
+
+    private String createdTimestampMember;
+
+    private String updatedTimestampMember;
 
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
@@ -169,6 +174,16 @@ public class EntityMetaImpl implements EntityMeta {
             if (!membersMeta.containsKey(method.getName())) {
                 membersMeta.put(method.getName(), null);
             }
+
+            Timestamp ts = method.getAnnotation(Timestamp.class);
+            if (ts != null) {
+                switch (ts.value()) {
+                case Created:
+                    createdTimestampMember = method.getName();
+                case Updated:
+                    updatedTimestampMember = method.getName();
+                }
+            }
         }
     }
 
@@ -222,4 +237,23 @@ public class EntityMetaImpl implements EntityMeta {
         }
         return bidirectionalReferenceMemberNames;
     }
+
+    @Override
+    public String getCreatedTimestampMember() {
+        if (!membersListCreated) {
+            lazyCreateMembersNamesList();
+            membersListCreated = true;
+        }
+        return createdTimestampMember;
+    }
+
+    @Override
+    public String getUpdatedTimestampMember() {
+        if (!membersListCreated) {
+            lazyCreateMembersNamesList();
+            membersListCreated = true;
+        }
+        return updatedTimestampMember;
+    }
+
 }

@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -350,7 +351,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private Key persistImpl(IEntity iEntity, boolean merge) {
-        if (iEntity.getEntityMeta().isTransient()) {
+        EntityMeta entityMeta = iEntity.getEntityMeta();
+        if (entityMeta.isTransient()) {
             throw new Error("Can't persist Transient Entity");
         }
         Entity entity;
@@ -361,6 +363,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 iEntity.setPrimaryKey(entity.getKey().getId());
             } else {
                 entity = new Entity(getIEntityKind(iEntity));
+            }
+            String createdTs = entityMeta.getCreatedTimestampMember();
+            if (createdTs != null) {
+                iEntity.setMemberValue(createdTs, new Date());
             }
         } else {
             Key key = KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey());
@@ -374,6 +380,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else {
                 entity = new Entity(key);
             }
+        }
+        String updatedTs = entityMeta.getUpdatedTimestampMember();
+        if (updatedTs != null) {
+            iEntity.setMemberValue(updatedTs, new Date());
         }
         updateEntityProperties(entity, iEntity, merge);
         datastoreCallStats.get().count++;

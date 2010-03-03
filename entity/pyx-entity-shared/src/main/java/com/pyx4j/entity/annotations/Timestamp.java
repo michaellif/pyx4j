@@ -14,24 +14,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 16, 2010
+ * Created on Mar 3, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.domain;
+package com.pyx4j.entity.annotations;
 
-import java.util.Date;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+/**
+ * Manage Updated/Created Timestamps
+ * 
+ * Single member of each type is supported in Entity.
+ */
+@Target( { ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Timestamp {
 
-public interface User extends IEntity {
+    public enum Update {
 
-    IPrimitive<String> email();
+        /**
+         * before first Entity Put/Save
+         */
+        Created,
 
-    IPrimitive<String> name();
+        /**
+         * before each Entity Put/Save
+         */
+        Updated
+    };
 
-    @Timestamp
-    IPrimitive<Date> updated();
+    Update value() default Update.Updated;
+
 }
