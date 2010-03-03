@@ -271,6 +271,7 @@
                                 </goals>
                                 <configuration>
                                     <executable>java</executable>
+                                    <killAfter>1200000</killAfter>
                                     <arguments>
                                         <argument>-cp</argument>
                                         <argument>${appengine.sdk.root}/lib/appengine-tools-api.jar</argument>
