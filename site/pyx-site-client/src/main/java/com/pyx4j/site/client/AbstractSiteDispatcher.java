@@ -106,7 +106,7 @@ public abstract class AbstractSiteDispatcher {
                 hideLoadingIndicator();
                 log.error("obtainSite error", caught);
                 //TODO handle SecurityViolationException to show login form
-                handleobtainSiteFailure(caught, siteName);
+                handleObtainSiteFailure(caught, siteName);
             }
 
             @Override
@@ -152,7 +152,7 @@ public abstract class AbstractSiteDispatcher {
     protected void obtainPredefinedSite(String siteName, AsyncCallback<SitePanel> callback) {
     }
 
-    protected void handleobtainSiteFailure(Throwable caught, String siteName) {
+    protected void handleObtainSiteFailure(Throwable caught, String siteName) {
         MessageDialog.error("Application error", "Contact administrator.");
     }
 
