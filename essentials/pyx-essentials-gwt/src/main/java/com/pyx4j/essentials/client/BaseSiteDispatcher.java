@@ -21,12 +21,16 @@
 package com.pyx4j.essentials.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ClientEntityFactory;
+import com.pyx4j.essentials.client.console.ConsoleSiteFactory;
+import com.pyx4j.essentials.client.console.ConsoleSitePanel;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
+import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
@@ -43,5 +47,15 @@ public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implemen
 
     public static BaseSiteDispatcher instance() {
         return instance;
+    }
+
+    @Override
+    protected boolean isPredefinedSite(String siteName) {
+        return ConsoleSiteFactory.siteId.equals(siteName);
+    }
+
+    @Override
+    protected void obtainPredefinedSite(String siteName, AsyncCallback<SitePanel> callback) {
+        ConsoleSitePanel.asyncLoadSite(callback);
     }
 }

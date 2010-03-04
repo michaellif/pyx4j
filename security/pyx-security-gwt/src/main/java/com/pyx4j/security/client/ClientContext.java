@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -35,6 +36,8 @@ public class ClientContext {
     private static Logger log = LoggerFactory.getLogger(ClientContext.class);
 
     private static UserVisit userVisit;
+
+    private static boolean authenticationObtained = false;
 
     private ClientContext() {
 
@@ -49,6 +52,7 @@ public class ClientContext {
     }
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
+        authenticationObtained = true;
         userVisit = authenticationResponse.getUserVisit();
         log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
@@ -85,18 +89,35 @@ public class ClientContext {
     }
 
     public static void obtainAuthenticationData() {
-        AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+        obtainAuthenticationData(null);
+    }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                log.error("Logout failure", caught);
+    public static void obtainAuthenticationData(final Runnable onAuthenticationAvalable) {
+        if (authenticationObtained) {
+            if (onAuthenticationAvalable != null) {
+                onAuthenticationAvalable.run();
             }
+        } else {
+            AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
 
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
-            }
-        };
-        RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
+                @Override
+                public void onFailure(Throwable caught) {
+                    log.error("obtain authentication failure", caught);
+                    authenticationObtained = true;
+                    if (onAuthenticationAvalable != null) {
+                        onAuthenticationAvalable.run();
+                    }
+                }
+
+                @Override
+                public void onSuccess(AuthenticationResponse result) {
+                    ClientContext.authenticated(result);
+                    if (onAuthenticationAvalable != null) {
+                        onAuthenticationAvalable.run();
+                    }
+                }
+            };
+            RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
+        }
     }
 }

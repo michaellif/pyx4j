@@ -41,6 +41,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractSiteDispatcher {
 
@@ -99,28 +100,35 @@ public abstract class AbstractSiteDispatcher {
         final String finalUri = uri;
         final Map<String, String> finalArgs = args;
 
-        //TODO check site permission
-        if (true) {
-            obtainSite(siteName, new AsyncCallback<SitePanel>() {
-                @Override
-                public void onFailure(Throwable caught) {
+        AsyncCallback<SitePanel> callback = new AsyncCallback<SitePanel>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                hideLoadingIndicator();
+                log.error("obtainSite error", caught);
+                //TODO handle SecurityViolationException to show login form
+                handleobtainSiteFailure(caught, siteName);
+            }
+
+            @Override
+            public void onSuccess(SitePanel sitePanel) {
+                if (sitePanel != null) {
+                    initSitePanel(siteName, sitePanel);
+                    show(sitePanel, finalUri, finalArgs);
                     hideLoadingIndicator();
+                } else {
+                    hideLoadingIndicator();
+                    throw new Error("sitePanel is not found");
                 }
+            }
+        };
 
-                @Override
-                public void onSuccess(SitePanel sitePanel) {
-                    if (sitePanel != null) {
-                        initSitePanel(siteName, sitePanel);
-                        show(sitePanel, finalUri, finalArgs);
-                        hideLoadingIndicator();
-                    } else {
-                        hideLoadingIndicator();
-                        throw new Error("sitePanel is not found");
-                    }
-                }
-            });
+        //TODO check site permission
+
+        if (isPredefinedSite(siteName)) {
+            obtainPredefinedSite(siteName, callback);
+        } else {
+            obtainSite(siteName, callback);
         }
-
     }
 
     protected void show(SitePanel sitePanel, String uri, Map<String, String> args) {
@@ -135,6 +143,17 @@ public abstract class AbstractSiteDispatcher {
             GoogleAnalytics.track("#" + uri);
             sitePanel.show(uri, args);
         }
+    }
+
+    protected boolean isPredefinedSite(String siteName) {
+        return false;
+    }
+
+    protected void obtainPredefinedSite(String siteName, AsyncCallback<SitePanel> callback) {
+    }
+
+    protected void handleobtainSiteFailure(Throwable caught, String siteName) {
+        MessageDialog.error("Application error", "Contact administrator.");
     }
 
     protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);
