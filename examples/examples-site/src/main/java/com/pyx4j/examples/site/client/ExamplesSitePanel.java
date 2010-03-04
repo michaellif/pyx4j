@@ -20,14 +20,13 @@
  */
 package com.pyx4j.examples.site.client;
 
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.CommandLink;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Link;
-import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -39,19 +38,6 @@ public abstract class ExamplesSitePanel extends SitePanel {
 
     protected ExamplesSitePanel(Site site) {
         super(site);
-
-        setSiteName(site.siteId().getValue());
-        setSiteCaption(site.siteCaption().getValue());
-        setLogoImage(site.logoUrl().getValue());
-        setFooterCopiright(site.footerCopiright().getValue());
-
-        {
-            boolean isHome = true;
-            for (Page page : site.pages()) {
-                addPage(page, isHome);
-                isHome = false;
-            }
-        }
 
         {
             boolean hasSeparator = false;

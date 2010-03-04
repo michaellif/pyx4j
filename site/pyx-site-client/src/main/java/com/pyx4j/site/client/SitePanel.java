@@ -143,6 +143,19 @@ public abstract class SitePanel extends SimplePanel {
             break;
         }
 
+        setSiteName(site.siteId().getValue());
+        setSiteCaption(site.siteCaption().getValue());
+        setLogoImage(site.logoUrl().getValue());
+        setFooterCopiright(site.footerCopiright().getValue());
+
+        {
+            boolean isHome = true;
+            for (Page page : site.pages()) {
+                addPage(page, isHome);
+                isHome = false;
+            }
+        }
+
     }
 
     public void show(String historyToken, Map<String, String> args) {
@@ -207,7 +220,7 @@ public abstract class SitePanel extends SimplePanel {
 
         primaryNavigationBar.setSelected(page.uri());
 
-        Window.setTitle(siteCaption + " " + page.caption().getValue());
+        Window.setTitle(page.caption().getValue() + " | " + siteCaption);
 
         currentPage = page;
 
