@@ -23,6 +23,7 @@ package com.pyx4j.security.server;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -51,6 +52,10 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         if (Context.getVisit() != null) {
             ar.setUserVisit(Context.getVisit().getUserVisit());
+        }
+
+        if (ServerSideConfiguration.instance().useAppengineGoogleAccounts()) {
+            AppengineUserService.updateAuthenticationResponse(ar);
         }
 
         return ar;

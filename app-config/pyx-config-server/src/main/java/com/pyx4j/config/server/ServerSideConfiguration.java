@@ -79,4 +79,8 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    public boolean useAppengineGoogleAccounts() {
+        return false;
+    }
+
 }
