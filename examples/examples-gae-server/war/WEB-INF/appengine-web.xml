@@ -46,4 +46,8 @@
             value="WEB-INF/logging.properties"/>
     </system-properties>
 
+    <admin-console>
+        <page name="Pyx Console" url="/#console&amp;" />
+    </admin-console>
+
 </appengine-web-app>
