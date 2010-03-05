@@ -23,8 +23,10 @@ package com.pyx4j.security.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -38,6 +40,10 @@ public class ClientContext {
     private static UserVisit userVisit;
 
     private static boolean authenticationObtained = false;
+
+    private static String loginURL;
+
+    private static String logoutURL;
 
     private ClientContext() {
 
@@ -54,6 +60,8 @@ public class ClientContext {
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         authenticationObtained = true;
         userVisit = authenticationResponse.getUserVisit();
+        loginURL = authenticationResponse.getLoginURL();
+        logoutURL = authenticationResponse.getLogoutURL();
         log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
@@ -88,6 +96,34 @@ public class ClientContext {
         RPCManager.execute(AuthenticationServices.Logout.class, null, defaultCallback);
     }
 
+    public static String getCurrentURL() {
+        if (History.getToken() != null) {
+            return Window.Location.getPath() + Window.Location.getQueryString() + "#" + History.getToken();
+        } else {
+            return Window.Location.getPath() + Window.Location.getQueryString();
+        }
+    }
+
+    public static String createLoginURL() {
+        return createLoginURL(getCurrentURL());
+    }
+
+    public static String createLogoutURL() {
+        return createLogoutURL(getCurrentURL());
+    }
+
+    private static String replaceUrl(String gaeUrl, String destinationURL) {
+        return gaeUrl.replace("REPLACE", URL.encode(destinationURL));
+    }
+
+    public static String createLoginURL(String destinationURL) {
+        return loginURL != null ? replaceUrl(loginURL, destinationURL) : "/";
+    }
+
+    public static String createLogoutURL(String destinationURL) {
+        return logoutURL != null ? replaceUrl(logoutURL, destinationURL) : "/";
+    }
+
     public static void obtainAuthenticationData() {
         obtainAuthenticationData(null);
     }
@@ -120,4 +156,5 @@ public class ClientContext {
             RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
         }
     }
+
 }

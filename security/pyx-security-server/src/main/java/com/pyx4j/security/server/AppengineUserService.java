@@ -22,15 +22,13 @@ package com.pyx4j.security.server;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 public class AppengineUserService {
 
     public static void updateAuthenticationResponse(AuthenticationResponse authenticationResponse) {
-
         UserService userService = UserServiceFactory.getUserService();
-        //userService.createLoginURL(arg0, arg1)
-
+        authenticationResponse.setLoginURL(userService.createLoginURL("REPLACE"));
+        authenticationResponse.setLogoutURL(userService.createLogoutURL("REPLACE"));
     }
 }
