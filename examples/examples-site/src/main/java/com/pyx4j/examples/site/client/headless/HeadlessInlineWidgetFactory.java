@@ -20,10 +20,10 @@
  */
 package com.pyx4j.examples.site.client.headless;
 
+import com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory;
 import com.pyx4j.site.client.InlineWidget;
-import com.pyx4j.site.client.InlineWidgetFactory;
 
-public class HeadlessInlineWidgetFactory extends InlineWidgetFactory {
+public class HeadlessInlineWidgetFactory extends ExamplesInlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String widgetId) {

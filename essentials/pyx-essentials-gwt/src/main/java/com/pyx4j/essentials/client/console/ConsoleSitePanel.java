@@ -21,23 +21,29 @@
 package com.pyx4j.essentials.client.console;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
+import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.client.SitePanel;
 
-public class ConsoleSitePanel extends SitePanel {
+public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 
     public ConsoleSitePanel() {
         super(ConsoleSiteFactory.createSite());
     }
 
     @Override
-    public InlineWidgetFactory getLocalWidgetFactory() {
+    public InlineWidget createWidget(String id) {
+        // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public InlineWidgetFactory getLocalWidgetFactory() {
+        return this;
     }
 
     public static void asyncLoadSite(final AsyncCallback<SitePanel> callback) {
@@ -53,4 +59,5 @@ public class ConsoleSitePanel extends SitePanel {
         });
 
     }
+
 }

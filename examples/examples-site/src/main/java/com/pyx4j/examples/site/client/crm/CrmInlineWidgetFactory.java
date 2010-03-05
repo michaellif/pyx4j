@@ -21,6 +21,7 @@
 package com.pyx4j.examples.site.client.crm;
 
 import com.pyx4j.examples.rpc.Widgets;
+import com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory;
 import com.pyx4j.examples.site.client.crm.customer.CustomerEditorWidget;
 import com.pyx4j.examples.site.client.crm.customer.CustomerListWidget;
 import com.pyx4j.examples.site.client.crm.dashboard.DashboardWidget;
@@ -29,9 +30,8 @@ import com.pyx4j.examples.site.client.crm.order.OrderListWidget;
 import com.pyx4j.examples.site.client.crm.resource.ResourceEditorWidget;
 import com.pyx4j.examples.site.client.crm.resource.ResourceListWidget;
 import com.pyx4j.site.client.InlineWidget;
-import com.pyx4j.site.client.InlineWidgetFactory;
 
-public class CrmInlineWidgetFactory extends InlineWidgetFactory {
+public class CrmInlineWidgetFactory extends ExamplesInlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String widgetId) {

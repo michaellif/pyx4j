@@ -22,7 +22,7 @@ package com.pyx4j.examples.site.client;
 
 import com.pyx4j.site.client.InlineWidget;
 
-public class InlineWidgetFactory extends com.pyx4j.site.client.InlineWidgetFactory {
+public class ExamplesInlineWidgetFactory implements com.pyx4j.site.client.InlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String widgetId) {

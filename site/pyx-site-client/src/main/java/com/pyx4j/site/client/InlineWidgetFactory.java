@@ -20,9 +20,8 @@
  */
 package com.pyx4j.site.client;
 
-public class InlineWidgetFactory {
+public interface InlineWidgetFactory {
 
-    public InlineWidget createWidget(String id) {
-        return null;
-    }
+    public InlineWidget createWidget(String id);
+
 }
