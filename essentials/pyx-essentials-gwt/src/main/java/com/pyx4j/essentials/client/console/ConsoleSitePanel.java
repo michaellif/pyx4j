@@ -37,8 +37,11 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String id) {
-        // TODO Auto-generated method stub
-        return null;
+        if (ConsoleSiteFactory.Widgets.console$preloadWidget.name().equals(id)) {
+            return new DBPreloadWidget();
+        } else {
+            return null;
+        }
     }
 
     @Override

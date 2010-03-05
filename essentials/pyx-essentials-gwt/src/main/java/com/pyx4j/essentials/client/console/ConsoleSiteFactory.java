@@ -29,13 +29,19 @@ public class ConsoleSiteFactory {
 
     public static final String siteId = "console";
 
+    public enum Widgets {
+
+        console$preloadWidget
+
+    }
+
     public static Site createSite() {
         Site site = EntityFactory.create(Site.class);
         site.siteId().setValue(siteId);
         site.siteCaption().setValue("Pyx Console");
         site.skinType().setValue(SkinType.light);
 
-        site.pages().add(createPage("DB Preload", ConsolePageType.console$preload, "Empty for now"));
+        site.pages().add(createWidgetPage("DB Preload", ConsolePageType.console$preload, Widgets.console$preloadWidget));
 
         site.pages().add(createPage("More...", ConsolePageType.console$more, "<div>Anything else we may need?</div>"));
 
@@ -50,4 +56,9 @@ public class ConsoleSiteFactory {
         return page;
     }
 
+    private static Page createWidgetPage(String caption, ConsolePageType pageType, Widgets widget) {
+        Page p = createPage(caption, pageType, "<div id='" + widget.name() + "'/>");
+        p.data().inlineWidgetIds().add(widget.name());
+        return p;
+    }
 }

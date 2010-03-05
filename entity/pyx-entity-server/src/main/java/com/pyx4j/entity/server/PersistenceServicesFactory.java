@@ -43,7 +43,7 @@ public class PersistenceServicesFactory {
                 try {
                     serviceClass = (Class<? extends IEntityPersistenceService>) Class.forName(RDBMS_IMPL_CLASS);
                 } catch (ClassNotFoundException e2) {
-                    throw new RuntimeException("PersistenceService not avalable");
+                    throw new RuntimeException("PersistenceService not found");
                 }
             }
             try {

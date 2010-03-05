@@ -41,4 +41,21 @@ public class MessageDialog {
         d.show();
         return d;
     }
+
+    public static void confirm(String title, String text, final Runnable onConfirmed) {
+        Dialog d = new Dialog(title, text, Dialog.Type.Confirm, new YesNoOption() {
+            @Override
+            public boolean onClickYes() {
+                onConfirmed.run();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                return true;
+            }
+        });
+        d.show();
+    }
+
 }
