@@ -33,6 +33,7 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.themes.business.BusinessTheme;
+import com.pyx4j.site.client.themes.console.ConsoleTheme;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
@@ -51,6 +52,8 @@ public class MainMenu extends MenuBar {
     private static DarkTheme darkTheme = new DarkTheme();
 
     private static BusinessTheme businessTheme = new BusinessTheme();
+
+    private static ConsoleTheme consoleTheme = new ConsoleTheme();
 
     public MainMenu(final AdminApplication app) {
 
@@ -84,6 +87,13 @@ public class MainMenu extends MenuBar {
                     StyleManger.installTheme(businessTheme);
                 }
             }));
+            styleMenuBar.addItem(new MenuItem("Console", new Command() {
+                @Override
+                public void execute() {
+                    StyleManger.installTheme(consoleTheme);
+                }
+            }));
+
         }
 
         {

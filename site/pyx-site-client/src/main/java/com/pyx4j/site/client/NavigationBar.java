@@ -91,8 +91,14 @@ public class NavigationBar extends ComplexPanel {
         NavigationTab tab = new NavigationTab(text, uri);
         if (firstTab == null) {
             firstTab = tab;
+            firstTab.addStyleDependentName("first");
+        }
+        if (lastTab != null) {
+            lastTab.removeStyleDependentName("last");
         }
         lastTab = tab;
+        lastTab.addStyleDependentName("last");
+
         tabs.add(tab);
         ul.appendChild(tab.getElement());
         add(tab, ul);

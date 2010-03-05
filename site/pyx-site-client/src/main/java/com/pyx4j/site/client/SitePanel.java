@@ -48,6 +48,7 @@ import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.business.BusinessTheme;
+import com.pyx4j.site.client.themes.console.ConsoleTheme;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.Page;
@@ -106,6 +107,8 @@ public abstract class SitePanel extends SimplePanel {
 
     private static BusinessTheme businessTheme = new BusinessTheme();
 
+    private static ConsoleTheme consoleTheme = new ConsoleTheme();
+
     private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactoryGlobal.class);
 
     public SitePanel(Site site) {
@@ -126,21 +129,6 @@ public abstract class SitePanel extends SimplePanel {
         createFooterLinksPanel();
 
         createFooterCopirightPanel();
-
-        switch (site.skinType().getValue()) {
-        case light:
-            StyleManger.installTheme(lightTheme);
-            break;
-        case dark:
-            StyleManger.installTheme(darkTheme);
-            break;
-        case business:
-            StyleManger.installTheme(businessTheme);
-            break;
-
-        default:
-            break;
-        }
 
         setSiteName(site.siteId().getValue());
         setSiteCaption(site.siteCaption().getValue());
@@ -189,12 +177,22 @@ public abstract class SitePanel extends SimplePanel {
             pageWidget.createInlineWidgets();
         }
 
-        if (SkinType.dark.equals(site.skinType().getValue())) {
-            StyleManger.installTheme(darkTheme);
-        } else if (SkinType.light.equals(site.skinType().getValue())) {
+        switch (site.skinType().getValue()) {
+        case light:
             StyleManger.installTheme(lightTheme);
-        } else if (SkinType.business.equals(site.skinType().getValue())) {
+            break;
+        case dark:
+            StyleManger.installTheme(darkTheme);
+            break;
+        case business:
             StyleManger.installTheme(businessTheme);
+            break;
+        case console:
+            StyleManger.installTheme(consoleTheme);
+            break;
+
+        default:
+            break;
         }
 
         setHeaderCaption(page.caption().getValue());
