@@ -28,7 +28,6 @@ public class AppengineUserService {
 
     public static void updateAuthenticationResponse(AuthenticationResponse authenticationResponse) {
         UserService userService = UserServiceFactory.getUserService();
-        authenticationResponse.setLoginURL(userService.createLoginURL("REPLACE"));
-        authenticationResponse.setLogoutURL(userService.createLogoutURL("REPLACE"));
+        authenticationResponse.setLogoutURL(userService.createLogoutURL("/"));
     }
 }

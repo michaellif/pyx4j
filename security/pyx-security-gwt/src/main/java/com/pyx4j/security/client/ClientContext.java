@@ -23,7 +23,6 @@ package com.pyx4j.security.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,8 +39,6 @@ public class ClientContext {
     private static UserVisit userVisit;
 
     private static boolean authenticationObtained = false;
-
-    private static String loginURL;
 
     private static String logoutURL;
 
@@ -60,7 +57,6 @@ public class ClientContext {
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         authenticationObtained = true;
         userVisit = authenticationResponse.getUserVisit();
-        loginURL = authenticationResponse.getLoginURL();
         logoutURL = authenticationResponse.getLogoutURL();
         log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
@@ -104,24 +100,26 @@ public class ClientContext {
         }
     }
 
-    public static String createLoginURL() {
-        return createLoginURL(getCurrentURL());
+    public static String getLogoutURL() {
+        return logoutURL;
     }
 
-    public static String createLogoutURL() {
-        return createLogoutURL(getCurrentURL());
+    public static void googleAccountsLogin() {
+        googleAccountsLogin(getCurrentURL());
     }
 
-    private static String replaceUrl(String gaeUrl, String destinationURL) {
-        return gaeUrl.replace("REPLACE", URL.encode(destinationURL));
-    }
+    public static void googleAccountsLogin(String destinationURLComponent) {
+        RPCManager.execute(AuthenticationServices.GetGoogleAccountsLoginUrl.class, destinationURLComponent, new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                log.error("Get LoginUrl failure", caught);
+            }
 
-    public static String createLoginURL(String destinationURL) {
-        return loginURL != null ? replaceUrl(loginURL, destinationURL) : "/";
-    }
-
-    public static String createLogoutURL(String destinationURL) {
-        return logoutURL != null ? replaceUrl(logoutURL, destinationURL) : "/";
+            @Override
+            public void onSuccess(String result) {
+                Window.Location.replace(result);
+            }
+        });
     }
 
     public static void obtainAuthenticationData() {

@@ -23,6 +23,7 @@ package com.pyx4j.security.server;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.appengine.api.users.UserServiceFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -61,7 +62,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
         return ar;
     }
 
-    public static class GetStatusImpl implements GetStatus {
+    public static class GetStatusImpl implements AuthenticationServices.GetStatus {
 
         @Override
         public AuthenticationResponse execute(VoidSerializable request) {
@@ -70,7 +71,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
     }
 
-    public static class AuthenticateImpl implements Authenticate {
+    public static class AuthenticateImpl implements AuthenticationServices.Authenticate {
 
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
@@ -79,12 +80,30 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
     }
 
-    public static class LogoutImpl implements Logout {
+    public static class LogoutImpl implements AuthenticationServices.Logout {
 
         @Override
         public AuthenticationResponse execute(VoidSerializable request) {
             Lifecycle.endSession();
             return createAuthenticationResponse();
+        }
+
+    }
+
+    public static class GetGoogleAccountsLoginUrlImpl implements AuthenticationServices.GetGoogleAccountsLoginUrl {
+
+        @Override
+        public String execute(String request) {
+            return UserServiceFactory.getUserService().createLoginURL(request);
+        }
+
+    }
+
+    public static class GetGoogleAccountsLogoutUrlImpl implements AuthenticationServices.GetGoogleAccountsLogoutUrl {
+
+        @Override
+        public String execute(String request) {
+            return UserServiceFactory.getUserService().createLogoutURL(request);
         }
 
     }

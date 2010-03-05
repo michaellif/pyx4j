@@ -35,8 +35,6 @@ public class AuthenticationResponse implements Serializable {
 
     private int maxInactiveInterval;
 
-    private String loginURL;
-
     private String logoutURL;
 
     public AuthenticationResponse() {
@@ -71,20 +69,12 @@ public class AuthenticationResponse implements Serializable {
         this.userVisit = userVisit;
     }
 
-    public String getLogoutURL() {
-        return logoutURL;
-    }
-
     public void setLogoutURL(String logoutURL) {
         this.logoutURL = logoutURL;
     }
 
-    public String getLoginURL() {
-        return loginURL;
-    }
-
-    public void setLoginURL(String loginURL) {
-        this.loginURL = loginURL;
+    public String getLogoutURL() {
+        return logoutURL;
     }
 
 }

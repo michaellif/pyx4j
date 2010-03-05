@@ -36,4 +36,13 @@ public interface AuthenticationServices {
     public interface Logout extends Service<VoidSerializable, AuthenticationResponse> {
 
     };
+
+    public interface GetGoogleAccountsLoginUrl extends Service<String, String> {
+
+    };
+
+    public interface GetGoogleAccountsLogoutUrl extends Service<String, String> {
+
+    };
+
 }
