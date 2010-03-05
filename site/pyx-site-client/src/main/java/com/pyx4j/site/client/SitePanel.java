@@ -43,7 +43,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
@@ -107,7 +106,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private static BusinessTheme businessTheme = new BusinessTheme();
 
-    private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactory.class);
+    private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactoryGlobal.class);
 
     public SitePanel(Site site) {
         this.site = site;

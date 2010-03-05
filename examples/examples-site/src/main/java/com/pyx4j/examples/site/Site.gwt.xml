@@ -12,8 +12,8 @@
     <inherits name='com.pyx4j.security.Security' />
     <inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
     
-    <replace-with class="com.pyx4j.examples.site.client.InlineWidgetFactory">
-		<when-type-is class="com.pyx4j.site.client.InlineWidgetFactory"/>
+    <replace-with class="com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory">
+		<when-type-is class="com.pyx4j.site.client.InlineWidgetFactoryGlobal"/>
 	</replace-with>
 	
 	<entry-point class='com.pyx4j.examples.site.client.ExamplesSiteDispatcher'/>
