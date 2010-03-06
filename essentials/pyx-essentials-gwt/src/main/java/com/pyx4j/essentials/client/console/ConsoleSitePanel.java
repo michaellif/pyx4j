@@ -22,9 +22,9 @@ package com.pyx4j.essentials.client.console;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.client.SitePanel;
@@ -56,7 +56,7 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
                 if (SecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
                     callback.onSuccess(new ConsoleSitePanel());
                 } else {
-                    callback.onFailure(new SecurityViolationException("Console require Authentication"));
+                    callback.onFailure(new AuthenticationRequiredException("Console require Authentication", true));
                 }
             }
         });

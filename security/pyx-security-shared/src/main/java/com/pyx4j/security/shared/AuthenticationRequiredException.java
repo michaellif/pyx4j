@@ -14,20 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 13, 2010
+ * Created on Mar 6, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.security.shared;
 
 @SuppressWarnings("serial")
-public class SecurityViolationException extends RuntimeException {
+public class AuthenticationRequiredException extends SecurityViolationException {
 
-    protected SecurityViolationException() {
+    private boolean developerAccessRequired;
 
-    }
-
-    public SecurityViolationException(String message) {
+    public AuthenticationRequiredException(String message) {
         super(message);
     }
+
+    public AuthenticationRequiredException(String message, boolean developerAccessRequired) {
+        super(message);
+        this.developerAccessRequired = developerAccessRequired;
+    }
+
+    public boolean isDeveloperAccessRequired() {
+        return developerAccessRequired;
+    }
+
 }

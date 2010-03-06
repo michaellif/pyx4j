@@ -34,14 +34,16 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
-
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.YesNoOption;
 
 public abstract class AbstractSiteDispatcher {
 
@@ -152,8 +154,44 @@ public abstract class AbstractSiteDispatcher {
     protected void obtainPredefinedSite(String siteName, AsyncCallback<SitePanel> callback) {
     }
 
-    protected void handleObtainSiteFailure(Throwable caught, String siteName) {
-        MessageDialog.error("Application error", "Contact administrator.");
+    //TODO define better even handling in application
+    protected boolean handleObtainSiteFailure(Throwable caught, String siteName) {
+        if (caught instanceof AuthenticationRequiredException) {
+            if (handleAuthenticationRequiredException((AuthenticationRequiredException) caught, siteName)) {
+                return true;
+            }
+        }
+        MessageDialog.error("Application error", caught.getMessage() + "\nContact administrator.");
+        return true;
+    }
+
+    /**
+     * Implementation will decide to use GoogleAccounts or not.
+     */
+    protected boolean handleAuthenticationRequiredException(AuthenticationRequiredException caught, String siteName) {
+        if (caught.isDeveloperAccessRequired()) {
+            showGoogleAccountsLoginRedirect(caught.getMessage());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected void showGoogleAccountsLoginRedirect(String title) {
+        Dialog d = new Dialog(title, "Redirect to Google login page?", Dialog.Type.Confirm, new YesNoOption() {
+            @Override
+            public boolean onClickYes() {
+                ClientContext.googleAccountsLogin();
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                History.back();
+                return true;
+            }
+        });
+        d.show();
     }
 
     protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);

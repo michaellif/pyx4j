@@ -19,4 +19,8 @@ public class CommandLink extends LinkBarItem {
         this.command = command;
     }
 
+    public void executeCommand() {
+        this.command.execute();
+    }
+
 }
