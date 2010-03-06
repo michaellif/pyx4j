@@ -7,11 +7,13 @@
 
 ========= Install Subclipse =========
 
-    http://subclipse.tigris.org/update_1.6.x for SVN 1.6
+     Subclipse for SVN 1.6
+     Update Site:  http://subclipse.tigris.org/update_1.6.x
 
 ========= Install M2-Eclipse =========
 
-    http://m2eclipse.sonatype.org/sites/m2e
+    Use the latest plugin http://m2eclipse.sonatype.org/
+    Update Site:  http://m2eclipse.sonatype.org/sites/m2e
 
 ========= maven build =========
 
@@ -33,10 +35,13 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 ========= Install Google App Engine SDK for Java =========
 
 1. Install default plugin - http://dl.google.com/eclipse/plugin/3.5
-2. Download and unzip appengine-java-sdk-1.3.0.zip
+2. Download and unzip appengine-java-sdk-1.3.1.zip
 		from http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Java
+
+-- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
-4. Copy results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
+   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.1-patch.zip
+4. Copy/Add results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
 
 ========= Eclipse Configuration for a new Workspace =========
 
