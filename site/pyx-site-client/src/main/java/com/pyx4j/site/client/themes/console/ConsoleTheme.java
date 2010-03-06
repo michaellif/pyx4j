@@ -49,7 +49,7 @@ public class ConsoleTheme extends SiteTheme {
     protected void initGeneralStyles() {
         super.initGeneralStyles();
         Style style = new Style("body");
-        style.addProperty("background", "#F8F8F8");
+        style.addProperty("background", "#FFFFFF");
         addStyle(style);
     }
 
@@ -62,7 +62,8 @@ public class ConsoleTheme extends SiteTheme {
     @Override
     protected void initContentPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_ContentPanel.name());
-        style.addProperty("width", "770px");
+        // 770 - > 795px; We need Total 780 for GAE Console
+        style.addProperty("width", "755px");
         style.addProperty("padding-top", "2px");
         style.addProperty("padding-bottom", "2px");
         addStyle(style);
@@ -195,7 +196,7 @@ public class ConsoleTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "100px");
         style.addProperty("margin-top", "10px");
-        style.addProperty("width", "850px");
+        style.addProperty("width", "800px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " ul");
@@ -311,7 +312,7 @@ public class ConsoleTheme extends SiteTheme {
     @Override
     protected void initEntityCRUDStyles() {
         Style style = new Style("." + EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
-        style.addProperty("width", "875px");
+        style.addProperty("width", "750px");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "10px 40px 10px 10px");
         style.addProperty("margin-bottom", "10px");
@@ -319,7 +320,7 @@ public class ConsoleTheme extends SiteTheme {
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
-        style.addProperty("width", "875px");
+        style.addProperty("width", "750px");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "10px 40px 10px 10px");
         style.addProperty("margin-bottom", "10px");
