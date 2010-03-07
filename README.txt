@@ -28,6 +28,14 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
   ** examples-*:
         mvn -P gwtce
 
+  all GWT modules if you are in hurry (20% faster):
+        mvn -P gwtce,draft
+
+  on Core 2 Duo CPU  you can run build 25% faster
+       mvn -P gwtce -DgwtLocalWorkers=2
+    Change  maven settings.xml to have <properties><gwtLocalWorkers>2</gwtLocalWorkers></properties> in default profile to make it permanent.
+
+
 * Before deployment to appengine run:
 
         mvn -P prod

@@ -507,6 +507,14 @@
             </properties>
         </profile>
 
+        <!-- Used for speed up the GWT compiler for developers -->
+        <profile>
+            <id>draft</id>
+            <properties>
+                <gwtDraftCompile>true</gwtDraftCompile>
+            </properties>
+        </profile>
+
     </profiles>
 
     <reporting>
