@@ -174,7 +174,7 @@
             <id>pyx4j-internal</id>
             <url>http://repository.pyx4j.com/internal/maven2-internal</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -194,12 +194,18 @@
     </repositories>
 
     <pluginRepositories>
-<!--
+        
         <pluginRepository>
-            <id>pyx4me-web</id>
-            <url>http://www.pyx4me.com/maven2</url>
+            <id>pyx4j-snapshots</id>
+            <url>http://repository.pyx4j.com/maven2-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </pluginRepository>
--->
+
         <pluginRepository>
             <id>codehaus.org</id>
             <name>Codehaus Central Repository</name>
