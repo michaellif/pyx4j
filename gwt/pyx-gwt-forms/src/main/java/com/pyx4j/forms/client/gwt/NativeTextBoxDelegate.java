@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
+
 import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 
@@ -77,6 +78,7 @@ public class NativeTextBoxDelegate<E> {
 
         nativeTextBox.addKeyUpHandler(new KeyUpHandler() {
 
+            @Override
             public void onKeyUp(KeyUpEvent event) {
                 keyTimer.cancel();
                 keyTimer.schedule(500);
@@ -84,12 +86,16 @@ public class NativeTextBoxDelegate<E> {
         });
 
         nativeTextBox.addFocusHandler(new FocusHandler() {
+
+            @Override
             public void onFocus(FocusEvent event) {
                 cTextField.onEditingStart();
             }
         });
 
         nativeTextBox.addBlurHandler(new BlurHandler() {
+
+            @Override
             public void onBlur(BlurEvent event) {
                 nativeValueUpdate();
                 cTextField.onEditingStop();

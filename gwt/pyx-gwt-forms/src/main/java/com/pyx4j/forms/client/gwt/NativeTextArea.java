@@ -20,9 +20,14 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
@@ -32,16 +37,52 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
 
     private final CTextArea textArea;
 
-    public NativeTextArea(final CTextArea textArea) {
+    private boolean nativeValueUpdate = false;
+
+    private final Timer keyTimer = new Timer() {
+        @Override
+        public void run() {
+            nativeValueUpdate();
+        }
+    };
+
+    public NativeTextArea(CTextArea textArea) {
         super();
         this.textArea = textArea;
+
         addChangeHandler(new ChangeHandler() {
 
             @Override
             public void onChange(ChangeEvent event) {
-                textArea.setValue(getText());
+                keyTimer.cancel();
+                nativeValueUpdate();
             }
         });
+
+        addKeyUpHandler(new KeyUpHandler() {
+
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                keyTimer.cancel();
+                keyTimer.schedule(500);
+            }
+        });
+
+        //        addFocusHandler(new FocusHandler() {
+        //            public void onFocus(FocusEvent event) {
+        //                //textArea.onEditingStart();
+        //            }
+        //        });
+
+        addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                nativeValueUpdate();
+                //textArea.onEditingStop();
+            }
+        });
+
         setTabIndex(textArea.getTabIndex());
 
     }
@@ -67,7 +108,27 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         DOM.setElementPropertyInt(getElement(), "scrollTop", Integer.MAX_VALUE);
     }
 
+    /**
+     * Prevents setting wrong value once the value has been Set Externally
+     */
+    void cancelScheduledUpdate() {
+        keyTimer.cancel();
+    }
+
+    private void nativeValueUpdate() {
+        // Prevents setting the native value while propagating value from native component to CComponent
+        nativeValueUpdate = true;
+        try {
+            textArea.setValue(getText());
+        } finally {
+            nativeValueUpdate = false;
+        }
+    }
+
     public void setNativeValue(String value) {
+        if (nativeValueUpdate) {
+            return;
+        }
         String newValue = value == null ? "" : value;
         if (!newValue.equals(getText())) {
             setText(newValue);
