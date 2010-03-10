@@ -1,9 +1,9 @@
 ========= Install Eclipse =========
 
 1. Get: Eclipse SDK
-       eclipse-SDK-3.5.1-win32.zip
+       eclipse-SDK-3.5.2-win32.zip
 
-2. Unzip it to directory: eclipse-3.5.1
+2. Unzip it to directory: eclipse-3.5.2
 
 ========= Install Subclipse =========
 
