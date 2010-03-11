@@ -147,6 +147,25 @@ public class BrowserType {
     }
 
     @SuppressWarnings("unused")
+    private static class ImplMozilla18 implements Impl {
+
+        @Override
+        public final Browser getType() {
+            return Browser.MOZILLA;
+        }
+
+        @Override
+        public float getVersion() {
+            return 0;
+        }
+
+        @Override
+        public final String getCompiledType() {
+            return "CompiledType#MOZILLA_1_8";
+        }
+    }
+
+    @SuppressWarnings("unused")
     private static class ImplIE6 implements Impl {
 
         @Override
