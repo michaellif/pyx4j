@@ -115,10 +115,6 @@
 
     </dependencies>
 
-    <properties>
-        <appengine.sdk.root>${CORP_TOOLS}/3p-libs/gae/appengine-java-sdk-${gaeVersion}</appengine.sdk.root>
-    </properties>
-
     <build>
 
         <plugins>
@@ -174,6 +170,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>net.kindleit</groupId>
+	            <artifactId>maven-gae-plugin</artifactId>
             </plugin>
 
         </plugins>
@@ -259,33 +260,22 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.1.1</version>
+                        <groupId>net.kindleit</groupId>
+	                    <artifactId>maven-gae-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>gae-deploy</id>
                                 <phase>integration-test</phase>
                                 <goals>
-                                    <goal>exec</goal>
+                                    <goal>deploy</goal>
                                 </goals>
-                                <configuration>
-                                    <executable>java</executable>
-                                    <arguments>
-                                        <argument>-cp</argument>
-                                        <argument>${appengine.sdk.root}/lib/appengine-tools-api.jar</argument>
-                                        <argument>com.google.appengine.tools.admin.AppCfg</argument>
-                                        <argument>--email=${appengine.dev.email}</argument>
-                                        <argument>update</argument>
-                                        <argument>${basedir}/war</argument>
-                                   </arguments>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 
 </project>

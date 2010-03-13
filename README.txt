@@ -64,5 +64,11 @@ Cleaning up Indexes in Google App Engine/Java
 
 rollback from pyx2 server (outside the firwall!):
 
+    cd /data/build/work/pyx/incubator/tester/tester-gae-server/
+    mvn gae:rollback
+  or
+    cd /data/build/work/pyx/examples/examples-gae-server/war
+    mvn gae:rollback
+
     /data/tools/3p-libs/gae/appengine-java-sdk-1.3.1/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/incubator/tester/tester-gae-server/war
     /data/tools/3p-libs/gae/appengine-java-sdk-1.3.1/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/examples/examples-gae-server/war

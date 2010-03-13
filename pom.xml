@@ -158,18 +158,6 @@
     </modules>
 
     <repositories>
-        <!--repository>
-            <id>google-gae-googlecode-repository</id>
-            <urlX>http://jclouds.googlecode.com/svn/repo</urlX>
-            <url>http://mvn.twig-persist.googlecode.com/hg</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository-->
-
         <repository>
             <id>pyx4j-internal</id>
             <url>http://repository.pyx4j.com/internal/maven2-internal</url>
@@ -191,10 +179,22 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+
+        <repository>
+            <id>maven-gae-plugin-googlecode-repository</id>
+            <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
     </repositories>
 
     <pluginRepositories>
-        
+
         <pluginRepository>
             <id>pyx4j-snapshots</id>
             <url>http://repository.pyx4j.com/maven2-snapshot</url>
@@ -212,6 +212,17 @@
             <url>http://repository.codehaus.org</url>
         </pluginRepository>
 
+        <pluginRepository>
+            <id>maven-gae-plugin-googlecode-repository</id>
+            <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+
     </pluginRepositories>
 
     <properties>
@@ -221,6 +232,8 @@
 
         <buildLabel>${project.version}</buildLabel>
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+
+        <appengine.sdk.root>${CORP_TOOLS}/3p-libs/gae/appengine-java-sdk-${gaeVersion}</appengine.sdk.root>
     </properties>
 
 
@@ -360,6 +373,21 @@
 
     <build>
         <defaultGoal>install</defaultGoal>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.kindleit</groupId>
+                    <artifactId>maven-gae-plugin</artifactId>
+                    <version>0.5.6</version>
+                    <configuration>
+                        <emailAccount>${appengine.dev.email}</emailAccount>
+                        <sdkDir>${appengine.sdk.root}</sdkDir>
+                        <appDir>${basedir}/war</appDir>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
         <plugins>
 
