@@ -31,6 +31,8 @@ class LoggerDefaultConfiguration {
                     ClientLogger.addAppender(new AppenderFirebug());
                 } else if (AppenderConsole.isSupported()) {
                     ClientLogger.addAppender(new AppenderConsole());
+                } else if (AppenderConsoleIE8.isSupported()) {
+                    ClientLogger.addAppender(new AppenderConsoleIE8());
                 }
             } else {
                 ClientLogger.addAppender(new AppenderStdOut());
