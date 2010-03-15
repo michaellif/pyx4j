@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -108,18 +109,35 @@ public class ClientContext {
         googleAccountsLogin(getCurrentURL());
     }
 
-    public static void googleAccountsLogin(String destinationURLComponent) {
-        RPCManager.execute(AuthenticationServices.GetGoogleAccountsLoginUrl.class, destinationURLComponent, new AsyncCallback<String>() {
+    public static void googleAccountsLogin(final String destinationURLComponent) {
+        logout(new AsyncCallback<AuthenticationResponse>() {
+
             @Override
             public void onFailure(Throwable caught) {
-                log.error("Get LoginUrl failure", caught);
+                googleLogin();
             }
 
             @Override
-            public void onSuccess(String result) {
-                Window.Location.replace(result);
+            public void onSuccess(AuthenticationResponse result) {
+                googleLogin();
             }
-        });
+
+            private void googleLogin() {
+                RPCManager.execute(AuthenticationServices.GetGoogleAccountsLoginUrl.class, destinationURLComponent, new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        log.error("Get LoginUrl failure", caught);
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        Window.Location.replace(result);
+                    }
+                });
+            }
+        }
+
+        );
     }
 
     public static void obtainAuthenticationData() {
