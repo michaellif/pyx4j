@@ -39,6 +39,11 @@ public abstract class AbstractDataPreloader implements DataPreloader {
 
     }
 
+    public static boolean isGAEDevelopment() {
+        SecurityManager sm = System.getSecurityManager();
+        return (sm != null) && (sm.getClass().getName().startsWith("com.google.appengine.tools.development"));
+    }
+
     protected static <T extends IEntity> String deleteAll(Class<T> entityClass) {
         EntityQueryCriteria<T> criteria = new EntityQueryCriteria<T>(entityClass);
         int count = PersistenceServicesFactory.getPersistenceService().delete(criteria);
