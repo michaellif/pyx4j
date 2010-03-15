@@ -24,12 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
 import com.pyx4j.forms.client.ui.CCaptcha;
@@ -100,7 +97,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 rememberID.setValue(true);
             }
         } else {
-            rememberID.setVisible(true);
+            rememberID.setVisible(false);
         }
 
         add(CForm.createFormWidget(LabelAlignment.TOP, components));
