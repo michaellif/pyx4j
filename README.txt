@@ -5,6 +5,8 @@
 
 2. Unzip it to directory: eclipse-3.5.2   (Optionally)
 
+3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_15\bin\javaw.exe")
+
 ========= Install Subclipse =========
 
      Subclipse for SVN 1.6
