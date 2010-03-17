@@ -6,16 +6,29 @@
 2. Unzip it to directory: eclipse-3.5.2   (Optionally)
 
 3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_15\bin\javaw.exe")
+   Or full Target on Windows 32:
+        D:\prog\dev\eclipse\eclipse-3.5.2\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
+
+4. Install Eclipse Plugins.
+    - Subclipse
+    - M2-Eclipse
+    - Google plugins for Eclipse
+    - Google Web Toolkin SDK
+    - Google App Engine SDK
+
+    All Eclipse Plugins required by our development team are stored in our repository.
+    Our Eclipse Update site is: http://pyx4j.com/eclipse/svn/trunk/3.5/
+    The stable update site url for this project as of March 2010 is http://pyx4j.com/eclipse/svn/tags/2010-03/
 
 ========= Install Subclipse =========
 
      Subclipse for SVN 1.6
-     Update Site:  http://subclipse.tigris.org/update_1.6.x
+     Official Update Site:  http://subclipse.tigris.org/update_1.6.x
 
 ========= Install M2-Eclipse =========
 
     Use the latest plugin http://m2eclipse.sonatype.org/
-    Update Site:  http://m2eclipse.sonatype.org/sites/m2e
+    Official Update Site:  http://m2eclipse.sonatype.org/sites/m2e
 
 ========= maven build =========
 
