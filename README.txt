@@ -3,7 +3,7 @@
 1. Get: Eclipse SDK
        eclipse-SDK-3.5.2-win32.zip
 
-2. Unzip it to directory: eclipse-3.5.2
+2. Unzip it to directory: eclipse-3.5.2   (Optionally)
 
 ========= Install Subclipse =========
 
@@ -42,11 +42,15 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 ========= Install Google App Engine SDK for Java =========
 
-1. Install default plugin - http://dl.google.com/eclipse/plugin/3.5
-2. Download and unzip appengine-java-sdk-1.3.1.zip
-		from http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Java
+1. Install "Google plugins for Eclipse 3.5 version 1.2.0"
+    site url: http://pyx4j.com/internal/eclipse/eclipse3.5-google-gpe-1.2.0/
+    Do not install default latest one from google site:  http://dl.google.com/eclipse/plugin/3.5
+
+    You may install SDKs bundle for GAE and GWT from google site for faster download.
 
 -- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
+2. Download and unzip appengine-java-sdk-1.3.1.zip
+		from http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Java
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
    If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.1-patch.zip
 4. Copy/Add results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
