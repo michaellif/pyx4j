@@ -18,8 +18,13 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.shared.domain;
+package com.pyx4j.site.client;
 
-public interface SkinType {
+import com.pyx4j.site.shared.domain.SkinType;
+import com.pyx4j.widgets.client.style.Theme;
+
+public interface SkinFactory {
+
+    Theme createSkin(SkinType type);
 
 }

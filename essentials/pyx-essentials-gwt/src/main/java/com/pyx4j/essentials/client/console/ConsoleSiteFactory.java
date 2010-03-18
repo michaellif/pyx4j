@@ -23,7 +23,7 @@ package com.pyx4j.essentials.client.console;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.domain.SkinType;
+import com.pyx4j.site.shared.domain.DefaultSkins;
 
 public class ConsoleSiteFactory {
 
@@ -39,7 +39,7 @@ public class ConsoleSiteFactory {
         Site site = EntityFactory.create(Site.class);
         site.siteId().setValue(siteId);
         site.siteCaption().setValue("Pyx Console");
-        site.skinType().setValue(SkinType.console);
+        site.skinType().setValue(DefaultSkins.console);
 
         site.pages().add(createWidgetPage("DB Preload", ConsolePageType.console$preload, Widgets.console$preloadWidget));
 

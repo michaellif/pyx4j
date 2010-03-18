@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.admin.client;
 
-import java.util.EnumSet;
+import java.util.Arrays;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.ria.client.AbstractView;
+import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.domain.SkinType;
 
@@ -55,7 +56,8 @@ public class SiteEditor extends AbstractView {
 
         };
 
-        ((CComboBox<SkinType>) (form.get(form.meta().skinType()))).setOptions(EnumSet.of(SkinType.light, SkinType.dark, SkinType.business));
+        ((CComboBox<SkinType>) (form.get(form.meta().skinType()))).setOptions(Arrays.asList(new SkinType[] { DefaultSkins.light, DefaultSkins.dark,
+                DefaultSkins.business }));
 
         form.populate(site);
 

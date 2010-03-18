@@ -29,7 +29,7 @@ import com.pyx4j.site.shared.domain.PageData;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.domain.SkinType;
+import com.pyx4j.site.shared.domain.DefaultSkins;
 
 public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
 
@@ -69,7 +69,7 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
         site.siteId().setValue(siteId);
         site.siteCaption().setValue(caption);
         site.logoUrl().setValue("images/logo.png");
-        site.skinType().setValue(SkinType.light);
+        site.skinType().setValue(DefaultSkins.light);
         site.footerCopiright().setValue(footerCopiright());
         siteCount++;
         return site;

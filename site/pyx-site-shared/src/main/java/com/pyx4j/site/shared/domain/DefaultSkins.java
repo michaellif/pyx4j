@@ -14,12 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 18, 2010
- * @author michaellif
+ * Created on Jan 27, 2010
+ * @author Michael
  * @version $Id$
  */
 package com.pyx4j.site.shared.domain;
 
-public interface SkinType {
-
+public enum DefaultSkins implements SkinType {
+    dark, light, business, console
 }

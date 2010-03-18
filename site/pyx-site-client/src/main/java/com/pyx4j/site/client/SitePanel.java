@@ -43,19 +43,15 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
-import com.pyx4j.site.client.themes.business.BusinessTheme;
-import com.pyx4j.site.client.themes.console.ConsoleTheme;
-import com.pyx4j.site.client.themes.dark.DarkTheme;
-import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.domain.SkinType;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -101,15 +97,9 @@ public abstract class SitePanel extends SimplePanel {
 
     private final HashMap<String, PageWidget> cachedPanels = new HashMap<String, PageWidget>();
 
-    private static LightTheme lightTheme = new LightTheme();
-
-    private static DarkTheme darkTheme = new DarkTheme();
-
-    private static BusinessTheme businessTheme = new BusinessTheme();
-
-    private static ConsoleTheme consoleTheme = new ConsoleTheme();
-
     private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactoryGlobal.class);
+
+    private SkinFactory skinFactory;
 
     public SitePanel(Site site) {
         this.site = site;
@@ -143,6 +133,7 @@ public abstract class SitePanel extends SimplePanel {
             }
         }
 
+        skinFactory = new DefaultSkinFactory();
     }
 
     public void show(String historyToken, Map<String, String> args) {
@@ -177,23 +168,7 @@ public abstract class SitePanel extends SimplePanel {
             pageWidget.createInlineWidgets();
         }
 
-        switch (site.skinType().getValue()) {
-        case light:
-            StyleManger.installTheme(lightTheme);
-            break;
-        case dark:
-            StyleManger.installTheme(darkTheme);
-            break;
-        case business:
-            StyleManger.installTheme(businessTheme);
-            break;
-        case console:
-            StyleManger.installTheme(consoleTheme);
-            break;
-
-        default:
-            break;
-        }
+        StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
 
         setHeaderCaption(page.caption().getValue());
 
@@ -447,6 +422,14 @@ public abstract class SitePanel extends SimplePanel {
 
     public void onAfterLogOut() {
 
+    }
+
+    public SkinFactory getSkinFactory() {
+        return skinFactory;
+    }
+
+    public void setSkinFactory(SkinFactory skinFactory) {
+        this.skinFactory = skinFactory;
     }
 
 }
