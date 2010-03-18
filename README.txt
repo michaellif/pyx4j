@@ -11,14 +11,17 @@
 
 4. Install Eclipse Plugins.
     - Subclipse
-    - M2-Eclipse
     - Google plugins for Eclipse
     - Google Web Toolkin SDK
     - Google App Engine SDK
+    - M2-Eclipse **
 
     All Eclipse Plugins required by our development team are stored in our repository.
     Our Eclipse Update site is: http://pyx4j.com/eclipse/svn/trunk/3.5/
     The stable update site url for this project as of March 2010 is http://pyx4j.com/eclipse/svn/tags/2010-03/
+
+    ** There is a copy of M2-Eclipse as aditional site
+      http://pyx4j.com/eclipse/svn/trunk/3.5/m2e  or http://pyx4j.com/eclipse/svn/tags/2010-03/m2e
 
 ========= Install Subclipse =========
 
