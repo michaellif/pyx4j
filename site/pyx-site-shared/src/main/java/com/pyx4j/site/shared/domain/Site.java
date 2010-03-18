@@ -45,7 +45,7 @@ public interface Site extends IEntity {
 
     @NotNull
     @Caption(name = "Skin Type")
-    IPrimitive<SkinType> skinType();
+    IPrimitive<String> skinType();
 
     @Owned
     IList<Link> headerLinks();

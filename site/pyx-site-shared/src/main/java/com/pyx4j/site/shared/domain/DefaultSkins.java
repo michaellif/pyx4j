@@ -20,6 +20,6 @@
  */
 package com.pyx4j.site.shared.domain;
 
-public enum DefaultSkins implements SkinType {
+public enum DefaultSkins {
     dark, light, business, console
 }

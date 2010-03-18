@@ -28,39 +28,38 @@ import com.pyx4j.site.client.themes.console.ConsoleTheme;
 import com.pyx4j.site.client.themes.dark.DarkTheme;
 import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.DefaultSkins;
-import com.pyx4j.site.shared.domain.SkinType;
 import com.pyx4j.widgets.client.style.Theme;
 
 public class DefaultSkinFactory implements SkinFactory {
 
-    private final Map<SkinType, Theme> themes = new HashMap<SkinType, Theme>();
+    private final Map<String, Theme> themes = new HashMap<String, Theme>();
 
     public DefaultSkinFactory() {
 
     }
 
     @Override
-    public Theme createSkin(SkinType type) {
-        if (DefaultSkins.light.equals(type)) {
-            if (!themes.containsKey(type)) {
-                themes.put(type, new LightTheme());
+    public Theme createSkin(String skinName) {
+        if (DefaultSkins.light.name().equals(skinName)) {
+            if (!themes.containsKey(skinName)) {
+                themes.put(skinName, new LightTheme());
             }
-            return themes.get(type);
-        } else if (DefaultSkins.dark.equals(type)) {
-            if (!themes.containsKey(type)) {
-                themes.put(type, new DarkTheme());
+            return themes.get(skinName);
+        } else if (DefaultSkins.dark.name().equals(skinName)) {
+            if (!themes.containsKey(skinName)) {
+                themes.put(skinName, new DarkTheme());
             }
-            return themes.get(type);
-        } else if (DefaultSkins.business.equals(type)) {
-            if (!themes.containsKey(type)) {
-                themes.put(type, new BusinessTheme());
+            return themes.get(skinName);
+        } else if (DefaultSkins.business.name().equals(skinName)) {
+            if (!themes.containsKey(skinName)) {
+                themes.put(skinName, new BusinessTheme());
             }
-            return themes.get(type);
-        } else if (DefaultSkins.console.equals(type)) {
-            if (!themes.containsKey(type)) {
-                themes.put(type, new ConsoleTheme());
+            return themes.get(skinName);
+        } else if (DefaultSkins.console.name().equals(skinName)) {
+            if (!themes.containsKey(skinName)) {
+                themes.put(skinName, new ConsoleTheme());
             }
-            return themes.get(type);
+            return themes.get(skinName);
         }
         return null;
     }

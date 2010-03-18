@@ -39,7 +39,7 @@ public class ConsoleSiteFactory {
         Site site = EntityFactory.create(Site.class);
         site.siteId().setValue(siteId);
         site.siteCaption().setValue("Pyx Console");
-        site.skinType().setValue(DefaultSkins.console);
+        site.skinType().setValue(DefaultSkins.console.name());
 
         site.pages().add(createWidgetPage("DB Preload", ConsolePageType.console$preload, Widgets.console$preloadWidget));
 

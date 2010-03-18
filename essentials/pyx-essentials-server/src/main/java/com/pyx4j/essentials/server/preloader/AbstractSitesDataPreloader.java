@@ -69,7 +69,7 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
         site.siteId().setValue(siteId);
         site.siteCaption().setValue(caption);
         site.logoUrl().setValue("images/logo.png");
-        site.skinType().setValue(DefaultSkins.light);
+        site.skinType().setValue(DefaultSkins.light.name());
         site.footerCopiright().setValue(footerCopiright());
         siteCount++;
         return site;

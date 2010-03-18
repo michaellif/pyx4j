@@ -35,7 +35,6 @@ import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.domain.SkinType;
 
 public class SiteEditor extends AbstractView {
 
@@ -56,8 +55,8 @@ public class SiteEditor extends AbstractView {
 
         };
 
-        ((CComboBox<SkinType>) (form.get(form.meta().skinType()))).setOptions(Arrays.asList(new SkinType[] { DefaultSkins.light, DefaultSkins.dark,
-                DefaultSkins.business }));
+        ((CComboBox<String>) (form.get(form.meta().skinType()))).setOptions(Arrays.asList(new String[] { DefaultSkins.light.name(), DefaultSkins.dark.name(),
+                DefaultSkins.business.name() }));
 
         form.populate(site);
 

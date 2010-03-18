@@ -20,11 +20,10 @@
  */
 package com.pyx4j.site.client;
 
-import com.pyx4j.site.shared.domain.SkinType;
 import com.pyx4j.widgets.client.style.Theme;
 
 public interface SkinFactory {
 
-    Theme createSkin(SkinType type);
+    Theme createSkin(String skinName);
 
 }
