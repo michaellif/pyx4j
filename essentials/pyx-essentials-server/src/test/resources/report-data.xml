@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resume>
+  <Name>David</Name>
+  <Address>2211 My Rd</Address>
+  <Phone>(547) 222-1111</Phone>
+  <E-mail>dg@gmail.com</E-mail>
+  <Experience>
+    <Company>Magic</Company>
+    <Position>Software Developer</Position>
+    <StartDate>May 2009</StartDate>
+    <EndDate>Present</EndDate>
+    <Detail>C, C++</Detail>
+    <Detail>User interface design</Detail>
+    <Detail>System architecture</Detail>
+  </Experience>
+  <Experience>
+    <Company>Force</Company>
+    <Position>Software Developer</Position>
+    <StartDate>Present</StartDate>
+    <EndDate>Future</EndDate>
+    <Detail>Java, XML, XSLT</Detail>
+    <Detail>Document generation</Detail>
+    <Detail>More to follow</Detail>
+    <Detail>Even more to follow</Detail>
+  </Experience>
+</Resume>

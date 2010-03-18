@@ -17,6 +17,8 @@ pyx-security-rpc
 pyx-security-shared
 pyx-security-server
 pyx-config-server
+pyx-essentials-server
+#pyx-essentials-server-tests
 javassist
 \slf4j-api
 slf4j-jdk14
@@ -33,5 +35,7 @@ slf4j-jdk14
 -pyx-security-shared.jar
 -pyx-security-server.jar
 -pyx-config-server.jar
+-pyx-essentials-server.jar
+#-pyx-essentials-server-tests.jar
 -slf4j-jdk14.jar
 -javassist.jar
