@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -27,15 +30,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.util.BrowserType;
-
 public class DynamicHTML extends HTMLPanel {
+
+    private static final Logger log = LoggerFactory.getLogger(DynamicHTML.class);
 
     public DynamicHTML(String html) {
         super(html);
-        if (BrowserType.isIE()) {
-            attachLocalAnchors();
-        }
+        attachLocalAnchors();
     }
 
     public DynamicHTML(String html, boolean wordWrap) {
@@ -60,6 +61,7 @@ public class DynamicHTML extends HTMLPanel {
                     Widget widget = new IEHistoryAnchor(el, el.getHref().substring(baseUrl.length()));
                     getChildren().add(widget);
                     adopt(widget);
+                    log.debug("replace href {}", el.getHref());
                 }
             }
         }

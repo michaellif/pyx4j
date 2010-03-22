@@ -156,7 +156,7 @@ public class NavigationBar extends ComplexPanel {
 
             switch (type) {
             case Primary:
-                if ("CompiledType#IE8".equals(BrowserType.getCompiledType())) {
+                if (BrowserType.isIE8()) {
                     getElement().getStyle().setProperty("display", "inline-block");
                 } else {
                     getElement().getStyle().setProperty("display", "inline");

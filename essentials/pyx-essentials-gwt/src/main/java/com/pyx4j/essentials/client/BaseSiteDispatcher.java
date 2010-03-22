@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -32,9 +35,12 @@ import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
 
+	private static final Logger log = LoggerFactory.getLogger(BaseSiteDispatcher.class);
+	
     private static BaseSiteDispatcher instance;
 
     public void onModuleLoad() {
@@ -43,6 +49,7 @@ public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implemen
         ClientLogger.addAppender(new RPCAppender(Level.WARN));
         ClientLogger.setDebugOn(true);
         UnrecoverableErrorHandlerDialog.register();
+        log.debug("{}", BrowserType.getCompiledType());
     }
 
     public static BaseSiteDispatcher instance() {

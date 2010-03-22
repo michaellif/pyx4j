@@ -54,8 +54,8 @@ public class StyleManger {
         }
 
         cleanUpInjectedStyles();
-
-        log.trace(stylesString.toString());
+        log.debug("install style {} ", theme.getClass().getName());
+        log.trace("{}", stylesString.toString());
 
         StyleInjector.inject(stylesString.toString());
     }
