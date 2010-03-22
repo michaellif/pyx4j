@@ -368,6 +368,12 @@
                 <version>3.11.0.GA</version>
             </dependency>
 
+            <dependency>
+                <groupId>saxon</groupId>
+                <artifactId>saxon</artifactId>
+                <version>8.7</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

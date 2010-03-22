@@ -43,6 +43,12 @@ public class ReportsProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(ReportsProcessor.class);
 
+    public static TransformerFactory newTransformerFactoryInstance() {
+        // return TransformerFactory.newInstance();
+        // Use XSLT since default is not available on GAE.
+        return TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", Thread.currentThread().getContextClassLoader());
+    }
+
     public static void createTransformation(InputStream binaryZip, InputStream xslTransformation, OutputStream transformationOut) {
         ZipInputStream zip = new ZipInputStream(binaryZip);
         try {
@@ -65,7 +71,7 @@ public class ReportsProcessor {
                         }
                         in = new ByteArrayInputStream(b.toByteArray());
                         // Output original document.xml entry to template.xml
-                        Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xslTransformation));
+                        Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
                         transformer.transform(new StreamSource(in), new StreamResult(new OutputStreamWriter(transformationOut)));
                         zip.closeEntry();
                     } finally {
@@ -95,7 +101,7 @@ public class ReportsProcessor {
                 zipOut.putNextEntry(new ZipEntry(entry.getName()));
                 if (entry.getName().equals("word/document.xml")) {
                     // Transform data with document-transform
-                    Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xslTransformation));
+                    Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
                     transformer.transform(new StreamSource(data), new StreamResult(new OutputStreamWriter(zipOut)));
                 } else {
                     // Copy data

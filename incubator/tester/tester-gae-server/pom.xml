@@ -121,6 +121,11 @@
         </dependency>
 
         <dependency>
+            <groupId>saxon</groupId>
+            <artifactId>saxon</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>compile</scope>
