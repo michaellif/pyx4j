@@ -47,6 +47,9 @@ public class StyleManger {
     }
 
     public static void installTheme(Theme theme) {
+        if (instance().theme != null && instance().theme.equals(theme)) {
+            return;
+        }
         instance().theme = theme;
         StringBuilder stylesString = new StringBuilder();
         for (Style style : theme.getAllStyles()) {
