@@ -124,12 +124,16 @@ public class Dialog extends DialogPanel {
 
     public Dialog(String caption, String message, Type type, DialogOptions options) {
         this(caption, options);
-        setBody(new MessagePanel(message, type));
+        MessagePanel messagePanel = new MessagePanel(message, type);
+        messagePanel.setSize("400px", "200px");
+
+        setBody(messagePanel);
         center();
     }
 
     public Dialog(String caption, DialogOptions options) {
         super(false, true);
+        setVisible(false);
         setGlassEnabled(true);
         setCaption(caption);
 
@@ -170,8 +174,8 @@ public class Dialog extends DialogPanel {
 
     public void setBody(Widget message) {
         content.add(message, DockPanel.CENTER);
-        message.setSize("400px", "200px");
         content.setCellHeight(message, "100%");
+        setVisible(true);
         center();
     }
 

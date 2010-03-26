@@ -61,6 +61,7 @@ public abstract class ExamplesSitePanel extends SitePanel {
                     }
 
                 };
+                logInPanel.setSize("400px", "200px");
                 dialog = new Dialog("Sign In", logInPanel);
                 dialog.setBody(logInPanel);
             }

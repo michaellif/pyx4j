@@ -243,6 +243,8 @@ public class WidgetsDemo implements EntryPoint {
             inputPanel.add(createLabled("Check Box:", new CheckBox()));
             inputPanel.add(createLabled("Text Area:", new TextArea()));
 
+            inputPanel.setSize("400px", "200px");
+
             dialog.setBody(inputPanel);
 
             dialog.show();
