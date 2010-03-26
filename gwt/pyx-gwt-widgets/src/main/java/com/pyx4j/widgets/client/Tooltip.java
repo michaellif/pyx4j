@@ -91,17 +91,19 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
                     delayShowTimer = null;
                     if (target instanceof Widget && ((Widget) target).isAttached() && ((Widget) target).isVisible()) {
                         int left = popupLeft + OFFSET_X;
-                        int top = popupTop + OFFSET_Y;
+                        int top = popupTop + OFFSET_Y + Window.getScrollTop();
 
+                        //TODO removed to fix site tooltip - what does it do?
                         // Fix position for the border of the window
-                        int width = 10 + 6 * text.length();
-                        int height = 30;
-                        if (top >= Window.getClientHeight() - height) {
-                            top = Window.getClientHeight() - height - 5;
-                        }
-                        if (left >= Window.getClientWidth() - width) {
-                            left = Window.getClientWidth() - width - 5;
-                        }
+                        //
+                        //                        int width = 10 + 6 * text.length();
+                        //                        int height = 30;
+                        //                        if (top >= Window.getClientHeight() - height) {
+                        //                            top = Window.getClientHeight() - height - 5;
+                        //                        }
+                        //                        if (left >= Window.getClientWidth() - width) {
+                        //                            left = Window.getClientWidth() - width - 5;
+                        //                        }
 
                         setPopupPosition(left, top);
                         content.setHTML(text);
