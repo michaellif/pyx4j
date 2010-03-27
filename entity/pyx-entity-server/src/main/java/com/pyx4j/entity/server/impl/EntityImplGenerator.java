@@ -56,11 +56,19 @@ public class EntityImplGenerator {
 
     private static EntityImplGenerator instance;
 
-    private final ClassPool pool;
+    private ClassPool pool;
+
+    private final boolean webapp;
 
     private EntityImplGenerator(boolean webapp) {
-        pool = ClassPool.getDefault();
-        appendClassPath(webapp);
+        this.webapp = webapp;
+    }
+
+    private synchronized void initClassPool() {
+        if (pool == null) {
+            pool = ClassPool.getDefault();
+            appendClassPath(webapp);
+        }
     }
 
     public static synchronized EntityImplGenerator instance() {
@@ -211,6 +219,7 @@ public class EntityImplGenerator {
         String interfaceName = interfaceClass.getName();
         String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         try {
+            initClassPool();
             CtClass cc = pool.makeClass(name);
             cc.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
             cc.addInterface(pool.get(interfaceName));

@@ -43,6 +43,7 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
         try {
             handlerClass = Class.forName(handlerClassName, true, Thread.currentThread().getContextClassLoader());
         } catch (ClassNotFoundException e) {
+            log.debug("generate impl class {}", clazz.getName());
             handlerClass = EntityImplGenerator.instance().generateImplementation(clazz.getName());
         }
         try {
