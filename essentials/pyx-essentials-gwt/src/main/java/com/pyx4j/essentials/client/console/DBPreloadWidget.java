@@ -40,34 +40,65 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        Anchor resetDB = new Anchor("Reset Initial Data");
-        contentPanel.add(resetDB);
-        resetDB.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                MessageDialog.confirm("Reset Initial Data", "All data would be removed\nDo you want to continue?", new Runnable() {
-                    @Override
-                    public void run() {
+        {
+            Anchor cleanDB = new Anchor("Remove All Data");
+            contentPanel.add(cleanDB);
+            cleanDB.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    MessageDialog.confirm("Remove All Data", "All data would be removed\nDo you want to continue?", new Runnable() {
+                        @Override
+                        public void run() {
 
-                        final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
+                            final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
 
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                MessageDialog.error("ResetInitialData Service failed", caught);
-                            }
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    MessageDialog.error("RemoveInitialData Service failed", caught);
+                                }
 
-                            @Override
-                            public void onSuccess(String result) {
-                                MessageDialog.info("DB Reset completed", result);
-                            }
-                        };
+                                @Override
+                                public void onSuccess(String result) {
+                                    MessageDialog.info("DB Reset completed", result);
+                                }
+                            };
 
-                        RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
-                    }
-                });
-            }
-        });
+                            RPCManager.execute(DatastoreAdminServices.RemoveAllData.class, null, rpcCallback);
+                        }
+                    });
+                }
+            });
+        }
 
+        {
+            Anchor resetDB = new Anchor("Reset Initial Data");
+            contentPanel.add(resetDB);
+            resetDB.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    MessageDialog.confirm("Reset Initial Data", "All data would be removed\nDo you want to continue?", new Runnable() {
+                        @Override
+                        public void run() {
+
+                            final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
+
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    MessageDialog.error("ResetInitialData Service failed", caught);
+                                }
+
+                                @Override
+                                public void onSuccess(String result) {
+                                    MessageDialog.info("DB Reset completed", result);
+                                }
+                            };
+
+                            RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override

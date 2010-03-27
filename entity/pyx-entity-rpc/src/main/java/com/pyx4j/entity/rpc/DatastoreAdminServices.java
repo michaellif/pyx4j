@@ -30,6 +30,10 @@ import com.pyx4j.rpc.shared.VoidSerializable;
  */
 public interface DatastoreAdminServices {
 
+    public interface RemoveAllData extends Service<VoidSerializable, String> {
+
+    };
+
     public interface ResetInitialData extends Service<VoidSerializable, String> {
 
     };

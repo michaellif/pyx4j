@@ -29,6 +29,14 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class EssentialsDatastoreAdminServicesImpl implements DatastoreAdminServices {
 
+    public static class RemoveAllDataImpl implements DatastoreAdminServices.RemoveAllData {
+
+        @Override
+        public String execute(VoidSerializable request) {
+            return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().delete();
+        }
+    }
+
     public static class ResetInitialDataImpl implements DatastoreAdminServices.ResetInitialData {
 
         @Override

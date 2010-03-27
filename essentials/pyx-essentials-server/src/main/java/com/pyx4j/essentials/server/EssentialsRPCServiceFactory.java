@@ -32,6 +32,9 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
         if (DatastoreAdminServices.ResetInitialData.class.getName().equals(serviceInterfaceClassName)) {
             return EssentialsDatastoreAdminServicesImpl.ResetInitialDataImpl.class;
         }
+        if (DatastoreAdminServices.RemoveAllData.class.getName().equals(serviceInterfaceClassName)) {
+            return EssentialsDatastoreAdminServicesImpl.RemoveAllDataImpl.class;
+        }
         if (DatastoreAdminServices.GetPreloaders.class.getName().equals(serviceInterfaceClassName)) {
             return EssentialsDatastoreAdminServicesImpl.GetPreloadersImpl.class;
         }
