@@ -29,6 +29,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public abstract class AbstractDataPreloader implements DataPreloader {
@@ -64,6 +65,12 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         ent.setMemberValue("name", name);
         PersistenceServicesFactory.getPersistenceService().persist(ent);
         return ent;
+    }
+
+    public static <T extends IEntity> T retrieveNamed(Class<T> clazz, String name) {
+        EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
+        criteria.add(PropertyCriterion.eq("name", name));
+        return PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
     }
 
     @Override
