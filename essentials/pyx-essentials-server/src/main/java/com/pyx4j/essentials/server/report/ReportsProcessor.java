@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -90,6 +91,10 @@ public class ReportsProcessor {
     }
 
     public static void createReport(InputStream binaryZip, InputStream xslTransformation, InputStream data, OutputStream report) {
+        createReport(binaryZip, xslTransformation, data, report, null);
+    }
+
+    public static void createReport(InputStream binaryZip, InputStream xslTransformation, InputStream data, OutputStream report, Map<String, byte[]> media) {
         ZipInputStream zipIn = new ZipInputStream(binaryZip);
         ZipOutputStream zipOut = new ZipOutputStream(report);
         try {
@@ -103,6 +108,8 @@ public class ReportsProcessor {
                     // Transform data with document-transform
                     Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
                     transformer.transform(new StreamSource(data), new StreamResult(new OutputStreamWriter(zipOut)));
+                } else if ((media != null) && media.containsKey(entry.getName())) {
+                    zipOut.write(media.get(entry.getName()));
                 } else {
                     // Copy data
                     byte buf[] = new byte[0xFF];
