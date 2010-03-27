@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server.dataimport;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +36,8 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 public abstract class AbstractDataPreloader implements DataPreloader {
 
     protected Map<String, Serializable> parameters;
+
+    private final Map<String, IEntity> namesCache = new HashMap<String, IEntity>();
 
     protected AbstractDataPreloader() {
 
@@ -67,10 +70,17 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         return ent;
     }
 
-    public static <T extends IEntity> T retrieveNamed(Class<T> clazz, String name) {
+    @SuppressWarnings("unchecked")
+    protected <T extends IEntity> T retrieveNamed(Class<T> clazz, String name) {
+        String key = clazz.getName() + "-" + name;
+        if (namesCache.containsKey(key)) {
+            return (T) namesCache.get(key);
+        }
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
         criteria.add(PropertyCriterion.eq("name", name));
-        return PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        T ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        namesCache.put(key, ent);
+        return ent;
     }
 
     @Override
