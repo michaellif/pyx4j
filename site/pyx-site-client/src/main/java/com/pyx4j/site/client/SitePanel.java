@@ -339,7 +339,12 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     public void setLogoImage(String logoUrl) {
-        logoImage.setUrl(logoUrl);
+        if (logoUrl != null) {
+            logoImage.setVisible(true);
+            logoImage.setUrl(logoUrl);
+        } else {
+            logoImage.setVisible(false);
+        }
     }
 
     protected void createPrimaryNavigationPanel() {
