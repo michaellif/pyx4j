@@ -68,7 +68,7 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 -- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
 2. Download and unzip appengine-java-sdk-1.3.1.zip
-		from http://code.google.com/appengine/downloads.html#Google_App_Engine_SDK_for_Java
+		from http://code.google.com/p/googleappengine/downloads/detail?name=appengine-java-sdk-1.3.1.zip&can=2&q=
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
    If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.1-patch.zip
 4. Copy/Add results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
