@@ -27,6 +27,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -55,6 +56,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -108,6 +110,8 @@ public class Dialog extends DialogPanel {
 
     // Handle focus for Stack of Dialogs, e.g. make proper focus on dialog bellow once the one above closed. 
     private FocusWidget currentFocusWidget;
+
+    private Element documentActiveElement;
 
     private static final List<Dialog> openDialogs = new Vector<Dialog>();
 
@@ -402,6 +406,10 @@ public class Dialog extends DialogPanel {
 
     @Override
     public void show() {
+        if (openDialogs.size() == 0) {
+            documentActiveElement = getDocumentActiveElement();
+        }
+
         if (!openDialogs.contains(this)) {
             openDialogs.add(this);
         }
@@ -442,8 +450,16 @@ public class Dialog extends DialogPanel {
             }
         } else {
             log.trace("Last dialog Closed");
+            if (documentActiveElement != null) {
+                documentActiveElement.focus();
+                documentActiveElement = null;
+            }
         }
     }
+
+    public final native Element getDocumentActiveElement() /*-{
+        return $doc.activeElement;
+    }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {
