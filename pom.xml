@@ -385,9 +385,9 @@
                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.5.6</version>
+                    <version>0.5.7</version>
                     <configuration>
-                        <emailAccount>${appengine.dev.email}</emailAccount>
+                        <serverId>appengine.google.com-pyx</serverId>
                         <sdkDir>${appengine.sdk.root}</sdkDir>
                         <appDir>${basedir}/war</appDir>
                     </configuration>

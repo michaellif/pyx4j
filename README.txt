@@ -78,13 +78,29 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 1. Change Eclipse config
       Window->Preferences  Java\Compiler  Set: 1.6
 
+ For mvn -P deploy-gae (mvn gae:deploy) to work add appengine.google.com-pyx to ./m2/settings.xml
+    <settings>
+        <servers>
+            ....
+            <server>
+                <id>appengine.google.com-pyx</id>
+                <username>MyEmail@gmail.com</username>
+                <password>MyPassword</password>
+            </server>
+
+        </servers>
+
+        <profiles>
+            ....
+        </profiles>
+    </settings>
 
 Cleaning up Indexes in Google App Engine/Java
   Use Python  SDK
     D:\etc\3p-libs\gae\appengine-python-1.3.1/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
     D:\etc\3p-libs\gae\appengine-python-1.3.1/appcfg.py vacuum_indexes D:\devGwt\pyx4j\examples\examples-gae-server
 
-rollback from pyx2 server (outside the firwall!):
+rollback from pyx2 server
 
     cd /data/build/work/pyx/incubator/tester/tester-gae-server/
     mvn gae:rollback
