@@ -90,6 +90,16 @@ public class TimeUtils {
         return (System.currentTimeMillis() - start);
     }
 
+    @SuppressWarnings("deprecation")
+    public static Date dayStart(Date d) {
+        return new Date(d.getYear(), d.getMonth(), d.getDate());
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Date dayEnd(Date d) {
+        return new Date(d.getYear(), d.getMonth(), d.getDate(), 23, 59, 59);
+    }
+
     public static boolean isToday(Date d) {
         return isSameDay(d, new Date());
     }
