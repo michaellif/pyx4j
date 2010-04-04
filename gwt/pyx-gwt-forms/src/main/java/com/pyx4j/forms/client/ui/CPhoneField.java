@@ -25,31 +25,21 @@ import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 public class CPhoneField extends CTextBox<String> {
 
     public CPhoneField() {
-        this(null, "617");
+        this(null);
     }
 
     public CPhoneField(String title) {
-        this(title, "617");
-    }
-
-    public CPhoneField(String title, String defaultAreaCode) {
         super(title);
-        setFormat(new PhoneFormat(defaultAreaCode));
+        setFormat(new PhoneFormat());
         addValueValidator(new TextBoxParserValidator<String>("Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 (dashes optional)"));
     }
 
     public static class PhoneFormat implements IFormat<String> {
 
-        private final String defaultAreaCode;
-
         private final static String regex = "^(\\(?\\d{3}\\)?\\s?[\\s-]?){1,2}(\\d{4})$";
 
-        public PhoneFormat(String defaultAreaCode) {
-            this.defaultAreaCode = defaultAreaCode;
-        }
-
         public PhoneFormat() {
-            this(null);
+
         }
 
         public static String normalize(String value) {
@@ -65,9 +55,6 @@ public class CPhoneField extends CTextBox<String> {
                 return null;
             }
             String unformatedPhone = normalize(value);
-            if (unformatedPhone.length() == 7 && defaultAreaCode != null) {
-                unformatedPhone = defaultAreaCode + unformatedPhone;
-            }
             if (unformatedPhone.length() == 10) {
                 return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
             } else {

@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -45,6 +46,7 @@ import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -120,6 +122,8 @@ public class EntityForm<E extends IEntity> {
                 comp = new CPasswordTextField(mm.getCaption());
             } else if (mm.isValidatorAnnotationPresent(Email.class)) {
                 comp = new CEmailField(mm.getCaption());
+            } else if (mm.isValidatorAnnotationPresent(Phone.class)) {
+                comp = new CPhoneField(mm.getCaption());
             } else {
                 comp = new CTextField(mm.getCaption());
             }
