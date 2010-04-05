@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -57,7 +58,9 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
     private static class TooltipPanel extends PopupPanel {
 
-        private final HTML content;
+        private final HTML textPane;
+
+        private final HTML shaddowPane;
 
         private Timer delayShowTimer;
 
@@ -71,9 +74,22 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
         public TooltipPanel() {
             super(true);
-            add(content = new HTML());
-            setStyleName(CSSClass.pyx4j_Tooltip.name());
-            getElement().getStyle().setProperty("zIndex", "30");
+            AbsolutePanel content = new AbsolutePanel();
+            content.getElement().getStyle().setProperty("overflow", "visible");
+            add(content);
+
+            shaddowPane = new HTML();
+            shaddowPane.setStyleName(CSSClass.pyx4j_Tooltip_Shadow.name());
+
+            textPane = new HTML();
+            textPane.setWordWrap(false);
+            textPane.setStyleName(CSSClass.pyx4j_Tooltip.name());
+
+            content.add(shaddowPane, 5, 5);
+            content.add(textPane, 0, 0);
+
+            textPane.getElement().getStyle().setZIndex(30);
+            shaddowPane.getElement().getStyle().setZIndex(29);
         }
 
         private void setPointerLocation(int left, int top) {
@@ -106,8 +122,9 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
                         //                        }
 
                         setPopupPosition(left, top);
-                        content.setHTML(text);
+                        textPane.setHTML(text);
                         TooltipPanel.this.show();
+                        shaddowPane.setPixelSize(textPane.getOffsetWidth(), textPane.getOffsetHeight());
                         scheduleHide();
                     }
                 }

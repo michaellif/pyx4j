@@ -153,8 +153,9 @@ public class NativeForm extends FlexTable implements INativeComponent {
         final Image imageInfoWarn = new Image();
         log.trace("tooltip.bundle.applyTo");
         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipEmpty());
-        imageInfoWarn.getElement().getStyle().setMarginRight(25, Unit.PX);
+        imageInfoWarn.getElement().getStyle().setMarginRight(10, Unit.PX);
         imageInfoWarn.getElement().getStyle().setMarginLeft(2, Unit.PX);
+        imageInfoWarn.getElement().getStyle().setPadding(1, Unit.PX);
 
         log.trace("cr.tooltip");
         final Tooltip tooltip = Tooltip.tooltip(imageInfoWarn, "");

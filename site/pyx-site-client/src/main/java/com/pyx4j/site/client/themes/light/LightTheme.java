@@ -49,6 +49,8 @@ public class LightTheme extends SiteTheme {
     protected void initGeneralStyles() {
         super.initGeneralStyles();
         Style style = new Style("body");
+        style.addProperty("font-family", "'Lucida Grande', 'Segoe UI', 'Bitstream Vera Sans', Tahoma, Verdana, Arial, sans-serif");
+        style.addProperty("font-size", "0.81em");
         style.addProperty("background", "#F8F8F8");
         addStyle(style);
     }
@@ -180,7 +182,7 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a span");
-        style.addProperty("padding-top", "6px");
+        style.addProperty("padding-top", "3px");
         style.addProperty("display", "block");
         style.addProperty("font-size", "18px");
         addStyle(style);

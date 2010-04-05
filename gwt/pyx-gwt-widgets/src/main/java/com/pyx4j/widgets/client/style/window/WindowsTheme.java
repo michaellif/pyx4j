@@ -341,10 +341,15 @@ public class WindowsTheme extends Theme {
     protected void initTooltipStyle() {
         Style style = new Style("." + CSSClass.pyx4j_Tooltip.name());
         style.addProperty("border", "1px solid #000000");
-        style.addProperty("background-color", "#FFFFCC");
+        style.addProperty("background-color", "#FCFFDB");
         style.addProperty("padding", "1px 3px 1px 3px");
         style.addProperty("color", "#000000");
-        style.addProperty("font-size", "16px");
+        addStyle(style);
+        style = new Style("." + CSSClass.pyx4j_Tooltip_Shadow.name());
+        style.addProperty("background-color", "gray");
+        style.addProperty("opacity", "0.2");
+        style.addProperty("filter", "alpha(opacity=20)");
+
         addStyle(style);
     }
 

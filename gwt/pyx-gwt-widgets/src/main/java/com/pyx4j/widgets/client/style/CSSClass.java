@@ -40,7 +40,7 @@ public enum CSSClass {
     gwtButtonDefault,
 
     //Tooltip
-    pyx4j_Tooltip,
+    pyx4j_Tooltip, pyx4j_Tooltip_Shadow,
 
     //Dialog
     pyx4j_Dialog, pyx4j_Dialog_Caption, pyx4j_Dialog_Resizer, pyx4j_Dialog_Content,
