@@ -75,6 +75,10 @@ public abstract class AbstractSiteDispatcher {
 
     //TODO handle wrong tokens !!!
     public void show(String path) {
+        if (currentSitePanel != null && !currentSitePanel.onBeforeLeaving()) {
+            return;
+        }
+
         //Split path to uri and args
         String uri = null;
         Map<String, String> args = null;

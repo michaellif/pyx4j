@@ -38,7 +38,7 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
 
     private List<E> options;
 
-    private String noSelectionText = "-- NO SELECTION --";
+    private String noSelectionText = "";
 
     private NotInOptionsPolicy policy;
 

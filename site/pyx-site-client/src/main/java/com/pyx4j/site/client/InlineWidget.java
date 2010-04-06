@@ -25,4 +25,6 @@ import java.util.Map;
 public interface InlineWidget {
 
     public void populate(Map<String, String> args);
+
+    public boolean onBeforeLeaving();
 }

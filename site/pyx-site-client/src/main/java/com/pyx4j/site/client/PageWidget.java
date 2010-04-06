@@ -79,4 +79,13 @@ public class PageWidget extends DynamicHTML {
             inlineWidget.populate(args);
         }
     }
+
+    public boolean onBeforeLeaving() {
+        for (InlineWidget inlineWidget : inlineWidgets) {
+            if (!inlineWidget.onBeforeLeaving()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -101,4 +101,10 @@ public class TechnologyWidget extends SimplePanel implements InlineWidget {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public boolean onBeforeLeaving() {
+        return true;
+    }
+
 }

@@ -105,4 +105,9 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
     public void populate(Map<String, String> args) {
     }
 
+    @Override
+    public boolean onBeforeLeaving() {
+        return true;
+    }
+
 }

@@ -155,7 +155,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipEmpty());
         imageInfoWarn.getElement().getStyle().setMarginRight(10, Unit.PX);
         imageInfoWarn.getElement().getStyle().setMarginLeft(2, Unit.PX);
-        imageInfoWarn.getElement().getStyle().setPadding(1, Unit.PX);
 
         log.trace("cr.tooltip");
         final Tooltip tooltip = Tooltip.tooltip(imageInfoWarn, "");
@@ -188,6 +187,11 @@ public class NativeForm extends FlexTable implements INativeComponent {
             //            widgetContainer.setCellWidth(imageInfoWarn, "20px");
         } else {
             widgetContainer.add(nativeComponent);
+        }
+
+        if (component.getWidth().equals("100%")) {
+            widgetContainer.setWidth("100%");
+            widgetContainer.setCellWidth(nativeComponent, "100%");
         }
 
         widgetContainer.setCellVerticalAlignment(imageInfoWarn, HasVerticalAlignment.ALIGN_MIDDLE);

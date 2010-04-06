@@ -37,4 +37,9 @@ public class DashboardWidget extends SimplePanel implements InlineWidget {
 
     }
 
+    @Override
+    public boolean onBeforeLeaving() {
+        return true;
+    }
+
 }

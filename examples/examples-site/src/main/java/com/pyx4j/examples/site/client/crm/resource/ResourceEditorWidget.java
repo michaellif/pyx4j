@@ -34,4 +34,9 @@ public class ResourceEditorWidget extends VerticalPanel implements InlineWidget 
 
     }
 
+    @Override
+    public boolean onBeforeLeaving() {
+        return true;
+    }
+
 }

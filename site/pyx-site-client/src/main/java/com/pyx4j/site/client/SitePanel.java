@@ -44,7 +44,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.gwt.DatePickerDropDownPanel;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -57,7 +56,7 @@ import com.pyx4j.widgets.client.style.StyleManger;
 
 public abstract class SitePanel extends SimplePanel {
 
-    private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(SitePanel.class);
 
     private final Site site;
 
@@ -69,7 +68,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private final List<Page> pages = new ArrayList<Page>();
 
-    private Page currentPage;
+    private PageWidget currentPageWidget;
 
     private AbsolutePanel headerPanel;
 
@@ -156,16 +155,15 @@ public abstract class SitePanel extends SimplePanel {
 
     protected void show(Page page, Map<String, String> args) {
 
-        PageWidget pageWidget;
         String path = page.uri().uri().getValue();
         if (cachedPanels.containsKey(path)) {
-            pageWidget = cachedPanels.get(path);
-            mainSectionPanel.setWidget(pageWidget);
+            currentPageWidget = cachedPanels.get(path);
+            mainSectionPanel.setWidget(currentPageWidget);
         } else {
-            pageWidget = new PageWidget(this, page.data());
-            cachedPanels.put(path, pageWidget);
-            mainSectionPanel.setWidget(pageWidget);
-            pageWidget.createInlineWidgets();
+            currentPageWidget = new PageWidget(this, page.data());
+            cachedPanels.put(path, currentPageWidget);
+            mainSectionPanel.setWidget(currentPageWidget);
+            currentPageWidget.createInlineWidgets();
         }
 
         StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
@@ -194,10 +192,15 @@ public abstract class SitePanel extends SimplePanel {
 
         Window.setTitle(page.caption().getValue() + " | " + siteCaption);
 
-        currentPage = page;
+        currentPageWidget.populateInlineWidgets(args);
 
-        pageWidget.populateInlineWidgets(args);
+    }
 
+    public boolean onBeforeLeaving() {
+        if (currentPageWidget != null && !currentPageWidget.onBeforeLeaving()) {
+            return false;
+        }
+        return true;
     }
 
     public static InlineWidgetFactory getGlobalWidgetFactory() {

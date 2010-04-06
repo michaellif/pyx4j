@@ -104,4 +104,10 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
             searchResultsPanel.setDistanceOverlay(null, 0);
         }
     }
+
+    @Override
+    public boolean onBeforeLeaving() {
+        return true;
+    }
+
 }

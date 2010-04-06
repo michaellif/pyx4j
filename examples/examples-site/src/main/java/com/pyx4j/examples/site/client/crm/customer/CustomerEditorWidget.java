@@ -75,4 +75,9 @@ public class CustomerEditorWidget extends VerticalPanel implements InlineWidget 
 
     }
 
+    @Override
+    public boolean onBeforeLeaving() {
+        return true;
+    }
+
 }
