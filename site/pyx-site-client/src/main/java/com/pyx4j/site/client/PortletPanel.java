@@ -10,6 +10,7 @@ package com.pyx4j.site.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Portlet;
 
-public class PortletWidget extends VerticalPanel {
+public class PortletPanel extends VerticalPanel {
 
-    private static final Logger log = LoggerFactory.getLogger(PortletWidget.class);
+    private static final Logger log = LoggerFactory.getLogger(PortletPanel.class);
 
     private final List<InlineWidget> inlineWidgets = new ArrayList<InlineWidget>();
 
@@ -31,7 +32,7 @@ public class PortletWidget extends VerticalPanel {
 
     private final Portlet portlet;
 
-    public PortletWidget(SitePanel parent, Portlet portlet) {
+    public PortletPanel(SitePanel parent, Portlet portlet) {
         super();
         this.parent = parent;
         this.portlet = portlet;
@@ -76,4 +77,11 @@ public class PortletWidget extends VerticalPanel {
             }
         }
     }
+
+    public void populateInlineWidgets(Map<String, String> args) {
+        for (InlineWidget inlineWidget : inlineWidgets) {
+            inlineWidget.populate(args);
+        }
+    }
+
 }

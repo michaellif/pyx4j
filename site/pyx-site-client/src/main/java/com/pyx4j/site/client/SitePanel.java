@@ -68,7 +68,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private final List<Page> pages = new ArrayList<Page>();
 
-    private PageWidget currentPageWidget;
+    private PagePanel currentPagePanel;
 
     private AbsolutePanel headerPanel;
 
@@ -94,7 +94,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private LinkBar footerLinkBar;
 
-    private final HashMap<String, PageWidget> cachedPanels = new HashMap<String, PageWidget>();
+    private final HashMap<String, PagePanel> cachedPanels = new HashMap<String, PagePanel>();
 
     private static InlineWidgetFactory globalWidgetFactory = GWT.create(InlineWidgetFactoryGlobal.class);
 
@@ -157,13 +157,13 @@ public abstract class SitePanel extends SimplePanel {
 
         String path = page.uri().uri().getValue();
         if (cachedPanels.containsKey(path)) {
-            currentPageWidget = cachedPanels.get(path);
-            mainSectionPanel.setWidget(currentPageWidget);
+            currentPagePanel = cachedPanels.get(path);
+            mainSectionPanel.setWidget(currentPagePanel);
         } else {
-            currentPageWidget = new PageWidget(this, page.data());
-            cachedPanels.put(path, currentPageWidget);
-            mainSectionPanel.setWidget(currentPageWidget);
-            currentPageWidget.createInlineWidgets();
+            currentPagePanel = new PagePanel(this, page.data());
+            cachedPanels.put(path, currentPagePanel);
+            mainSectionPanel.setWidget(currentPagePanel);
+            currentPagePanel.createInlineWidgets();
         }
 
         StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
@@ -173,18 +173,20 @@ public abstract class SitePanel extends SimplePanel {
         leftSectionPanel.clear();
         if (page.data().leftPortlets().size() > 0) {
             for (Portlet portlet : page.data().leftPortlets()) {
-                PortletWidget portletWidget = new PortletWidget(this, portlet);
-                leftSectionPanel.add(portletWidget);
-                portletWidget.createInlineWidgets();
+                PortletPanel portletPanel = new PortletPanel(this, portlet);
+                leftSectionPanel.add(portletPanel);
+                portletPanel.createInlineWidgets();
+                portletPanel.populateInlineWidgets(args);
             }
         }
 
         rightSectionPanel.clear();
         if (page.data().rightPortlets().size() > 0) {
             for (Portlet portlet : page.data().rightPortlets()) {
-                PortletWidget portletWidget = new PortletWidget(this, portlet);
-                rightSectionPanel.add(portletWidget);
-                portletWidget.createInlineWidgets();
+                PortletPanel portletPanel = new PortletPanel(this, portlet);
+                rightSectionPanel.add(portletPanel);
+                portletPanel.createInlineWidgets();
+                portletPanel.populateInlineWidgets(args);
             }
         }
 
@@ -192,12 +194,12 @@ public abstract class SitePanel extends SimplePanel {
 
         Window.setTitle(page.caption().getValue() + " | " + siteCaption);
 
-        currentPageWidget.populateInlineWidgets(args);
+        currentPagePanel.populateInlineWidgets(args);
 
     }
 
     public boolean onBeforeLeaving() {
-        if (currentPageWidget != null && !currentPageWidget.onBeforeLeaving()) {
+        if (currentPagePanel != null && !currentPagePanel.onBeforeLeaving()) {
             return false;
         }
         return true;

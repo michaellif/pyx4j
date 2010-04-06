@@ -32,9 +32,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.PageData;
 
-public class PageWidget extends DynamicHTML {
+public class PagePanel extends DynamicHTML {
 
-    private static final Logger log = LoggerFactory.getLogger(PageWidget.class);
+    private static final Logger log = LoggerFactory.getLogger(PagePanel.class);
 
     private final List<InlineWidget> inlineWidgets = new ArrayList<InlineWidget>();
 
@@ -42,7 +42,7 @@ public class PageWidget extends DynamicHTML {
 
     private final PageData pageData;
 
-    public PageWidget(SitePanel parent, PageData pageData) {
+    public PagePanel(SitePanel parent, PageData pageData) {
         super(pageData.html().getValue(), true);
         this.parent = parent;
         this.pageData = pageData;
