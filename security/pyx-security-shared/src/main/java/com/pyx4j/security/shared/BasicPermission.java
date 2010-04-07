@@ -36,8 +36,17 @@ public class BasicPermission implements Permission {
         this.path = path;
     }
 
+    public String getPath() {
+        return path;
+    }
+
     public String getActions() {
         return "";
+    }
+
+    @Override
+    public String toString() {
+        return getPath() + " " + getActions();
     }
 
     @Override
