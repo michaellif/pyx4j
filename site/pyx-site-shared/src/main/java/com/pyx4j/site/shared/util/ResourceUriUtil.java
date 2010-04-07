@@ -52,13 +52,17 @@ public class ResourceUriUtil {
 
     public static List<String> parseResourceUri(ResourceUri uri) {
         List<String> path = new ArrayList<String>();
-        //        String uriStr = uri.uri().getValue();
-        //        StringTokenizer tokenizer = new StringTokenizer(uriStr, SITE_SEPARATOR);
-        //        int count = 0;
-        //        while (tokenizer.hasMoreTokens()) {
-        //            path.add(tokenizer.nextToken(count > 0 ? PAGE_SEPARATOR : SITE_SEPARATOR));
-        //            count++;
-        //        }
+        String uriStr = uri.uri().getValue();
+        String[] siteAndPages = uriStr.split("\\" + SITE_SEPARATOR);
+        path.add(siteAndPages[0]);
+        if (siteAndPages[1].contains(PAGE_SEPARATOR)) {
+            String[] pages = siteAndPages[1].split("\\" + PAGE_SEPARATOR);
+            for (String string : pages) {
+                path.add(string);
+            }
+        } else {
+            path.add(siteAndPages[1]);
+        }
         return path;
     }
 
@@ -83,23 +87,22 @@ public class ResourceUriUtil {
     }
 
     public static boolean isRoot(ResourceUri uri) {
-        return !uri.uri().getValue().contains(PAGE_SEPARATOR);
+        return parseResourceUri(uri).size() == 2;
     }
 
     public static ResourceUri getRoot(ResourceUri uri) {
-        String uriStr = uri.uri().getValue();
-        return createResourceUri(uriStr.substring(0, uriStr.indexOf(SITE_SEPARATOR)), uriStr.substring(uriStr.indexOf(SITE_SEPARATOR) + 1, uriStr
-                .indexOf(PAGE_SEPARATOR)));
+        List<String> path = parseResourceUri(uri);
+        return createResourceUri(path.get(0), path.get(1));
     }
 
     public static ResourceUri getParent(ResourceUri uri) {
-        //        String uriStr = uri.uri().getValue();
-        //        StringTokenizer tokenizer = new StringTokenizer(uriStr);
-        //
-        //        return createResourceUri(uriStr.substring(0, uriStr.indexOf(SITE_SEPARATOR)), uriStr.substring(uriStr.indexOf(SITE_SEPARATOR) + 1, uriStr
-        //                .indexOf(PAGE_SEPARATOR)));
-        //        
-        return null;
+        List<String> path = parseResourceUri(uri);
+        String[] subpath = new String[path.size() - 2];
+        for (int i = 1; i < path.size() - 1; i++) {
+            subpath[i - 1] = path.get(i);
+        }
+
+        return createResourceUri(path.get(0), subpath);
     }
 
 }
