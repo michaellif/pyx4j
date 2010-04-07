@@ -68,6 +68,11 @@ public abstract class AbstractCRUDPermission extends BasicPermission {
         return this.actions;
     }
 
+    @Override
+    public String toString() {
+        return getPath() + " " + getActions();
+    }
+
     private static int decodeActions(String actions) {
         String actionsLowerCase = actions.toLowerCase().trim();
         int mask = 0;
