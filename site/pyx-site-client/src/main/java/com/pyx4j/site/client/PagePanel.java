@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
-import com.pyx4j.site.shared.domain.PageData;
+import com.pyx4j.site.shared.domain.Page;
 
 public class PagePanel extends DynamicHTML {
 
@@ -40,18 +40,22 @@ public class PagePanel extends DynamicHTML {
 
     private final SitePanel parent;
 
-    private final PageData pageData;
+    private final Page page;
 
-    public PagePanel(SitePanel parent, PageData pageData) {
-        super(pageData.html().getValue(), true);
+    public PagePanel(SitePanel parent, Page page) {
+        super(page.data().html().getValue(), true);
         this.parent = parent;
-        this.pageData = pageData;
+        this.page = page;
         setStyleName(SiteCSSClass.pyx4j_Site_PageWidget.name());
     }
 
+    public Page getPage() {
+        return page;
+    }
+
     public void createInlineWidgets() {
-        if (!pageData.inlineWidgetIds().isNull() && pageData.inlineWidgetIds().getValue().size() > 0) {
-            for (String widgetId : pageData.inlineWidgetIds().getValue()) {
+        if (!page.data().inlineWidgetIds().isNull() && page.data().inlineWidgetIds().getValue().size() > 0) {
+            for (String widgetId : page.data().inlineWidgetIds().getValue()) {
                 //check in local (page) factory
                 InlineWidget inlineWidget = null;
                 //check in local (page) factory

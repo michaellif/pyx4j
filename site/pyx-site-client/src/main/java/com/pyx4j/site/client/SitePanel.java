@@ -60,10 +60,6 @@ public abstract class SitePanel extends SimplePanel {
 
     private final Site site;
 
-    private String siteName;
-
-    private String siteCaption;
-
     private Page homePage;
 
     private final List<Page> pages = new ArrayList<Page>();
@@ -119,8 +115,6 @@ public abstract class SitePanel extends SimplePanel {
 
         createFooterCopirightPanel();
 
-        setSiteName(site.siteId().getValue());
-        setSiteCaption(site.siteCaption().getValue());
         setLogoImage(site.logoUrl().getValue());
         setFooterCopiright(site.footerCopiright().getValue());
 
@@ -133,6 +127,10 @@ public abstract class SitePanel extends SimplePanel {
         }
 
         skinFactory = new DefaultSkinFactory();
+    }
+
+    public Site getSite() {
+        return site;
     }
 
     public void show(String historyToken, Map<String, String> args) {
@@ -160,7 +158,7 @@ public abstract class SitePanel extends SimplePanel {
             currentPagePanel = cachedPanels.get(path);
             mainSectionPanel.setWidget(currentPagePanel);
         } else {
-            currentPagePanel = new PagePanel(this, page.data());
+            currentPagePanel = new PagePanel(this, page);
             cachedPanels.put(path, currentPagePanel);
             mainSectionPanel.setWidget(currentPagePanel);
             currentPagePanel.createInlineWidgets();
@@ -192,10 +190,14 @@ public abstract class SitePanel extends SimplePanel {
 
         primaryNavigationBar.setSelected(page.uri());
 
-        Window.setTitle(page.caption().getValue() + " | " + siteCaption);
+        Window.setTitle(page.caption().getValue() + " | " + site.siteCaption().getValue());
 
         currentPagePanel.populateInlineWidgets(args);
 
+    }
+
+    public PagePanel getCurrentPagePanel() {
+        return currentPagePanel;
     }
 
     public boolean onBeforeLeaving() {
@@ -332,15 +334,7 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     public String getSiteName() {
-        return siteName;
-    }
-
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
-    }
-
-    public void setSiteCaption(String siteCaption) {
-        this.siteCaption = siteCaption;
+        return site.siteId().getValue();
     }
 
     public void setLogoImage(String logoUrl) {

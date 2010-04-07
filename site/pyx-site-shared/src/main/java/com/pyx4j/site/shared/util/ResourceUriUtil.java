@@ -23,6 +23,10 @@ package com.pyx4j.site.shared.util;
 import static com.pyx4j.site.shared.domain.ResourceUri.PAGE_SEPARATOR;
 import static com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.ResourceUri;
 
@@ -47,6 +51,18 @@ public class ResourceUriUtil {
         return resourceUri;
     }
 
+    public static List<String> parseResourceUri(ResourceUri uri) {
+        List<String> path = new ArrayList<String>();
+        //        String uriStr = uri.uri().getValue();
+        //        StringTokenizer tokenizer = new StringTokenizer(uriStr, SITE_SEPARATOR);
+        //        int count = 0;
+        //        while (tokenizer.hasMoreTokens()) {
+        //            path.add(tokenizer.nextToken(count > 0 ? PAGE_SEPARATOR : SITE_SEPARATOR));
+        //            count++;
+        //        }
+        return path;
+    }
+
     public static boolean isContained(ResourceUri parent, ResourceUri child) {
         if (parent == null || child == null) {
             return false;
@@ -69,6 +85,20 @@ public class ResourceUriUtil {
 
     public static boolean isRoot(ResourceUri uri) {
         return !uri.uri().getValue().contains(PAGE_SEPARATOR);
+    }
+
+    public static ResourceUri getRoot(ResourceUri uri) {
+        String uriStr = uri.uri().getValue();
+        return createResourceUri(uriStr.substring(0, uriStr.indexOf(SITE_SEPARATOR)), uriStr.substring(uriStr.indexOf(SITE_SEPARATOR) + 1, uriStr
+                .indexOf(PAGE_SEPARATOR)));
+    }
+
+    public static ResourceUri getParent(ResourceUri uri) {
+        String uriStr = uri.uri().getValue();
+        StringTokenizer tokenizer = new StringTokenizer(uriStr);
+
+        return createResourceUri(uriStr.substring(0, uriStr.indexOf(SITE_SEPARATOR)), uriStr.substring(uriStr.indexOf(SITE_SEPARATOR) + 1, uriStr
+                .indexOf(PAGE_SEPARATOR)));
     }
 
 }
