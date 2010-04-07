@@ -80,11 +80,13 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
     }
 
     protected Page createPage(String caption, ResourceUri uri, String html) {
-        return createPage(caption, uri, html, null, null, null);
+        return createPage(null, caption, uri, html, null, null, null);
     }
 
-    protected Page createPage(String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
+    protected Page createPage(String tabName, String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
+            String[] inlineWidgets) {
         Page page = EntityFactory.create(Page.class);
+        page.tabName().setValue(tabName);
         page.caption().setValue(caption);
         page.uri().set(uri);
         if (html == null) {

@@ -200,11 +200,11 @@ public class PreloadSites extends AbstractSitesDataPreloader {
     }
 
     private Page createPage(String caption, PageType pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
-        return createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
+        return createPage(null, caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
     }
 
     private Page createSingleWidgetPage(String caption, PageType pageType, String inlineWidget) {
-        return createPage(caption, pageType.getUri(), "</div><div id='" + inlineWidget + "'></div>", null, null, new String[] { inlineWidget });
+        return createPage(null, caption, pageType.getUri(), "</div><div id='" + inlineWidget + "'></div>", null, null, new String[] { inlineWidget });
     }
 
     private String getPageContent(PageType page) {

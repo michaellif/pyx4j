@@ -394,7 +394,11 @@ public abstract class SitePanel extends SimplePanel {
             homePage = page;
         }
         if (ResourceUriUtil.isRoot(page.uri())) {
-            primaryNavigationBar.add(page.caption().getValue(), page.uri());
+            if (page.tabName().getValue() == null) {
+                primaryNavigationBar.add(page.caption().getValue(), page.uri());
+            } else {
+                primaryNavigationBar.add(page.tabName().getValue(), page.uri());
+            }
         }
     }
 

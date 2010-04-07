@@ -29,6 +29,8 @@ public interface Page extends IEntity {
     @Owned
     ResourceUri uri();
 
+    IPrimitive<String> tabName();
+
     IPrimitive<String> caption();
 
     @Owned
