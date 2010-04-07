@@ -25,7 +25,6 @@ import static com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.ResourceUri;
@@ -94,11 +93,13 @@ public class ResourceUriUtil {
     }
 
     public static ResourceUri getParent(ResourceUri uri) {
-        String uriStr = uri.uri().getValue();
-        StringTokenizer tokenizer = new StringTokenizer(uriStr);
-
-        return createResourceUri(uriStr.substring(0, uriStr.indexOf(SITE_SEPARATOR)), uriStr.substring(uriStr.indexOf(SITE_SEPARATOR) + 1, uriStr
-                .indexOf(PAGE_SEPARATOR)));
+        //        String uriStr = uri.uri().getValue();
+        //        StringTokenizer tokenizer = new StringTokenizer(uriStr);
+        //
+        //        return createResourceUri(uriStr.substring(0, uriStr.indexOf(SITE_SEPARATOR)), uriStr.substring(uriStr.indexOf(SITE_SEPARATOR) + 1, uriStr
+        //                .indexOf(PAGE_SEPARATOR)));
+        //        
+        return null;
     }
 
 }
