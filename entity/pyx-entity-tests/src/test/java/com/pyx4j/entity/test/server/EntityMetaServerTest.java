@@ -14,30 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on 2010-04-08
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.test.server;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.test.shared.InitializerTestCase;
+import com.pyx4j.entity.test.shared.domain.Employee;
 
-@Target( { ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Table {
+public class EntityMetaServerTest extends InitializerTestCase {
 
-    /**
-     * The name of the table or Entity kind for GAE.
-     * 
-     * Defaults to the entity name.
-     */
-    String name() default "";
-
-    /**
-     * Name prefix.
-     */
-    String prefix() default "";
+    public void testPersistenceName() {
+        EntityMeta empMeta = EntityFactory.getEntityMeta(Employee.class);
+        assertEquals("PersistenceName", "testEmployee", empMeta.getPersistenceName());
+    }
 }
