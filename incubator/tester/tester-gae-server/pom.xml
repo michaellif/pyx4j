@@ -288,6 +288,13 @@
                                     <goal>deploy</goal>
                                 </goals>
                             </execution>
+                            <execution>
+                                <id>gae-rollback</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>rollback</goal>
+                                </goals>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
