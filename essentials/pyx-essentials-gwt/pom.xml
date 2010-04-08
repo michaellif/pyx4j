@@ -75,6 +75,12 @@
         </dependency>
 
         <dependency>
+            <groupId>pl.rmalinowski.gwt2swf</groupId>
+            <artifactId>gwt2swf</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
             <scope>provided</scope>

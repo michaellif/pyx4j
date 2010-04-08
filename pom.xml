@@ -355,6 +355,12 @@
 		    </dependency>
 
             <dependency>
+                <groupId>pl.rmalinowski.gwt2swf</groupId>
+                <artifactId>gwt2swf</artifactId>
+                <version>0.6.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>net.tanesha.recaptcha4j</groupId>
                 <artifactId>recaptcha4j</artifactId>
                 <version>0.0.7</version>
