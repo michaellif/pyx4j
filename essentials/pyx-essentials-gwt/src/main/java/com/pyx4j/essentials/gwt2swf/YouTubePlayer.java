@@ -144,7 +144,7 @@ public class YouTubePlayer extends JavaScriptObject {
 
     private final native int getPlayerStateInt()
     /*-{
-        return this.getCurrentTime();
+        return this.getPlayerState();
     }-*/;
 
     public final PlayerState getPlayerState() {
