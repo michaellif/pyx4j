@@ -102,7 +102,7 @@ public abstract class AbstractSiteDispatcher {
                 throw new RuntimeException("welcomeUri is not set");
             }
         }
-        final String siteName = uri.substring(0, uri.indexOf(com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR));
+        final String siteName = uri.substring(0, uri.indexOf(ResourceUri.SITE_SEPARATOR));
         final String finalUri = uri;
         final Map<String, String> finalArgs = args;
 
