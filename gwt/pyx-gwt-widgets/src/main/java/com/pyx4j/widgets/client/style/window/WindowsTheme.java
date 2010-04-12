@@ -393,123 +393,95 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initDatePickerStyle() {
+
         Style style = new Style(".gwt-DatePicker");
         style.addProperty("margin", "2px 4px");
-        style.addProperty("border", "2px inset " + ThemeColor.BORDER);
-        style.addProperty("cursor", "default");
-        style.addProperty("background-color", "#green");
-        style.addProperty("color", "#red");
+        style.addProperty("border", "1px solid #A2BBDD");
+        style.addProperty("background-color", "white");
+        style.addProperty("color", ThemeColor.TEXT);
         addStyle(style);
+
+        style = new Style(".gwt-DatePicker td, .datePickerMonthSelector td:focus");
+        style.addProperty("outline-style", "none");
+        style.addProperty("outline-width", "medium");
+        addStyle(style);
+
+        style = new Style(".datePickerDays");
+        style.addProperty("background", "white none repeat scroll 0 0");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".datePickerDay, .datePickerWeekdayLabel, .datePickerWeekendLabel");
+        style.addProperty("font-size", "75%");
+        style.addProperty("outline-color", ThemeColor.TEXT);
+        style.addProperty("outline-style", "none");
+        style.addProperty("outline-width", "medium");
+        style.addProperty("padding", "4px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".datePickerWeekdayLabel, .datePickerWeekendLabel");
+        style.addProperty("background", "#C3D9FF none repeat scroll 0 0");
+        style.addProperty("cursor", "default");
+        style.addProperty("padding", "0 4px 2px");
+        addStyle(style);
+
+        style = new Style(".datePickerDay");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("padding", "4px");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsToday");
+        style.addProperty("border", "1px solid black");
+        style.addProperty("padding", "3px");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsWeekend");
+        style.addProperty("background", "#EEEEEE none repeat scroll 0 0");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsFiller");
+        style.addProperty("color", "#888888");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsValue");
+        style.addProperty("background", "#AACCEE none repeat scroll 0 0");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsDisabled");
+        style.addProperty("color", "#AAAAAA");
+        style.addProperty("font-style", "italic");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsHighlighted");
+        style.addProperty("background", "#F0E68C none repeat scroll 0 0");
+        addStyle(style);
+
+        style = new Style(".datePickerDayIsValueAndHighlighted");
+        style.addProperty("background", "#BBDDD9 none repeat scroll 0 0");
+        addStyle(style);
+
+        style = new Style(".datePickerMonthSelector");
+        style.addProperty("background", "#C3D9FF none repeat scroll 0 0");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("td.datePickerMonth");
+        style.addProperty("color", "blue");
+        style.addProperty("font-size", "70%");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "center");
+        style.addProperty("white-space", "nowrap");
+        addStyle(style);
+
+        style = new Style(".datePickerPreviousButton, .datePickerNextButton");
+        style.addProperty("color", "blue");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("font-size", "120%");
+        style.addProperty("line-height", "1em");
+        style.addProperty("padding", "0 4px");
+        addStyle(style);
+
     }
 
-    //    /* ::::: DatePicker ::::: */
-    //
-    //    .gwt-DatePicker {
-    //           margin: 2px 4px;
-    //           border: 2px inset ButtonShadow;
-    //            
-    //            cursor: default;
-    //
-    //            background-color: ButtonFace;
-    //            color: ButtonText; 
-    //    }
-    //    .gwt-DatePicker, x:-moz-any-link {
-    //           border: 2px solid;
-    //           -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow;
-    //           -moz-border-right-colors: ThreeDHighlight ThreeDLightShadow;
-    //           -moz-border-bottom-colors: ThreeDHighlight ThreeDLightShadow;
-    //           -moz-border-left-colors: ThreeDShadow ThreeDDarkShadow;
-    //           background-color: -moz-Field;
-    //           color: -moz-FieldText;
-    //    }
-    //    .gwt-DatePicker td,
-    //    .datePickerMonthSelector td:focus {
-    //            outline: none
-    //    }
-    //    .datePickerDays {
-    //            width: 100%;
-    //            background-color: buttonhighlight;
-    //    }
-    //    .datePickerDay,
-    //    .datePickerWeekdayLabel,
-    //    .datePickerWeekendLabel {
-    //            text-align: center;
-    //            padding: 4px;
-    //            outline: none;
-    //    }
-    //    .datePickerWeekdayLabel,
-    //    .datePickerWeekendLabel {
-    //            background: url("images/button.png") repeat-x;
-    //            -background: Highlight;
-    //            background-color: Highlight;
-    //            color: HighlightText;
-    //            font-weight: bold;
-    //            padding: 0px 4px 2px;
-    //            cursor: default;
-    //    }
-    //    .datePickerDay {
-    //            padding: 4px;
-    //            cursor: hand;
-    //            cursor: pointer;
-    //    }
-    //    .datePickerDayIsToday {
-    //            border: 1px solid Highlight;
-    //            padding: 3px;
-    //    }
-    //    .datePickerDayIsWeekend {
-    //            background-color: ButtonFace;
-    //    }
-    //    .datePickerDayIsFiller {
-    //            color: GrayText;
-    //    }
-    //    .datePickerDayIsValue {
-    //            background-color: Highlight;
-    //            color: HighlightText;
-    //    }
-    //    .datePickerDayIsDisabled {
-    //            color: GrayText;
-    //            font-style: italic;
-    //    }
-    //    .datePickerDayIsHighlighted {
-    //            background-color: Highlight;
-    //           color: HighlightText;
-    //            opacity: 0.7;
-    //            filter: alpha(opacity=70);
-    //            zoom: 1;
-    //    }
-    //    .datePickerDayIsValueAndHighlighted {
-    //            background-color: InfoBackground;
-    //            color: Infotext;
-    //    }
-    //    .datePickerMonthSelector {
-    //            background: url("images/button.png") repeat-x;
-    //            -background: transparent;
-    //            width: 100%;
-    //    }
-    //    td.datePickerMonth {
-    //            text-align: center;
-    //            vertical-align: center;
-    //            white-space: nowrap;
-    //            font-weight: bold;
-    //            color: ButtonText;
-    //    }
-    //    .datePickerPreviousButton,
-    //    .datePickerNextButton {
-    //            font-size: 120%;
-    //            line-height: 1em;
-    //            color: ButtonText;
-    //            cursor: hand;
-    //            cursor: pointer;
-    //            padding: 0px 4px;
-    //           outline: none;
-    //           border: 1px solid transparent;
-    //           -border: 1px solid ButtonFace;
-    //    }
-    //    .datePickerPreviousButton:hover,
-    //    .datePickerNextButton:hover {
-    //           background-color: ButtonHighlight;
-    //           border: 1px solid ButtonShadow;
-    //    }
-    //
-    //    
 }

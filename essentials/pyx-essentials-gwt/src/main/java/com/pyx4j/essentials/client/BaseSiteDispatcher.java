@@ -39,8 +39,8 @@ import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
 
-	private static final Logger log = LoggerFactory.getLogger(BaseSiteDispatcher.class);
-	
+    private static final Logger log = LoggerFactory.getLogger(BaseSiteDispatcher.class);
+
     private static BaseSiteDispatcher instance;
 
     public void onModuleLoad() {
