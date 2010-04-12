@@ -54,7 +54,7 @@ public class WindowsTheme extends Theme {
         initTextBoxStyle();
         initCheckBoxStyle();
         initListBoxStyle();
-
+        initDatePickerStyle();
     }
 
     protected void initThemeColors() {
@@ -392,4 +392,124 @@ public class WindowsTheme extends Theme {
         addStyle(style);
     }
 
+    protected void initDatePickerStyle() {
+        Style style = new Style(".gwt-DatePicker");
+        style.addProperty("margin", "2px 4px");
+        style.addProperty("border", "2px inset " + ThemeColor.BORDER);
+        style.addProperty("cursor", "default");
+        style.addProperty("background-color", "#green");
+        style.addProperty("color", "#red");
+        addStyle(style);
+    }
+
+    //    /* ::::: DatePicker ::::: */
+    //
+    //    .gwt-DatePicker {
+    //           margin: 2px 4px;
+    //           border: 2px inset ButtonShadow;
+    //            
+    //            cursor: default;
+    //
+    //            background-color: ButtonFace;
+    //            color: ButtonText; 
+    //    }
+    //    .gwt-DatePicker, x:-moz-any-link {
+    //           border: 2px solid;
+    //           -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow;
+    //           -moz-border-right-colors: ThreeDHighlight ThreeDLightShadow;
+    //           -moz-border-bottom-colors: ThreeDHighlight ThreeDLightShadow;
+    //           -moz-border-left-colors: ThreeDShadow ThreeDDarkShadow;
+    //           background-color: -moz-Field;
+    //           color: -moz-FieldText;
+    //    }
+    //    .gwt-DatePicker td,
+    //    .datePickerMonthSelector td:focus {
+    //            outline: none
+    //    }
+    //    .datePickerDays {
+    //            width: 100%;
+    //            background-color: buttonhighlight;
+    //    }
+    //    .datePickerDay,
+    //    .datePickerWeekdayLabel,
+    //    .datePickerWeekendLabel {
+    //            text-align: center;
+    //            padding: 4px;
+    //            outline: none;
+    //    }
+    //    .datePickerWeekdayLabel,
+    //    .datePickerWeekendLabel {
+    //            background: url("images/button.png") repeat-x;
+    //            -background: Highlight;
+    //            background-color: Highlight;
+    //            color: HighlightText;
+    //            font-weight: bold;
+    //            padding: 0px 4px 2px;
+    //            cursor: default;
+    //    }
+    //    .datePickerDay {
+    //            padding: 4px;
+    //            cursor: hand;
+    //            cursor: pointer;
+    //    }
+    //    .datePickerDayIsToday {
+    //            border: 1px solid Highlight;
+    //            padding: 3px;
+    //    }
+    //    .datePickerDayIsWeekend {
+    //            background-color: ButtonFace;
+    //    }
+    //    .datePickerDayIsFiller {
+    //            color: GrayText;
+    //    }
+    //    .datePickerDayIsValue {
+    //            background-color: Highlight;
+    //            color: HighlightText;
+    //    }
+    //    .datePickerDayIsDisabled {
+    //            color: GrayText;
+    //            font-style: italic;
+    //    }
+    //    .datePickerDayIsHighlighted {
+    //            background-color: Highlight;
+    //           color: HighlightText;
+    //            opacity: 0.7;
+    //            filter: alpha(opacity=70);
+    //            zoom: 1;
+    //    }
+    //    .datePickerDayIsValueAndHighlighted {
+    //            background-color: InfoBackground;
+    //            color: Infotext;
+    //    }
+    //    .datePickerMonthSelector {
+    //            background: url("images/button.png") repeat-x;
+    //            -background: transparent;
+    //            width: 100%;
+    //    }
+    //    td.datePickerMonth {
+    //            text-align: center;
+    //            vertical-align: center;
+    //            white-space: nowrap;
+    //            font-weight: bold;
+    //            color: ButtonText;
+    //    }
+    //    .datePickerPreviousButton,
+    //    .datePickerNextButton {
+    //            font-size: 120%;
+    //            line-height: 1em;
+    //            color: ButtonText;
+    //            cursor: hand;
+    //            cursor: pointer;
+    //            padding: 0px 4px;
+    //           outline: none;
+    //           border: 1px solid transparent;
+    //           -border: 1px solid ButtonFace;
+    //    }
+    //    .datePickerPreviousButton:hover,
+    //    .datePickerNextButton:hover {
+    //           background-color: ButtonHighlight;
+    //           border: 1px solid ButtonShadow;
+    //    }
+    //
+    //    
 }
