@@ -165,6 +165,41 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         Assert.assertNotNull("retrieve", address2);
 
         Assert.assertEquals("address.city Value", cityName, address2.city().name().getValue());
+
+        // Test value removal
+
+        address2.city().name().setValue(null);
+        srv.persist(address2);
+
+        Address address3 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertNull("null is saved", address3.city().name().getValue());
+    }
+
+    public void testEmbeddedEntityRemoval() {
+
+        Address address = EntityFactory.create(Address.class);
+
+        City city = EntityFactory.create(City.class);
+        String cityName = "Toronto" + uniqueString();
+        city.name().setValue(cityName);
+
+        address.city().set(city);
+
+        srv.persist(address);
+
+        Long primaryKey = address.getPrimaryKey();
+        Address address2 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertNotNull("retrieve", address2);
+
+        Assert.assertEquals("address.city Value", cityName, address2.city().name().getValue());
+
+        // Test value removal
+
+        address2.removeMemberValue(address2.city().getFieldName());
+        srv.persist(address2);
+
+        Address address3 = srv.retrieve(Address.class, primaryKey);
+        Assert.assertTrue("null is saved", address3.city().isNull());
     }
 
     public void testEmbeddedEntitySet() {
@@ -240,5 +275,14 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         Assert.assertEquals("address.country Value", countryName, emp2.workAddress().country().name().getValue());
         Assert.assertEquals("address.city Value", cityName, emp2.workAddress().city().name().getValue());
+
+        // Test value removal
+
+        emp2.workAddress().removeMemberValue(emp2.workAddress().city().getFieldName());
+        srv.persist(emp2);
+
+        Employee emp3 = srv.retrieve(Employee.class, primaryKey);
+        Assert.assertTrue("null is saved", emp3.workAddress().city().isNull());
+
     }
 }
