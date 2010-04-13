@@ -164,6 +164,16 @@ public class EntityForm<E extends IEntity> {
         throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
     }
 
+    public boolean contains(IObject<?> member) {
+        Path memberPath = member.getPath();
+        for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
+            if (me.getValue().equals(memberPath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressWarnings("unchecked")
     public void bind(CEditableComponent<?> component, Path path) {
         binding.put(component, path);

@@ -26,7 +26,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
 public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel {
 
@@ -39,10 +42,6 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
-    public CEditableComponent<?> create(IObject<?> member) {
-        return form.create(member);
-    }
-
     public E meta() {
         return form.meta();
     }
@@ -50,7 +49,6 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     @Override
     public void setWidget(Widget w) {
         super.setWidget(w);
-        w.setWidth("100%");
     }
 
     public EntityEditorForm<E> getForm() {
@@ -67,5 +65,22 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     public <T> CEditableComponent<T> get(IObject<T> member) {
         return form.get(member);
+    }
+
+    public Widget createFormWidget(LabelAlignment allignment, IObject<?>[][] members) {
+        CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
+        for (int i = 0; i < components.length; i++) {
+            for (int j = 0; j < components[0].length; j++) {
+                IObject<?> member = members[i][j];
+                if (member == null) {
+                    components[i][j] = null;
+                } else if (form.contains(member)) {
+                    components[i][j] = get(member);
+                } else {
+                    components[i][j] = form.create(member);
+                }
+            }
+        }
+        return CForm.createFormWidget(allignment, components);
     }
 }

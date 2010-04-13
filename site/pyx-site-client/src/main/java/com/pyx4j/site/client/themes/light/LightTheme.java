@@ -281,9 +281,9 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initHtmlPortletStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
-        style.addProperty("margin", "10px");
+        style.addProperty("margin", "4px");
         style.addProperty("width", "230px");
-        style.addProperty("padding", "5px");
+        style.addProperty("padding", "4px");
         style.addProperty("color", "gray");
         style.addProperty("text-align", "center");
         addStyle(style);
@@ -335,9 +335,9 @@ public class LightTheme extends SiteTheme {
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
-        style.addProperty("width", "875px");
+        style.addProperty("width", "100%");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        style.addProperty("padding", "10px 40px 10px 10px");
+        style.addProperty("padding", "3px");
         style.addProperty("margin-bottom", "10px");
         style.addProperty("border", "solid 1px");
         style.addProperty("border-color", ThemeColor.BORDER);

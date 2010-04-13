@@ -27,9 +27,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.examples.domain.crm.Customer;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
@@ -42,20 +41,19 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
         setWidget(contentPanel);
 
-        CTextArea notesEditor = (CTextArea) create(meta().note());
-        notesEditor.setColumns(80);
+        IObject<?>[][] advancedSearchComponents = new IObject[][] {
 
-        CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
+        { meta().name(), meta().phone() },
 
-        { create(meta().name()), create(meta().phone()) },
+        { meta().street(), meta().zip() },
 
-        { create(meta().street()), create(meta().zip()) },
-
-        { notesEditor, notesEditor },
+        { meta().note(), meta().note() },
 
         };
 
-        Widget formWidget = CForm.createFormWidget(LabelAlignment.LEFT, advancedSearchComponents);
+        ((CTextArea) meta().note()).setColumns(80);
+
+        Widget formWidget = createFormWidget(LabelAlignment.LEFT, advancedSearchComponents);
         contentPanel.add(formWidget);
 
         Button viewButton = new Button("Save");
