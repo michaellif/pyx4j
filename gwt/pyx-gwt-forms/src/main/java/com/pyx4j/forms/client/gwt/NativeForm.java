@@ -196,6 +196,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
         widgetContainer.setCellVerticalAlignment(imageInfoWarn, HasVerticalAlignment.ALIGN_MIDDLE);
         widgetContainer.setCellHorizontalAlignment(imageInfoWarn, HasHorizontalAlignment.ALIGN_LEFT);
+        widgetContainer.getElement().getStyle().setPadding(2, Unit.PX);
 
         setWidget(widgetRow, widgetColumn, widgetContainer);
 

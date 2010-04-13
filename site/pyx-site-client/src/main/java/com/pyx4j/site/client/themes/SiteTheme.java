@@ -85,6 +85,12 @@ public abstract class SiteTheme extends WindowsTheme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
+        style = new Style("table");
+        style.addProperty("border-spacing", "0px");
+        addStyle(style);
+        style = new Style("td");
+        style.addProperty("padding", "0px");
+        addStyle(style);
     }
 
     protected abstract void initSitePanelStyles();
