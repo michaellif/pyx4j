@@ -82,6 +82,11 @@ public interface MemberMeta {
 
     public Class<?> getValueClass();
 
+    /**
+     * IList, ISet, IPrimitive, or extends IEntity
+     * 
+     * @return
+     */
     public Class<? extends IObject<?>> getObjectClass();
 
     /**

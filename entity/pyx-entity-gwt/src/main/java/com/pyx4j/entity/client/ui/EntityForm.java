@@ -71,7 +71,11 @@ public class EntityForm<E extends IEntity> {
         public void onValueChange(ValueChangeEvent event) {
             Path memberPath = binding.get(event.getSource());
             if ((memberPath != null) && (editableEntity != null)) {
-                editableEntity.setValue(memberPath, event.getValue());
+                Object value = event.getValue();
+                if (value instanceof IEntity) {
+                    value = ((IEntity) value).getValue();
+                }
+                editableEntity.setValue(memberPath, value);
             }
         }
     }
@@ -177,7 +181,12 @@ public class EntityForm<E extends IEntity> {
 
         for (CEditableComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);
-            component.setValue(editableEntity.getValue(memberPath));
+            IObject<?> m = editableEntity.getMember(memberPath);
+            if (m instanceof IEntity) {
+                component.setValue(m);
+            } else {
+                component.setValue(m.getValue());
+            }
         }
     }
 

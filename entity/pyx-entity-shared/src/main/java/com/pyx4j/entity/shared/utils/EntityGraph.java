@@ -52,11 +52,11 @@ public class EntityGraph {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isEntity()) {
                 applyRecursively((IEntity) entity.getMember(memberName), method, processed);
-            } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+            } else if (ISet.class.equals(memberMeta.getObjectClass())) {
                 for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
                     applyRecursively(value, method, processed);
                 }
-            } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
+            } else if (IList.class.equals(memberMeta.getObjectClass())) {
                 for (IEntity value : (IList<?>) entity.getMember(memberName)) {
                     applyRecursively(value, method, processed);
                 }
