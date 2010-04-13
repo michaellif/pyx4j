@@ -25,21 +25,47 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel {
 
-    public AbstractEntityEditorPanel() {
+    private final EntityEditorForm<E> form;
+
+    public AbstractEntityEditorPanel(Class<E> clazz) {
         super();
+        form = EntityEditorForm.create(clazz);
+
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
-    public abstract void populateForm(E entity);
+    public CEditableComponent<?> create(IObject<?> member) {
+        return form.create(member);
+    }
 
-    public abstract E getEntity();
+    public E meta() {
+        return form.meta();
+    }
 
     @Override
     public void setWidget(Widget w) {
         super.setWidget(w);
         w.setWidth("100%");
+    }
+
+    public EntityEditorForm<E> getForm() {
+        return form;
+    }
+
+    public void populateForm(E entity) {
+        form.populate(entity);
+    }
+
+    public E getEntity() {
+        return form.getValue();
+    }
+
+    public <T> CEditableComponent<T> get(IObject<T> member) {
+        return form.get(member);
     }
 }

@@ -27,34 +27,29 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
-import com.pyx4j.entity.client.ui.crud.EntityEditorForm;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
 public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
-    private final EntityEditorForm<Customer> form;
-
     CustomerEditorPanel() {
+        super(Customer.class);
 
         VerticalPanel contentPanel = new VerticalPanel();
 
         setWidget(contentPanel);
 
-        form = EntityEditorForm.create(Customer.class);
-
-        CTextArea notesEditor = (CTextArea) form.create(form.meta().note());
+        CTextArea notesEditor = (CTextArea) create(meta().note());
         notesEditor.setColumns(80);
 
         CComponent<?>[][] advancedSearchComponents = new CComponent[][] {
 
-        { form.create(form.meta().name()), form.create(form.meta().phone()) },
+        { create(meta().name()), create(meta().phone()) },
 
-        { form.create(form.meta().street()), form.create(form.meta().zip()) },
+        { create(meta().street()), create(meta().zip()) },
 
         { notesEditor, notesEditor },
 
@@ -77,13 +72,4 @@ public class CustomerEditorPanel extends AbstractEntityEditorPanel<Customer> {
 
     }
 
-    @Override
-    public void populateForm(Customer customer) {
-        form.populate(customer);
-    }
-
-    @Override
-    public Customer getEntity() {
-        return form.getValue();
-    }
 }
