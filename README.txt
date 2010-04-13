@@ -78,6 +78,9 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 1. Change Eclipse config
       Window->Preferences  Java\Compiler  Set: 1.6
 
+2.  To Server web applications start add "Program argumets:"
+   --disable_update_check
+
  For mvn -P deploy-gae (mvn gae:deploy) to work add appengine.google.com-pyx to ./m2/settings.xml
     <settings>
         <servers>
