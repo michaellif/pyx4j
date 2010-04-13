@@ -90,7 +90,7 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initPageWidgetStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name());
-        style.addProperty("padding", "10px");
+        style.addProperty("padding", "2px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " h1, h2, h3, h4 ,h5");
@@ -335,7 +335,6 @@ public class LightTheme extends SiteTheme {
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_EntityEditor.name());
-        style.addProperty("width", "100%");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("padding", "3px");
         style.addProperty("margin-bottom", "10px");
