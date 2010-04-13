@@ -140,6 +140,20 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity childIEntity, boolean indexed) {
+        if (childIEntity.isNull()) {
+            // remove all properties
+            EntityMeta em = childIEntity.getEntityMeta();
+            for (String memberName : em.getMemberNames()) {
+                MemberMeta memberMeta = em.getMemberMeta(memberName);
+                if ((memberMeta.isEntity()) && (memberMeta.isEmbedded())) {
+                    embedEntityProperties(entity, prefix + "_" + memberName, sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity.getMember(memberName),
+                            indexed && memberMeta.isIndexed());
+                } else {
+                    entity.removeProperty(prefix + "_" + memberName + sufix + EMBEDDED_PRROPERTY_SUFIX);
+                }
+            }
+            return;
+        }
         nextValue: for (Map.Entry<String, Object> me : childIEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;
