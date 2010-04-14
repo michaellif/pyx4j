@@ -14,16 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 7, 2009
+ * Created on 2010-04-14
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.rpc.client;
 
 /**
- * Marker for AsyncCallback. Service call is recoverable from InvocationExceptions.
- * Usually read only transaction.
+ * Marker for AsyncCallback. Usually Database write services calls, this will cause
+ * Semi-transparent GlassPanel.
  */
-public interface RecoverableCall {
+public interface BlockingCall {
 
 }

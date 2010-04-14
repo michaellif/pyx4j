@@ -20,16 +20,20 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityCSSClass;
+import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.rpc.client.BlockingAsyncCallback;
+import com.pyx4j.rpc.client.RPCManager;
 
 public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel {
 
@@ -82,5 +86,32 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             }
         }
         return CForm.createFormWidget(allignment, components);
+    }
+
+    protected Class<? extends EntityServices.Save> getSaveService() {
+        return EntityServices.Save.class;
+    }
+
+    protected void onBeforeSave() {
+        // TODO validations goes here.
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void doSave() {
+        onBeforeSave();
+        final AsyncCallback handlingCallback = new BlockingAsyncCallback<E>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new RuntimeException(caught);
+            }
+
+            @Override
+            public void onSuccess(E result) {
+                populateForm(result);
+            }
+
+        };
+        RPCManager.execute(getSaveService(), getEntity(), handlingCallback);
     }
 }

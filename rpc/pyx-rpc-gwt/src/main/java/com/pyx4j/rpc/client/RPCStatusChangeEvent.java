@@ -21,6 +21,7 @@
 package com.pyx4j.rpc.client;
 
 import com.google.gwt.event.shared.GwtEvent;
+
 import com.pyx4j.rpc.shared.Service;
 
 public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
@@ -40,15 +41,19 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
     @SuppressWarnings("unchecked")
     private final Class<? extends Service> serviceDescriptorClass;
 
+    private final Object callbackInstance;
+
     private final long requestDuration;
 
     @SuppressWarnings("unchecked")
-    public RPCStatusChangeEvent(When when, boolean rpcIdle, boolean executeBackground, Class<? extends Service> serviceDescriptorClass, long requestDuration) {
+    public RPCStatusChangeEvent(When when, boolean rpcIdle, boolean executeBackground, Class<? extends Service> serviceDescriptorClass,
+            Object callbackInstance, long requestDuration) {
         super();
         this.when = when;
         this.rpcIdle = rpcIdle;
         this.executeBackground = executeBackground;
         this.serviceDescriptorClass = serviceDescriptorClass;
+        this.callbackInstance = callbackInstance;
         this.requestDuration = requestDuration;
     }
 
@@ -63,6 +68,14 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
     @SuppressWarnings("unchecked")
     public Class<? extends Service> getServiceDescriptorClass() {
         return serviceDescriptorClass;
+    }
+
+    public boolean isRecoverableServiceCall() {
+        return callbackInstance instanceof RecoverableCall;
+    }
+
+    public boolean isBlockingServiceCall() {
+        return callbackInstance instanceof BlockingCall;
     }
 
     public long getRequestDuration() {

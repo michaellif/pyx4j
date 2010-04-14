@@ -36,9 +36,11 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -136,20 +138,31 @@ public class WidgetsDemo implements EntryPoint {
         }
 
         {
-            Button buttonGlass = new Button("Glass ON (15 sec)");
+            Button buttonGlass = new Button("Glass  SemiTransparent ON (15 sec)");
             contentPanel.add(buttonGlass);
             buttonGlass.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    showGlassPanel(15);
+                    showGlassPanel(GlassStyle.SemiTransparent, 15);
+                };
+            });
+        }
+
+        {
+            Button buttonGlass = new Button("Glass Transparent ON (15 sec)");
+            contentPanel.add(buttonGlass);
+            buttonGlass.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    showGlassPanel(GlassStyle.Transparent, 15);
                 };
             });
         }
     }
 
-    private static void showGlassPanel(int sec) {
+    private static void showGlassPanel(GlassStyle glassStyle, int sec) {
         log.info("glassPanel.show");
-        GlassPanel.show();
+        GlassPanel.show(glassStyle);
         Timer timer = new Timer() {
             @Override
             public void run() {
@@ -221,7 +234,7 @@ public class WidgetsDemo implements EntryPoint {
                 @Override
                 public boolean onClickCustom1() {
                     log.info("onClickCustom1");
-                    showGlassPanel(15);
+                    showGlassPanel(GlassStyle.SemiTransparent, 15);
                     return false;
                 }
 

@@ -25,6 +25,7 @@ import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
 import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 public class ApplicationCommon {
 
@@ -35,7 +36,7 @@ public class ApplicationCommon {
             public void onRPCStatusChange(RPCStatusChangeEvent event) {
                 if (!event.isExecuteBackground()) {
                     if (event.getWhen() == When.START) {
-                        GlassPanel.show();
+                        GlassPanel.show(event.isBlockingServiceCall() ? GlassStyle.SemiTransparent : GlassStyle.Transparent);
                     } else {
                         GlassPanel.hide();
                     }

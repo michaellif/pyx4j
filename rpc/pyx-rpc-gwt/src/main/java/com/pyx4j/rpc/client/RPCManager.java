@@ -93,7 +93,7 @@ public class RPCManager {
                 retryAttempt);
         try {
             runningServicesCount++;
-            fireStatusChangeEvent(When.START, executeBackground, serviceInterface, -1);
+            fireStatusChangeEvent(When.START, executeBackground, serviceInterface, callback, -1);
             service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
@@ -147,7 +147,7 @@ public class RPCManager {
             } finally {
                 callback = null;
                 request = null;
-                fireStatusChangeEvent(When.FAILURE, executeBackground, serviceInterface, System.currentTimeMillis() - requestStartTime);
+                fireStatusChangeEvent(When.FAILURE, executeBackground, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
             }
         }
 
@@ -163,15 +163,17 @@ public class RPCManager {
             } finally {
                 callback = null;
                 request = null;
-                fireStatusChangeEvent(When.SUCCESS, executeBackground, serviceInterface, System.currentTimeMillis() - requestStartTime);
+                fireStatusChangeEvent(When.SUCCESS, executeBackground, serviceInterface, callback, System.currentTimeMillis() - requestStartTime);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service> serviceDescriptorClass, long requestDuration) {
+    private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service> serviceDescriptorClass, Object callbackInstance,
+            long requestDuration) {
         if (handlerManager != null) {
-            handlerManager.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, executeBackground, serviceDescriptorClass, requestDuration));
+            handlerManager.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, executeBackground, serviceDescriptorClass, callbackInstance,
+                    requestDuration));
         }
     }
 

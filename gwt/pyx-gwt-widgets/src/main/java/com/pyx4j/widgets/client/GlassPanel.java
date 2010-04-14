@@ -50,6 +50,13 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
     private HandlerRegistration handlerRegistration;
 
+    public static enum GlassStyle {
+
+        Transparent,
+
+        SemiTransparent
+    }
+
     protected GlassPanel() {
         super(DOM.createDiv());
         DOM.setInnerHTML(getElement(), "<table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
@@ -64,8 +71,6 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
         getElement().getStyle().setDisplay(Display.NONE);
 
-        setStyleName(CSSClass.pyx4j_GlassPanel.name());
-
     }
 
     public static GlassPanel instance() {
@@ -76,13 +81,26 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     public static void show() {
+        show(GlassStyle.SemiTransparent);
+    }
+
+    public static void show(GlassStyle glassStyle) {
         showRequestCount++;
         log.trace("Show glass panel request (" + showRequestCount + ")");
         if (showRequestCount == 1) {
-            instance().handlerRegistration = Window.addResizeHandler(instance());
-            DOM.setCapture(instance().getElement());
-            instance().setPixelSize(Window.getClientWidth(), Window.getClientHeight());
-            instance().getElement().getStyle().setDisplay(Display.BLOCK);
+            GlassPanel glassPanel = instance();
+            glassPanel.handlerRegistration = Window.addResizeHandler(glassPanel);
+            DOM.setCapture(glassPanel.getElement());
+            switch (glassStyle) {
+            case Transparent:
+                glassPanel.setStyleName(CSSClass.pyx4j_GlassPanel_Transparent.name());
+                break;
+            case SemiTransparent:
+                glassPanel.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent.name());
+                break;
+            }
+            glassPanel.setPixelSize(Window.getClientWidth(), Window.getClientHeight());
+            glassPanel.getElement().getStyle().setDisplay(Display.BLOCK);
         }
     }
 
