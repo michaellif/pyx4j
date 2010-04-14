@@ -109,7 +109,13 @@ public class EntityServicesImpl {
         @Override
         public IEntity execute(EntityQueryCriteria request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
-            IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
+            IEntity ent;
+            if (request instanceof EntityCriteriaByPK) {
+                ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
+                        ((EntityCriteriaByPK) request).getPrimaryKey());
+            } else {
+                ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
+            }
             if (ent != null) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
             }

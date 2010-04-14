@@ -20,17 +20,15 @@
  */
 package com.pyx4j.entity.rpc;
 
-import java.io.Serializable;
-
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 /**
  * Special case criteria for EntityServices.RetrieveByPK service.
  */
 @SuppressWarnings("serial")
-public class EntityCriteriaByPK<E extends IEntity> implements Serializable {
-
-    private String domainName;
+public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E> {
 
     private long primaryKey;
 
@@ -39,7 +37,7 @@ public class EntityCriteriaByPK<E extends IEntity> implements Serializable {
     }
 
     public EntityCriteriaByPK(Class<E> entityClass) {
-        this.domainName = entityClass.getName();
+        super(entityClass);
     }
 
     public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass) {
@@ -59,15 +57,42 @@ public class EntityCriteriaByPK<E extends IEntity> implements Serializable {
         return c;
     }
 
-    public String getDomainName() {
-        return domainName;
-    }
-
     public long getPrimaryKey() {
         return primaryKey;
     }
 
     public void setPrimaryKey(long primaryKey) {
         this.primaryKey = primaryKey;
+    }
+
+    @Override
+    public EntityQueryCriteria<E> add(Criterion criterion) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public EntityQueryCriteria<E> sort(EntityQueryCriteria.Sort sort) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        if (!(o instanceof EntityCriteriaByPK<?>)) {
+            return false;
+        } else {
+            return primaryKey == ((EntityCriteriaByPK<?>) o).primaryKey;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = super.hashCode();
+        hashCode *= 0x1F;
+        hashCode += Long.valueOf(primaryKey).hashCode();
+        return hashCode;
     }
 }
