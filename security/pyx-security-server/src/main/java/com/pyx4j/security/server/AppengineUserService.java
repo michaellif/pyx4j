@@ -22,6 +22,7 @@ package com.pyx4j.security.server;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 public class AppengineUserService {

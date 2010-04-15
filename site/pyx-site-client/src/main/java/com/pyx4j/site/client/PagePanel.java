@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
@@ -99,16 +100,4 @@ public class PagePanel extends DynamicHTML {
         }
     }
 
-    /**
-     * @deprecated Remove this. Use PageLeavingHandler
-     */
-    @Deprecated
-    public boolean onBeforeLeaving() {
-        for (InlineWidget inlineWidget : inlineWidgets) {
-            if (!inlineWidget.onBeforeLeaving()) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

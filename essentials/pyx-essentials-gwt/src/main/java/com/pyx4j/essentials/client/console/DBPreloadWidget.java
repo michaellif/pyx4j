@@ -28,6 +28,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.InlineWidget;
@@ -103,11 +104,6 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
 
     @Override
     public void populate(Map<String, String> args) {
-    }
-
-    @Override
-    public boolean onBeforeLeaving() {
-        return true;
     }
 
 }

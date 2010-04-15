@@ -21,9 +21,9 @@
 package com.pyx4j.essentials.client.console;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.domain.DefaultSkins;
 
 public class ConsoleSiteFactory {
 

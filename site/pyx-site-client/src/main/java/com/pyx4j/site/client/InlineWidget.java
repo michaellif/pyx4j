@@ -26,9 +26,4 @@ public interface InlineWidget {
 
     public void populate(Map<String, String> args);
 
-    /**
-     * @deprecated Remove this. Use PageLeavingHandler
-     */
-    @Deprecated
-    public boolean onBeforeLeaving();
 }

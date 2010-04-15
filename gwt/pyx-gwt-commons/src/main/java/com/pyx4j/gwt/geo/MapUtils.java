@@ -24,6 +24,7 @@ import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.maps.client.geocode.Geocoder;
 import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
+
 import com.pyx4j.geo.GeoPoint;
 
 public class MapUtils {

@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -204,17 +205,6 @@ public abstract class SitePanel extends SimplePanel {
         if (currentPagePanel != null) {
             currentPagePanel.onPageLeaving(event);
         }
-    }
-
-    /**
-     * @deprecated Remove this. Use PageLeavingHandler
-     */
-    @Deprecated
-    public boolean onBeforeLeaving() {
-        if (currentPagePanel != null && !currentPagePanel.onBeforeLeaving()) {
-            return false;
-        }
-        return true;
     }
 
     public static InlineWidgetFactory getGlobalWidgetFactory() {

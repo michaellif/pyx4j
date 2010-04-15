@@ -37,6 +37,7 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
+
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
@@ -95,11 +96,6 @@ public abstract class AbstractSiteDispatcher {
     }
 
     public void show(final String path) {
-        //TODO remove this.
-        if (currentSitePanel != null && !currentSitePanel.onBeforeLeaving()) {
-            return;
-        }
-
         if (currentSitePanel != null) {
             PageLeavingEvent ple = new PageLeavingEvent(true);
             currentSitePanel.onPageLeaving(ple);

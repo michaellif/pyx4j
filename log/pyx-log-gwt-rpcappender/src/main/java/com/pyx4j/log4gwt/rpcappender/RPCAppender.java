@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.log4gwt.client.Appender;
 import com.pyx4j.log4gwt.client.LogFormatter;

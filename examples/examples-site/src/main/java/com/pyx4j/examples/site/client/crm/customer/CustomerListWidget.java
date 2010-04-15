@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
@@ -103,11 +104,6 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         } else {
             searchResultsPanel.setDistanceOverlay(null, 0);
         }
-    }
-
-    @Override
-    public boolean onBeforeLeaving() {
-        return true;
     }
 
 }

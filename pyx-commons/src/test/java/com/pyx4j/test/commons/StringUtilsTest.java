@@ -20,9 +20,9 @@
  */
 package com.pyx4j.test.commons;
 
-import com.pyx4j.commons.CommonsStringUtils;
-
 import junit.framework.TestCase;
+
+import com.pyx4j.commons.CommonsStringUtils;
 
 public class StringUtilsTest extends TestCase {
 

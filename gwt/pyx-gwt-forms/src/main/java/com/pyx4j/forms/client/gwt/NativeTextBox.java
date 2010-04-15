@@ -20,10 +20,9 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.pyx4j.widgets.client.TextBox;
-
 import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
+import com.pyx4j.widgets.client.TextBox;
 
 public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E> {
 

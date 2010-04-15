@@ -21,6 +21,7 @@
 package com.pyx4j.log4gwt.client;
 
 import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.log4gwt.shared.LogEvent;
 
 public class AppenderHosted implements Appender {

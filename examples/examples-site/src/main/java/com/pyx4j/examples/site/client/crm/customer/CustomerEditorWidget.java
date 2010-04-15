@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
@@ -73,11 +74,6 @@ public class CustomerEditorWidget extends VerticalPanel implements InlineWidget 
 
         RPCManager.execute(EntityServices.RetrieveByPK.class, EntityCriteriaByPK.create(Customer.class, customerId), callback);
 
-    }
-
-    @Override
-    public boolean onBeforeLeaving() {
-        return true;
     }
 
 }

@@ -102,9 +102,4 @@ public class TechnologyWidget extends SimplePanel implements InlineWidget {
 
     }
 
-    @Override
-    public boolean onBeforeLeaving() {
-        return true;
-    }
-
 }

@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.log4gwt.client.ClientLogger;
 
 public class LogEventsPanel extends VerticalPanel {

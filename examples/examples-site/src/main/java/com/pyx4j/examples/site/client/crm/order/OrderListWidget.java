@@ -34,9 +34,4 @@ public class OrderListWidget extends VerticalPanel implements InlineWidget {
 
     }
 
-    @Override
-    public boolean onBeforeLeaving() {
-        return true;
-    }
-
 }

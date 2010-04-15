@@ -25,6 +25,7 @@ import java.util.Date;
 import org.slf4j.helpers.MessageFormatter;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+
 import com.pyx4j.log4gwt.shared.LogEvent;
 
 public class LogFormatter {

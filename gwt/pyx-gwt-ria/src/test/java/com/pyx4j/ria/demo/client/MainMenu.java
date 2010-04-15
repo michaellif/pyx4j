@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+
 import com.pyx4j.ria.demo.client.proving.ProvingManager;
 import com.pyx4j.widgets.client.dialog.DialogPanel;
 
