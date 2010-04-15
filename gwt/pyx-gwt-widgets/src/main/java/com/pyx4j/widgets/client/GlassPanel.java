@@ -99,7 +99,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
                 glassPanel.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent.name());
                 break;
             }
-            glassPanel.setPixelSize(Window.getClientWidth(), Window.getClientHeight());
+            glassPanel.setGlassPanelSize();
             glassPanel.getElement().getStyle().setDisplay(Display.BLOCK);
         }
     }
@@ -119,7 +119,7 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
         }
     }
 
-    public void onResize(ResizeEvent event) {
+    private void setGlassPanelSize() {
         Style style = getElement().getStyle();
 
         int winWidth = Window.getClientWidth();
@@ -141,6 +141,10 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
         // The size is set. Show the glass again.
         style.setDisplay(Display.BLOCK);
+    }
+
+    public void onResize(ResizeEvent event) {
+        setGlassPanelSize();
     }
 
 }
