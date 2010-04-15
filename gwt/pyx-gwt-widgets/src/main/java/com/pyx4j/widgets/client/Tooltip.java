@@ -82,8 +82,9 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
             shaddowPane.setStyleName(CSSClass.pyx4j_Tooltip_Shadow.name());
 
             textPane = new HTML();
-            textPane.setWordWrap(false);
+            textPane.setWordWrap(true);
             textPane.setStyleName(CSSClass.pyx4j_Tooltip.name());
+            textPane.setWidth("200px");
 
             content.add(shaddowPane, 5, 5);
             content.add(textPane, 0, 0);
