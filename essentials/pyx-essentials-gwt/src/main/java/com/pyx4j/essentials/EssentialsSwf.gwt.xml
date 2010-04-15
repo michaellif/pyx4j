@@ -5,4 +5,5 @@
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="pl.rmalinowski.gwt2swf.GWT2SWF"/>
     <source path="gwt2swf"/>
+    <public path="gwt2swf/public"/>
 </module>
