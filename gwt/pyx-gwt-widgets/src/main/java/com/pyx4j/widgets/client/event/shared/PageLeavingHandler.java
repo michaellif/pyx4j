@@ -26,6 +26,9 @@ import com.google.gwt.event.shared.EventHandler;
  * InlineWidget aware of PageLeavingEvent should not register them. It is done
  * automatically.
  * 
+ * TODO this handler should be renamed to something like StateChangeHandler and should be
+ * combined with BeforeCloseHandler
+ * 
  * @author vlads
  * 
  */
