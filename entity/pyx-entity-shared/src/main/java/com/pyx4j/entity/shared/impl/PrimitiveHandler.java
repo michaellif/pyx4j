@@ -67,9 +67,10 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             return true;
         }
         TYPE thisValue = this.getValue();
-        if ((other == null) || (thisValue == null) || (!(other instanceof IPrimitive<?>))
-                || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {
+        if ((other == null) || (!(other instanceof IPrimitive<?>)) || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {
             return false;
+        } else if ((thisValue == null) && ((IPrimitive<?>) other).getValue() == null) {
+            return true;
         }
         return thisValue.equals(((IPrimitive<?>) other).getValue());
     }
@@ -86,7 +87,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public String toString() {
-        return getObjectClass().getName() + getValue();
+        return getObjectClass().getName() + " " + getValue();
     }
 
 }

@@ -20,15 +20,25 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -39,6 +49,8 @@ import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
 public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel implements PageLeavingHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
 
     private final EntityEditorForm<E> form;
 
@@ -95,7 +107,42 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
      * @return true when any filed in Entity has been changes.
      */
     public boolean isChanged() {
-        return !EntityGraph.fullyEqual(getEntity(), form.getOrigValue());
+        return !equalRecursive(getEntity(), form.getOrigValue(), new HashSet<IEntity>());
+    }
+
+    public static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
+        if (entity1.isNull() && ((entity2 == null) || entity2.isNull())) {
+            return true;
+        }
+        if (processed.contains(entity1)) {
+            return true;
+        }
+        processed.add(entity1);
+        EntityMeta em = entity1.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isEntity() && (memberMeta.isEmbedded())) {
+                if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (ISet.class.equals(memberMeta.getObjectClass())) {
+                if (!EqualsHelper.equals((ISet<?>) entity1.getMember(memberName), (ISet<?>) entity2.getMember(memberName))) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (IList.class.equals(memberMeta.getObjectClass())) {
+                if (!EqualsHelper.equals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName))) {
+                    log.debug("changed {}", memberName);
+                    return false;
+                }
+            } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
+                log.debug("changed {}", memberName);
+                log.debug("[{}] -> [{}]", entity2.getMember(memberName), entity1.getMember(memberName));
+                return false;
+            }
+        }
+        return true;
     }
 
     public void onPageLeaving(PageLeavingEvent event) {
