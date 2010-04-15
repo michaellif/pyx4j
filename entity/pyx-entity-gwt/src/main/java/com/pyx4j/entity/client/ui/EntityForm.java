@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -202,6 +201,10 @@ public class EntityForm<E extends IEntity> {
 
     public E getValue() {
         return editableEntity;
+    }
+
+    public E getOrigValue() {
+        return origEntity;
     }
 
 }

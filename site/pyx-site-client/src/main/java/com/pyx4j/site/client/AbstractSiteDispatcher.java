@@ -31,6 +31,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
@@ -42,8 +45,11 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.DialogOptions;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.YesNoOption;
+import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 
 public abstract class AbstractSiteDispatcher {
 
@@ -54,6 +60,8 @@ public abstract class AbstractSiteDispatcher {
     private SitePanel currentSitePanel;
 
     private ResourceUri welcomeUri;
+
+    private String pathShown;
 
     public AbstractSiteDispatcher() {
         History.addValueChangeHandler(new ValueChangeHandler<String>() {
@@ -71,14 +79,63 @@ public abstract class AbstractSiteDispatcher {
 
         RootPanel.get().add(GlassPanel.instance());
 
+        Window.addWindowClosingHandler(new ClosingHandler() {
+            @Override
+            public void onWindowClosing(ClosingEvent event) {
+                if (currentSitePanel != null) {
+                    PageLeavingEvent ple = new PageLeavingEvent(true);
+                    currentSitePanel.onPageLeaving(ple);
+                    if (ple.hasMessage()) {
+                        event.setMessage(ple.getMessage());
+                    }
+                }
+            }
+        });
+
     }
 
-    //TODO handle wrong tokens !!!
-    public void show(String path) {
+    public void show(final String path) {
+        //TODO remove this.
         if (currentSitePanel != null && !currentSitePanel.onBeforeLeaving()) {
             return;
         }
 
+        if (currentSitePanel != null) {
+            PageLeavingEvent ple = new PageLeavingEvent(true);
+            currentSitePanel.onPageLeaving(ple);
+            if (ple.hasMessage()) {
+
+                //TODO allow to answer Save when available and navigate anyway. 
+                DialogOptions options = new OkCancelOption() {
+                    @Override
+                    public boolean onClickOk() {
+                        //allow to answer: navigate anyway.
+                        History.newItem(path, false);
+                        doShow(path);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onClickCancel() {
+                        return true;
+                    }
+                };
+
+                Dialog d = new Dialog("Confirm", "Are you sure you want to navigate away from this page?\n" + ple.getMessage()
+                        + "\nPress OK to continue, or Cancel to stay on the current page.", Dialog.Type.Confirm, options);
+
+                d.show();
+
+                //reset the original history token
+                History.newItem(pathShown, false);
+                return;
+            }
+        }
+        doShow(path);
+    }
+
+    //TODO handle wrong tokens !!!
+    private void doShow(final String path) {
         //Split path to uri and args
         String uri = null;
         Map<String, String> args = null;
@@ -121,6 +178,7 @@ public abstract class AbstractSiteDispatcher {
                     initSitePanel(siteName, sitePanel);
                     show(sitePanel, finalUri, finalArgs);
                     hideLoadingIndicator();
+                    pathShown = path;
                 } else {
                     hideLoadingIndicator();
                     throw new Error("sitePanel is not found");

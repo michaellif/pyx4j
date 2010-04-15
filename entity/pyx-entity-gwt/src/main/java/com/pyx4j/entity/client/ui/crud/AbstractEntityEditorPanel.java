@@ -23,19 +23,21 @@ package com.pyx4j.entity.client.ui.crud;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
+import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
-public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel {
+public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel implements PageLeavingHandler {
 
     private final EntityEditorForm<E> form;
 
@@ -86,6 +88,19 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             }
         }
         return CForm.createFormWidget(allignment, components);
+    }
+
+    /**
+     * @return true when any filed in Entity has been changes.
+     */
+    public boolean isChanged() {
+        return !EntityGraph.fullyEqual(getEntity(), form.getOrigValue());
+    }
+
+    public void onPageLeaving(PageLeavingEvent event) {
+        if (isChanged()) {
+            event.addMessage(meta().getEntityMeta().getCaption() + " " + getEntity().getStringView() + " wasn't saved");
+        }
     }
 
     protected Class<? extends EntityServices.Save> getSaveService() {

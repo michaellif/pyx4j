@@ -43,7 +43,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -52,6 +51,7 @@ import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
+import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 public abstract class SitePanel extends SimplePanel {
@@ -200,6 +200,16 @@ public abstract class SitePanel extends SimplePanel {
         return currentPagePanel;
     }
 
+    public void onPageLeaving(PageLeavingEvent event) {
+        if (currentPagePanel != null) {
+            currentPagePanel.onPageLeaving(event);
+        }
+    }
+
+    /**
+     * @deprecated Remove this. Use PageLeavingHandler
+     */
+    @Deprecated
     public boolean onBeforeLeaving() {
         if (currentPagePanel != null && !currentPagePanel.onBeforeLeaving()) {
             return false;

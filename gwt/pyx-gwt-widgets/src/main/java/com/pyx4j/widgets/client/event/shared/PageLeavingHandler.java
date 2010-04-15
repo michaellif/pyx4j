@@ -14,21 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
- * @author michaellif
+ * Created on Apr 14, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client;
+package com.pyx4j.widgets.client.event.shared;
 
-import java.util.Map;
+import com.google.gwt.event.shared.EventHandler;
 
-public interface InlineWidget {
-
-    public void populate(Map<String, String> args);
+/**
+ * InlineWidget aware of PageLeavingEvent should not register them. It is done
+ * automatically.
+ * 
+ * @author vlads
+ * 
+ */
+public interface PageLeavingHandler extends EventHandler {
 
     /**
-     * @deprecated Remove this. Use PageLeavingHandler
+     * Fired just before the browser window closes or navigates to a different site or
+     * Page. No user-interface may be displayed!
+     * 
+     * @param event
+     *            the event
      */
-    @Deprecated
-    public boolean onBeforeLeaving();
+    public void onPageLeaving(PageLeavingEvent event);
+
 }

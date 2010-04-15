@@ -27,10 +27,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
+import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
+import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
 public class PagePanel extends DynamicHTML {
 
@@ -70,6 +72,11 @@ public class PagePanel extends DynamicHTML {
                 if (root != null && inlineWidget != null) {
                     root.add((Widget) inlineWidget);
                     inlineWidgets.add(inlineWidget);
+
+                    if (inlineWidget instanceof PageLeavingHandler) {
+                        addPageLeavingHandler((PageLeavingHandler) inlineWidget);
+                    }
+
                 } else {
                     log.warn("Failed to add inline widget " + widgetId + " to panel.");
                 }
@@ -78,12 +85,24 @@ public class PagePanel extends DynamicHTML {
         }
     }
 
+    public HandlerRegistration addPageLeavingHandler(PageLeavingHandler handler) {
+        return addHandler(handler, PageLeavingEvent.TYPE);
+    }
+
+    public void onPageLeaving(PageLeavingEvent event) {
+        this.fireEvent(event);
+    }
+
     public void populateInlineWidgets(Map<String, String> args) {
         for (InlineWidget inlineWidget : inlineWidgets) {
             inlineWidget.populate(args);
         }
     }
 
+    /**
+     * @deprecated Remove this. Use PageLeavingHandler
+     */
+    @Deprecated
     public boolean onBeforeLeaving() {
         for (InlineWidget inlineWidget : inlineWidgets) {
             if (!inlineWidget.onBeforeLeaving()) {

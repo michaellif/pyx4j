@@ -21,8 +21,10 @@
 package com.pyx4j.entity.shared.utils;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
@@ -63,4 +65,22 @@ public class EntityGraph {
             }
         }
     }
+
+    public static boolean fullyEqual(IEntity ent1, IEntity ent2) {
+        if (!EqualsHelper.equals(ent1, ent2)) {
+            return false;
+        }
+        Map<String, Object> otherValue = ent2.getValue();
+        for (Map.Entry<String, Object> me : ent1.getValue().entrySet()) {
+            //TODO test and fix this
+            if (me.getValue() instanceof Map) {
+                continue;
+            }
+            if (!EqualsHelper.equals(me.getValue(), otherValue.get(me.getKey()))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
