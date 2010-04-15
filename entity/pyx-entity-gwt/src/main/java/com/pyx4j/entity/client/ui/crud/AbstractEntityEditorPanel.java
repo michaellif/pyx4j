@@ -52,12 +52,11 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
 
-    private final EntityEditorForm<E> form;
+    private final EntityEditorFormModel<E> form;
 
     public AbstractEntityEditorPanel(Class<E> clazz) {
         super();
-        form = EntityEditorForm.create(clazz);
-
+        form = EntityEditorFormModel.create(clazz);
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
@@ -65,12 +64,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return form.meta();
     }
 
-    @Override
-    public void setWidget(Widget w) {
-        super.setWidget(w);
-    }
-
-    public EntityEditorForm<E> getForm() {
+    public EntityEditorFormModel<E> getForm() {
         return form;
     }
 
@@ -110,7 +104,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return !equalRecursive(getEntity(), form.getOrigValue(), new HashSet<IEntity>());
     }
 
-    public static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
+    private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
         if (entity1.isNull() && ((entity2 == null) || entity2.isNull())) {
             return true;
         }

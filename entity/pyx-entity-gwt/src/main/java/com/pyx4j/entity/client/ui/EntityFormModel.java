@@ -51,7 +51,7 @@ import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 
-public class EntityForm<E extends IEntity> {
+public class EntityFormModel<E extends IEntity> {
 
     private final E metaEntity;
 
@@ -80,7 +80,7 @@ public class EntityForm<E extends IEntity> {
         }
     }
 
-    public EntityForm(Class<E> clazz) {
+    public EntityFormModel(Class<E> clazz) {
         metaEntity = EntityFactory.create(clazz);
         valuePropagation = new ValuePropagation();
     }

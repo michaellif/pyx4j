@@ -20,17 +20,17 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
-import com.pyx4j.entity.client.ui.EntityForm;
+import com.pyx4j.entity.client.ui.EntityFormModel;
 import com.pyx4j.entity.shared.IEntity;
 
-public class EntityEditorForm<E extends IEntity> extends EntityForm<E> {
+public class EntityEditorFormModel<E extends IEntity> extends EntityFormModel<E> {
 
-    public EntityEditorForm(Class<E> clazz) {
+    public EntityEditorFormModel(Class<E> clazz) {
         super(clazz);
     }
 
-    public static <T extends IEntity> EntityEditorForm<T> create(Class<T> clazz) {
-        return new EntityEditorForm<T>(clazz);
+    public static <T extends IEntity> EntityEditorFormModel<T> create(Class<T> clazz) {
+        return new EntityEditorFormModel<T>(clazz);
     }
 
 }

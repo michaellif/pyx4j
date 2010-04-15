@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 
-public class EntitySearchCriteriaForm<E extends IEntity> {
+public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     private final E metaEntity;
 
@@ -86,7 +86,7 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
 
     }
 
-    public EntitySearchCriteriaForm(Class<E> clazz) {
+    public EntitySearchCriteriaFormModel(Class<E> clazz) {
         metaEntity = EntityFactory.create(clazz);
         valuePropagation = new ValuePropagationHandler();
         visibilityPropagation = new VisibilityPropagationHandler();
@@ -96,8 +96,8 @@ public class EntitySearchCriteriaForm<E extends IEntity> {
         return metaEntity;
     }
 
-    public static <T extends IEntity> EntitySearchCriteriaForm<T> create(Class<T> clazz) {
-        return new EntitySearchCriteriaForm<T>(clazz);
+    public static <T extends IEntity> EntitySearchCriteriaFormModel<T> create(Class<T> clazz) {
+        return new EntitySearchCriteriaFormModel<T>(clazz);
     }
 
     public CEditableComponent<?> create(IObject<?> member) {
