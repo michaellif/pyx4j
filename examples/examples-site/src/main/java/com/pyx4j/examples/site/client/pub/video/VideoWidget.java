@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.essentials.gwt2swf.FlowplayerWidget;
 import com.pyx4j.site.client.InlineWidget;
 
@@ -88,6 +89,7 @@ public class VideoWidget extends VerticalPanel implements InlineWidget {
 
         final FlowplayerWidget video = new FlowplayerWidget(267, 200);
         video.allowFullscreen();
+        video.addParam("wmode", "transparent");
         //video.addClipParam(videoURL);
         videoPanel.add(video);
 
