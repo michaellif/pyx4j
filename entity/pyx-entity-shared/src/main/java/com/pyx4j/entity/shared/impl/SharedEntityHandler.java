@@ -181,7 +181,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public boolean isNull() {
         Map<String, Object> thisValue = this.getValue();
-        return (thisValue == null) || (thisValue.size() == 0);
+        if ((thisValue == null) || (thisValue.isEmpty())) {
+            return true;
+        }
+        return ((EntityValueMap) thisValue).isNull();
     }
 
     @Override

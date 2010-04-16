@@ -105,8 +105,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
-        if (entity1.isNull() && ((entity2 == null) || entity2.isNull())) {
-            return true;
+        if (((entity2 == null) || entity2.isNull())) {
+            return (entity1 == null) || entity1.isNull();
+        } else if ((entity1 == null) || entity1.isNull()) {
+            return false;
         }
         if (processed.contains(entity1)) {
             return true;

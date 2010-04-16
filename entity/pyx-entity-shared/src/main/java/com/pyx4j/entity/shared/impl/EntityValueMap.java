@@ -44,6 +44,22 @@ public class EntityValueMap extends HashMap<String, Object> {
         return EqualsHelper.equals(pk, ((Map<?, ?>) other).get(IEntity.PRIMARY_KEY));
     }
 
+    public boolean isNull() {
+        if (this.isEmpty()) {
+            return true;
+        }
+        for (Map.Entry<String, Object> me : this.entrySet()) {
+            if (me.getValue() instanceof EntityValueMap) {
+                if (!((EntityValueMap) me.getValue()).isNull()) {
+                    return false;
+                }
+            } else if (me.getValue() != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public int hashCode() {
         Object pk = this.get(IEntity.PRIMARY_KEY);
