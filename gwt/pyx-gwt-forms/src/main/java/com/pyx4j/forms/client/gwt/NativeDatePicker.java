@@ -42,8 +42,6 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
         textBox.setNativeValue(datePicker.getValue());
         setTabIndex(datePicker.getTabIndex());
 
-        textBox.setStyleName("gwt-DateBox");
-
         textBox.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 DatePickerDropDownPanel.hideDatePicker();
