@@ -88,6 +88,7 @@ public class VideoWidget extends VerticalPanel implements InlineWidget {
 
         final FlowplayerWidget video = new FlowplayerWidget(267, 200);
         video.allowFullscreen();
+        //video.addClipParam(videoURL);
         videoPanel.add(video);
 
         HorizontalPanel videoButtonsPanel = new HorizontalPanel();

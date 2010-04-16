@@ -20,27 +20,46 @@
  */
 package com.pyx4j.essentials.gwt2swf;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class FlowplayerWidget extends ExtSWFWidget {
 
-    private static final Logger log = LoggerFactory.getLogger(FlowplayerWidget.class);
-
     private Player player;
+
+    private StringBuilder config;
 
     public FlowplayerWidget(int width, int height) {
         super(GWT.getModuleBaseURL() + "flowplayer.swf", width, height);
         //super("http://releases.flowplayer.org/swf/flowplayer-3.1.5.swf", width, height);
         this.addParam("allowScriptAccess", "always");
-        this.addFlashVar("config", "{\"playerId\":\"" + super.getSwfId() + "\"}");
     }
 
     public void allowFullscreen() {
         this.addParam("allowfullscreen", "true");
+    }
+
+    private StringBuilder q(Object text) {
+        config.append('"').append(text).append('"');
+        return config;
+    }
+
+    public void addClipParam(String clipUrl) {
+        if (config == null) {
+            config = new StringBuilder();
+        }
+        config.append(',');
+        q("clip").append(":{");
+
+        q("url").append(":");
+        q(clipUrl);
+
+        config.append("}");
+    }
+
+    @Override
+    protected void onBeforeSWFInjection() {
+        this.addFlashVar("config", "{\"playerId\":\"" + super.getSwfId() + "\"" + ((config != null) ? config.toString() : "") + "}");
     }
 
     public static class Player extends JavaScriptObject {
