@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -51,7 +52,7 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                         @Override
                         public void run() {
 
-                            final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
+                            final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
 
                                 @Override
                                 public void onFailure(Throwable caught) {
@@ -81,7 +82,7 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                         @Override
                         public void run() {
 
-                            final AsyncCallback<String> rpcCallback = new AsyncCallback<String>() {
+                            final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
 
                                 @Override
                                 public void onFailure(Throwable caught) {
