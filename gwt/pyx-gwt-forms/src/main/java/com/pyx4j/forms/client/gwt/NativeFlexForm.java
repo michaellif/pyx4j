@@ -20,7 +20,8 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.ui.FlexTable;
 
@@ -30,26 +31,25 @@ import com.pyx4j.forms.client.ui.INativeComponent;
 
 public class NativeFlexForm extends FlexTable implements INativeComponent {
 
-    public NativeFlexForm(CFlexForm cFlexForm, List<CComponent<?>> componentCollection) {
-        // TODO Auto-generated constructor stub
+    private static final Logger log = LoggerFactory.getLogger(NativeFlexForm.class);
+
+    private final CFlexForm form;
+
+    public NativeFlexForm(CFlexForm form) {
+        this.form = form;
     }
 
     @Override
     public CComponent<?> getCComponent() {
-        // TODO Auto-generated method stub
-        return null;
+        return form;
     }
 
-    @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        // TODO Auto-generated method stub
-
     }
 
     public void layout() {

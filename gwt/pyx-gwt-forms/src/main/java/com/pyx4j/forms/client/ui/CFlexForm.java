@@ -62,7 +62,7 @@ public class CFlexForm extends CContainer {
     @Override
     public NativeFlexForm initNativeComponent() {
         if (nativeForm == null) {
-            nativeForm = new NativeFlexForm(this, componentCollection);
+            nativeForm = new NativeFlexForm(this);
             nativeForm.layout();
             applyAccessibilityRules();
         }

@@ -323,9 +323,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
     public void setEnabled(boolean enabled) {
     }
 
-    public void updateLookAndFeel() {
-    }
-
     public CForm getCComponent() {
         return form;
     }
