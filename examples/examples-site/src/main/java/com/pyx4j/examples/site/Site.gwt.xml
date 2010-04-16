@@ -11,6 +11,7 @@
     <inherits name='com.pyx4j.examples.ExamplesRpc' />
     <inherits name='com.pyx4j.security.Security' />
     <inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
+    <inherits name='com.pyx4j.essentials.EssentialsSwf' />
     
     <replace-with class="com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory">
 		<when-type-is class="com.pyx4j.site.client.InlineWidgetFactoryGlobal"/>

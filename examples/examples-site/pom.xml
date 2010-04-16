@@ -68,6 +68,11 @@
             <artifactId>pyx-essentials-gwt</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>pl.rmalinowski.gwt2swf</groupId>
+            <artifactId>gwt2swf</artifactId>
+        </dependency>
 
 	</dependencies>
 

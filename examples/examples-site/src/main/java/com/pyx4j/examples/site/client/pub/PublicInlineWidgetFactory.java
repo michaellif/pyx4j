@@ -22,6 +22,7 @@ package com.pyx4j.examples.site.client.pub;
 
 import com.pyx4j.examples.rpc.Widgets;
 import com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory;
+import com.pyx4j.examples.site.client.pub.video.VideoWidget;
 import com.pyx4j.site.client.InlineWidget;
 
 public class PublicInlineWidgetFactory extends ExamplesInlineWidgetFactory {
@@ -30,6 +31,8 @@ public class PublicInlineWidgetFactory extends ExamplesInlineWidgetFactory {
     public InlineWidget createWidget(String widgetId) {
         if (Widgets.pub$technologyWidget.name().equals(widgetId)) {
             return new TechnologyWidget();
+        } else if (Widgets.pub$videoWidget.name().equals(widgetId)) {
+            return new VideoWidget();
         } else {
             return null;
         }

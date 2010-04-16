@@ -63,6 +63,11 @@ public class FlowplayerWidget extends ExtSWFWidget {
             this.fp_play();
         }-*/;
 
+        public final native void addClip(String videoUrl, int index)
+        /*-{
+            this.fp_addClip({url:videoUrl},index);
+        }-*/;
+
         /**
          * TODO This does not work!
          * 
@@ -70,7 +75,8 @@ public class FlowplayerWidget extends ExtSWFWidget {
          */
         public final native void setPlaylist(String videoUrl)
         /*-{
-            this.fp_setPlaylist([ { url: 'http://localhost:8888/test.mp4', autoPlay: false, autoBuffering: false }]);
+            var pl = { url: videoUrl, autoPlay: false, autoBuffering: false };
+            this.fp_setPlaylist([pl]);
         }-*/;
     }
 

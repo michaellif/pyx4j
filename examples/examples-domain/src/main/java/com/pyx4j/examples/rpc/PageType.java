@@ -31,6 +31,8 @@ public enum PageType {
 
     pub$examples(ResourceUriUtil.createResourceUri(Sites.pub.name(), "examples")),
 
+    pub$examples$widgets(ResourceUriUtil.createResourceUri(Sites.pub.name(), "examples", "video")),
+
     pub$contactUs(ResourceUriUtil.createResourceUri(Sites.pub.name(), "contactUs")),
 
     pub$home$technicalSupport(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "technicalSupport")),

@@ -29,6 +29,12 @@
             path="/**.ico"
             expiration="4h" />
         <include
+            path="/**.js"
+            expiration="4h" />
+        <include
+            path="/**.swf"
+            expiration="4h" />
+        <include
             path="/index.html"
             expiration="4h" />
         <include

@@ -116,13 +116,17 @@ public class PreloadSites extends AbstractSitesDataPreloader {
 
         new String[] { Widgets.pub$searchWidget.name() }));
 
-        site.pages().add(createPage("Examples", PageType.pub$examples, getPageContent(PageType.pub$examples),
+        {
+            site.pages().add(createPage("Examples", PageType.pub$examples, getPageContent(PageType.pub$examples),
 
-        null,
+            null,
 
-        new Portlet[] { slogan1Portlet, mantraPortlet },
+            new Portlet[] { slogan1Portlet, mantraPortlet },
 
-        null));
+            null));
+
+            site.pages().add(createSingleWidgetPage("Video", PageType.pub$examples$widgets, Widgets.pub$videoWidget.name()));
+        }
 
         site.pages().add(createPage("Contact Us", PageType.pub$contactUs, getPageContent(PageType.pub$contactUs),
 
