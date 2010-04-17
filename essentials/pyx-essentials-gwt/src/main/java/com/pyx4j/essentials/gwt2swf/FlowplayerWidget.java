@@ -46,11 +46,19 @@ public class FlowplayerWidget extends ExtSWFWidget {
     public FlowplayerWidget(int width, int height) {
         super(GWT.getModuleBaseURL() + "flowplayer.swf", width, height);
         this.addParam("allowScriptAccess", "always");
+    }
+
+    @Override
+    protected void onLoad() {
         instances.put(super.getSwfId(), this);
+        super.onLoad();
     }
 
     @Override
     protected void onUnload() {
+        if (isLoaded()) {
+            player().close();
+        }
         super.onUnload();
         instances.remove(super.getSwfId());
     }
@@ -95,7 +103,9 @@ public class FlowplayerWidget extends ExtSWFWidget {
         FlowplayerWidget p = instances.get(playerApiId);
         if (p != null) {
             if ("onLoad" == eventName) {
-                p.onFlowplayerLoad();
+                if ("player" == arg1) {
+                    p.onFlowplayerLoad();
+                }
             } else {
                 p.onFlowplayerEvent(eventName, arg1, arg2, arg3);
             }
@@ -130,6 +140,11 @@ public class FlowplayerWidget extends ExtSWFWidget {
         public final native void pause()
         /*-{
             this.fp_pause();
+        }-*/;
+
+        public final native void close()
+        /*-{
+            this.fp_close();
         }-*/;
 
         public final native boolean isFullscreen()
