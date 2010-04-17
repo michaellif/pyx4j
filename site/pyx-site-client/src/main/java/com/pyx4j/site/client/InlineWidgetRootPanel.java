@@ -61,4 +61,8 @@ public class InlineWidgetRootPanel extends AbsolutePanel {
         super(elem.<com.google.gwt.user.client.Element> cast());
         onAttach();
     }
+
+    InlineWidgetRootPanel(Element elem, boolean tmpTestHackVlads) {
+        super(elem.<com.google.gwt.user.client.Element> cast());
+    }
 }

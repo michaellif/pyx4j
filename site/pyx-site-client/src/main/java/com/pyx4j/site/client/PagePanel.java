@@ -27,9 +27,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
@@ -69,19 +71,53 @@ public class PagePanel extends DynamicHTML {
                 if (inlineWidget == null) {
                     inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
                 }
-                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
-                if (root != null && inlineWidget != null) {
-                    root.add((Widget) inlineWidget);
-                    inlineWidgets.add(inlineWidget);
 
-                    if (inlineWidget instanceof PageLeavingHandler) {
-                        addPageLeavingHandler((PageLeavingHandler) inlineWidget);
+                if (inlineWidget == null) {
+                    log.warn("Failed create inline widget {} in panel {}.", widgetId, page.caption().getValue());
+                    continue;
+                }
+
+                boolean vladsVersion = true;
+
+                if (vladsVersion) {
+
+                    NodeList<Element> htmlElements = this.getElement().getElementsByTagName("div");
+                    boolean replaced = false;
+                    if (htmlElements != null) {
+                        for (int i = 0; i < htmlElements.getLength(); i++) {
+                            if (widgetId.endsWith(htmlElements.getItem(i).getId())) {
+
+                                DivElement el = DivElement.as(htmlElements.getItem(i));
+                                InlineWidgetRootPanel root = new InlineWidgetRootPanel(el, true);
+                                root.add((Widget) inlineWidget);
+                                inlineWidgets.add(inlineWidget);
+                                if (inlineWidget instanceof PageLeavingHandler) {
+                                    addPageLeavingHandler((PageLeavingHandler) inlineWidget);
+                                }
+                                getChildren().add(root);
+                                adopt(root);
+                                replaced = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!replaced) {
+                        log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption().getValue());
                     }
 
                 } else {
-                    log.warn("Failed to add inline widget " + widgetId + " to panel.");
-                }
 
+                    InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
+                    if (root != null && inlineWidget != null) {
+                        root.add((Widget) inlineWidget);
+                        inlineWidgets.add(inlineWidget);
+                        if (inlineWidget instanceof PageLeavingHandler) {
+                            addPageLeavingHandler((PageLeavingHandler) inlineWidget);
+                        }
+                    } else {
+                        log.warn("Failed to add inline widget " + widgetId + " to panel.");
+                    }
+                }
             }
         }
     }
@@ -92,6 +128,18 @@ public class PagePanel extends DynamicHTML {
 
     public void onPageLeaving(PageLeavingEvent event) {
         this.fireEvent(event);
+    }
+
+    @Override
+    protected void onLoad() {
+        log.debug("PagePanel [{}] onLoad", page.caption().getValue());
+        super.onLoad();
+    }
+
+    @Override
+    protected void onUnload() {
+        log.debug("PagePanel [{}] onUnload", page.caption().getValue());
+        super.onUnload();
     }
 
     public void populateInlineWidgets(Map<String, String> args) {

@@ -50,14 +50,17 @@ public class FlowplayerWidget extends ExtSWFWidget {
 
     @Override
     protected void onLoad() {
+        log.debug("flowplayer onLoad");
         instances.put(super.getSwfId(), this);
         super.onLoad();
     }
 
     @Override
     protected void onUnload() {
+        log.debug("flowplayer onUnload");
         if (isLoaded()) {
             player().close();
+            player = null;
         }
         super.onUnload();
         instances.remove(super.getSwfId());
@@ -103,12 +106,15 @@ public class FlowplayerWidget extends ExtSWFWidget {
         FlowplayerWidget p = instances.get(playerApiId);
         if (p != null) {
             if ("onLoad" == eventName) {
+                log.debug("flowplayer load event [{}] {}", eventName, arg1);
                 if ("player" == arg1) {
                     p.onFlowplayerLoad();
                 }
             } else {
                 p.onFlowplayerEvent(eventName, arg1, arg2, arg3);
             }
+        } else {
+            log.warn("unbound flowplayer event [{}] {}", playerApiId, eventName);
         }
     }
 
@@ -182,8 +188,10 @@ public class FlowplayerWidget extends ExtSWFWidget {
     private void onFlowplayerLoad() {
         if (player == null) {
             player = Player.create(super.getSwfId());
-            log.debug("flowplayer {} ready", super.getSwfId());
-            onReady();
+            if (player != null) {
+                log.debug("flowplayer {} ready", super.getSwfId());
+                onReady();
+            }
         }
     }
 
