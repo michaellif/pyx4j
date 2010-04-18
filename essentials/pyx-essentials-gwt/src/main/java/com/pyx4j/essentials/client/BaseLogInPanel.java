@@ -27,7 +27,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.crud.EntityEditorFormModel;
 import com.pyx4j.forms.client.ui.CCaptcha;
@@ -37,6 +36,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -136,7 +136,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
             return false;
         }
 
-        AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+        AsyncCallback<AuthenticationResponse> callback = new BlockingAsyncCallback<AuthenticationResponse>() {
 
             @Override
             public void onFailure(Throwable caught) {
