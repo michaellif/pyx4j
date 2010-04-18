@@ -43,6 +43,9 @@
         <include
             path="/**/hosted.html"
             expiration="4h" />
+        <include
+            path="/**/index.html"
+            expiration="4h" />    
     </static-files>
 
 	<!-- Configure java.util.logging -->

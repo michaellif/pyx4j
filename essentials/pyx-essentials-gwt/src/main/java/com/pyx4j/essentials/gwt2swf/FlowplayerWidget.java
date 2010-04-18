@@ -44,7 +44,18 @@ public class FlowplayerWidget extends ExtSWFWidget {
     }
 
     public FlowplayerWidget(int width, int height) {
-        super(GWT.getModuleBaseURL() + "flowplayer.swf", width, height);
+        this(GWT.getModuleBaseURL() + "flowplayer.swf", width, height);
+    }
+
+    /**
+     * 
+     * @param src
+     *            "http://releases.flowplayer.org/swf/flowplayer-3.1.5.swf"
+     * @param width
+     * @param height
+     */
+    public FlowplayerWidget(String src, int width, int height) {
+        super(src, width, height);
         this.addParam("allowScriptAccess", "always");
     }
 
@@ -103,18 +114,24 @@ public class FlowplayerWidget extends ExtSWFWidget {
 
     @SuppressWarnings("unused")
     private static void flowplayerEvent(String playerApiId, String eventName, String arg1, String arg2, String arg3) {
-        FlowplayerWidget p = instances.get(playerApiId);
-        if (p != null) {
-            if ("onLoad" == eventName) {
-                log.debug("flowplayer load event [{}] {}", eventName, arg1);
-                if ("player" == arg1) {
-                    p.onFlowplayerLoad();
+        try {
+            FlowplayerWidget p = instances.get(playerApiId);
+            if (p != null) {
+                if ("onLoad" == eventName) {
+                    log.debug("flowplayer load event [{}] {}", eventName, arg1);
+                    if ("player" == arg1) {
+                        p.onFlowplayerLoad();
+                    }
+                } else if ("onError" == eventName) {
+                    p.onFlowplayerError(arg1, arg2);
+                } else {
+                    p.onFlowplayerEvent(eventName, arg1, arg2, arg3);
                 }
             } else {
-                p.onFlowplayerEvent(eventName, arg1, arg2, arg3);
+                log.warn("unbound flowplayer event [{}] {}", playerApiId, eventName);
             }
-        } else {
-            log.warn("unbound flowplayer event [{}] {}", playerApiId, eventName);
+        } catch (Throwable t) {
+            log.error("handler error", t);
         }
     }
 
@@ -210,6 +227,10 @@ public class FlowplayerWidget extends ExtSWFWidget {
      */
     protected void onFlowplayerEvent(String eventName, String arg1, String arg2, String arg3) {
 
+    }
+
+    protected void onFlowplayerError(String code, String errorMessage) {
+        log.error("flowplayer error [{}] {}", code, errorMessage);
     }
 
     public void play() {
