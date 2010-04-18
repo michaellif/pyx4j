@@ -82,7 +82,7 @@ public class FlowplayerWidget extends ExtSWFWidget {
     }
 
     private StringBuilder q(Object text) {
-        config.append('"').append(text).append('"');
+        config.append('\'').append(text).append('\'');
         return config;
     }
 
@@ -93,15 +93,39 @@ public class FlowplayerWidget extends ExtSWFWidget {
         config.append(',');
         q("clip").append(":{");
 
-        q("url").append(":");
+        q("url").append(':');
         q(clipUrl);
 
+        config.append('}');
+    }
+
+    public void addClipParam(String clipUrl, boolean autoPlay, boolean autoBuffering) {
+        if (config == null) {
+            config = new StringBuilder();
+        }
+        config.append(',');
+        q("clip").append(":{");
+
+        if (clipUrl != null) {
+            q("url").append(":");
+            q(clipUrl);
+            config.append(',');
+        }
+
+        q("autoPlay").append(":");
+        q(autoPlay);
+        config.append(',');
+
+        q("autoBuffering").append(":");
+        q(autoBuffering);
+
         config.append("}");
+
     }
 
     @Override
     protected void onBeforeSWFInjection() {
-        this.addFlashVar("config", "{\"playerId\":\"" + super.getSwfId() + "\"" + ((config != null) ? config.toString() : "") + "}");
+        this.addFlashVar("config", "{'playerId':'" + super.getSwfId() + "'" + ((config != null) ? config.toString() : "") + "}");
     }
 
     private static native void registerCallbacks()
