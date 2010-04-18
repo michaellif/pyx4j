@@ -177,7 +177,7 @@ public class FlowplayerWidget extends ExtSWFWidget {
 
         public final native void addClip(String videoUrl, int index)
         /*-{
-            this.fp_addClip({url:videoUrl},index);
+            this.fp_addClip(videoUrl, index);
         }-*/;
 
         /**
@@ -242,7 +242,7 @@ public class FlowplayerWidget extends ExtSWFWidget {
     }
 
     public void setClip(String videoUrl) {
-        log.debug("setClip {}", videoUrl);
-        player().addClip(videoUrl, 0);
+        log.debug("flowplayer setClip {}", videoUrl);
+        player().addClip(videoUrl, -1);
     }
 }
