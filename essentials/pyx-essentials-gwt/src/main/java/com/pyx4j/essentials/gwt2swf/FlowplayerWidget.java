@@ -39,6 +39,8 @@ public class FlowplayerWidget extends ExtSWFWidget {
 
     private StringBuilder config;
 
+    private boolean autoPlay;
+
     static {
         registerCallbacks();
     }
@@ -275,6 +277,18 @@ public class FlowplayerWidget extends ExtSWFWidget {
 
     public void setClip(String videoUrl) {
         log.debug("flowplayer setClip {}", videoUrl);
-        player().addClip(videoUrl, -1);
+        if (autoPlay) {
+            player().play(videoUrl);
+            autoPlay = false;
+        } else {
+            player().addClip(videoUrl, -1);
+        }
+    }
+
+    /**
+     * Would be reset on next setClip
+     */
+    public void setAutoPlay() {
+        autoPlay = true;
     }
 }
