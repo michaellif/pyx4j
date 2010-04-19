@@ -265,6 +265,14 @@ public class FlowplayerWidget extends ExtSWFWidget {
         player().play(videoUrl);
     }
 
+    public void stop() {
+        player().stop();
+    }
+
+    public void pause() {
+        player().pause();
+    }
+
     public void setClip(String videoUrl) {
         log.debug("flowplayer setClip {}", videoUrl);
         player().addClip(videoUrl, -1);
