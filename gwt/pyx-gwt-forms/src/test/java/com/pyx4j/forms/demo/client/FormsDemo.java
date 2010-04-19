@@ -24,7 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CFlexForm;
@@ -45,7 +48,8 @@ public class FormsDemo implements EntryPoint {
 
         StyleManger.installTheme(new WindowsTheme());
 
-        VerticalPanel contentPanel = new VerticalPanel();
+        ScrollPanel contentPanel = new ScrollPanel();
+        contentPanel.setSize("200px", "200px");
         RootPanel.get().add(contentPanel);
 
         CFlexForm form = new CFlexForm();
@@ -60,16 +64,12 @@ public class FormsDemo implements EntryPoint {
                 constraint.colSpan = 2;
                 constraint.rowSpan = 2;
             }
-            if (i == 3) {
-                constraint.colSpan = 2;
-                constraint.rowSpan = 2;
-            }
             l.setConstraints(constraint);
             form.addComponent(l);
 
         }
 
-        contentPanel.add(form.initNativeComponent());
+        contentPanel.setWidget(form.initNativeComponent());
 
     }
 }
