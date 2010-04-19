@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CFlexForm;
@@ -32,6 +34,8 @@ import com.pyx4j.forms.client.ui.INativeComponent;
 public class NativeFlexForm extends FlexTable implements INativeComponent {
 
     private static final Logger log = LoggerFactory.getLogger(NativeFlexForm.class);
+
+    private final int numOfColumns = 3;
 
     private final CFlexForm form;
 
@@ -53,8 +57,25 @@ public class NativeFlexForm extends FlexTable implements INativeComponent {
     }
 
     public void layout() {
-        // TODO Auto-generated method stub
+        clear();
+        int row = 0;
+        int column = 5;
+        FlexCellFormatter cellFormatter = getFlexCellFormatter();
 
+        for (CComponent<?> component : form.getComponents()) {
+            Widget nativeComponent = (Widget) component.initNativeComponent();
+            setWidget(row, column, nativeComponent);
+            if (component.getConstraints() != null) {
+                cellFormatter.setColSpan(row, column, component.getConstraints().colSpan);
+                cellFormatter.setRowSpan(row, column, component.getConstraints().rowSpan);
+            }
+            cellFormatter.setHeight(row, column, "100px");
+            cellFormatter.setWidth(row, column, "100px");
+            if (++column == numOfColumns + 5) {
+                row++;
+                column = 5;
+            }
+        }
     }
 
 }

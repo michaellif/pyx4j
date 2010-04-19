@@ -86,4 +86,8 @@ public class CLayoutConstraints {
 
     public Margin margin;
 
+    public int rowSpan;
+
+    public int colSpan;
+
 }

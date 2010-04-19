@@ -26,12 +26,11 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CGroupBoxPanel;
+import com.pyx4j.forms.client.ui.CFlexForm;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CLayoutConstraints;
+import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
@@ -49,21 +48,28 @@ public class FormsDemo implements EntryPoint {
         VerticalPanel contentPanel = new VerticalPanel();
         RootPanel.get().add(contentPanel);
 
-        CComponent<?>[][] components = new CComponent[][] {
+        CFlexForm form = new CFlexForm();
 
-        { new CCheckBox("CCheckBox") },
+        for (int i = 0; i < 20; i++) {
+            CTextArea l = new CTextArea(i + "");
+            l.setWidth("100%");
+            l.setHeight("100%");
+            l.setValue(i + "");
+            CLayoutConstraints constraint = new CLayoutConstraints();
+            if (i == 1) {
+                constraint.colSpan = 2;
+                constraint.rowSpan = 2;
+            }
+            if (i == 3) {
+                constraint.colSpan = 2;
+                constraint.rowSpan = 2;
+            }
+            l.setConstraints(constraint);
+            form.addComponent(l);
 
-        };
+        }
 
-        CForm form = new CForm();
-
-        form.setComponents(components);
-        CGroupBoxPanel boxPanel = new CGroupBoxPanel("CGroupBoxPanel");
-        boxPanel.setExpended(false);
-        boxPanel.addComponent(form);
-
-        contentPanel.add((Widget) boxPanel.initNativeComponent());
+        contentPanel.add(form.initNativeComponent());
 
     }
-
 }

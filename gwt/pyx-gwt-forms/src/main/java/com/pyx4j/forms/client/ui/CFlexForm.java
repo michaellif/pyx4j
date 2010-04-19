@@ -21,33 +21,29 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.forms.client.gwt.NativeFlexForm;
 
 public class CFlexForm extends CContainer {
 
-    private final List<CComponent<?>> componentCollection = new ArrayList<CComponent<?>>();
+    private final List<CComponent<?>> componentList = new ArrayList<CComponent<?>>();
 
     private NativeFlexForm nativeForm;
 
     public void addComponent(int index, CComponent<?> component) {
-        componentCollection.add(index, component);
+        componentList.add(index, component);
         component.setParent(this);
-        if (getNativeComponent() != null) {
-            getNativeComponent().layout();
-        }
     }
 
     @Override
     public void addComponent(CComponent<?> component) {
-        addComponent(componentCollection.size(), component);
+        addComponent(componentList.size(), component);
     }
 
     @Override
-    public Collection<CComponent<?>> getComponents() {
-        return componentCollection;
+    public List<CComponent<?>> getComponents() {
+        return componentList;
     }
 
     @Override
