@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -117,6 +116,9 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         EntityMeta em = entity1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isDetached() || memberMeta.isRpcTransient() || memberMeta.isRpcTransient()) {
+                continue;
+            }
             if (memberMeta.isEntity() && (memberMeta.isEmbedded())) {
                 if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
                     log.debug("changed {}", memberName);
