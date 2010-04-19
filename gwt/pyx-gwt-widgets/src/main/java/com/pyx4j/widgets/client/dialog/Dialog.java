@@ -56,7 +56,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -524,5 +523,41 @@ public class Dialog extends DialogPanel {
                 attachFocusHandler(((HasWidgets) w).iterator());
             }
         }
+    }
+
+    public Button getYesButton() {
+        return yesButton;
+    }
+
+    public Button getNoButton() {
+        return noButton;
+    }
+
+    public Button getOkButton() {
+        return okButton;
+    }
+
+    public Button getCancelButton() {
+        return cancelButton;
+    }
+
+    public Button getCloseButton() {
+        return closeButton;
+    }
+
+    public Button getCustom1Button() {
+        return custom1Button;
+    }
+
+    public Button getCustom2Button() {
+        return custom2Button;
+    }
+
+    public Button getCustom3Button() {
+        return custom3Button;
+    }
+
+    public Button getCustom4Button() {
+        return custom4Button;
     }
 }
