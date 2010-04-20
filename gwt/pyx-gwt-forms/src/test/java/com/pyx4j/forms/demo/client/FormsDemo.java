@@ -24,14 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CFlexForm;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CLayoutConstraints;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -48,8 +44,9 @@ public class FormsDemo implements EntryPoint {
 
         StyleManger.installTheme(new WindowsTheme());
 
-        ScrollPanel contentPanel = new ScrollPanel();
-        contentPanel.setSize("200px", "200px");
+        RootPanel.get().getElement().getStyle().setProperty("margin", "0");
+
+        SimplePanel contentPanel = new SimplePanel();
         RootPanel.get().add(contentPanel);
 
         CFlexForm form = new CFlexForm();

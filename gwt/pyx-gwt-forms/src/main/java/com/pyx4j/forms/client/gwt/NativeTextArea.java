@@ -50,6 +50,8 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         super();
         this.textArea = textArea;
 
+        getElement().getStyle().setProperty("resize", "none");
+
         addChangeHandler(new ChangeHandler() {
 
             @Override

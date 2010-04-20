@@ -23,8 +23,11 @@ package com.pyx4j.forms.client.gwt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
@@ -32,11 +35,13 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CFlexForm;
 import com.pyx4j.forms.client.ui.INativeComponent;
 
-public class NativeFlexForm extends LayoutPanel implements INativeComponent {
+public class NativeFlexForm extends ComplexPanel implements INativeComponent {
 
     private static final Logger log = LoggerFactory.getLogger(NativeFlexForm.class);
 
     private final FlexTable flexTable;
+
+    private final AbsolutePanel layoutPanel;
 
     private final int numOfColumns = 3;
 
@@ -45,9 +50,35 @@ public class NativeFlexForm extends LayoutPanel implements INativeComponent {
     public NativeFlexForm(CFlexForm form) {
         this.form = form;
 
-        flexTable = new FlexTable();
-        add(flexTable);
+        setElement(DOM.createDiv());
 
+        getElement().getStyle().setProperty("position", "relative");
+
+        layoutPanel = new AbsolutePanel();
+
+        layoutPanel.getElement().getStyle().setProperty("left", "0px");
+        layoutPanel.getElement().getStyle().setProperty("top", "0px");
+        layoutPanel.getElement().getStyle().setProperty("position", "absolute");
+        layoutPanel.getElement().getStyle().setProperty("overflow", "hidden");
+        layoutPanel.getElement().getStyle().setBackgroundColor("#eff");
+
+        flexTable = new FlexTable();
+        flexTable.setSize("600px", "500px");
+        flexTable.getElement().getStyle().setProperty("borderSpacing", "0px");
+        flexTable.getElement().getStyle().setProperty("left", "0px");
+        flexTable.getElement().getStyle().setProperty("top", "0px");
+        flexTable.getElement().getStyle().setProperty("position", "relative");
+
+        add(layoutPanel, getElement());
+
+        add(flexTable, getElement());
+
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        layoutPanel.setSize(flexTable.getOffsetWidth() + "px", flexTable.getOffsetHeight() + "px");
     }
 
     @Override
@@ -84,6 +115,15 @@ public class NativeFlexForm extends LayoutPanel implements INativeComponent {
                 column = 5;
             }
         }
+    }
+
+    public void showBorders() {
+        for (CComponent<?> component : form.getComponents()) {
+            Widget nativeComponent = (Widget) component.initNativeComponent();
+            System.out.println("+++" + nativeComponent.getAbsoluteLeft());
+        }
+
+        layoutPanel.add(new Label("aaaaaaaaaaaaaaaa"), 5, 5);
     }
 
 }
