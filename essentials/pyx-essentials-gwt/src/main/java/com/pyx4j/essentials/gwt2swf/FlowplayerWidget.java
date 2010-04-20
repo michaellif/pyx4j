@@ -102,6 +102,10 @@ public class FlowplayerWidget extends ExtSWFWidget {
     }
 
     public void addClipParam(String clipUrl, boolean autoPlay, boolean autoBuffering) {
+        addClipParam(clipUrl, autoPlay, autoBuffering, "orig");
+    }
+
+    public void addClipParam(String clipUrl, boolean autoPlay, boolean autoBuffering, String scaling) {
         if (config == null) {
             config = new StringBuilder();
         }
@@ -120,6 +124,13 @@ public class FlowplayerWidget extends ExtSWFWidget {
 
         q("autoBuffering").append(":");
         q(autoBuffering);
+
+        if (scaling != null) {
+            config.append(',');
+
+            q("scaling").append(":");
+            q(scaling);
+        }
 
         config.append("}");
 

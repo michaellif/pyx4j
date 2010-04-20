@@ -29,12 +29,15 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.essentials.gwt2swf.FlowplayerWidget;
 import com.pyx4j.site.client.InlineWidget;
 
@@ -44,7 +47,11 @@ public class VideoWidget extends VerticalPanel implements InlineWidget {
 
     PlayVideoDialog dialog;
 
-    String videoURL = "http://danila.skarzhevskyy.com/danila-mini-2mb.mp4";
+    String videoURL0 = "http://danila.skarzhevskyy.com/Danila%202010-03-16%20Pechataem.flv";
+
+    String videoURL1 = "http://danila.skarzhevskyy.com/Danila%202010-02-04%20Pischim.flv";
+
+    String videoURL2 = "http://danila.skarzhevskyy.com/Danila%202010-03-27%20Voice.flv";
 
     public VideoWidget() {
         dialog = new PlayVideoDialog();
@@ -91,7 +98,17 @@ public class VideoWidget extends VerticalPanel implements InlineWidget {
         videoPanelStyle.setProperty("border", "solid 1px");
         videoPanelStyle.setProperty("borderColor", "#E5ECF9");
 
-        final FlowplayerWidget video = new FlowplayerWidget(267, 200) {
+        final FlowplayerWidget video = new FlowplayerWidget((300 - 25) * 16 / 9, 300) {
+
+            @Override
+            protected void onReady() {
+                DeferredCommand.addCommand(new Command() {
+                    public void execute() {
+                        setClip(videoURL0);
+                    }
+                });
+            }
+
             @Override
             protected void onFlowplayerEvent(String eventName, String arg1, String arg2, String arg3) {
                 log.debug("flowplayer event [{}] {}", eventName, arg1);
@@ -99,28 +116,45 @@ public class VideoWidget extends VerticalPanel implements InlineWidget {
         };
         video.allowFullscreen();
         video.addParam("wmode", "transparent");
-        //video.addClipParam(videoURL);
+        video.addClipParam(null, false, false);
+
         videoPanel.add(video);
 
         HorizontalPanel videoButtonsPanel = new HorizontalPanel();
         videoPanel.add(videoButtonsPanel);
 
-        final Anchor load = new Anchor("&nbsp;Load&nbsp;", true);
-        videoButtonsPanel.add(load);
-        load.addClickHandler(new ClickHandler() {
+        final Anchor load1 = new Anchor("&nbsp;Load Video 1&nbsp;", true);
+        videoButtonsPanel.add(load1);
+        load1.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //video.player().setPlaylist(videoURL);
-                video.player().addClip(videoURL, 0);
+                video.stop();
+                video.player().close();
+                video.play(videoURL1);
             }
         });
+
+        videoButtonsPanel.add(new HTML("|"));
+
+        final Anchor load2 = new Anchor("&nbsp;Load Video 2&nbsp;", true);
+        videoButtonsPanel.add(load2);
+        load2.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                video.stop();
+                video.player().close();
+                video.play(videoURL2);
+            }
+        });
+
+        videoButtonsPanel.add(new HTML("|"));
 
         final Anchor play = new Anchor("&nbsp;Play&nbsp;", true);
         videoButtonsPanel.add(play);
         play.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                video.play(videoURL);
+                video.play();
             }
         });
 
