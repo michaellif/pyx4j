@@ -34,7 +34,7 @@ public class CLabel extends CEditableComponent<String> {
 
     public CLabel(String title) {
         super(title);
-        setWidth("200px");
+        setWidth("180px");
     }
 
     public void setWordWrap(boolean wrap) {

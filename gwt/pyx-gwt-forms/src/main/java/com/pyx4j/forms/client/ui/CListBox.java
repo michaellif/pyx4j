@@ -84,7 +84,7 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
         super(title);
         this.layout = layout;
         this.displayProperties = new ListBoxDisplayProperties();
-        setWidth("200px");
+        setWidth("180px");
     }
 
     /**

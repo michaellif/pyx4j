@@ -25,17 +25,18 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -53,6 +54,10 @@ import com.pyx4j.widgets.client.Tooltip;
 
 public class NativeForm extends FlexTable implements INativeComponent {
 
+    private final int LEFT_LABEL_WIDTH = 100;
+
+    private final int TOP_LABEL_WIDTH = 250;
+
     private static final Logger log = LoggerFactory.getLogger(NativeForm.class);
 
     private final CForm form;
@@ -60,10 +65,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
     private CComponent<?>[][] components;
 
     private final int[][][] spans;
-
-    private final Label[][] labels;
-
-    private int columnCount = 1;
 
     private final LabelAlignment allignment;
 
@@ -79,18 +80,15 @@ public class NativeForm extends FlexTable implements INativeComponent {
         this.infoImageAlignment = infoImageAlignment;
 
         spans = new int[components.length][components[0].length][2];
-        labels = new Label[components.length][components[0].length];
-        columnCount = components[0].length;
         preprocess();
         addAllComponents();
 
         setWidth(form.getWidth());
         setHeight(form.getHeight());
 
-        //TODO
-        //        if (ClientState.isDevMode()) {
-        //            sinkEvents(Event.ONMOUSEOVER);
-        //        }
+        if (!GWT.isScript()) {
+            sinkEvents(Event.ONMOUSEOVER);
+        }
     }
 
     private void addAllComponents() {
@@ -106,133 +104,18 @@ public class NativeForm extends FlexTable implements INativeComponent {
     }
 
     private void addComponent(final CComponent<?> component, int row, int column) {
-        final Label label = new Label(component.getTitle() == null ? "" : component.getTitle() + ":");
-        Cursor.setDefault(label.getElement());
-        labels[row][column] = label;
 
-        int labelRow = 0;
-        int labelColumn = 0;
-        int widgetRow = 0;
-        int widgetColumn = 0;
-        if (allignment.equals(LabelAlignment.LEFT)) {
-            labelRow = row;
-            labelColumn = 2 * column;
-            widgetRow = row;
-            widgetColumn = 2 * column + 1;
-        } else {
-            labelRow = 2 * row;
-            labelColumn = column;
-            widgetRow = 2 * row + 1;
-            widgetColumn = column;
-        }
+        final WidgetContainer widgetContainer = new WidgetContainer(component);
 
-        setWidget(labelRow, labelColumn, label);
-        final Widget nativeComponent = (Widget) component.initNativeComponent();
-        if (nativeComponent == null) {
-            throw new RuntimeException("initNativeComponent() method call on " + component.getName() + "[" + component.getClass() + "] returns null.");
-        }
-        if (nativeComponent instanceof NativeCheckBox) {
-            ((NativeCheckBox) nativeComponent).setText(null);
-        }
-
-        // TODO move ensureDebugId GWT call to proper place e.g. NativeComponent creation
-        if (component.getComponentDebugID() != null) {
-            nativeComponent.ensureDebugId(component.getComponentDebugID());
-        }
-
-        if (nativeComponent instanceof Focusable) {
-            label.addClickHandler(new ClickHandler() {
-                public void onClick(ClickEvent event) {
-                    ((Focusable) nativeComponent).setFocus(true);
-                }
-            });
-        }
-
-        final HorizontalPanel widgetContainer = new HorizontalPanel();
-
-        final Image imageInfoWarn = new Image();
-        log.trace("tooltip.bundle.applyTo");
-        imageInfoWarn.setResource(ImageFactory.getImages().formTooltipEmpty());
-        imageInfoWarn.getElement().getStyle().setMarginRight(10, Unit.PX);
-        imageInfoWarn.getElement().getStyle().setMarginLeft(2, Unit.PX);
-
-        log.trace("cr.tooltip");
-        final Tooltip tooltip = Tooltip.tooltip(imageInfoWarn, "");
-
-        renderToolTip(tooltip, component, imageInfoWarn);
-        label.setVisible(component.isVisible());
-        widgetContainer.setVisible(component.isVisible());
-
-        component.addPropertyChangeHandler(new PropertyChangeHandler() {
-            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                CComponent<?> source = (CComponent<?>) propertyChangeEvent.getSource();
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
-                    label.setVisible(source.isVisible());
-                    widgetContainer.setVisible(source.isVisible());
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
-                    label.setText(component.getTitle() + ":");
-                }
-                renderToolTip(tooltip, source, imageInfoWarn);
-            }
-        });
-
-        if (InfoImageAlignment.BEFORE.equals(infoImageAlignment)) {
-            widgetContainer.add(imageInfoWarn);
-            widgetContainer.add(nativeComponent);
-            //            DOM.setStyleAttribute(nativeComponent.getElement(), "marginRight", "20px");
-            //            widgetContainer.setCellWidth(imageInfoWarn, "20px");
-        } else if (InfoImageAlignment.AFTER.equals(infoImageAlignment)) {
-            widgetContainer.add(nativeComponent);
-            widgetContainer.add(imageInfoWarn);
-            //            widgetContainer.setCellWidth(imageInfoWarn, "20px");
-        } else {
-            widgetContainer.add(nativeComponent);
-        }
-
-        widgetContainer.setCellVerticalAlignment(imageInfoWarn, HasVerticalAlignment.ALIGN_MIDDLE);
-        widgetContainer.setCellHorizontalAlignment(imageInfoWarn, HasHorizontalAlignment.ALIGN_LEFT);
-        widgetContainer.getElement().getStyle().setPadding(2, Unit.PX);
-
-        setWidget(widgetRow, widgetColumn, widgetContainer);
+        setWidget(row, column, widgetContainer);
 
         FlexCellFormatter cellFormatter = getFlexCellFormatter();
 
         int rowSpan = spans[row][column][0];
         int columnSpan = spans[row][column][1];
 
-        if (rowSpan > 1) {
-            if (allignment.equals(LabelAlignment.LEFT)) {
-                cellFormatter.setRowSpan(labelRow, labelColumn, rowSpan);
-                cellFormatter.setRowSpan(widgetRow, widgetColumn, rowSpan);
-            } else {
-                cellFormatter.setRowSpan(widgetRow, widgetColumn, 2 * rowSpan - 1);
-            }
-        }
-
-        if (columnSpan > 1) {
-            if (allignment.equals(LabelAlignment.LEFT)) {
-                cellFormatter.setColSpan(widgetRow, widgetColumn, 2 * columnSpan - 1);
-            } else {
-                cellFormatter.setColSpan(labelRow, labelRow, columnSpan);
-                cellFormatter.setColSpan(widgetRow, widgetColumn, columnSpan);
-            }
-        }
-
-        if (allignment.equals(LabelAlignment.LEFT)) {
-            cellFormatter.setVerticalAlignment(labelRow, labelColumn, HasVerticalAlignment.ALIGN_MIDDLE);
-            cellFormatter.setVerticalAlignment(widgetRow, widgetColumn, HasVerticalAlignment.ALIGN_MIDDLE);
-        } else {
-            cellFormatter.setVerticalAlignment(labelRow, labelColumn, HasVerticalAlignment.ALIGN_TOP);
-            cellFormatter.setVerticalAlignment(widgetRow, widgetColumn, HasVerticalAlignment.ALIGN_TOP);
-        }
-
-        if (allignment.equals(LabelAlignment.LEFT)) {
-            cellFormatter.setWidth(labelRow, labelColumn, Math.round((double) 2 / 5 * 100 / columnCount) + "%");
-            cellFormatter.setWidth(widgetRow, widgetColumn, Math.round((double) 3 / 5 * 100 / columnCount + (double) (columnSpan - 1) * 100 / columnCount)
-                    + "%");
-        }
-
-        cellFormatter.setWordWrap(labelRow, labelColumn, false);
+        cellFormatter.setRowSpan(row, column, rowSpan);
+        cellFormatter.setColSpan(row, column, columnSpan);
 
     }
 
@@ -302,24 +185,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
         return buffer.toString();
     }
 
-    private void renderToolTip(Tooltip tooltip, CComponent<?> source, Image image) {
-        log.trace("renderToolTip");
-        if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
-            tooltip.setTooltipText(source.getToolTip());
-            if (source.getToolTip() == null || source.getToolTip().trim().length() == 0) {
-                Cursor.setDefault(image.getElement());
-                image.setResource(ImageFactory.getImages().formTooltipEmpty());
-            } else {
-                Cursor.setHand(image.getElement());
-                if (source instanceof CEditableComponent<?> && !((CEditableComponent<?>) source).isValid()) {
-                    image.setResource(ImageFactory.getImages().formTooltipWarn());
-                } else {
-                    image.setResource(ImageFactory.getImages().formTooltipInfo());
-                }
-            }
-        }
-    }
-
     public void setEnabled(boolean enabled) {
     }
 
@@ -336,13 +201,12 @@ public class NativeForm extends FlexTable implements INativeComponent {
      */
     @Override
     public void onBrowserEvent(Event event) {
-        //TODO
-        //        if (ClientState.isDevMode()) {
-        //            CComponent<?> component = findItem(DOM.eventGetTarget(event));
-        //            if (event.getShiftKey() && component != null) {
-        //                log.debug(component.toString());
-        //            }
-        //        }
+        if (!GWT.isScript()) {
+            CComponent<?> component = findItem(DOM.eventGetTarget(event));
+            if (event.getShiftKey() && component != null) {
+                log.debug(component.toString());
+            }
+        }
         super.onBrowserEvent(event);
     }
 
@@ -359,6 +223,142 @@ public class NativeForm extends FlexTable implements INativeComponent {
             }
         }
         return null;
+    }
+
+    class WidgetContainer extends ComplexPanel {
+
+        CComponent<?> component;
+
+        Widget nativeComponent;
+
+        Label label;
+
+        Image imageInfoWarn;
+
+        Image imageMandatory;
+
+        Tooltip tooltip;
+
+        WidgetContainer(final CComponent<?> component) {
+            setElement(DOM.createDiv());
+
+            this.component = component;
+            nativeComponent = (Widget) component.initNativeComponent();
+            label = new Label(component.getTitle() == null ? "" : component.getTitle() + ":");
+            label.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            Cursor.setDefault(label.getElement());
+
+            if (nativeComponent == null) {
+                throw new RuntimeException("initNativeComponent() method call on " + component.getName() + "[" + component.getClass() + "] returns null.");
+            }
+            if (nativeComponent instanceof NativeCheckBox) {
+                ((NativeCheckBox) nativeComponent).setText(null);
+            }
+
+            // TODO move ensureDebugId GWT call to proper place e.g. NativeComponent creation
+            if (component.getComponentDebugID() != null) {
+                nativeComponent.ensureDebugId(component.getComponentDebugID());
+            }
+
+            if (nativeComponent instanceof Focusable) {
+                label.addClickHandler(new ClickHandler() {
+                    public void onClick(ClickEvent event) {
+                        ((Focusable) nativeComponent).setFocus(true);
+                    }
+                });
+            }
+
+            imageInfoWarn = new Image();
+            imageInfoWarn.getElement().getStyle().setPosition(Position.ABSOLUTE);
+
+            imageMandatory = new Image();
+            imageMandatory.setResource(ImageFactory.getImages().mandatory());
+            imageMandatory.getElement().getStyle().setPosition(Position.ABSOLUTE);
+
+            tooltip = Tooltip.tooltip(imageInfoWarn, "");
+
+            renderToolTip();
+            renderMandatoryStar();
+
+            label.setVisible(component.isVisible());
+            setVisible(component.isVisible());
+
+            component.addPropertyChangeHandler(new PropertyChangeHandler() {
+                public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                        label.setVisible(component.isVisible());
+                        setVisible(component.isVisible());
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
+                        label.setText(component.getTitle() + ":");
+                    }
+                    renderToolTip();
+                    renderMandatoryStar();
+                }
+            });
+
+            add(nativeComponent, getElement());
+            add(imageInfoWarn, getElement());
+            add(imageMandatory, getElement());
+            add(label, getElement());
+
+            if (allignment.equals(LabelAlignment.LEFT)) {
+                label.getElement().getStyle().setWidth(LEFT_LABEL_WIDTH, Unit.PX);
+                label.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+                label.setWordWrap(true);
+                getElement().getStyle().setPaddingTop(5, Unit.PX);
+                getElement().getStyle().setPaddingLeft(LEFT_LABEL_WIDTH + 10, Unit.PX);
+                getElement().getStyle().setPaddingBottom(20, Unit.PX);
+            } else {
+                label.getElement().getStyle().setWidth(TOP_LABEL_WIDTH, Unit.PX);
+                getElement().getStyle().setPaddingTop(25, Unit.PX);
+                getElement().getStyle().setPaddingLeft(5, Unit.PX);
+                getElement().getStyle().setPaddingBottom(5, Unit.PX);
+            }
+
+            getElement().getStyle().setPaddingRight(40, Unit.PX);
+            getElement().getStyle().setPosition(Position.RELATIVE);
+        }
+
+        @Override
+        protected void onLoad() {
+            super.onLoad();
+            if (allignment.equals(LabelAlignment.LEFT)) {
+                imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + LEFT_LABEL_WIDTH + 25) + "px");
+                imageInfoWarn.getElement().getStyle().setProperty("top", "7px");
+            } else {
+                imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + 10) + "px");
+                imageInfoWarn.getElement().getStyle().setProperty("top", "27px");
+            }
+            label.getElement().getStyle().setProperty("top", "5px");
+            label.getElement().getStyle().setProperty("left", "15px");
+
+            imageMandatory.getElement().getStyle().setProperty("top", "5px");
+            imageMandatory.getElement().getStyle().setProperty("left", "5px");
+        }
+
+        private void renderToolTip() {
+            if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
+                tooltip.setTooltipText(component.getToolTip());
+                if (component.getToolTip() == null || component.getToolTip().trim().length() == 0) {
+                    imageInfoWarn.setVisible(false);
+                } else {
+                    if (component instanceof CEditableComponent<?> && ((CEditableComponent<?>) component).isMandatoryConditionMet()
+                            && !((CEditableComponent<?>) component).isValid()) {
+                        imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
+                    } else {
+                        imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
+                    }
+                    imageInfoWarn.setVisible(true);
+                }
+            }
+        }
+
+        private void renderMandatoryStar() {
+            if (component instanceof CEditableComponent<?>) {
+                imageMandatory.setVisible(!((CEditableComponent<?>) component).isMandatoryConditionMet());
+            }
+        }
+
     }
 
 }

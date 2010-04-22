@@ -61,8 +61,6 @@ public interface FormImages extends ClientBundle {
 
     // ----
 
-    ImageResource formTooltipEmpty();
-
     ImageResource formTooltipInfo();
 
     ImageResource formTooltipWarn();
@@ -72,5 +70,9 @@ public interface FormImages extends ClientBundle {
     ImageResource groupBoxOpen();
 
     ImageResource groupBoxClose();
+
+    // ---
+
+    ImageResource mandatory();
 
 }

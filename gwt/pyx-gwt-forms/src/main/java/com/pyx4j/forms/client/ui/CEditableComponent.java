@@ -111,14 +111,14 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     @Override
     public String getToolTip() {
         String tooltip = super.getToolTip();
-        if (isValid()) {
+        if (isValid() || !isMandatoryConditionMet()) {
             return tooltip;
         } else {
-            return getValidationMessage() + ((tooltip == null) || tooltip.trim().equals("") ? "" : "<p>" + tooltip);
+            return getValidationMessageWithoutMandatoyCondition() + ((tooltip == null) || tooltip.trim().equals("") ? "" : "<p>" + tooltip);
         }
     }
 
-    protected boolean isMandatoryConditionMet() {
+    public boolean isMandatoryConditionMet() {
         return !isMandatory() || (!isValueEmpty());
     }
 
@@ -127,6 +127,13 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
             if (!isMandatoryConditionMet()) {
                 return getMandatoryValidationMessage();
             }
+            return getValidationMessageWithoutMandatoyCondition();
+        }
+        return null;
+    }
+
+    private String getValidationMessageWithoutMandatoyCondition() {
+        if (!isValid() && isMandatoryConditionMet()) {
             if (validators != null) {
                 for (EditableValueValidator<E> validator : validators) {
                     if (!validator.isValid(this, getValue())) {
