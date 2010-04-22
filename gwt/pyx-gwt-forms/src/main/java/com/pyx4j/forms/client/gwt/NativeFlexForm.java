@@ -60,6 +60,7 @@ public class NativeFlexForm extends ComplexPanel implements INativeComponent {
         layoutPanel.getElement().getStyle().setProperty("top", "0px");
         layoutPanel.getElement().getStyle().setProperty("position", "absolute");
         layoutPanel.getElement().getStyle().setProperty("overflow", "hidden");
+        layoutPanel.getElement().getStyle().setProperty("opacity", "0.5");
         layoutPanel.getElement().getStyle().setBackgroundColor("#eff");
 
         flexTable = new FlexTable();
@@ -69,9 +70,11 @@ public class NativeFlexForm extends ComplexPanel implements INativeComponent {
         flexTable.getElement().getStyle().setProperty("top", "0px");
         flexTable.getElement().getStyle().setProperty("position", "relative");
 
-        add(layoutPanel, getElement());
+        sinkEvents(Integer.MAX_VALUE);
 
         add(flexTable, getElement());
+
+        add(layoutPanel, getElement());
 
     }
 
