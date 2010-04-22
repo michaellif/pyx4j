@@ -58,7 +58,7 @@ public class FlowplayerWidget extends ExtSWFWidget {
      */
     public FlowplayerWidget(String src, int width, int height) {
         super(src, width, height);
-        this.addParam("allowScriptAccess", "always");
+        allowScriptAccess();
     }
 
     @Override
@@ -77,10 +77,6 @@ public class FlowplayerWidget extends ExtSWFWidget {
         }
         super.onUnload();
         instances.remove(super.getSwfId());
-    }
-
-    public void allowFullscreen() {
-        this.addParam("allowfullscreen", "true");
     }
 
     private StringBuilder q(Object text) {

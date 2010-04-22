@@ -32,9 +32,11 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
 
     private static final Map<String, YouTubePlayerWidget> instances = new HashMap<String, YouTubePlayerWidget>();
 
-    private final String playerApiId;
-
     private YouTubePlayer control;
+
+    private final boolean chromeless;
+
+    private String videoId;
 
     static {
         registerCallbacks();
@@ -47,16 +49,34 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
          }
     }-*/;
 
-    public YouTubePlayerWidget(String name, int width, int height) {
-        super("http://www.youtube.com/apiplayer?enablejsapi=1&playerapiid=" + name, width, height);
-        instances.put(name, this);
-        this.addParam("allowScriptAccess", "always");
-        playerApiId = name;
-        log.debug("PlayerWidget {} created", playerApiId);
+    public YouTubePlayerWidget(int width, int height) {
+        super(null, width, height);
+        chromeless = true;
+        allowScriptAccess();
     }
 
-    public String getPlayerApiId() {
-        return playerApiId;
+    public YouTubePlayerWidget(String videoId, int width, int height) {
+        super(null, width, height);
+        chromeless = false;
+        allowScriptAccess();
+        this.videoId = videoId;
+    }
+
+    @Override
+    protected void onLoad() {
+        log.debug("ytPlayer onLoad");
+        instances.put(super.getSwfId(), this);
+        super.onLoad();
+    }
+
+    @Override
+    protected void onUnload() {
+        log.debug("ytPlayer onUnload");
+        if (isLoaded()) {
+            control = null;
+        }
+        super.onUnload();
+        instances.remove(super.getSwfId());
     }
 
     public YouTubePlayer getControl() {
@@ -64,9 +84,20 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
     }
 
     @Override
-    protected void onUnload() {
-        super.onUnload();
-        instances.remove(playerApiId);
+    public String getSrc() {
+        if (chromeless) {
+            return "http://www.youtube.com/apiplayer?enablejsapi=1&version=3&playerapiid=" + getSwfId();
+        } else {
+            return "http://www.youtube.com/v/" + videoId + "?enablejsapi=1&version=3&cc_load_policy=0&playerapiid=" + getSwfId();
+        }
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
+        if (isLoaded()) {
+            getControl().loadVideoById(videoId);
+            log.debug("loadVideoById {}", videoId);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -77,12 +108,16 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
         }
     }
 
+    public boolean isLoaded() {
+        return isReady();
+    }
+
     public boolean isReady() {
         return control != null;
     }
 
     protected void onReady() {
         control = YouTubePlayer.create(getSwfId());
-        log.debug("PlayerWidget {} ready", playerApiId);
+        log.debug("PlayerWidget {} ready", getSwfId());
     }
 }

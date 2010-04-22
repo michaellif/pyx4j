@@ -33,4 +33,12 @@ public class ExtSWFWidget extends SWFWidget {
         return super.getSwfId();
     }
 
+    protected void allowScriptAccess() {
+        this.addParam("allowScriptAccess", "always");
+    }
+
+    public void allowFullscreen() {
+        this.addParam("allowfullscreen", "true");
+    }
+
 }

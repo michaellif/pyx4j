@@ -21,6 +21,7 @@
 package com.pyx4j.examples.site.client.pub.video;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.essentials.gwt2swf.YouTubePlayer;
 import com.pyx4j.essentials.gwt2swf.YouTubePlayerWidget;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -38,7 +39,7 @@ public class PlayVideoDialog extends VerticalPanel implements CancelOption, Cust
 
     public void show() {
         Dialog dialog = new Dialog(title, this);
-        player = new YouTubePlayerWidget("YTPlayer", 630, 483) {
+        player = new YouTubePlayerWidget(630, 483) {
             @Override
             protected void onReady() {
                 super.onReady();
