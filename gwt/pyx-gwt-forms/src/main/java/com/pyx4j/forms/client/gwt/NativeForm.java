@@ -103,19 +103,13 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     }
 
-    private void addComponent(final CComponent<?> component, int row, int column) {
+    private void addComponent(CComponent<?> component, int row, int column) {
 
-        final WidgetContainer widgetContainer = new WidgetContainer(component);
-
-        setWidget(row, column, widgetContainer);
+        setWidget(row, column, new WidgetContainer(component));
 
         FlexCellFormatter cellFormatter = getFlexCellFormatter();
-
-        int rowSpan = spans[row][column][0];
-        int columnSpan = spans[row][column][1];
-
-        cellFormatter.setRowSpan(row, column, rowSpan);
-        cellFormatter.setColSpan(row, column, columnSpan);
+        cellFormatter.setRowSpan(row, column, spans[row][column][0]);
+        cellFormatter.setColSpan(row, column, spans[row][column][1]);
 
     }
 
