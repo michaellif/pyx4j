@@ -356,6 +356,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
         private void renderMandatoryStar() {
             if (component instanceof CEditableComponent<?>) {
                 imageMandatory.setVisible(!((CEditableComponent<?>) component).isMandatoryConditionMet());
+            } else {
+                imageMandatory.setVisible(false);
             }
         }
 
