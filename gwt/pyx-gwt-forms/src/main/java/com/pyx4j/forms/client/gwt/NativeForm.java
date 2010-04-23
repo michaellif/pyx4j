@@ -277,6 +277,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
             tooltip = Tooltip.tooltip(imageInfoWarn, "");
 
+            Tooltip.tooltip(imageMandatory, "This field is mandatory");
+
             renderToolTip();
             renderMandatoryStar();
 
