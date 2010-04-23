@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -34,11 +36,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ImageFactory;
@@ -47,6 +51,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
@@ -105,7 +110,11 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private void addComponent(CComponent<?> component, int row, int column) {
 
-        setWidget(row, column, new WidgetContainer(component));
+        if (component instanceof CFormFolder) {
+            setWidget(row, column, new FolderContainer((CFormFolder) component));
+        } else {
+            setWidget(row, column, new WidgetContainer(component));
+        }
 
         FlexCellFormatter cellFormatter = getFlexCellFormatter();
         cellFormatter.setRowSpan(row, column, spans[row][column][0]);
@@ -360,4 +369,76 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     }
 
+    class FolderContainer extends ComplexPanel {
+
+        private final CFormFolder<?, ?> folder;
+
+        private final Anchor addCommand;
+
+        private final Label label;
+
+        private final VerticalPanel container;
+
+        FolderContainer(final CFormFolder<?, ?> folder) {
+            setElement(DOM.createDiv());
+
+            this.folder = folder;
+
+            container = new VerticalPanel();
+            container.setWidth("100%");
+            container.add(new Label("CONTAINER"));
+
+            label = new Label(folder.getTitle() == null ? "" : folder.getTitle());
+            label.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+            addCommand = new Anchor("add");
+            addCommand.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            addCommand.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
+            addCommand.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+
+            label.setVisible(folder.isVisible());
+            setVisible(folder.isVisible());
+
+            folder.addPropertyChangeHandler(new PropertyChangeHandler() {
+                public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                        label.setVisible(folder.isVisible());
+                        setVisible(folder.isVisible());
+                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
+                        label.setText(folder.getTitle() + ":");
+                    }
+                }
+            });
+
+            add(container, getElement());
+
+            add(label, getElement());
+
+            add(addCommand, getElement());
+
+            label.setWordWrap(false);
+            label.getElement().getStyle().setProperty("top", "5px");
+            label.getElement().getStyle().setProperty("left", "15px");
+
+            addCommand.getElement().getStyle().setProperty("left", (LEFT_LABEL_WIDTH + 25) + "px");
+            addCommand.getElement().getStyle().setProperty("top", "5px");
+
+            getElement().getStyle().setPaddingTop(25, Unit.PX);
+            getElement().getStyle().setPaddingBottom(20, Unit.PX);
+            getElement().getStyle().setPosition(Position.RELATIVE);
+        }
+
+        @Override
+        protected void onLoad() {
+            super.onLoad();
+        }
+
+    }
 }

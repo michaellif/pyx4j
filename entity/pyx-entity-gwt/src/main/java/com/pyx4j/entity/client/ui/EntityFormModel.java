@@ -34,6 +34,7 @@ import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -43,6 +44,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
+import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
@@ -143,6 +145,8 @@ public class EntityFormModel<E extends IEntity> {
             comp = new CIntegerField(mm.getCaption());
         } else if (mm.getValueClass().equals(Long.class)) {
             comp = new CLongField(mm.getCaption());
+        } else if (mm.getObjectClass().equals(IList.class)) {
+            comp = new CFormFolder(mm.getCaption());
         } else {
             comp = new CTextField(mm.getCaption());
         }
