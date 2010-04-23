@@ -221,17 +221,17 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     class WidgetContainer extends ComplexPanel {
 
-        CComponent<?> component;
+        private final CComponent<?> component;
 
-        Widget nativeComponent;
+        private final Widget nativeComponent;
 
-        Label label;
+        private final Label label;
 
-        Image imageInfoWarn;
+        private final Image imageInfoWarn;
 
-        Image imageMandatory;
+        private final Image imageMandatory;
 
-        Tooltip tooltip;
+        private final Tooltip tooltip;
 
         WidgetContainer(final CComponent<?> component) {
             setElement(DOM.createDiv());
@@ -263,6 +263,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             }
 
             imageInfoWarn = new Image();
+            imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
             imageInfoWarn.getElement().getStyle().setPosition(Position.ABSOLUTE);
 
             imageMandatory = new Image();
@@ -302,14 +303,21 @@ public class NativeForm extends FlexTable implements INativeComponent {
                 label.getElement().getStyle().setOverflow(Overflow.HIDDEN);
                 label.setWordWrap(true);
                 getElement().getStyle().setPaddingTop(5, Unit.PX);
-                getElement().getStyle().setPaddingLeft(LEFT_LABEL_WIDTH + 10, Unit.PX);
+                getElement().getStyle().setPaddingLeft(LEFT_LABEL_WIDTH + 20, Unit.PX);
                 getElement().getStyle().setPaddingBottom(20, Unit.PX);
+                imageInfoWarn.getElement().getStyle().setProperty("top", "6px");
             } else {
                 label.getElement().getStyle().setWidth(TOP_LABEL_WIDTH, Unit.PX);
                 getElement().getStyle().setPaddingTop(25, Unit.PX);
                 getElement().getStyle().setPaddingLeft(5, Unit.PX);
                 getElement().getStyle().setPaddingBottom(5, Unit.PX);
+                imageInfoWarn.getElement().getStyle().setProperty("top", "26px");
             }
+            label.getElement().getStyle().setProperty("top", "5px");
+            label.getElement().getStyle().setProperty("left", "15px");
+
+            imageMandatory.getElement().getStyle().setProperty("top", "5px");
+            imageMandatory.getElement().getStyle().setProperty("left", "5px");
 
             getElement().getStyle().setPaddingRight(40, Unit.PX);
             getElement().getStyle().setPosition(Position.RELATIVE);
@@ -320,16 +328,9 @@ public class NativeForm extends FlexTable implements INativeComponent {
             super.onLoad();
             if (allignment.equals(LabelAlignment.LEFT)) {
                 imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + LEFT_LABEL_WIDTH + 25) + "px");
-                imageInfoWarn.getElement().getStyle().setProperty("top", "7px");
             } else {
                 imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + 10) + "px");
-                imageInfoWarn.getElement().getStyle().setProperty("top", "27px");
             }
-            label.getElement().getStyle().setProperty("top", "5px");
-            label.getElement().getStyle().setProperty("left", "15px");
-
-            imageMandatory.getElement().getStyle().setProperty("top", "5px");
-            imageMandatory.getElement().getStyle().setProperty("left", "5px");
         }
 
         private void renderToolTip() {
