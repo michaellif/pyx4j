@@ -27,9 +27,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.CFlexForm;
-import com.pyx4j.forms.client.ui.CLayoutConstraints;
-import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
@@ -48,25 +45,6 @@ public class FormsDemo implements EntryPoint {
 
         SimplePanel contentPanel = new SimplePanel();
         RootPanel.get().add(contentPanel);
-
-        CFlexForm form = new CFlexForm();
-
-        for (int i = 0; i < 20; i++) {
-            CTextArea l = new CTextArea(i + "");
-            l.setWidth("100%");
-            l.setHeight("100%");
-            l.setValue(i + "");
-            CLayoutConstraints constraint = new CLayoutConstraints();
-            if (i == 1) {
-                constraint.colSpan = 2;
-                constraint.rowSpan = 2;
-            }
-            l.setConstraints(constraint);
-            form.addComponent(l);
-
-        }
-
-        contentPanel.setWidget(form.initNativeComponent());
 
     }
 }
