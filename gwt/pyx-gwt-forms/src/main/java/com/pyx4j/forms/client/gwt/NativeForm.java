@@ -328,7 +328,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             imageMandatory.getElement().getStyle().setProperty("top", "5px");
             imageMandatory.getElement().getStyle().setProperty("left", "5px");
 
-            getElement().getStyle().setPaddingRight(40, Unit.PX);
+            getElement().getStyle().setPaddingRight(30, Unit.PX);
             getElement().getStyle().setPosition(Position.RELATIVE);
         }
 

@@ -75,7 +75,6 @@ public class CGroupBoxPanel extends CContainer {
     public CGroupBoxPanel(String title, Layout layout) {
         super(title);
         this.layout = layout;
-        setWidth("100%");
     }
 
     public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {

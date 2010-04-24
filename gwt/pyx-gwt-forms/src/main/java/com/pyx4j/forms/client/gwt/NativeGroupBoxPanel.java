@@ -138,7 +138,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
 
         Style borderStyle = this.getElement().getStyle();
         borderStyle.setProperty("padding", "5px");
-        borderStyle.setProperty("margin", "3px 8px 8px 8px");
+        borderStyle.setProperty("margin", "3px");
         if (layout == Layout.PLAIN) {
             borderStyle.setProperty("border", "1px solid");
             borderStyle.setProperty("borderColor", "#387cbb");
@@ -195,6 +195,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
             super.add(container);
         }
         container.add(w);
+        w.setWidth("100%");
     }
 
     public CGroupBoxPanel getCComponent() {
