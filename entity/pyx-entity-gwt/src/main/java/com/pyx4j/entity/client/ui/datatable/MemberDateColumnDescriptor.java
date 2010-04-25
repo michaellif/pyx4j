@@ -23,31 +23,20 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 
-public class MemberDateColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
+public class MemberDateColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
-    private String dateTimeFormatPattern;
+    public static String DEFAULT_DATE_FORMAT = "EEE, MMM d, yyyy - h:mm a";
 
-    public MemberDateColumnDescriptor(String columnName, String columnTitle, String dateTimeFormatPattern) {
-        super(columnName, columnTitle);
-        if (dateTimeFormatPattern == null) {
-            dateTimeFormatPattern = "EEE, MMM d, yyyy - h:mm a";
-        }
-    }
-
-    public String getDateTimeFormatPattern() {
-        return dateTimeFormatPattern;
-    }
-
-    public void setDateTimeFormatPattern(String dateTimeFormatPattern) {
-        this.dateTimeFormatPattern = dateTimeFormatPattern;
+    public MemberDateColumnDescriptor(Path columnPath, String columnTitle, String dateTimeFormatPattern) {
+        super(columnPath, columnTitle, (dateTimeFormatPattern == null) ? DEFAULT_DATE_FORMAT : dateTimeFormatPattern);
     }
 
     @Override
     public String convert(E entity) {
-        Object value = entity.getMemberValue(getColumnName());
+        Object value = entity.getMember(getColumnPath()).getValue();
         if (value == null) {
             return "";
         }
@@ -59,7 +48,7 @@ public class MemberDateColumnDescriptor<E extends IEntity> extends ColumnDescrip
         } else {
             return value.toString();
         }
-        return DateTimeFormat.getFormat(getDateTimeFormatPattern()).format(date);
+        return DateTimeFormat.getFormat(getFormatPattern()).format(date);
     }
 
 }

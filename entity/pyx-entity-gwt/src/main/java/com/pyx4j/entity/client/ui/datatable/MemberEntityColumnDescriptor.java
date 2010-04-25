@@ -21,16 +21,17 @@
 package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 
-public class MemberEntityColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
+public class MemberEntityColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
-    public MemberEntityColumnDescriptor(String columnName, String columnTitle) {
-        super(columnName, columnTitle);
+    public MemberEntityColumnDescriptor(Path columnPath, String columnTitle, String formatPattern) {
+        super(columnPath, columnTitle, formatPattern);
     }
 
     @Override
     public String convert(E entity) {
-        return ((IEntity) entity.getMember(getColumnName())).getStringView();
+        return ((IEntity) entity.getMember(getColumnPath())).getStringView();
     }
 
 }

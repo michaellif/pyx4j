@@ -33,15 +33,15 @@ public class ColumnDescriptorFactory {
     public static ColumnDescriptor createColumnDescriptor(IObject member) {
         MemberMeta mm = member.getMeta();
         if (mm.isEntity()) {
-            return new MemberEntityColumnDescriptor(mm.getFieldName(), mm.getCaption());
+            return new MemberEntityColumnDescriptor(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if (mm.getValueClass().equals(Date.class)) {
-            return new MemberDateColumnDescriptor(mm.getFieldName(), mm.getCaption(), mm.getFormat());
+            return new MemberDateColumnDescriptor(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
-            return new MemberEntityCollectionColumnDescriptor(mm.getFieldName(), mm.getCaption());
+            return new MemberEntityCollectionColumnDescriptor(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if (member instanceof IPrimitiveSet<?>) {
-            return new MemberCollectionColumnDescriptor(mm.getFieldName(), mm.getCaption(), mm.getFormat());
+            return new MemberCollectionColumnDescriptor(member.getPath(), mm.getCaption(), mm.getFormat());
         } else {
-            return new MemberColumnDescriptor(mm.getFieldName(), mm.getCaption(), mm.getFormat());
+            return new MemberColumnDescriptor(member.getPath(), mm.getCaption(), mm.getFormat());
         }
     }
 }

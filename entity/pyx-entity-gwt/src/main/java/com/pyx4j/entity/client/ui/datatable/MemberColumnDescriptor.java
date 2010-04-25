@@ -21,14 +21,22 @@
 package com.pyx4j.entity.client.ui.datatable;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 
 public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
 
+    private final Path columnPath;
+
     private String formatPattern;
 
-    public MemberColumnDescriptor(String columnName, String columnTitle, String formatPattern) {
-        super(columnName, columnTitle);
+    public MemberColumnDescriptor(Path columnPath, String columnTitle, String formatPattern) {
+        super(columnPath.toString(), columnTitle);
+        this.columnPath = columnPath;
         this.formatPattern = formatPattern;
+    }
+
+    public Path getColumnPath() {
+        return columnPath;
     }
 
     public String getFormatPattern() {
@@ -41,7 +49,7 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
 
     @Override
     public String convert(E entity) {
-        Object value = entity.getMemberValue(getColumnName());
+        Object value = entity.getMember(columnPath).getValue();
         if (value == null) {
             return "";
         } else {
@@ -49,4 +57,5 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
             return value.toString();
         }
     }
+
 }

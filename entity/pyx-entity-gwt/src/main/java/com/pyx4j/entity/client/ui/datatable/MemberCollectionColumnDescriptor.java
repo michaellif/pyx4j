@@ -25,10 +25,9 @@ import java.util.Collection;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 
-public class MemberCollectionColumnDescriptor<E extends IEntity> extends ColumnDescriptor<E> {
-
-    private String formatPattern;
+public class MemberCollectionColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
     private static class StringConverter implements ToStringConverter<Object> {
 
@@ -42,23 +41,14 @@ public class MemberCollectionColumnDescriptor<E extends IEntity> extends ColumnD
         }
     }
 
-    public MemberCollectionColumnDescriptor(String columnName, String columnTitle, String formatPattern) {
-        super(columnName, columnTitle);
-        this.formatPattern = formatPattern;
-    }
-
-    public String getFormatPattern() {
-        return formatPattern;
-    }
-
-    public void setFormatPattern(String formatPattern) {
-        this.formatPattern = formatPattern;
+    public MemberCollectionColumnDescriptor(Path columnPath, String columnTitle, String formatPattern) {
+        super(columnPath, columnTitle, formatPattern);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public String convert(E entity) {
-        Object value = entity.getMemberValue(getColumnName());
+        Object value = entity.getMember(getColumnPath());
         if (value == null) {
             return "";
         } else if (value instanceof Collection<?>) {
