@@ -52,7 +52,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -172,6 +171,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     String kind = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName();
                     value = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
                 }
+            } else {
+                value = convertToGAEValue(value, entity, meta);
             }
             //TODO Allow to embed other types
             String name = prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX;
@@ -180,6 +181,38 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else {
                 entity.setUnindexedProperty(name, value);
             }
+        }
+    }
+
+    private Object convertToGAEValue(Object value, Entity entity, MemberMeta meta) {
+        if (value instanceof String) {
+            if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
+                return new Text((String) value);
+            } else {
+                Indexed index = meta.getAnnotation(Indexed.class);
+                if ((index != null) && (index.keywordLenght() > 0)) {
+                    entity.setProperty(getIndexedPropertyName(meta), createStringKeywordIndex(index.keywordLenght(), (String) value));
+                }
+                return value;
+            }
+        } else if (value instanceof Enum<?>) {
+            return ((Enum<?>) value).name();
+        } else if (value instanceof GeoPoint) {
+            GeoPoint geoPoint = (GeoPoint) value;
+            Indexed index = meta.getAnnotation(Indexed.class);
+            if (index != null) {
+                entity.setProperty(getIndexedPropertyName(meta), geoPoint.getCells());
+            }
+            return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
+        } else if (value != null) {
+            if (value.getClass().isArray()) {
+                //TODO support more arrays
+                return new Blob((byte[]) value);
+            } else {
+                return value;
+            }
+        } else {
+            return value;
         }
     }
 
@@ -213,17 +246,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     value = KeyFactory
                             .createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKeyId);
                 }
-            } else if (value instanceof String) {
-                if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
-                    value = new Text((String) value);
-                } else {
-                    Indexed index = meta.getAnnotation(Indexed.class);
-                    if ((index != null) && (index.keywordLenght() > 0)) {
-                        entity.setProperty(getIndexedPropertyName(meta), createStringKeywordIndex(index.keywordLenght(), (String) value));
-                    }
-                }
-            } else if (value instanceof Enum<?>) {
-                value = ((Enum<?>) value).name();
             } else if ((ISet.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof Set<?>)) {
                 Set<Key> childKeys = new HashSet<Key>();
                 if (meta.isOwnedRelationships()) {
@@ -282,19 +304,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
-            } else if (value instanceof GeoPoint) {
-                GeoPoint geoPoint = (GeoPoint) value;
-                value = new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
-                Indexed index = meta.getAnnotation(Indexed.class);
-                if (index != null) {
-                    entity.setProperty(getIndexedPropertyName(meta), geoPoint.getCells());
-                }
-            } else if (value != null) {
-                if (value.getClass().isArray()) {
-                    //TODO support more arrays
-                    value = new Blob((byte[]) value);
-                }
+            } else {
+                value = convertToGAEValue(value, entity, meta);
             }
+
             if (meta.isIndexed()) {
                 entity.setProperty(me.getKey(), value);
             } else {
@@ -433,11 +446,34 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (childIEntity.getMeta().isDetached()) {
                 childIEntity.setPrimaryKey(((Key) value).getId());
             } else {
-                retrieveEntity(childIEntity, (Key) value, retrievedMap);
+                if ((iEntity.getOwner() != null) && (iEntity.getEntityMeta().getMemberMeta(keyName).isOwner())) {
+                    // Do not retrieve Owner
+                } else {
+                    retrieveEntity(childIEntity, (Key) value, retrievedMap);
+                }
             }
             return childIEntity.getValue();
+        } else if (value instanceof String) {
+            Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
+            if (Enum.class.isAssignableFrom(cls)) {
+                return Enum.valueOf((Class<Enum>) cls, (String) value);
+            } else {
+                return value;
+            }
+        } else if (value instanceof Long) {
+            if (Integer.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
+                return ((Long) value).intValue();
+            } else {
+                return value;
+            }
+        } else if (value instanceof Blob) {
+            //TODO support more types.
+            return ((Blob) value).getBytes();
+        } else if (value instanceof GeoPt) {
+            return new GeoPoint(((GeoPt) value).getLatitude(), ((GeoPt) value).getLongitude());
+        } else {
+            return value;
         }
-        return value;
     }
 
     /**
@@ -472,29 +508,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 // Recursive child values
                 setEmbededIEntityValue(iEntity, keyName, value, retrievedMap);
                 continue;
-            } else if (value instanceof Text) {
-                value = ((Text) value).getValue();
-            } else if (value instanceof Key) {
-                IEntity childIEntity = (IEntity) iEntity.getMember(keyName);
-                if (childIEntity.getMeta().isDetached()) {
-                    childIEntity.setPrimaryKey(((Key) value).getId());
-                } else {
-                    if ((iEntity.getOwner() != null) && (iEntity.getEntityMeta().getMemberMeta(keyName).isOwner())) {
-                        // Do not retrieve Owner
-                    } else {
-                        retrieveEntity(childIEntity, (Key) value, retrievedMap);
-                    }
-                }
-                continue;
-            } else if (value instanceof String) {
-                Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
-                if (Enum.class.isAssignableFrom(cls)) {
-                    value = Enum.valueOf((Class<Enum>) cls, (String) value);
-                }
-            } else if (value instanceof Long) {
-                if (Integer.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
-                    value = ((Long) value).intValue();
-                }
             } else if (value instanceof List<?>) {
                 IObject<?> member = iEntity.getMember(keyName);
                 if (member.getMeta().isEmbedded()) {
@@ -542,11 +555,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     ((IPrimitiveSet) member).addAll((Collection) value);
                     continue;
                 }
-            } else if (value instanceof Blob) {
-                value = ((Blob) value).getBytes();
-                //TODO support more types.
-            } else if (value instanceof GeoPt) {
-                value = new GeoPoint(((GeoPt) value).getLatitude(), ((GeoPt) value).getLongitude());
+            } else {
+                value = deserializeValue(iEntity, keyName, value, retrievedMap);
             }
             iEntity.setMemberValue(keyName, value);
         }
