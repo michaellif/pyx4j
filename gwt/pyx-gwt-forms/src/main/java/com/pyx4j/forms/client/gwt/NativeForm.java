@@ -178,14 +178,38 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
-        for (CComponent<?>[] component : components) {
-            for (int j = 0; j < component.length; j++) {
-                buffer.append(component[j]).append("       ");
+        StringBuilder builder = new StringBuilder();
+        for (CComponent<?>[] componentRow : components) {
+            for (CComponent<?> component : componentRow) {
+                builder.append(component).append("       ");
             }
-            buffer.append("\n");
+            builder.append("\n");
         }
-        return buffer.toString();
+        return builder.toString();
+    }
+
+    public String toStringForPrint() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<table>");
+        for (int i = 0; i < components.length; i++) {
+            builder.append("<tr>");
+            for (int j = 0; j < components[i].length; j++) {
+                if (components[i][j] == null) {
+                } else if (components[i][j] instanceof CEditableComponent<?>) {
+                    builder.append("<td>");
+                    builder.append(components[i][j].getTitle()).append(": ");
+                    builder.append("</td><td>");
+                    builder.append(((CEditableComponent) components[i][j]).getValue());
+                    builder.append("</td>");
+                } else {
+
+                }
+            }
+            builder.append("</tr>");
+        }
+        builder.append("</table>");
+
+        return builder.toString();
     }
 
     public void setEnabled(boolean enabled) {

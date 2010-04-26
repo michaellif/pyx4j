@@ -81,6 +81,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     public Widget createFormWidget(LabelAlignment allignment, IObject<?>[][] members) {
+        return (Widget) createForm(allignment, members).initNativeComponent();
+    }
+
+    public CForm createForm(LabelAlignment allignment, IObject<?>[][] members) {
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
         for (int i = 0; i < components.length; i++) {
             for (int j = 0; j < components[0].length; j++) {
@@ -94,7 +98,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
                 }
             }
         }
-        return CForm.createFormWidget(allignment, components);
+        CForm form = new CForm(allignment);
+        form.setComponents(components);
+
+        return form;
     }
 
     /**

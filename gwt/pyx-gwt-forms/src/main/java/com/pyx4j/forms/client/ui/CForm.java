@@ -112,7 +112,7 @@ public class CForm extends CContainer {
     }
 
     @Override
-    public INativeComponent getNativeComponent() {
+    public NativeForm getNativeComponent() {
         return nativeForm;
     }
 
