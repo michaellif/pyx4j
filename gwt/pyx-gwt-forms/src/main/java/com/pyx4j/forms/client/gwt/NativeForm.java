@@ -40,11 +40,13 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -69,6 +71,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private CComponent<?>[][] components;
 
+    private int columnCount = 1;
+
     private final int[][][] spans;
 
     private final LabelAlignment allignment;
@@ -81,6 +85,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
         setCellSpacing(0);
         this.form = form;
         components = comp;
+        columnCount = components[0].length;
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
 
@@ -189,27 +194,75 @@ public class NativeForm extends FlexTable implements INativeComponent {
     }
 
     public String toStringForPrint() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<table>");
+        FlexTable table = new FlexTable();
         for (int i = 0; i < components.length; i++) {
-            builder.append("<tr>");
             for (int j = 0; j < components[i].length; j++) {
+                int labelRow = 0;
+                int labelColumn = 0;
+                int widgetRow = 0;
+                int widgetColumn = 0;
+                if (allignment.equals(LabelAlignment.LEFT)) {
+                    labelRow = i;
+                    labelColumn = 2 * j;
+                    widgetRow = i;
+                    widgetColumn = 2 * j + 1;
+                } else {
+                    labelRow = 2 * i;
+                    labelColumn = j;
+                    widgetRow = 2 * i + 1;
+                    widgetColumn = j;
+                }
                 if (components[i][j] == null) {
                 } else if (components[i][j] instanceof CEditableComponent<?>) {
-                    builder.append("<td>");
-                    builder.append(components[i][j].getTitle()).append(": ");
-                    builder.append("</td><td>");
-                    builder.append(((CEditableComponent) components[i][j]).getValue());
-                    builder.append("</td>");
+                    table.setWidget(labelRow, labelColumn, new Label(components[i][j].getTitle() + ": "));
+                    table.setWidget(widgetRow, widgetColumn, new Label(CommonsStringUtils.nvl(((CEditableComponent) components[i][j]).getValue())));
                 } else {
 
                 }
-            }
-            builder.append("</tr>");
-        }
-        builder.append("</table>");
+                FlexCellFormatter cellFormatter = table.getFlexCellFormatter();
 
-        return builder.toString();
+                int rowSpan = spans[i][j][0];
+                int columnSpan = spans[i][j][1];
+
+                if (rowSpan > 1) {
+                    if (allignment.equals(LabelAlignment.LEFT)) {
+                        cellFormatter.setRowSpan(labelRow, labelColumn, rowSpan);
+                        cellFormatter.setRowSpan(widgetRow, widgetColumn, rowSpan);
+                    } else {
+                        cellFormatter.setRowSpan(widgetRow, widgetColumn, 2 * rowSpan - 1);
+                    }
+                }
+
+                if (columnSpan > 1) {
+                    if (allignment.equals(LabelAlignment.LEFT)) {
+                        cellFormatter.setColSpan(widgetRow, widgetColumn, 2 * columnSpan - 1);
+                    } else {
+                        cellFormatter.setColSpan(labelRow, labelRow, columnSpan);
+                        cellFormatter.setColSpan(widgetRow, widgetColumn, columnSpan);
+                    }
+                }
+
+                if (allignment.equals(LabelAlignment.LEFT)) {
+                    cellFormatter.setVerticalAlignment(labelRow, labelColumn, HasVerticalAlignment.ALIGN_MIDDLE);
+                    cellFormatter.setVerticalAlignment(widgetRow, widgetColumn, HasVerticalAlignment.ALIGN_MIDDLE);
+                } else {
+                    cellFormatter.setVerticalAlignment(labelRow, labelColumn, HasVerticalAlignment.ALIGN_TOP);
+                    cellFormatter.setVerticalAlignment(widgetRow, widgetColumn, HasVerticalAlignment.ALIGN_TOP);
+                }
+
+                if (allignment.equals(LabelAlignment.LEFT)) {
+                    cellFormatter.setWidth(labelRow, labelColumn, Math.round((double) 2 / 5 * 100 / columnCount) + "%");
+                    cellFormatter.setWidth(widgetRow, widgetColumn, Math.round((double) 3 / 5 * 100 / columnCount + (double) (columnSpan - 1) * 100
+                            / columnCount)
+                            + "%");
+                }
+
+                cellFormatter.setWordWrap(labelRow, labelColumn, false);
+
+            }
+        }
+
+        return table.toString();
     }
 
     public void setEnabled(boolean enabled) {
