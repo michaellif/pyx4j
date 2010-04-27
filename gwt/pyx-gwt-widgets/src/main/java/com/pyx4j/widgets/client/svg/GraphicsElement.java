@@ -39,25 +39,13 @@ import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GraphicsElement extends Widget implements HasClickHandlers, HasAllMouseHandlers {
+public abstract class GraphicsElement extends Widget implements HasClickHandlers, HasAllMouseHandlers {
 
     GraphicsElement() {
     }
 
-    public void setFill(String fill) {
-        getElement().setAttribute("fill", fill);
-    }
-
     public void setOpacity(String opacity) {
         getElement().setAttribute("opacity", opacity);
-    }
-
-    public void setStroke(String stroke) {
-        getElement().setAttribute("stroke", stroke);
-    }
-
-    public void setStrokeWidth(String strokeWidth) {
-        getElement().setAttribute("strokeWidth", strokeWidth);
     }
 
     public void setTransform(String transform) {

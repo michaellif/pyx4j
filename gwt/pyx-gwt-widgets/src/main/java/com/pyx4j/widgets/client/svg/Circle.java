@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.svg;
 
-public class Circle extends GraphicsElement {
+public class Circle extends Shape {
 
     public Circle(Coordinate center, Length radius) {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "circle"));

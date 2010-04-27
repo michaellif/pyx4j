@@ -21,7 +21,6 @@
 package com.pyx4j.widgets.client.svg;
 
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Group extends ComplexPanel {
 
@@ -33,9 +32,8 @@ public class Group extends ComplexPanel {
         getElement().setAttribute("transform", transform);
     }
 
-    @Override
-    public void add(Widget w) {
-        super.add(w, getElement());
+    public void add(GraphicsElement e) {
+        super.add(e, getElement());
     }
 
 }

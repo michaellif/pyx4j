@@ -14,17 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 6, 2010
- * @author Michael
+ * Created on Apr 27, 2010
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client.svg;
 
-public class Path extends Shape {
+public abstract class Shape extends GraphicsElement {
 
-    public Path(String d) {
-        setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "path"));
-        getElement().setAttribute("d", d);
+    public Shape() {
+
+    }
+
+    public void setFill(String fill) {
+        getElement().setAttribute("fill", fill);
+    }
+
+    public void setStroke(String stroke) {
+        getElement().setAttribute("stroke", stroke);
+    }
+
+    public void setStrokeWidth(String strokeWidth) {
+        getElement().setAttribute("strokeWidth", strokeWidth);
     }
 
 }

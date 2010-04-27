@@ -21,17 +21,20 @@
 package com.pyx4j.widgets.client.svg;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BarChartModel {
-    private final LinkedHashMap<String, List<BarChartItem>> items;
+    private final HashMap<String, List<BarChartItem>> items;
+
+    private final List<String> positions;
 
     private final List<String> colors;
 
     public BarChartModel(List<String> positions) {
-        items = new LinkedHashMap<String, List<BarChartItem>>();
+        this.positions = positions;
+        items = new HashMap<String, List<BarChartItem>>();
         for (String position : positions) {
             items.put(position, new ArrayList<BarChartItem>());
         }
@@ -53,6 +56,10 @@ public class BarChartModel {
 
     public Map<String, List<BarChartItem>> getItems() {
         return items;
+    }
+
+    public List<String> getPositions() {
+        return positions;
     }
 
     public List<BarChartItem> getItems(String position) {

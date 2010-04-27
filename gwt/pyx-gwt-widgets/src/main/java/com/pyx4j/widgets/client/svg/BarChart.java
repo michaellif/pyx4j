@@ -20,15 +20,92 @@
  */
 package com.pyx4j.widgets.client.svg;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BarChart extends Group {
 
+    private final int width;
+
+    private final int height;
+
     public BarChart(BarChartModel model, int width, int height) {
+        this.width = width;
+        this.height = height;
         setBarChartModel(model);
+        setTransform("translate(20 120)");
 
     }
 
     public void setBarChartModel(BarChartModel model) {
         clear();
+
+        List<String> positions = model.getPositions();
+
+        ArrayList<GraphicsElement> components = new ArrayList<GraphicsElement>();
+
+        double x = 0;
+
+        for (int i = 0; i < 18; i++) {
+
+            x += 20;
+
+            String color = "green";
+
+            if (i % 3 == 0) {
+                x += 10;
+                color = "red";
+            } else if (i % 3 == 1) {
+                color = "green";
+            } else if (i % 3 == 2) {
+                color = "blue";
+            }
+
+            double height = Math.random() * 100;
+
+            double width = 20;
+
+            {
+                String frontFace = "M " + x + "," + (-height) + //
+                        " L " + x + "," + 0 + //
+                        " L " + (x + width) + "," + 0 + //
+                        " L " + (x + width) + "," + (-height) + //
+                        " Z"; // 
+
+                final Path frontFacePath = new Path(frontFace);
+                frontFacePath.setFill(color);
+                components.add(frontFacePath);
+            }
+
+            {
+                String backFace = "M " + (x + width) + "," + (-height) + //
+                        " L " + (x + width) + "," + 0 + //
+                        " L " + (x + width + width / 2) + "," + (-width / 2) + //
+                        " L " + (x + width + width / 2) + "," + (-height - width / 2) + //
+                        " Z"; // 
+
+                final Path backFacePath = new Path(backFace);
+                backFacePath.setFill(color);
+                components.add(backFacePath);
+            }
+
+            {
+                String topFace = "M " + x + "," + (-height) + //
+                        " L " + (x + width / 2) + "," + (-height - width / 2) + //
+                        " L " + (x + width + width / 2) + "," + (-height - width / 2) + //
+                        " L " + (x + width) + "," + (-height) + //
+                        " Z"; // 
+
+                final Path topFacePath = new Path(topFace);
+                topFacePath.setFill(color);
+                components.add(topFacePath);
+            }
+
+        }
+
+        for (GraphicsElement element : components) {
+            add(element);
+        }
 
     }
 }

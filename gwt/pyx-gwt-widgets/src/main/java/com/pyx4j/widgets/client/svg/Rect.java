@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.svg;
 
-public class Rect extends GraphicsElement {
+public class Rect extends Shape {
 
     public Rect(Coordinate coordinate, Length width, Length height) {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "rect"));
