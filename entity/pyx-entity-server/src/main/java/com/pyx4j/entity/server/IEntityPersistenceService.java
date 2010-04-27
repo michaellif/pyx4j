@@ -24,8 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public interface IEntityPersistenceService {
 
@@ -50,7 +51,9 @@ public interface IEntityPersistenceService {
     /**
      * This may be a join with secondary table in RDBMS
      */
-    public String getIndexedPropertyName(MemberMeta memberMeta);
+    public String getIndexedPropertyName(EntityMeta meta, Path path);
+
+    public String getPropertyName(EntityMeta meta, Path path);
 
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria);
 

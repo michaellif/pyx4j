@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -81,16 +82,38 @@ public class IndexedEntitySearch {
 
         // TODO use groups in EntitySearchCriteria
         Set<MemberMeta> processed = new HashSet<MemberMeta>();
+        IEntityPersistenceService srv = PersistenceServicesFactory.getPersistenceService();
 
-        for (Map.Entry<PathSearch, Serializable> me : searchCriteria.getFilters().entrySet()) {
+        nextCriteria: for (Map.Entry<PathSearch, Serializable> me : searchCriteria.getFilters().entrySet()) {
             if (me.getValue() == null) {
                 continue;
             }
             PathSearch path = me.getKey();
-            if (path.getPathMembers().size() > 1) {
-                // TODO
-                log.warn("Ignore path {} not implemented", path);
-                continue;
+            final int pathLength = path.getPathMembers().size();
+            if (pathLength > 1) {
+                EntityMeta em = meta;
+                MemberMeta mm = null;
+                int count = 0;
+                for (String memberName : path.getPathMembers()) {
+                    //TODO ICollection support
+                    if (mm != null) {
+                        Class<?> valueClass = mm.getValueClass();
+                        if (!(IEntity.class.isAssignableFrom(valueClass))) {
+                            throw new RuntimeException("Invalid member in path " + memberName);
+                        } else {
+                            em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
+                        }
+                    }
+                    mm = em.getMemberMeta(memberName);
+                    count++;
+                    if (pathLength == count) {
+                        break;
+                    }
+                    if (!mm.isEmbedded()) {
+                        log.warn("Ignore path {}; not implemented", path);
+                        continue nextCriteria;
+                    }
+                }
             }
             MemberMeta mm = meta.getMemberMeta(path);
             if (processed.contains(mm)) {
@@ -106,8 +129,7 @@ public class IndexedEntitySearch {
                 if ((index != null) && (index.keywordLenght() > 0)) {
                     Set<String> keys = IndexString.getIndexValues(index.keywordLenght(), str);
                     for (String key : keys) {
-                        queryCriteria.add(new PropertyCriterion(PersistenceServicesFactory.getPersistenceService().getIndexedPropertyName(mm),
-                                Restriction.EQUAL, key));
+                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
                     }
                     //use secondary filter if required
                     for (String word : str.split(IndexString.KEYWORD_SPLIT_PATTERN)) {
@@ -129,8 +151,9 @@ public class IndexedEntitySearch {
                     }
                     String from = str;
                     String to = from + "z";
-                    queryCriteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.GREATER_THAN_OR_EQUAL, from));
-                    queryCriteria.add(new PropertyCriterion(mm.getFieldName(), Restriction.LESS_THAN, to));
+                    String propertyName = srv.getPropertyName(meta, path);
+                    queryCriteria.add(new PropertyCriterion(propertyName, Restriction.GREATER_THAN_OR_EQUAL, from));
+                    queryCriteria.add(new PropertyCriterion(propertyName, Restriction.LESS_THAN, to));
                     hasInequalityFilter = true;
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
@@ -140,8 +163,7 @@ public class IndexedEntitySearch {
                 if ((areaRadius != null) && (geoPointFrom != null)) {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
-                    queryCriteria.add(new PropertyCriterion(PersistenceServicesFactory.getPersistenceService().getIndexedPropertyName(mm), Restriction.IN,
-                            (Serializable) keys));
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.IN, (Serializable) keys));
                     inMemoryFilters.add(new GeoDistanceInMemoryFilter(new Path(pathWithGeoPointData), geoPointFrom, areaRadius.doubleValue()));
                 }
                 processed.add(mm);

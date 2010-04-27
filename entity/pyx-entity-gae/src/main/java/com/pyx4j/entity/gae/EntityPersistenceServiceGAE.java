@@ -52,6 +52,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -64,6 +65,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -161,6 +163,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (meta.isTransient()) {
                 continue nextValue;
             }
+            String propertyName = prefix + "_" + meta.getFieldName() + sufix + EMBEDDED_PRROPERTY_SUFIX;
             Object value = me.getValue();
             if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
                 if (meta.isEmbedded()) {
@@ -172,26 +175,25 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     value = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
                 }
             } else {
-                value = convertToGAEValue(value, entity, meta);
+                value = convertToGAEValue(value, entity, propertyName, meta);
             }
             //TODO Allow to embed other types
-            String name = prefix + "_" + me.getKey() + sufix + EMBEDDED_PRROPERTY_SUFIX;
             if (indexed && meta.isIndexed()) {
-                entity.setProperty(name, value);
+                entity.setProperty(propertyName, value);
             } else {
-                entity.setUnindexedProperty(name, value);
+                entity.setUnindexedProperty(propertyName, value);
             }
         }
     }
 
-    private Object convertToGAEValue(Object value, Entity entity, MemberMeta meta) {
+    private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta) {
         if (value instanceof String) {
             if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                 return new Text((String) value);
             } else {
                 Indexed index = meta.getAnnotation(Indexed.class);
                 if ((index != null) && (index.keywordLenght() > 0)) {
-                    entity.setProperty(getIndexedPropertyName(meta), createStringKeywordIndex(index.keywordLenght(), (String) value));
+                    entity.setProperty(getIndexedPropertyName(propertyName), createStringKeywordIndex(index.keywordLenght(), (String) value));
                 }
                 return value;
             }
@@ -201,7 +203,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             GeoPoint geoPoint = (GeoPoint) value;
             Indexed index = meta.getAnnotation(Indexed.class);
             if (index != null) {
-                entity.setProperty(getIndexedPropertyName(meta), geoPoint.getCells());
+                entity.setProperty(getIndexedPropertyName(propertyName), geoPoint.getCells());
             }
             return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
         } else if (value != null) {
@@ -222,6 +224,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 continue nextValue;
             }
             MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(me.getKey());
+            String propertyName = meta.getFieldName();
             if (meta.isTransient()) {
                 continue nextValue;
             }
@@ -305,13 +308,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
             } else {
-                value = convertToGAEValue(value, entity, meta);
+                value = convertToGAEValue(value, entity, propertyName, meta);
             }
 
             if (meta.isIndexed()) {
-                entity.setProperty(me.getKey(), value);
+                entity.setProperty(propertyName, value);
             } else {
-                entity.setUnindexedProperty(me.getKey(), value);
+                entity.setUnindexedProperty(propertyName, value);
             }
         }
 
@@ -335,12 +338,81 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    private String getIndexedPropertyName(String propertyName) {
+        return propertyName + SECONDARY_PRROPERTY_SUFIX;
+    }
+
     /**
      * We store the indexed values in the same entity
      */
     @Override
-    public String getIndexedPropertyName(MemberMeta memberMeta) {
-        return memberMeta.getFieldName() + SECONDARY_PRROPERTY_SUFIX;
+    public String getIndexedPropertyName(EntityMeta meta, Path path) {
+        StringBuilder propertyName = new StringBuilder();
+        final int pathLength = path.getPathMembers().size();
+        EntityMeta em = meta;
+        MemberMeta mm = null;
+        int count = 0;
+        int embeddedCount = 0;
+        for (String memberName : path.getPathMembers()) {
+            //TODO ICollection support
+            if (mm != null) {
+                Class<?> valueClass = mm.getValueClass();
+                if (!(IEntity.class.isAssignableFrom(valueClass))) {
+                    throw new RuntimeException("Invalid member in path " + memberName);
+                } else {
+                    em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
+                }
+            }
+            mm = em.getMemberMeta(memberName);
+            count++;
+            propertyName.append(memberName);
+            if (pathLength != count) {
+                if (!mm.isEmbedded()) {
+                    log.warn("Path {}; not implemented", path);
+                    throw new RuntimeException("Invalid member in path " + memberName);
+                } else {
+                    embeddedCount++;
+                }
+                propertyName.append("_");
+            }
+        }
+        while (embeddedCount > 0) {
+            embeddedCount--;
+            propertyName.append(EMBEDDED_PRROPERTY_SUFIX);
+        }
+        propertyName.append(SECONDARY_PRROPERTY_SUFIX);
+        return propertyName.toString();
+    }
+
+    @Override
+    public String getPropertyName(EntityMeta meta, Path path) {
+        StringBuilder propertyName = new StringBuilder();
+        final int pathLength = path.getPathMembers().size();
+        EntityMeta em = meta;
+        MemberMeta mm = null;
+        int count = 0;
+        for (String memberName : path.getPathMembers()) {
+            //TODO ICollection support
+            if (mm != null) {
+                Class<?> valueClass = mm.getValueClass();
+                if (!(IEntity.class.isAssignableFrom(valueClass))) {
+                    throw new RuntimeException("Invalid member in path " + memberName);
+                } else {
+                    em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
+                }
+            }
+            mm = em.getMemberMeta(memberName);
+            count++;
+            propertyName.append(memberName);
+            if (pathLength != count) {
+                if (!mm.isEmbedded()) {
+                    log.warn("Path {}; not implemented", path);
+                    throw new RuntimeException("Invalid member in path " + memberName);
+                }
+                propertyName.append("_");
+            }
+        }
+        return propertyName.toString();
     }
 
     private Object createStringKeywordIndex(int keywordLenght, String value) {
