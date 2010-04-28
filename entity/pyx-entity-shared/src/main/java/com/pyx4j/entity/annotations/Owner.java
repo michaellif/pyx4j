@@ -27,8 +27,6 @@ import java.lang.annotation.Target;
 
 /**
  * Maps to javax.persistence.OneToOne or javax.persistence.OneToMany with CascadeType.ALL
- * 
- * Member automatically becomes Detached @see com.pyx4j.entity.annotations.Detached
  */
 @Target( { ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

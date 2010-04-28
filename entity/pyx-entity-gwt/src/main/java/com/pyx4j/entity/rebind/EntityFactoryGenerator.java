@@ -342,7 +342,8 @@ public class EntityFactoryGenerator extends Generator {
             // Class<?> valueClass, Class<? extends IObject<?>> objectClass,
             if (type.isAssignableTo(iPrimitiveInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
@@ -351,7 +352,8 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("false, ");
             } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
@@ -360,7 +362,8 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("false, ");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
@@ -369,7 +372,8 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println("false, ");
             } else if (type.isAssignableTo(iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
@@ -382,7 +386,8 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("true, ");
             } else {
-                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
+                        + interfaceType.getQualifiedSourceName() + "'");
             }
 
             // String fieldName, String caption, String description,
@@ -418,12 +423,12 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(", ");
             writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(Detached.class) != null) || (method.getAnnotation(Owner.class) != null)).toString());
+            writer.print(Boolean.valueOf(method.getAnnotation(Detached.class) != null).toString());
             writer.print(", ");
             boolean embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
             writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(Owner.class) != null)).toString());
+            writer.print(Boolean.valueOf(method.getAnnotation(Owner.class) != null).toString());
             writer.print(", ");
             writer.print(Boolean.valueOf(embedded).toString());
             writer.print(", ");
@@ -541,32 +546,37 @@ public class EntityFactoryGenerator extends Generator {
             writer.indent();
             if (type.isAssignableTo(iPrimitiveInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIPrimitiveSet(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIList(\"" + method.getName() + "\", " + valueClass + ".class);");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
                 writer.println("return lazyCreateMemberIEntity(\"" + method.getName() + "\", " + type.getQualifiedSourceName() + ".class);");
             } else {
-                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
+                        + interfaceType.getQualifiedSourceName() + "'");
             }
             writer.outdent();
             writer.println("}");
