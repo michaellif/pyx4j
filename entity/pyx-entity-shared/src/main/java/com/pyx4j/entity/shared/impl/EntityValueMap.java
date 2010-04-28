@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IEntity;
@@ -71,8 +74,13 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    public static void dumpMap(StringBuilder b, Map<String, Object> map) {
+    public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map> processed) {
+        if (processed.contains(map)) {
+            b.append("...");
+            return;
+        }
         boolean first = true;
+        processed.add(map);
         for (Map.Entry<String, Object> me : map.entrySet()) {
             if (!first) {
                 b.append(' ');
@@ -82,11 +90,28 @@ public class EntityValueMap extends HashMap<String, Object> {
             b.append(me.getKey()).append("=");
             if (me.getValue() instanceof Map<?, ?>) {
                 b.append('{');
-                dumpMap(b, (Map<String, Object>) me.getValue());
+                dumpMap(b, (Map<String, Object>) me.getValue(), processed);
                 b.append('}');
+            } else if (me.getValue() instanceof Collection<?>) {
+                b.append('[');
+                for (Object o : (Collection<?>) me.getValue()) {
+                    if (o instanceof Map<?, ?>) {
+                        dumpMap(b, (Map<String, Object>) o, processed);
+                    } else {
+                        b.append(o);
+                    }
+                }
+                b.append(']');
             } else {
                 b.append(me.getValue());
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        EntityValueMap.dumpMap(b, this, new HashSet<Map>());
+        return b.toString();
     }
 }

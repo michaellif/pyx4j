@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -389,7 +390,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         b.append(getObjectClass().getName()).append(" ");
         Map<String, Object> v = getValue();
         if (v != null) {
-            EntityValueMap.dumpMap(b, v);
+            EntityValueMap.dumpMap(b, v, new HashSet<Map>());
         } else {
             b.append("{null}");
         }
@@ -398,6 +399,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public String toString() {
-        return getObjectClass().getName() + " " + getValue();
+        return getObjectClass().getName() + " " + debugString();
     }
 }
