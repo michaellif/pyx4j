@@ -33,6 +33,8 @@ public class Path implements Serializable {
 
     public static char PATH_SEPARATOR = '/';
 
+    public static String COLLECTION_SEPARATOR = "[]";
+
     private String path;
 
     private transient String rootObjectClassName;
@@ -53,7 +55,7 @@ public class Path implements Serializable {
         while (object != null) {
             String pathElement = null;
             if (object.getParent() instanceof ICollection) {
-                pathElement = "[]";
+                pathElement = COLLECTION_SEPARATOR;
             } else if (object.getFieldName() == null) {
                 rootObjectClassName = GWTJava5Helper.getSimpleName(object.getObjectClass());
                 this.path = rootObjectClassName + PATH_SEPARATOR + this.path;

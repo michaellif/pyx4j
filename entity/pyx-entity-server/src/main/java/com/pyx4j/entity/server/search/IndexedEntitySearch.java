@@ -40,6 +40,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -84,12 +85,13 @@ public class IndexedEntitySearch {
         Set<MemberMeta> processed = new HashSet<MemberMeta>();
         IEntityPersistenceService srv = PersistenceServicesFactory.getPersistenceService();
 
-        nextCriteria: for (Map.Entry<PathSearch, Serializable> me : searchCriteria.getFilters().entrySet()) {
+        nextFilter: for (Map.Entry<PathSearch, Serializable> me : searchCriteria.getFilters().entrySet()) {
             if (me.getValue() == null) {
                 continue;
             }
             PathSearch path = me.getKey();
             final int pathLength = path.getPathMembers().size();
+            boolean inMemoryFilterOnly = false;
             if (pathLength > 1) {
                 EntityMeta em = meta;
                 MemberMeta mm = null;
@@ -109,9 +111,15 @@ public class IndexedEntitySearch {
                     if (pathLength == count) {
                         break;
                     }
+                    if ((ICollection.class.isAssignableFrom(mm.getObjectClass()))) {
+                        log.debug("path {} not implemented in storage", path);
+                        inMemoryFilters.add(new CollectionInMemoryFilter(path, count, me.getValue()));
+                        continue nextFilter;
+                    }
                     if (!mm.isEmbedded()) {
-                        log.warn("Ignore path {}; not implemented", path);
-                        continue nextCriteria;
+                        log.debug("path {} not implemented in storage", path);
+                        inMemoryFilterOnly = true;
+                        break;
                     }
                 }
             }
@@ -129,7 +137,11 @@ public class IndexedEntitySearch {
                 if ((index != null) && (index.keywordLenght() > 0)) {
                     Set<String> keys = IndexString.getIndexValues(index.keywordLenght(), str);
                     for (String key : keys) {
-                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
+                        if (inMemoryFilterOnly) {
+                            inMemoryFilters.add(new StringInMemoryFilter(path, key));
+                        } else {
+                            queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
+                        }
                     }
                     //use secondary filter if required
                     for (String word : str.split(IndexString.KEYWORD_SPLIT_PATTERN)) {
@@ -140,7 +152,7 @@ public class IndexedEntitySearch {
                     }
                 } else {
                     // Simple like implementation
-                    if (hasInequalityFilter && limitToOneIndex) {
+                    if (inMemoryFilterOnly || (hasInequalityFilter && limitToOneIndex)) {
                         // Add to in memory filters
                         inMemoryFilters.add(new StringInMemoryFilter(path, str));
                         continue;
