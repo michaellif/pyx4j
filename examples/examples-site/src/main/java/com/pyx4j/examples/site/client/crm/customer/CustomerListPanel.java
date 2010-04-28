@@ -49,11 +49,11 @@ public class CustomerListPanel extends VerticalPanel {
 
         List<ColumnDescriptor<Customer>> columnDescriptors = new ArrayList<ColumnDescriptor<Customer>>();
 
-        ColumnDescriptor<Customer> name = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.name());
+        ColumnDescriptor<Customer> name = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer, metaCastomer.name());
         name.setWidth("150px");
         name.setWordWrap(false);
         columnDescriptors.add(name);
-        ColumnDescriptor<Customer> street = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer.street());
+        ColumnDescriptor<Customer> street = ColumnDescriptorFactory.createColumnDescriptor(metaCastomer, metaCastomer.street());
         street.setWidth("400px");
         street.setWordWrap(false);
         columnDescriptors.add(street);
