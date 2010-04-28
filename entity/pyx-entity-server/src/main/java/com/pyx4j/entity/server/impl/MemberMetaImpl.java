@@ -141,7 +141,7 @@ public class MemberMetaImpl implements MemberMeta {
         embedded = (valueClass.getAnnotation(EmbeddedEntity.class) != null) || (method.getAnnotation(EmbeddedEntity.class) != null);
         ownedRelationships = embedded || (method.getAnnotation(Owned.class) != null);
         owner = (method.getAnnotation(Owner.class) != null);
-        detached = owner || (method.getAnnotation(Detached.class) != null);
+        detached = (method.getAnnotation(Detached.class) != null);
         indexed = (method.getAnnotation(Unindexed.class) == null);
     }
 
