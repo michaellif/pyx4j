@@ -163,6 +163,11 @@ public class EntityFormModel<E extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
+    public <T extends IEntity> CEditableComponent<T> get(T member) {
+        return (CEditableComponent<T>) get((IObject<?>) member);
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> CEditableComponent<T> get(IObject<T> member) {
         Path memberPath = member.getPath();
         for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {

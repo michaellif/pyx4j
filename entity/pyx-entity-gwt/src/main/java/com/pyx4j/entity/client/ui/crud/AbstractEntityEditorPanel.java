@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -73,6 +74,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     public E getEntity() {
         return form.getValue();
+    }
+
+    public <T extends IEntity> CEditableComponent<T> get(T member) {
+        return form.get(member);
     }
 
     public <T> CEditableComponent<T> get(IObject<T> member) {
