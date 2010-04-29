@@ -179,6 +179,8 @@ public class IndexedEntitySearch {
                     inMemoryFilters.add(new GeoDistanceInMemoryFilter(new Path(pathWithGeoPointData), geoPointFrom, areaRadius.doubleValue()));
                 }
                 processed.add(mm);
+            } else if (Enum.class.isAssignableFrom(mm.getValueClass())) {
+                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
             } else {
                 log.warn("Search by class {} not implemented", mm.getValueClass());
             }
