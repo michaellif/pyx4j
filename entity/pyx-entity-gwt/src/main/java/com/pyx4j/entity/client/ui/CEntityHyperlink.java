@@ -96,7 +96,7 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
         private boolean enabled;
 
         public NativeEntityHyperlink(CEntityHyperlink hyperlink) {
-            super();
+            super("&nbsp;", true);
             this.cHyperlink = hyperlink;
             setTabIndex(hyperlink.getTabIndex());
 
@@ -158,7 +158,7 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
 
         @Override
         public void setNativeValue(IEntity value) {
-            setText(value.getStringView());
+            setHTML("&nbsp;" + ((value == null) ? "" : value.getStringView()));
         }
 
     }
