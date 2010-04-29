@@ -47,9 +47,6 @@ public class NativeHorizontalPanel extends HorizontalPanel implements INativeSim
         GWTStyleAdapter.setLayoutConstraints((Widget) nativeWidget, layoutConstraints);
     }
 
-    public void updateLookAndFeel() {
-    }
-
     public CPanel getCComponent() {
         return panel;
     }

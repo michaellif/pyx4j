@@ -47,9 +47,6 @@ public class NativeLabel extends Label implements INativeEditableComponent<Strin
     public void setEnabled(boolean enabled) {
     }
 
-    public void updateLookAndFeel() {
-    }
-
     public boolean isEditable() {
         return false;
     }

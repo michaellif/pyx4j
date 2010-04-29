@@ -59,9 +59,6 @@ public class NativeVerticalPanel extends VerticalPanel implements INativeSimpleP
         //        }
     }
 
-    public void updateLookAndFeel() {
-    }
-
     public CPanel getCComponent() {
         return panel;
     }

@@ -59,9 +59,6 @@ public class NativeButton extends com.google.gwt.user.client.ui.Button implement
         return comand;
     }
 
-    public void updateLookAndFeel() {
-    }
-
     public CButton getCComponent() {
         return button;
     }

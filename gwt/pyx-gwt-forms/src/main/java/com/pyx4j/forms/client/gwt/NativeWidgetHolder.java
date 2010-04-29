@@ -47,9 +47,6 @@ public class NativeWidgetHolder extends SimplePanel implements INativeWidgetHold
     public void setEnabled(boolean enabled) {
     }
 
-    public void updateLookAndFeel() {
-    }
-
     @Override
     protected void onLoad() {
         super.onLoad();
