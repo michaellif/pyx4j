@@ -45,4 +45,11 @@ public class ColumnDescriptorFactory {
             return new MemberColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         }
     }
+
+    public static <E extends IEntity> ColumnDescriptor<E> createColumnDescriptor(E meta, IObject<?> member, String width) {
+        ColumnDescriptor<E> cd = ColumnDescriptorFactory.createColumnDescriptor(meta, member);
+        cd.setWidth(width);
+        cd.setWordWrap(false);
+        return cd;
+    }
 }
