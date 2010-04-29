@@ -44,7 +44,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private static final Logger log = LoggerFactory.getLogger(DataTable.class);
 
-    private final DataTableModel<E> model;
+    private DataTableModel<E> model;
 
     private int selectedRow = -1;
 
@@ -59,9 +59,13 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
     private static final String CHECK_MARK_COLUMN_SIZE = "22px";
 
     public DataTable(DataTableModel<E> model, boolean checkboxColumnShown) {
+        this(checkboxColumnShown);
+        setDataTableModel(model);
+    }
+
+    public DataTable(boolean checkboxColumnShown) {
         super();
         this.checkboxColumnShown = checkboxColumnShown;
-        this.model = model;
         this.addClickHandler(new ClickHandler() {
 
             @Override
@@ -76,10 +80,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 UIObject.setStyleName(current, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-selected", true);
             }
         });
-        model.addDataTableModelListener(this);
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTable.name());
         DOM.setStyleAttribute(getElement(), "tableLayout", "fixed");
-        renderTable();
     }
 
     private void renderBody() {
@@ -185,6 +187,15 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     public DataTableModel<E> getDataTableModel() {
         return model;
+    }
+
+    public void setDataTableModel(DataTableModel<E> model) {
+        if (this.model != null) {
+            this.model.removeDataTableModelListener(this);
+        }
+        this.model = model;
+        model.addDataTableModelListener(this);
+        renderTable();
     }
 
     public int getSelectedRow() {
