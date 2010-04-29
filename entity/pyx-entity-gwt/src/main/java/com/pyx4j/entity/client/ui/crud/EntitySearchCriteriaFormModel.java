@@ -26,7 +26,6 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -138,6 +137,10 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             }
         }
         throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
+    }
+
+    public <T> CEditableComponent<T> get(IObject<T> member) {
+        return get(member, null);
     }
 
     @SuppressWarnings("unchecked")
