@@ -33,4 +33,8 @@ public class ServiceExecutePermission extends BasicPermission {
     public ServiceExecutePermission(Class<? extends Service<?, ?>> targetServiceInterface) {
         super(targetServiceInterface.getName());
     }
+
+    public ServiceExecutePermission(Class<?> targetServiceGroup, String path) {
+        super(targetServiceGroup.getName() + path);
+    }
 }
