@@ -182,9 +182,6 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         return caption.getText();
     }
 
-    public void updateLookAndFeel() {
-    }
-
     public void add(INativeComponent nativeWidget, CLayoutConstraints layoutConstraints) {
         Widget w = (Widget) nativeWidget;
         if (container == null) {
