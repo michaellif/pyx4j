@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -108,7 +107,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
      * @return true when any filed in Entity has been changes.
      */
     public boolean isChanged() {
-        return !equalRecursive(getEntity(), form.getOrigValue(), new HashSet<IEntity>());
+        return !equalRecursive(form.getOrigValue(), getEntity(), new HashSet<IEntity>());
     }
 
     private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
@@ -127,9 +126,19 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
                 continue;
             }
-            if (memberMeta.isEntity() && (memberMeta.isEmbedded())) {
-                if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
-                    log.debug("changed {}", memberName);
+            if (memberMeta.isEntity()) {
+                if (memberMeta.isEmbedded()) {
+                    if (!equalRecursive((IEntity) entity1.getMember(memberName), (IEntity) entity2.getMember(memberName), processed)) {
+                        log.debug("changed {}", memberName);
+                        return false;
+                    }
+                } else if (((IEntity) entity1.getMember(memberName)).isNull()) {
+                    if (!((IEntity) entity2.getMember(memberName)).isNull()) {
+                        log.debug("changed [null] -> [{}]", entity2.getMember(memberName));
+                        return false;
+                    }
+                } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
+                    log.debug("changed [{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
                     return false;
                 }
             } else if (ISet.class.equals(memberMeta.getObjectClass())) {
@@ -144,7 +153,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
                 }
             } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
                 log.debug("changed {}", memberName);
-                log.debug("[{}] -> [{}]", entity2.getMember(memberName), entity1.getMember(memberName));
+                log.debug("[{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
                 return false;
             }
         }

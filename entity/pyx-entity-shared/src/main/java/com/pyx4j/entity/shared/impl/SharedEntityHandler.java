@@ -399,6 +399,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public String toString() {
-        return getObjectClass().getName() + " " + debugString();
+        return debugString();
     }
 }
