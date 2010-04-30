@@ -63,7 +63,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private final int LEFT_LABEL_WIDTH = 100;
 
-    private final int TOP_LABEL_WIDTH = 250;
+    private final int TOP_LABEL_WIDTH = 200;
 
     private static final Logger log = LoggerFactory.getLogger(NativeForm.class);
 
