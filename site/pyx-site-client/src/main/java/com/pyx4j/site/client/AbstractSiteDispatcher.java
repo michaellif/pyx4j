@@ -22,6 +22,7 @@ package com.pyx4j.site.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,9 @@ import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
+import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -104,6 +107,13 @@ public abstract class AbstractSiteDispatcher {
             }
         };
         History.addValueChangeHandler(historyChangeHandler);
+
+        ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
+                onAuthenticationChange();
+            }
+        });
 
         RootPanel.get().add(GlassPanel.instance());
 
