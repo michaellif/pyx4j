@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server.search;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
@@ -167,6 +169,11 @@ public class IndexedEntitySearch {
                     queryCriteria.add(new PropertyCriterion(propertyName, Restriction.GREATER_THAN_OR_EQUAL, from));
                     queryCriteria.add(new PropertyCriterion(propertyName, Restriction.LESS_THAN, to));
                     hasInequalityFilter = true;
+                }
+            } else if (Date.class.isAssignableFrom(mm.getValueClass())) {
+                Date day = (Date) searchCriteria.getValue(new PathSearch(path.getPathString(), "day"));
+                if (day != null) {
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, TimeUtils.dayStart(day)));
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();

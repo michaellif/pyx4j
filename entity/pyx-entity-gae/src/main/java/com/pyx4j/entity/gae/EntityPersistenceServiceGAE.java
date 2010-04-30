@@ -54,6 +54,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
@@ -199,6 +200,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
         } else if (value instanceof Enum<?>) {
             return ((Enum<?>) value).name();
+        } else if (value instanceof Date) {
+            Indexed index = meta.getAnnotation(Indexed.class);
+            if (index != null) {
+                // TODO move values like month and week
+                Date v = TimeUtils.dayStart((Date) value);
+                entity.setProperty(getIndexedPropertyName(propertyName), v);
+            }
+            return value;
         } else if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
             Indexed index = meta.getAnnotation(Indexed.class);
