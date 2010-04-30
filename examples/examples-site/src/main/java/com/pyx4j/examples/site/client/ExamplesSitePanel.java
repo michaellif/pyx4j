@@ -22,8 +22,6 @@ package com.pyx4j.examples.site.client;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.gwt.commons.History;
-
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.CommandLink;

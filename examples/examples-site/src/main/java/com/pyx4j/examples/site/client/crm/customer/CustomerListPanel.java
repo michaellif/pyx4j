@@ -37,7 +37,6 @@ import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.rpc.PageType;
-import com.pyx4j.gwt.commons.History;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 
 public class CustomerListPanel extends VerticalPanel {

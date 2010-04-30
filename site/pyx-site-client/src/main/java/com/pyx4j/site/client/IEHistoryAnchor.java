@@ -25,8 +25,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 
-import com.pyx4j.gwt.commons.History;
-
 /**
  * Fix for "Local anchor link causes reload in IE"
  * 

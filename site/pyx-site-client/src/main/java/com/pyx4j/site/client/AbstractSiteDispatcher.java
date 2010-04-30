@@ -22,7 +22,6 @@ package com.pyx4j.site.client;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
@@ -38,11 +38,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.gwt.commons.GoogleAnalytics;
-import com.pyx4j.gwt.commons.History;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
-import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -66,11 +63,13 @@ public abstract class AbstractSiteDispatcher {
 
     private final ValueChangeHandler<String> historyChangeHandler;
 
+    private boolean historyChangeHandlerDisabled = false;
+
     public AbstractSiteDispatcher() {
         historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(final ValueChangeEvent<String> event) {
-                if (currentSitePanel != null) {
+                if (currentSitePanel != null && !historyChangeHandlerDisabled) {
                     PageLeavingEvent ple = new PageLeavingEvent(true);
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {
@@ -105,12 +104,6 @@ public abstract class AbstractSiteDispatcher {
             }
         };
         History.addValueChangeHandler(historyChangeHandler);
-        ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
-                onAuthenticationChange();
-            }
-        });
 
         RootPanel.get().add(GlassPanel.instance());
 
@@ -129,6 +122,9 @@ public abstract class AbstractSiteDispatcher {
 
     }
 
+    /**
+     * Show first page. Call it from onModuleLoad()
+     */
     public static void show() {
         History.fireCurrentHistoryState();
     }
@@ -146,10 +142,10 @@ public abstract class AbstractSiteDispatcher {
     }
 
     public void substituteCurrentHistoryToken(String newToken) {
-        History.removeValueChangeHandler(historyChangeHandler);
+        historyChangeHandlerDisabled = true;
         back();
-        History.addValueChangeHandler(historyChangeHandler);
         History.newItem(newToken, false);
+        historyChangeHandlerDisabled = false;
     }
 
     //TODO handle wrong tokens !!!
