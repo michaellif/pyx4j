@@ -26,6 +26,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -109,6 +110,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     HTML contentHtml = new HTML(value.toString());
                     if (!columnDescriptor.isWordWrap()) {
                         contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
+                        contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
                     }
                     setWidget(rowIndex, colIndex, contentHtml);
                 }

@@ -166,6 +166,8 @@ public abstract class SitePanel extends SimplePanel {
         }
 
         StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
+        Window.setTitle(page.caption().getValue() + " | " + site.siteCaption().getValue());
+        Window.scrollTo(0, 0);
 
         setHeaderCaption(page.caption().getValue());
 
@@ -190,9 +192,6 @@ public abstract class SitePanel extends SimplePanel {
         }
 
         primaryNavigationBar.setSelected(page.uri());
-
-        Window.setTitle(page.caption().getValue() + " | " + site.siteCaption().getValue());
-        Window.scrollTo(0, 0);
 
         currentPagePanel.populateInlineWidgets(args);
 
