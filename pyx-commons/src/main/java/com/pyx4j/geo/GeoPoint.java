@@ -102,4 +102,12 @@ public class GeoPoint implements Serializable {
             lo = 180 - (-180 - lo);
         return new GeoPoint(la, lo);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof GeoPoint)) {
+            return false;
+        }
+        return (lat == ((GeoPoint) other).lat) && (lng == ((GeoPoint) other).lng);
+    }
 }
