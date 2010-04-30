@@ -29,12 +29,13 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.examples.rpc.PageType;
+import com.pyx4j.gwt.commons.History;
+import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.InlineWidget;
 
 public class TechnologyWidget extends SimplePanel implements InlineWidget {
@@ -66,7 +67,7 @@ public class TechnologyWidget extends SimplePanel implements InlineWidget {
         anchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                History.newItem(PageType.pub$examples$widgets.getUri().uri().getValue(), true);
+                AbstractSiteDispatcher.show(PageType.pub$examples$widgets.getUri().uri().getValue());
             }
         });
 

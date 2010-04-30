@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
@@ -39,6 +38,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.gwt.commons.History;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
@@ -64,13 +64,47 @@ public abstract class AbstractSiteDispatcher {
 
     private String pathShown;
 
+    private final ValueChangeHandler<String> historyChangeHandler;
+
     public AbstractSiteDispatcher() {
-        History.addValueChangeHandler(new ValueChangeHandler<String>() {
+        historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                show(event.getValue());
+            public void onValueChange(final ValueChangeEvent<String> event) {
+                if (currentSitePanel != null) {
+                    PageLeavingEvent ple = new PageLeavingEvent(true);
+                    currentSitePanel.onPageLeaving(ple);
+                    if (ple.hasMessage()) {
+
+                        //TODO allow to answer Save when available and navigate anyway. 
+                        DialogOptions options = new OkCancelOption() {
+                            @Override
+                            public boolean onClickOk() {
+                                //allow to answer: navigate anyway.
+                                substituteCurrentHistoryToken(event.getValue());
+                                doShow(event.getValue());
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onClickCancel() {
+                                return true;
+                            }
+                        };
+
+                        Dialog d = new Dialog("Confirm", "Are you sure you want to navigate away from this page?\n" + ple.getMessage()
+                                + "\nPress OK to continue, or Cancel to stay on the current page.", Dialog.Type.Confirm, options);
+
+                        d.show();
+
+                        //reset the original history token
+                        substituteCurrentHistoryToken(pathShown);
+                        return;
+                    }
+                }
+                doShow(event.getValue());
             }
-        });
+        };
+        History.addValueChangeHandler(historyChangeHandler);
         ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
@@ -95,39 +129,27 @@ public abstract class AbstractSiteDispatcher {
 
     }
 
-    public void show(final String path) {
-        if (currentSitePanel != null) {
-            PageLeavingEvent ple = new PageLeavingEvent(true);
-            currentSitePanel.onPageLeaving(ple);
-            if (ple.hasMessage()) {
+    public static void show() {
+        History.fireCurrentHistoryState();
+    }
 
-                //TODO allow to answer Save when available and navigate anyway. 
-                DialogOptions options = new OkCancelOption() {
-                    @Override
-                    public boolean onClickOk() {
-                        //allow to answer: navigate anyway.
-                        History.newItem(path, false);
-                        doShow(path);
-                        return true;
-                    }
+    public static void show(String path) {
+        History.newItem(path);
+    }
 
-                    @Override
-                    public boolean onClickCancel() {
-                        return true;
-                    }
-                };
+    public static void back() {
+        History.back();
+    }
 
-                Dialog d = new Dialog("Confirm", "Are you sure you want to navigate away from this page?\n" + ple.getMessage()
-                        + "\nPress OK to continue, or Cancel to stay on the current page.", Dialog.Type.Confirm, options);
+    public static void forward() {
+        History.forward();
+    }
 
-                d.show();
-
-                //reset the original history token
-                History.newItem(pathShown, false);
-                return;
-            }
-        }
-        doShow(path);
+    public void substituteCurrentHistoryToken(String newToken) {
+        History.removeValueChangeHandler(historyChangeHandler);
+        back();
+        History.addValueChangeHandler(historyChangeHandler);
+        History.newItem(newToken, false);
     }
 
     //TODO handle wrong tokens !!!
@@ -172,7 +194,18 @@ public abstract class AbstractSiteDispatcher {
             public void onSuccess(SitePanel sitePanel) {
                 if (sitePanel != null) {
                     initSitePanel(siteName, sitePanel);
-                    show(sitePanel, finalUri, finalArgs);
+                    if (finalUri != null) {
+                        if (!sitePanel.equals(currentSitePanel)) {
+                            if (currentSitePanel != null) {
+                                RootPanel.get().remove(currentSitePanel);
+                            }
+                            currentSitePanel = sitePanel;
+                            RootPanel.get().add(currentSitePanel);
+                        }
+                        GoogleAnalytics.track("#" + finalUri);
+                        sitePanel.show(finalUri, finalArgs);
+                    }
+
                     hideLoadingIndicator();
                     pathShown = path;
                 } else {
@@ -188,20 +221,6 @@ public abstract class AbstractSiteDispatcher {
             obtainPredefinedSite(siteName, callback);
         } else {
             obtainSite(siteName, callback);
-        }
-    }
-
-    protected void show(SitePanel sitePanel, String uri, Map<String, String> args) {
-        if (uri != null) {
-            if (!sitePanel.equals(currentSitePanel)) {
-                if (currentSitePanel != null) {
-                    RootPanel.get().remove(currentSitePanel);
-                }
-                currentSitePanel = sitePanel;
-                RootPanel.get().add(currentSitePanel);
-            }
-            GoogleAnalytics.track("#" + uri);
-            sitePanel.show(uri, args);
         }
     }
 

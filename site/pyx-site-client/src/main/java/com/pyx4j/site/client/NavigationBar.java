@@ -35,7 +35,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Panel;
@@ -133,7 +132,7 @@ public class NavigationBar extends ComplexPanel {
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    History.newItem(uri.uri().getValue(), true);
+                    AbstractSiteDispatcher.show(uri.uri().getValue());
                 }
             });
 

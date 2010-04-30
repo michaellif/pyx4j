@@ -23,8 +23,9 @@ package com.pyx4j.site.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
+
+import com.pyx4j.gwt.commons.History;
 
 /**
  * Fix for "Local anchor link causes reload in IE"
@@ -44,7 +45,7 @@ class IEHistoryAnchor extends Anchor implements ClickHandler {
 
     @Override
     public void onClick(ClickEvent event) {
-        History.newItem(targetHistoryToken, true);
+        AbstractSiteDispatcher.show(targetHistoryToken);
     }
 
 }

@@ -23,13 +23,13 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.History;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -126,7 +126,7 @@ public class LinkBar extends ComplexPanel {
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    History.newItem(uri.uri().getValue(), true);
+                    AbstractSiteDispatcher.show(uri.uri().getValue());
                     getParent().removeStyleDependentName("mouseOver");
                 }
             });

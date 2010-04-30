@@ -25,7 +25,6 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
@@ -38,6 +37,8 @@ import com.pyx4j.entity.client.ui.datatable.DataTableModel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.rpc.PageType;
+import com.pyx4j.gwt.commons.History;
+import com.pyx4j.site.client.AbstractSiteDispatcher;
 
 public class CustomerListPanel extends VerticalPanel {
 
@@ -69,7 +70,7 @@ public class CustomerListPanel extends VerticalPanel {
                 Cell cell = dataTable.getCellForEvent(event);
                 Customer customer = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
                 String uri = PageType.crm$customers$editor.getUri().uri().getValue() + "?entity_id=" + customer.getPrimaryKey();
-                History.newItem(uri);
+                AbstractSiteDispatcher.show(uri);
             }
         });
 

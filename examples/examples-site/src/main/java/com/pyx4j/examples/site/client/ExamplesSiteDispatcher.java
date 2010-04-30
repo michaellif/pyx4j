@@ -23,7 +23,6 @@ package com.pyx4j.examples.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -33,8 +32,10 @@ import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
 import com.pyx4j.examples.site.client.headless.ExamplesHeadlessSitePanel;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSitePanel;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.gwt.commons.History;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
+import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.SiteCache;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Site;
@@ -64,7 +65,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
 
         setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home"));
 
-        show(History.getToken());
+        show();
 
     }
 
@@ -73,7 +74,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         super.onAfterLogOut();
         if (getCurrentSitePanel() != null) {
             if (getCurrentSitePanel().equals(getSitePanels().get(Sites.crm.name()))) {
-                History.newItem(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home").uri().getValue());
+                AbstractSiteDispatcher.show(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home").uri().getValue());
             }
         }
     }

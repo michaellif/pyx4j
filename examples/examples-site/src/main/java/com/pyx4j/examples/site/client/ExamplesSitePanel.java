@@ -21,9 +21,11 @@
 package com.pyx4j.examples.site.client;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.History;
+
+import com.pyx4j.gwt.commons.History;
 
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.CommandLink;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.shared.domain.Link;
@@ -57,7 +59,7 @@ public abstract class ExamplesSitePanel extends SitePanel {
                     @Override
                     public void onLogInComplete() {
                         dialog.hide();
-                        History.newItem("crm&customers");
+                        AbstractSiteDispatcher.show("crm&customers");
                     }
 
                 };
