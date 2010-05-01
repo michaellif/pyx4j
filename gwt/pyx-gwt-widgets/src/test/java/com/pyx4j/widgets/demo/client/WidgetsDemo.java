@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -99,6 +98,17 @@ public class WidgetsDemo implements EntryPoint {
             final Button dialogButton = new Button("Show Dialog2");
             dialogButton.addClickHandler(new DialogButtonHandler2());
             contentPanel.add(dialogButton);
+        }
+
+        {
+            final Button button = new Button("Key Test Dialog");
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    KeysTestDialog.show();
+                }
+            });
+            contentPanel.add(button);
         }
 
         {
