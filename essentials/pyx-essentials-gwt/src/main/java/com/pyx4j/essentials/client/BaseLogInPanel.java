@@ -56,7 +56,9 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     private final EntityEditorFormModel<AuthenticationRequest> form;
 
-    private CCheckBox rememberID;
+    protected CCheckBox rememberID;
+
+    protected CHyperlink forgotPassword;
 
     public BaseLogInPanel() {
 
@@ -65,7 +67,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         form = EntityEditorFormModel.create(AuthenticationRequest.class);
 
-        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
+        forgotPassword = new CHyperlink(null, new Command() {
 
             @Override
             public void execute() {
