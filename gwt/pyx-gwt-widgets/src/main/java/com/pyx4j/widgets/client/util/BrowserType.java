@@ -66,6 +66,8 @@ public class BrowserType {
 
     private static Boolean isIE8;
 
+    private static Boolean isMobile;
+
     public static final boolean isIE6() {
         if (isIE6 == null) {
             isIE6 = isIE() && (!isIE8()) && (!isIE7());
@@ -85,6 +87,13 @@ public class BrowserType {
             isIE8 = isIE() && getUserAgent().toLowerCase().contains("msie 8");
         }
         return isIE8;
+    }
+
+    public static final boolean isMobile() {
+        if (isMobile == null) {
+            isMobile = getUserAgent().toLowerCase().contains("mobile");
+        }
+        return isMobile;
     }
 
     private static interface Impl {
