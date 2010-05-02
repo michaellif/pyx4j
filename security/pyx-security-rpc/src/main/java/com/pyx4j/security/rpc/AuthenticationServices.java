@@ -21,11 +21,10 @@
 package com.pyx4j.security.rpc;
 
 import com.pyx4j.rpc.shared.Service;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AuthenticationServices {
 
-    public interface GetStatus extends Service<VoidSerializable, AuthenticationResponse> {
+    public interface GetStatus extends Service<String, AuthenticationResponse> {
 
     };
 
@@ -33,7 +32,7 @@ public interface AuthenticationServices {
 
     };
 
-    public interface Logout extends Service<VoidSerializable, AuthenticationResponse> {
+    public interface Logout extends Service<String, AuthenticationResponse> {
 
     };
 

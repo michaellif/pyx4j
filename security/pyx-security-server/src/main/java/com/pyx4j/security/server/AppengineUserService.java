@@ -28,7 +28,9 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 public class AppengineUserService {
 
     public static void updateAuthenticationResponse(AuthenticationResponse authenticationResponse) {
-        UserService userService = UserServiceFactory.getUserService();
-        authenticationResponse.setLogoutURL(userService.createLogoutURL("/"));
+        if (authenticationResponse.getLogoutURL() == null) {
+            UserService userService = UserServiceFactory.getUserService();
+            authenticationResponse.setLogoutURL(userService.createLogoutURL(authenticationResponse.getLogoutURL()));
+        }
     }
 }

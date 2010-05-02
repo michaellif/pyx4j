@@ -58,7 +58,9 @@ public class ClientContext {
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         authenticationObtained = true;
         userVisit = authenticationResponse.getUserVisit();
-        logoutURL = authenticationResponse.getLogoutURL();
+        if (authenticationResponse.getLogoutURL() != null) {
+            logoutURL = authenticationResponse.getLogoutURL();
+        }
         log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
@@ -71,6 +73,10 @@ public class ClientContext {
      * Chrome and Safari would not execute RPC call and session would still be active.
      */
     public static void logout(final AsyncCallback<AuthenticationResponse> callback) {
+        logout("/", callback);
+    }
+
+    public static void logout(String logoutApplicationUrl, final AsyncCallback<AuthenticationResponse> callback) {
         AsyncCallback<AuthenticationResponse> defaultCallback = new AsyncCallback<AuthenticationResponse>() {
 
             @Override
@@ -90,7 +96,7 @@ public class ClientContext {
                 }
             }
         };
-        RPCManager.execute(AuthenticationServices.Logout.class, null, defaultCallback);
+        RPCManager.execute(AuthenticationServices.Logout.class, logoutApplicationUrl, defaultCallback);
     }
 
     public static String getCurrentURL() {

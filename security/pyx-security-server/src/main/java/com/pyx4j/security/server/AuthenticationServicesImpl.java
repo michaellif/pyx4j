@@ -26,7 +26,6 @@ import java.util.Set;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -42,8 +41,9 @@ import com.pyx4j.server.contexts.Lifecycle;
  */
 public class AuthenticationServicesImpl implements AuthenticationServices {
 
-    public static AuthenticationResponse createAuthenticationResponse() {
+    public static AuthenticationResponse createAuthenticationResponse(String logoutApplicationUrl) {
         AuthenticationResponse ar = new AuthenticationResponse();
+        ar.setLogoutURL(logoutApplicationUrl);
         if (Context.getSession() != null) {
             ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
         }
@@ -66,8 +66,8 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
     public static class GetStatusImpl implements AuthenticationServices.GetStatus {
 
         @Override
-        public AuthenticationResponse execute(VoidSerializable request) {
-            return createAuthenticationResponse();
+        public AuthenticationResponse execute(String request) {
+            return createAuthenticationResponse(request);
         }
 
     }
@@ -76,7 +76,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
-            return createAuthenticationResponse();
+            return createAuthenticationResponse(request.logoutApplicationUrl().getValue());
         }
 
     }
@@ -84,9 +84,9 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
     public static class LogoutImpl implements AuthenticationServices.Logout {
 
         @Override
-        public AuthenticationResponse execute(VoidSerializable request) {
+        public AuthenticationResponse execute(String request) {
             Lifecycle.endSession();
-            return createAuthenticationResponse();
+            return createAuthenticationResponse(request);
         }
 
     }

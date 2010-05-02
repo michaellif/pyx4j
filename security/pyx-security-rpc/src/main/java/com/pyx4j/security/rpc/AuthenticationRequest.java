@@ -32,6 +32,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface AuthenticationRequest extends IEntity {
 
+    IPrimitive<String> logoutApplicationUrl();
+
     @Email
     @NotNull
     IPrimitive<String> email();

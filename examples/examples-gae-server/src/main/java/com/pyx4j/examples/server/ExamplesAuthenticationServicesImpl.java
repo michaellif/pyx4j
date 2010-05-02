@@ -119,7 +119,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.add(cr.behavior().getValue());
             Lifecycle.beginSession(new UserVisit(user.getPrimaryKey(), user.name().getValue()), behaviors);
-            return AuthenticationServicesImpl.createAuthenticationResponse();
+            return AuthenticationServicesImpl.createAuthenticationResponse(request.logoutApplicationUrl().getValue());
         }
     }
 
