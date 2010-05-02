@@ -157,18 +157,19 @@ public class IndexedEntitySearch {
                     if (inMemoryFilterOnly || (hasInequalityFilter && limitToOneIndex)) {
                         // Add to in memory filters
                         inMemoryFilters.add(new StringInMemoryFilter(path, str));
-                        continue;
+                    } else {
+                        // Database value should be capitalized for this to work.
+                        char firstChar = str.charAt(0);
+                        if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
+                            str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
+                        }
+                        String from = str;
+                        String to = from + "z";
+                        String propertyName = srv.getPropertyName(meta, path);
+                        queryCriteria.add(new PropertyCriterion(propertyName, Restriction.GREATER_THAN_OR_EQUAL, from));
+                        queryCriteria.add(new PropertyCriterion(propertyName, Restriction.LESS_THAN, to));
+                        hasInequalityFilter = true;
                     }
-                    char firstChar = str.charAt(0);
-                    if (Character.isLetter(firstChar) && Character.isLowerCase(firstChar)) {
-                        str = str.replaceFirst(String.valueOf(firstChar), String.valueOf(Character.toUpperCase(firstChar)));
-                    }
-                    String from = str;
-                    String to = from + "z";
-                    String propertyName = srv.getPropertyName(meta, path);
-                    queryCriteria.add(new PropertyCriterion(propertyName, Restriction.GREATER_THAN_OR_EQUAL, from));
-                    queryCriteria.add(new PropertyCriterion(propertyName, Restriction.LESS_THAN, to));
-                    hasInequalityFilter = true;
                 }
             } else if (Date.class.isAssignableFrom(mm.getValueClass())) {
                 Date day = (Date) searchCriteria.getValue(new PathSearch(path.getPathString(), "day"));
