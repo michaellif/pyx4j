@@ -24,10 +24,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.commons.Printable;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-public interface IEntity extends IObject<Map<String, Object>>, Serializable {
+public interface IEntity extends IObject<Map<String, Object>>, Serializable, Printable {
 
     public static String PRIMARY_KEY = "id";
 

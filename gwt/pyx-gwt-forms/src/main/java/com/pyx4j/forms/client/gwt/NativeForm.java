@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.gwt;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -47,6 +49,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Printable;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -64,6 +67,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
     private final int LEFT_LABEL_WIDTH = 100;
 
     private final int TOP_LABEL_WIDTH = 200;
+
+    private final static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("MMM d, yyyy");
 
     private static final Logger log = LoggerFactory.getLogger(NativeForm.class);
 
@@ -215,9 +220,14 @@ public class NativeForm extends FlexTable implements INativeComponent {
                 if (components[i][j] == null) {
                 } else if (components[i][j] instanceof CEditableComponent<?>) {
                     table.setWidget(labelRow, labelColumn, new Label(components[i][j].getTitle() + ": "));
-                    table.setWidget(widgetRow, widgetColumn, new Label(CommonsStringUtils.nvl(((CEditableComponent) components[i][j]).getValue())));
-                } else {
-
+                    Object value = ((CEditableComponent<?>) components[i][j]).getValue();
+                    if (value instanceof Printable) {
+                        table.setWidget(widgetRow, widgetColumn, new Label(((Printable) value).getStringView()));
+                    } else if (value instanceof Date) {
+                        table.setWidget(widgetRow, widgetColumn, new Label(dateTimeFormat.format((Date) value)));
+                    } else {
+                        table.setWidget(widgetRow, widgetColumn, new Label(CommonsStringUtils.nvl(value)));
+                    }
                 }
                 FlexCellFormatter cellFormatter = table.getFlexCellFormatter();
 
