@@ -60,6 +60,20 @@ public class PathSearch extends Path {
         return super.toString();
     }
 
+    public String getHistoryKey() {
+        StringBuilder key = new StringBuilder();
+        boolean first = true;
+        for (String p : getPathMembers()) {
+            if (first) {
+                first = false;
+            } else {
+                key.append('.');
+            }
+            key.append(p);
+        }
+        return key.toString();
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof PathSearch)) {

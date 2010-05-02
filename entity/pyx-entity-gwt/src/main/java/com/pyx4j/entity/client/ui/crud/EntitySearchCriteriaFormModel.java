@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -167,5 +168,40 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     public EntitySearchCriteria<E> getValue() {
         return editableCriteria;
+    }
+
+    public void populateHistory(Map<String, String> history) {
+        for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
+            CEditableComponent comp = me.getKey();
+            if ((!comp.isVisible()) || (comp.isValueEmpty())) {
+                continue;
+            }
+            //TODO support all types
+            if (!(comp instanceof CTextField)) {
+                continue;
+            }
+
+            Object value = history.get(me.getValue().getHistoryKey());
+            if (value != null) {
+                comp.populate(value);
+            }
+        }
+    }
+
+    public Map<String, String> getHistory() {
+        Map<String, String> map = new HashMap<String, String>();
+        for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
+            CEditableComponent<?> comp = me.getKey();
+            if ((!comp.isVisible()) || (comp.isValueEmpty())) {
+                continue;
+            }
+            //TODO support all types
+            if (!(comp instanceof CTextField)) {
+                continue;
+            }
+            String value = (String) comp.getValue();
+            map.put(me.getValue().getHistoryKey(), value);
+        }
+        return map;
     }
 }
