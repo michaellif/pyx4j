@@ -63,6 +63,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.annotations.validator.PasswordCreator;
 import com.pyx4j.entity.annotations.validator.Pattern;
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
@@ -465,6 +466,7 @@ public class EntityFactoryGenerator extends Generator {
             addValidatorAnnotation(writer, method, PasswordCreator.class);
             addValidatorAnnotation(writer, method, NotNull.class);
             addValidatorAnnotation(writer, method, Email.class);
+            addValidatorAnnotation(writer, method, Phone.class);
             addValidatorAnnotation(writer, method, Pattern.class);
 
             writer.println("return mm;");
