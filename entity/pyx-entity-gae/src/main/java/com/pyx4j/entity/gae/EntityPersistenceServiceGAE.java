@@ -692,7 +692,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             datastoreCallStats.get().count++;
             entity = datastore.get(key);
         } catch (EntityNotFoundException e) {
-            throw new RuntimeException("EntityNotFound");
+            throw new RuntimeException("Entity " + entityClass.getSimpleName() + " NotFound");
         }
 
         updateIEntity(iEntity, entity, new HashMap<Key, IEntity>());
