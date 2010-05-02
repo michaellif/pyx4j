@@ -211,6 +211,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
         }
     }
 
+    @Override
     public void setValueByItemName(final String name) {
         if (name == null && !isMandatory()) {
             setValue(null);

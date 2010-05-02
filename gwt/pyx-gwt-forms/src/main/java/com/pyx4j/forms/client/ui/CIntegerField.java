@@ -35,7 +35,7 @@ public class CIntegerField extends CNumberField<Integer> {
     }
 
     @Override
-    Integer valueOf(String string) {
+    public Integer valueOf(String string) {
         return Integer.valueOf(string);
     }
 

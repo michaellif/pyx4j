@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -321,6 +322,34 @@ public abstract class AbstractSiteDispatcher {
         this.currentSitePanel = currentSitePanel;
     }
 
+    /**
+     * TODO mode to HistoryUtils, Maybe this belong to Client side ResourceUriUtil, BUT
+     * ResourceUriUtil is shared, so com.google.gwt.http.client.URL can't be used!
+     * 
+     */
+    public static String createHistoryToken(String uri, Map<String, String> history) {
+        StringBuilder newToken = new StringBuilder();
+        newToken.append(uri);
+        newToken.append(ResourceUri.ARGS_GROUP_SEPARATOR);
+
+        boolean first = true;
+        for (Map.Entry<String, String> me : history.entrySet()) {
+            if (first) {
+                first = false;
+            } else {
+                newToken.append(ResourceUri.ARGS_SEPARATOR);
+            }
+            newToken.append(me.getKey());
+            newToken.append(ResourceUri.NAME_VALUE_SEPARATOR);
+            newToken.append(URL.encode(me.getValue()));
+        }
+
+        return newToken.toString();
+    }
+
+    /**
+     * TODO mode to HistoryUtils.
+     */
     private Map<String, String> parsArgs(String substring) {
         Map<String, String> args = null;
         String[] nameValues = substring.split(ResourceUri.ARGS_SEPARATOR);
@@ -329,7 +358,7 @@ public abstract class AbstractSiteDispatcher {
             for (int i = 0; i < nameValues.length; i++) {
                 String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
                 if (nameAndValue.length == 2) {
-                    args.put(nameAndValue[0], nameAndValue[1]);
+                    args.put(nameAndValue[0], URL.decode(nameAndValue[1]));
                 } else {
                     log.warn("Can't pars argument {}", nameValues[i]);
                 }

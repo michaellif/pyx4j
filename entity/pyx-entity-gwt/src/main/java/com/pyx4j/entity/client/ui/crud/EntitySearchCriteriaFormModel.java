@@ -39,6 +39,8 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CNumberField;
+import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.CTextField;
 
 public class EntitySearchCriteriaFormModel<E extends IEntity> {
@@ -171,19 +173,29 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     }
 
     public void populateHistory(Map<String, String> history) {
+        if (history == null) {
+            return;
+        }
         for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
             CEditableComponent comp = me.getKey();
-            if ((!comp.isVisible()) || (comp.isValueEmpty())) {
+            if (!comp.isVisible()) {
                 continue;
             }
-            //TODO support all types
-            if (!(comp instanceof CTextField)) {
-                continue;
-            }
-
             Object value = history.get(me.getValue().getHistoryKey());
-            if (value != null) {
-                comp.populate(value);
+            if (value == null) {
+                comp.setValue(null);
+            } else if (comp instanceof CTextField) {
+                comp.setValue(value);
+            } else if (comp instanceof CNumberField) {
+                comp.setValue(((CNumberField) comp).valueOf((String) value));
+            } else if (comp instanceof CEntityComboBox) {
+                ((CEntityComboBox) comp).setValueByItemName((String) value);
+            } else if (comp instanceof CComboBox) {
+                ((CComboBox) comp).setValueByItemName((String) value);
+            } else if (comp instanceof CDatePicker) {
+                //TODO
+            } else {
+
             }
         }
     }
@@ -195,12 +207,32 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             if ((!comp.isVisible()) || (comp.isValueEmpty())) {
                 continue;
             }
+            Object value = comp.getValue();
+
+            String historyValue = null;
             //TODO support all types
-            if (!(comp instanceof CTextField)) {
-                continue;
+            if (comp instanceof CTextField) {
+                historyValue = (String) value;
+            } else if (comp instanceof CEntityComboBox) {
+                historyValue = ((CEntityComboBox) comp).getItemName((IEntity) value);
+            } else if (comp instanceof CComboBox) {
+                if (value instanceof Enum) {
+                    historyValue = ((Enum<?>) value).toString();
+                } else {
+                    historyValue = (String) value;
+                }
+            } else if (comp instanceof CDatePicker) {
+                //TODO
+            } else if (comp instanceof CTextBox) {
+                historyValue = value.toString();
+            } else {
+
             }
-            String value = (String) comp.getValue();
-            map.put(me.getValue().getHistoryKey(), value);
+
+            if (historyValue != null) {
+                map.put(me.getValue().getHistoryKey(), historyValue);
+            }
+
         }
         return map;
     }

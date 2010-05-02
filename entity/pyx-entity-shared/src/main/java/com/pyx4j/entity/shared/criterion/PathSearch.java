@@ -64,12 +64,19 @@ public class PathSearch extends Path {
         StringBuilder key = new StringBuilder();
         boolean first = true;
         for (String p : getPathMembers()) {
+            if (p.equals(COLLECTION_SEPARATOR)) {
+                continue;
+            }
             if (first) {
                 first = false;
             } else {
                 key.append('.');
             }
             key.append(p);
+        }
+        if (pathProperty != null) {
+            key.append('.');
+            key.append(pathProperty);
         }
         return key.toString();
     }

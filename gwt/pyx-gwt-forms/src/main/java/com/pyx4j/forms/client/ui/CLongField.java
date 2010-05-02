@@ -35,7 +35,7 @@ public class CLongField extends CNumberField<Long> {
     }
 
     @Override
-    Long valueOf(String string) {
+    public Long valueOf(String string) {
         return Long.valueOf(string);
     }
 

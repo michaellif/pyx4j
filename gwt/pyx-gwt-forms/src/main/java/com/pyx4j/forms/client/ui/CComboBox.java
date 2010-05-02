@@ -182,4 +182,22 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
         return this.policy;
     }
 
+    public void setValueByItemName(final String name) {
+        if (name == null && !isMandatory()) {
+            setValue(null);
+        } else {
+            retriveOptions(new AsyncOptionsReadyCallback<E>() {
+                @Override
+                public void onOptionsReady(List<E> opt) {
+                    for (E o : getOptions()) {
+                        if (getItemName(o).equals(name)) {
+                            setValue(o);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    }
+
 }

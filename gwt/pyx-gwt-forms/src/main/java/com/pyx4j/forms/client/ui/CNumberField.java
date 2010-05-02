@@ -85,5 +85,5 @@ public abstract class CNumberField<E extends Number> extends CTextBox<E> {
 
     abstract boolean isInRange(E value, E from, E to);
 
-    abstract E valueOf(String string);
+    public abstract E valueOf(String string);
 }

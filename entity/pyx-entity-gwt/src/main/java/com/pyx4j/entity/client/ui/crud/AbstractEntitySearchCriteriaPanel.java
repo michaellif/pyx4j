@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
+import java.util.Map;
+
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -49,6 +51,14 @@ public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> exten
     public void setWidget(Widget w) {
         super.setWidget(w);
         w.setWidth("100%");
+    }
+
+    public void populateHistory(Map<String, String> history) {
+        form.populateHistory(history);
+    }
+
+    public Map<String, String> getHistory() {
+        return form.getHistory();
     }
 
 }
