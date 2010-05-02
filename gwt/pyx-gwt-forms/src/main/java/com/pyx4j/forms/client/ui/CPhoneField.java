@@ -66,7 +66,7 @@ public class CPhoneField extends CTextBox<String> {
             if (string == null || !string.matches(regex)) {
                 return null;
             }
-            return format(string).replaceAll("-", "");
+            return format(string);
         }
 
     }
