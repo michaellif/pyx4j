@@ -61,4 +61,7 @@ public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> exten
         return form.getHistory();
     }
 
+    public EntitySearchCriteriaFormModel<E> getForm() {
+        return form;
+    }
 }
