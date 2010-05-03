@@ -27,9 +27,9 @@ import com.pyx4j.entity.client.EntityCSSClass;
 
 public class DataTableActionsBar extends SimplePanel {
 
-    private final DataTable dataTable;
+    private final DataTable<?> dataTable;
 
-    public DataTableActionsBar(DataTable dataTable) {
+    public DataTableActionsBar(DataTable<?> dataTable) {
         this.dataTable = dataTable;
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
 
