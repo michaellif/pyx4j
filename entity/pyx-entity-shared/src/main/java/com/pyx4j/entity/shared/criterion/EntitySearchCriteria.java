@@ -106,4 +106,14 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("domainName=").append(getDomainName());
+        builder.append(" pageSize=").append(getPageSize());
+        builder.append(" pageNumber=").append(getPageNumber());
+        builder.append(" filters=").append(getFilters());
+        return builder.toString();
+    }
 }

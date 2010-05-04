@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
  */
 public class DataTableModel<E extends IEntity> {
 
-    public static final int PAGE_SIZE = 20;
+    public static final int PAGE_SIZE = 8;
 
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
@@ -149,18 +149,20 @@ public class DataTableModel<E extends IEntity> {
         return data;
     }
 
-    public void populateData(List<DataItem<E>> dataItems) {
+    public void populateData(List<DataItem<E>> dataItems, int pageNumber) {
         data.clear();
         if (dataItems != null) {
             for (DataItem<E> dataItem : dataItems) {
                 data.add(dataItem);
             }
         }
+        this.pageNumber = pageNumber;
         fireTableChanged(new DataTableModelEvent());
     }
 
     public void clearData() {
         data.clear();
+        this.pageNumber = 1;
         fireTableChanged(new DataTableModelEvent());
     }
 
@@ -170,10 +172,6 @@ public class DataTableModel<E extends IEntity> {
 
     public int getPageNumber() {
         return pageNumber;
-    }
-
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
     }
 
     public int getPageSize() {

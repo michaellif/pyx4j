@@ -29,26 +29,25 @@ import com.pyx4j.entity.client.EntityCSSClass;
 
 public class DataTableActionsBar extends HorizontalPanel {
 
-    private final DataTable<?> dataTable;
-
-    public DataTableActionsBar(DataTable<?> dataTable, ClickHandler prevHandler, ClickHandler nextHandler) {
-        this.dataTable = dataTable;
+    public DataTableActionsBar(final DataTable<?> dataTable, ClickHandler prevHandler, ClickHandler nextHandler) {
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
         setWidth("100%");
         HorizontalPanel contentPanel = new HorizontalPanel();
         add(contentPanel);
         setCellHorizontalAlignment(contentPanel, HorizontalPanel.ALIGN_RIGHT);
 
-        Anchor prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
+        final Anchor prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
+        prevAnchor.setEnabled(false);
         prevAnchor.addClickHandler(prevHandler);
         contentPanel.add(prevAnchor);
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
 
-        Anchor nextAnchor = new Anchor("Next&nbsp;&gt;", true);
-        prevAnchor.addClickHandler(nextHandler);
+        final Anchor nextAnchor = new Anchor("Next&nbsp;&gt;", true);
+        nextAnchor.addClickHandler(nextHandler);
         contentPanel.add(nextAnchor);
 
         getElement().getStyle().setProperty("textAlign", "right");
         getElement().getStyle().setProperty("padding", "6px");
+
     }
 }
