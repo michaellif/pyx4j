@@ -32,6 +32,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
+import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
@@ -78,7 +79,6 @@ public class EntityServicesImpl {
      */
     public static class SearchImpl implements EntityServices.Search {
 
-        @SuppressWarnings("unchecked")
         @Override
         public EntitySearchResult<?> execute(EntitySearchCriteria<?> request) {
             long start = System.nanoTime();
@@ -88,10 +88,13 @@ public class EntityServicesImpl {
             IndexedEntitySearch search = new IndexedEntitySearch(request);
             search.buildQueryCriteria();
             EntitySearchResult<IEntity> r = new EntitySearchResult<IEntity>();
-            for (IEntity ent : search.getResult()) {
+            SearchResultIterator<IEntity> it = search.getResult();
+            while (it.hasNext()) {
+                IEntity ent = it.next();
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
                 r.add(ent);
             }
+            r.hasMoreData(it.hasMoreData());
 
             long duration = System.nanoTime() - start;
             int callsCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount() - initCount;

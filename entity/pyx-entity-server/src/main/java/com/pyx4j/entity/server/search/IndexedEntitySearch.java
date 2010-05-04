@@ -23,7 +23,6 @@ package com.pyx4j.entity.server.search;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -195,7 +194,7 @@ public class IndexedEntitySearch {
         }
     }
 
-    public Iterable<IEntity> getResult() {
+    public SearchResultIterator<IEntity> getResult() {
         final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(null, queryCriteria);
         final int maxResults;
         final int firstResult;
@@ -207,68 +206,83 @@ public class IndexedEntitySearch {
             firstResult = -1;
         }
 
-        return new Iterable<IEntity>() {
+        return new SearchResultIterator<IEntity>() {
+
+            int count = 0;
+
+            IEntity next;
+
+            IEntity last;
+
+            IEntity more;
+
             @Override
-            public Iterator<IEntity> iterator() {
-                return new Iterator<IEntity>() {
+            public boolean hasNext() {
+                if (next != null) {
+                    return true;
+                }
+                if (count >= maxResults) {
+                    return false;
+                }
 
-                    int count = 0;
-
-                    IEntity next;
-
-                    IEntity last;
-
-                    @Override
-                    public boolean hasNext() {
-                        if (next != null) {
-                            return true;
-                        }
-                        if (count >= maxResults) {
-                            return false;
-                        }
-
-                        // TODO This loop should be avoided using Cursor from previous query.
-                        while ((count < firstResult) && unfiltered.hasNext()) {
-                            if (accept(unfiltered.next())) {
-                                count++;
-                            }
-                        }
-
-                        while (unfiltered.hasNext()) {
-                            IEntity ent = unfiltered.next();
-                            if (accept(ent)) {
-                                next = ent;
-                                break;
-                            }
-                        }
-                        return (next != null);
-                    }
-
-                    @Override
-                    public IEntity next() {
-                        if (!hasNext()) {
-                            throw new NoSuchElementException();
-                        }
+                // TODO This loop should be avoided using Cursor from previous query.
+                while ((count < firstResult) && unfiltered.hasNext()) {
+                    if (accept(unfiltered.next())) {
                         count++;
-                        try {
-                            return next;
-                        } finally {
-                            last = next;
-                            next = null;
-                        }
                     }
+                }
 
-                    @Override
-                    public void remove() {
-                        if (last == null) {
-                            throw new NoSuchElementException();
-                        }
-                        PersistenceServicesFactory.getPersistenceService().delete(last);
-                        last = null;
+                while (unfiltered.hasNext()) {
+                    IEntity ent = unfiltered.next();
+                    if (accept(ent)) {
+                        next = ent;
+                        break;
                     }
-                };
+                }
+                return (next != null);
+            }
+
+            @Override
+            public boolean hasMoreData() {
+                if (count < maxResults) {
+                    return false;
+                }
+                if (more == null) {
+                    while (unfiltered.hasNext()) {
+                        IEntity ent = unfiltered.next();
+                        if (accept(ent)) {
+                            more = ent;
+                            break;
+                        }
+                    }
+                }
+                return (more != null);
+            }
+
+            @Override
+            public IEntity next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                count++;
+                try {
+                    return next;
+                } finally {
+                    last = next;
+                    next = null;
+                }
+            }
+
+            @Override
+            public void remove() {
+                if (last == null) {
+                    throw new NoSuchElementException();
+                }
+                PersistenceServicesFactory.getPersistenceService().delete(last);
+                last = null;
             }
         };
+
     }
 
     protected boolean accept(IEntity entity) {
