@@ -201,8 +201,8 @@ public class IndexedEntitySearch {
         final int maxResults;
         final int firstResult;
         if (searchCriteria.getPageSize() > 0) {
-            maxResults = searchCriteria.getPageSize();
             firstResult = searchCriteria.getPageSize() * (searchCriteria.getPageNumber() - 1);
+            maxResults = firstResult + searchCriteria.getPageSize();
         } else {
             maxResults = Integer.MAX_VALUE;
             firstResult = -1;
