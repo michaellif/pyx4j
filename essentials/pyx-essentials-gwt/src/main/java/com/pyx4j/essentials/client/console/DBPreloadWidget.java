@@ -20,31 +20,51 @@
  */
 package com.pyx4j.essentials.client.console;
 
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.InlineWidget;
+import com.pyx4j.widgets.client.GroupBoxPanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 class DBPreloadWidget extends SimplePanel implements InlineWidget {
 
-    DBPreloadWidget() {
+    VerticalPanel preloadersPanel;
 
+    DBPreloadWidget() {
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
+        contentPanel.setWidth("100%");
+
+        GroupBoxPanel generalGroup = new GroupBoxPanel(false);
+        generalGroup.setCaption("General");
+        VerticalPanel general = new VerticalPanel();
+        generalGroup.setContainer(general);
+        contentPanel.add(generalGroup);
 
         {
             Anchor cleanDB = new Anchor("Remove All Data");
-            contentPanel.add(cleanDB);
+            general.add(cleanDB);
             cleanDB.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -74,7 +94,7 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
 
         {
             Anchor resetDB = new Anchor("Reset Initial Data");
-            contentPanel.add(resetDB);
+            general.add(resetDB);
             resetDB.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -101,10 +121,85 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                 }
             });
         }
+
+        GroupBoxPanel preloadersGroup = new GroupBoxPanel(true);
+        preloadersGroup.setCaption("Preloaders");
+        preloadersPanel = new VerticalPanel();
+        preloadersPanel.setWidth("100%");
+        preloadersGroup.setContainer(preloadersPanel);
+        contentPanel.add(preloadersGroup);
     }
 
     @Override
     public void populate(Map<String, String> args) {
+        // Remove all.
+        Iterator<Widget> it = preloadersPanel.iterator();
+        while (it.hasNext()) {
+            it.next();
+            it.remove();
+        }
+        final AsyncCallback<Vector<DataPreloaderInfo>> rpcCallback = new AsyncCallback<Vector<DataPreloaderInfo>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                MessageDialog.error("ResetInitialData Service failed", caught);
+            }
+
+            @Override
+            public void onSuccess(Vector<DataPreloaderInfo> result) {
+                for (DataPreloaderInfo info : result) {
+                    addDataPreloaderInfo(info);
+                }
+            }
+        };
+        RPCManager.execute(DatastoreAdminServices.GetPreloaders.class, null, rpcCallback);
     }
 
+    private void addDataPreloaderInfo(final DataPreloaderInfo info) {
+        GroupBoxPanel group = new GroupBoxPanel(false);
+        group.setCaption(info.getDataPreloaderClassName());
+        preloadersPanel.add(group);
+        VerticalPanel panel = new VerticalPanel();
+        group.setContainer(panel);
+
+        for (final Map.Entry<String, Serializable> me : info.getParameters().entrySet()) {
+            HorizontalPanel paramPanel = new HorizontalPanel();
+            panel.add(paramPanel);
+
+            TextBox text;
+            paramPanel.add(new Label(me.getKey() + CommonsStringUtils.NO_BREAK_SPACE_HTML));
+            paramPanel.add(text = new TextBox());
+            text.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+                @Override
+                public void onValueChange(ValueChangeEvent<String> event) {
+                    info.getParameters().put(me.getKey(), event.getValue());
+                }
+            });
+        }
+
+        Anchor execute = new Anchor("Execute");
+        panel.add(execute);
+        execute.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MessageDialog.error("Execute Service failed", caught);
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        MessageDialog.info("Execute completed", result);
+                    }
+                };
+
+                Vector<DataPreloaderInfo> preloaders = new Vector<DataPreloaderInfo>();
+                preloaders.add(info);
+                RPCManager.execute(DatastoreAdminServices.ExectutePreloaders.class, preloaders, rpcCallback);
+            }
+        });
+    }
 }

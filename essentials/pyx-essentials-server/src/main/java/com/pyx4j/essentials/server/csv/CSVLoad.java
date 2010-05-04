@@ -24,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Vector;
 
 public class CSVLoad {
 
@@ -90,5 +92,29 @@ public class CSVLoad {
                 is = null;
             }
         }
+    }
+
+    public static String[] loadFile(String fileName, final String columName) {
+        final List<String> data = new Vector<String>();
+        loadFile(fileName, new CSVReciver() {
+
+            int columnIndex = 0;
+
+            @Override
+            public boolean canContuneLoad() {
+                return (columnIndex >= 0);
+            }
+
+            @Override
+            public void onHeader(String[] header) {
+                columnIndex = findHeaderColumn(header, columName);
+            }
+
+            @Override
+            public void onRow(String[] value) {
+                data.add(value[columnIndex]);
+            }
+        });
+        return data.toArray(new String[data.size()]);
     }
 }

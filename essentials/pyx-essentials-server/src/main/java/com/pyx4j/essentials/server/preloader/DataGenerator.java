@@ -22,7 +22,13 @@ package com.pyx4j.essentials.server.preloader;
 
 import java.util.Random;
 
+import com.pyx4j.essentials.server.csv.CSVLoad;
+
 public class DataGenerator {
+
+    static String[] firstNames;
+
+    static String[] lastNames;
 
     public static String randomLetters(int count) {
         StringBuilder b = new StringBuilder();
@@ -34,5 +40,27 @@ public class DataGenerator {
 
     public static char randomLetter() {
         return (char) (('A') + new Random().nextInt('Z' - 'A'));
+    }
+
+    private static String resourceFileName(String fileName) {
+        return DataGenerator.class.getPackage().getName().replace('.', '/') + "/" + fileName;
+    }
+
+    public static String randomFirstName() {
+        if (firstNames == null) {
+            firstNames = CSVLoad.loadFile(resourceFileName("first-names.csv"), "name");
+        }
+        return firstNames[new Random().nextInt(firstNames.length)];
+    }
+
+    public static String randomLastName() {
+        if (lastNames == null) {
+            lastNames = CSVLoad.loadFile(resourceFileName("last-names.csv"), "name");
+        }
+        return lastNames[new Random().nextInt(lastNames.length)];
+    }
+
+    public static String randomName() {
+        return randomFirstName() + " " + randomLastName();
     }
 }
