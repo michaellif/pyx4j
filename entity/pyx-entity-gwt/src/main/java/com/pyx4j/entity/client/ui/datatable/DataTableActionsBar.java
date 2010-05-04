@@ -79,7 +79,9 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         prevAnchor.setVisible(model.getPageNumber() > 0);
         int from = model.getPageNumber() * model.getPageSize() + 1;
         int to = from + model.getData().size() - 1;
-        if (from == to) {
+        if (from > to) {
+            countLabel.setText("");
+        } else if (from == to) {
             countLabel.setText(from + "");
         } else {
             countLabel.setText(from + "-" + to);

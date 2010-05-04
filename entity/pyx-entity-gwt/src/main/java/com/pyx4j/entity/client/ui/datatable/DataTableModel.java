@@ -45,7 +45,7 @@ public class DataTableModel<E extends IEntity> {
 
     private ColumnDescriptor<E> secondarySortColumn;
 
-    private int pageNumber = 1;
+    private int pageNumber = 0;
 
     private int pageSize = PAGE_SIZE;
 
@@ -163,7 +163,7 @@ public class DataTableModel<E extends IEntity> {
 
     public void clearData() {
         data.clear();
-        this.pageNumber = 1;
+        this.pageNumber = 0;
         fireTableChanged(new DataTableModelEvent());
     }
 
