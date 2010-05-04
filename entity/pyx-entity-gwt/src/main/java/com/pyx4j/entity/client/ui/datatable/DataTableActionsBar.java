@@ -20,27 +20,35 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.entity.client.EntityCSSClass;
 
-public class DataTableActionsBar extends SimplePanel {
+public class DataTableActionsBar extends HorizontalPanel {
 
     private final DataTable<?> dataTable;
 
-    public DataTableActionsBar(DataTable<?> dataTable) {
+    public DataTableActionsBar(DataTable<?> dataTable, ClickHandler prevHandler, ClickHandler nextHandler) {
         this.dataTable = dataTable;
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
+        setWidth("100%");
+        HorizontalPanel contentPanel = new HorizontalPanel();
+        add(contentPanel);
+        setCellHorizontalAlignment(contentPanel, HorizontalPanel.ALIGN_RIGHT);
 
-        setWidget(new HTML("<span style='font-size: 0.81em;'>"
+        Anchor prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
+        prevAnchor.addClickHandler(prevHandler);
+        contentPanel.add(prevAnchor);
+        prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
 
-        + "<a href=''>&nbsp;&lt;&nbsp;Prev&nbsp;20</a>"
+        Anchor nextAnchor = new Anchor("Next&nbsp;&gt;", true);
+        prevAnchor.addClickHandler(nextHandler);
+        contentPanel.add(nextAnchor);
 
-        + "<span style='padding: 0px 5px 0px 5px;'><b>1</b> - <b>20</b></span>"
-
-        + "<a href=''>&nbsp;Next&nbsp;20&nbsp;&gt;</a><span>"));
         getElement().getStyle().setProperty("textAlign", "right");
-        getElement().getStyle().setProperty("padding", "10px");
+        getElement().getStyle().setProperty("padding", "6px");
     }
 }

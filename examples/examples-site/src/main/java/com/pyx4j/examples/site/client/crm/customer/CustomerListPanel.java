@@ -75,9 +75,9 @@ public class CustomerListPanel extends VerticalPanel {
 
         dataTable.setWidth("550px");
 
-        add(new DataTableActionsBar(dataTable));
+        add(new DataTableActionsBar(dataTable, null, null));
         add(dataTable);
-        add(new DataTableActionsBar(dataTable));
+        add(new DataTableActionsBar(dataTable, null, null));
 
     }
 
@@ -86,7 +86,7 @@ public class CustomerListPanel extends VerticalPanel {
         for (Customer customer : customers) {
             dataItems.add(new DataItem<Customer>(customer));
         }
-        dataTableModel.populateData(dataItems, 0, 20);
+        dataTableModel.populateData(dataItems);
     }
 
     public void clearData() {
