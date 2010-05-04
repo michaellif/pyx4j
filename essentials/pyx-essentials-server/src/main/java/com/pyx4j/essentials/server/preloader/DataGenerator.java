@@ -48,14 +48,14 @@ public class DataGenerator {
 
     public static String randomFirstName() {
         if (firstNames == null) {
-            firstNames = CSVLoad.loadFile(resourceFileName("first-names.csv"), "name");
+            firstNames = CSVLoad.loadFile(resourceFileName("first-names.csv"), "Name");
         }
         return firstNames[new Random().nextInt(firstNames.length)];
     }
 
     public static String randomLastName() {
         if (lastNames == null) {
-            lastNames = CSVLoad.loadFile(resourceFileName("last-names.csv"), "name");
+            lastNames = CSVLoad.loadFile(resourceFileName("last-names.csv"), "Name");
         }
         return lastNames[new Random().nextInt(lastNames.length)];
     }

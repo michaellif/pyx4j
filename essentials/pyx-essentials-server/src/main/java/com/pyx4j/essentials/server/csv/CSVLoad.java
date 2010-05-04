@@ -58,12 +58,15 @@ public class CSVLoad {
     }
 
     public static void loadFile(String fileName, CSVReciver reciver) {
-        InputStream is = null;
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        if (is == null) {
+            throw new RuntimeException("Resouce [" + fileName + "] not found");
+        }
+        loadFile(is, reciver);
+    }
+
+    public static void loadFile(InputStream is, CSVReciver reciver) {
         try {
-            is = CSVLoad.class.getClassLoader().getResourceAsStream(fileName);
-            if (is == null) {
-                throw new RuntimeException("Resouce not found");
-            }
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = null;
             boolean header = true;
@@ -80,9 +83,9 @@ public class CSVLoad {
             }
             reader.close();
         } catch (IOException ioe) {
-            throw new Error("Load file error:" + fileName, ioe);
+            throw new RuntimeException("Load file error", ioe);
         } catch (Exception e) {
-            throw new Error("Load file error:" + fileName, e);
+            throw new RuntimeException("Load file error", e);
         } finally {
             try {
                 if (is != null) {

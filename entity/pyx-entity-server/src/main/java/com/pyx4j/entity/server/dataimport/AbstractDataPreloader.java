@@ -92,4 +92,12 @@ public abstract class AbstractDataPreloader implements DataPreloader {
     public void setParametersValues(Map<String, Serializable> parameters) {
         this.parameters = parameters;
     }
+
+    protected Serializable getParameter(String name) {
+        if (parameters == null) {
+            return null;
+        } else {
+            return parameters.get(name);
+        }
+    }
 }
