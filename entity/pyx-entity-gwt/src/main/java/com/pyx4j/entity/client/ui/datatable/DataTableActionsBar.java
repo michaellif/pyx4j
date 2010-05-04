@@ -85,6 +85,9 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         } else {
             countLabel.setText(from + "-" + to);
         }
+
+        nextAnchor.setVisible(model.hasMoreData());
+
     }
 
 }
