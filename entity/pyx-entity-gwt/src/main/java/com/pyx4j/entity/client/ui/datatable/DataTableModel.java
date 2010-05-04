@@ -49,8 +49,6 @@ public class DataTableModel<E extends IEntity> {
 
     private int pageSize = PAGE_SIZE;
 
-    private int totalRows;
-
     private final EntityMeta entityMeta;
 
     public DataTableModel(EntityMeta entityMeta, List<ColumnDescriptor<E>> columnDescriptors) {

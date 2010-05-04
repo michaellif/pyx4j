@@ -75,9 +75,9 @@ public class CustomerListPanel extends VerticalPanel {
 
         dataTable.setWidth("550px");
 
-        add(new DataTableActionsBar(dataTable, null, null));
+        add(new DataTableActionsBar(null, null));
         add(dataTable);
-        add(new DataTableActionsBar(dataTable, null, null));
+        add(new DataTableActionsBar(null, null));
 
     }
 

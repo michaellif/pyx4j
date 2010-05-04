@@ -27,22 +27,28 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.entity.client.EntityCSSClass;
 
-public class DataTableActionsBar extends HorizontalPanel {
+public class DataTableActionsBar extends HorizontalPanel implements DataTableModelListener {
 
-    public DataTableActionsBar(final DataTable<?> dataTable, ClickHandler prevHandler, ClickHandler nextHandler) {
+    private DataTableModel<?> model;
+
+    private final Anchor prevAnchor;
+
+    private final Anchor nextAnchor;
+
+    public DataTableActionsBar(ClickHandler prevHandler, ClickHandler nextHandler) {
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
         setWidth("100%");
         HorizontalPanel contentPanel = new HorizontalPanel();
         add(contentPanel);
         setCellHorizontalAlignment(contentPanel, HorizontalPanel.ALIGN_RIGHT);
 
-        final Anchor prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
-        prevAnchor.setEnabled(false);
+        prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
+        prevAnchor.setVisible(false);
         prevAnchor.addClickHandler(prevHandler);
         contentPanel.add(prevAnchor);
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
 
-        final Anchor nextAnchor = new Anchor("Next&nbsp;&gt;", true);
+        nextAnchor = new Anchor("Next&nbsp;&gt;", true);
         nextAnchor.addClickHandler(nextHandler);
         contentPanel.add(nextAnchor);
 
@@ -50,4 +56,18 @@ public class DataTableActionsBar extends HorizontalPanel {
         getElement().getStyle().setProperty("padding", "6px");
 
     }
+
+    public void setDataTableModel(DataTableModel<?> model) {
+        if (this.model != null) {
+            this.model.removeDataTableModelListener(this);
+        }
+        this.model = model;
+        model.addDataTableModelListener(this);
+    }
+
+    @Override
+    public void onTableModelChanged(DataTableModelEvent e) {
+        prevAnchor.setVisible(model.getPageNumber() > 1);
+    }
+
 }
