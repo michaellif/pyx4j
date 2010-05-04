@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
-import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -53,7 +52,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
         contentPanel.add(prevAnchor);
 
-        countLabel = new Label("21-30", true);
+        countLabel = new Label("", true);
         countLabel.getElement().getStyle().setMarginRight(10, Unit.PX);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         contentPanel.add(countLabel);
@@ -77,8 +76,8 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
 
     @Override
     public void onTableModelChanged(DataTableModelEvent e) {
-        prevAnchor.setVisible(model.getPageNumber() > 1);
-        int from = ((model.getPageNumber() - 1) * model.getPageSize() + 1);
+        prevAnchor.setVisible(model.getPageNumber() > 0);
+        int from = model.getPageNumber() * model.getPageSize() + 1;
         int to = from + model.getData().size() - 1;
         if (from == to) {
             countLabel.setText(from + "");
