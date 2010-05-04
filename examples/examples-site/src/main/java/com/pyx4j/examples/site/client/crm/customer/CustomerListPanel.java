@@ -86,7 +86,7 @@ public class CustomerListPanel extends VerticalPanel {
         for (Customer customer : customers) {
             dataItems.add(new DataItem<Customer>(customer));
         }
-        dataTableModel.populateData(dataItems, 1);
+        dataTableModel.populateData(dataItems, 1, false);
     }
 
     public void clearData() {
