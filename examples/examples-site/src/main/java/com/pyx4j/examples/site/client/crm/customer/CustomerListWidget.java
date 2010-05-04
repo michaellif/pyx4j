@@ -23,7 +23,6 @@ package com.pyx4j.examples.site.client.crm.customer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,7 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
@@ -70,12 +70,12 @@ public class CustomerListWidget extends VerticalPanel implements InlineWidget {
         searchResultsPanel.clearData();
         final long start = System.currentTimeMillis();
 
-        AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
+        AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
 
-            public void onSuccess(Vector<? extends IEntity> result) {
+            public void onSuccess(EntitySearchResult<? extends IEntity> result) {
                 log.debug("Loaded Customers in {} msec ", System.currentTimeMillis() - start);
                 List<Customer> entities = new ArrayList<Customer>();
-                for (IEntity entity : result) {
+                for (IEntity entity : result.getData()) {
                     if (entity instanceof Customer) {
                         entities.add((Customer) entity);
                     }

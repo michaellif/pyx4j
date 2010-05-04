@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
@@ -79,17 +80,17 @@ public class EntityServicesImpl {
 
         @SuppressWarnings("unchecked")
         @Override
-        public Vector execute(EntitySearchCriteria<?> request) {
+        public EntitySearchResult<?> execute(EntitySearchCriteria<?> request) {
             long start = System.nanoTime();
             int initCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount();
 
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
             IndexedEntitySearch search = new IndexedEntitySearch(request);
             search.buildQueryCriteria();
-            Vector<IEntity> v = new Vector<IEntity>();
+            EntitySearchResult<IEntity> r = new EntitySearchResult<IEntity>();
             for (IEntity ent : search.getResult()) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
-                v.add(ent);
+                r.add(ent);
             }
 
             long duration = System.nanoTime() - start;
@@ -99,7 +100,7 @@ public class EntityServicesImpl {
             } else {
                 log.debug("search {} took {}ms; calls " + callsCount, request.getDomainName(), (int) (duration / Consts.MSEC2NANO));
             }
-            return v;
+            return r;
         }
     }
 

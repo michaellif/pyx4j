@@ -38,7 +38,7 @@ public interface EntityServices {
 
     };
 
-    public interface Search extends Service<EntitySearchCriteria<?>, Vector<? extends IEntity>> {
+    public interface Search extends Service<EntitySearchCriteria<?>, EntitySearchResult<? extends IEntity>> {
 
     };
 
