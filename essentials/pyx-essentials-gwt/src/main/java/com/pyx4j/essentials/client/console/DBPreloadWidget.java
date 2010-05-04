@@ -25,20 +25,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
@@ -162,13 +162,15 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
         VerticalPanel panel = new VerticalPanel();
         group.setContainer(panel);
 
+        FlexTable table = new FlexTable();
+        int row = 0;
         for (final Map.Entry<String, Serializable> me : info.getParameters().entrySet()) {
-            HorizontalPanel paramPanel = new HorizontalPanel();
-            panel.add(paramPanel);
+            Label label = new Label(me.getKey());
+            table.setWidget(row, 0, label);
+            label.getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-            TextBox text;
-            paramPanel.add(new Label(me.getKey() + CommonsStringUtils.NO_BREAK_SPACE_HTML));
-            paramPanel.add(text = new TextBox());
+            TextBox text = new TextBox();
+            table.setWidget(row, 1, text);
             text.addValueChangeHandler(new ValueChangeHandler<String>() {
 
                 @Override
@@ -176,6 +178,12 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                     info.getParameters().put(me.getKey(), event.getValue());
                 }
             });
+
+            row++;
+        }
+
+        if (table.getRowCount() > 0) {
+            panel.add(table);
         }
 
         Anchor execute = new Anchor("Execute");
