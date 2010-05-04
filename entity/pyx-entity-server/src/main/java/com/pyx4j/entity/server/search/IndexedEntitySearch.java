@@ -188,6 +188,8 @@ public class IndexedEntitySearch {
                 processed.add(mm);
             } else if (Enum.class.isAssignableFrom(mm.getValueClass())) {
                 queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
+            } else if (mm.isEntity()) {
+                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, ((IEntity) me.getValue()).getPrimaryKey()));
             } else {
                 log.warn("Search by class {} not implemented", mm.getValueClass());
             }
