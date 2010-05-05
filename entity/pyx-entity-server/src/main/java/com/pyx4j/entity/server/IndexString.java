@@ -31,10 +31,8 @@ public class IndexString {
         Set<String> set = new HashSet<String>();
         for (String word : searchCriteria.split(KEYWORD_SPLIT_PATTERN)) {
             word = word.toLowerCase();
-            if (word.length() > keywordLenght) {
-                set.add(word.substring(0, keywordLenght));
-            } else {
-                set.add(word);
+            for (int i = 1; i <= Math.min(keywordLenght, word.length()); i++) {
+                set.add(word.substring(0, i));
             }
         }
         return set;
