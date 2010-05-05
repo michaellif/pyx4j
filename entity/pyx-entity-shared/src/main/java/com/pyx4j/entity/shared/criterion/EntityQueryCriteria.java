@@ -127,6 +127,10 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable {
         return sorts;
     }
 
+    public void setSorts(List<Sort> sorts) {
+        this.sorts = sorts;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
@@ -172,4 +176,5 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable {
         }
         return hashCode;
     }
+
 }

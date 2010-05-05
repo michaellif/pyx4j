@@ -22,10 +22,14 @@ package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 public class EntitySearchCriteria<E extends IEntity> implements Serializable {
 
@@ -42,6 +46,8 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
     private int pageSize = -1;
 
     private Map<PathSearch, Serializable> filters = new HashMap<PathSearch, Serializable>();
+
+    private List<Sort> sorts;
 
     protected EntitySearchCriteria() {
 
@@ -105,6 +111,34 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public EntitySearchCriteria<E> asc(IObject<?> member) {
+        return asc(member.getFieldName());
+    }
+
+    public EntitySearchCriteria<E> asc(String propertyName) {
+        return sort(new Sort(propertyName, false));
+    }
+
+    public EntitySearchCriteria<E> desc(String propertyName) {
+        return sort(new Sort(propertyName, true));
+    }
+
+    public EntitySearchCriteria<E> sort(Sort sort) {
+        if (sorts == null) {
+            sorts = new Vector<Sort>();
+        }
+        sorts.add(sort);
+        return this;
+    }
+
+    public List<Sort> getSorts() {
+        return sorts;
+    }
+
+    public void setSorts(List<Sort> sorts) {
+        this.sorts = sorts;
     }
 
     @Override

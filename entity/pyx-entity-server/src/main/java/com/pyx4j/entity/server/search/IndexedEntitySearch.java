@@ -81,6 +81,7 @@ public class IndexedEntitySearch {
 
     public void buildQueryCriteria() {
         queryCriteria = EntityQueryCriteria.create(entityClass);
+        queryCriteria.setSorts(searchCriteria.getSorts());
 
         // TODO use groups in EntitySearchCriteria
         Set<MemberMeta> processed = new HashSet<MemberMeta>();
