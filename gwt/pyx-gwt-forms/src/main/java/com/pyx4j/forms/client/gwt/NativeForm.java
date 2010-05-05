@@ -399,6 +399,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
                     } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
                         label.setText(component.getTitle() + ":");
                     }
+                    positionImageInfoWarn();
                     renderToolTip();
                     renderMandatoryStar();
                 }
@@ -409,6 +410,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             add(imageMandatory, getElement());
             add(label, getElement());
 
+            label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
             if (allignment.equals(LabelAlignment.LEFT)) {
                 label.getElement().getStyle().setOverflow(Overflow.HIDDEN);
                 label.setWordWrap(true);
@@ -422,7 +424,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
                 getElement().getStyle().setPaddingBottom(5, Unit.PX);
                 imageInfoWarn.getElement().getStyle().setProperty("top", "26px");
             }
-            label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
             label.getElement().getStyle().setProperty("top", "5px");
             label.getElement().getStyle().setProperty("left", "15px");
 
@@ -436,6 +437,10 @@ public class NativeForm extends FlexTable implements INativeComponent {
         @Override
         protected void onLoad() {
             super.onLoad();
+            positionImageInfoWarn();
+        }
+
+        private void positionImageInfoWarn() {
             if (allignment.equals(LabelAlignment.LEFT)) {
                 imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + labelWidth + 25) + "px");
             } else {
