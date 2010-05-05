@@ -90,6 +90,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private static final String EMBEDDED_PRROPERTY_SUFIX = "-e";
 
+    private static final String GLOBAL_KEYWORD_PRROPERTY = "keys" + SECONDARY_PRROPERTY_SUFIX;
+
     private final DatastoreService datastore;
 
     private final ThreadLocal<CallStats> datastoreCallStats = new ThreadLocal<CallStats>() {
@@ -188,17 +190,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta) {
+        Indexed index = meta.getAnnotation(Indexed.class);
         if (value instanceof String) {
             if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                 return new Text((String) value);
             } else {
-                Indexed index = meta.getAnnotation(Indexed.class);
                 if ((index != null) && (index.keywordLenght() > 0)) {
-                    entity.setProperty(getIndexedPropertyName(propertyName), createStringKeywordIndex(index.keywordLenght(), (String) value));
+                    if (index.global() != 0) {
+                        addGloablIndex(entity, index.global(), createStringKeywordIndex(index.keywordLenght(), (String) value));
+                    } else {
+                        entity.setProperty(getIndexedPropertyName(propertyName), createStringKeywordIndex(index.keywordLenght(), (String) value));
+                    }
                 }
                 return value;
             }
         } else if (value instanceof Enum<?>) {
+            if ((index != null) && (index.global() != 0)) {
+                addGloablIndex(entity, index.global(), ((Enum<?>) value).name());
+            }
             return ((Enum<?>) value).name();
         } else if (IPrimitiveSet.class.isAssignableFrom(meta.getObjectClass())) {
             if (Enum.class.isAssignableFrom(meta.getValueClass())) {
@@ -206,12 +215,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 for (Enum v : (Set<Enum>) value) {
                     gValue.add(v.name());
                 }
+                if ((index != null) && (index.global() != 0)) {
+                    addGloablIndex(entity, index.global(), gValue);
+                }
                 return gValue;
             } else {
                 return value;
             }
         } else if (value instanceof Date) {
-            Indexed index = meta.getAnnotation(Indexed.class);
             if (index != null) {
                 // TODO move values like month and week
                 Date v = TimeUtils.dayStart((Date) value);
@@ -220,7 +231,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             return value;
         } else if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
-            Indexed index = meta.getAnnotation(Indexed.class);
             if (index != null) {
                 entity.setProperty(getIndexedPropertyName(propertyName), geoPoint.getCells());
             }
@@ -360,6 +370,26 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    private void addGloablIndex(Entity entity, char prefix, Set<String> newKeys) {
+        Set<String> keys = (Set<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
+        if (keys == null) {
+            keys = new HashSet<String>();
+        }
+        for (String key : newKeys) {
+            keys.add(prefix + key);
+        }
+        entity.setProperty(GLOBAL_KEYWORD_PRROPERTY, keys);
+    }
+
+    private void addGloablIndex(Entity entity, char prefix, String newKey) {
+        Set<String> keys = (Set<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
+        if (keys == null) {
+            keys = new HashSet<String>();
+        }
+        keys.add(prefix + newKey);
+        entity.setProperty(GLOBAL_KEYWORD_PRROPERTY, keys);
+    }
+
     private String getIndexedPropertyName(String propertyName) {
         return propertyName + SECONDARY_PRROPERTY_SUFIX;
     }
@@ -369,6 +399,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
      */
     @Override
     public String getIndexedPropertyName(EntityMeta meta, Path path) {
+        Indexed index = meta.getMemberMeta(path).getAnnotation(Indexed.class);
+        if ((index != null) && (index.global() != 0)) {
+            return GLOBAL_KEYWORD_PRROPERTY;
+        }
+
         StringBuilder propertyName = new StringBuilder();
         final int pathLength = path.getPathMembers().size();
         EntityMeta em = meta;
@@ -437,8 +472,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return propertyName.toString();
     }
 
-    private Object createStringKeywordIndex(int keywordLenght, String value) {
-        return IndexString.getIndexValues(keywordLenght, value);
+    private Set<String> createStringKeywordIndex(int keywordLenght, String value) {
+        return IndexString.getIndexKeys(keywordLenght, value);
     }
 
     private String getIEntityKind(IEntity iEntity) {

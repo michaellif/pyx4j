@@ -142,7 +142,13 @@ public class IndexedEntitySearch {
                         if (inMemoryFilterOnly) {
                             inMemoryFilters.add(new StringInMemoryFilter(path, key));
                         } else {
-                            queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
+                            if (index.global() != 0) {
+                                queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index
+                                        .global())
+                                        + key));
+                            } else {
+                                queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
+                            }
                         }
                     }
                     //use secondary filter if required
@@ -188,7 +194,13 @@ public class IndexedEntitySearch {
                 }
                 processed.add(mm);
             } else if (Enum.class.isAssignableFrom(mm.getValueClass())) {
-                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
+                Indexed index = mm.getAnnotation(Indexed.class);
+                if ((index != null) && (index.global() != 0)) {
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
+                            + me.getValue()));
+                } else {
+                    queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
+                }
             } else if (mm.isEntity()) {
                 queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, ((IEntity) me.getValue()).getPrimaryKey()));
             } else {

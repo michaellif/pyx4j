@@ -38,4 +38,6 @@ public @interface Indexed {
     String name() default "";
 
     int keywordLenght() default 0;
+
+    char global() default 0;
 }

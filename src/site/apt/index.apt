@@ -55,4 +55,7 @@ We can create Entity implementation classes at build-time so bytecode manipulati
 
     * {{{http://code.google.com/p/objectify-appengine/}Objectify-Appengine}}
 
+    * {{{http://code.google.com/p/simpleds/}SimpleDS}}
+
     * {{{http://code.google.com/p/gwt-ent/}GWT ENT}}
+
