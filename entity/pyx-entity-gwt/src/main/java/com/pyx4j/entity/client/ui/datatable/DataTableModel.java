@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
  */
 public class DataTableModel<E extends IEntity> {
 
-    public static final int PAGE_SIZE = 8;
+    public static final int PAGE_SIZE = 20;
 
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
