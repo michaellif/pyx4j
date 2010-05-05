@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
@@ -96,6 +97,15 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             detailsMessage += caught.getMessage();
         } else if (errorCode != null) {
             detailsMessage = "\n\nErrorCode [" + errorCode + "]";
+        }
+        if (caught != null) {
+            if ((caught instanceof UnrecoverableClientError) && (caught.getCause() != null)) {
+                caught = caught.getCause();
+            }
+            detailsMessage += "\n\n" + caught.getClass();
+            if (caught instanceof StatusCodeException) {
+                detailsMessage += " " + (((StatusCodeException) caught).getStatusCode());
+            }
         }
 
         boolean sessionClosed = closeSessionOnUnrecoverableError();
