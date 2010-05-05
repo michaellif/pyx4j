@@ -970,13 +970,21 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
 
+        int removedCount = 0;
         List<Key> keys = new Vector<Key>();
         for (Entity entity : pq.asIterable()) {
+            if (keys.size() >= 500) {
+                datastoreCallStats.get().count++;
+                datastore.delete(keys);
+                removedCount += keys.size();
+                keys.clear();
+            }
             keys.add(entity.getKey());
         }
         datastoreCallStats.get().count++;
         datastore.delete(keys);
-        return keys.size();
+        removedCount += keys.size();
+        return removedCount;
     }
 
     public int getDatastoreCallCount() {
