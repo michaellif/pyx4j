@@ -800,7 +800,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         StringBuilder b = new StringBuilder();
         for (Query.FilterPredicate f : query.getFilterPredicates()) {
-            b.append(" ").append(f.getPropertyName());
+            b.append(" ").append(f.getPropertyName()).append(f.getOperator()).append(f.getValue());
         }
         log.debug("search by {}", b);
 
