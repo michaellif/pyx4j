@@ -789,6 +789,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
             }
         }
+        if (criteria.getSorts() != null) {
+            for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
+                query.addSort(sort.getPropertyName(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
+            }
+        }
         return query;
     }
 
