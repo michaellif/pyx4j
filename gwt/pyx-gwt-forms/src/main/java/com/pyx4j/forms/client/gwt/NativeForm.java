@@ -84,6 +84,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private final InfoImageAlignment infoImageAlignment;
 
+    private int labelWidth;
+
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
         setBorderWidth(0);
@@ -93,6 +95,19 @@ public class NativeForm extends FlexTable implements INativeComponent {
         columnCount = components[0].length;
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
+
+        switch (allignment) {
+        case LEFT:
+            if (columnCount == 1) {
+                labelWidth = 2 * LEFT_LABEL_WIDTH;
+            } else {
+                labelWidth = LEFT_LABEL_WIDTH;
+            }
+            break;
+        case TOP:
+            labelWidth = TOP_LABEL_WIDTH;
+            break;
+        }
 
         spans = new int[components.length][components[0].length][2];
         preprocess();
@@ -395,20 +410,19 @@ public class NativeForm extends FlexTable implements INativeComponent {
             add(label, getElement());
 
             if (allignment.equals(LabelAlignment.LEFT)) {
-                label.getElement().getStyle().setWidth(LEFT_LABEL_WIDTH, Unit.PX);
                 label.getElement().getStyle().setOverflow(Overflow.HIDDEN);
                 label.setWordWrap(true);
                 getElement().getStyle().setPaddingTop(5, Unit.PX);
-                getElement().getStyle().setPaddingLeft(LEFT_LABEL_WIDTH + 20, Unit.PX);
+                getElement().getStyle().setPaddingLeft(labelWidth + 20, Unit.PX);
                 getElement().getStyle().setPaddingBottom(20, Unit.PX);
                 imageInfoWarn.getElement().getStyle().setProperty("top", "6px");
             } else {
-                label.getElement().getStyle().setWidth(TOP_LABEL_WIDTH, Unit.PX);
                 getElement().getStyle().setPaddingTop(25, Unit.PX);
                 getElement().getStyle().setPaddingLeft(5, Unit.PX);
                 getElement().getStyle().setPaddingBottom(5, Unit.PX);
                 imageInfoWarn.getElement().getStyle().setProperty("top", "26px");
             }
+            label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
             label.getElement().getStyle().setProperty("top", "5px");
             label.getElement().getStyle().setProperty("left", "15px");
 
@@ -423,7 +437,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
         protected void onLoad() {
             super.onLoad();
             if (allignment.equals(LabelAlignment.LEFT)) {
-                imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + LEFT_LABEL_WIDTH + 25) + "px");
+                imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + labelWidth + 25) + "px");
             } else {
                 imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + 10) + "px");
             }
@@ -514,7 +528,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             label.getElement().getStyle().setProperty("top", "5px");
             label.getElement().getStyle().setProperty("left", "15px");
 
-            addCommand.getElement().getStyle().setProperty("left", (LEFT_LABEL_WIDTH + 25) + "px");
+            addCommand.getElement().getStyle().setProperty("left", (labelWidth + 25) + "px");
             addCommand.getElement().getStyle().setProperty("top", "5px");
 
             getElement().getStyle().setPaddingTop(25, Unit.PX);
