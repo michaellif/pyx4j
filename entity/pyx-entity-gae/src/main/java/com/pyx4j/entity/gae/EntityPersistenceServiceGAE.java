@@ -797,6 +797,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 query.addSort(sort.getPropertyName(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
             }
         }
+
+        StringBuilder b = new StringBuilder();
+        for (Query.FilterPredicate f : query.getFilterPredicates()) {
+            b.append(" ").append(f.getPropertyName());
+        }
+        log.debug("search by {}", b);
+
         return query;
     }
 
