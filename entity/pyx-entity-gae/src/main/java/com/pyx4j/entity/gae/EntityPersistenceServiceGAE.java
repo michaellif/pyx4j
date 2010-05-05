@@ -238,6 +238,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void updateEntityProperties(Entity entity, IEntity iEntity, boolean merge) {
+        if (iEntity.isNull()) {
+            return;
+        }
         nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;
