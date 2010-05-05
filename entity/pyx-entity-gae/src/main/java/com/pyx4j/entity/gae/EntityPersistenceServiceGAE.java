@@ -643,7 +643,15 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                     continue;
                 } else if (member instanceof IPrimitiveSet<?>) {
-                    ((IPrimitiveSet) member).addAll((Collection) value);
+                    if (Enum.class.isAssignableFrom(member.getMeta().getValueClass())) {
+                        Class<Enum> cls = (Class<Enum>) member.getMeta().getValueClass();
+                        for (String v : (Collection<String>) value) {
+                            Enum eValue = Enum.valueOf(cls, v);
+                            ((IPrimitiveSet) member).add(eValue);
+                        }
+                    } else {
+                        ((IPrimitiveSet) member).addAll((Collection) value);
+                    }
                     continue;
                 }
             } else {
