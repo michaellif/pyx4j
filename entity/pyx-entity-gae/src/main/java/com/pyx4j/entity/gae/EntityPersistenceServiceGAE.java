@@ -200,6 +200,16 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
         } else if (value instanceof Enum<?>) {
             return ((Enum<?>) value).name();
+        } else if (IPrimitiveSet.class.isAssignableFrom(meta.getObjectClass())) {
+            if (Enum.class.isAssignableFrom(meta.getValueClass())) {
+                Set<String> gValue = new HashSet<String>();
+                for (Enum v : (Set<Enum>) value) {
+                    gValue.add(v.name());
+                }
+                return gValue;
+            } else {
+                return value;
+            }
         } else if (value instanceof Date) {
             Indexed index = meta.getAnnotation(Indexed.class);
             if (index != null) {
