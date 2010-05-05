@@ -74,7 +74,7 @@ public class LightTheme extends SiteTheme {
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
         style.addProperty("background", "transparent url(images/container-header.gif) no-repeat");
-        style.addProperty("height", "170px");
+        style.addProperty("height", "140px");
         addStyle(style);
     }
 
@@ -141,10 +141,7 @@ public class LightTheme extends SiteTheme {
     @Override
     protected void initHeaderCaptionsStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
-        style.addProperty("color", "gray");
-        style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "130px");
-        style.addProperty("font-size", "22px");
+        style.addProperty("visibility", "hidden");
 
         addStyle(style);
     }

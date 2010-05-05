@@ -54,9 +54,12 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private final EntityEditorFormModel<E> form;
 
-    public AbstractEntityEditorPanel(Class<E> clazz) {
+    private final Class<E> entityClass;
+
+    public AbstractEntityEditorPanel(Class<E> entityClass) {
         super();
-        form = EntityEditorFormModel.create(clazz);
+        this.entityClass = entityClass;
+        form = EntityEditorFormModel.create(entityClass);
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
@@ -74,6 +77,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     public E getEntity() {
         return form.getValue();
+    }
+
+    public Class<E> getEntityClass() {
+        return entityClass;
     }
 
     public <T extends IEntity> CEditableComponent<T> get(T member) {
@@ -179,6 +186,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         // TODO validations goes here.
     }
 
+    protected void onAfterSave() {
+        // TODO validations goes here.
+    }
+
     @SuppressWarnings("unchecked")
     protected void doSave() {
         onBeforeSave();
@@ -192,6 +203,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             @Override
             public void onSuccess(E result) {
                 populateForm(result);
+                onAfterSave();
             }
 
         };
