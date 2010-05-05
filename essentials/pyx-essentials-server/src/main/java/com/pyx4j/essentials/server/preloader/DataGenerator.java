@@ -20,15 +20,22 @@
  */
 package com.pyx4j.essentials.server.preloader;
 
+import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Random;
 
 import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 public class DataGenerator {
 
     static String[] firstNames;
 
     static String[] lastNames;
+
+    static List<AddressInfo> adresses;
+
+    private static int areCodes[] = { 416, 905, 647 };
 
     public static String randomLetters(int count) {
         StringBuilder b = new StringBuilder();
@@ -62,5 +69,22 @@ public class DataGenerator {
 
     public static String randomName() {
         return randomFirstName() + " " + randomLastName();
+    }
+
+    public static AddressInfo randomAddressInfo() {
+        if (adresses == null) {
+            adresses = EntityCSVReciver.create(AddressInfo.class).loadFile(resourceFileName("postal_codes.csv"));
+        }
+        return adresses.get(new Random().nextInt(adresses.size()));
+    }
+
+    public static String randomPhone() {
+        return randomPhone(String.valueOf(areCodes[new Random().nextInt(areCodes.length)]));
+    }
+
+    public static String randomPhone(String areaCode) {
+        DecimalFormat nf = new DecimalFormat("0000000");
+        String unformatedPhone = areaCode + nf.format((new Random().nextInt(10000000)));
+        return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
     }
 }

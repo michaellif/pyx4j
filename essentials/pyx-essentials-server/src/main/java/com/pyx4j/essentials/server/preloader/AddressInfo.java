@@ -14,17 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-04-30
+ * Created on 2010-05-05
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.csv;
+package com.pyx4j.essentials.server.preloader;
 
-public interface CSVReciver {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    void onHeader(String[] headers);
+public interface AddressInfo extends IEntity {
 
-    void onRow(String[] values);
+    IPrimitive<String> streetName();
 
-    boolean canContuneLoad();
+    IPrimitive<String> municipality();
+
+    IPrimitive<String> postalCode();
+
+    IPrimitive<Double> latitude();
+
+    IPrimitive<Double> longitude();
+
 }

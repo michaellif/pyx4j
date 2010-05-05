@@ -45,6 +45,28 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public TYPE pars(String value) {
+        TYPE converted;
+        if (valueClass.equals(String.class)) {
+            converted = (TYPE) value;
+        } else if (valueClass.equals(Double.class)) {
+            converted = (TYPE) Double.valueOf(value);
+        } else if (valueClass.equals(Float.class)) {
+            converted = (TYPE) Float.valueOf(value);
+        } else if (valueClass.equals(Long.class)) {
+            converted = (TYPE) Long.valueOf(value);
+        } else if (valueClass.equals(Integer.class)) {
+            converted = (TYPE) Integer.valueOf(value);
+        } else if (valueClass.isEnum()) {
+            converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
+        } else {
+            throw new RuntimeException("Unsupported type");
+        }
+        return converted;
+    }
+
     @Override
     public Class<TYPE> getValueClass() {
         return valueClass;
