@@ -27,6 +27,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -156,7 +157,7 @@ public class ClientContext {
                 onAuthenticationAvalable.run();
             }
         } else {
-            AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+            AsyncCallback<AuthenticationResponse> callback = new BlockingAsyncCallback<AuthenticationResponse>() {
 
                 @Override
                 public void onFailure(Throwable caught) {

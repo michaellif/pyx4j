@@ -32,6 +32,7 @@ import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 
 public class RemoteServiceImpl implements RemoteService {
@@ -56,7 +57,7 @@ public class RemoteServiceImpl implements RemoteService {
                 throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
             } catch (Throwable t) {
                 log.error("Service call error", t);
-                throw new RuntimeException("Fatal system error");
+                throw new UnRecoverableRuntimeException("Fatal system error");
             }
             ServiceRegistry.register(serviceInterfaceClassName, clazz);
         }
@@ -68,7 +69,7 @@ public class RemoteServiceImpl implements RemoteService {
             if ((e.getCause() != null) && (e.getCause() != e)) {
                 log.error("Fatal system error cause", e.getCause());
             }
-            throw new RuntimeException("Fatal system error: " + e.getMessage());
+            throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
         }
         try {
             List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
@@ -89,9 +90,10 @@ public class RemoteServiceImpl implements RemoteService {
         } catch (RuntimeException e) {
             log.error("Service call error", e);
             if (e.getMessage() == null) {
-                throw new RuntimeException("System error, contact support");
+                throw new UnRecoverableRuntimeException("System error, contact support");
+            } else {
+                throw new UnRecoverableRuntimeException(e.getMessage());
             }
-            throw e;
         }
     }
 }

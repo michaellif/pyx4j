@@ -41,6 +41,7 @@ import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RemoteServiceAsync;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.serialization.client.RemoteServiceSerializer;
 
 public class RPCManager {
@@ -134,7 +135,8 @@ public class RPCManager {
             try {
                 if (caught instanceof IncompatibleRemoteServiceException) {
                     UncaughtHandler.onUnrecoverableError(caught, "RPC." + GWTJava5Helper.getSimpleName(serviceInterface));
-                } else if ((callback instanceof RecoverableCall) && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
+                } else if ((!(caught instanceof UnRecoverableRuntimeException)) && (callback instanceof RecoverableCall)
+                        && (RECOVERABLE_CALL_RETRY_MAX >= retryAttempt)) {
                     log.error("Try to recover {} from service invocation error {}", serviceInterface, caught);
                     executeImpl(serviceInterface, request, callback, executeBackground, retryAttempt + 1);
                 } else if (callback != null) {
