@@ -197,7 +197,7 @@ public class IndexedEntitySearch {
                 Indexed index = mm.getAnnotation(Indexed.class);
                 if ((index != null) && (index.global() != 0)) {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
-                            + me.getValue()));
+                            + ((Enum<?>) me.getValue()).name()));
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
                 }
