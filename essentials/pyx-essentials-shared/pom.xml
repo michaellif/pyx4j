@@ -27,6 +27,12 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+       
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-shared</artifactId>
             <version>${project.version}</version>
         </dependency>

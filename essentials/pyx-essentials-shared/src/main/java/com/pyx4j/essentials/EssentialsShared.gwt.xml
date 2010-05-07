@@ -3,5 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.entity.EntityShared'/>
+    <inherits name='com.pyx4j.rpc.RPCShared'/>
+    <source path="rpc"/>
     <source path="shared"/>
 </module>
