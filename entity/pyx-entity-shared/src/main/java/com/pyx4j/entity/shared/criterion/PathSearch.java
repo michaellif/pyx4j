@@ -21,14 +21,17 @@
 package com.pyx4j.entity.shared.criterion;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 
-public class PathSearch extends Path {
+public class PathSearch extends Path implements Comparable<PathSearch> {
 
     private static final long serialVersionUID = -7287478852586750914L;
 
     private String pathProperty;
+
+    private int cardinality;
 
     //TOSO should Restriction be here or in value? 
     //private Restriction restriction;
@@ -44,11 +47,26 @@ public class PathSearch extends Path {
 
     public PathSearch(IObject<?> object) {
         super(object);
+        setCardinality(cardinalityByType(object));
     }
 
     public PathSearch(IObject<?> object, String pathProperty) {
         super(object);
         this.pathProperty = pathProperty;
+        setCardinality(cardinalityByType(object));
+    }
+
+    /**
+     * Longer key value ideally changes cardinality but this is not countded here!
+     */
+    public static int cardinalityByType(IObject<?> object) {
+        if (object.getValueClass().isEnum()) {
+            return 3;
+        } else if (object.getMeta().isValidatorAnnotationPresent(Phone.class)) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 
     public String getPathProperty() {
@@ -58,6 +76,14 @@ public class PathSearch extends Path {
     //TODO use better function name and probably in Path itself.
     public String getPathString() {
         return super.toString();
+    }
+
+    public int getCardinality() {
+        return cardinality;
+    }
+
+    public void setCardinality(int cardinality) {
+        this.cardinality = cardinality;
     }
 
     public String getHistoryKey() {
@@ -98,4 +124,10 @@ public class PathSearch extends Path {
     public String toString() {
         return super.toString() + " (" + pathProperty + ")";
     }
+
+    @Override
+    public int compareTo(PathSearch other) {
+        return ((cardinality == other.cardinality) ? (toString().compareTo(other.toString())) : (cardinality < other.cardinality) ? -1 : 1);
+    }
+
 }

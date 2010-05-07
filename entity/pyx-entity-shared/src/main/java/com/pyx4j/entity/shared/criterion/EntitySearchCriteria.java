@@ -21,9 +21,8 @@
 package com.pyx4j.entity.shared.criterion;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -45,9 +44,9 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
 
     private int pageSize = -1;
 
-    private Map<PathSearch, Serializable> filters = new HashMap<PathSearch, Serializable>();
+    private TreeMap<PathSearch, Serializable> filters = new TreeMap<PathSearch, Serializable>();
 
-    private List<Sort> sorts;
+    private Vector<Sort> sorts;
 
     protected EntitySearchCriteria() {
 
@@ -77,7 +76,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
         return filters;
     }
 
-    protected void setFilters(Map<PathSearch, Serializable> filters) {
+    protected void setFilters(TreeMap<PathSearch, Serializable> filters) {
         this.filters = filters;
     }
 
@@ -133,11 +132,11 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
         return this;
     }
 
-    public List<Sort> getSorts() {
+    public Vector<Sort> getSorts() {
         return sorts;
     }
 
-    public void setSorts(List<Sort> sorts) {
+    public void setSorts(Vector<Sort> sorts) {
         this.sorts = sorts;
     }
 
