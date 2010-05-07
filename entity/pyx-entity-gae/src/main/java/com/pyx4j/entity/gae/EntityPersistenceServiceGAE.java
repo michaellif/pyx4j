@@ -809,25 +809,37 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
+    private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
         String propertyName = propertyCriterion.getPropertyName();
         Object value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
             propertyName = Entity.KEY_RESERVED_PROPERTY;
         }
-        query.addFilter(propertyName, operator(propertyCriterion.getRestriction()), value);
+        Query.FilterOperator oprator = operator(propertyCriterion.getRestriction());
+        query.addFilter(propertyName, oprator, value);
+        return oprator;
     }
 
     private <T extends IEntity> Query buildQuery(EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
         Query query = new Query(entityMeta.getPersistenceName());
+        boolean allowSort = true;
+        int keyFilter = 0;
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
-                    addFilter(query, entityMeta, (PropertyCriterion) cr);
+                    if (GLOBAL_KEYWORD_PRROPERTY.equals(((PropertyCriterion) cr).getPropertyName())) {
+                        if ((keyFilter >= 2) && allowSort && (criteria.getSorts() != null)) {
+                            break;
+                        }
+                        keyFilter++;
+                    }
+                    if (addFilter(query, entityMeta, (PropertyCriterion) cr) == Query.FilterOperator.IN) {
+                        allowSort = false;
+                    }
                 }
             }
         }
-        if (criteria.getSorts() != null) {
+        if (allowSort && (criteria.getSorts() != null)) {
             for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
                 query.addSort(sort.getPropertyName(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
             }
