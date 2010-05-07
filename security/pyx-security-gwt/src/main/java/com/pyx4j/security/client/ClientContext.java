@@ -152,6 +152,10 @@ public class ClientContext {
     }
 
     public static void obtainAuthenticationData(final Runnable onAuthenticationAvalable) {
+        obtainAuthenticationData(onAuthenticationAvalable, true);
+    }
+
+    public static void obtainAuthenticationData(final Runnable onAuthenticationAvalable, boolean executeBackground) {
         if (authenticationObtained) {
             if (onAuthenticationAvalable != null) {
                 onAuthenticationAvalable.run();
@@ -176,7 +180,11 @@ public class ClientContext {
                     }
                 }
             };
-            RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
+            if (executeBackground) {
+                RPCManager.executeBackground(AuthenticationServices.GetStatus.class, null, callback);
+            } else {
+                RPCManager.execute(AuthenticationServices.GetStatus.class, null, callback);
+            }
         }
     }
 
