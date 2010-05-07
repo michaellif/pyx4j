@@ -24,6 +24,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class PathSearch extends Path implements Comparable<PathSearch> {
 
@@ -40,29 +41,30 @@ public class PathSearch extends Path implements Comparable<PathSearch> {
 
     }
 
-    public PathSearch(String path, String pathProperty) {
+    public PathSearch(MemberMeta memberMeta, String path, String pathProperty) {
         super(path);
         this.pathProperty = pathProperty;
+        setCardinality(cardinalityByType(memberMeta));
     }
 
     public PathSearch(IObject<?> object) {
         super(object);
-        setCardinality(cardinalityByType(object));
+        setCardinality(cardinalityByType(object.getMeta()));
     }
 
     public PathSearch(IObject<?> object, String pathProperty) {
         super(object);
         this.pathProperty = pathProperty;
-        setCardinality(cardinalityByType(object));
+        setCardinality(cardinalityByType(object.getMeta()));
     }
 
     /**
-     * Longer key value ideally changes cardinality but this is not countded here!
+     * Longer key value ideally changes cardinality but this is not counted here!
      */
-    public static int cardinalityByType(IObject<?> object) {
-        if (object.getValueClass().isEnum()) {
+    public static int cardinalityByType(MemberMeta memberMeta) {
+        if (memberMeta.getValueClass().isEnum()) {
             return 3;
-        } else if (object.getMeta().isValidatorAnnotationPresent(Phone.class)) {
+        } else if (memberMeta.isValidatorAnnotationPresent(Phone.class)) {
             return 2;
         } else {
             return 1;

@@ -178,14 +178,14 @@ public class IndexedEntitySearch {
                     }
                 }
             } else if (Date.class.isAssignableFrom(mm.getValueClass())) {
-                Date day = (Date) searchCriteria.getValue(new PathSearch(path.getPathString(), "day"));
+                Date day = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "day"));
                 if (day != null) {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, TimeUtils.dayStart(day)));
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();
-                Integer areaRadius = (Integer) searchCriteria.getValue(new PathSearch(pathWithGeoPointData, "radius"));
-                GeoPoint geoPointFrom = (GeoPoint) searchCriteria.getValue(new PathSearch(pathWithGeoPointData, "from"));
+                Integer areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, pathWithGeoPointData, "radius"));
+                GeoPoint geoPointFrom = (GeoPoint) searchCriteria.getValue(new PathSearch(mm, pathWithGeoPointData, "from"));
                 if ((areaRadius != null) && (geoPointFrom != null)) {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
