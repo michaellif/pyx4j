@@ -39,4 +39,18 @@ public class CompareHelper {
         return s1.compareTo(s2);
     }
 
+    public static <T> int compareTo(Comparable<T> o1, T o2) {
+        // this is also null == null
+        if (o1 == o2) {
+            return 0;
+        }
+        // Null in Front
+        if (o2 == null) {
+            return 1;
+        }
+        if (o1 == null) {
+            return -1;
+        }
+        return o1.compareTo(o2);
+    }
 }
