@@ -20,9 +20,10 @@
  */
 package com.pyx4j.entity.server.search;
 
-import java.util.Iterator;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
+import com.pyx4j.entity.shared.IEntity;
 
-public interface SearchResultIterator<E> extends Iterator<E> {
+public interface SearchResultIterator<E extends IEntity> extends ICursorIterator<E> {
 
     public boolean hasMoreData();
 

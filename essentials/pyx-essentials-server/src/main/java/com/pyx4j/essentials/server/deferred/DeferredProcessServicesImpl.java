@@ -23,12 +23,17 @@ package com.pyx4j.essentials.server.deferred;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
 public class DeferredProcessServicesImpl implements DeferredProcessServices {
+
+    private final static Logger log = LoggerFactory.getLogger(DeferredProcessServicesImpl.class);
 
     private static final String DEFERRED_PROCESS_SESSION_ATTRIBUTE = DeferredProcessServicesImpl.class.getName();
 
@@ -78,7 +83,14 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
         public DeferredProcessProgressResponse execute(String deferredCorrelationID) {
             IDeferredProcess process = getMap().get(deferredCorrelationID);
             if (process != null) {
-                process.execute();
+                try {
+                    process.execute();
+                } catch (Throwable e) {
+                    log.error("execute error", e);
+                    DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
+                    r.setError();
+                    return r;
+                }
                 DeferredProcessProgressResponse r = process.status();
                 if (r.isCompleted()) {
                     getMap().remove(deferredCorrelationID);

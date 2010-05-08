@@ -209,8 +209,8 @@ public class IndexedEntitySearch {
         }
     }
 
-    public SearchResultIterator<IEntity> getResult() {
-        final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(null, queryCriteria);
+    public SearchResultIterator<IEntity> getResult(String encodedCursorRefference) {
+        final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorRefference, queryCriteria);
         final int maxResults;
         final int firstResult;
         if (searchCriteria.getPageSize() > 0) {
@@ -272,6 +272,11 @@ public class IndexedEntitySearch {
                     }
                 }
                 return (more != null);
+            }
+
+            @Override
+            public String encodedCursorRefference() {
+                return unfiltered.encodedCursorRefference();
             }
 
             @Override

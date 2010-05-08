@@ -20,34 +20,52 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.Consts;
+import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.search.IndexedEntitySearch;
+import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.security.shared.SecurityController;
 
 public class SearchReportDeferredProcess implements IDeferredProcess {
 
     private static final long serialVersionUID = -7944873735643401186L;
 
-    int test = 1;
+    private final static Logger log = LoggerFactory.getLogger(SearchReportDeferredProcess.class);
 
     private final StringBuilder data = new StringBuilder();
 
     private final EntitySearchCriteria<?> request;
 
+    private String encodedCursorRefference;
+
     private final Class<? extends IEntity> entityClass;
 
-    private final EntityMeta entityMeta;
+    private int fetchCount = 0;
+
+    private boolean fetchCompleate;
+
+    private boolean formatCompleate;
 
     public SearchReportDeferredProcess(EntitySearchCriteria<?> request) {
+        SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
         this.request = request;
-        entityClass = ServerEntityFactory.entityClass(request.getDomainName());
-        entityMeta = EntityFactory.getEntityMeta(entityClass);
+        this.request.setPageSize(0);
+        this.entityClass = ServerEntityFactory.entityClass(request.getDomainName());
+        formatHeader();
     }
 
     @Override
@@ -57,18 +75,65 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     @Override
     public void execute() {
-        //TODO implement this
-        if (test > 5) {
-            test = 0;
+        if (fetchCompleate) {
             createDownloadable();
+            formatCompleate = true;
         } else {
-            test++;
-            data.append("xx" + test + "bob\n");
+            long start = System.currentTimeMillis();
+            IndexedEntitySearch search = new IndexedEntitySearch(request);
+            search.buildQueryCriteria();
+            SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
+            while (it.hasNext()) {
+                IEntity ent = it.next();
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                formatEntity(ent);
+                fetchCount++;
+                if (System.currentTimeMillis() - start > Consts.SEC2MSEC * 20) {
+                    log.error("Executions time quota exceeded {}", System.currentTimeMillis() - start);
+                    encodedCursorRefference = it.encodedCursorRefference();
+                    return;
+                }
+            }
+            fetchCompleate = true;
         }
     }
 
     protected String getFileName() {
-        return entityMeta.getCaption() + ".csv";
+        return EntityFactory.getEntityMeta(entityClass).getCaption() + ".csv";
+    }
+
+    protected void formatHeader() {
+        EntityMeta em = EntityFactory.getEntityMeta(entityClass);
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (em.getMemberMeta(memberName).isRpcTransient()) {
+                continue;
+            } else if (memberMeta.isEntity()) {
+                data.append(memberMeta.getCaption());
+                data.append(",");
+            } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                data.append(memberMeta.getCaption());
+                data.append(",");
+            }
+        }
+        data.append("\n");
+    }
+
+    protected void formatEntity(IEntity entity) {
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (em.getMemberMeta(memberName).isRpcTransient()) {
+                continue;
+            } else if (memberMeta.isEntity()) {
+                data.append(((IEntity) entity.getMember(memberName)).getStringView());
+                data.append(",");
+            } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                data.append(entity.getMember(memberName).getValue());
+                data.append(",");
+            }
+        }
+        data.append("\n");
     }
 
     protected void createDownloadable() {
@@ -78,14 +143,14 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     @Override
     public DeferredProcessProgressResponse status() {
-        if (test == 0) {
+        if (formatCompleate) {
             DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
             r.setCompleted();
             r.setDownloadLink("/download/" + System.currentTimeMillis() + "/" + getFileName());
             return r;
         } else {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-            r.setProgress(test);
+            r.setProgress(fetchCount);
             return r;
         }
     }

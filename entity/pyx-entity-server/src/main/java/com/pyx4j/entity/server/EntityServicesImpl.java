@@ -88,7 +88,7 @@ public class EntityServicesImpl {
             IndexedEntitySearch search = new IndexedEntitySearch(request);
             search.buildQueryCriteria();
             EntitySearchResult<IEntity> r = new EntitySearchResult<IEntity>();
-            SearchResultIterator<IEntity> it = search.getResult();
+            SearchResultIterator<IEntity> it = search.getResult(null);
             while (it.hasNext()) {
                 IEntity ent = it.next();
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));

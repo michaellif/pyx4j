@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -51,6 +51,8 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.commons.Consts;
@@ -930,7 +932,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         final Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
 
-        final Iterator<Entity> iterator = pq.asIterator();
+        final QueryResultIterable<Entity> iterable;
+        if (encodedCursorRefference != null) {
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withCursor(Cursor.fromWebSafeString(encodedCursorRefference)));
+        } else {
+            iterable = pq.asQueryResultIterable();
+        }
+        final QueryResultIterator<Entity> iterator = iterable.iterator();
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().count - initCount;
         if (duration > Consts.SEC2NANO) {
@@ -961,8 +969,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
             @Override
             public String encodedCursorRefference() {
-                // TODO Auto-generated method stub
-                return null;
+                return iterator.getCursor().toWebSafeString();
             }
         };
     }
