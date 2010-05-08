@@ -55,7 +55,7 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
             if (process != null) {
                 return process.status();
             } else {
-                throw new Error("Process not found");
+                throw new RuntimeException("Process " + deferredCorrelationID + " not found");
             }
         }
 
@@ -71,7 +71,7 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
                 getMap().remove(deferredCorrelationID);
                 return null;
             } else {
-                throw new Error("Process not found");
+                throw new RuntimeException("Process " + deferredCorrelationID + " not found");
             }
         }
 
@@ -89,6 +89,7 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
                     log.error("execute error", e);
                     DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
                     r.setError();
+                    getMap().remove(deferredCorrelationID);
                     return r;
                 }
                 DeferredProcessProgressResponse r = process.status();
@@ -97,7 +98,7 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
                 }
                 return r;
             } else {
-                throw new Error("Process not found");
+                throw new RuntimeException("Process " + deferredCorrelationID + " not found");
             }
         }
 
@@ -111,6 +112,7 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
         Map<String, IDeferredProcess> map = getMap();
         String deferredCorrelationID = String.valueOf(System.currentTimeMillis());
         map.put(deferredCorrelationID, process);
+        log.debug("process created {}", deferredCorrelationID);
         return deferredCorrelationID;
     }
 }

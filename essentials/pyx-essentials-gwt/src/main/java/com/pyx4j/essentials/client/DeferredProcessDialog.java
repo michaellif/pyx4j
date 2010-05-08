@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
@@ -49,15 +50,27 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
     private boolean canceled = false;
 
+    VerticalPanel messagePenel = new VerticalPanel();
+
+    protected final HTML message1;
+
+    protected final HTML message2;
+
     public DeferredProcessDialog(String title, String initialMessage) {
-        this.setWidget(new HTML(initialMessage));
+        this.setWidget(messagePenel = new VerticalPanel());
+        messagePenel.add(message1 = new HTML(initialMessage));
+        messagePenel.add(message2 = new HTML(""));
         dialog = new Dialog(title, this);
         dialog.setBody(this);
+        dialog.getCloseButton().setVisible(false);
     }
 
     public void show() {
-        dialog.getCloseButton().setVisible(false);
         dialog.show();
+    }
+
+    public void hide() {
+        dialog.hide();
     }
 
     @Override
@@ -90,13 +103,13 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     }
 
     protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
-        this.setWidget(new HTML("Compleated"));
+        message1.setHTML("Compleated");
         onDeferredCompleate();
     }
 
     protected void onDeferredError(DeferredProcessProgressResponse result) {
         onDeferredCompleate();
-        dialog.hide();
+        hide();
         MessageDialog.error(dialog.getTitle(), result.getMessage());
     }
 
@@ -111,7 +124,10 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
 
             @Override
             public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
+                hide();
+                if (!canceled) {
+                    throw new UnrecoverableClientError(caught);
+                }
             }
 
             @Override
@@ -121,6 +137,7 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
                 } else if (result.isCompleted()) {
                     onDeferredSuccess(result);
                 } else {
+                    message2.setHTML("Progress: " + result.getProgress());
                     executeProcess();
                 }
             }

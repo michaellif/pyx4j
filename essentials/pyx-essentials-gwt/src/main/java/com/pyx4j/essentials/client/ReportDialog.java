@@ -46,11 +46,13 @@ public class ReportDialog extends DeferredProcessDialog {
     public static void start(Class<? extends ReportServices.Search> reportServiceInterface, EntitySearchCriteria<?> criteria) {
 
         final ReportDialog rd = new ReportDialog("Report", "Creating report...");
+        rd.show();
 
         AsyncCallback<String> callback = new BlockingAsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
+                rd.hide();
                 throw new UnrecoverableClientError(caught);
             }
 

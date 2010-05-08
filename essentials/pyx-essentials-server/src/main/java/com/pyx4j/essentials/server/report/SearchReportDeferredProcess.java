@@ -89,11 +89,12 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                 formatEntity(ent);
                 fetchCount++;
                 if (System.currentTimeMillis() - start > Consts.SEC2MSEC * 20) {
-                    log.error("Executions time quota exceeded {}", System.currentTimeMillis() - start);
+                    log.warn("Executions time quota exceeded {}", System.currentTimeMillis() - start);
                     encodedCursorRefference = it.encodedCursorRefference();
                     return;
                 }
             }
+            log.debug("fetch compleate {}", fetchCount);
             fetchCompleate = true;
         }
     }
