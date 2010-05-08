@@ -20,17 +20,32 @@
  */
 package com.pyx4j.essentials.client;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class ReportDialog extends DeferredProcessDialog {
 
+    private String downloadUrl;
+
     public static void start(EntitySearchCriteria<?> criteria) {
+        start(ReportServices.Search.class, criteria);
+    }
+
+    public static void start(Class<? extends ReportServices.Search> reportServiceInterface, EntitySearchCriteria<?> criteria) {
+
+        final ReportDialog rd = new ReportDialog("Report", "Creating report...");
 
         AsyncCallback<String> callback = new BlockingAsyncCallback<String>() {
 
@@ -41,11 +56,55 @@ public class ReportDialog extends DeferredProcessDialog {
 
             @Override
             public void onSuccess(String deferredCorrelationID) {
-                // TODO Auto-generated method stub
+                rd.setDeferredCorrelationID(deferredCorrelationID);
             }
 
         };
 
-        RPCManager.execute(ReportServices.Search.class, criteria, callback);
+        RPCManager.execute(reportServiceInterface, criteria, callback);
+    }
+
+    public ReportDialog(String title, String initialMessage) {
+        super(title, initialMessage);
+    }
+
+    protected boolean useDownloadFrame() {
+        return !BrowserType.isIE(); /* && !ClientState.isSeleniumMode(); */
+    }
+
+    @Override
+    protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
+
+        if (result.isCompletedSuccess()) {
+            downloadUrl = ((DeferredReportProcessProgressResponse) result).getDownloadLink();
+            if (useDownloadFrame()) {
+                new DownloadFrame(downloadUrl);
+                dialog.hide();
+            } else {
+                VerticalPanel vp = new VerticalPanel();
+                this.setWidget(vp);
+                vp.add(new HTML("Report creation compleated"));
+                HTML downloadLink = new HTML("<a href=\"" + downloadUrl + "\" target=\"_blank\">Download</a>");
+                downloadLink.addClickHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        dialog.hide();
+                    }
+                });
+                downloadLink.ensureDebugId("reportDownloadLink");
+                vp.add(downloadLink);
+            }
+        }
+
+        onDeferredCompleate();
+    }
+
+    @Override
+    public boolean onClickClose() {
+        if (downloadUrl != null) {
+            RPCManager.execute(ReportServices.CancelDownload.class, downloadUrl, null);
+        }
+        return onClickClose();
     }
 }

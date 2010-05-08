@@ -20,9 +20,15 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
+import com.pyx4j.essentials.server.download.Downloadable;
 
 public class SearchReportDeferredProcess implements IDeferredProcess {
 
@@ -30,8 +36,18 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     int test = 1;
 
-    public SearchReportDeferredProcess(EntitySearchCriteria<?> request) {
+    private final StringBuilder data = new StringBuilder();
 
+    private final EntitySearchCriteria<?> request;
+
+    private final Class<? extends IEntity> entityClass;
+
+    private final EntityMeta entityMeta;
+
+    public SearchReportDeferredProcess(EntitySearchCriteria<?> request) {
+        this.request = request;
+        entityClass = ServerEntityFactory.entityClass(request.getDomainName());
+        entityMeta = EntityFactory.getEntityMeta(entityClass);
     }
 
     @Override
@@ -44,20 +60,34 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         //TODO implement this
         if (test > 5) {
             test = 0;
+            createDownloadable();
         } else {
             test++;
+            data.append("xx" + test + "bob\n");
         }
+    }
+
+    protected String getFileName() {
+        return entityMeta.getCaption() + ".csv";
+    }
+
+    protected void createDownloadable() {
+        Downloadable d = new Downloadable(data.toString().getBytes(), "text/csv");
+        d.save(getFileName());
     }
 
     @Override
     public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
         if (test == 0) {
+            DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
             r.setCompleted();
+            r.setDownloadLink("/download/" + System.currentTimeMillis() + "/" + getFileName());
+            return r;
         } else {
+            DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
             r.setProgress(test);
+            return r;
         }
-        return r;
     }
 
 }

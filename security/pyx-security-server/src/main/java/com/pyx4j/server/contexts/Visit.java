@@ -44,6 +44,8 @@ public class Visit implements Serializable {
 
     private long requestIDCount = 0;
 
+    private transient boolean changed;
+
     public Visit() {
         this.userVisit = null;
         this.attributes = new Hashtable<String, Serializable>();
@@ -69,11 +71,16 @@ public class Visit implements Serializable {
     protected void beginSession(UserVisit userVisit, Acl acl) {
         this.userVisit = userVisit;
         this.acl = acl;
+        this.changed = true;
     }
 
     protected void endSession() {
         this.userVisit = null;
         this.acl = null;
+    }
+
+    public boolean isChanged() {
+        return changed;
     }
 
     public Serializable getAttribute(String name) {
@@ -90,6 +97,7 @@ public class Visit implements Serializable {
 
     public void setAttribute(String name, Serializable value) {
         this.attributes.put(name, value);
+        this.changed = true;
     }
 
     public Enumeration<String> getTransientAttributeNames() {

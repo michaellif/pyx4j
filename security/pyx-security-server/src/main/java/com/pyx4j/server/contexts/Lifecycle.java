@@ -56,6 +56,13 @@ public class Lifecycle {
 
     public static void endRequest() {
         //        PersistenceServicesFactory.getPersistenceService().endRequest();
+        HttpSession session = Context.getSession();
+        if (session != null) {
+            Visit visit = Context.getVisit();
+            if ((visit != null) && (visit.isChanged())) {
+                session.setAttribute(Context.SESSION_VISIT, visit);
+            }
+        }
         Context.remove();
     }
 

@@ -111,6 +111,10 @@ public class DeferredProcessProgressResponse implements Serializable {
         return status == ProcessStatus.CANCELED;
     }
 
+    public boolean isCompletedSuccess() {
+        return status == ProcessStatus.COMPLETED_SUCCESS;
+    }
+
     public void setCanceled() {
         status = ProcessStatus.CANCELED;
     }

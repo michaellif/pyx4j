@@ -14,24 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-05-07
+ * Created on May 8, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.essentials.rpc.report;
 
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-import com.pyx4j.rpc.shared.Service;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 
-public interface ReportServices {
+@SuppressWarnings("serial")
+public class DeferredReportProcessProgressResponse extends DeferredProcessProgressResponse {
 
-    public interface Search extends Service<EntitySearchCriteria<?>, String> {
+    private String downloadLink;
 
-    };
+    public DeferredReportProcessProgressResponse() {
 
-    public interface CancelDownload extends Service<String, VoidSerializable> {
+    }
 
-    };
+    public String getDownloadLink() {
+        return downloadLink;
+    }
+
+    public void setDownloadLink(String downloadLink) {
+        this.downloadLink = downloadLink;
+    }
 
 }

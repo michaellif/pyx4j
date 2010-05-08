@@ -23,6 +23,8 @@ package com.pyx4j.essentials.server.report;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class ReportServicesImpl implements ReportServices {
 
@@ -31,6 +33,19 @@ public class ReportServicesImpl implements ReportServices {
         @Override
         public String execute(EntitySearchCriteria<?> request) {
             return DeferredProcessServicesImpl.register(new SearchReportDeferredProcess(request));
+        }
+
+    }
+
+    public static class CancelDownloadImpl implements ReportServices.CancelDownload {
+
+        @Override
+        public VoidSerializable execute(String request) {
+            String fileName = Downloadable.getDownloadableFileName(request);
+            if (fileName != null) {
+                Downloadable.cancel(fileName);
+            }
+            return null;
         }
 
     }
