@@ -21,11 +21,11 @@
 package com.pyx4j.entity.server.impl;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -41,6 +41,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -58,9 +59,9 @@ public class EntityMetaImpl implements EntityMeta {
 
     private final boolean rpcTransient;
 
-    private boolean membersListCreated;
-
     protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
+
+    private List<String> memberNames;
 
     private List<String> toStringMemberNames;
 
@@ -164,8 +165,15 @@ public class EntityMetaImpl implements EntityMeta {
         return mm;
     }
 
-    private void lazyCreateMembersNamesList() {
-        for (Method method : entityClass.getMethods()) {
+    private synchronized void lazyCreateMembersNamesList() {
+        if (memberNames != null) {
+            return;
+        }
+        SharedEntityHandler anInstance = (SharedEntityHandler) EntityFactory.create(getEntityClass());
+        memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMemebers()));
+
+        //Find special members
+        for (Method method : getEntityClass().getMethods()) {
             if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
                 continue;
             }
@@ -173,10 +181,6 @@ public class EntityMetaImpl implements EntityMeta {
             if (type == Void.class) {
                 continue;
             }
-            if (!membersMeta.containsKey(method.getName())) {
-                membersMeta.put(method.getName(), null);
-            }
-
             Timestamp ts = method.getAnnotation(Timestamp.class);
             if (ts != null) {
                 switch (ts.value()) {
@@ -190,12 +194,9 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Set<String> getMemberNames() {
-        if (!membersListCreated) {
-            lazyCreateMembersNamesList();
-            membersListCreated = true;
-        }
-        return membersMeta.keySet();
+    public List<String> getMemberNames() {
+        lazyCreateMembersNamesList();
+        return memberNames;
     }
 
     @Override
@@ -242,19 +243,13 @@ public class EntityMetaImpl implements EntityMeta {
 
     @Override
     public String getCreatedTimestampMember() {
-        if (!membersListCreated) {
-            lazyCreateMembersNamesList();
-            membersListCreated = true;
-        }
+        lazyCreateMembersNamesList();
         return createdTimestampMember;
     }
 
     @Override
     public String getUpdatedTimestampMember() {
-        if (!membersListCreated) {
-            lazyCreateMembersNamesList();
-            membersListCreated = true;
-        }
+        lazyCreateMembersNamesList();
         return updatedTimestampMember;
     }
 

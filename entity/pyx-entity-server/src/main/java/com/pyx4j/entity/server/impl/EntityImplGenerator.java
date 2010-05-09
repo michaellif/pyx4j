@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
@@ -221,60 +220,70 @@ public class EntityImplGenerator {
         String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         try {
             initClassPool();
-            CtClass cc = pool.makeClass(name);
-            cc.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
-            cc.addInterface(pool.get(interfaceName));
+            CtClass interfaceCtClass = pool.get(interfaceName);
+            CtClass implClass = pool.makeClass(name);
+            implClass.setSuperclass(pool.get(SharedEntityHandler.class.getName()));
+            implClass.addInterface(interfaceCtClass);
             // Constructors
             // N.B. transient fields are not initialized during deserialization 
-            CtConstructor defaultConstructor = new CtConstructor(null, cc);
+            CtConstructor defaultConstructor = new CtConstructor(null, implClass);
             defaultConstructor.setBody("super(" + interfaceName + ".class, null, null);");
-            cc.addConstructor(defaultConstructor);
+            implClass.addConstructor(defaultConstructor);
 
             CtClass ctStringClass = pool.get(String.class.getName());
 
-            CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IObject.class.getName()), ctStringClass }, cc);
+            CtConstructor memberConstructor = new CtConstructor(new CtClass[] { pool.get(IObject.class.getName()), ctStringClass }, implClass);
             memberConstructor.setBody("super(" + interfaceName + ".class, $1, $2);");
-            cc.addConstructor(memberConstructor);
+            implClass.addConstructor(memberConstructor);
 
             // add field with default 1L value.
-            CtField field = new CtField(CtClass.longType, "serialVersionUID", cc);
+            CtField field = new CtField(CtClass.longType, "serialVersionUID", implClass);
             field.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL);
-            cc.addField(field, "1L");
+            implClass.addField(field, "1L");
 
             // Override getObjectClass with proper value since transient value is null in super 
-            CtMethod getObjectClassOverride = new CtMethod(pool.get(Class.class.getName()), "getObjectClass", null, cc);
+            CtMethod getObjectClassOverride = new CtMethod(pool.get(Class.class.getName()), "getObjectClass", null, implClass);
             getObjectClassOverride.setBody("return " + interfaceName + ".class;");
-            cc.addMethod(getObjectClassOverride);
+            implClass.addMethod(getObjectClassOverride);
 
             // Abstract methods
-            CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, cc);
+            CtMethod lazyCreateMember = new CtMethod(pool.get(IObject.class.getName()), "lazyCreateMember", new CtClass[] { ctStringClass }, implClass);
             lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(" + interfaceName + ".class, this, $1);");
-            cc.addMethod(lazyCreateMember);
+            implClass.addMethod(lazyCreateMember);
 
-            // Members access
-            for (Method method : interfaceClass.getMethods()) {
-                if (method.getDeclaringClass().equals(Object.class) || method.getDeclaringClass().isAssignableFrom(IEntity.class)) {
+            StringBuilder membersNamesStringArray = new StringBuilder();
+            // Members access, Use CtClass to get the list of Methods ordered by declaration order.
+            for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
+                if (method.getDeclaringClass().equals(Object.class) || (!method.getDeclaringClass().equals(interfaceCtClass))) {
                     continue;
                 }
-                Class<?> type = method.getReturnType();
-                if (type == Void.class) {
+                CtClass type = method.getReturnType();
+                if (type == CtClass.voidType) {
                     continue;
                 }
-                CtMethod member = new CtMethod(pool.get(type.getName()), method.getName(), null, cc);
+                CtMethod member = new CtMethod(type, method.getName(), null, implClass);
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
-                cc.addMethod(member);
+                implClass.addMethod(member);
+                if (membersNamesStringArray.length() > 0) {
+                    membersNamesStringArray.append(", ");
+                }
+                membersNamesStringArray.append("\"").append(method.getName()).append("\"");
             }
 
+            CtMethod getMemebersMethod = new CtMethod(pool.get(String[].class.getName()), "getMemebers", null, implClass);
+            getMemebersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
+            implClass.addMethod(getMemebersMethod);
+
             //Static for optimization
-            CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", cc);
+            CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", implClass);
             entityMetaField.setModifiers(Modifier.PRIVATE | Modifier.STATIC);
-            cc.addField(entityMetaField);
+            implClass.addField(entityMetaField);
 
-            CtMethod getEntityMetaMethod = new CtMethod(pool.get(EntityMeta.class.getName()), "getEntityMeta", null, cc);
+            CtMethod getEntityMetaMethod = new CtMethod(pool.get(EntityMeta.class.getName()), "getEntityMeta", null, implClass);
             getEntityMetaMethod.setBody("{ if (entityMeta == null) { entityMeta = super.getEntityMeta(); } return entityMeta; }");
-            cc.addMethod(getEntityMetaMethod);
+            implClass.addMethod(getEntityMetaMethod);
 
-            return cc;
+            return implClass;
         } catch (CannotCompileException e) {
             log.error("Impl compile error", e);
             throw new Error("Can't create class " + name);

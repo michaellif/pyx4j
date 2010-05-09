@@ -199,6 +199,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return EntityFactory.getEntityMeta((Class<IEntity>) getObjectClass());
     }
 
+    /**
+     * Generator will create the list ordered by member declaration in source.
+     */
+    public abstract String[] getMemebers();
+
     @Override
     public IObject<?> getMember(String memberName) {
         if (members == null) {

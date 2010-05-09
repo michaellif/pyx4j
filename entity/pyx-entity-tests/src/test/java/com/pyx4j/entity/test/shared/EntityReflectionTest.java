@@ -20,8 +20,10 @@
  */
 package com.pyx4j.entity.test.shared;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -30,7 +32,7 @@ public class EntityReflectionTest extends InitializerTestCase {
 
     public void testAddressMemberList() {
         Address address = EntityFactory.create(Address.class);
-        Set<String> names = address.getEntityMeta().getMemberNames();
+        List<String> names = address.getEntityMeta().getMemberNames();
 
         assertTrue("Address has streetName", names.contains("streetName"));
         assertTrue("Address has country", names.contains("country"));
@@ -39,8 +41,13 @@ public class EntityReflectionTest extends InitializerTestCase {
 
     public void testEmployeeMemberList() {
         Employee emp = EntityFactory.create(Employee.class);
-        Set<String> names = emp.getEntityMeta().getMemberNames();
+        List<String> names = emp.getEntityMeta().getMemberNames();
         assertEquals("Employee Memebers count", Employee.DECLARED_MEMEBERS, names.size());
+        //Test declared order
+        List<String> namesDeclared = Arrays.asList(Employee.MEMEBERS_ORDER);
+        if (!EqualsHelper.equals(names, namesDeclared)) {
+            fail("Memeber Order is not preserved " + names);
+        }
     }
 
     public void testAddressMemberAccess() {

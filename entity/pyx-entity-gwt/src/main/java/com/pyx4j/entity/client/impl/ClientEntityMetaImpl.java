@@ -21,12 +21,14 @@
 package com.pyx4j.entity.client.impl;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -42,20 +44,19 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final boolean rpcTransient;
 
+    private List<String> memberNames;
+
     protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
 
     private final List<String> toStringMemberNames;
 
     public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient, boolean rpcTransient,
-            String[] membersNames, String[] memberNamesToString) {
+            String[] memberNamesToString) {
         this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
         this.persistenceTransient = persistenceTransient;
         this.rpcTransient = rpcTransient;
-        for (String m : membersNames) {
-            membersMeta.put(m, null);
-        }
         toStringMemberNames = Arrays.asList(memberNamesToString);
     }
 
@@ -90,8 +91,12 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Set<String> getMemberNames() {
-        return membersMeta.keySet();
+    public List<String> getMemberNames() {
+        if (memberNames == null) {
+            SharedEntityHandler anInstance = (SharedEntityHandler) EntityFactory.create(getEntityClass());
+            memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMemebers()));
+        }
+        return memberNames;
     }
 
     /**

@@ -21,7 +21,6 @@
 package com.pyx4j.entity.shared.meta;
 
 import java.util.List;
-import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
@@ -62,7 +61,7 @@ public interface EntityMeta {
      */
     public boolean isRpcTransient();
 
-    public Set<String> getMemberNames();
+    public List<String> getMemberNames();
 
     public MemberMeta getMemberMeta(String memberName);
 

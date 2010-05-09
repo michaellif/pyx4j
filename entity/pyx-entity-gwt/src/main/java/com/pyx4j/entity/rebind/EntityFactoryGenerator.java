@@ -246,17 +246,12 @@ public class EntityFactoryGenerator extends Generator {
         }
         Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
         Boolean rpcTransient = (interfaceType.getAnnotation(RpcTransient.class) != null) || (interfaceType.getAnnotation(RpcBlacklist.class) != null);
-        StringBuilder membersNamesStringArray = new StringBuilder();
 
         List<String> toStringMemberNames = new Vector<String>();
         final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
 
         for (JMethod method : interfaceType.getMethods()) {
             if (isEntityMemeber(method)) {
-                if (membersNamesStringArray.length() > 0) {
-                    membersNamesStringArray.append(", ");
-                }
-                membersNamesStringArray.append("\"").append(method.getName()).append("\"");
                 ToString ts = method.getAnnotation(ToString.class);
                 if (ts != null) {
                     toStringMemberNames.add(method.getName());
@@ -307,10 +302,6 @@ public class EntityFactoryGenerator extends Generator {
 
         writer.print(rpcTransient.toString());
         writer.print(", ");
-
-        writer.print("new String[] {");
-        writer.print(membersNamesStringArray.toString());
-        writer.print("}, ");
 
         writer.print("new String[] {");
         writer.print(toStringMemberNamesStringArray.toString());
@@ -596,6 +587,7 @@ public class EntityFactoryGenerator extends Generator {
         writer.outdent();
         writer.println("}");
 
+        StringBuilder membersNamesStringArray = new StringBuilder();
         // Members access
         for (JMethod method : interfaceType.getMethods()) {
             if (!isEntityMemeber(method)) {
@@ -613,7 +605,22 @@ public class EntityFactoryGenerator extends Generator {
 
             writer.outdent();
             writer.println("}");
+
+            if (membersNamesStringArray.length() > 0) {
+                membersNamesStringArray.append(", ");
+            }
+            membersNamesStringArray.append("\"").append(method.getName()).append("\"");
         }
+
+        writer.println();
+        writer.println("@Override");
+        writer.println("public String[] getMemebers() {");
+        writer.indent();
+        writer.print("return new String[] {");
+        writer.print(membersNamesStringArray.toString());
+        writer.println("};");
+        writer.outdent();
+        writer.println("}");
 
         // for optimization
         writer.println();
