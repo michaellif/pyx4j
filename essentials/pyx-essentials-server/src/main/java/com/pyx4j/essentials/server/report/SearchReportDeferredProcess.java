@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
+import com.pyx4j.essentials.rpc.report.ReportColumn;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.security.shared.SecurityController;
@@ -54,6 +58,8 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     private final Class<? extends IEntity> entityClass;
 
+    private List<String> selectedMemberNames;
+
     private int fetchCount = 0;
 
     private boolean fetchCompleate;
@@ -65,7 +71,6 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         this.request = request;
         this.request.setPageSize(0);
         this.entityClass = ServerEntityFactory.entityClass(request.getDomainName());
-        formatHeader();
     }
 
     @Override
@@ -80,6 +85,9 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
             formatCompleate = true;
         } else {
             long start = System.currentTimeMillis();
+            if (selectedMemberNames == null) {
+                formatHeader();
+            }
             IndexedEntitySearch search = new IndexedEntitySearch(request);
             search.buildQueryCriteria();
             SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
@@ -105,15 +113,23 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
     }
 
     protected void formatHeader() {
+        selectedMemberNames = new Vector<String>();
         EntityMeta em = EntityFactory.getEntityMeta(entityClass);
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (em.getMemberMeta(memberName).isRpcTransient()) {
                 continue;
-            } else if (memberMeta.isEntity()) {
+            }
+            ReportColumn reportColumn = memberMeta.getAnnotation(ReportColumn.class);
+            if ((reportColumn != null) && reportColumn.ignore()) {
+                continue;
+            }
+            if (memberMeta.isEntity()) {
+                selectedMemberNames.add(memberName);
                 data.append(memberMeta.getCaption());
                 data.append(",");
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                selectedMemberNames.add(memberName);
                 data.append(memberMeta.getCaption());
                 data.append(",");
             }
@@ -123,11 +139,9 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     protected void formatEntity(IEntity entity) {
         EntityMeta em = entity.getEntityMeta();
-        for (String memberName : em.getMemberNames()) {
+        for (String memberName : selectedMemberNames) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (em.getMemberMeta(memberName).isRpcTransient()) {
-                continue;
-            } else if (memberMeta.isEntity()) {
+            if (memberMeta.isEntity()) {
                 data.append(((IEntity) entity.getMember(memberName)).getStringView());
                 data.append(",");
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
