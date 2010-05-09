@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
@@ -45,7 +44,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
 
             info.setDataPreloaderClassName(preloader.getClass().getName());
 
-            Map<String, Serializable> params = new HashMap<String, Serializable>();
+            HashMap<String, Serializable> params = new HashMap<String, Serializable>();
             for (String param : preloader.getParameters()) {
                 params.put(param, null);
             }

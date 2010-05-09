@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rpc;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("serial")
@@ -28,7 +29,7 @@ public class DataPreloaderInfo implements Serializable {
 
     private String dataPreloaderClassName;
 
-    private Map<String, Serializable> parameters;
+    private HashMap<String, Serializable> parameters;
 
     public DataPreloaderInfo() {
 
@@ -46,7 +47,7 @@ public class DataPreloaderInfo implements Serializable {
         return parameters;
     }
 
-    public void setParameters(Map<String, Serializable> parameters) {
+    public void setParameters(HashMap<String, Serializable> parameters) {
         this.parameters = parameters;
     }
 }
