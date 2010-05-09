@@ -14,22 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 4, 2010
+ * Created on May 8, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.rpc.shared;
+package com.pyx4j.commons;
 
-import com.pyx4j.commons.RuntimeExceptionSerializable;
+/**
+ * 
+ * RuntimeException that are safe to sent to client.
+ * 
+ * TODO add i18n
+ */
+public class RuntimeExceptionSerializable extends RuntimeException {
 
-@SuppressWarnings("serial")
-public class UnRecoverableRuntimeException extends RuntimeExceptionSerializable {
+    private static final long serialVersionUID = 1L;
 
-    public UnRecoverableRuntimeException() {
-        super();
+    protected RuntimeExceptionSerializable() {
+
     }
 
-    public UnRecoverableRuntimeException(String message) {
+    public RuntimeExceptionSerializable(String message) {
         super(message);
     }
 

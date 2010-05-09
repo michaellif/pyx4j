@@ -89,10 +89,10 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
     protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
 
         String detailsMessage = null;
-        if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 30) {
+        if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
             detailsMessage = "\n\nErrorCode ";
             if (errorCode != null) {
-                detailsMessage += "[" + errorCode + "] ";
+                detailsMessage += "[" + errorCode + "]\n";
             }
             detailsMessage += caught.getMessage();
         } else if (errorCode != null) {
@@ -102,7 +102,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             if ((caught instanceof UnrecoverableClientError) && (caught.getCause() != null)) {
                 caught = caught.getCause();
             }
-            detailsMessage += "\n\n" + caught.getClass();
+            detailsMessage += "\n" + caught.getClass();
             if (caught instanceof StatusCodeException) {
                 detailsMessage += " " + (((StatusCodeException) caught).getStatusCode());
             }

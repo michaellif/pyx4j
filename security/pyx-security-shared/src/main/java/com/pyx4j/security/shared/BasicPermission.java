@@ -46,7 +46,14 @@ public class BasicPermission implements Permission {
 
     @Override
     public String toString() {
-        return getPath() + " " + getActions();
+        StringBuilder b = new StringBuilder();
+        b.append(getPath());
+        String a = getActions();
+        if ((a != null) && (a.length() > 0)) {
+            b.append(' ');
+            b.append(a);
+        }
+        return b.toString();
     }
 
     @Override

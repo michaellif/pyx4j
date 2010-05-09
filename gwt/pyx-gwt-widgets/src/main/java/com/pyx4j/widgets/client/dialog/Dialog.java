@@ -56,6 +56,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -385,7 +386,7 @@ public class Dialog extends DialogPanel {
             setCellHeight(scrollPanel, "100%");
             setCellWidth(scrollPanel, "100%");
 
-            HTML htmlMessage = new HTML(message);
+            HTML htmlMessage = new HTML(message.replace("\n", "<br/>"));
 
             HorizontalPanel htmlHolder = new HorizontalPanel();
             htmlHolder.setSize("100%", "100%");

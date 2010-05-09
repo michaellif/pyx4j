@@ -27,6 +27,7 @@ import java.util.ListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.RemoteService;
@@ -89,7 +90,9 @@ public class RemoteServiceImpl implements RemoteService {
             return returnValue;
         } catch (RuntimeException e) {
             log.error("Service call error", e);
-            if (e.getMessage() == null) {
+            if (e instanceof RuntimeExceptionSerializable) {
+                throw e;
+            } else if (e.getMessage() == null) {
                 throw new UnRecoverableRuntimeException("System error, contact support");
             } else {
                 throw new UnRecoverableRuntimeException(e.getMessage());

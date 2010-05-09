@@ -20,8 +20,10 @@
  */
 package com.pyx4j.security.shared;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+
 @SuppressWarnings("serial")
-public class SecurityViolationException extends RuntimeException {
+public class SecurityViolationException extends RuntimeExceptionSerializable {
 
     protected SecurityViolationException() {
 
