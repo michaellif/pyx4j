@@ -73,6 +73,16 @@ public class ServerSideConfiguration {
     }
 
     /**
+     * Allow to share GAE DB between applications. The same as @Table(prefix = "app1")
+     * affects all Entity saved by application.
+     * 
+     * @return non null value to prefix all table names in DB
+     */
+    public String persistenceNamePrefix() {
+        return null;
+    }
+
+    /**
      * Default is Allow All Access Control List
      */
     public AclCreator getAclCreator() {

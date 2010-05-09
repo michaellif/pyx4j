@@ -30,6 +30,7 @@ import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -72,11 +73,12 @@ public class EntityMetaImpl implements EntityMeta {
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
         Table tableAnnotation = entityClass.getAnnotation(Table.class);
+        String persistenceNamePrefix = ServerSideConfiguration.instance().persistenceNamePrefix();
         if (tableAnnotation != null) {
-            persistenceName = tableAnnotation.prefix()
+            persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + tableAnnotation.prefix()
                     + (CommonsStringUtils.isStringSet(tableAnnotation.name()) ? tableAnnotation.name() : entityClass.getSimpleName());
         } else {
-            persistenceName = entityClass.getSimpleName();
+            persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + entityClass.getSimpleName();
         }
 
         Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
