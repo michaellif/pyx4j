@@ -26,9 +26,16 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.RpcRequestBuilder;
 
-public class AppEngineUsageProcessingRpcRequestBuilder extends RpcRequestBuilder {
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.rpc.shared.Service;
 
-    public AppEngineUsageProcessingRpcRequestBuilder() {
+public class PyxRpcRequestBuilder extends RpcRequestBuilder {
+
+    private boolean collectAppEngineUsageStats;
+
+    private String serviceInterfaceMarker;
+
+    public PyxRpcRequestBuilder() {
     }
 
     private static class ResponseHeaderRequestCallbackAdapter implements RequestCallback {
@@ -47,10 +54,32 @@ public class AppEngineUsageProcessingRpcRequestBuilder extends RpcRequestBuilder
         }
     }
 
+    /**
+     * Mark service entry point with service name to be able to view statistic in GAE
+     * console.
+     */
+    @SuppressWarnings("unchecked")
+    void executing(final Class<? extends Service> serviceInterface) {
+        serviceInterfaceMarker = GWTJava5Helper.getSimpleName(serviceInterface).replace('$', '.');
+    }
+
+    @Override
+    protected RequestBuilder doCreate(String serviceEntryPoint) {
+        return super.doCreate(serviceEntryPoint + "/" + serviceInterfaceMarker);
+    }
+
+    void enableAppEngineUsageStats() {
+        collectAppEngineUsageStats = true;
+    }
+
     @Override
     protected void doSetCallback(RequestBuilder rb, RequestCallback callback) {
-        ResponseHeaderRequestCallbackAdapter adapter = new ResponseHeaderRequestCallbackAdapter();
-        adapter.callback = callback;
-        super.doSetCallback(rb, adapter);
+        if (collectAppEngineUsageStats) {
+            ResponseHeaderRequestCallbackAdapter adapter = new ResponseHeaderRequestCallbackAdapter();
+            adapter.callback = callback;
+            super.doSetCallback(rb, adapter);
+        } else {
+            super.doSetCallback(rb, callback);
+        }
     }
 }

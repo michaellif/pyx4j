@@ -58,9 +58,13 @@ public class RPCManager {
 
     private static final int RECOVERABLE_CALL_RETRY_MAX = 3;
 
+    private static PyxRpcRequestBuilder requestBuilder;
+
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
         serializer = GWT.create(RPCSerializer.class);
+        ServiceDefTarget target = (ServiceDefTarget) service;
+        target.setRpcRequestBuilder(requestBuilder = new PyxRpcRequestBuilder());
     }
 
     public static void setServiceEntryPointURL(String url) {
@@ -69,8 +73,7 @@ public class RPCManager {
     }
 
     public static void enableAppEngineUsageStats() {
-        ServiceDefTarget target = (ServiceDefTarget) service;
-        target.setRpcRequestBuilder(new AppEngineUsageProcessingRpcRequestBuilder());
+        requestBuilder.enableAppEngineUsageStats();
     }
 
     public static Serializer getSerializer() {
@@ -95,6 +98,7 @@ public class RPCManager {
         try {
             runningServicesCount++;
             fireStatusChangeEvent(When.START, executeBackground, serviceInterface, callback, -1);
+            requestBuilder.executing(serviceInterface);
             service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);

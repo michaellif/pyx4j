@@ -45,12 +45,12 @@
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <url-pattern>/g.site/service</url-pattern>
+        <url-pattern>/g.site/srv/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <url-pattern>/g.ria/service</url-pattern>
+        <url-pattern>/g.ria/srv/*</url-pattern>
     </servlet-mapping>
 
     <!-- Default page -->

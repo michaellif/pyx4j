@@ -29,7 +29,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * 
  * Use RPCManager.execute(...) in client code;
  */
-@RemoteServiceRelativePath("service")
+@RemoteServiceRelativePath("srv")
 public interface RemoteService extends com.google.gwt.user.client.rpc.RemoteService {
 
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException;
