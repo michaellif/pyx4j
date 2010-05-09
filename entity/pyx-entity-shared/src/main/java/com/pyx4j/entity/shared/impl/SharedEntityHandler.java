@@ -46,8 +46,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     private Map<String, Object> data;
 
-    private transient EntityMeta entityMeta;
-
     protected transient HashMap<String, IObject<?>> members;
 
     /**
@@ -197,11 +195,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @SuppressWarnings("unchecked")
     @Override
     public EntityMeta getEntityMeta() {
-        if (entityMeta == null) {
-            // Cache Meta for this class.
-            entityMeta = EntityFactory.getEntityMeta((Class<IEntity>) getObjectClass());
-        }
-        return entityMeta;
+        // Cache EntityMeta is done in Entity implementations using static member.
+        return EntityFactory.getEntityMeta((Class<IEntity>) getObjectClass());
     }
 
     @Override
@@ -317,7 +312,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     private Object getMemberStringView(String memberName) {
-        if (entityMeta.getMemberMeta(memberName).isEntity()) {
+        if (getEntityMeta().getMemberMeta(memberName).isEntity()) {
             return ((IEntity) getMember(memberName)).getStringView();
         } else {
             return getMemberValue(memberName);

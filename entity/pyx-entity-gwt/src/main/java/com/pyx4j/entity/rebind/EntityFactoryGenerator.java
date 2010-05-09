@@ -498,6 +498,7 @@ public class EntityFactoryGenerator extends Generator {
         composer.addImport(interfaceType.getQualifiedSourceName());
         composer.addImport(IObject.class.getName());
         composer.addImport(IEntity.class.getName());
+        composer.addImport(EntityMeta.class.getName());
         composer.setSuperclass(SharedEntityHandler.class.getName());
         composer.addImplementedInterface(interfaceType.getName());
         composer.addAnnotationDeclaration("@SuppressWarnings(\"serial\")");
@@ -514,6 +515,13 @@ public class EntityFactoryGenerator extends Generator {
     }
 
     private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
+        //Static for optimization
+        writer.println();
+        writer.indent();
+        writer.println("private static EntityMeta entityMeta;");
+        writer.outdent();
+
+        // Constructors
         writer.println();
         writer.indent();
         writer.println("public " + simpleName + "() { ");
@@ -606,6 +614,16 @@ public class EntityFactoryGenerator extends Generator {
             writer.outdent();
             writer.println("}");
         }
+
+        // for optimization
+        writer.println();
+        writer.println("@Override");
+        writer.println("public EntityMeta getEntityMeta() {");
+        writer.indent();
+        writer.println("if (entityMeta == null) { entityMeta = super.getEntityMeta(); }");
+        writer.println("return entityMeta;");
+        writer.outdent();
+        writer.println("}");
 
     }
 }

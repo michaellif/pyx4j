@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityImplGenerator {
 
@@ -263,6 +264,15 @@ public class EntityImplGenerator {
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
                 cc.addMethod(member);
             }
+
+            //Static for optimization
+            CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", cc);
+            entityMetaField.setModifiers(Modifier.PRIVATE | Modifier.STATIC);
+            cc.addField(entityMetaField);
+
+            CtMethod getEntityMetaMethod = new CtMethod(pool.get(EntityMeta.class.getName()), "getEntityMeta", null, cc);
+            getEntityMetaMethod.setBody("{ if (entityMeta == null) { entityMeta = super.getEntityMeta(); } return entityMeta; }");
+            cc.addMethod(getEntityMetaMethod);
 
             return cc;
         } catch (CannotCompileException e) {
