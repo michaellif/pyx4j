@@ -94,7 +94,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                     return;
                 }
             }
-            log.debug("fetch compleate {}", fetchCount);
+            log.debug("fetch compleate {}; data size {}", fetchCount, data.length());
             fetchCompleate = true;
         }
     }
