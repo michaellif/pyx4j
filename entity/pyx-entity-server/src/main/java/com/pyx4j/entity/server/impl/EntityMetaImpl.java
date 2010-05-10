@@ -231,6 +231,10 @@ public class EntityMetaImpl implements EntityMeta {
         //TODO move this list creation to EntityImplGenerator for better performance
         if (bidirectionalReferenceMemberNames == null) {
             bidirectionalReferenceMemberNames = new Vector<String>();
+            //Hack for Abstract IEntity as a filed
+            if (getEntityClass().equals(IEntity.class)) {
+                return bidirectionalReferenceMemberNames;
+            }
             for (String memberName : getMemberNames()) {
                 MemberMeta meta = getMemberMeta(memberName);
                 if (meta.isOwner()) {

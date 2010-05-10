@@ -285,10 +285,10 @@ public class EntityImplGenerator {
 
             return implClass;
         } catch (CannotCompileException e) {
-            log.error("Impl compile error", e);
+            log.error("Impl " + interfaceName + " compile error", e);
             throw new Error("Can't create class " + name);
         } catch (NotFoundException e) {
-            log.error("Impl construction error", e);
+            log.error("Impl " + interfaceName + " construction error", e);
             throw new Error("Can't create class " + name);
         }
     }

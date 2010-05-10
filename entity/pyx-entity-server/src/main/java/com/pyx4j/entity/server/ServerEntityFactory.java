@@ -38,6 +38,9 @@ public class ServerEntityFactory implements IEntityFactoryImpl {
 
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
+        if (IEntity.class.equals(clazz)) {
+            throw new Error("Should not use abstract IEntity class");
+        }
         String handlerClassName = clazz.getName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
         Class<?> handlerClass;
         try {
