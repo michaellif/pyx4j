@@ -50,7 +50,9 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     private final static Logger log = LoggerFactory.getLogger(SearchReportDeferredProcess.class);
 
-    private final StringBuilder data = new StringBuilder();
+    protected String dataStored;
+
+    protected transient StringBuilder dataBuilder = new StringBuilder();
 
     private final EntitySearchCriteria<?> request;
 
@@ -59,6 +61,8 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
     private final Class<? extends IEntity> entityClass;
 
     private List<String> selectedMemberNames;
+
+    private volatile boolean canceled;
 
     private int fetchCount = 0;
 
@@ -75,41 +79,63 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     @Override
     public void cancel() {
-        // TODO Auto-generated method stub
+        canceled = true;
     }
 
     @Override
     public void execute() {
+        if (canceled) {
+            return;
+        }
         if (fetchCompleate) {
             createDownloadable();
             formatCompleate = true;
         } else {
             long start = System.currentTimeMillis();
-            if (selectedMemberNames == null) {
-                formatHeader();
-            }
-            IndexedEntitySearch search = new IndexedEntitySearch(request);
-            search.buildQueryCriteria();
-            SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
-            while (it.hasNext()) {
-                IEntity ent = it.next();
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
-                formatEntity(ent);
-                fetchCount++;
-                if (System.currentTimeMillis() - start > Consts.SEC2MSEC * 20) {
-                    log.warn("Executions time quota exceeded {}", System.currentTimeMillis() - start);
-                    log.debug("fetch will continue {}; data size {}", fetchCount, data.length());
-                    encodedCursorRefference = it.encodedCursorRefference();
-                    return;
+            try {
+                if (dataStored != null) {
+                    dataBuilder.append(dataStored);
+                }
+                if (selectedMemberNames == null) {
+                    formatHeader();
+                }
+                IndexedEntitySearch search = new IndexedEntitySearch(request);
+                search.buildQueryCriteria();
+                SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
+                while (it.hasNext()) {
+                    IEntity ent = it.next();
+                    SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                    formatEntity(ent);
+                    fetchCount++;
+                    if (System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) {
+                        log.warn("Executions time quota exceeded {}", System.currentTimeMillis() - start);
+                        log.debug("fetch will continue {}; data size {}", fetchCount, dataBuilder.length());
+                        encodedCursorRefference = it.encodedCursorRefference();
+                        return;
+                    }
+                    if (canceled) {
+                        log.debug("fetch canceled");
+                        break;
+                    }
+                }
+                log.debug("fetch compleate {}; data size {}", fetchCount, dataBuilder.length());
+                fetchCompleate = true;
+            } finally {
+                if (canceled) {
+                    dataStored = null;
+                } else {
+                    dataStored = dataBuilder.toString();
                 }
             }
-            log.debug("fetch compleate {}; data size {}", fetchCount, data.length());
-            fetchCompleate = true;
         }
     }
 
     protected String getFileName() {
         return EntityFactory.getEntityMeta(entityClass).getCaption() + ".csv";
+    }
+
+    protected boolean acceptMemeber(String memberName, MemberMeta memberMeta) {
+        return true;
     }
 
     protected void formatHeader() {
@@ -124,17 +150,20 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
             if ((reportColumn != null) && reportColumn.ignore()) {
                 continue;
             }
+            if (!acceptMemeber(memberName, memberMeta)) {
+                continue;
+            }
             if (memberMeta.isEntity()) {
                 selectedMemberNames.add(memberName);
-                data.append(memberMeta.getCaption());
-                data.append(",");
+                dataBuilder.append(memberMeta.getCaption());
+                dataBuilder.append(",");
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 selectedMemberNames.add(memberName);
-                data.append(memberMeta.getCaption());
-                data.append(",");
+                dataBuilder.append(memberMeta.getCaption());
+                dataBuilder.append(",");
             }
         }
-        data.append("\n");
+        dataBuilder.append("\n");
     }
 
     protected void formatEntity(IEntity entity) {
@@ -142,18 +171,18 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         for (String memberName : selectedMemberNames) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isEntity()) {
-                data.append(((IEntity) entity.getMember(memberName)).getStringView());
-                data.append(",");
+                dataBuilder.append(((IEntity) entity.getMember(memberName)).getStringView());
+                dataBuilder.append(",");
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                data.append(entity.getMember(memberName).getValue());
-                data.append(",");
+                dataBuilder.append(entity.getMember(memberName).getValue());
+                dataBuilder.append(",");
             }
         }
-        data.append("\n");
+        dataBuilder.append("\n");
     }
 
     protected void createDownloadable() {
-        Downloadable d = new Downloadable(data.toString().getBytes(), "text/csv");
+        Downloadable d = new Downloadable(dataStored.getBytes(), "text/csv");
         d.save(getFileName());
     }
 
@@ -167,6 +196,9 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         } else {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
             r.setProgress(fetchCount);
+            if (canceled) {
+                r.setCanceled();
+            }
             return r;
         }
     }
