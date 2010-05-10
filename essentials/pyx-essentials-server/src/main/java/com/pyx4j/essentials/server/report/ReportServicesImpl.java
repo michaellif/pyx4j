@@ -20,7 +20,7 @@
  */
 package com.pyx4j.essentials.server.report;
 
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
 import com.pyx4j.essentials.server.download.Downloadable;
@@ -31,7 +31,7 @@ public class ReportServicesImpl implements ReportServices {
     public static class SearchImpl implements ReportServices.Search {
 
         @Override
-        public String execute(EntitySearchCriteria<?> request) {
+        public String execute(ReportRequest request) {
             return DeferredProcessServicesImpl.register(new SearchReportDeferredProcess(request));
         }
 

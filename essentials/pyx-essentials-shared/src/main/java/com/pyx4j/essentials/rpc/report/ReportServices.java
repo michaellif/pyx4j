@@ -20,13 +20,12 @@
  */
 package com.pyx4j.essentials.rpc.report;
 
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface ReportServices {
 
-    public interface Search extends Service<EntitySearchCriteria<?>, String> {
+    public interface Search extends Service<ReportRequest, String> {
 
     };
 

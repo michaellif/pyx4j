@@ -34,12 +34,12 @@ import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.security.shared.SecurityController;
@@ -52,7 +52,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     protected ReportTableFormater formater;
 
-    private final EntitySearchCriteria<?> request;
+    private final ReportRequest request;
 
     private String encodedCursorRefference;
 
@@ -68,12 +68,13 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     private boolean formatCompleate;
 
-    public SearchReportDeferredProcess(EntitySearchCriteria<?> request) {
-        SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+    public SearchReportDeferredProcess(ReportRequest request) {
+        SecurityController.assertPermission(new EntityPermission(request.getCriteria().getDomainName(), EntityPermission.READ));
         this.request = request;
-        this.request.setPageSize(0);
-        this.entityClass = ServerEntityFactory.entityClass(request.getDomainName());
+        this.request.getCriteria().setPageSize(0);
+        this.entityClass = ServerEntityFactory.entityClass(request.getCriteria().getDomainName());
         this.formater = new ReportTableCSVFormater();
+        ((ReportTableCSVFormater) this.formater).setTimezoneOffset(request.getTimezoneOffset());
     }
 
     @Override
@@ -95,7 +96,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                 if (selectedMemberNames == null) {
                     createHeader();
                 }
-                IndexedEntitySearch search = new IndexedEntitySearch(request);
+                IndexedEntitySearch search = new IndexedEntitySearch(request.getCriteria());
                 search.buildQueryCriteria();
                 SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
                 while (it.hasNext()) {

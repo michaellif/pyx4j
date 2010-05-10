@@ -117,4 +117,9 @@ public class TimeUtils {
     public static String getTimeZoneInfo() {
         return "UTC" + String.valueOf(-(new Date()).getTimezoneOffset() / 60);
     }
+
+    @SuppressWarnings("deprecation")
+    public static int getTimezoneOffset() {
+        return (new Date()).getTimezoneOffset();
+    }
 }

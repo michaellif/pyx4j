@@ -26,13 +26,24 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class ReportTableCSVFormater implements ReportTableFormater, Externalizable {
 
     protected transient StringBuilder dataBuilder;
 
+    protected SimpleDateFormat dateFormat;
+
     public ReportTableCSVFormater() {
         dataBuilder = new StringBuilder();
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    }
+
+    public void setTimezoneOffset(int timezoneOffset) {
+        String[] ids = TimeZone.getAvailableIDs(timezoneOffset);
+        if (ids.length != 0) {
+            dateFormat.setTimeZone(TimeZone.getTimeZone(ids[0]));
+        }
     }
 
     @Override
@@ -84,11 +95,13 @@ public class ReportTableCSVFormater implements ReportTableFormater, Externalizab
         if (dataStored != null) {
             dataBuilder.append(dataStored);
         }
+        dateFormat = (SimpleDateFormat) in.readObject();
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(dataBuilder.toString());
+        out.writeObject(dateFormat);
     }
 
 }

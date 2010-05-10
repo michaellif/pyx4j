@@ -26,9 +26,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
@@ -48,6 +50,10 @@ public class ReportDialog extends DeferredProcessDialog {
         final ReportDialog rd = new ReportDialog("Report", "Creating report...");
         rd.show();
 
+        ReportRequest reportRequest = new ReportRequest();
+        reportRequest.setTimezoneOffset(TimeUtils.getTimezoneOffset());
+        reportRequest.setCriteria(criteria);
+
         AsyncCallback<String> callback = new BlockingAsyncCallback<String>() {
 
             @Override
@@ -63,7 +69,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
         };
 
-        RPCManager.execute(reportServiceInterface, criteria, callback);
+        RPCManager.execute(reportServiceInterface, reportRequest, callback);
     }
 
     public ReportDialog(String title, String initialMessage) {

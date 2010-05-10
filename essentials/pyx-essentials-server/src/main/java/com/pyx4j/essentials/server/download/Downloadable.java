@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.server.contexts.Context;
 
 public class Downloadable implements Serializable {
@@ -51,6 +52,30 @@ public class Downloadable implements Serializable {
         this.data = data;
         this.contentType = contentType;
         this.creationTimestamp = System.currentTimeMillis();
+    }
+
+    public static String getContentType(DownloadFormat downloadFormat) {
+        switch (downloadFormat) {
+        case RTF:
+            return "application/rtf";
+        case DOCX:
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        case XLS:
+            return "application/xls";
+        case ODT:
+            return "application/vnd.oasis.opendocument.text";
+        case PDF:
+            return "application/pdf";
+        case XML:
+            return "text/xml";
+        case HTML:
+            return "text/html";
+        case TXT:
+            return "text/csv";
+        case CSV:
+        default:
+            throw new RuntimeException("Unsupported report download format " + downloadFormat);
+        }
     }
 
     public boolean isOutDated() {
