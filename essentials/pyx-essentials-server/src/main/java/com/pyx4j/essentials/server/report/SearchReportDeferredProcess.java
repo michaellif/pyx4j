@@ -52,7 +52,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
 
     protected String dataStored;
 
-    protected transient StringBuilder dataBuilder = new StringBuilder();
+    protected transient StringBuilder dataBuilder;
 
     private final EntitySearchCriteria<?> request;
 
@@ -93,6 +93,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         } else {
             long start = System.currentTimeMillis();
             try {
+                dataBuilder = new StringBuilder();
                 if (dataStored != null) {
                     dataBuilder.append(dataStored);
                 }
