@@ -76,4 +76,8 @@ public class ReflectionServiceFactory implements IServiceFactory {
         return filters;
     }
 
+    protected void addFilter(IServiceFilter filter) {
+        filters.add(filter);
+    }
+
 }

@@ -93,6 +93,10 @@ public class EntityServicesImpl {
                 IEntity ent = it.next();
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
                 r.add(ent);
+                if (System.nanoTime() > start + Consts.SEC2NANO * 20) {
+                    r.setQuotaExceeded(true);
+                    break;
+                }
             }
             r.hasMoreData(it.hasMoreData());
 

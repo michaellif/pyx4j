@@ -32,6 +32,8 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     private boolean hasMoreData;
 
+    private boolean quotaExceeded;
+
     public EntitySearchResult() {
         data = new Vector<E>();
     }
@@ -54,5 +56,13 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     public void hasMoreData(boolean hasMoreData) {
         this.hasMoreData = hasMoreData;
+    }
+
+    public boolean isQuotaExceeded() {
+        return quotaExceeded;
+    }
+
+    public void setQuotaExceeded(boolean quotaExceeded) {
+        this.quotaExceeded = quotaExceeded;
     }
 }
