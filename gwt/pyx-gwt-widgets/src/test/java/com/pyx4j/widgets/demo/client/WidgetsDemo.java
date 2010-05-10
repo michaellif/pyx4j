@@ -269,7 +269,6 @@ public class WidgetsDemo implements EntryPoint {
             inputPanel.setSize("400px", "200px");
 
             dialog.setBody(inputPanel);
-
             dialog.show();
         }
 

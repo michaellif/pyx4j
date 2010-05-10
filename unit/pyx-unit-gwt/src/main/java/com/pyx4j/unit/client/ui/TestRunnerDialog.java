@@ -44,7 +44,6 @@ public class TestRunnerDialog extends Dialog {
         super("JUnit Client Side", runner);
         runner.setSize("400px", "200px");
         setBody(runner);
-
     }
 
     public static void createAsync() {

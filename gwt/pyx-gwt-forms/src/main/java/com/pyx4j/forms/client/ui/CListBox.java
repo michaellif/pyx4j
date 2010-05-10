@@ -273,6 +273,8 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
         ((Widget) nativeListBox).setSize("400px", "200px");
 
         pop.setBody((Widget) nativeListBox);
+        pop.show();
+
     }
 
     public E getSelected() {

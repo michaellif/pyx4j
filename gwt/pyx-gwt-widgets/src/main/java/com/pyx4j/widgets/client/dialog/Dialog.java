@@ -132,12 +132,10 @@ public class Dialog extends DialogPanel {
         messagePanel.setSize("400px", "200px");
 
         setBody(messagePanel);
-        center();
     }
 
     public Dialog(String caption, DialogOptions options) {
         super(false, true);
-        setVisible(false);
         setGlassEnabled(true);
         setCaption(caption);
 
@@ -179,8 +177,6 @@ public class Dialog extends DialogPanel {
     public void setBody(Widget message) {
         content.add(message, DockPanel.CENTER);
         content.setCellHeight(message, "100%");
-        setVisible(true);
-        center();
     }
 
     private HorizontalPanel createButtonsPanel() {
@@ -413,7 +409,13 @@ public class Dialog extends DialogPanel {
         if (!openDialogs.contains(this)) {
             openDialogs.add(this);
         }
+
+        if (!isShowing()) {
+            setVisible(false);
+        }
         super.show();
+        center();
+        setVisible(true);
         // The insides of Dialog may be CForm that is only initialized on show.
         DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
             public void execute() {
