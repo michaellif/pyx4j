@@ -28,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.pyx4j.commons.Consts;
+
 public class ReportTableCSVFormater implements ReportTableFormater, Externalizable {
 
     protected transient StringBuilder dataBuilder;
@@ -40,7 +42,8 @@ public class ReportTableCSVFormater implements ReportTableFormater, Externalizab
     }
 
     public void setTimezoneOffset(int timezoneOffset) {
-        String[] ids = TimeZone.getAvailableIDs(timezoneOffset);
+        // Hack. Selecting first time zone is as good as any, There are no Daylight Saving Time information from the GWT client.
+        String[] ids = TimeZone.getAvailableIDs(-(int) (timezoneOffset * Consts.MIN2MSEC));
         if (ids.length != 0) {
             dateFormat.setTimeZone(TimeZone.getTimeZone(ids[0]));
         }
@@ -67,7 +70,7 @@ public class ReportTableCSVFormater implements ReportTableFormater, Externalizab
         if (value == null) {
             text = "";
         } else if (value instanceof Date) {
-            text = new SimpleDateFormat("MM/dd/yyyy HH:mm").format((Date) value);
+            text = dateFormat.format((Date) value);
         } else {
             text = value.toString();
         }
