@@ -20,17 +20,33 @@
  */
 package com.pyx4j.entity.server.search;
 
+import java.util.regex.Pattern;
+
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 
 public class StringInMemoryFilter extends InMemoryFilter {
 
-    protected String pattern;
+    protected final String wordStart;
 
-    public StringInMemoryFilter(Path propertyPath, String pattern) {
+    protected final Pattern pattern;
+
+    public StringInMemoryFilter(Path propertyPath, String word) {
         super(propertyPath);
-        this.pattern = pattern.toLowerCase();
+        word = word.toLowerCase();
+        int wc = word.indexOf(IndexString.WILDCARD_CHAR);
+        if (wc == 0) {
+            // Starts from Wildcard character = can't use startsWith
+            wordStart = null;
+            pattern = Pattern.compile(word.replace("*", ".*?") + "\\b.*");
+        } else if (wc >= 1) {
+            wordStart = word.substring(0, wc);
+            pattern = Pattern.compile(word.replace("*", ".*?") + "\\b.*");
+        } else {
+            wordStart = word;
+            pattern = null;
+        }
     }
 
     @Override
@@ -40,7 +56,15 @@ public class StringInMemoryFilter extends InMemoryFilter {
             return false;
         }
         for (String word : value.toLowerCase().split(IndexString.KEYWORD_SPLIT_PATTERN)) {
-            if (word.startsWith(pattern)) {
+            if (wordStart != null) {
+                if (word.startsWith(wordStart)) {
+                    if (pattern == null) {
+                        return true;
+                    } else {
+                        return pattern.matcher(word).matches();
+                    }
+                }
+            } else if (pattern.matcher(word).matches()) {
                 return true;
             }
         }

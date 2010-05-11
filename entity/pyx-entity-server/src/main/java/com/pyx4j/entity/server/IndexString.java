@@ -21,16 +21,20 @@
 package com.pyx4j.entity.server;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 public class IndexString {
 
-    public static String KEYWORD_SPLIT_PATTERN = "[\\W,.;\\-]";
+    public static String KEYWORD_SPLIT_PATTERN = "[\\W,.;\\-&&[^*]]";
+
+    public static char WILDCARD_CHAR = '*';
 
     public static Set<String> getIndexKeys(int keywordLenght, String searchCriteria) {
         Set<String> set = new HashSet<String>();
         for (String word : searchCriteria.split(KEYWORD_SPLIT_PATTERN)) {
-            word = word.toLowerCase();
+            word = word.trim().toLowerCase();
             for (int i = 1; i <= Math.min(keywordLenght, word.length()); i++) {
                 set.add(word.substring(0, i));
             }
@@ -41,13 +45,33 @@ public class IndexString {
     public static Set<String> getIndexValues(int keywordLenght, String searchCriteria) {
         Set<String> set = new HashSet<String>();
         for (String word : searchCriteria.split(KEYWORD_SPLIT_PATTERN)) {
-            word = word.toLowerCase();
-            if (word.length() > keywordLenght) {
+            word = word.toLowerCase().trim();
+            int wc = word.indexOf(WILDCARD_CHAR);
+            if (wc == 0) {
+                // Starts from Wildcard character = can't use index
+                continue;
+            } else if (wc >= 1) {
+                word = word.substring(0, wc);
+            }
+            if (word.length() == 0) {
+                continue;
+            } else if (word.length() > keywordLenght) {
                 set.add(word.substring(0, keywordLenght));
             } else {
                 set.add(word);
             }
         }
         return set;
+    }
+
+    public static List<String> splitIndexValues(String searchCriteria) {
+        List<String> list = new Vector<String>();
+        for (String word : searchCriteria.split(KEYWORD_SPLIT_PATTERN)) {
+            word = word.trim();
+            if (word.length() > 0) {
+                list.add(word);
+            }
+        }
+        return list;
     }
 }

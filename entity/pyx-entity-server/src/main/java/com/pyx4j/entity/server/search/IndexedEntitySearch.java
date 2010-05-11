@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -152,10 +153,15 @@ public class IndexedEntitySearch {
                         }
                     }
                     //use secondary filter if required
-                    for (String word : str.split(IndexString.KEYWORD_SPLIT_PATTERN)) {
-                        word = word.toLowerCase();
-                        if (word.length() > index.keywordLenght()) {
-                            inMemoryFilters.add(new StringInMemoryFilter(path, word));
+                    List<String> words = IndexString.splitIndexValues(str.toLowerCase());
+                    log.debug("keywords {}", words);
+                    if (words.size() == 1) {
+                        inMemoryFilters.add(new StringInMemoryFilter(path, words.get(0)));
+                    } else {
+                        if (mm.getAnnotation(Phone.class) != null) {
+                            inMemoryFilters.add(new StringCompositeOrderedInMemoryFilter(path, words));
+                        } else {
+                            inMemoryFilters.add(new StringCompositeInMemoryFilter(path, words));
                         }
                     }
                 } else {
