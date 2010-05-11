@@ -173,15 +173,12 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     }
 
     public void populateHistory(Map<String, String> history) {
-        if (history == null) {
-            return;
-        }
         for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
             CEditableComponent comp = me.getKey();
             if (!comp.isVisible()) {
                 continue;
             }
-            Object value = history.get(me.getValue().getHistoryKey());
+            Object value = history == null ? null : history.get(me.getValue().getHistoryKey());
             if (value == null) {
                 comp.setValue(null);
             } else if (comp instanceof CTextField) {

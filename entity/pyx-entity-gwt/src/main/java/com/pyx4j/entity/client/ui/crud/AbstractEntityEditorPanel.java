@@ -75,6 +75,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         form.populate(entity);
     }
 
+    public void clearForm() {
+        form.populate(null);
+    }
+
     public E getEntity() {
         return form.getValue();
     }
