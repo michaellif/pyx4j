@@ -36,9 +36,9 @@ public class CollectionInMemoryFilter extends InMemoryFilter {
 
     final Serializable searchValue;
 
-    public CollectionInMemoryFilter(Path propertyPath, int pathItem, Serializable Object) {
+    public CollectionInMemoryFilter(Path propertyPath, int pathItem, Serializable object) {
         super(propertyPath);
-        searchValue = Object;
+        searchValue = object;
         int count = 0;
         for (String memberName : propertyPath.getPathMembers()) {
             count++;

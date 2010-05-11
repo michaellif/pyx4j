@@ -181,6 +181,8 @@ public class IndexedEntitySearch {
                 Date day = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "day"));
                 if (day != null) {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, TimeUtils.dayStart(day)));
+                    // Add in case index criteria is dropped by search 
+                    inMemoryFilters.add(new DayInMemoryFilter(path, day));
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();
@@ -198,6 +200,8 @@ public class IndexedEntitySearch {
                 if ((index != null) && (index.global() != 0)) {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
                             + ((Enum<?>) me.getValue()).name()));
+                    // Add in case index criteria is dropped by search 
+                    inMemoryFilters.add(new PrimitiveInMemoryFilter(path, me.getValue()));
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
                 }
