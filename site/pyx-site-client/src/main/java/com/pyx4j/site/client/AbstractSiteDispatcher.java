@@ -67,7 +67,7 @@ public abstract class AbstractSiteDispatcher {
 
     private final ValueChangeHandler<String> historyChangeHandler;
 
-    private boolean historyChangeHandlerDisabled = false;
+    private final boolean historyChangeHandlerDisabled = false;
 
     public AbstractSiteDispatcher() {
         historyChangeHandler = new ValueChangeHandler<String>() {
@@ -82,8 +82,6 @@ public abstract class AbstractSiteDispatcher {
                         DialogOptions options = new OkCancelOption() {
                             @Override
                             public boolean onClickOk() {
-                                //allow to answer: navigate anyway.
-                                substituteCurrentHistoryToken(event.getValue());
                                 doShow(event.getValue());
                                 return true;
                             }
@@ -99,8 +97,6 @@ public abstract class AbstractSiteDispatcher {
 
                         d.show();
 
-                        //reset the original history token
-                        substituteCurrentHistoryToken(pathShown);
                         return;
                     }
                 }
@@ -152,11 +148,33 @@ public abstract class AbstractSiteDispatcher {
         History.forward();
     }
 
-    public void substituteCurrentHistoryToken(String newToken) {
-        historyChangeHandlerDisabled = true;
-        back();
+    public void addHistoryToken(String newToken) {
         History.newItem(newToken, false);
-        historyChangeHandlerDisabled = false;
+    }
+
+    /**
+     * TODO mode to HistoryUtils, Maybe this belong to Client side ResourceUriUtil, BUT
+     * ResourceUriUtil is shared, so com.google.gwt.http.client.URL can't be used!
+     * 
+     */
+    public static String createHistoryToken(String uri, Map<String, String> history) {
+        StringBuilder newToken = new StringBuilder();
+        newToken.append(uri);
+        newToken.append(ResourceUri.ARGS_GROUP_SEPARATOR);
+
+        boolean first = true;
+        for (Map.Entry<String, String> me : history.entrySet()) {
+            if (first) {
+                first = false;
+            } else {
+                newToken.append(ResourceUri.ARGS_SEPARATOR);
+            }
+            newToken.append(me.getKey());
+            newToken.append(ResourceUri.NAME_VALUE_SEPARATOR);
+            newToken.append(URL.encode(me.getValue()));
+        }
+
+        return newToken.toString();
     }
 
     //TODO handle wrong tokens !!!
@@ -320,31 +338,6 @@ public abstract class AbstractSiteDispatcher {
 
     public void setCurrentSitePanel(SitePanel currentSitePanel) {
         this.currentSitePanel = currentSitePanel;
-    }
-
-    /**
-     * TODO mode to HistoryUtils, Maybe this belong to Client side ResourceUriUtil, BUT
-     * ResourceUriUtil is shared, so com.google.gwt.http.client.URL can't be used!
-     * 
-     */
-    public static String createHistoryToken(String uri, Map<String, String> history) {
-        StringBuilder newToken = new StringBuilder();
-        newToken.append(uri);
-        newToken.append(ResourceUri.ARGS_GROUP_SEPARATOR);
-
-        boolean first = true;
-        for (Map.Entry<String, String> me : history.entrySet()) {
-            if (first) {
-                first = false;
-            } else {
-                newToken.append(ResourceUri.ARGS_SEPARATOR);
-            }
-            newToken.append(me.getKey());
-            newToken.append(ResourceUri.NAME_VALUE_SEPARATOR);
-            newToken.append(URL.encode(me.getValue()));
-        }
-
-        return newToken.toString();
     }
 
     /**
