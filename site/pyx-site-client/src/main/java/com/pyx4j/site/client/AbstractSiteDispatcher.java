@@ -148,16 +148,7 @@ public abstract class AbstractSiteDispatcher {
         History.forward();
     }
 
-    public void addHistoryToken(String newToken) {
-        History.newItem(newToken, false);
-    }
-
-    /**
-     * TODO mode to HistoryUtils, Maybe this belong to Client side ResourceUriUtil, BUT
-     * ResourceUriUtil is shared, so com.google.gwt.http.client.URL can't be used!
-     * 
-     */
-    public static String createHistoryToken(String uri, Map<String, String> history) {
+    public void addHistoryToken(String uri, Map<String, String> history) {
         StringBuilder newToken = new StringBuilder();
         newToken.append(uri);
         newToken.append(ResourceUri.ARGS_GROUP_SEPARATOR);
@@ -174,7 +165,7 @@ public abstract class AbstractSiteDispatcher {
             newToken.append(URL.encode(me.getValue()));
         }
 
-        return newToken.toString();
+        History.newItem(newToken.toString(), false);
     }
 
     //TODO handle wrong tokens !!!
