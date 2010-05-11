@@ -145,6 +145,7 @@
 
         <module>essentials/pyx-essentials-shared</module>
         <module>essentials/pyx-essentials-gwt</module>
+        <module>essentials/pyx-essentials-data</module>
         <module>essentials/pyx-essentials-server</module>
 
         <module>incubator/tester/tester-client</module>
