@@ -137,7 +137,7 @@ public class EntityFormModel<E extends IEntity> {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox(mm.getCaption());
-        } else if (mm.getValueClass().equals(Date.class)) {
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
             comp = new CDatePicker(mm.getCaption());
         } else if (mm.getValueClass().equals(Boolean.class)) {
             comp = new CCheckBox(mm.getCaption());

@@ -591,6 +591,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else {
                 return value;
             }
+        } else if (value instanceof Date) {
+            Class<?> cls = iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass();
+            if (cls.equals(java.sql.Date.class)) {
+                return new java.sql.Date(((Date) value).getTime());
+            } else {
+                return value;
+            }
         } else if (value instanceof Long) {
             if (Integer.class.isAssignableFrom(iEntity.getEntityMeta().getMemberMeta(keyName).getValueClass())) {
                 return ((Long) value).intValue();
