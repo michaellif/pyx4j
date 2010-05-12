@@ -44,6 +44,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
@@ -207,7 +208,11 @@ public class IndexedEntitySearch {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
                             + ((Enum<?>) me.getValue()).name()));
                     // Add in case index criteria is dropped by search 
-                    inMemoryFilters.add(new PrimitiveInMemoryFilter(path, me.getValue()));
+                    if (IPrimitiveSet.class.isAssignableFrom(mm.getObjectClass())) {
+                        inMemoryFilters.add(new PrimitiveSetInMemoryFilter(path, me.getValue()));
+                    } else {
+                        inMemoryFilters.add(new PrimitiveInMemoryFilter(path, me.getValue()));
+                    }
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
                 }
