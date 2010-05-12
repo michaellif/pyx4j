@@ -85,6 +85,8 @@ public class CPhoneField extends CTextBox<String> {
             }
             if (string.contains("*")) {
                 return string;
+            } else if (string.matches(".*[^0-9\\s\\(\\)-]+.*")) {
+                return null;
             }
             String unformatedPhone = PhoneFormat.normalize(string);
             if (unformatedPhone.length() == 10) {
