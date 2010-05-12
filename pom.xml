@@ -653,6 +653,9 @@
                 <groupId>net.sf</groupId>
                 <artifactId>stat-scm</artifactId>
                 <configuration>
+                    <excludes>
+                        <exclude>**/*.cvs</exclude>
+                    </excludes>
                     <nonDeveloperLogins>
                         <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
                     </nonDeveloperLogins>
