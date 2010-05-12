@@ -35,6 +35,8 @@ public class DataGenerator {
 
     static List<AddressInfo> adresses;
 
+    static Random random = new Random();
+
     private static int areCodes[] = { 416, 905, 647 };
 
     public static String randomLetters(int count) {
@@ -46,7 +48,7 @@ public class DataGenerator {
     }
 
     public static char randomLetter() {
-        return (char) (('A') + new Random().nextInt('Z' - 'A'));
+        return (char) (('A') + random.nextInt('Z' - 'A'));
     }
 
     private static String resourceFileName(String fileName) {
@@ -57,14 +59,14 @@ public class DataGenerator {
         if (firstNames == null) {
             firstNames = CSVLoad.loadFile(resourceFileName("first-names.csv"), "Name");
         }
-        return firstNames[new Random().nextInt(firstNames.length)];
+        return firstNames[random.nextInt(firstNames.length)];
     }
 
     public static String randomLastName() {
         if (lastNames == null) {
             lastNames = CSVLoad.loadFile(resourceFileName("last-names.csv"), "Name");
         }
-        return lastNames[new Random().nextInt(lastNames.length)];
+        return lastNames[random.nextInt(lastNames.length)];
     }
 
     public static String randomName() {
@@ -75,16 +77,16 @@ public class DataGenerator {
         if (adresses == null) {
             adresses = EntityCSVReciver.create(AddressInfo.class).loadFile(resourceFileName("postal_codes.csv"));
         }
-        return adresses.get(new Random().nextInt(adresses.size()));
+        return adresses.get(random.nextInt(adresses.size()));
     }
 
     public static String randomPhone() {
-        return randomPhone(String.valueOf(areCodes[new Random().nextInt(areCodes.length)]));
+        return randomPhone(String.valueOf(areCodes[random.nextInt(areCodes.length)]));
     }
 
     public static String randomPhone(String areaCode) {
         DecimalFormat nf = new DecimalFormat("0000000");
-        String unformatedPhone = areaCode + nf.format((new Random().nextInt(10000000)));
+        String unformatedPhone = areaCode + nf.format((random.nextInt(10000000)));
         return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
     }
 }
