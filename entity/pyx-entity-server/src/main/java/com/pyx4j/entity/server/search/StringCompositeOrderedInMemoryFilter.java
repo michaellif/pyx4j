@@ -40,7 +40,11 @@ public class StringCompositeOrderedInMemoryFilter extends InMemoryFilter {
         super(propertyPath);
         StringBuilder rexExpr = new StringBuilder();
         for (String word : words) {
-            if (word.indexOf(IndexString.WILDCARD_CHAR) != -1) {
+            int wc = word.indexOf(IndexString.WILDCARD_CHAR);
+            if ((wc != 0) && (rexExpr.length() == 0)) {
+                rexExpr.append(".*");
+            }
+            if (wc != -1) {
                 rexExpr.append(word.replace("*", ".*?"));
                 rexExpr.append("\\b.*");
             } else {

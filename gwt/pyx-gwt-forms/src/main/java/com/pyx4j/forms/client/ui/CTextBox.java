@@ -45,7 +45,7 @@ public abstract class CTextBox<E> extends CEditableComponent<E> {
         this(null);
     }
 
-    protected void setFormat(IFormat<E> format) {
+    public void setFormat(IFormat<E> format) {
         this.format = format;
     }
 

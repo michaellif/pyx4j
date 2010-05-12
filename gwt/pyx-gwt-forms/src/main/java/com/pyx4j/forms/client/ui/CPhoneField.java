@@ -70,4 +70,34 @@ public class CPhoneField extends CTextBox<String> {
         }
 
     }
+
+    public static class PhoneSearchFormat implements IFormat<String> {
+
+        @Override
+        public String format(String value) {
+            return value;
+        }
+
+        @Override
+        public String parse(String string) {
+            if (string == null) {
+                return null;
+            }
+            if (string.contains("*")) {
+                return string;
+            }
+            String unformatedPhone = PhoneFormat.normalize(string);
+            if (unformatedPhone.length() == 10) {
+                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
+            } else if (string.length() != unformatedPhone.length()) {
+                // Contains some user formating.
+                return string;
+            } else if (unformatedPhone.length() == 7) {
+                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 7);
+            } else {
+                return string;
+            }
+        }
+
+    }
 }

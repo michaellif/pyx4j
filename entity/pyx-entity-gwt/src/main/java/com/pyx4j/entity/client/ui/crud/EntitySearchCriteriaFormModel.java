@@ -27,6 +27,7 @@ import java.util.Map;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -40,6 +41,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
+import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.CTextField;
 
@@ -117,7 +119,12 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         } else if (mm.getValueClass().equals(Date.class)) {
             comp = new CDatePicker();
         } else {
-            comp = new CTextField();
+            if (mm.isValidatorAnnotationPresent(Phone.class)) {
+                comp = new CPhoneField();
+                ((CPhoneField) comp).setFormat(new CPhoneField.PhoneSearchFormat());
+            } else {
+                comp = new CTextField();
+            }
         }
         comp.setTitle((name == null) ? mm.getCaption() : name);
         bind(comp, new PathSearch(member, pathProperty));
