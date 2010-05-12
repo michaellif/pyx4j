@@ -737,7 +737,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 datastoreCallStats.get().count++;
                 entity = datastore.get(key);
             } catch (EntityNotFoundException e) {
-                throw new RuntimeException("EntityNotFound");
+                throw new RuntimeException("Entity " + key.getKind() + " " + key.getId() + " NotFound");
             }
             retrievedMap.put(key, iEntity);
             updateIEntity(iEntity, entity, retrievedMap);
@@ -757,7 +757,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             datastoreCallStats.get().count++;
             entity = datastore.get(key);
         } catch (EntityNotFoundException e) {
-            throw new RuntimeException("Entity " + entityClass.getSimpleName() + " NotFound");
+            throw new RuntimeException("Entity " + entityClass.getSimpleName() + " " + primaryKey + " " + " NotFound");
         }
 
         updateIEntity(iEntity, entity, new HashMap<Key, IEntity>());
@@ -858,7 +858,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         for (Query.FilterPredicate f : query.getFilterPredicates()) {
             b.append(" ").append(f.getPropertyName()).append(f.getOperator()).append(f.getValue());
         }
-        log.debug("search by {}", b);
+        log.debug("{} search by {}", entityMeta.getPersistenceName(), b);
 
         return query;
     }
