@@ -67,13 +67,11 @@ public abstract class AbstractSiteDispatcher {
 
     private final ValueChangeHandler<String> historyChangeHandler;
 
-    private final boolean historyChangeHandlerDisabled = false;
-
     public AbstractSiteDispatcher() {
         historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(final ValueChangeEvent<String> event) {
-                if (currentSitePanel != null && !historyChangeHandlerDisabled) {
+                if (currentSitePanel != null) {
                     PageLeavingEvent ple = new PageLeavingEvent(true);
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {
@@ -88,6 +86,7 @@ public abstract class AbstractSiteDispatcher {
 
                             @Override
                             public boolean onClickCancel() {
+                                History.newItem(pathShown, false);
                                 return true;
                             }
                         };
@@ -96,7 +95,6 @@ public abstract class AbstractSiteDispatcher {
                                 + "\nPress OK to continue, or Cancel to stay on the current page.", Dialog.Type.Confirm, options);
 
                         d.show();
-
                         return;
                     }
                 }
