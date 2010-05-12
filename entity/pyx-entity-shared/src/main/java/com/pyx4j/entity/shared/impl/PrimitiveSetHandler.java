@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
@@ -196,6 +197,24 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
     public <T> T[] toArray(T[] a) {
         // TODO implement this
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        Set<TYPE> thisValue = this.getValue();
+        if ((other == null) || (thisValue == null) || (!(other instanceof IPrimitiveSet<?>))
+                || (!this.getValueClass().equals(((IPrimitiveSet<?>) other).getValueClass()))) {
+            return false;
+        }
+        return EqualsHelper.equals(thisValue, ((IPrimitiveSet<?>) other).getValue());
+    }
+
+    @Override
+    public String toString() {
+        return getObjectClass().getName() + " " + getValue();
     }
 
 }

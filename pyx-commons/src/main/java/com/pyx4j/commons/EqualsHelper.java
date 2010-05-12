@@ -37,6 +37,12 @@ public abstract class EqualsHelper {
             return CommonsStringUtils.equals((String) value1, value2);
         } else if (value2 instanceof String) {
             return CommonsStringUtils.equals((String) value2, value1);
+        } else if (value1 instanceof List<?>) {
+            return equals((List<?>) value1, (List<?>) value2);
+        } else if (value1 instanceof Collection<?>) {
+            return equals((Collection<?>) value1, (Collection<?>) value2);
+            //        } else if (value1 instanceof IEqual<?>) {
+            //            return iequals((IEqual) value1, value2);
         } else if (value1 != null) {
             return value1.equals(value2);
         } else {
