@@ -30,7 +30,6 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.INativeNativeComboBox;
 import com.pyx4j.widgets.client.ListBox;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 /**
  *
@@ -46,8 +45,6 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
     private boolean firstNativeItemIsNoSelection = false;
 
     private E notInOptionsValue = null;
-
-    private boolean initialyUpdated = false;
 
     private boolean deferredSetSelectedStarted = false;
 
@@ -69,15 +66,6 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
         setWidth(comboBox.getWidth());
         setTabIndex(comboBox.getTabIndex());
 
-        if (BrowserType.isIE()) {
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    initialyUpdated = true;
-                }
-            });
-        } else {
-            initialyUpdated = true;
-        }
     }
 
     public void setOptions(List<E> opt) {
@@ -95,6 +83,7 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
 
     public void refreshOptions() {
         super.clear();
+
         firstNativeItemIsNoSelection = !comboBox.isMandatory();
         if (firstNativeItemIsNoSelection) {
             super.addItem(comboBox.getItemName(null));
@@ -123,7 +112,7 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
                 super.addItem(comboBox.getItemName(o));
             }
         }
-        setSelectedValueDeferable(this.value);
+        setSelectedValue(this.value);
     }
 
     private E getValueByNativeOptionIndex(int index) {
@@ -206,29 +195,19 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
         if ((this.value != null) && ((options == null) || !options.contains(this.value))) {
             refreshOptions();
         } else {
-            setSelectedValueDeferable(this.value);
-        }
-    }
-
-    private void setSelectedValueDeferable(E value) {
-        setSelectedValue(value);
-        // Correction for hidden field initialization in IE
-        if ((!initialyUpdated) && (!deferredSetSelectedStarted) && (!firstNativeItemIsNoSelection) && (value == null)) {
-            deferredSetSelectedStarted = true;
-            DeferredCommand.addCommand(new Command() {
-                public void execute() {
-                    setSelectedValue(NativeComboBox.this.value);
-                }
-            });
+            setSelectedValue(this.value);
         }
     }
 
     private void setSelectedValue(E value) {
         this.value = value;
-        int oldIndex = getSelectedIndex();
-        int newIndex = getNativeOptionIndex(value);
-        if (oldIndex != newIndex) {
-            setSelectedIndex(newIndex);
+        if (!deferredSetSelectedStarted) {
+            deferredSetSelectedStarted = true;
+            DeferredCommand.addCommand(new Command() {
+                public void execute() {
+                    setSelectedIndex(getNativeOptionIndex(NativeComboBox.this.value));
+                }
+            });
         }
     }
 
