@@ -57,6 +57,8 @@ public class CPhoneField extends CTextBox<String> {
             String unformatedPhone = normalize(value);
             if (unformatedPhone.length() == 10) {
                 return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
+            } else if (unformatedPhone.length() == 7) {
+                return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 7);
             } else {
                 return unformatedPhone;
             }
