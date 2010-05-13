@@ -2,8 +2,6 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
-	<inherits name='com.pyx4j.Commons'/>
-	<inherits name='com.pyx4j.log4gwt.Log4gwt'/>
-	<source path="commons"/> 
-    <super-source path="emul"/>
+    <inherits name='com.pyx4j.gwt.GwtCommons'/>
+    <source path="commons"/> 
 </module>

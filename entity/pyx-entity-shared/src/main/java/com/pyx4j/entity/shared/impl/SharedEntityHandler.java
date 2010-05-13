@@ -20,10 +20,12 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.GWTJava5Helper;
@@ -326,30 +328,43 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public String getStringView() {
-        List<String> sm = getEntityMeta().getToStringMemberNames();
-        switch (sm.size()) {
-        case 0:
+        if (isNull()) {
             return null;
-        case 1:
-            return CommonsStringUtils.nvl(getMemberStringView(sm.get(0)));
-        case 2:
-            return CommonsStringUtils.nvl_concat(getMemberStringView(sm.get(0)), getMemberStringView(sm.get(1)), " ");
-        default:
-            Map<String, Object> entityValue = getValue();
-            if (entityValue == null) {
-                return null;
-            }
-            StringBuilder sb = new StringBuilder();
+        }
+        List<String> sm = getEntityMeta().getToStringMemberNames();
+        String format = getEntityMeta().getToStringFormat();
+        if (format != null) {
+            List<Object> values = new Vector<Object>();
             for (String memeberName : sm) {
-                Object v = entityValue.get(memeberName);
-                if (v != null) {
-                    if (sb.length() > 0) {
-                        sb.append(" ");
-                    }
-                    sb.append(getMemberStringView(memeberName));
-                }
+                values.add(CommonsStringUtils.nvl(getMemberStringView(memeberName)));
             }
-            return sb.toString();
+            return MessageFormat.format(format, values.toArray());
+        } else {
+
+            switch (sm.size()) {
+            case 0:
+                return null;
+            case 1:
+                return CommonsStringUtils.nvl(getMemberStringView(sm.get(0)));
+            case 2:
+                return CommonsStringUtils.nvl_concat(getMemberStringView(sm.get(0)), getMemberStringView(sm.get(1)), " ");
+            default:
+                Map<String, Object> entityValue = getValue();
+                if (entityValue == null) {
+                    return null;
+                }
+                StringBuilder sb = new StringBuilder();
+                for (String memeberName : sm) {
+                    Object v = entityValue.get(memeberName);
+                    if (v != null) {
+                        if (sb.length() > 0) {
+                            sb.append(" ");
+                        }
+                        sb.append(getMemberStringView(memeberName));
+                    }
+                }
+                return sb.toString();
+            }
         }
     }
 

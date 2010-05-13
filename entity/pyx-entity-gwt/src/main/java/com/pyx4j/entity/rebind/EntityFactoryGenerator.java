@@ -56,6 +56,7 @@ import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.validator.Email;
@@ -231,6 +232,14 @@ public class EntityFactoryGenerator extends Generator {
         writer.commit(logger);
     }
 
+    private String escapeSourceString(String value) {
+        if (value == null) {
+            return "null";
+        } else {
+            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
+        }
+    }
+
     private void writeEntityMetaImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
 
         String caption;
@@ -273,7 +282,7 @@ public class EntityFactoryGenerator extends Generator {
             if (toStringMemberNamesStringArray.length() > 0) {
                 toStringMemberNamesStringArray.append(", ");
             }
-            toStringMemberNamesStringArray.append("\"").append(memberName).append("\"");
+            toStringMemberNamesStringArray.append(escapeSourceString(memberName));
         }
 
         writer.println();
@@ -285,22 +294,24 @@ public class EntityFactoryGenerator extends Generator {
         writer.print(interfaceType.getName());
         writer.print(".class, ");
 
-        writer.print("\"");
-        writer.print(caption);
-        writer.print("\", ");
+        writer.print(escapeSourceString(caption));
+        writer.print(", ");
 
-        if (description == null) {
-            writer.print("null, ");
-        } else {
-            writer.print("\"");
-            writer.print(description);
-            writer.print("\", ");
-        }
+        writer.print(escapeSourceString(description));
+        writer.print(", ");
 
         writer.print(persistenceTransient.toString());
         writer.print(", ");
 
         writer.print(rpcTransient.toString());
+        writer.print(", ");
+
+        ToStringFormat toStringFormatAnnotation = interfaceType.getAnnotation(ToStringFormat.class);
+        if (toStringFormatAnnotation != null) {
+            writer.print(escapeSourceString(toStringFormatAnnotation.value()));
+        } else {
+            writer.print("null");
+        }
         writer.print(", ");
 
         writer.print("new String[] {");
@@ -383,9 +394,8 @@ public class EntityFactoryGenerator extends Generator {
             }
 
             // String fieldName, String caption, String description,
-            writer.print("\"");
-            writer.print(method.getName());
-            writer.print("\", ");
+            writer.print(escapeSourceString(method.getName()));
+            writer.print(", ");
 
             String memeberCaption;
             String memeberDescription = null;
@@ -398,17 +408,11 @@ public class EntityFactoryGenerator extends Generator {
             if (memeberCaptionAnnotation != null) {
                 memeberDescription = memeberCaptionAnnotation.description();
             }
-            writer.print("\"");
-            writer.print(memeberCaption);
-            writer.print("\", ");
+            writer.print(escapeSourceString(memeberCaption));
+            writer.print(", ");
 
-            if (memeberDescription == null) {
-                writer.println("null, ");
-            } else {
-                writer.print("\"");
-                writer.print(memeberDescription);
-                writer.println("\", ");
-            }
+            writer.print(escapeSourceString(memeberDescription));
+            writer.println(", ");
 
             // persistenceTransient, rpcTransient, detached, ownedRelationships, owner, embedded, indexed, stringLength
             writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
@@ -437,9 +441,7 @@ public class EntityFactoryGenerator extends Generator {
 
             Format formatAnnotation = method.getAnnotation(Format.class);
             if (formatAnnotation != null) {
-                writer.print("\"");
-                writer.print(formatAnnotation.value());
-                writer.print("\"");
+                writer.print(escapeSourceString(formatAnnotation.value()));
             } else {
                 writer.print("null");
             }
@@ -506,7 +508,7 @@ public class EntityFactoryGenerator extends Generator {
     }
 
     private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
-        //Static for optimization
+        //Static for optimisation
         writer.println();
         writer.indent();
         writer.println("private static EntityMeta entityMeta;");
@@ -622,7 +624,7 @@ public class EntityFactoryGenerator extends Generator {
         writer.outdent();
         writer.println("}");
 
-        // for optimization
+        // for optimisation
         writer.println();
         writer.println("@Override");
         writer.println("public EntityMeta getEntityMeta() {");

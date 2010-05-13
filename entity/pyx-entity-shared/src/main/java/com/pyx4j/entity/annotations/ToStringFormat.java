@@ -33,5 +33,5 @@ public @interface ToStringFormat {
      * 
      * @see java.text.MessageFormat.format
      */
-    String format();
+    String value();
 }

@@ -92,6 +92,13 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-gwt-commons</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-runner</artifactId>
             <version>${project.version}</version>
         </dependency>

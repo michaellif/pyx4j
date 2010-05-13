@@ -37,6 +37,7 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -197,6 +198,16 @@ public class EntityMetaImpl implements EntityMeta {
     public List<String> getMemberNames() {
         lazyCreateMembersNamesList();
         return memberNames;
+    }
+
+    @Override
+    public String getToStringFormat() {
+        ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
+        if (annotation != null) {
+            return annotation.value();
+        } else {
+            return null;
+        }
     }
 
     @Override

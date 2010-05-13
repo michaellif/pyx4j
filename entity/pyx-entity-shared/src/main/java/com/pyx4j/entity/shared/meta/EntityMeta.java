@@ -67,6 +67,8 @@ public interface EntityMeta {
 
     public MemberMeta getMemberMeta(Path path);
 
+    public String getToStringFormat();
+
     public List<String> getToStringMemberNames();
 
     /**

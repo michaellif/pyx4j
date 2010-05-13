@@ -48,16 +48,19 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     protected final HashMap<String, MemberMeta> membersMeta = new HashMap<String, MemberMeta>();
 
+    private final String toStringFormat;
+
     private final List<String> toStringMemberNames;
 
     public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient, boolean rpcTransient,
-            String[] memberNamesToString) {
+            String toStringFormat, String[] memberNamesToString) {
         this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
         this.persistenceTransient = persistenceTransient;
         this.rpcTransient = rpcTransient;
-        toStringMemberNames = Arrays.asList(memberNamesToString);
+        this.toStringFormat = toStringFormat;
+        this.toStringMemberNames = Arrays.asList(memberNamesToString);
     }
 
     @Override
@@ -117,6 +120,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     public MemberMeta getMemberMeta(Path path) {
         //TODO
         throw new Error("TODO: Not implemented in client yet");
+    }
+
+    @Override
+    public String getToStringFormat() {
+        return toStringFormat;
     }
 
     @Override
