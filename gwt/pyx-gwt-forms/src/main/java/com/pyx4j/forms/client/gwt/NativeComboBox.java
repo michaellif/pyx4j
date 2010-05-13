@@ -205,8 +205,8 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
             deferredSetSelectedStarted = true;
             DeferredCommand.addCommand(new Command() {
                 public void execute() {
-                    setSelectedIndex(getNativeOptionIndex(NativeComboBox.this.value));
                     deferredSetSelectedStarted = false;
+                    setSelectedIndex(getNativeOptionIndex(NativeComboBox.this.value));
                 }
             });
         }
