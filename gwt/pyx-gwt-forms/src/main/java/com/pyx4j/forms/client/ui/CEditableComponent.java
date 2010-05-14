@@ -28,6 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ICloneable;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -59,7 +60,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     }
 
     public void setValue(E value) {
-        if (getValue() == null ? value == null : getValue().equals(value)) {
+        if (isValuesEquals(getValue(), value)) {
             return;
         }
         this.value = value;
@@ -81,6 +82,10 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
 
     public boolean isValueEmpty() {
         return (getValue() == null);
+    }
+
+    public boolean isValuesEquals(E value1, E value2) {
+        return EqualsHelper.equals(value1, value2);
     }
 
     public boolean isEditable() {

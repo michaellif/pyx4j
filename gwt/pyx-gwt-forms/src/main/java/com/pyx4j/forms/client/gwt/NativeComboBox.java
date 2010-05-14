@@ -68,19 +68,23 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
 
     }
 
+    @Override
     public void setOptions(List<E> opt) {
         this.options = opt;
         refreshOptions();
     }
 
+    @Override
     public void refreshOption(E opt) {
         setItemText(getNativeOptionIndex(opt), comboBox.getItemName(opt));
     }
 
+    @Override
     public void removeOption(E opt) {
         removeItem(getNativeOptionIndex(opt));
     }
 
+    @Override
     public void refreshOptions() {
         super.clear();
 
@@ -181,15 +185,18 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
         return enabled;
     }
 
+    @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
         super.setEnabled(editable && this.isEnabled());
     }
 
+    @Override
     public boolean isEditable() {
         return editable;
     }
 
+    @Override
     public void setNativeValue(E value) {
         this.value = value;
         if ((this.value != null) && ((options == null) || !options.contains(this.value))) {

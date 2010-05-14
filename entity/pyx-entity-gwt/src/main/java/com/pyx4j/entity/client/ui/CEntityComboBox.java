@@ -234,8 +234,38 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
     }
 
     @Override
+    public void setValue(E value) {
+        if ((value != null) && (value.isNull())) {
+            value = null;
+        }
+        super.setValue(value);
+    }
+
+    @Override
+    public void populate(E value) {
+        if ((value != null) && (value.isNull())) {
+            value = null;
+        }
+        super.populate(value);
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return super.isValueEmpty() || getValue().isNull();
+    }
+
+    @Override
+    public boolean isValuesEquals(E value1, E value2) {
+        if (((value1 == null) || value1.isNull()) && ((value2 == null) || value2.isNull())) {
+            return true;
+        } else {
+            return super.isValuesEquals(value1, value2);
+        }
+    }
+
+    @Override
     public String getItemName(E o) {
-        if (o == null) {
+        if ((o == null) || (o.isNull())) {
             if (isLoading) {
                 return "loading...";
             } else if (isUnavailable) {

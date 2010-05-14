@@ -30,6 +30,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.AbstractAccessAdapter;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
@@ -38,8 +39,6 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
 
     private NativeEntityHyperlink nativeLink;
 
-    private IEntity value;
-
     private boolean wordWrap = false;
 
     private final String uriPrefix;
@@ -47,6 +46,15 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
     public CEntityHyperlink(String title, String uriPrefix) {
         super(title);
         this.uriPrefix = uriPrefix;
+
+        this.addAccessAdapter(new AbstractAccessAdapter() {
+
+            @Override
+            public boolean isEnabled(CComponent<?> component) {
+                return !isValueEmpty();
+            }
+
+        });
     }
 
     @Override
@@ -65,15 +73,19 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
 
     @Override
     public void setValue(IEntity value) {
-        this.value = value;
-        if (nativeLink != null) {
-            nativeLink.setNativeValue(value);
-        }
+        super.setValue(value);
+        applyAccessibilityRules();
     }
 
     @Override
-    public IEntity getValue() {
-        return value;
+    public void populate(IEntity value) {
+        super.populate(value);
+        applyAccessibilityRules();
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return super.isValueEmpty() || getValue().isNull();
     }
 
     public void setWordWrap(boolean wrap) {
@@ -92,8 +104,6 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
         private final Command comand;
 
         private final CEntityHyperlink cHyperlink;
-
-        private boolean enabled;
 
         public NativeEntityHyperlink(CEntityHyperlink hyperlink) {
             super("&nbsp;", true);
@@ -124,22 +134,11 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
                     }
                 }
             });
-
-            setEnabled(cHyperlink.isEnabled());
         }
 
+        @Override
         public CComponent<?> getCComponent() {
             return cHyperlink;
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        @Override
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
         }
 
         @Override
@@ -158,7 +157,7 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
 
         @Override
         public void setNativeValue(IEntity value) {
-            setHTML("&nbsp;" + ((value == null) ? "" : value.getStringView()));
+            setHTML("&nbsp;" + ((value == null) ? "" : value.getStringView()) + "&nbsp;");
         }
 
     }

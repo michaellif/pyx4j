@@ -45,6 +45,8 @@ public abstract class EqualsHelper {
             //            return iequals((IEqual) value1, value2);
         } else if (value1 != null) {
             return value1.equals(value2);
+        } else if (value2 != null) {
+            return value2.equals(value1);
         } else {
             return false;
         }
