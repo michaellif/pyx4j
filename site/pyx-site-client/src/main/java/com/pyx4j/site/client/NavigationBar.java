@@ -119,13 +119,13 @@ public class NavigationBar extends ComplexPanel {
             addMouseOverHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    getParent().addStyleDependentName("mouseOver");
+                    getParent().addStyleDependentName("hover");
                 }
             });
             addMouseOutHandler(new MouseOutHandler() {
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    getParent().removeStyleDependentName("mouseOver");
+                    getParent().removeStyleDependentName("hover");
                 }
             });
 
@@ -133,6 +133,7 @@ public class NavigationBar extends ComplexPanel {
                 @Override
                 public void onClick(ClickEvent event) {
                     AbstractSiteDispatcher.show(uri.uri().getValue());
+                    getParent().removeStyleDependentName("hover");
                 }
             });
 
