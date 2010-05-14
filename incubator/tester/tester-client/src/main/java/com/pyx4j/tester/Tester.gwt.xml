@@ -8,6 +8,7 @@
 
     <inherits name='com.pyx4j.unit.test.UnitTests'/>
 	<inherits name='com.pyx4j.test.CommonsTests'/>
+    <inherits name='com.pyx4j.gwt.test.GwtCommonsTests'/>
     <inherits name='com.pyx4j.entity.test.EntitySharedTests'/>
     <inherits name='com.pyx4j.rpc.test.RPCTests'/>
 	<inherits name='com.pyx4j.unit.ServerSideUnitRunner'/>
