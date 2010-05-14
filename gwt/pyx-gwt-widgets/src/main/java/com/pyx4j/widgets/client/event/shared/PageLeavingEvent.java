@@ -36,10 +36,19 @@ public class PageLeavingEvent extends GwtEvent<PageLeavingHandler> {
      */
     private StringBuilder messageBuilder = null;
 
-    private final boolean windowClosing;
+    public static enum ChageType {
 
-    public PageLeavingEvent(boolean windowClosing) {
-        this.windowClosing = windowClosing;
+        ARGUMETS_CHANGING,
+
+        PAGE_CHANGING,
+
+        WINDOW_CLOSING;
+    }
+
+    private final ChageType type;
+
+    public PageLeavingEvent(ChageType type) {
+        this.type = type;
     }
 
     @Override
@@ -56,8 +65,8 @@ public class PageLeavingEvent extends GwtEvent<PageLeavingHandler> {
      * 
      * @return true when browser window closes or navigates to a different site.
      */
-    public boolean isWindowClosing() {
-        return windowClosing;
+    public ChageType getChageType() {
+        return type;
     }
 
     /**

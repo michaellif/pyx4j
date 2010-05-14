@@ -39,6 +39,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
@@ -63,7 +64,7 @@ public abstract class AbstractSiteDispatcher {
 
     private ResourceUri welcomeUri;
 
-    private String pathShown;
+    private NavigationUri pathShown;
 
     private final ValueChangeHandler<String> historyChangeHandler;
 
@@ -71,8 +72,15 @@ public abstract class AbstractSiteDispatcher {
         historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(final ValueChangeEvent<String> event) {
+                final NavigationUri navigationUri = new NavigationUri(event.getValue());
                 if (currentSitePanel != null) {
-                    PageLeavingEvent ple = new PageLeavingEvent(true);
+                    log.debug("page change [{}] -> [{}]", pathShown.getPath(), event.getValue());
+                    PageLeavingEvent ple;
+                    if (navigationUri.getPageUri().equals(pathShown.getPageUri())) {
+                        ple = new PageLeavingEvent(PageLeavingEvent.ChageType.ARGUMETS_CHANGING);
+                    } else {
+                        ple = new PageLeavingEvent(PageLeavingEvent.ChageType.PAGE_CHANGING);
+                    }
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {
 
@@ -80,13 +88,13 @@ public abstract class AbstractSiteDispatcher {
                         DialogOptions options = new OkCancelOption() {
                             @Override
                             public boolean onClickOk() {
-                                doShow(event.getValue());
+                                doShow(navigationUri);
                                 return true;
                             }
 
                             @Override
                             public boolean onClickCancel() {
-                                History.newItem(pathShown, false);
+                                History.newItem(pathShown.getPath(), false);
                                 return true;
                             }
                         };
@@ -98,7 +106,7 @@ public abstract class AbstractSiteDispatcher {
                         return;
                     }
                 }
-                doShow(event.getValue());
+                doShow(navigationUri);
             }
         };
         History.addValueChangeHandler(historyChangeHandler);
@@ -116,7 +124,7 @@ public abstract class AbstractSiteDispatcher {
             @Override
             public void onWindowClosing(ClosingEvent event) {
                 if (currentSitePanel != null) {
-                    PageLeavingEvent ple = new PageLeavingEvent(true);
+                    PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChageType.WINDOW_CLOSING);
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {
                         event.setMessage(ple.getMessage());
@@ -167,33 +175,16 @@ public abstract class AbstractSiteDispatcher {
     }
 
     //TODO handle wrong tokens !!!
-    private void doShow(final String path) {
-        //Split path to uri and args
-        String uri = null;
-        Map<String, String> args = null;
-        int splitIndex = path.indexOf(ResourceUri.ARGS_GROUP_SEPARATOR);
-        if (splitIndex == -1) {
-            uri = path;
-        } else {
-            uri = path.substring(0, splitIndex);
-            if (path.length() > splitIndex) {
-                args = parsArgs(path.substring(splitIndex + 1));
-            }
-        }
+    private void doShow(final NavigationUri navigationUri) {
+        log.debug("Page URI  {}", navigationUri.getPageUri());
+        log.debug("Page Args {}", navigationUri.getArgs());
 
-        log.debug("Page URI " + uri);
-        log.debug("Page Args " + args);
-
-        if (uri == null || uri.length() == 0) {
-            uri = welcomeUri.uri().getValue();
-            args = null;
-            if (uri == null) {
+        if (!CommonsStringUtils.isStringSet(navigationUri.getPageUri())) {
+            if (welcomeUri.uri().isNull()) {
                 throw new RuntimeException("welcomeUri is not set");
             }
+            navigationUri.setPath(welcomeUri.uri().getValue());
         }
-        final String siteName = uri.substring(0, uri.indexOf(ResourceUri.SITE_SEPARATOR));
-        final String finalUri = uri;
-        final Map<String, String> finalArgs = args;
 
         AsyncCallback<SitePanel> callback = new AsyncCallback<SitePanel>() {
             @Override
@@ -201,27 +192,26 @@ public abstract class AbstractSiteDispatcher {
                 hideLoadingIndicator();
                 log.error("obtainSite error", caught);
                 //TODO handle SecurityViolationException to show login form
-                handleObtainSiteFailure(caught, siteName);
+                handleObtainSiteFailure(caught, navigationUri.getSiteName());
             }
 
             @Override
             public void onSuccess(SitePanel sitePanel) {
                 if (sitePanel != null) {
-                    initSitePanel(siteName, sitePanel);
-                    if (finalUri != null) {
-                        if (!sitePanel.equals(currentSitePanel)) {
-                            if (currentSitePanel != null) {
-                                RootPanel.get().remove(currentSitePanel);
-                            }
-                            currentSitePanel = sitePanel;
-                            RootPanel.get().add(currentSitePanel);
+                    initSitePanel(navigationUri.getSiteName(), sitePanel);
+
+                    if (!sitePanel.equals(currentSitePanel)) {
+                        if (currentSitePanel != null) {
+                            RootPanel.get().remove(currentSitePanel);
                         }
-                        GoogleAnalytics.track("#" + finalUri);
-                        sitePanel.show(finalUri, finalArgs);
+                        currentSitePanel = sitePanel;
+                        RootPanel.get().add(currentSitePanel);
                     }
+                    GoogleAnalytics.track("#" + navigationUri.getPageUri());
+                    sitePanel.show(navigationUri.getPageUri(), navigationUri.getArgs());
 
                     hideLoadingIndicator();
-                    pathShown = path;
+                    pathShown = navigationUri;
                 } else {
                     hideLoadingIndicator();
                     throw new Error("sitePanel is not found");
@@ -231,10 +221,10 @@ public abstract class AbstractSiteDispatcher {
 
         //TODO check site permission
 
-        if (isPredefinedSite(siteName)) {
-            obtainPredefinedSite(siteName, callback);
+        if (isPredefinedSite(navigationUri.getSiteName())) {
+            obtainPredefinedSite(navigationUri.getSiteName(), callback);
         } else {
-            obtainSite(siteName, callback);
+            obtainSite(navigationUri.getSiteName(), callback);
         }
     }
 
