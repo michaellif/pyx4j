@@ -23,13 +23,14 @@ package com.pyx4j.essentials.server.preloader;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.server.SiteServicesImpl;
-import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Link;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.PageData;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.util.PageTypeUriEnum;
+import com.pyx4j.site.shared.util.SiteFactoryUtils;
 
 public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
 
@@ -63,13 +64,8 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
     }
 
     protected Site createSite(String siteId, String caption) {
-        Site site = EntityFactory.create(Site.class);
-        site.updateTimestamp().setValue(System.currentTimeMillis());
+        Site site = SiteFactoryUtils.createSite(siteId, caption);
         SiteServicesImpl.resetCache(siteId);
-        site.siteId().setValue(siteId);
-        site.siteCaption().setValue(caption);
-        site.logoUrl().setValue("images/logo.png");
-        site.skinType().setValue(DefaultSkins.light.name());
         site.footerCopiright().setValue(footerCopiright());
         siteCount++;
         return site;
@@ -79,39 +75,44 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
         return "&copy; 2008-2010 pyx4j.com All rights reserved.";
     }
 
-    protected Page createPage(String caption, ResourceUri uri, String html) {
-        return createPage(null, caption, uri, html, null, null, null);
-    }
-
-    protected Page createPage(String tabName, String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
-            String[] inlineWidgets) {
-        Page page = EntityFactory.create(Page.class);
-        page.tabName().setValue(tabName);
-        page.caption().setValue(caption);
-        page.uri().set(uri);
+    protected Page createPage(String caption, PageTypeUriEnum pageType, String html) {
+        pageCount++;
         if (html == null) {
             html = pageBodyUnderConstruction(caption);
         }
-        page.data().html().setValue(html);
+        return SiteFactoryUtils.createPage(caption, pageType, html);
+    }
 
-        if (leftPortlets != null) {
-            for (Portlet portlet : leftPortlets) {
-                page.data().leftPortlets().add(portlet);
-            }
-        }
-
-        if (rightPortlets != null) {
-            for (Portlet portlet : rightPortlets) {
-                page.data().rightPortlets().add(portlet);
-            }
-        }
-
-        if (inlineWidgets != null) {
-            for (String widgetId : inlineWidgets) {
-                page.data().inlineWidgetIds().add(widgetId);
-            }
-        }
+    protected Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget) {
         pageCount++;
+        return SiteFactoryUtils.createSingleWidgetPage(caption, pageType, inlineWidget);
+    }
+
+    protected Page createPage(String caption, ResourceUri uri, String html) {
+        pageCount++;
+        if (html == null) {
+            html = pageBodyUnderConstruction(caption);
+        }
+        return createPage(caption, uri, html, null, null, null);
+    }
+
+    protected Page createPage(String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
+        return createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
+    }
+
+    protected Page createPage(String tabName, String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
+            String[] inlineWidgets) {
+        Page page = createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
+        page.tabName().setValue(tabName);
+        return page;
+    }
+
+    protected Page createPage(String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
+        pageCount++;
+        if (html == null) {
+            html = pageBodyUnderConstruction(caption);
+        }
+        Page page = SiteFactoryUtils.createPage(caption, uri, html, leftPortlets, rightPortlets, inlineWidgets);
         return page;
     }
 
