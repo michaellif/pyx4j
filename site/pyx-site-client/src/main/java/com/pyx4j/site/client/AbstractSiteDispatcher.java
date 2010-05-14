@@ -197,24 +197,26 @@ public abstract class AbstractSiteDispatcher {
 
             @Override
             public void onSuccess(SitePanel sitePanel) {
-                if (sitePanel != null) {
-                    initSitePanel(navigationUri.getSiteName(), sitePanel);
+                try {
+                    if (sitePanel != null) {
+                        initSitePanel(navigationUri.getSiteName(), sitePanel);
 
-                    if (!sitePanel.equals(currentSitePanel)) {
-                        if (currentSitePanel != null) {
-                            RootPanel.get().remove(currentSitePanel);
+                        if (!sitePanel.equals(currentSitePanel)) {
+                            if (currentSitePanel != null) {
+                                RootPanel.get().remove(currentSitePanel);
+                            }
+                            currentSitePanel = sitePanel;
+                            RootPanel.get().add(currentSitePanel);
                         }
-                        currentSitePanel = sitePanel;
-                        RootPanel.get().add(currentSitePanel);
-                    }
-                    GoogleAnalytics.track("#" + navigationUri.getPageUri());
-                    sitePanel.show(navigationUri.getPageUri(), navigationUri.getArgs());
+                        GoogleAnalytics.track("#" + navigationUri.getPageUri());
+                        sitePanel.show(navigationUri.getPageUri(), navigationUri.getArgs());
 
+                        pathShown = navigationUri;
+                    } else {
+                        throw new Error("sitePanel is not found");
+                    }
+                } finally {
                     hideLoadingIndicator();
-                    pathShown = navigationUri;
-                } else {
-                    hideLoadingIndicator();
-                    throw new Error("sitePanel is not found");
                 }
             }
         };
