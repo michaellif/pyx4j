@@ -21,9 +21,10 @@
 package com.pyx4j.examples.rpc;
 
 import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.util.PageTypeUriEnum;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
 
-public enum PageType {
+public enum PageType implements PageTypeUriEnum {
 
     //----pub-----//
 
