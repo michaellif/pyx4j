@@ -64,7 +64,7 @@ public abstract class AbstractSiteDispatcher {
 
     private ResourceUri welcomeUri;
 
-    private NavigationUri pathShown;
+    private NavigationUri pathShown = new NavigationUri("");
 
     private final ValueChangeHandler<String> historyChangeHandler;
 
