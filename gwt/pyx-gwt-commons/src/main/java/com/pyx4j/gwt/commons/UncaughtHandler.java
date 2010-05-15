@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 
 public class UncaughtHandler implements UncaughtExceptionHandler {
@@ -78,6 +79,8 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
                 }
                 if (UncaughtHandler.delegate != null) {
                     UncaughtHandler.delegate.onUnrecoverableError(caught, errorCode);
+                } else {
+                    Window.alert("An Unexpected Error Has Occurred");
                 }
             } catch (Throwable ignore) {
             }

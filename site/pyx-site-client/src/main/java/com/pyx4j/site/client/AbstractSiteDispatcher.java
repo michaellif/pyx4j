@@ -124,6 +124,7 @@ public abstract class AbstractSiteDispatcher {
             @Override
             public void onWindowClosing(ClosingEvent event) {
                 if (currentSitePanel != null) {
+                    log.debug("page leaving on window closing");
                     PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChageType.WINDOW_CLOSING);
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {

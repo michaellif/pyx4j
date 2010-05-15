@@ -134,6 +134,8 @@ public class NavigationBar extends ComplexPanel {
                 public void onClick(ClickEvent event) {
                     AbstractSiteDispatcher.show(uri.uri().getValue());
                     getParent().removeStyleDependentName("hover");
+                    // Prevent IE from triggering Window.ClosingEvent
+                    event.preventDefault();
                 }
             });
 
