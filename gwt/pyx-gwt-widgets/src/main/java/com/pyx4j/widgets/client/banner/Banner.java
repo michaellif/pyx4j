@@ -86,14 +86,10 @@ public class Banner extends AbsolutePanel {
         show(0);
     }
 
-    @Override
-    protected void onLoad() {
-        super.onLoad();
-        int x = width - controlPanel.getOffsetWidth() - 40;
-        setWidgetPosition(controlPanel, x, height - 40);
-    }
-
     public void show(int index) {
+        if (currentIndex == index) {
+            return;
+        }
         final Widget fadeOut = currentIndex < 0 ? null : items.get(currentIndex);
         final Widget fadeIn = items.get(index);
         fadeIn.getElement().getStyle().setOpacity(0);
@@ -118,6 +114,13 @@ public class Banner extends AbsolutePanel {
             }
         };
         timer.scheduleRepeating(10);
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        int x = width - controlPanel.getOffsetWidth() - 40;
+        setWidgetPosition(controlPanel, x, height - 40);
     }
 
     class ControlPanel extends HorizontalPanel {
