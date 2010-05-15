@@ -80,7 +80,11 @@ public class Banner extends AbsolutePanel {
         }
     }
 
-    public void init() {
+    protected void init() {
+        //keep control panel on top and counter updated
+        if (controlPanel != null) {
+            remove(controlPanel);
+        }
         controlPanel = new ControlPanel();
         add(controlPanel, 0, 0);
         show(0);
@@ -118,9 +122,18 @@ public class Banner extends AbsolutePanel {
 
     @Override
     protected void onLoad() {
+        init();
         super.onLoad();
         int x = width - controlPanel.getOffsetWidth() - 40;
         setWidgetPosition(controlPanel, x, height - 40);
+        start();
+    }
+
+    @Override
+    protected void onUnload() {
+        super.onUnload();
+        show(0);
+        stop();
     }
 
     class ControlPanel extends HorizontalPanel {

@@ -328,7 +328,7 @@ public abstract class SitePanel extends SimplePanel {
         logoImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Window.Location.replace("/");
+                AbstractSiteDispatcher.show("");
             }
         });
     }
