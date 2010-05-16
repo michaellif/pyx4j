@@ -33,6 +33,8 @@ public class UserVisit implements Serializable {
 
     private String name;
 
+    protected transient boolean changed;
+
     public UserVisit() {
 
     }
@@ -49,6 +51,7 @@ public class UserVisit implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.changed = true;
     }
 
     public Long getPrincipalPrimaryKey() {
@@ -57,6 +60,10 @@ public class UserVisit implements Serializable {
 
     public void setPrincipalPrimaryKey(Long principalPrimaryKey) {
         this.principalPrimaryKey = principalPrimaryKey;
+    }
+
+    public boolean isChanged() {
+        return changed;
     }
 
     @Override

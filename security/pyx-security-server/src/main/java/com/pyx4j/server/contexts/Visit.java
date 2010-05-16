@@ -80,7 +80,7 @@ public class Visit implements Serializable {
     }
 
     public boolean isChanged() {
-        return changed;
+        return changed || ((this.userVisit != null) && (this.userVisit.isChanged()));
     }
 
     public Serializable getAttribute(String name) {
