@@ -51,8 +51,16 @@ public class SiteFactoryUtils {
         return createSingleWidgetPage(caption, pageType.getUri(), inlineWidget);
     }
 
+    public static Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        return createSingleWidgetPage(caption, pageType.getUri(), inlineWidget, leftPortlets, rightPortlets);
+    }
+
     public static Page createSingleWidgetPage(String caption, ResourceUri uri, Enum<?> inlineWidget) {
-        return createPage(caption, uri, "<div id='" + inlineWidget.name() + "'></div>", null, null, new String[] { inlineWidget.name() });
+        return createSingleWidgetPage(caption, uri, inlineWidget, null, null);
+    }
+
+    public static Page createSingleWidgetPage(String caption, ResourceUri uri, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        return createPage(caption, uri, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
     }
 
     public static Page createPage(String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {

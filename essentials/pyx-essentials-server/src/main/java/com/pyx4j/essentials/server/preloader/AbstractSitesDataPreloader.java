@@ -88,6 +88,18 @@ public abstract class AbstractSitesDataPreloader extends AbstractDataPreloader {
         return SiteFactoryUtils.createSingleWidgetPage(caption, pageType, inlineWidget);
     }
 
+    protected Page createSingleWidgetPage(String tabName, String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets,
+            Portlet[] rightPortlets) {
+        Page page = createSingleWidgetPage(caption, pageType, inlineWidget, leftPortlets, rightPortlets);
+        page.tabName().setValue(tabName);
+        return page;
+    }
+
+    protected Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        pageCount++;
+        return SiteFactoryUtils.createSingleWidgetPage(caption, pageType, inlineWidget, leftPortlets, rightPortlets);
+    }
+
     protected Page createPage(String caption, ResourceUri uri, String html) {
         pageCount++;
         if (html == null) {
