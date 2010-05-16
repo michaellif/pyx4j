@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 
 import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.util.PageTypeUriEnum;
 
 public class NavigationUri {
 
@@ -51,11 +52,14 @@ public class NavigationUri {
         setPath(path);
     }
 
+    public NavigationUri(PageTypeUriEnum pageTypeUri) {
+        setPath(pageTypeUri.getUri().uri().getValue());
+    }
+
     public static Map<String, String> parsArgs(String substring) {
-        Map<String, String> args = null;
+        Map<String, String> args = new HashMap<String, String>();
         String[] nameValues = substring.split(ResourceUri.ARGS_SEPARATOR);
         if (nameValues.length > 0) {
-            args = new HashMap<String, String>();
             for (int i = 0; i < nameValues.length; i++) {
                 String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
                 if (nameAndValue.length == 2) {
@@ -69,6 +73,24 @@ public class NavigationUri {
     }
 
     public String getPath() {
+        if (path == null) {
+            StringBuilder newToken = new StringBuilder();
+            newToken.append(pageUri);
+
+            boolean first = true;
+            for (Map.Entry<String, String> me : args.entrySet()) {
+                if (first) {
+                    newToken.append(ResourceUri.ARGS_GROUP_SEPARATOR);
+                    first = false;
+                } else {
+                    newToken.append(ResourceUri.ARGS_SEPARATOR);
+                }
+                newToken.append(me.getKey());
+                newToken.append(ResourceUri.NAME_VALUE_SEPARATOR);
+                newToken.append(URL.encode(me.getValue()));
+            }
+            path = newToken.toString();
+        }
         return path;
     }
 
@@ -98,16 +120,19 @@ public class NavigationUri {
         return siteName;
     }
 
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
-    }
-
     public String getPageUri() {
         return pageUri;
     }
 
     public void setPageUri(String pageUri) {
         this.pageUri = pageUri;
+        int siteIndex = pageUri.indexOf(ResourceUri.SITE_SEPARATOR);
+        if (siteIndex > 0) {
+            siteName = pageUri.substring(0, siteIndex);
+        } else {
+            siteName = "";
+        }
+        path = null;
     }
 
     public Map<String, String> getArgs() {
@@ -115,7 +140,17 @@ public class NavigationUri {
     }
 
     public void setArgs(Map<String, String> args) {
-        this.args = args;
+        if (args == null) {
+            this.args.clear();
+        } else {
+            this.args = args;
+        }
+        path = null;
+    }
+
+    public void addArg(String name, String value) {
+        this.args.put(name, value);
+        path = null;
     }
 
 }
