@@ -34,7 +34,7 @@ public enum CSSClass {
     pyx4j_Folder,
 
     //Button
-    pyx4j_Button,
+    pyx4j_Button, pyx4j_ButtonContent, pyx4j_ButtonText, pyx4j_ButtonImage,
 
     // Style for GWT button active { The one that has Enter focus in dialog}
     gwtButtonDefault,

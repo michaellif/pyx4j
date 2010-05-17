@@ -267,7 +267,7 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initButtonStyles() {
-        Style style = new Style("." + CSSClass.pyx4j_Button.name());
+        Style style = new Style("." + CSSClass.pyx4j_ButtonContent.name());
         style.addProperty("padding", "3px");
         style.addProperty("margin", "1px");
         style.addProperty("border", "2px solid transparent");
@@ -276,19 +276,19 @@ public class WindowsTheme extends Theme {
         style.addProperty("outline", "none");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Button.name() + "-hover");
+        style = new Style("." + CSSClass.pyx4j_ButtonContent.name() + "-hover");
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "outset");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Button.name() + "-pushed");
+        style = new Style("." + CSSClass.pyx4j_ButtonContent.name() + "-pushed");
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "ridge");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Button.name() + "-checked");
+        style = new Style("." + CSSClass.pyx4j_ButtonContent.name() + "-checked");
         style.addProperty("background", ThemeColor.OBJECT_TONE2);
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "inset");

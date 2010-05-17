@@ -38,53 +38,73 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Button extends ButtonBase {
 
+    private final Element content;
+
     public Button(Image image) {
         this(image, null);
     }
 
     public Button(String text) {
-        this(null, text);
+        this((Image) null, text);
+    }
+
+    public Button(String text, String stylePrefix) {
+        this(null, text, stylePrefix);
     }
 
     public Button(String text, ClickHandler handler) {
-        this(null, text);
+        this((Image) null, text);
         this.addClickHandler(handler);
+    }
+
+    public Button(Image image, final String text, String stylePrefix) {
+        this(image, text, new ButtonFacesHandler(), stylePrefix);
     }
 
     public Button(Image image, final String text) {
         this(image, text, new ButtonFacesHandler());
     }
 
-    protected Button(Image image, final String text, ButtonFacesHandler facesHandler) {
+    public Button(Image image, final String text, ButtonFacesHandler facesHandler) {
+        this(image, text, facesHandler, CSSClass.pyx4j_Button.name());
+    }
+
+    protected Button(Image image, final String text, ButtonFacesHandler facesHandler, String stylePrefix) {
         super(DOM.createSpan());
         getElement().getStyle().setProperty("display", "inline-block");
         getElement().getStyle().setProperty("verticalAlign", "top");
+        setStylePrimaryName(getElement(), stylePrefix);
+
         // for IE6
         // getElement().getStyle().setProperty("borderColor", "pink");
         // getElement().getStyle().setProperty("filter", "chroma(color=pink)");
 
         facesHandler.install(this);
 
-        Element content = DOM.createSpan();
-        content.getStyle().setProperty("display", "inline");
+        content = DOM.createSpan();
+        content.getStyle().setProperty("display", "inline-block");
         content.getStyle().setProperty("whiteSpace", "nowrap");
         content.getStyle().setProperty("verticalAlign", "middle");
+        content.getStyle().setProperty("height", "100%");
+
+        setStylePrimaryName(content, stylePrefix + "Content");
 
         if (image != null) {
             Element imageElem = image.getElement();
             imageElem.getStyle().setProperty("verticalAlign", "middle");
+            imageElem.getStyle().setProperty("display", "inline-block");
+            setStylePrimaryName(imageElem, stylePrefix + "Image");
             content.appendChild(imageElem);
         }
         if (text != null) {
             Element textElem = DOM.createSpan();
-            textElem.setInnerText(text);
+            textElem.setInnerHTML(text);
+            textElem.getStyle().setProperty("verticalAlign", "middle");
+            textElem.getStyle().setProperty("display", "inline-block");
             content.appendChild(textElem);
+            setStylePrimaryName(textElem, stylePrefix + "Text");
         }
         getElement().appendChild(content);
-
-        setStylePrimaryName(CSSClass.pyx4j_Button.name());
-
-        setTabIndex(-1);
 
     }
 

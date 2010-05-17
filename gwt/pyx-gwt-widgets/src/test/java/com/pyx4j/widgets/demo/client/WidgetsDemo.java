@@ -24,11 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -40,6 +42,7 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -49,6 +52,7 @@ import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
+import com.pyx4j.widgets.demo.client.images.TestImages;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -56,6 +60,8 @@ import com.pyx4j.widgets.client.style.window.WindowsTheme;
 public class WidgetsDemo implements EntryPoint {
 
     private static final Logger log = LoggerFactory.getLogger(WidgetsDemo.class);
+
+    private static TestImages bundle = GWT.create(TestImages.class);
 
     public void onModuleLoad() {
 
@@ -168,6 +174,14 @@ public class WidgetsDemo implements EntryPoint {
                 };
             });
         }
+        {
+            com.pyx4j.widgets.client.Button buttonTest1 = new com.pyx4j.widgets.client.Button("Test");
+            contentPanel.add(buttonTest1);
+
+            com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(bundle.groupBoxClose()), "Test");
+            contentPanel.add(buttonTest2);
+        }
+
     }
 
     private static void showGlassPanel(GlassStyle glassStyle, int sec) {
