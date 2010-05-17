@@ -77,15 +77,16 @@ public class Banner extends AbsolutePanel {
                 show((currentIndex + 1) % items.size());
             }
         };
+        slideChangeTimer.run();
         slideChangeTimer.scheduleRepeating(6000);
-        startStopAction.setHTML("&#x25A0;");
+        startStopAction.setCaption("&#x25A0;");
     }
 
     public void stop() {
         if (slideChangeTimer != null) {
             slideChangeTimer.cancel();
             slideChangeTimer = null;
-            startStopAction.setHTML("&#x25B6;");
+            startStopAction.setCaption("&#x25B6;");
         }
     }
 
@@ -112,6 +113,7 @@ public class Banner extends AbsolutePanel {
         fadeIn.getElement().getStyle().setOpacity(0);
         fadeIn.setVisible(true);
         currentIndex = index;
+        controlPanel.setSelectedItem(currentIndex);
         Timer timer = new Timer() {
             int iterationCounter = 0;
 
@@ -153,6 +155,8 @@ public class Banner extends AbsolutePanel {
 
     class ControlPanel extends HorizontalPanel {
 
+        private final ArrayList<Button> itemActionList = new ArrayList<Button>();
+
         ControlPanel() {
             Button leftAction = new Button("&#171;", buttonStyle);
             leftAction.addClickHandler(new ClickHandler() {
@@ -170,6 +174,7 @@ public class Banner extends AbsolutePanel {
 
             for (int i = 0; i < items.size(); i++) {
                 Button itemAction = new Button((i + 1) + "", buttonStyle);
+                itemActionList.add(itemAction);
                 add(itemAction);
                 final int finalI = i;
                 itemAction.addClickHandler(new ClickHandler() {
@@ -207,6 +212,16 @@ public class Banner extends AbsolutePanel {
 
         }
 
+        public void setSelectedItem(int currentIndex) {
+            for (int i = 0; i < itemActionList.size(); i++) {
+                if (i == currentIndex) {
+                    itemActionList.get(i).addStyleDependentName("selected");
+                } else {
+                    itemActionList.get(i).removeStyleDependentName("selected");
+                }
+            }
+
+        }
     }
 
 }

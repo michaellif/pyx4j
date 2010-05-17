@@ -40,6 +40,8 @@ public class Button extends ButtonBase {
 
     private final Element content;
 
+    private Element textElem;
+
     public Button(Image image) {
         this(image, null);
     }
@@ -97,7 +99,7 @@ public class Button extends ButtonBase {
             content.appendChild(imageElem);
         }
         if (text != null) {
-            Element textElem = DOM.createSpan();
+            textElem = DOM.createSpan();
             textElem.setInnerHTML(text);
             textElem.getStyle().setProperty("verticalAlign", "middle");
             textElem.getStyle().setProperty("display", "inline-block");
@@ -106,6 +108,10 @@ public class Button extends ButtonBase {
         }
         getElement().appendChild(content);
 
+    }
+
+    public void setCaption(String html) {
+        textElem.setInnerHTML(html);
     }
 
     public void setTooltip(String text) {
