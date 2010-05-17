@@ -40,15 +40,22 @@ public class Banner extends AbsolutePanel {
 
     private final int height;
 
+    private final String buttonStyle;
+
     private int currentIndex = -1;
 
     private ControlPanel controlPanel;
 
     private Timer slideChangeTimer;
 
-    public Banner(int width, int height) {
+    private boolean animationIsRunning = false;
+
+    private Button startStopAction;
+
+    public Banner(int width, int height, String buttonStyle) {
         this.width = width;
         this.height = height;
+        this.buttonStyle = buttonStyle;
         items = new ArrayList<Widget>();
         setSize(width + "px", height + "px");
     }
@@ -71,13 +78,14 @@ public class Banner extends AbsolutePanel {
             }
         };
         slideChangeTimer.scheduleRepeating(6000);
-
+        startStopAction.setHTML("&#x25A0;");
     }
 
     public void stop() {
         if (slideChangeTimer != null) {
             slideChangeTimer.cancel();
             slideChangeTimer = null;
+            startStopAction.setHTML("&#x25B6;");
         }
     }
 
@@ -92,6 +100,10 @@ public class Banner extends AbsolutePanel {
     }
 
     public void show(int index) {
+        if (animationIsRunning) {
+            return;
+        }
+        animationIsRunning = true;
         if (currentIndex == index) {
             return;
         }
@@ -105,6 +117,7 @@ public class Banner extends AbsolutePanel {
 
             @Override
             public void run() {
+
                 fadeIn.getElement().getStyle().setOpacity(((double) iterationCounter) / 100);
                 if (fadeOut != null) {
                     fadeOut.getElement().getStyle().setOpacity(1 - ((double) iterationCounter) / 100);
@@ -115,6 +128,7 @@ public class Banner extends AbsolutePanel {
                         fadeOut.setVisible(false);
                     }
                     this.cancel();
+                    animationIsRunning = false;
                 }
             }
         };
@@ -125,8 +139,8 @@ public class Banner extends AbsolutePanel {
     protected void onLoad() {
         init();
         super.onLoad();
-        int x = width - controlPanel.getOffsetWidth() - 160;
-        setWidgetPosition(controlPanel, x, height - 40);
+        int x = width - controlPanel.getOffsetWidth() - 100;
+        setWidgetPosition(controlPanel, x, height - 30);
         start();
     }
 
@@ -140,18 +154,22 @@ public class Banner extends AbsolutePanel {
     class ControlPanel extends HorizontalPanel {
 
         ControlPanel() {
-            Button leftAction = new Button("&#171;");
+            Button leftAction = new Button("&#171;", buttonStyle);
             leftAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     stop();
-                    show((currentIndex - 1) % items.size());
+                    if (currentIndex == 0) {
+                        show(items.size() - 1);
+                    } else {
+                        show((currentIndex - 1) % items.size());
+                    }
                 }
             });
             add(leftAction);
 
             for (int i = 0; i < items.size(); i++) {
-                Button itemAction = new Button((i + 1) + "");
+                Button itemAction = new Button((i + 1) + "", buttonStyle);
                 add(itemAction);
                 final int finalI = i;
                 itemAction.addClickHandler(new ClickHandler() {
@@ -163,7 +181,7 @@ public class Banner extends AbsolutePanel {
                 });
             }
 
-            Button startStopAction = new Button("&#062;");
+            startStopAction = new Button("&#x25A0;", buttonStyle);//&#x25A0;//&#x25B6;
             startStopAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -175,7 +193,7 @@ public class Banner extends AbsolutePanel {
                 }
             });
             add(startStopAction);
-            Button rightAction = new Button("&#187;");
+            Button rightAction = new Button("&#187;", buttonStyle);
             rightAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -185,7 +203,7 @@ public class Banner extends AbsolutePanel {
             });
             add(rightAction);
 
-            getElement().getStyle().setOpacity(0.5);
+            getElement().getStyle().setOpacity(0.7);
 
         }
 
