@@ -180,7 +180,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     value = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
                 }
             } else {
-                value = convertToGAEValue(value, entity, propertyName, meta);
+                value = convertToGAEValue(value, entity, propertyName, meta, indexed && meta.isIndexed());
             }
             //TODO Allow to embed other types
             if (indexed && meta.isIndexed()) {
@@ -191,8 +191,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta) {
-        Indexed index = meta.getAnnotation(Indexed.class);
+    private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta, boolean indexed) {
+        Indexed index = null;
+        if (indexed) {
+            index = meta.getAnnotation(Indexed.class);
+        }
         if (value instanceof String) {
             if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
                 return new Text((String) value);
@@ -270,7 +273,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     // Save Owned iEntity
                     IEntity childIEntity = (IEntity) iEntity.getMember(me.getKey());
                     if (meta.isEmbedded()) {
-                        embedEntityProperties(entity, me.getKey(), "", childIEntity, meta.isEntity());
+                        embedEntityProperties(entity, me.getKey(), "", childIEntity, meta.isIndexed());
                         continue nextValue;
                     } else {
                         value = persistImpl(childIEntity, merge);
@@ -342,7 +345,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
             } else {
-                value = convertToGAEValue(value, entity, propertyName, meta);
+                value = convertToGAEValue(value, entity, propertyName, meta, meta.isIndexed());
             }
 
             if (meta.isIndexed()) {
