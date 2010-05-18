@@ -36,6 +36,7 @@ import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 
 public class EntityServicesImpl {
@@ -146,4 +147,14 @@ public class EntityServicesImpl {
         }
     }
 
+    public static class DeleteImpl implements EntityServices.Delete {
+
+        @Override
+        public VoidSerializable execute(IEntity entity) {
+            SecurityController.assertPermission(new EntityPermission(entity.getObjectClass(), EntityPermission.DELETE));
+            PersistenceServicesFactory.getPersistenceService().delete(entity);
+            return null;
+        }
+
+    }
 }
