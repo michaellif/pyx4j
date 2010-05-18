@@ -35,7 +35,10 @@ public class ReportAccumulator<E extends Serializable> implements Serializable {
 
     }
 
-    public void add(E item, double count) {
+    public void add(E item, Double count) {
+        if (count == null) {
+            return;
+        }
         Double counter = itemsCount.get(item);
         if (counter == null) {
             counter = new Double(count);
