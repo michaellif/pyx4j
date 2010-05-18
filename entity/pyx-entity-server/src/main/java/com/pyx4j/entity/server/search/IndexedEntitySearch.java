@@ -191,6 +191,14 @@ public class IndexedEntitySearch {
                     // Add in case index criteria is dropped by search 
                     inMemoryFilters.add(new DayInMemoryFilter(path, day));
                 }
+            } else if (Integer.class.isAssignableFrom(mm.getValueClass())) {
+                Serializable value = me.getValue();
+                if (value instanceof String) {
+                    value = Integer.valueOf((String) value);
+                } else if (!(value instanceof Integer)) {
+                    log.error("can't conver value to integer {}", value);
+                }
+                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();
                 Integer areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, pathWithGeoPointData, "radius"));
