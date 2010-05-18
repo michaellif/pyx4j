@@ -88,6 +88,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
             return;
         }
         if (fetchCompleate) {
+            formatCompleate();
             createDownloadable();
             formatCompleate = true;
         } else {
@@ -187,6 +188,10 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         reportEntityEnds(entity);
     }
 
+    protected void formatCompleate() {
+
+    }
+
     protected void createDownloadable() {
         Downloadable d = new Downloadable(formater.getBinaryData(), formater.getContentType());
         d.save(getFileName());
@@ -207,6 +212,10 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
             }
             return r;
         }
+    }
+
+    protected int getCount() {
+        return fetchCount;
     }
 
 }
