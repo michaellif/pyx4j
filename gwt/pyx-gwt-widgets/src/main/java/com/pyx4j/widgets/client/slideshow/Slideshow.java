@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.widgets.client.banner;
+package com.pyx4j.widgets.client.slideshow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.Button;
 
-public class Banner extends AbsolutePanel {
+public class Slideshow extends AbsolutePanel {
 
-    private static final Logger log = LoggerFactory.getLogger(Banner.class);
+    private static final Logger log = LoggerFactory.getLogger(Slideshow.class);
 
     private final List<Widget> items;
 
@@ -57,7 +57,7 @@ public class Banner extends AbsolutePanel {
 
     private boolean animationIsRunning = false;
 
-    public Banner(int width, int height, String buttonStyle) {
+    public Slideshow(int width, int height, String buttonStyle) {
         this.width = width;
         this.height = height;
         this.buttonStyle = buttonStyle;
@@ -163,7 +163,7 @@ public class Banner extends AbsolutePanel {
             init();
             start();
         } catch (Throwable t) {
-            log.error("Failed to init banner", t);
+            log.error("Failed to init slideshow", t);
         }
     }
 
@@ -173,7 +173,7 @@ public class Banner extends AbsolutePanel {
         try {
             hide();
         } catch (Throwable t) {
-            log.error("Failed to hide banner", t);
+            log.error("Failed to hide slideshow", t);
         }
 
     }
