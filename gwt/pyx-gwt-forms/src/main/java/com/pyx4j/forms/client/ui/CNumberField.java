@@ -28,7 +28,7 @@ public abstract class CNumberField<E extends Number> extends CTextBox<E> {
 
     public CNumberField(String title, String validationMessage) {
         super(title);
-        setFormat(new NumberFormat());
+        setFormat(new DefaultNumberFormat());
         validator = new TextBoxParserValidator<E>(validationMessage);
         addValueValidator(validator);
     }
@@ -39,7 +39,7 @@ public abstract class CNumberField<E extends Number> extends CTextBox<E> {
         addValueValidator(validator);
     }
 
-    class NumberFormat implements IFormat<E> {
+    class DefaultNumberFormat implements IFormat<E> {
 
         public String format(E value) {
             return value.toString();

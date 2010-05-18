@@ -42,6 +42,7 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CFormFolder;
@@ -145,6 +146,11 @@ public class EntityFormModel<E extends IEntity> {
             comp = new CIntegerField(mm.getCaption());
         } else if (mm.getValueClass().equals(Long.class)) {
             comp = new CLongField(mm.getCaption());
+        } else if (mm.getValueClass().equals(Double.class)) {
+            comp = new CDoubleField(mm.getCaption());
+            if (mm.getFormat() != null) {
+                ((CDoubleField) comp).setNumberFormat(mm.getFormat());
+            }
         } else if (mm.getObjectClass().equals(IList.class)) {
             comp = new CFormFolder(mm.getCaption());
         } else {
