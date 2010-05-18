@@ -61,7 +61,7 @@ public class ToggleButton extends Button {
         }
 
         @Override
-        public void install(Button button) {
+        public void init(Button button) {
             this.button = (ToggleButton) button;
             button.addMouseOverHandler(this);
             button.addMouseOutHandler(this);

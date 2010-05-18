@@ -24,7 +24,6 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 public interface TestImages extends ClientBundle {
-
     public ImageResource groupBoxOpen();
 
     public ImageResource groupBoxClose();

@@ -42,6 +42,8 @@ public class Button extends ButtonBase {
 
     private Element textElem;
 
+    private final ButtonFacesHandler buttonFacesHandler;
+
     public Button(Image image) {
         this(image, null);
     }
@@ -73,6 +75,9 @@ public class Button extends ButtonBase {
 
     protected Button(Image image, final String text, ButtonFacesHandler facesHandler, String stylePrefix) {
         super(DOM.createSpan());
+
+        buttonFacesHandler = facesHandler;
+
         getElement().getStyle().setProperty("display", "inline-block");
         getElement().getStyle().setProperty("verticalAlign", "top");
         setStylePrimaryName(getElement(), stylePrefix);
@@ -81,7 +86,7 @@ public class Button extends ButtonBase {
         // getElement().getStyle().setProperty("borderColor", "pink");
         // getElement().getStyle().setProperty("filter", "chroma(color=pink)");
 
-        facesHandler.install(this);
+        facesHandler.init(this);
 
         content = DOM.createSpan();
         content.getStyle().setProperty("display", "inline-block");
@@ -118,14 +123,24 @@ public class Button extends ButtonBase {
         Tooltip.tooltip(this, text);
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        buttonFacesHandler.enable(enabled);
+    }
+
     static class ButtonFacesHandler implements MouseOverHandler, MouseOutHandler, MouseDownHandler, MouseUpHandler {
 
         private Button button;
 
+        private boolean enabled = true;
+
+        private boolean mouseOver = false;
+
         public ButtonFacesHandler() {
         }
 
-        public void install(Button button) {
+        public void init(Button button) {
             this.button = button;
             button.addMouseOverHandler(this);
             button.addMouseOutHandler(this);
@@ -133,28 +148,60 @@ public class Button extends ButtonBase {
             button.addMouseUpHandler(this);
         }
 
+        public void enable(boolean flag) {
+            enabled = flag;
+            if (flag) {
+                button.removeStyleDependentName("disabled");
+                if (mouseOver) {
+                    onMouseOver(null);
+                }
+            } else {
+                button.addStyleDependentName("disabled");
+                button.removeStyleDependentName("pushed");
+                button.removeStyleDependentName("hover");
+            }
+        }
+
         @Override
         public void onMouseOver(MouseOverEvent event) {
-            button.removeStyleDependentName("pushed");
-            button.addStyleDependentName("hover");
+            mouseOver = true;
+            if (isEnabled()) {
+                button.removeStyleDependentName("pushed");
+                button.addStyleDependentName("hover");
+            }
         }
 
         @Override
         public void onMouseOut(MouseOutEvent event) {
-            button.removeStyleDependentName("hover");
-            button.removeStyleDependentName("pushed");
+            mouseOver = false;
+            if (isEnabled()) {
+                button.removeStyleDependentName("hover");
+                button.removeStyleDependentName("pushed");
+            }
         }
 
         @Override
         public void onMouseDown(MouseDownEvent event) {
-            button.removeStyleDependentName("hover");
-            button.addStyleDependentName("pushed");
+            if (isEnabled()) {
+                button.removeStyleDependentName("hover");
+                button.addStyleDependentName("pushed");
+            }
         }
 
         @Override
         public void onMouseUp(MouseUpEvent event) {
-            button.removeStyleDependentName("pushed");
-            button.addStyleDependentName("hover");
+            if (isEnabled()) {
+                button.removeStyleDependentName("pushed");
+                button.addStyleDependentName("hover");
+            }
+        }
+
+        public Button getButton() {
+            return button;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
         }
 
     }

@@ -23,8 +23,13 @@ package com.pyx4j.widgets.client.banner;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -33,6 +38,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.Button;
 
 public class Banner extends AbsolutePanel {
+
+    private static final Logger log = LoggerFactory.getLogger(Banner.class);
 
     private final List<Widget> items;
 
@@ -49,8 +56,6 @@ public class Banner extends AbsolutePanel {
     private Timer slideChangeTimer;
 
     private boolean animationIsRunning = false;
-
-    private Button startStopAction;
 
     public Banner(int width, int height, String buttonStyle) {
         this.width = width;
@@ -79,15 +84,15 @@ public class Banner extends AbsolutePanel {
         };
         slideChangeTimer.run();
         slideChangeTimer.scheduleRepeating(6000);
-        startStopAction.setCaption("&#x25A0;");
+        controlPanel.getStartStopAction().setCaption("&#x25A0;");
     }
 
     public void stop() {
         if (slideChangeTimer != null) {
             slideChangeTimer.cancel();
             slideChangeTimer = null;
-            startStopAction.setCaption("&#x25B6;");
         }
+        controlPanel.getStartStopAction().setCaption("&#x25B6;");
     }
 
     protected void init() {
@@ -97,68 +102,94 @@ public class Banner extends AbsolutePanel {
         }
         controlPanel = new ControlPanel();
         add(controlPanel, 0, 0);
+        int x = width - controlPanel.getOffsetWidth() - 100;
+        setWidgetPosition(controlPanel, x, height - 30);
         show(0);
     }
 
-    public void show(int index) {
-        if (animationIsRunning) {
-            return;
+    protected void hide() {
+        stop();
+        final Widget currentItem = currentIndex < 0 ? null : items.get(currentIndex);
+        if (currentItem != null) {
+            currentItem.setVisible(false);
         }
-        animationIsRunning = true;
-        if (currentIndex == index) {
-            return;
-        }
-        final Widget fadeOut = currentIndex < 0 ? null : items.get(currentIndex);
-        final Widget fadeIn = items.get(index);
-        fadeIn.getElement().getStyle().setOpacity(0);
-        fadeIn.setVisible(true);
-        currentIndex = index;
-        controlPanel.setSelectedItem(currentIndex);
-        Timer timer = new Timer() {
-            int iterationCounter = 0;
+        currentIndex = -1;
+    }
 
-            @Override
-            public void run() {
-
-                fadeIn.getElement().getStyle().setOpacity(((double) iterationCounter) / 100);
-                if (fadeOut != null) {
-                    fadeOut.getElement().getStyle().setOpacity(1 - ((double) iterationCounter) / 100);
+    public void show(final int index) {
+        DeferredCommand.addCommand(new Command() {
+            public void execute() {
+                if ((currentIndex == index) || animationIsRunning) {
+                    return;
                 }
-                iterationCounter++;
-                if (iterationCounter == 100) {
-                    if (fadeOut != null) {
-                        fadeOut.setVisible(false);
+                final Widget fadeOut = currentIndex < 0 ? null : items.get(currentIndex);
+                final Widget fadeIn = items.get(index);
+                fadeIn.getElement().getStyle().setOpacity(0);
+                fadeIn.setVisible(true);
+                currentIndex = index;
+                controlPanel.setSelectedItem(index);
+                animationIsRunning = true;
+                controlPanel.setEnabled(false);
+                Timer animationTimer = new Timer() {
+                    int iterationCounter = 0;
+
+                    @Override
+                    public void run() {
+
+                        fadeIn.getElement().getStyle().setOpacity(((double) iterationCounter) / 100);
+                        if (fadeOut != null) {
+                            fadeOut.getElement().getStyle().setOpacity(1 - ((double) iterationCounter) / 100);
+                        }
+                        iterationCounter++;
+                        if (iterationCounter == 100) {
+                            if (fadeOut != null) {
+                                fadeOut.setVisible(false);
+                            }
+                            this.cancel();
+                            animationIsRunning = false;
+                            controlPanel.setEnabled(true);
+                        }
                     }
-                    this.cancel();
-                    animationIsRunning = false;
-                }
+                };
+                animationTimer.scheduleRepeating(7);
             }
-        };
-        timer.scheduleRepeating(10);
+        });
     }
 
     @Override
     protected void onLoad() {
-        init();
         super.onLoad();
-        int x = width - controlPanel.getOffsetWidth() - 100;
-        setWidgetPosition(controlPanel, x, height - 30);
-        start();
+        try {
+            init();
+            start();
+        } catch (Throwable t) {
+            log.error("Failed to init banner", t);
+        }
     }
 
     @Override
     protected void onUnload() {
         super.onUnload();
-        show(0);
-        stop();
+        try {
+            hide();
+        } catch (Throwable t) {
+            log.error("Failed to hide banner", t);
+        }
+
     }
 
     class ControlPanel extends HorizontalPanel {
 
         private final ArrayList<Button> itemActionList = new ArrayList<Button>();
 
+        private final Button leftAction;
+
+        private final Button startStopAction;
+
+        private final Button rightAction;
+
         ControlPanel() {
-            Button leftAction = new Button("&#171;", buttonStyle);
+            leftAction = new Button("&#171;", buttonStyle);
             leftAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -198,7 +229,7 @@ public class Banner extends AbsolutePanel {
                 }
             });
             add(startStopAction);
-            Button rightAction = new Button("&#187;", buttonStyle);
+            rightAction = new Button("&#187;", buttonStyle);
             rightAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -212,6 +243,19 @@ public class Banner extends AbsolutePanel {
 
         }
 
+        public void setEnabled(boolean flag) {
+            for (int i = 0; i < itemActionList.size(); i++) {
+                itemActionList.get(i).setEnabled(flag);
+            }
+
+            leftAction.setEnabled(flag);
+
+            startStopAction.setEnabled(flag);
+
+            rightAction.setEnabled(flag);
+
+        }
+
         public void setSelectedItem(int currentIndex) {
             for (int i = 0; i < itemActionList.size(); i++) {
                 if (i == currentIndex) {
@@ -220,8 +264,12 @@ public class Banner extends AbsolutePanel {
                     itemActionList.get(i).removeStyleDependentName("selected");
                 }
             }
-
         }
+
+        public Button getStartStopAction() {
+            return startStopAction;
+        }
+
     }
 
 }
