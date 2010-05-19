@@ -96,6 +96,13 @@ public class WidgetsDemo implements EntryPoint {
             photoAlbum.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
             photoAlbum.getElement().getStyle().setBorderColor("black");
             photoAlbum.getElement().getStyle().setBorderWidth(2, Unit.PX);
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo1");
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo2");
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo3");
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo4");
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo5");
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo6");
+            photoAlbum.addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo7");
             contentPanel.add(photoAlbum);
         }
 

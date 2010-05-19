@@ -20,36 +20,32 @@
  */
 package com.pyx4j.widgets.client.photoalbum;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
 
-import com.pyx4j.widgets.client.HasTooltipMouseHandlers;
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.Tooltip;
 
 public class PhotoAlbum extends DockPanel {
@@ -58,8 +54,6 @@ public class PhotoAlbum extends DockPanel {
 
     private final FlowPanel photoPanel;
 
-    private final List<Photo> photoList = new ArrayList<Photo>();
-
     public PhotoAlbum() {
         actionPanel = new ActionPanel();
         add(actionPanel, DockPanel.NORTH);
@@ -67,27 +61,36 @@ public class PhotoAlbum extends DockPanel {
         photoPanel = new FlowPanel();
         add(photoPanel, DockPanel.CENTER);
 
-        photoPanel.add(new PhotoHolder());
-        photoPanel.add(new PhotoHolder());
-        photoPanel.add(new PhotoHolder());
-        photoPanel.add(new PhotoHolder());
-        photoPanel.add(new PhotoHolder());
     }
 
-    public void addPhoto() {
+    public void addPhoto(String thumbnailUrl, String photoUrl, String caption) {
+        Photo photo = new Photo(thumbnailUrl, photoUrl, caption);
+        PhotoHolder holder = new PhotoHolder(photo);
+        photoPanel.add(holder);
+    }
 
+    public void removePhoto(int index) {
+        photoPanel.remove(index);
     }
 
     class PhotoHolder extends AbsolutePanel {
 
         private final Image image;
 
-        public PhotoHolder() {
-            setSize("200px", "200px");
+        private boolean showMenuHandler = false;
+
+        private final MenuBar menuButtonBar;
+
+        private final Tooltip tooltip;
+
+        private final HTML caption;
+
+        public PhotoHolder(final Photo photo) {
+            setSize("220px", "220px");
             getElement().getStyle().setMargin(2, Unit.PX);
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-            image = new Image("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG");
+            image = new Image(photo.thumbnailUrl);
             image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             image.getElement().getStyle().setProperty("textAlign", "center");
             image.addClickHandler(new ClickHandler() {
@@ -99,35 +102,96 @@ public class PhotoAlbum extends DockPanel {
                 }
             });
 
-            PhotoFrame frame = new PhotoFrame();
-            Tooltip.tooltip(frame, "Tooltip");
-            frame.getElement().getStyle().setBackgroundColor("lightgray");
-            frame.setSize("180px", "180px");
-            frame.add(image);
+            DockPanel frame = new DockPanel();
+            frame.setSize("200px", "200px");
+            ImageResource background = ImageFactory.getImages().photoFrame();
+            frame.getElement().getStyle().setProperty("background", "url(" + background.getURL() + ") no-repeat 100% 100%");
+
+            frame.add(image, CENTER);
             frame.setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
             frame.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
 
+            caption = new HTML(photo.caption, false);
+            caption.getElement().getStyle().setCursor(Cursor.DEFAULT);
+            caption.setHeight("1.2em");
+            caption.setWidth("195px");
+            caption.getElement().getStyle().setProperty("textAlign", "center");
+            caption.getElement().getStyle().setProperty("overflow", "hidden");
+            tooltip = Tooltip.tooltip(caption, photo.caption);
+            frame.add(caption, SOUTH);
             add(frame, 10, 0);
-        }
 
-        class PhotoFrame extends HorizontalPanel implements HasTooltipMouseHandlers {
+            ImageResource viewMenu = ImageFactory.getImages().viewMenu();
+            MenuBar actionsMenu = new ActionsMenu();
+            MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
+            menuButtonItem.removeStyleName("gwt-MenuItem");
+            menuButtonItem.getElement().getStyle().setCursor(Cursor.POINTER);
 
-            @Override
-            public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-                return addDomHandler(handler, MouseOutEvent.getType());
-            }
+            menuButtonBar = new MenuBar();
+            menuButtonBar.setVisible(false);
+            menuButtonBar.addItem(menuButtonItem);
 
-            @Override
-            public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-                return addDomHandler(handler, MouseOverEvent.getType());
-            }
-
-            @Override
-            public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-                return addDomHandler(handler, MouseMoveEvent.getType());
-            }
+            add(menuButtonBar, 187, 5);
 
         }
+
+        class ActionsMenu extends MenuBar {
+            public ActionsMenu() {
+                super(true);
+                setAutoOpen(true);
+                MenuItem editCaptionMenu = new MenuItem("Edit Caption", true, new Command() {
+                    @Override
+                    public void execute() {
+                        String newText = "EDITED" + System.currentTimeMillis();
+                        tooltip.setTooltipText(newText);
+                        caption.setHTML(newText);
+                    }
+                });
+                MenuItem deletePhotoMenu = new MenuItem("Delete Photo", true, new Command() {
+
+                    @Override
+                    public void execute() {
+                        removePhoto(photoPanel.getWidgetIndex(PhotoHolder.this));
+                    }
+                });
+                addItem(editCaptionMenu);
+                addItem(deletePhotoMenu);
+
+                addCloseHandler(new CloseHandler<PopupPanel>() {
+
+                    @Override
+                    public void onClose(CloseEvent<PopupPanel> event) {
+                        menuButtonBar.setVisible(showMenuHandler);
+                    }
+                });
+
+                PhotoHolder.this.addDomHandler(new MouseOverHandler() {
+                    @Override
+                    public void onMouseOver(MouseOverEvent event) {
+                        showMenuHandler = true;
+                        menuButtonBar.setVisible(true);
+                    }
+                }, MouseOverEvent.getType());
+
+                PhotoHolder.this.addDomHandler(new MouseOutHandler() {
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        showMenuHandler = false;
+                        if (!isAttached() || !isVisible()) {
+                            menuButtonBar.setVisible(false);
+                        }
+                    }
+                }, MouseOutEvent.getType());
+            }
+
+            @Override
+            protected void onDetach() {
+                super.onDetach();
+                menuButtonBar.setVisible(showMenuHandler);
+            }
+
+        }
+
     }
 
     class ActionPanel extends HorizontalPanel {
@@ -140,6 +204,13 @@ public class PhotoAlbum extends DockPanel {
             slideshowButton = new Button("Slideshow");
             add(slideshowButton);
             addPhotoButton = new Button("Add photo");
+            addPhotoButton.addClickHandler(new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo#");
+                }
+            });
             add(addPhotoButton);
         }
     }

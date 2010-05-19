@@ -134,7 +134,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
         public void setPopupPosition(int pointerLeft, int pointerTop) {
             int popupLeft = pointerLeft + OFFSET_X;
             int popupTop = pointerTop + OFFSET_Y + Window.getScrollTop();
-            log.debug("popupTop=" + popupTop + " pointerTop=" + pointerTop);
+            //log.debug("popupTop=" + popupTop + " pointerTop=" + pointerTop);
 
             super.setPopupPosition(popupLeft, popupTop);
         }
