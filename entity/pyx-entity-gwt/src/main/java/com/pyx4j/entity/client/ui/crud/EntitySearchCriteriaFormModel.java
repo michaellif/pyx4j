@@ -149,8 +149,9 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends IEntity> CEditableComponent<T> get(T member) {
-        return (CEditableComponent<T>) get(member, null);
+        return (CEditableComponent<T>) get((IObject<?>) member);
     }
 
     public <T> CEditableComponent<T> get(IObject<T> member) {
