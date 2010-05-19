@@ -119,6 +119,10 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable {
         return domainName;
     }
 
+    public boolean hasCriteria() {
+        return ((filters != null) && (filters.size() > 0)) || ((sorts != null) && (sorts.size() > 0));
+    }
+
     public List<Criterion> getFilters() {
         return filters;
     }

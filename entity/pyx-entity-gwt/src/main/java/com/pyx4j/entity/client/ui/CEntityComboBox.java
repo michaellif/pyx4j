@@ -48,7 +48,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntityComboBox.class);
 
     private EntityQueryCriteria<E> criteria;
 
@@ -119,6 +119,12 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                 Collections.sort(optFiltered, comparator);
             }
             super.setOptions(optFiltered);
+        }
+    }
+
+    public void resetOptions() {
+        if ((optionsLoaded) || (criteria != null)) {
+            optionsLoaded = false;
         }
     }
 

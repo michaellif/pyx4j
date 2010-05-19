@@ -118,15 +118,21 @@ public class ReferenceDataManager {
     /**
      * Update the reference data when Entity is modified by user.
      */
-    public static void update(IEntity ent) {
+    public static <T extends IEntity> void update(T ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
             if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
+                boolean found = false;
                 for (IEntity item : me.getValue()) {
                     if (ent.equals(item) && (item != ent)) {
                         // Replace item in List
                         item.setValue(ent.getValue());
+                        log.debug("ref entity updated {}", ent);
+                        found = true;
                         break;
                     }
+                }
+                if ((!found) && !me.getKey().hasCriteria()) {
+                    ((List<T>) me.getValue()).add(ent);
                 }
             }
         }
