@@ -171,6 +171,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
             }
 
             final AsyncCallback<List<E>> handlingCallback = new AsyncCallback<List<E>>() {
+
+                @Override
                 public void onSuccess(List<E> result) {
                     isLoading = false;
                     isUnavailable = false;
@@ -184,6 +186,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                     }
                 }
 
+                @Override
                 public void onFailure(Throwable caught) {
                     isLoading = false;
                     isUnavailable = true;

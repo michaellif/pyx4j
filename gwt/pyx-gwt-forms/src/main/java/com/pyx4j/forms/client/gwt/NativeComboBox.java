@@ -29,6 +29,7 @@ import com.google.gwt.user.client.DeferredCommand;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.INativeNativeComboBox;
+import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
 /**
@@ -227,11 +228,21 @@ public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<
     protected void onLoad() {
         super.onLoad();
         DomDebug.attachedWidget();
+        if (options == null) {
+            comboBox.retriveOptions(new AsyncOptionsReadyCallback<E>() {
+                @Override
+                public void onOptionsReady(List<E> opt) {
+                    setOptions(opt);
+                }
+            });
+        }
     }
 
     @Override
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
+        options = null;
+        super.clear();
     }
 }
