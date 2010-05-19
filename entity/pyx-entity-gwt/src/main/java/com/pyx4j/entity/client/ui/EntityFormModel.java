@@ -77,6 +77,11 @@ public class EntityFormModel<E extends IEntity> {
                 Object value = event.getValue();
                 if (value instanceof IEntity) {
                     value = ((IEntity) value).getValue();
+                } else if ((value instanceof Date)) {
+                    Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    if (cls.equals(java.sql.Date.class)) {
+                        value = new java.sql.Date(((Date) value).getTime());
+                    }
                 }
                 editableEntity.setValue(memberPath, value);
             }

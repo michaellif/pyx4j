@@ -117,9 +117,22 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         return memberMeta;
     }
 
+    @SuppressWarnings("unchecked")
     public MemberMeta getMemberMeta(Path path) {
-        //TODO
-        throw new Error("TODO: Not implemented in client yet");
+        EntityMeta em = this;
+        MemberMeta mm = null;
+        for (String memberName : path.getPathMembers()) {
+            //TODO ICollection support
+            if (mm != null) {
+                if (!mm.isEntity()) {
+                    throw new RuntimeException("Invalid member in path " + memberName);
+                } else {
+                    em = EntityFactory.getEntityMeta((Class<? extends IEntity>) mm.getValueClass());
+                }
+            }
+            mm = em.getMemberMeta(memberName);
+        }
+        return mm;
     }
 
     @Override

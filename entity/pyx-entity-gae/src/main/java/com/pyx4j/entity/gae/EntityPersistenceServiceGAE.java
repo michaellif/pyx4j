@@ -228,6 +228,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 return value;
             }
         } else if (value instanceof Date) {
+            if (value instanceof java.sql.Date) {
+                value = new Date(((Date) value).getTime());
+            }
             if (index != null) {
                 // TODO move values like month and week
                 Date v = TimeUtils.dayStart((Date) value);
