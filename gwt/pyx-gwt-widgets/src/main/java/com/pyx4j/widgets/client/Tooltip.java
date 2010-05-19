@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
@@ -38,6 +41,8 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(Tooltip.class);
+
     private static final int DELAY_TO_SHOW = 300;
 
     private static final int DELAY_TO_HIDE = 7000;
@@ -50,7 +55,11 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
     private String text;
 
-    private final HasAllMouseHandlers target;
+    private final Widget target;
+
+    public static Tooltip tooltip(HasTooltipMouseHandlers sender, String text) {
+        return new Tooltip(sender, text);
+    }
 
     public static Tooltip tooltip(HasAllMouseHandlers sender, String text) {
         return new Tooltip(sender, text);
@@ -65,10 +74,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
         private Timer delayShowTimer;
 
         private Timer delayHideTimer;
-
-        private int popupLeft;
-
-        private int popupTop;
 
         private long hideTimeStamp;
 
@@ -93,12 +98,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
             shaddowPane.getElement().getStyle().setZIndex(29);
         }
 
-        private void setPointerLocation(int left, int top) {
-            this.popupLeft = left;
-            this.popupTop = top;
-        }
-
-        private void scheduleShow(final HasAllMouseHandlers target, final String text) {
+        private void scheduleShow(final Widget target, final String text) {
             if (delayShowTimer != null) {
                 delayShowTimer.cancel();
             }
@@ -106,9 +106,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
                 @Override
                 public void run() {
                     delayShowTimer = null;
-                    if (target instanceof Widget && ((Widget) target).isAttached() && ((Widget) target).isVisible()) {
-                        int left = popupLeft + OFFSET_X;
-                        int top = popupTop + OFFSET_Y + Window.getScrollTop();
+                    if (target.isAttached() && target.isVisible()) {
 
                         //TODO removed to fix site tooltip - what does it do?
                         // Fix position for the border of the window
@@ -122,7 +120,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
                         //                            left = Window.getClientWidth() - width - 5;
                         //                        }
 
-                        setPopupPosition(left, top);
                         textPane.setHTML(text);
                         TooltipPanel.this.show();
                         shaddowPane.setPixelSize(textPane.getOffsetWidth(), textPane.getOffsetHeight());
@@ -131,6 +128,15 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
                 }
             };
             delayShowTimer.schedule((System.currentTimeMillis() - hideTimeStamp > 200) ? DELAY_TO_SHOW : 200);
+        }
+
+        @Override
+        public void setPopupPosition(int pointerLeft, int pointerTop) {
+            int popupLeft = pointerLeft + OFFSET_X;
+            int popupTop = pointerTop + OFFSET_Y + Window.getScrollTop();
+            log.debug("popupTop=" + popupTop + " pointerTop=" + pointerTop);
+
+            super.setPopupPosition(popupLeft, popupTop);
         }
 
         private void scheduleHide() {
@@ -162,9 +168,17 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
     }
 
+    protected Tooltip(HasTooltipMouseHandlers target, String text) {
+        this.text = text;
+        this.target = (Widget) target;
+        target.addMouseOverHandler(this);
+        target.addMouseOutHandler(this);
+        target.addMouseMoveHandler(this);
+    }
+
     protected Tooltip(HasAllMouseHandlers target, String text) {
         this.text = text;
-        this.target = target;
+        this.target = (Widget) target;
         target.addMouseOverHandler(this);
         target.addMouseOutHandler(this);
         target.addMouseMoveHandler(this);
@@ -181,7 +195,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
             if (tooltipPanel == null) {
                 tooltipPanel = new TooltipPanel();
             }
-            tooltipPanel.setPointerLocation(event.getClientX(), event.getClientY());
+            tooltipPanel.setPopupPosition(event.getClientX(), event.getClientY());
             tooltipPanel.scheduleShow(target, this.text);
         }
     }
@@ -189,7 +203,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
     @Override
     public void onMouseMove(MouseMoveEvent event) {
         if (tooltipPanel != null) {
-            tooltipPanel.setPointerLocation(event.getClientX(), event.getClientY());
+            tooltipPanel.setPopupPosition(event.getClientX(), event.getClientY());
         }
     }
 

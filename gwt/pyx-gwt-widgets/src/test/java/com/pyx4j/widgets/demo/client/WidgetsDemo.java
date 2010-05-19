@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
@@ -49,6 +51,7 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.GlueOption;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
+import com.pyx4j.widgets.client.photoalbum.PhotoAlbum;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
@@ -86,6 +89,15 @@ public class WidgetsDemo implements EntryPoint {
         TextArea htmlViewer = new TextArea();
 
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
+
+        {
+            PhotoAlbum photoAlbum = new PhotoAlbum();
+            photoAlbum.setWidth("700px");
+            photoAlbum.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            photoAlbum.getElement().getStyle().setBorderColor("black");
+            photoAlbum.getElement().getStyle().setBorderWidth(2, Unit.PX);
+            contentPanel.add(photoAlbum);
+        }
 
         contentPanel.add(pageNameTextBox);
         contentPanel.add(editorDecorator);
