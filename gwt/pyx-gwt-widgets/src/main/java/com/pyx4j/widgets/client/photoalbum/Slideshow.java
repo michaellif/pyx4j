@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.pyx4j.widgets.client.slideshow;
+package com.pyx4j.widgets.client.photoalbum;
 
 import java.util.ArrayList;
 import java.util.List;
