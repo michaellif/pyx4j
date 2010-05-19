@@ -200,7 +200,7 @@ public abstract class AbstractSiteDispatcher {
             @Override
             public void onFailure(Throwable caught) {
                 hideLoadingIndicator();
-                log.error("obtainSite error", caught);
+                log.warn("obtainSite error", caught);
                 //TODO handle SecurityViolationException to show login form
                 handleObtainSiteFailure(caught, navigationUri.getSiteName());
             }
