@@ -150,7 +150,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     }
 
     public <T extends IEntity> CEditableComponent<T> get(T member) {
-        return get(member);
+        return (CEditableComponent<T>) get(member, null);
     }
 
     public <T> CEditableComponent<T> get(IObject<T> member) {
