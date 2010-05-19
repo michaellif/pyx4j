@@ -52,4 +52,8 @@ public class ReportCounter<E extends Serializable> implements Serializable {
     public Set<Entry<E, Integer>> entrySet() {
         return itemsCount.entrySet();
     }
+
+    public int size() {
+        return itemsCount.size();
+    }
 }

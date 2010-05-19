@@ -56,4 +56,7 @@ public class ReportAccumulator<E extends Serializable> implements Serializable {
         return itemsCount.entrySet();
     }
 
+    public int size() {
+        return itemsCount.size();
+    }
 }
