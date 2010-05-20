@@ -121,16 +121,16 @@ public class MessageFormat {
             } else if (formatType.equals("date")) {
                 DateTimeFormat fmt;
                 if (formatStyle == null) {
-                    //fmt = DateTimeFormat.getMediumDateFormat();
-                    fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
+                    fmt = DateTimeFormat.getMediumDateFormat();
+                    //fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
                 } else if (formatStyle.equals("short")) {
-                    //fmt = DateTimeFormat.getShortDateFormat();
+                    fmt = DateTimeFormat.getShortDateFormat();
                     //03/01/70
-                    fmt = DateTimeFormat.getFormat("dd/MM/yy");
+                    //fmt = DateTimeFormat.getFormat("dd/MM/yy");
                 } else if (formatStyle.equals("medium")) {
-                    //fmt = DateTimeFormat.getMediumDateFormat();
+                    fmt = DateTimeFormat.getMediumDateFormat();
                     //3-Jan-1970
-                    fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
+                    //fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
                 } else if (formatStyle.equals("long")) {
                     fmt = DateTimeFormat.getLongDateFormat();
                 } else if (formatStyle.equals("full")) {
