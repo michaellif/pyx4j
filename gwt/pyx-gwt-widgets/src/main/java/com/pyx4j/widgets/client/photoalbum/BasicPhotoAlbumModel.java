@@ -20,6 +20,40 @@
  */
 package com.pyx4j.widgets.client.photoalbum;
 
-public class BasicPhotoAlbumModel {
+import java.util.ArrayList;
+import java.util.List;
+
+public class BasicPhotoAlbumModel implements PhotoAlbumModel {
+
+    private final ArrayList<Photo> photoList = new ArrayList<Photo>();
+
+    private PhotoAlbum photoAlbum;
+
+    public BasicPhotoAlbumModel() {
+    }
+
+    public void setPhotoAlbum(PhotoAlbum photoAlbum) {
+        this.photoAlbum = photoAlbum;
+    }
+
+    public void addPhoto(Photo photo) {
+        photoList.add(photo);
+        photoAlbum.onPhotoAdded(photo, photoList.size() - 1);
+    }
+
+    public void removePhoto(int index) {
+        photoList.remove(index);
+        photoAlbum.onPhotoRemoved(index);
+    }
+
+    public void updateCaption(int index, String caption) {
+        photoList.get(index).setCaption(caption);
+        photoAlbum.onCaptionUpdated(caption, index);
+    }
+
+    @Override
+    public List<Photo> getPhotoList() {
+        return photoList;
+    }
 
 }

@@ -83,7 +83,7 @@ public class Slideshow extends AbsolutePanel {
             }
         };
         slideChangeTimer.run();
-        slideChangeTimer.scheduleRepeating(6000);
+        slideChangeTimer.scheduleRepeating(10000);
         controlPanel.getStartStopAction().setCaption("&#x25A0;");
     }
 

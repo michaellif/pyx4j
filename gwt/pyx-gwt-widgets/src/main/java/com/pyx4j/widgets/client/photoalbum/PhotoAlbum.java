@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.photoalbum;
 
+import java.util.List;
+
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -54,6 +57,10 @@ public class PhotoAlbum extends DockPanel {
 
     private final FlowPanel photoPanel;
 
+    private PhotoAlbumModel model;
+
+    private Command addPhotoCommand;
+
     public PhotoAlbum() {
         actionPanel = new ActionPanel();
         add(actionPanel, DockPanel.NORTH);
@@ -63,14 +70,9 @@ public class PhotoAlbum extends DockPanel {
 
     }
 
-    public void addPhoto(String thumbnailUrl, String photoUrl, String caption) {
-        Photo photo = new Photo(thumbnailUrl, photoUrl, caption);
-        PhotoHolder holder = new PhotoHolder(photo);
-        photoPanel.add(holder);
-    }
-
-    public void removePhoto(int index) {
-        photoPanel.remove(index);
+    public void setPhotoAlbumModel(PhotoAlbumModel model) {
+        this.model = model;
+        model.setPhotoAlbum(this);
     }
 
     class PhotoHolder extends AbsolutePanel {
@@ -90,7 +92,7 @@ public class PhotoAlbum extends DockPanel {
             getElement().getStyle().setMargin(2, Unit.PX);
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-            image = new Image(photo.thumbnailUrl);
+            image = new Image(photo.getThumbnailUrl());
             image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             image.getElement().getStyle().setProperty("textAlign", "center");
             image.addClickHandler(new ClickHandler() {
@@ -111,13 +113,13 @@ public class PhotoAlbum extends DockPanel {
             frame.setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
             frame.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
 
-            caption = new HTML(photo.caption, false);
+            caption = new HTML(photo.getCaption(), false);
             caption.getElement().getStyle().setCursor(Cursor.DEFAULT);
             caption.setHeight("1.2em");
             caption.setWidth("195px");
             caption.getElement().getStyle().setProperty("textAlign", "center");
             caption.getElement().getStyle().setProperty("overflow", "hidden");
-            tooltip = Tooltip.tooltip(caption, photo.caption);
+            tooltip = Tooltip.tooltip(caption, photo.getCaption());
             frame.add(caption, SOUTH);
             add(frame, 10, 0);
 
@@ -135,6 +137,11 @@ public class PhotoAlbum extends DockPanel {
 
         }
 
+        void setCaption(String captionText) {
+            tooltip.setTooltipText(captionText);
+            caption.setHTML(captionText);
+        }
+
         class ActionsMenu extends MenuBar {
             public ActionsMenu() {
                 super(true);
@@ -143,15 +150,14 @@ public class PhotoAlbum extends DockPanel {
                     @Override
                     public void execute() {
                         String newText = "EDITED" + System.currentTimeMillis();
-                        tooltip.setTooltipText(newText);
-                        caption.setHTML(newText);
+                        PhotoAlbum.this.model.updateCaption(photoPanel.getWidgetIndex(PhotoHolder.this), newText);
                     }
                 });
                 MenuItem deletePhotoMenu = new MenuItem("Delete Photo", true, new Command() {
 
                     @Override
                     public void execute() {
-                        removePhoto(photoPanel.getWidgetIndex(PhotoHolder.this));
+                        model.removePhoto(photoPanel.getWidgetIndex(PhotoHolder.this));
                     }
                 });
                 addItem(editCaptionMenu);
@@ -202,45 +208,61 @@ public class PhotoAlbum extends DockPanel {
 
         public ActionPanel() {
             slideshowButton = new Button("Slideshow");
-            add(slideshowButton);
-            addPhotoButton = new Button("Add photo");
-            addPhotoButton.addClickHandler(new ClickHandler() {
-
+            slideshowButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    addPhoto("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG", "", "Photo#");
+                    Slideshow slideshow = new Slideshow(640, 510, null);
+                    List<Photo> photoList = model.getPhotoList();
+                    for (Photo photo : photoList) {
+                        HorizontalPanel holder = new HorizontalPanel();
+                        PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
+                        photoImage.getElement().getStyle().setPadding(20, Unit.PX);
+                        photoImage.getElement().getStyle().setPaddingBottom(40, Unit.PX);
+                        holder.add(photoImage);
+                        holder.setCellHorizontalAlignment(photoImage, ALIGN_CENTER);
+                        holder.setCellVerticalAlignment(photoImage, ALIGN_MIDDLE);
+                        slideshow.addItem(holder);
+                    }
+                    PopupPanel popup = new PopupPanel(true);
+                    popup.getElement().getStyle().setBackgroundColor("#EDEDFF");
+                    popup.getElement().getStyle().setBorderColor("gray");
+                    popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
+                    popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+                    popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");
+                    popup.getElement().getStyle().setProperty("MozBoxShadow", "10px 10px 5px #aaa");
+                    popup.add(slideshow);
+                    popup.center();
+                }
+            });
+            add(slideshowButton);
+
+            addPhotoButton = new Button("Add photo");
+            addPhotoButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    addPhotoCommand.execute();
                 }
             });
             add(addPhotoButton);
         }
     }
 
-    class Photo {
-
-        private final String thumbnailUrl;
-
-        private final String photoUrl;
-
-        private final String caption;
-
-        public Photo(String thumbnailUrl, String photoUrl, String caption) {
-            super();
-            this.thumbnailUrl = thumbnailUrl;
-            this.photoUrl = photoUrl;
-            this.caption = caption;
-        }
-
-        public String getThumbnailUrl() {
-            return thumbnailUrl;
-        }
-
-        public String getPhotoUrl() {
-            return photoUrl;
-        }
-
-        public String getCaption() {
-            return caption;
-        }
-
+    public void setAddPhotoCommand(Command command) {
+        addPhotoCommand = command;
     }
+
+    public void onPhotoAdded(Photo photo, int index) {
+        PhotoHolder holder = new PhotoHolder(photo);
+        photoPanel.add(holder);
+    }
+
+    public void onPhotoRemoved(int index) {
+        photoPanel.remove(index);
+    }
+
+    public void onCaptionUpdated(String caption, int index) {
+        PhotoHolder holder = (PhotoHolder) photoPanel.getWidget(index);
+        holder.setCaption(caption);
+    }
+
 }

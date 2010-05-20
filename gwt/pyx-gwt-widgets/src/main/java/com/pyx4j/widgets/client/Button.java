@@ -70,11 +70,15 @@ public class Button extends ButtonBase {
     }
 
     public Button(Image image, final String text, ButtonFacesHandler facesHandler) {
-        this(image, text, facesHandler, CSSClass.pyx4j_Button.name());
+        this(image, text, facesHandler, null);
     }
 
     protected Button(Image image, final String text, ButtonFacesHandler facesHandler, String stylePrefix) {
         super(DOM.createSpan());
+
+        if (stylePrefix == null) {
+            stylePrefix = CSSClass.pyx4j_Button.name();
+        }
 
         buttonFacesHandler = facesHandler;
 
