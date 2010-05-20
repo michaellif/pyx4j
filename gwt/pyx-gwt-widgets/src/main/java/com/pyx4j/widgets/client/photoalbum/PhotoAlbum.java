@@ -52,15 +52,13 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class PhotoAlbum extends DockPanel {
+public abstract class PhotoAlbum extends DockPanel {
 
     private final ActionPanel actionPanel;
 
     private final FlowPanel photoPanel;
 
     private PhotoAlbumModel model;
-
-    private Command addPhotoCommand;
 
     public PhotoAlbum() {
         actionPanel = new ActionPanel();
@@ -69,6 +67,10 @@ public class PhotoAlbum extends DockPanel {
         photoPanel = new FlowPanel();
         add(photoPanel, DockPanel.CENTER);
 
+    }
+
+    public PhotoAlbumModel getPhotoAlbumModel() {
+        return model;
     }
 
     public void setPhotoAlbumModel(PhotoAlbumModel model) {
@@ -96,14 +98,6 @@ public class PhotoAlbum extends DockPanel {
             image = new Image(photo.getThumbnailUrl());
             image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             image.getElement().getStyle().setProperty("textAlign", "center");
-            image.addClickHandler(new ClickHandler() {
-
-                @Override
-                public void onClick(ClickEvent event) {
-                    // TODO Auto-generated method stub
-
-                }
-            });
 
             DockPanel frame = new DockPanel();
             frame.setSize("200px", "200px");
@@ -160,8 +154,7 @@ public class PhotoAlbum extends DockPanel {
                 MenuItem editCaptionMenu = new MenuItem("Edit Caption", true, new Command() {
                     @Override
                     public void execute() {
-                        String newText = "EDITED" + System.currentTimeMillis();
-                        PhotoAlbum.this.model.updateCaption(photoPanel.getWidgetIndex(PhotoHolder.this), newText);
+                        updateCaptionCommand(photoPanel.getWidgetIndex(PhotoHolder.this));
                     }
                 });
                 MenuItem deletePhotoMenu = new MenuItem("Delete Photo", true, new Command() {
@@ -241,7 +234,7 @@ public class PhotoAlbum extends DockPanel {
             addPhotoButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    addPhotoCommand.execute();
+                    addPhotoCommand();
                 }
             });
             add(addPhotoButton);
@@ -274,9 +267,9 @@ public class PhotoAlbum extends DockPanel {
 
     }
 
-    public void setAddPhotoCommand(Command command) {
-        addPhotoCommand = command;
-    }
+    public abstract void addPhotoCommand();
+
+    public abstract void updateCaptionCommand(int index);
 
     public void onPhotoAdded(Photo photo, int index) {
         PhotoHolder holder = new PhotoHolder(photo);

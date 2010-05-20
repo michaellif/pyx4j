@@ -94,7 +94,22 @@ public class WidgetsDemo implements EntryPoint {
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
 
         {
-            PhotoAlbum photoAlbum = new PhotoAlbum();
+            PhotoAlbum photoAlbum = new PhotoAlbum() {
+
+                @Override
+                public void addPhotoCommand() {
+                    getPhotoAlbumModel().addPhoto(
+                            new Photo("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG",
+                                    "http://lh6.ggpht.com/_FD9tLNw_5yE/SzyrboXbN3I/AAAAAAAAC_g/kcLqFd20EoM/s800/IMG_4117.JPG", "Photo#"));
+                }
+
+                @Override
+                public void updateCaptionCommand(int index) {
+                    getPhotoAlbumModel().updateCaption(index, "EDITED " + System.currentTimeMillis());
+                }
+
+            };
+
             photoAlbum.setWidth("700px");
             photoAlbum.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
             photoAlbum.getElement().getStyle().setBorderColor("black");
@@ -116,14 +131,6 @@ public class WidgetsDemo implements EntryPoint {
                     "http://lh4.ggpht.com/_FD9tLNw_5yE/Szyrc_7QzfI/AAAAAAAAC_k/IHpmCERsqko/s576/IMG_4118.JPG", "Photo6"));
             model.addPhoto(new Photo("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG",
                     "http://lh6.ggpht.com/_FD9tLNw_5yE/SzyrboXbN3I/AAAAAAAAC_g/kcLqFd20EoM/s800/IMG_4117.JPG", "Photo7"));
-
-            photoAlbum.setAddPhotoCommand(new Command() {
-                @Override
-                public void execute() {
-                    model.addPhoto(new Photo("http://lh4.ggpht.com/_FD9tLNw_5yE/SzyrjJGfFYI/AAAAAAAAC_4/XxxueqfTri0/s128/IMG_4122.JPG",
-                            "http://lh6.ggpht.com/_FD9tLNw_5yE/SzyrboXbN3I/AAAAAAAAC_g/kcLqFd20EoM/s800/IMG_4117.JPG", "Photo#"));
-                }
-            });
 
             contentPanel.add(photoAlbum);
         }

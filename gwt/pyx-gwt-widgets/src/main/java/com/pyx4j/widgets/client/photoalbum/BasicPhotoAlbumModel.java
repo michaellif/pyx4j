@@ -56,6 +56,10 @@ public class BasicPhotoAlbumModel implements PhotoAlbumModel {
         return photoList;
     }
 
+    protected PhotoAlbum getPhotoAlbum() {
+        return photoAlbum;
+    }
+
     public void clear() {
         photoList.clear();
         photoAlbum.onClear();

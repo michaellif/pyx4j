@@ -152,12 +152,12 @@ public class Slideshow extends AbsolutePanel {
                     @Override
                     public void run() {
 
-                        fadeIn.getElement().getStyle().setOpacity(((double) iterationCounter) / 100);
+                        fadeIn.getElement().getStyle().setOpacity(((double) iterationCounter) / 20);
                         if (fadeOut != null) {
-                            fadeOut.getElement().getStyle().setOpacity(1 - ((double) iterationCounter) / 100);
+                            fadeOut.getElement().getStyle().setOpacity(1 - ((double) iterationCounter) / 20);
                         }
                         iterationCounter++;
-                        if (iterationCounter == 100) {
+                        if (iterationCounter == 20) {
                             if (fadeOut != null) {
                                 fadeOut.setVisible(false);
                             }
@@ -167,7 +167,7 @@ public class Slideshow extends AbsolutePanel {
                         }
                     }
                 };
-                animationTimer.scheduleRepeating(7);
+                animationTimer.scheduleRepeating(20);
             }
         });
     }
