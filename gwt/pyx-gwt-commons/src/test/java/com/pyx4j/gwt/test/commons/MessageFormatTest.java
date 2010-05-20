@@ -21,8 +21,11 @@
 package com.pyx4j.gwt.test.commons;
 
 import java.text.MessageFormat;
+import java.util.Date;
 
 import junit.framework.TestCase;
+
+import com.pyx4j.commons.Consts;
 
 //import com.pyx4j.gwt.emul.java.text.MessageFormat;
 
@@ -30,8 +33,7 @@ public class MessageFormatTest extends TestCase {
 
     private void assertMessageFormat(String expected, String pattern, Object... arguments) {
         String result = MessageFormat.format(pattern, arguments);
-        assertEquals(expected, result);
-
+        assertEquals(pattern, expected, result);
     }
 
     public void testReplacements() {
@@ -42,4 +44,31 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("{0}", "'{0}'", "A");
     }
 
+    public void testNumberFormat() {
+        assertMessageFormat("2,000", "{0,number}", 2000);
+        assertMessageFormat("2,000", "{0,number,integer}", 2000);
+        assertMessageFormat("2000", "{0,number,#}", 2000);
+        assertMessageFormat("null", "{0,number,#}", (Object) null);
+        assertMessageFormat("2000.21", "{0,number,#.##}", 2000.21);
+    }
+
+    public void testDateFormat() {
+        int offset = (new Date(0)).getTimezoneOffset();
+        Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
+        assertMessageFormat("3-Jan-1970", "{0,date}", date);
+        assertMessageFormat("03/01/70", "{0,date,short}", date);
+        assertMessageFormat("3-Jan-1970", "{0,date,medium}", date);
+        assertMessageFormat("January 3, 1970", "{0,date,long}", date);
+        assertMessageFormat("Saturday, January 3, 1970", "{0,date,full}", date);
+    }
+
+    public void testTimeFormat() {
+        int offset = (new Date(0)).getTimezoneOffset();
+        Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
+        assertMessageFormat("4:10:00 AM", "{0,time}", date);
+        assertMessageFormat("4:10 AM", "{0,time,short}", date);
+        assertMessageFormat("4:10:00 AM", "{0,time,medium}", date);
+        //assertMessageFormat("4:10:00 EST AM", "{0,time,long}", date);
+        //assertMessageFormat("4:10:00 o'clock AM EST", "{0,time,full}", date);
+    }
 }

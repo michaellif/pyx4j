@@ -21,6 +21,11 @@
 //package com.pyx4j.gwt.emul.java.text;
 package java.text;
 
+import java.util.Date;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
+
 /**
  * Minimal implementation to get going
  */
@@ -83,14 +88,86 @@ public class MessageFormat {
 
     private static void format(StringBuilder result, final String formatPattern, Object... arguments) {
         int comaIdx = formatPattern.indexOf(',');
-        int index;
+        int argumentIndex;
+        String formatType = null;
+        String formatStyle = null;
         if (comaIdx > 0) {
-            index = Integer.valueOf(formatPattern.substring(0, comaIdx));
+            argumentIndex = Integer.valueOf(formatPattern.substring(0, comaIdx));
+            int comaTypeIdx = formatPattern.indexOf(',', comaIdx + 1);
+            if (comaTypeIdx > 0) {
+                formatType = formatPattern.substring(comaIdx + 1, comaTypeIdx);
+                formatStyle = formatPattern.substring(comaTypeIdx + 1, formatPattern.length());
+            } else {
+                formatType = formatPattern.substring(comaIdx + 1, formatPattern.length());
+            }
         } else {
-            index = Integer.valueOf(formatPattern);
+            argumentIndex = Integer.valueOf(formatPattern);
         }
-        Object value = arguments[index];
-        result.append(value);
+        Object value = arguments[argumentIndex];
+        Object formatedValue;
+        if ((formatType == null) || (value == null)) {
+            formatedValue = value;
+        } else {
+            if (formatType.equals("number")) {
+                NumberFormat fmt;
+                if (formatStyle == null) {
+                    fmt = NumberFormat.getDecimalFormat();
+                } else if (formatStyle.equals("integer")) {
+                    fmt = NumberFormat.getFormat("#,###");
+                } else {
+                    fmt = NumberFormat.getFormat(formatStyle);
+                }
+                formatedValue = fmt.format(toDouble(value));
+            } else if (formatType.equals("date")) {
+                DateTimeFormat fmt;
+                if (formatStyle == null) {
+                    //fmt = DateTimeFormat.getMediumDateFormat();
+                    fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
+                } else if (formatStyle.equals("short")) {
+                    //fmt = DateTimeFormat.getShortDateFormat();
+                    //03/01/70
+                    fmt = DateTimeFormat.getFormat("dd/MM/yy");
+                } else if (formatStyle.equals("medium")) {
+                    //fmt = DateTimeFormat.getMediumDateFormat();
+                    //3-Jan-1970
+                    fmt = DateTimeFormat.getFormat("d-MMM-yyyy");
+                } else if (formatStyle.equals("long")) {
+                    fmt = DateTimeFormat.getLongDateFormat();
+                } else if (formatStyle.equals("full")) {
+                    fmt = DateTimeFormat.getFullDateFormat();
+                } else {
+                    fmt = DateTimeFormat.getFormat(formatStyle);
+                }
+                formatedValue = fmt.format((Date) value);
+            } else if (formatType.equals("time")) {
+                DateTimeFormat fmt;
+                if (formatStyle == null) {
+                    fmt = DateTimeFormat.getMediumTimeFormat();
+                } else if (formatStyle.equals("short")) {
+                    fmt = DateTimeFormat.getShortTimeFormat();
+                } else if (formatStyle.equals("medium")) {
+                    fmt = DateTimeFormat.getMediumTimeFormat();
+                } else if (formatStyle.equals("long")) {
+                    fmt = DateTimeFormat.getLongTimeFormat();
+                } else if (formatStyle.equals("full")) {
+                    fmt = DateTimeFormat.getFullTimeFormat();
+                } else {
+                    fmt = DateTimeFormat.getFormat(formatStyle);
+                }
+                formatedValue = fmt.format((Date) value);
+            } else {
+                formatedValue = value;
+            }
+        }
+        result.append(formatedValue);
+    }
+
+    private static double toDouble(Object value) {
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        } else {
+            throw new IllegalArgumentException("number expected instead of " + value.getClass());
+        }
     }
 
 }
