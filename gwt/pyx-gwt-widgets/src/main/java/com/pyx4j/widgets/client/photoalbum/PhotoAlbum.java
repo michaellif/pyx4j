@@ -292,4 +292,8 @@ public class PhotoAlbum extends DockPanel {
         holder.setCaption(caption);
     }
 
+    public void onClear() {
+        photoPanel.clear();
+    }
+
 }

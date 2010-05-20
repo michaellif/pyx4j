@@ -34,4 +34,6 @@ public interface PhotoAlbumModel {
 
     void setPhotoAlbum(PhotoAlbum photoAlbum);
 
+    void clear();
+
 }
