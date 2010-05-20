@@ -57,10 +57,20 @@ public class Slideshow extends AbsolutePanel {
 
     private boolean animationIsRunning = false;
 
+    private final int initPosition;
+
+    private final boolean runOnInit;
+
     public Slideshow(int width, int height, String buttonStyle) {
+        this(width, height, buttonStyle, 0, true);
+    }
+
+    public Slideshow(int width, int height, String buttonStyle, int initPosition, boolean runOnInit) {
         this.width = width;
         this.height = height;
         this.buttonStyle = buttonStyle;
+        this.initPosition = initPosition;
+        this.runOnInit = runOnInit;
         items = new ArrayList<Widget>();
         setSize(width + "px", height + "px");
     }
@@ -104,7 +114,13 @@ public class Slideshow extends AbsolutePanel {
         add(controlPanel, 0, 0);
         int x = width - controlPanel.getOffsetWidth() - 100;
         setWidgetPosition(controlPanel, x, height - 30);
-        show(0);
+        show(initPosition);
+        if (runOnInit) {
+            controlPanel.getStartStopAction().setCaption("&#x25A0;");
+        } else {
+            controlPanel.getStartStopAction().setCaption("&#x25B6;");
+        }
+
     }
 
     protected void hide() {
@@ -161,7 +177,9 @@ public class Slideshow extends AbsolutePanel {
         super.onLoad();
         try {
             init();
-            start();
+            if (runOnInit) {
+                start();
+            }
         } catch (Throwable t) {
             log.error("Failed to init slideshow", t);
         }

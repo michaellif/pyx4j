@@ -37,6 +37,7 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -124,12 +125,21 @@ public class PhotoAlbum extends DockPanel {
             add(frame, 10, 0);
 
             ImageResource viewMenu = ImageFactory.getImages().viewMenu();
-            MenuBar actionsMenu = new ActionsMenu();
+            ActionsMenu actionsMenu = new ActionsMenu();
             MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
             menuButtonItem.removeStyleName("gwt-MenuItem");
             menuButtonItem.getElement().getStyle().setCursor(Cursor.POINTER);
 
-            menuButtonBar = new MenuBar();
+            menuButtonBar = new MenuBar() {
+                @Override
+                public void onBrowserEvent(Event event) {
+                    if (event.getTypeInt() == Event.ONCLICK) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    super.onBrowserEvent(event);
+                }
+            };
             menuButtonBar.setVisible(false);
             menuButtonBar.addItem(menuButtonItem);
 
@@ -188,6 +198,14 @@ public class PhotoAlbum extends DockPanel {
                         }
                     }
                 }, MouseOutEvent.getType());
+
+                PhotoHolder.this.addDomHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        slideshow(photoPanel.getWidgetIndex(PhotoHolder.this), false);
+                    }
+                }, ClickEvent.getType());
+
             }
 
             @Override
@@ -211,27 +229,7 @@ public class PhotoAlbum extends DockPanel {
             slideshowButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    Slideshow slideshow = new Slideshow(640, 510, null);
-                    List<Photo> photoList = model.getPhotoList();
-                    for (Photo photo : photoList) {
-                        HorizontalPanel holder = new HorizontalPanel();
-                        PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
-                        photoImage.getElement().getStyle().setPadding(20, Unit.PX);
-                        photoImage.getElement().getStyle().setPaddingBottom(40, Unit.PX);
-                        holder.add(photoImage);
-                        holder.setCellHorizontalAlignment(photoImage, ALIGN_CENTER);
-                        holder.setCellVerticalAlignment(photoImage, ALIGN_MIDDLE);
-                        slideshow.addItem(holder);
-                    }
-                    PopupPanel popup = new PopupPanel(true);
-                    popup.getElement().getStyle().setBackgroundColor("#EDEDFF");
-                    popup.getElement().getStyle().setBorderColor("gray");
-                    popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
-                    popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-                    popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");
-                    popup.getElement().getStyle().setProperty("MozBoxShadow", "10px 10px 5px #aaa");
-                    popup.add(slideshow);
-                    popup.center();
+                    slideshow(0, true);
                 }
             });
             add(slideshowButton);
@@ -245,6 +243,32 @@ public class PhotoAlbum extends DockPanel {
             });
             add(addPhotoButton);
         }
+    }
+
+    protected void slideshow(int startFrom, boolean run) {
+        Slideshow slideshow = new Slideshow(640, 510, null, startFrom, run);
+        List<Photo> photoList = model.getPhotoList();
+        for (Photo photo : photoList) {
+            HorizontalPanel holder = new HorizontalPanel();
+            PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
+            photoImage.getElement().getStyle().setPadding(20, Unit.PX);
+            photoImage.getElement().getStyle().setPaddingBottom(40, Unit.PX);
+            holder.add(photoImage);
+            holder.setCellHorizontalAlignment(photoImage, ALIGN_CENTER);
+            holder.setCellVerticalAlignment(photoImage, ALIGN_MIDDLE);
+            slideshow.addItem(holder);
+        }
+        PopupPanel popup = new PopupPanel(true);
+        popup.getElement().getStyle().setBackgroundColor("#EDEDFF");
+        popup.getElement().getStyle().setBorderColor("gray");
+        popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");
+        popup.getElement().getStyle().setProperty("MozBoxShadow", "10px 10px 5px #aaa");
+        popup.add(slideshow);
+
+        popup.center();
+
     }
 
     public void setAddPhotoCommand(Command command) {
