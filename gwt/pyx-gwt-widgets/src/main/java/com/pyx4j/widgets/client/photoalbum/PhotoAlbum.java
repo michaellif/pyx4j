@@ -122,6 +122,7 @@ public class PhotoAlbum extends DockPanel {
             caption.getElement().getStyle().setProperty("overflow", "hidden");
             tooltip = Tooltip.tooltip(caption, photo.getCaption());
             frame.add(caption, SOUTH);
+            frame.setCellHeight(caption, "2em");
             add(frame, 10, 0);
 
             ImageResource viewMenu = ImageFactory.getImages().viewMenu();
@@ -226,6 +227,7 @@ public class PhotoAlbum extends DockPanel {
 
         public ActionPanel() {
             slideshowButton = new Button("Slideshow");
+            slideshowButton.getElement().getStyle().setMargin(12, Unit.PX);
             slideshowButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -235,6 +237,7 @@ public class PhotoAlbum extends DockPanel {
             add(slideshowButton);
 
             addPhotoButton = new Button("Add photo");
+            addPhotoButton.getElement().getStyle().setMargin(12, Unit.PX);
             addPhotoButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
