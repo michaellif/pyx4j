@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class Slideshow extends AbsolutePanel {
 
@@ -140,7 +141,7 @@ public class Slideshow extends AbsolutePanel {
                 }
                 final Widget fadeOut = currentIndex < 0 ? null : items.get(currentIndex);
                 final Widget fadeIn = items.get(index);
-                fadeIn.getElement().getStyle().setOpacity(0);
+                setOpacity(fadeIn, 0);
                 fadeIn.setVisible(true);
                 currentIndex = index;
                 controlPanel.setSelectedItem(index);
@@ -152,9 +153,9 @@ public class Slideshow extends AbsolutePanel {
                     @Override
                     public void run() {
 
-                        fadeIn.getElement().getStyle().setOpacity(((double) iterationCounter) / 20);
+                        setOpacity(fadeIn, ((double) iterationCounter) / 20);
                         if (fadeOut != null) {
-                            fadeOut.getElement().getStyle().setOpacity(1 - ((double) iterationCounter) / 20);
+                            setOpacity(fadeOut, (1 - ((double) iterationCounter) / 20));
                         }
                         iterationCounter++;
                         if (iterationCounter == 20) {
@@ -257,7 +258,7 @@ public class Slideshow extends AbsolutePanel {
             });
             add(rightAction);
 
-            getElement().getStyle().setOpacity(0.7);
+            setOpacity(this, 0.7);
 
         }
 
@@ -288,6 +289,14 @@ public class Slideshow extends AbsolutePanel {
             return startStopAction;
         }
 
+    }
+
+    private void setOpacity(Widget widget, double opacity) {
+        if (BrowserType.isIE()) {
+            widget.getElement().getStyle().setProperty("filter", "alpha(opacity=" + (opacity * 100) + ")");
+        } else {
+            widget.getElement().getStyle().setOpacity(opacity);
+        }
     }
 
 }
