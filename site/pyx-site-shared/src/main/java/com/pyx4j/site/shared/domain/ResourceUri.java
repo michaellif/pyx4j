@@ -27,9 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @EmbeddedEntity
 public interface ResourceUri extends IEntity {
 
-    public static String SITE_SEPARATOR = "&";
-
-    public static String PAGE_SEPARATOR = "$";
+    public static String PAGE_SEPARATOR = "/";
 
     public static String ARGS_GROUP_SEPARATOR = "?";
 

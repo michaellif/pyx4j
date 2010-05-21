@@ -31,9 +31,7 @@ public class SiteMap {
         StringBuilder builder = new StringBuilder();
         for (int i = 1; i < parts.length; i++) {
             builder.append(parts[i]);
-            if (i == 1) {
-                builder.append(ResourceUri.SITE_SEPARATOR);
-            } else if (i < parts.length - 1) {
+            if (i < parts.length - 1) {
                 builder.append(ResourceUri.PAGE_SEPARATOR);
             }
         }

@@ -108,7 +108,7 @@ public class NavigationUri {
         if (args == null) {
             args = new HashMap<String, String>();
         }
-        int siteIndex = pageUri.indexOf(ResourceUri.SITE_SEPARATOR);
+        int siteIndex = pageUri.indexOf(ResourceUri.PAGE_SEPARATOR);
         if (siteIndex > 0) {
             siteName = pageUri.substring(0, siteIndex);
         } else {
@@ -126,7 +126,7 @@ public class NavigationUri {
 
     public void setPageUri(String pageUri) {
         this.pageUri = pageUri;
-        int siteIndex = pageUri.indexOf(ResourceUri.SITE_SEPARATOR);
+        int siteIndex = pageUri.indexOf(ResourceUri.PAGE_SEPARATOR);
         if (siteIndex > 0) {
             siteName = pageUri.substring(0, siteIndex);
         } else {

@@ -21,7 +21,6 @@
 package com.pyx4j.site.shared.util;
 
 import static com.pyx4j.site.shared.domain.ResourceUri.PAGE_SEPARATOR;
-import static com.pyx4j.site.shared.domain.ResourceUri.SITE_SEPARATOR;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ public class ResourceUriUtil {
     public static ResourceUri createResourceUri(String siteName, String... path) {
         StringBuilder builder = new StringBuilder();
         builder.append(siteName);
-        builder.append(SITE_SEPARATOR);
+        builder.append(PAGE_SEPARATOR);
         if (path != null) {
             for (int i = 0; i < path.length;) {
                 builder.append(path[i]);
@@ -53,15 +52,9 @@ public class ResourceUriUtil {
     public static List<String> parseResourceUri(ResourceUri uri) {
         List<String> path = new ArrayList<String>();
         String uriStr = uri.uri().getValue();
-        String[] siteAndPages = uriStr.split("\\" + SITE_SEPARATOR);
-        path.add(siteAndPages[0]);
-        if (siteAndPages[1].contains(PAGE_SEPARATOR)) {
-            String[] pages = siteAndPages[1].split("\\" + PAGE_SEPARATOR);
-            for (String string : pages) {
-                path.add(string);
-            }
-        } else {
-            path.add(siteAndPages[1]);
+        String[] parts = uriStr.split("\\" + PAGE_SEPARATOR);
+        for (String string : parts) {
+            path.add(string);
         }
         return path;
     }
