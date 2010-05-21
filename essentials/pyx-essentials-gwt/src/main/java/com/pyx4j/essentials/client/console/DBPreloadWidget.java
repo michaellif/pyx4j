@@ -59,6 +59,9 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
         setWidget(contentPanel);
         contentPanel.setWidth("100%");
 
+        //TODO TMP move to Site Map
+        contentPanel.add(new SessionsAdminWidget());
+
         GroupBoxPanel generalGroup = new GroupBoxPanel(false);
         generalGroup.setCaption("General");
         VerticalPanel general = new VerticalPanel();

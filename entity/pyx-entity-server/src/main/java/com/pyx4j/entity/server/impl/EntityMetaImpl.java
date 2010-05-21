@@ -74,10 +74,11 @@ public class EntityMetaImpl implements EntityMeta {
 
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
-        Table tableAnnotation = entityClass.getAnnotation(Table.class);
         String persistenceNamePrefix = ServerSideConfiguration.instance().persistenceNamePrefix();
+        Table tableAnnotation = entityClass.getAnnotation(Table.class);
         if (tableAnnotation != null) {
-            persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + tableAnnotation.prefix()
+            persistenceName = (((persistenceNamePrefix != null) && (!tableAnnotation.disableGlobalPrefix())) ? persistenceNamePrefix : "")
+                    + tableAnnotation.prefix()
                     + (CommonsStringUtils.isStringSet(tableAnnotation.name()) ? tableAnnotation.name() : entityClass.getSimpleName());
         } else {
             persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + entityClass.getSimpleName();

@@ -48,7 +48,7 @@ public class DOEqualsTest extends TestCase {
         assertFalse("DO are different", d1.equals(d2));
         assertTrue("DO are different", d1.hashCode() != d2.hashCode());
 
-        d2 = new PropertyCriterion(null, Restriction.EQUAL, null);
+        d2 = new PropertyCriterion((String) null, Restriction.EQUAL, null);
 
         assertFalse("DO are different", d1.equals(d2));
         assertFalse("DO are different", d2.equals(d1));

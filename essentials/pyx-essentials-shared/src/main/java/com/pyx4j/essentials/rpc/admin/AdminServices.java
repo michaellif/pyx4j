@@ -14,30 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-05-07
+ * Created on 2010-05-21
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.deferred;
+package com.pyx4j.essentials.rpc.admin;
 
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface DeferredProcessServices {
+public interface AdminServices {
 
-    public interface GetStatus extends Service<String, DeferredProcessProgressResponse> {
-
-    };
-
-    public interface Cancel extends Service<String, VoidSerializable> {
+    public interface CountSessions extends Service<Boolean, String> {
 
     };
 
-    public interface ContinueExecution extends Service<String, DeferredProcessProgressResponse> {
+    public interface PurgeExpiredSessions extends DeferredProcessServices.AbstractStartDeferredProcessService {
 
     };
 
-    public interface AbstractStartDeferredProcessService extends Service<VoidSerializable, String> {
+    public interface PurgeAllSessions extends DeferredProcessServices.AbstractStartDeferredProcessService {
 
     };
 }

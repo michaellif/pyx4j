@@ -14,35 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on 2010-05-21
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.essentials.server.admin;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@Target( { ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Table {
+@Table(name = "_ah_SESSION", disableGlobalPrefix = true)
+interface GaeStoredSession extends IEntity {
 
     /**
-     * The name of the table or Entity kind for GAE.
-     * 
-     * Defaults to the entity name.
+     * milliseconds; the same as in System.currentTimeMillis();
      */
-    String name() default "";
+    IPrimitive<String> _expires();
 
-    /**
-     * Name prefix.
-     */
-    String prefix() default "";
-
-    /**
-     * Disable the use of ServerSideConfiguration.persistenceNamePrefix()
-     */
-    boolean disableGlobalPrefix() default false;
+    IPrimitive<byte[]> _values();
 }

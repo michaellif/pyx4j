@@ -48,6 +48,10 @@ public class PropertyCriterion implements Criterion {
         this.value = value;
     }
 
+    public PropertyCriterion(IObject<?> member, Restriction restriction, Serializable value) {
+        this(member.getFieldName(), restriction, value);
+    }
+
     public static PropertyCriterion eq(IObject<?> member, Serializable value) {
         return new PropertyCriterion(member.getFieldName(), Restriction.EQUAL, value);
     }
