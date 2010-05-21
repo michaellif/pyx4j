@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.EntityCSSClass;
 
 public class DataTableActionsBar extends HorizontalPanel implements DataTableModelListener {
@@ -53,7 +52,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
         contentPanel.add(prevAnchor);
 
-        countLabel = new Label(CommonsStringUtils.NO_BREAK_SPACE_HTML, true);
+        countLabel = new Label(" ", true);
         countLabel.getElement().getStyle().setMarginRight(10, Unit.PX);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         contentPanel.add(countLabel);
@@ -81,9 +80,9 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         int from = model.getPageNumber() * model.getPageSize() + 1;
         int to = from + model.getData().size() - 1;
         if (from > to) {
-            countLabel.setText(CommonsStringUtils.NO_BREAK_SPACE_HTML);
+            countLabel.setText(" ");
         } else if (from == to) {
-            countLabel.setText(from + "");
+            countLabel.setText(String.valueOf(from));
         } else {
             countLabel.setText(from + "-" + to);
         }
