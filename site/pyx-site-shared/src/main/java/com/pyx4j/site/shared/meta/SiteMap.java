@@ -22,10 +22,25 @@ package com.pyx4j.site.shared.meta;
 
 public class SiteMap {
 
+    public static String PATH_SEPARATOR = "/";
+
+    public static String ARGS_GROUP_SEPARATOR = "?";
+
+    public static String ARGS_SEPARATOR = "&";
+
+    public static String NAME_VALUE_SEPARATOR = "=";
+
     public static String getPageUri(Class<? extends NavigNode> page) {
         String[] parts = page.getName().split("\\$");
 
-        return parts[1];
+        StringBuilder builder = new StringBuilder();
+        for (int i = 1; i < parts.length; i++) {
+            builder.append(parts[i]);
+            if (i < parts.length - 1) {
+                builder.append(PATH_SEPARATOR);
+            }
+        }
+        return builder.toString();
     }
 
 }
