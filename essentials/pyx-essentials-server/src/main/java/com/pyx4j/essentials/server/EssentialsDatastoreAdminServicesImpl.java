@@ -54,11 +54,20 @@ public class EssentialsDatastoreAdminServicesImpl implements DatastoreAdminServi
 
     }
 
-    public static class ExectutePreloadersImpl implements DatastoreAdminServices.ExectutePreloaders {
+    public static class ExectutePreloadersCreateImpl implements DatastoreAdminServices.ExectutePreloadersCreate {
 
         @Override
         public String execute(Vector<DataPreloaderInfo> request) {
-            return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().exectutePreloaders(request);
+            return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().exectutePreloadersCreate(request);
+        }
+
+    }
+
+    public static class ExectutePreloadersDeleteImpl implements DatastoreAdminServices.ExectutePreloadersDelete {
+
+        @Override
+        public String execute(Vector<DataPreloaderInfo> request) {
+            return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().exectutePreloadersDelete(request);
         }
 
     }

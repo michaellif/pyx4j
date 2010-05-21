@@ -42,7 +42,11 @@ public interface DatastoreAdminServices {
 
     };
 
-    public interface ExectutePreloaders extends Service<Vector<DataPreloaderInfo>, String> {
+    public interface ExectutePreloadersDelete extends Service<Vector<DataPreloaderInfo>, String> {
+
+    };
+    
+    public interface ExectutePreloadersCreate extends Service<Vector<DataPreloaderInfo>, String> {
 
     };
 }

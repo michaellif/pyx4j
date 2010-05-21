@@ -28,20 +28,17 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
 
     @Override
     public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
-
         if (DatastoreAdminServices.ResetInitialData.class.getName().equals(serviceInterfaceClassName)) {
             return EssentialsDatastoreAdminServicesImpl.ResetInitialDataImpl.class;
-        }
-        if (DatastoreAdminServices.RemoveAllData.class.getName().equals(serviceInterfaceClassName)) {
+        } else if (DatastoreAdminServices.RemoveAllData.class.getName().equals(serviceInterfaceClassName)) {
             return EssentialsDatastoreAdminServicesImpl.RemoveAllDataImpl.class;
-        }
-        if (DatastoreAdminServices.GetPreloaders.class.getName().equals(serviceInterfaceClassName)) {
+        } else if (DatastoreAdminServices.GetPreloaders.class.getName().equals(serviceInterfaceClassName)) {
             return EssentialsDatastoreAdminServicesImpl.GetPreloadersImpl.class;
+        } else if (DatastoreAdminServices.ExectutePreloadersCreate.class.getName().equals(serviceInterfaceClassName)) {
+            return EssentialsDatastoreAdminServicesImpl.ExectutePreloadersCreateImpl.class;
+        } else if (DatastoreAdminServices.ExectutePreloadersDelete.class.getName().equals(serviceInterfaceClassName)) {
+            return EssentialsDatastoreAdminServicesImpl.ExectutePreloadersDeleteImpl.class;
         }
-        if (DatastoreAdminServices.ExectutePreloaders.class.getName().equals(serviceInterfaceClassName)) {
-            return EssentialsDatastoreAdminServicesImpl.ExectutePreloadersImpl.class;
-        }
-
         return super.getServiceClass(serviceInterfaceClassName);
     }
 

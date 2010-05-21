@@ -33,12 +33,15 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
@@ -186,9 +189,46 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
             panel.add(table);
         }
 
-        Anchor execute = new Anchor("Execute");
-        panel.add(execute);
-        execute.addClickHandler(new ClickHandler() {
+        HorizontalPanel execPanel = new HorizontalPanel();
+        panel.add(execPanel);
+
+        Anchor executeDelete = new Anchor("Execute Delete");
+        execPanel.add(executeDelete);
+        executeDelete.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                MessageDialog.confirm("Remove Data", "Some data would be removed\nDo you want to continue?", new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
+
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                MessageDialog.error("Execute Service failed", caught);
+                            }
+
+                            @Override
+                            public void onSuccess(String result) {
+                                MessageDialog.info("Execute completed", result);
+                            }
+                        };
+
+                        Vector<DataPreloaderInfo> preloaders = new Vector<DataPreloaderInfo>();
+                        preloaders.add(info);
+                        RPCManager.execute(DatastoreAdminServices.ExectutePreloadersDelete.class, preloaders, rpcCallback);
+
+                    }
+                });
+
+            }
+        });
+
+        execPanel.add(new HTML(CommonsStringUtils.NO_BREAK_SPACE_HTML));
+
+        Anchor executeCreate = new Anchor("Execute Create");
+        execPanel.add(executeCreate);
+        executeCreate.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
@@ -206,8 +246,9 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
 
                 Vector<DataPreloaderInfo> preloaders = new Vector<DataPreloaderInfo>();
                 preloaders.add(info);
-                RPCManager.execute(DatastoreAdminServices.ExectutePreloaders.class, preloaders, rpcCallback);
+                RPCManager.execute(DatastoreAdminServices.ExectutePreloadersCreate.class, preloaders, rpcCallback);
             }
         });
+
     }
 }

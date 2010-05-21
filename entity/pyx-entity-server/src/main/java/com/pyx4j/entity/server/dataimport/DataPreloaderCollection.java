@@ -54,13 +54,27 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         return dpis;
     }
 
-    public String exectutePreloaders(Vector<DataPreloaderInfo> dpis) {
+    public String exectutePreloadersCreate(Vector<DataPreloaderInfo> dpis) {
         StringBuilder b = new StringBuilder();
         for (DataPreloaderInfo info : dpis) {
             findPreloader: for (DataPreloader preloader : childPreloaders) {
                 if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
                     preloader.setParametersValues(info.getParameters());
                     b.append(preloader.create()).append('\n');
+                    break findPreloader;
+                }
+            }
+        }
+        return b.toString();
+    }
+
+    public String exectutePreloadersDelete(Vector<DataPreloaderInfo> dpis) {
+        StringBuilder b = new StringBuilder();
+        for (DataPreloaderInfo info : dpis) {
+            findPreloader: for (DataPreloader preloader : childPreloaders) {
+                if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
+                    preloader.setParametersValues(info.getParameters());
+                    b.append(preloader.delete()).append('\n');
                     break findPreloader;
                 }
             }
