@@ -126,7 +126,9 @@ public class SiteFactory {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
         String uri = SiteMap.getPageUri(node);
-        uriRegistry.add(uri);
+        if (!uriRegistry.contains(uri)) {
+            uriRegistry.add(uri);
+        }
         page.uri().setValue(uri);
         page.discriminator().setValue(discriminator);
         if (html == null) {
