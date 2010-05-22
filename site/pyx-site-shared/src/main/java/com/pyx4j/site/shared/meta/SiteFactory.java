@@ -111,6 +111,10 @@ public class SiteFactory {
         return page;
     }
 
+    public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, Enum<?> inlineWidget) {
+        return createSingleWidgetPage(caption, node, null, inlineWidget, null, null);
+    }
+
     public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
             Portlet[] leftPortlets, Portlet[] rightPortlets) {
         return createPage(caption, node, discriminator, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets,
