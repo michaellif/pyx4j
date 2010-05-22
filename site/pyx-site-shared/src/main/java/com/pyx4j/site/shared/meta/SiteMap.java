@@ -20,7 +20,11 @@
  */
 package com.pyx4j.site.shared.meta;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import static com.pyx4j.site.shared.domain.ResourceUri.PAGE_SEPARATOR;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.site.shared.domain.ResourceUri;
 
 public class SiteMap {
@@ -39,10 +43,41 @@ public class SiteMap {
         return builder.toString();
     }
 
-    public static ResourceUri getPageUriAsResourceUri(Class<? extends NavigNode> page) {
-        ResourceUri resourceUri = EntityFactory.create(ResourceUri.class);
-        resourceUri.uri().setValue(getPageUri(page));
-        return resourceUri;
-
+    public static List<String> parseResourceUri(String uri) {
+        List<String> path = new ArrayList<String>();
+        String[] parts = uri.split("\\" + PAGE_SEPARATOR);
+        for (String string : parts) {
+            path.add(string);
+        }
+        return path;
     }
+
+    public static boolean isContained(String parent, String child) {
+        if (parent == null || child == null) {
+            return false;
+        }
+        return child.equals(parent) || child.startsWith(parent + PAGE_SEPARATOR);
+    }
+
+    public static boolean areEqual(String uri1, String uri2) {
+        if (uri1 == null || uri2 == null) {
+            return false;
+        }
+        return uri1 != null && uri1.equals(uri2);
+    }
+
+    public static boolean isRoot(String uri) {
+        return parseResourceUri(uri).size() == 2;
+    }
+
+    public static String getRoot(String uri) {
+        List<String> path = parseResourceUri(uri);
+        return path.get(0) + PAGE_SEPARATOR + path.get(1);
+    }
+
+    public static String getParent(String uri) {
+        int lastItemIndex = uri.lastIndexOf(PAGE_SEPARATOR);
+        return uri.substring(0, lastItemIndex);
+    }
+
 }

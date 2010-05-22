@@ -37,7 +37,7 @@ import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.client.SitePanelLoader;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.util.ResourceUriUtil;
+import com.pyx4j.site.shared.meta.SiteMap;
 
 public class ExamplesHeadlessSitePanel extends ExamplesSitePanel {
 
@@ -60,7 +60,7 @@ public class ExamplesHeadlessSitePanel extends ExamplesSitePanel {
 
     @Override
     protected void show(final Page page, Map<String, String> args) {
-        if (page != null && args != null && ResourceUriUtil.areEqual(page.uri().getValue(), PageType.headless$headless$activation.getUri().uri().getValue())
+        if (page != null && args != null && SiteMap.areEqual(page.uri().getValue(), PageType.headless$headless$activation.getUri().uri().getValue())
                 && args.containsKey("activate")) {
             AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
                 @Override

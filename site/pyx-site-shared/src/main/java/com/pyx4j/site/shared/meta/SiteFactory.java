@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.shared.meta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Page;
@@ -29,6 +32,8 @@ import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.util.PageTypeUriEnum;
 
 public class SiteFactory {
+
+    private static final List<String> uriRegistry = new ArrayList<String>();
 
     protected Portlet createPortlet(String portletId, String caption, String html) {
         Portlet portlet = EntityFactory.create(Portlet.class);
@@ -99,6 +104,19 @@ public class SiteFactory {
         return createPage(caption, uri, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
     }
 
+    protected static Page createPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, String html,
+            Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
+        Page page = createPage(caption, node, discriminator, html, leftPortlets, rightPortlets, inlineWidgets);
+        page.tabName().setValue(tabName);
+        return page;
+    }
+
+    public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
+            Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        return createPage(caption, node, discriminator, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets,
+                new String[] { inlineWidget.name() });
+    }
+
     public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html) {
         return createPage(caption, node, discriminator, html, null, null, null);
     }
@@ -107,7 +125,9 @@ public class SiteFactory {
             Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
-        page.uri().setValue(SiteMap.getPageUri(node));
+        String uri = SiteMap.getPageUri(node);
+        uriRegistry.add(uri);
+        page.uri().setValue(uri);
         page.discriminator().setValue(discriminator);
         if (html == null) {
             html = caption;
@@ -164,4 +184,9 @@ public class SiteFactory {
         }
         return page;
     }
+
+    public static List<String> getUriRegistry() {
+        return uriRegistry;
+    }
+
 }

@@ -49,46 +49,4 @@ public class ResourceUriUtil {
         return resourceUri;
     }
 
-    public static List<String> parseResourceUri(String uri) {
-        List<String> path = new ArrayList<String>();
-        String[] parts = uri.split("\\" + PAGE_SEPARATOR);
-        for (String string : parts) {
-            path.add(string);
-        }
-        return path;
-    }
-
-    public static boolean isContained(String parent, String child) {
-        if (parent == null || child == null) {
-            return false;
-        }
-        return child.equals(parent) || child.startsWith(parent + PAGE_SEPARATOR);
-    }
-
-    public static boolean areEqual(String uri1, String uri2) {
-        if (uri1 == null || uri2 == null) {
-            return false;
-        }
-        return uri1 != null && uri1.equals(uri2);
-    }
-
-    public static boolean isRoot(String uri) {
-        return parseResourceUri(uri).size() == 2;
-    }
-
-    public static ResourceUri getRoot(String uri) {
-        List<String> path = parseResourceUri(uri);
-        return createResourceUri(path.get(0), path.get(1));
-    }
-
-    public static ResourceUri getParent(String uri) {
-        List<String> path = parseResourceUri(uri);
-        String[] subpath = new String[path.size() - 2];
-        for (int i = 1; i < path.size() - 1; i++) {
-            subpath[i - 1] = path.get(i);
-        }
-
-        return createResourceUri(path.get(0), subpath);
-    }
-
 }
