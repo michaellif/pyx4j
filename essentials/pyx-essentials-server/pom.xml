@@ -61,6 +61,20 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-labs</artifactId>
+            <optional>true</optional>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api</artifactId>
+            <optional>true</optional>
+            <scope>provided</scope>
+        </dependency>
+
 		<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>

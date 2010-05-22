@@ -71,8 +71,11 @@ public class Downloadable implements Serializable {
         case HTML:
             return "text/html";
         case TXT:
-            return "text/csv";
+            return "text/plain";
         case CSV:
+            return "text/csv";
+        case JAVA_SERIALIZED:
+            return "application/x-java-serialized-object";
         default:
             throw new RuntimeException("Unsupported report download format " + downloadFormat);
         }

@@ -38,7 +38,9 @@ public enum DownloadFormat {
 
     HTML("html", "HTML Document"),
 
-    TXT("txt", "Text file");
+    TXT("txt", "Text file"),
+
+    JAVA_SERIALIZED("ser", "Java Serialized Object");
 
     private String extension;
 

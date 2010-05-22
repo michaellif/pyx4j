@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<cronentries>
+  <cron>
+    <url>/internal/cron?job=PurgeSessions</url>
+    <description>Purge Expired Sessions every day</description>
+    <schedule>every day</schedule>
+  </cron>
+</cronentries>

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.essentials.server.admin;
 
+import java.text.MessageFormat;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -46,13 +48,12 @@ public class AdminServicesImpl implements AdminServices {
     public static class CountSessionsImpl implements AdminServices.CountSessions {
 
         @Override
-        public String execute(Boolean allSessions) {
+        public String execute(VoidSerializable request) {
             EntityQueryCriteria<GaeStoredSession> criteria = EntityQueryCriteria.create(GaeStoredSession.class);
-            if ((allSessions == null) || (!allSessions)) {
-                criteria.add(new PropertyCriterion(criteria.meta()._expires(), Restriction.LESS_THAN, inactiveTime()));
-            }
-            int count = PersistenceServicesFactory.getPersistenceService().count(criteria);
-            return String.valueOf(count);
+            int countAll = PersistenceServicesFactory.getPersistenceService().count(criteria);
+            criteria.add(new PropertyCriterion(criteria.meta()._expires(), Restriction.LESS_THAN, inactiveTime()));
+            int countExpired = PersistenceServicesFactory.getPersistenceService().count(criteria);
+            return MessageFormat.format("Total sessions: {0}\nExpired sessions: {1}\n", countAll, countExpired);
         }
     }
 
@@ -60,7 +61,7 @@ public class AdminServicesImpl implements AdminServices {
 
         @Override
         public String execute(VoidSerializable request) {
-            return DeferredProcessServicesImpl.register(new SessionsPurgeDeferredProcess(true));
+            return DeferredProcessServicesImpl.register(new SessionsPurgeDeferredProcess(false));
         }
 
     }

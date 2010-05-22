@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.admin;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Vector;
 
@@ -110,6 +111,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
             r.setCanceled();
         } else if (compleate) {
             r.setCompleted();
+            r.setMessage(MessageFormat.format("Removed {0} sessions", count));
         }
         return r;
     }

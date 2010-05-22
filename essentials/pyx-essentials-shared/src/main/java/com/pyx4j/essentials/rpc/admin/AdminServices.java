@@ -22,10 +22,11 @@ package com.pyx4j.essentials.rpc.admin;
 
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AdminServices {
 
-    public interface CountSessions extends Service<Boolean, String> {
+    public interface CountSessions extends Service<VoidSerializable, String> {
 
     };
 

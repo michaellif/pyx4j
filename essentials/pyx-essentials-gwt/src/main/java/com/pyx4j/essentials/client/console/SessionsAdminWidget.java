@@ -39,9 +39,7 @@ import com.pyx4j.widgets.client.GroupBoxPanel;
 
 public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
 
-    private final HTML expiredCount;
-
-    private final HTML allCount;
+    private final HTML sessionCount;
 
     public SessionsAdminWidget() {
         this.setWidth("100%");
@@ -50,8 +48,7 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
         statisticGroup.setCaption("Sessions Statistics");
         this.add(statisticGroup);
 
-        statisticGroup.add(allCount = new HTML());
-        statisticGroup.add(expiredCount = new HTML());
+        statisticGroup.add(sessionCount = new HTML());
 
         GroupBoxPanel cleanupGroup = new GroupBoxPanel(false);
         cleanupGroup.setCaption("Cleanup Sessions");
@@ -88,10 +85,13 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
                         });
                     }
                 }));
+
+        //TODO remove this call once moved to page 
+        refreshStats();
     }
 
     private void refreshStats() {
-        AsyncCallback<String> callback1 = new AsyncCallback<String>() {
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -100,28 +100,12 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
 
             @Override
             public void onSuccess(String value) {
-                allCount.setHTML("Total sessions: " + value);
+                sessionCount.setHTML(value.replace("\n", "</br>"));
             }
 
         };
 
-        RPCManager.execute(AdminServices.CountSessions.class, Boolean.TRUE, callback1);
-
-        AsyncCallback<String> callback2 = new AsyncCallback<String>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-
-            @Override
-            public void onSuccess(String value) {
-                expiredCount.setHTML("Expired sessions: " + value);
-            }
-
-        };
-
-        RPCManager.execute(AdminServices.CountSessions.class, Boolean.FALSE, callback2);
+        RPCManager.execute(AdminServices.CountSessions.class, null, callback);
     }
 
     @Override
