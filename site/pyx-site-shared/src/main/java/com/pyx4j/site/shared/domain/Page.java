@@ -32,6 +32,8 @@ public interface Page extends IEntity {
 
     IPrimitive<String> caption();
 
+    IPrimitive<String> discriminator();
+
     @Owned
     PageData data();
 

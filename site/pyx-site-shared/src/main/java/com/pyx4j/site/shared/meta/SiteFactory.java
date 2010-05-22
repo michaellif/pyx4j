@@ -99,15 +99,16 @@ public class SiteFactory {
         return createPage(caption, uri, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
     }
 
-    public static Page createPage(String caption, Class<? extends NavigNode> node, String html) {
-        return createPage(caption, node, html, null, null, null);
+    public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html) {
+        return createPage(caption, node, discriminator, html, null, null, null);
     }
 
-    public static Page createPage(String caption, Class<? extends NavigNode> node, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
-            String[] inlineWidgets) {
+    public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html, Portlet[] leftPortlets,
+            Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
         page.uri().setValue(SiteMap.getPageUri(node));
+        page.discriminator().setValue(discriminator);
         if (html == null) {
             html = caption;
         }

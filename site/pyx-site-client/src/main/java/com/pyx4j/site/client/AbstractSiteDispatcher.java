@@ -297,6 +297,7 @@ public abstract class AbstractSiteDispatcher {
         } else {
             onAfterLogOut();
         }
+        doShow(pathShown);
     }
 
     protected void onAfterLogOut() {

@@ -62,7 +62,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private Page homePage;
 
-    private final List<Page> pages = new ArrayList<Page>();
+    private final Map<String, List<Page>> pages = new HashMap<String, List<Page>>();
 
     private PagePanel currentPagePanel;
 
@@ -152,13 +152,13 @@ public abstract class SitePanel extends SimplePanel {
 
     protected void show(Page page, Map<String, String> args) {
 
-        String path = page.uri().getValue();
-        if (cachedPanels.containsKey(path)) {
-            currentPagePanel = cachedPanels.get(path);
+        String key = page.uri().getValue() + "$" + page.discriminator();
+        if (cachedPanels.containsKey(key)) {
+            currentPagePanel = cachedPanels.get(key);
             mainSectionPanel.setWidget(currentPagePanel);
         } else {
             currentPagePanel = new PagePanel(this, page);
-            cachedPanels.put(path, currentPagePanel);
+            cachedPanels.put(key, currentPagePanel);
             mainSectionPanel.setWidget(currentPagePanel);
             currentPagePanel.createInlineWidgets();
         }
@@ -387,23 +387,33 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     private void addPage(Page page) {
-        pages.add(page);
-        if (ResourceUriUtil.isRoot(page.uri().getValue())) {
-            if (page.tabName().getValue() == null) {
-                primaryNavigationBar.add(page.caption().getValue(), page.uri().getValue());
-            } else {
-                primaryNavigationBar.add(page.tabName().getValue(), page.uri().getValue());
+        List<Page> sameUriPages = pages.get(page.uri().getValue());
+        if (sameUriPages == null) {
+            sameUriPages = new ArrayList<Page>();
+            pages.put(page.uri().getValue(), sameUriPages);
+            if (ResourceUriUtil.isRoot(page.uri().getValue())) {
+                if (page.tabName().getValue() == null) {
+                    primaryNavigationBar.add(page.caption().getValue(), page.uri().getValue());
+                } else {
+                    primaryNavigationBar.add(page.tabName().getValue(), page.uri().getValue());
+                }
             }
         }
+        sameUriPages.add(page);
+
     }
 
     public Page getPage(String uri) {
-        for (Page page : pages) {
-            if (page.uri().getValue().equals(uri)) {
-                return page;
-            }
+        List<Page> sameUriPages = pages.get(uri);
+        if (sameUriPages != null && sameUriPages.size() > 0) {
+            return selectPageForGivenUri(sameUriPages);
+        } else {
+            return null;
         }
-        return null;
+    }
+
+    protected Page selectPageForGivenUri(List<Page> sameUriPages) {
+        return sameUriPages.get(0);
     }
 
     public Page getHomePage() {
