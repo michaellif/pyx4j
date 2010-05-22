@@ -105,7 +105,7 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
 
         };
 
-        RPCManager.execute(AdminServices.CountSessions.class, true, callback1);
+        RPCManager.execute(AdminServices.CountSessions.class, Boolean.TRUE, callback1);
 
         AsyncCallback<String> callback2 = new AsyncCallback<String>() {
 
@@ -121,7 +121,7 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
 
         };
 
-        RPCManager.execute(AdminServices.CountSessions.class, false, callback2);
+        RPCManager.execute(AdminServices.CountSessions.class, Boolean.FALSE, callback2);
     }
 
     @Override
