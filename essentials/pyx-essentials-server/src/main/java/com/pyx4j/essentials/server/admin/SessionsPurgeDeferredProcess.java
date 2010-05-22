@@ -94,6 +94,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
                 return;
             }
         }
+        compleate = true;
     }
 
     @Override
