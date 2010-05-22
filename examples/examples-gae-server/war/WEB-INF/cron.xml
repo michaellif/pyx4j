@@ -3,6 +3,6 @@
   <cron>
     <url>/internal/cron?job=PurgeSessions</url>
     <description>Purge Expired Sessions every day</description>
-    <schedule>every day</schedule>
+    <schedule>every 24 hours</schedule>
   </cron>
 </cronentries>
