@@ -45,7 +45,7 @@
             expiration="4h" />
         <include
             path="/**/index.html"
-            expiration="4h" />    
+            expiration="4h" />
     </static-files>
 
 	<!-- Configure java.util.logging -->
@@ -56,7 +56,7 @@
     </system-properties>
 
     <admin-console>
-        <page name="Pyx Console" url="/#console&amp;" />
+        <page name="Pyx Console" url="/#console/" />
     </admin-console>
 
 </appengine-web-app>
