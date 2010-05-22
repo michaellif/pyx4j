@@ -62,7 +62,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1", ".pyx4j.com");
         CaptchaComposite.setPublicKey("6LdBxgoAAAAAAP7RdZ3kbHwVA99j1qKB97pdo6Mq");
 
-        setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home"));
+        setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home").uri().getValue());
 
         show();
 

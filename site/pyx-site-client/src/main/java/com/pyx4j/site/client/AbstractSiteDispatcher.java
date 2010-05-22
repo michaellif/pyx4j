@@ -63,7 +63,7 @@ public abstract class AbstractSiteDispatcher {
 
     private SitePanel currentSitePanel;
 
-    private ResourceUri welcomeUri;
+    private String welcomeUri;
 
     private NavigationUri pathShown = new NavigationUri("");
 
@@ -190,10 +190,10 @@ public abstract class AbstractSiteDispatcher {
         log.debug("Page Args {}", navigationUri.getArgs());
 
         if (!CommonsStringUtils.isStringSet(navigationUri.getPageUri())) {
-            if (welcomeUri.uri().isNull()) {
+            if (welcomeUri == null) {
                 throw new RuntimeException("welcomeUri is not set");
             }
-            navigationUri.setPath(welcomeUri.uri().getValue());
+            navigationUri.setPath(welcomeUri);
         }
 
         AsyncCallback<SitePanel> callback = new AsyncCallback<SitePanel>() {
@@ -315,11 +315,11 @@ public abstract class AbstractSiteDispatcher {
 
     }
 
-    public ResourceUri getWelcomeUri() {
+    public String getWelcomeUri() {
         return welcomeUri;
     }
 
-    public void setWelcomeUri(ResourceUri welcomeUri) {
+    public void setWelcomeUri(String welcomeUri) {
         this.welcomeUri = welcomeUri;
     }
 

@@ -119,11 +119,10 @@ public abstract class SitePanel extends SimplePanel {
         setFooterCopiright(site.footerCopiright().getValue());
 
         {
-            boolean isHome = true;
             for (Page page : site.pages()) {
-                addPage(page, isHome);
-                isHome = false;
+                addPage(page);
             }
+            homePage = site.pages().get(0);
         }
 
         skinFactory = new DefaultSkinFactory();
@@ -387,11 +386,8 @@ public abstract class SitePanel extends SimplePanel {
         footerLinkBar.add(link, separator);
     }
 
-    public void addPage(com.pyx4j.site.shared.domain.Page page, boolean isHome) {
+    private void addPage(Page page) {
         pages.add(page);
-        if (isHome) {
-            homePage = page;
-        }
         if (ResourceUriUtil.isRoot(page.uri().getValue())) {
             if (page.tabName().getValue() == null) {
                 primaryNavigationBar.add(page.caption().getValue(), page.uri().getValue());
