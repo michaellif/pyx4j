@@ -26,8 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Page extends IEntity {
 
-    @Owned
-    ResourceUri uri();
+    IPrimitive<String> uri();
 
     IPrimitive<String> tabName();
 

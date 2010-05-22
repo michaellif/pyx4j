@@ -99,10 +99,46 @@ public class SiteFactory {
         return createPage(caption, uri, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
     }
 
+    public static Page createPage(String caption, Class<? extends NavigNode> node, String html) {
+        return createPage(caption, node, html, null, null, null);
+    }
+
+    public static Page createPage(String caption, Class<? extends NavigNode> node, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
+            String[] inlineWidgets) {
+        Page page = EntityFactory.create(Page.class);
+        page.caption().setValue(caption);
+        page.uri().setValue(SiteMap.getPageUri(node));
+        if (html == null) {
+            html = caption;
+        }
+        page.data().html().setValue(html);
+
+        if (leftPortlets != null) {
+            for (Portlet portlet : leftPortlets) {
+                page.data().leftPortlets().add(portlet);
+            }
+        }
+
+        if (rightPortlets != null) {
+            for (Portlet portlet : rightPortlets) {
+                page.data().rightPortlets().add(portlet);
+            }
+        }
+
+        if (inlineWidgets != null) {
+            for (String widgetId : inlineWidgets) {
+                page.data().inlineWidgetIds().add(widgetId);
+            }
+        }
+        return page;
+    }
+
+    //TODO 
+    @Deprecated
     public static Page createPage(String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
-        page.uri().set(uri);
+        page.uri().setValue(uri.uri().getValue());
         if (html == null) {
             html = caption;
         }

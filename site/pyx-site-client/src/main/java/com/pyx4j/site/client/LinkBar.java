@@ -119,13 +119,13 @@ public class LinkBar extends ComplexPanel {
             getElement().getStyle().setCursor(Cursor.DEFAULT);
         }
 
-        LinkItemAnchor(String html, final ResourceUri uri) {
+        LinkItemAnchor(String html, final String uri) {
             super(html, true, "javascript:void(0)");
             setWordWrap(false);
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AbstractSiteDispatcher.show(uri.uri().getValue());
+                    AbstractSiteDispatcher.show(uri);
                     getParent().removeStyleDependentName("mouseOver");
                 }
             });
@@ -139,18 +139,6 @@ public class LinkBar extends ComplexPanel {
                 @Override
                 public void onClick(ClickEvent event) {
                     command.execute();
-                    getParent().removeStyleDependentName("mouseOver");
-                }
-            });
-            init();
-        }
-
-        LinkItemAnchor(String html, String href) {
-            super(html, true, href);
-            setWordWrap(false);
-            addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
                     getParent().removeStyleDependentName("mouseOver");
                 }
             });

@@ -49,7 +49,6 @@ import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
-import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
@@ -154,7 +153,7 @@ public abstract class SitePanel extends SimplePanel {
 
     protected void show(Page page, Map<String, String> args) {
 
-        String path = page.uri().uri().getValue();
+        String path = page.uri().getValue();
         if (cachedPanels.containsKey(path)) {
             currentPagePanel = cachedPanels.get(path);
             mainSectionPanel.setWidget(currentPagePanel);
@@ -191,7 +190,7 @@ public abstract class SitePanel extends SimplePanel {
             }
         }
 
-        primaryNavigationBar.setSelected(page.uri());
+        primaryNavigationBar.setSelected(page.uri().getValue());
 
         currentPagePanel.populateInlineWidgets(args);
 
@@ -393,27 +392,18 @@ public abstract class SitePanel extends SimplePanel {
         if (isHome) {
             homePage = page;
         }
-        if (ResourceUriUtil.isRoot(page.uri())) {
+        if (ResourceUriUtil.isRoot(page.uri().getValue())) {
             if (page.tabName().getValue() == null) {
-                primaryNavigationBar.add(page.caption().getValue(), page.uri());
+                primaryNavigationBar.add(page.caption().getValue(), page.uri().getValue());
             } else {
-                primaryNavigationBar.add(page.tabName().getValue(), page.uri());
+                primaryNavigationBar.add(page.tabName().getValue(), page.uri().getValue());
             }
         }
     }
 
     public Page getPage(String uri) {
         for (Page page : pages) {
-            if (page.uri().uri().getValue().equals(uri)) {
-                return page;
-            }
-        }
-        return null;
-    }
-
-    public Page getPage(ResourceUri uri) {
-        for (Page page : pages) {
-            if (page.uri().getValue().equals(uri.getValue())) {
+            if (page.uri().getValue().equals(uri)) {
                 return page;
             }
         }

@@ -43,7 +43,7 @@ public class PageEditor extends AbstractView {
     private final TextArea htmlViewer;
 
     public PageEditor(Page page) {
-        super(new VerticalPanel(), page.uri().uri().getValue(), ImageFactory.getImages().image());
+        super(new VerticalPanel(), page.uri().getValue(), ImageFactory.getImages().image());
         this.page = page;
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 

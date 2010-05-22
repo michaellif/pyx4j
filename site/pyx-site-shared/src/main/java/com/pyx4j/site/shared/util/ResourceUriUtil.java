@@ -49,46 +49,39 @@ public class ResourceUriUtil {
         return resourceUri;
     }
 
-    public static List<String> parseResourceUri(ResourceUri uri) {
+    public static List<String> parseResourceUri(String uri) {
         List<String> path = new ArrayList<String>();
-        String uriStr = uri.uri().getValue();
-        String[] parts = uriStr.split("\\" + PAGE_SEPARATOR);
+        String[] parts = uri.split("\\" + PAGE_SEPARATOR);
         for (String string : parts) {
             path.add(string);
         }
         return path;
     }
 
-    public static boolean isContained(ResourceUri parent, ResourceUri child) {
+    public static boolean isContained(String parent, String child) {
         if (parent == null || child == null) {
             return false;
         }
-        String childValue = child.uri().getValue();
-        String parentValue = parent.uri().getValue();
-
-        return childValue.equals(parentValue) || childValue.startsWith(parentValue + PAGE_SEPARATOR);
+        return child.equals(parent) || child.startsWith(parent + PAGE_SEPARATOR);
     }
 
-    public static boolean areEqual(ResourceUri uri1, ResourceUri uri2) {
+    public static boolean areEqual(String uri1, String uri2) {
         if (uri1 == null || uri2 == null) {
             return false;
         }
-        String uri1Value = uri1.uri().getValue();
-        String uri2Value = uri2.uri().getValue();
-
-        return uri1Value != null && uri1Value.equals(uri2Value);
+        return uri1 != null && uri1.equals(uri2);
     }
 
-    public static boolean isRoot(ResourceUri uri) {
+    public static boolean isRoot(String uri) {
         return parseResourceUri(uri).size() == 2;
     }
 
-    public static ResourceUri getRoot(ResourceUri uri) {
+    public static ResourceUri getRoot(String uri) {
         List<String> path = parseResourceUri(uri);
         return createResourceUri(path.get(0), path.get(1));
     }
 
-    public static ResourceUri getParent(ResourceUri uri) {
+    public static ResourceUri getParent(String uri) {
         List<String> path = parseResourceUri(uri);
         String[] subpath = new String[path.size() - 2];
         for (int i = 1; i < path.size() - 1; i++) {

@@ -46,10 +46,10 @@ public class ExamplesHeadlessSitePanel extends ExamplesSitePanel {
     private ExamplesHeadlessSitePanel(Site site) {
         super(site);
 
-        addFooterLink(new PageLink("Technical Support", PageType.headless$headless$technicalSupport.getUri()), false);
-        addFooterLink(new PageLink("Privacy Policy", PageType.headless$headless$privacyPolicy.getUri()), true);
-        addFooterLink(new PageLink("Terms of Use", PageType.headless$headless$termsOfUse.getUri()), true);
-        addFooterLink(new PageLink("Contact Us", PageType.headless$headless$contactUs.getUri()), true);
+        addFooterLink(new PageLink("Technical Support", PageType.headless$headless$technicalSupport.getUri().uri().getValue()), false);
+        addFooterLink(new PageLink("Privacy Policy", PageType.headless$headless$privacyPolicy.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Terms of Use", PageType.headless$headless$termsOfUse.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Contact Us", PageType.headless$headless$contactUs.getUri().uri().getValue()), true);
 
     }
 
@@ -60,7 +60,7 @@ public class ExamplesHeadlessSitePanel extends ExamplesSitePanel {
 
     @Override
     protected void show(final Page page, Map<String, String> args) {
-        if (page != null && args != null && ResourceUriUtil.areEqual(page.uri(), PageType.headless$headless$activation.getUri())
+        if (page != null && args != null && ResourceUriUtil.areEqual(page.uri().getValue(), PageType.headless$headless$activation.getUri().uri().getValue())
                 && args.containsKey("activate")) {
             AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
                 @Override

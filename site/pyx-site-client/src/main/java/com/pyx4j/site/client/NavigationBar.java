@@ -42,7 +42,6 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
-import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.util.ResourceUriUtil;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -86,7 +85,7 @@ public class NavigationBar extends ComplexPanel {
 
     }
 
-    public void add(String text, ResourceUri uri) {
+    public void add(String text, String uri) {
         NavigationTab tab = new NavigationTab(text, uri);
         if (firstTab == null) {
             firstTab = tab;
@@ -103,14 +102,14 @@ public class NavigationBar extends ComplexPanel {
         add(tab, ul);
     }
 
-    public void setSelected(ResourceUri uri) {
+    public void setSelected(String uri) {
         for (NavigationTab tab : tabs) {
             tab.setSelected(ResourceUriUtil.isContained(tab.uri, uri));
         }
     }
 
     class NavigationTabAnchor extends Anchor {
-        NavigationTabAnchor(String text, final ResourceUri uri) {
+        NavigationTabAnchor(String text, final String uri) {
             super("<span>" + text + "</span>", true);
 
             getElement().getStyle().setProperty("outline", "0px");
@@ -132,7 +131,7 @@ public class NavigationBar extends ComplexPanel {
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AbstractSiteDispatcher.show(uri.uri().getValue());
+                    AbstractSiteDispatcher.show(uri);
                     getParent().removeStyleDependentName("hover");
                     // Prevent IE from triggering Window.ClosingEvent
                     event.preventDefault();
@@ -146,9 +145,9 @@ public class NavigationBar extends ComplexPanel {
 
         private final NavigationTabAnchor anchor;
 
-        private final ResourceUri uri;
+        private final String uri;
 
-        NavigationTab(String text, final ResourceUri uri) {
+        NavigationTab(String text, final String uri) {
             this.uri = uri;
 
             setElement(Document.get().createLIElement());

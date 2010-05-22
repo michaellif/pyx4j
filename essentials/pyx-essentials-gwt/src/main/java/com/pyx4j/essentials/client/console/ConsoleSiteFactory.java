@@ -51,7 +51,7 @@ public class ConsoleSiteFactory {
     private static Page createPage(String caption, ConsolePageType pageType, String html) {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
-        page.uri().set(pageType.getUri());
+        page.uri().setValue(pageType.getUri().uri().getValue());
         page.data().html().setValue(html);
         return page;
     }

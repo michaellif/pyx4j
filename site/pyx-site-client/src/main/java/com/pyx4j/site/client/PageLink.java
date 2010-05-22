@@ -8,15 +8,20 @@
  */
 package com.pyx4j.site.client;
 
-import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PageLink extends LinkBarItem {
 
-    public ResourceUri uri;
+    public final String uri;
 
-    public PageLink(String html, ResourceUri uri) {
+    public PageLink(String html, String uri) {
         super(html);
         this.uri = uri;
+    }
+
+    public PageLink(String html, Class<? extends NavigNode> node) {
+        this(html, SiteMap.getPageUri(node));
     }
 
 }

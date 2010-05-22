@@ -42,10 +42,10 @@ public class ExamplesCrmSitePanel extends ExamplesSitePanel {
 
     private ExamplesCrmSitePanel(Site site) {
         super(site);
-        addFooterLink(new PageLink("Technical Support", PageType.crm$home$technicalSupport.getUri()), false);
-        addFooterLink(new PageLink("Privacy Policy", PageType.crm$home$privacyPolicy.getUri()), true);
-        addFooterLink(new PageLink("Terms of Use", PageType.crm$home$termsOfUse.getUri()), true);
-        addFooterLink(new PageLink("Contact Us", PageType.crm$home$contactUs.getUri()), true);
+        addFooterLink(new PageLink("Technical Support", PageType.crm$home$technicalSupport.getUri().uri().getValue()), false);
+        addFooterLink(new PageLink("Privacy Policy", PageType.crm$home$privacyPolicy.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Terms of Use", PageType.crm$home$termsOfUse.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Contact Us", PageType.crm$home$contactUs.getUri().uri().getValue()), true);
 
     }
 

@@ -90,7 +90,7 @@ public class SiteMapView extends AbstractView {
             TreeItem siteRootItem = new TreeItem(site.siteId().getValue());
             siteRootItem.setUserObject(site);
             for (Page page : site.pages()) {
-                TreeItem pageItem = new TreeItem(HtmlUtils.escapeText(page.uri().uri().getValue()));
+                TreeItem pageItem = new TreeItem(HtmlUtils.escapeText(page.uri().getValue()));
                 pageItem.setUserObject(page);
                 siteRootItem.addItem(pageItem);
             }

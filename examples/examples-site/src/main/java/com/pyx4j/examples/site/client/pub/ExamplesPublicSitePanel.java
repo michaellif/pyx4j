@@ -43,10 +43,10 @@ public class ExamplesPublicSitePanel extends ExamplesSitePanel {
     private ExamplesPublicSitePanel(Site site) {
         super(site);
 
-        addFooterLink(new PageLink("Technical Support", PageType.pub$home$technicalSupport.getUri()), false);
-        addFooterLink(new PageLink("Privacy Policy", PageType.pub$home$privacyPolicy.getUri()), true);
-        addFooterLink(new PageLink("Terms of Use", PageType.pub$home$termsOfUse.getUri()), true);
-        addFooterLink(new PageLink("Contact Us", PageType.pub$contactUs.getUri()), true);
+        addFooterLink(new PageLink("Technical Support", PageType.pub$home$technicalSupport.getUri().uri().getValue()), false);
+        addFooterLink(new PageLink("Privacy Policy", PageType.pub$home$privacyPolicy.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Terms of Use", PageType.pub$home$termsOfUse.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Contact Us", PageType.pub$contactUs.getUri().uri().getValue()), true);
 
     }
 
