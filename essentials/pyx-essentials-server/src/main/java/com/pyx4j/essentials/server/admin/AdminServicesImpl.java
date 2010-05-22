@@ -32,7 +32,7 @@ import com.pyx4j.server.contexts.Context;
 
 public class AdminServicesImpl implements AdminServices {
 
-    private static long inactiveTime() {
+    static long inactiveTime() {
         int sessionTimeoutSeconds = 0;
         if (Context.getSession() != null) {
             sessionTimeoutSeconds = Context.getSession().getMaxInactiveInterval();

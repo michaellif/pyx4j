@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public interface IEntityPersistenceService {
 
-    public interface ICursorIterator<T extends IEntity> extends Iterator<T> {
+    public interface ICursorIterator<T> extends Iterator<T> {
 
         /**
          * @see com.google.appengine.api.datastore.Cursor.toWebSafeString()
@@ -61,13 +61,17 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria);
 
+    public <T extends IEntity> ICursorIterator<Long> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria);
+
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 
     public void delete(IEntity entity);
 
-    public void delete(Class<IEntity> entityClass, long primaryKey);
+    public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey);
 
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria);
+
+    public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys);
 
     public int getDatastoreCallCount();
 

@@ -556,25 +556,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return keyCreated;
     }
 
-    @Override
-    public void delete(IEntity iEntity) {
-        if (iEntity.getEntityMeta().isTransient()) {
-            throw new Error("Can't delete Transient Entity");
-        }
-        datastoreCallStats.get().count++;
-        datastore.delete(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey()));
-    }
-
-    @Override
-    public void delete(Class<IEntity> entityClass, long primaryKey) {
-        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't retrieve Transient Entity");
-        }
-        datastoreCallStats.get().count++;
-        datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
-    }
-
     private Object deserializeValue(IEntity iEntity, String keyName, Object value, Map<Key, IEntity> retrievedMap) {
         if (value instanceof Text) {
             return ((Text) value).getValue();
@@ -1014,6 +995,60 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public <T extends IEntity> ICursorIterator<Long> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+        long start = System.nanoTime();
+        int initCount = datastoreCallStats.get().count;
+        final Class<T> entityClass = entityClass(criteria);
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        Query query = buildQuery(entityMeta, criteria);
+        query.setKeysOnly();
+        datastoreCallStats.get().count++;
+        PreparedQuery pq = datastore.prepare(query);
+
+        final QueryResultIterable<Entity> iterable;
+        if (encodedCursorRefference != null) {
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withCursor(Cursor.fromWebSafeString(encodedCursorRefference)));
+        } else {
+            iterable = pq.asQueryResultIterable();
+        }
+        final QueryResultIterator<Entity> iterator = iterable.iterator();
+        long duration = System.nanoTime() - start;
+        int callsCount = datastoreCallStats.get().count - initCount;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+        }
+
+        return new ICursorIterator<Long>() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public Long next() {
+                Entity entity = iterator.next();
+                return entity.getKey().getId();
+            }
+
+            @Override
+            public void remove() {
+                iterator.remove();
+            }
+
+            @Override
+            public String encodedCursorRefference() {
+                return iterator.getCursor().toWebSafeString();
+            }
+        };
+    }
+
+    @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         Class<T> entityClass = entityClass(criteria);
@@ -1033,6 +1068,25 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             log.debug("countQuery {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         }
         return rc;
+    }
+
+    @Override
+    public void delete(IEntity iEntity) {
+        if (iEntity.getEntityMeta().isTransient()) {
+            throw new Error("Can't delete Transient Entity");
+        }
+        datastoreCallStats.get().count++;
+        datastore.delete(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey()));
+    }
+
+    @Override
+    public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        datastoreCallStats.get().count++;
+        datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
     }
 
     @Override
@@ -1062,6 +1116,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastore.delete(keys);
         removedCount += keys.size();
         return removedCount;
+    }
+
+    public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't delete Transient Entity");
+        }
+        List<Key> keys = new Vector<Key>();
+        for (Long primaryKey : primaryKeys) {
+            if (keys.size() >= 500) {
+                datastoreCallStats.get().count++;
+                datastore.delete(keys);
+                keys.clear();
+            }
+            keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
+        }
+        datastoreCallStats.get().count++;
+        datastore.delete(keys);
     }
 
     public int getDatastoreCallCount() {
