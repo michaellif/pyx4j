@@ -21,9 +21,11 @@
 package com.pyx4j.widgets.client.style;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class Theme {
 
@@ -43,6 +45,16 @@ public class Theme {
 
     public List<Style> getAllStyles() {
         return styles;
+    }
+
+    public List<Style> getStyles(String selector) {
+        List<Style> r = new Vector<Style>();
+        for (Style style : styles) {
+            if (selector.equals(style.getSelector())) {
+                r.add(style);
+            }
+        }
+        return Collections.unmodifiableList(r);
     }
 
     public void addStyle(Style style) {
