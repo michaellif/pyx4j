@@ -22,4 +22,12 @@ package com.pyx4j.site.shared.meta;
 
 public interface NavigNode {
 
+    public static String PAGE_SEPARATOR = "/";
+
+    public static String ARGS_GROUP_SEPARATOR = "?";
+
+    public static String ARGS_SEPARATOR = "&";
+
+    public static String NAME_VALUE_SEPARATOR = "=";
+
 }

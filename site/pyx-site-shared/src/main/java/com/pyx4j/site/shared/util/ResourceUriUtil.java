@@ -20,10 +20,7 @@
  */
 package com.pyx4j.site.shared.util;
 
-import static com.pyx4j.site.shared.domain.ResourceUri.PAGE_SEPARATOR;
-
-import java.util.ArrayList;
-import java.util.List;
+import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.ResourceUri;

@@ -20,6 +20,10 @@
  */
 package com.pyx4j.site.client;
 
+import static com.pyx4j.site.shared.meta.NavigNode.ARGS_GROUP_SEPARATOR;
+import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
+import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +49,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.site.shared.util.PageTypeUriEnum;
@@ -174,17 +177,17 @@ public abstract class AbstractSiteDispatcher {
     public void addHistoryToken(String uri, Map<String, String> history) {
         StringBuilder newToken = new StringBuilder();
         newToken.append(uri);
-        newToken.append(ResourceUri.ARGS_GROUP_SEPARATOR);
+        newToken.append(ARGS_GROUP_SEPARATOR);
 
         boolean first = true;
         for (Map.Entry<String, String> me : history.entrySet()) {
             if (first) {
                 first = false;
             } else {
-                newToken.append(ResourceUri.ARGS_SEPARATOR);
+                newToken.append(ARGS_SEPARATOR);
             }
             newToken.append(me.getKey());
-            newToken.append(ResourceUri.NAME_VALUE_SEPARATOR);
+            newToken.append(NAME_VALUE_SEPARATOR);
             newToken.append(URL.encode(me.getValue()));
         }
 
@@ -344,11 +347,11 @@ public abstract class AbstractSiteDispatcher {
      */
     private Map<String, String> parsArgs(String substring) {
         Map<String, String> args = null;
-        String[] nameValues = substring.split(ResourceUri.ARGS_SEPARATOR);
+        String[] nameValues = substring.split(ARGS_SEPARATOR);
         if (nameValues.length > 0) {
             args = new HashMap<String, String>();
             for (int i = 0; i < nameValues.length; i++) {
-                String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
+                String[] nameAndValue = nameValues[i].split(NAME_VALUE_SEPARATOR);
                 if (nameAndValue.length == 2) {
                     args.put(nameAndValue[0], URL.decode(nameAndValue[1]));
                 } else {

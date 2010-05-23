@@ -20,12 +20,10 @@
  */
 package com.pyx4j.site.shared.meta;
 
-import static com.pyx4j.site.shared.domain.ResourceUri.PAGE_SEPARATOR;
+import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.pyx4j.site.shared.domain.ResourceUri;
 
 public class SiteMap {
 
@@ -36,7 +34,7 @@ public class SiteMap {
         for (int i = 1; i < parts.length; i++) {
             builder.append(parts[i]);
             if (i < parts.length - 1) {
-                builder.append(ResourceUri.PAGE_SEPARATOR);
+                builder.append(PAGE_SEPARATOR);
             }
         }
 
