@@ -66,7 +66,7 @@ public class Context {
         }
     }
 
-    static HttpServletRequest getRequest() {
+    public static HttpServletRequest getRequest() {
         return request.get();
     }
 
