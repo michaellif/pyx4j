@@ -20,9 +20,7 @@
  */
 package com.pyx4j.widgets.client.svg;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
-
-public class ClipPath extends ComplexPanel {
+public class ClipPath extends ContainerElement {
 
     public ClipPath(String id, String path) {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "clipPath"));

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 6, 2010
+ * Created on May 23, 2010
  * @author Michael
  * @version $Id$
  */
@@ -22,14 +22,14 @@ package com.pyx4j.widgets.client.svg;
 
 import com.google.gwt.user.client.ui.ComplexPanel;
 
-public class Group extends ContainerElement {
+public class ContainerElement extends ComplexPanel {
 
-    public Group() {
-        setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "g"));
+    public void add(GraphicsElement e) {
+        super.add(e, getElement());
     }
 
-    public void setTransform(String transform) {
-        getElement().setAttribute("transform", transform);
+    public void add(ContainerElement e) {
+        super.add(e, getElement());
     }
 
 }
