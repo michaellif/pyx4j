@@ -62,6 +62,17 @@ public class NavigationUri {
         setPath(SiteMap.getPageUri(page));
     }
 
+    public NavigationUri(Class<? extends NavigNode> page, String name, String value) {
+        setPath(SiteMap.getPageUri(page));
+        addArg(name, value);
+    }
+
+    public NavigationUri(Class<? extends NavigNode> page, String name1, String value1, String name2, String value2) {
+        setPath(SiteMap.getPageUri(page));
+        addArg(name1, value1);
+        addArg(name2, value2);
+    }
+
     @Deprecated
     public NavigationUri(PageTypeUriEnum pageTypeUri) {
         setPath(pageTypeUri.getUri().uri().getValue());
