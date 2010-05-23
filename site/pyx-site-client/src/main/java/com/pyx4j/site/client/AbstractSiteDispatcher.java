@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client;
 
-import static com.pyx4j.site.shared.meta.NavigNode.ARGS_GROUP_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
 
@@ -174,26 +173,6 @@ public abstract class AbstractSiteDispatcher {
         History.forward();
     }
 
-    public void addHistoryToken(String uri, Map<String, String> history) {
-        StringBuilder newToken = new StringBuilder();
-        newToken.append(uri);
-        newToken.append(ARGS_GROUP_SEPARATOR);
-
-        boolean first = true;
-        for (Map.Entry<String, String> me : history.entrySet()) {
-            if (first) {
-                first = false;
-            } else {
-                newToken.append(ARGS_SEPARATOR);
-            }
-            newToken.append(me.getKey());
-            newToken.append(NAME_VALUE_SEPARATOR);
-            newToken.append(URL.encode(me.getValue()));
-        }
-
-        History.newItem(newToken.toString(), false);
-    }
-
     //TODO handle wrong tokens !!!
     private void doShow(final NavigationUri navigationUri) {
         log.debug("Page URI  {}", navigationUri.getPageUri());
@@ -332,6 +311,10 @@ public abstract class AbstractSiteDispatcher {
 
     public void setWelcomeUri(String welcomeUri) {
         this.welcomeUri = welcomeUri;
+    }
+
+    public void setWelcomeUri(Class<? extends NavigNode> welcomePage) {
+        setWelcomeUri(SiteMap.getPageUri(welcomePage));
     }
 
     public SitePanel getCurrentSitePanel() {
