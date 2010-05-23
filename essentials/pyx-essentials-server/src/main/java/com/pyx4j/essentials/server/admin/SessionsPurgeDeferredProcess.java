@@ -21,18 +21,23 @@
 package com.pyx4j.essentials.server.admin;
 
 import java.text.MessageFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+
 import com.pyx4j.commons.Consts;
-import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 
@@ -41,8 +46,6 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
     private static final long serialVersionUID = 2801629609391105201L;
 
     private final static Logger log = LoggerFactory.getLogger(SessionsPurgeDeferredProcess.class);
-
-    private String encodedCursorRefference;
 
     private long inactiveTime;
 
@@ -66,15 +69,19 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
             return;
         }
         long start = System.currentTimeMillis();
-        EntityQueryCriteria<GaeStoredSession> criteria = EntityQueryCriteria.create(GaeStoredSession.class);
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(GaeStoredSession.class);
+        Query query = new Query(entityMeta.getPersistenceName());
+        query.setKeysOnly();
         if (inactiveTime > 0) {
-            criteria.add(new PropertyCriterion(criteria.meta()._expires(), Restriction.LESS_THAN, inactiveTime));
+            query.addFilter("_expires", Query.FilterOperator.LESS_THAN, inactiveTime);
         }
-        List<Long> primaryKeys = new Vector<Long>();
-        ICursorIterator<Long> keysIter = PersistenceServicesFactory.getPersistenceService().queryKeys(encodedCursorRefference, criteria);
-        while (keysIter.hasNext()) {
-            Long key = keysIter.next();
-            primaryKeys.add(key);
+        List<Key> primaryKeys = new Vector<Key>();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+        Iterator<Entity> iterable = results.asIterator();
+        while (iterable.hasNext()) {
+            Entity entity = iterable.next();
+            primaryKeys.add(entity.getKey());
             count++;
             if (canceled) {
                 log.debug("fetch canceled");
@@ -82,7 +89,7 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
             }
             boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * 15;
             if ((primaryKeys.size() > 20) || (quotaExceeded)) {
-                PersistenceServicesFactory.getPersistenceService().delete(GaeStoredSession.class, primaryKeys);
+                datastore.delete(primaryKeys);
                 primaryKeys.clear();
                 if (!quotaExceeded) {
                     quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * 15;
@@ -91,9 +98,11 @@ public class SessionsPurgeDeferredProcess implements IDeferredProcess {
             if (quotaExceeded) {
                 log.warn("Executions time quota exceeded {}", System.currentTimeMillis() - start);
                 log.debug("fetch and delte will continue {}", count);
-                encodedCursorRefference = keysIter.encodedCursorRefference();
                 return;
             }
+        }
+        if (primaryKeys.size() > 0) {
+            datastore.delete(primaryKeys);
         }
         compleate = true;
     }
