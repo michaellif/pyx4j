@@ -29,6 +29,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
 
 public class DeferredProcessServicesImpl implements DeferredProcessServices {
 
@@ -38,10 +39,13 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
 
     @SuppressWarnings("unchecked")
     private static synchronized HashMap<String, IDeferredProcess> getMap() {
-        HashMap<String, IDeferredProcess> m = (HashMap<String, IDeferredProcess>) Context.getVisit().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
+        if (Context.getSession() == null) {
+            Lifecycle.beginAnonymousSession();
+        }
+        HashMap<String, IDeferredProcess> m = (HashMap<String, IDeferredProcess>) Context.getSession().getAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE);
         if (m == null) {
             m = new HashMap<String, IDeferredProcess>();
-            Context.getVisit().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
+            Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, m);
         }
         return m;
     }
@@ -113,7 +117,7 @@ public class DeferredProcessServicesImpl implements DeferredProcessServices {
      * This is required on GAE?
      */
     private static void saveMap(HashMap<String, IDeferredProcess> map) {
-        Context.getVisit().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, map);
+        Context.getSession().setAttribute(DEFERRED_PROCESS_SESSION_ATTRIBUTE, map);
     }
 
     /**
