@@ -58,6 +58,7 @@ public class SiteFactory {
         return "&copy; 2008-2010 pyx4j.com All rights reserved.";
     }
 
+    @Deprecated
     protected static Page createSingleWidgetPage(String tabName, String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets,
             Portlet[] rightPortlets) {
         Page page = createSingleWidgetPage(caption, pageType, inlineWidget, leftPortlets, rightPortlets);
@@ -65,6 +66,7 @@ public class SiteFactory {
         return page;
     }
 
+    @Deprecated
     protected static Page createPage(String tabName, String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
             String[] inlineWidgets) {
         Page page = createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
@@ -72,6 +74,7 @@ public class SiteFactory {
         return page;
     }
 
+    @Deprecated
     public static Page createPage(String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
         return createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
     }
@@ -80,28 +83,42 @@ public class SiteFactory {
         return "<span style='text-align:center;'><h2>'" + caption + "' page is under construction.</h2></span>";
     }
 
+    protected static String inlineWidgetHtml(Enum<?> inlineWidget) {
+        return "<div id='" + inlineWidget.name() + "'></div>";
+    }
+
+    @Deprecated
     public static Page createPage(String caption, PageTypeUriEnum pageType, String html) {
         return createPage(caption, pageType.getUri(), html, null, null, null);
     }
 
+    public static Page createPage(String caption, Class<? extends NavigNode> node, String html) {
+        return createPage(null, caption, node, null, html, null, null, null);
+    }
+
+    @Deprecated
     public static Page createPage(String caption, ResourceUri uri, String html) {
         return createPage(caption, uri, html, null, null, null);
     }
 
+    @Deprecated
     public static Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget) {
         return createSingleWidgetPage(caption, pageType.getUri(), inlineWidget);
     }
 
+    @Deprecated
     public static Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
         return createSingleWidgetPage(caption, pageType.getUri(), inlineWidget, leftPortlets, rightPortlets);
     }
 
+    @Deprecated
     public static Page createSingleWidgetPage(String caption, ResourceUri uri, Enum<?> inlineWidget) {
         return createSingleWidgetPage(caption, uri, inlineWidget, null, null);
     }
 
+    @Deprecated
     public static Page createSingleWidgetPage(String caption, ResourceUri uri, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        return createPage(caption, uri, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
+        return createPage(caption, uri, inlineWidgetHtml(inlineWidget), leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
     }
 
     protected static Page createPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, String html,
@@ -112,13 +129,12 @@ public class SiteFactory {
     }
 
     public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, Enum<?> inlineWidget) {
-        return createSingleWidgetPage(caption, node, null, inlineWidget, null, null);
+        return createPage(null, caption, node, null, inlineWidgetHtml(inlineWidget), null, null, new String[] { inlineWidget.name() });
     }
 
     public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
             Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        return createPage(caption, node, discriminator, "<div id='" + inlineWidget.name() + "'></div>", leftPortlets, rightPortlets,
-                new String[] { inlineWidget.name() });
+        return createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
     }
 
     public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html) {

@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.essentials.client.ConfirmActionClickHandler;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -48,7 +49,7 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
         statisticGroup.setCaption("Sessions Statistics");
         this.add(statisticGroup);
 
-        statisticGroup.add(sessionCount = new HTML());
+        statisticGroup.add(sessionCount = new HTML(CommonsStringUtils.NO_BREAK_SPACE_HTML + "<br/>" + CommonsStringUtils.NO_BREAK_SPACE_HTML));
 
         GroupBoxPanel cleanupGroup = new GroupBoxPanel(false);
         cleanupGroup.setCaption("Cleanup Sessions");
@@ -86,8 +87,6 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
                     }
                 }));
 
-        //TODO remove this call once moved to page 
-        refreshStats();
     }
 
     private void refreshStats() {
@@ -100,7 +99,7 @@ public class SessionsAdminWidget extends VerticalPanel implements InlineWidget {
 
             @Override
             public void onSuccess(String value) {
-                sessionCount.setHTML(value.replace("\n", "</br>"));
+                sessionCount.setHTML(value.replace("\n", "<br/>"));
             }
 
         };

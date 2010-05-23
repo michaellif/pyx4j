@@ -59,6 +59,10 @@ public class SiteMap {
         return child.equals(parent) || child.startsWith(parent + PAGE_SEPARATOR);
     }
 
+    @Deprecated
+    /**
+     * @Deprecated use EqualsHelper
+     */
     public static boolean areEqual(String uri1, String uri2) {
         if (uri1 == null || uri2 == null) {
             return false;

@@ -112,7 +112,7 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     protected void onDeferredSuccess(DeferredProcessProgressResponse result) {
         message1.setHTML("Compleated");
         if (result.getMessage() != null) {
-            message2.setHTML(result.getMessage().replace("\n", "</br>"));
+            message2.setHTML(result.getMessage().replace("\n", "<br/>"));
         }
         onDeferredCompleate();
     }

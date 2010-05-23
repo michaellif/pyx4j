@@ -37,10 +37,19 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
     }
 
     @Override
-    public InlineWidget createWidget(String id) {
-        if (ConsoleSiteFactory.Widgets.console$preloadWidget.name().equals(id)) {
+    public InlineWidget createWidget(String widgetId) {
+        ConsoleSiteMap.Widgets id;
+        try {
+            id = ConsoleSiteMap.Widgets.valueOf(widgetId);
+        } catch (Throwable e) {
+            return null;
+        }
+        switch (id) {
+        case console$preloadWidget:
             return new DBPreloadWidget();
-        } else {
+        case console$sessionsAdminWidget:
+            return new SessionsAdminWidget();
+        default:
             return null;
         }
     }

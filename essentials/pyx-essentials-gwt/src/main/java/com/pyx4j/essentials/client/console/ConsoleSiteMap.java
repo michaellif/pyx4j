@@ -20,22 +20,30 @@
  */
 package com.pyx4j.essentials.client.console;
 
-import com.pyx4j.site.shared.domain.ResourceUri;
-import com.pyx4j.site.shared.util.ResourceUriUtil;
+import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.SiteMap;
 
-public enum ConsolePageType {
+public class ConsoleSiteMap extends SiteMap {
 
-    console$preload(ResourceUriUtil.createResourceUri(ConsoleSiteFactory.siteId, "preload")),
+    public interface console extends NavigNode {
 
-    console$more(ResourceUriUtil.createResourceUri(ConsoleSiteFactory.siteId, "more"));
+        public interface Preload extends NavigNode {
+        }
 
-    private ResourceUri uri;
+        public interface Sessions extends NavigNode {
+        }
 
-    public ResourceUri getUri() {
-        return uri;
+        public interface More extends NavigNode {
+        }
+
     }
 
-    private ConsolePageType(ResourceUri uri) {
-        this.uri = uri;
+    public enum Widgets {
+
+        console$preloadWidget,
+
+        console$sessionsAdminWidget
+
     }
+
 }

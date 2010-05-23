@@ -22,18 +22,12 @@ package com.pyx4j.essentials.client.console;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.DefaultSkins;
-import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.meta.SiteFactory;
 
-public class ConsoleSiteFactory {
+public class ConsoleSiteFactory extends SiteFactory {
 
     public static final String siteId = "console";
-
-    public enum Widgets {
-
-        console$preloadWidget
-
-    }
 
     public static Site createSite() {
         Site site = EntityFactory.create(Site.class);
@@ -41,24 +35,13 @@ public class ConsoleSiteFactory {
         site.siteCaption().setValue("Pyx Console");
         site.skinType().setValue(DefaultSkins.console.name());
 
-        site.pages().add(createWidgetPage("DB Preload", ConsolePageType.console$preload, Widgets.console$preloadWidget));
+        site.pages().add(createSingleWidgetPage("DB Preload", ConsoleSiteMap.console.Preload.class, ConsoleSiteMap.Widgets.console$preloadWidget));
 
-        site.pages().add(createPage("More...", ConsolePageType.console$more, "<div>Anything else we may need?</div>"));
+        site.pages().add(createSingleWidgetPage("Sessions", ConsoleSiteMap.console.Sessions.class, ConsoleSiteMap.Widgets.console$sessionsAdminWidget));
+
+        site.pages().add(createPage("More...", ConsoleSiteMap.console.More.class, "<div>Anything else we may need?</div>"));
 
         return site;
     }
 
-    private static Page createPage(String caption, ConsolePageType pageType, String html) {
-        Page page = EntityFactory.create(Page.class);
-        page.caption().setValue(caption);
-        page.uri().setValue(pageType.getUri().uri().getValue());
-        page.data().html().setValue(html);
-        return page;
-    }
-
-    private static Page createWidgetPage(String caption, ConsolePageType pageType, Widgets widget) {
-        Page p = createPage(caption, pageType, "<div id='" + widget.name() + "'/>");
-        p.data().inlineWidgetIds().add(widget.name());
-        return p;
-    }
 }
