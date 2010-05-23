@@ -59,6 +59,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- need for taskqueue and it is not automaticaly added during build -->
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-labs</artifactId>
+        </dependency>
+
 		<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
