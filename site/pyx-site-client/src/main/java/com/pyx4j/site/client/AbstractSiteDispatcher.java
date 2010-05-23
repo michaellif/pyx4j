@@ -46,6 +46,8 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.site.shared.util.PageTypeUriEnum;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -148,6 +150,11 @@ public abstract class AbstractSiteDispatcher {
         History.newItem(path);
     }
 
+    public static void show(Class<? extends NavigNode> page) {
+        show(SiteMap.getPageUri(page));
+    }
+
+    @Deprecated
     public static void show(PageTypeUriEnum page) {
         show(page.getUri().uri().getValue());
     }

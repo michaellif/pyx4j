@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 
 import com.pyx4j.site.shared.domain.ResourceUri;
+import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.site.shared.util.PageTypeUriEnum;
 
 public class NavigationUri {
@@ -52,6 +54,11 @@ public class NavigationUri {
         setPath(path);
     }
 
+    public NavigationUri(Class<? extends NavigNode> page) {
+        setPath(SiteMap.getPageUri(page));
+    }
+
+    @Deprecated
     public NavigationUri(PageTypeUriEnum pageTypeUri) {
         setPath(pageTypeUri.getUri().uri().getValue());
     }

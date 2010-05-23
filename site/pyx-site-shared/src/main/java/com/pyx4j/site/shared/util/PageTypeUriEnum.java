@@ -22,6 +22,7 @@ package com.pyx4j.site.shared.util;
 
 import com.pyx4j.site.shared.domain.ResourceUri;
 
+@Deprecated
 public interface PageTypeUriEnum {
 
     public ResourceUri getUri();
