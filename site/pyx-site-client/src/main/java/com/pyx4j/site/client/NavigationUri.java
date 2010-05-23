@@ -63,7 +63,7 @@ public class NavigationUri {
             for (int i = 0; i < nameValues.length; i++) {
                 String[] nameAndValue = nameValues[i].split(ResourceUri.NAME_VALUE_SEPARATOR);
                 if (nameAndValue.length == 2) {
-                    args.put(nameAndValue[0], URL.decode(nameAndValue[1]));
+                    args.put(nameAndValue[0], URL.decodeComponent(nameAndValue[1]));
                 } else {
                     log.warn("Can't pars argument {}", nameValues[i]);
                 }
@@ -87,7 +87,7 @@ public class NavigationUri {
                 }
                 newToken.append(me.getKey());
                 newToken.append(ResourceUri.NAME_VALUE_SEPARATOR);
-                newToken.append(URL.encode(me.getValue()));
+                newToken.append(URL.encodeComponent(me.getValue()));
             }
             path = newToken.toString();
         }
