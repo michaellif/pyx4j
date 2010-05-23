@@ -67,13 +67,18 @@ public class CronServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        IDeferredProcess process = createProcess(request);
-        if (process == null) {
-            log.error("unknown cron job {}", request.getQueryString());
-            response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
-            return;
-        }
+        try {
+            IDeferredProcess process = createProcess(request);
+            if (process == null) {
+                log.error("unknown cron job {}", request.getQueryString());
+                response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+                return;
+            }
 
-        DeferredProcessTaskWorkerServlet.defer(process);
+            DeferredProcessTaskWorkerServlet.defer(process);
+        } catch (Throwable e) {
+            log.error("cron error", e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
