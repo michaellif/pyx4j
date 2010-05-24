@@ -35,7 +35,6 @@ import com.google.gwt.http.client.URL;
 
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
-import com.pyx4j.site.shared.util.PageTypeUriEnum;
 
 public class NavigationUri {
 
@@ -71,11 +70,6 @@ public class NavigationUri {
         setPath(SiteMap.getPageUri(page));
         addArg(name1, value1);
         addArg(name2, value2);
-    }
-
-    @Deprecated
-    public NavigationUri(PageTypeUriEnum pageTypeUri) {
-        setPath(pageTypeUri.getUri().uri().getValue());
     }
 
     public static Map<String, String> parsArgs(String substring) {

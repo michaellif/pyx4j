@@ -29,7 +29,6 @@ import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.util.PageTypeUriEnum;
 
 public class SiteFactory {
 
@@ -58,38 +57,12 @@ public class SiteFactory {
         return "&copy; 2008-2010 pyx4j.com All rights reserved.";
     }
 
-    @Deprecated
-    protected static Page createSingleWidgetPage(String tabName, String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets,
-            Portlet[] rightPortlets) {
-        Page page = createSingleWidgetPage(caption, pageType, inlineWidget, leftPortlets, rightPortlets);
-        page.tabName().setValue(tabName);
-        return page;
-    }
-
-    @Deprecated
-    protected static Page createPage(String tabName, String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets,
-            String[] inlineWidgets) {
-        Page page = createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
-        page.tabName().setValue(tabName);
-        return page;
-    }
-
-    @Deprecated
-    public static Page createPage(String caption, PageTypeUriEnum pageType, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
-        return createPage(caption, pageType.getUri(), html, leftPortlets, rightPortlets, inlineWidgets);
-    }
-
     protected static String pageBodyUnderConstruction(String caption) {
         return "<span style='text-align:center;'><h2>'" + caption + "' page is under construction.</h2></span>";
     }
 
     protected static String inlineWidgetHtml(Enum<?> inlineWidget) {
         return "<div id='" + inlineWidget.name() + "'></div>";
-    }
-
-    @Deprecated
-    public static Page createPage(String caption, PageTypeUriEnum pageType, String html) {
-        return createPage(caption, pageType.getUri(), html, null, null, null);
     }
 
     public static Page createPage(String caption, Class<? extends NavigNode> node, String html) {
@@ -99,16 +72,6 @@ public class SiteFactory {
     @Deprecated
     public static Page createPage(String caption, ResourceUri uri, String html) {
         return createPage(caption, uri, html, null, null, null);
-    }
-
-    @Deprecated
-    public static Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget) {
-        return createSingleWidgetPage(caption, pageType.getUri(), inlineWidget);
-    }
-
-    @Deprecated
-    public static Page createSingleWidgetPage(String caption, PageTypeUriEnum pageType, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        return createSingleWidgetPage(caption, pageType.getUri(), inlineWidget, leftPortlets, rightPortlets);
     }
 
     @Deprecated
