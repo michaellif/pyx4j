@@ -20,34 +20,35 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.entity.client.ui.crud.IEntitySearchResultsPanel;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
 import com.pyx4j.examples.domain.crm.Customer;
 
-public class CustomerSearchResultsPanel extends HorizontalPanel implements IEntitySearchResultsPanel<Customer> {
-
-    private final CustomerListPanel customerListPanel;
+public class CustomerSearchResultsPanel extends EntitySearchResultsPanel<Customer> {
 
     private final CustomerListMapPanel customerListMapPanel;
 
     public CustomerSearchResultsPanel() {
-        super();
-        setWidth("100%");
-        customerListPanel = new CustomerListPanel();
-        add(customerListPanel);
+        super(Customer.class);
+        getListPanel().setWidth("450px");
+
         customerListMapPanel = new CustomerListMapPanel();
+        customerListMapPanel.getElement().getStyle().setMarginLeft(5, Unit.PX);
         add(customerListMapPanel);
         setCellHorizontalAlignment(customerListMapPanel, HasHorizontalAlignment.ALIGN_RIGHT);
-
     }
 
-    public void populateData(List<Customer> entities) {
-        customerListPanel.populateData(entities);
+    @Override
+    public void populateData(List<Customer> entities, int pageNumber, boolean hasMoreData) {
+        super.populateData(entities, pageNumber, hasMoreData);
         customerListMapPanel.populateData(entities);
     }
 
@@ -55,8 +56,20 @@ public class CustomerSearchResultsPanel extends HorizontalPanel implements IEnti
         customerListMapPanel.setDistanceOverlay(latLng, distance);
     }
 
+    @Override
     public void clearData() {
-        customerListPanel.clearData();
+        super.clearData();
         customerListMapPanel.clearData();
+    }
+
+    @Override
+    public List<ColumnDescriptor<Customer>> getColumnDescriptors() {
+        List<ColumnDescriptor<Customer>> columnDescriptors = new ArrayList<ColumnDescriptor<Customer>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name(), "120px"));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().phone(), "90px"));
+        ColumnDescriptor<Customer> addrCol = ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().address(), "180px");
+        addrCol.setWordWrap(true);
+        columnDescriptors.add(addrCol);
+        return columnDescriptors;
     }
 }

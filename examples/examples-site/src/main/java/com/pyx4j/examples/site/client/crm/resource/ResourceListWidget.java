@@ -20,17 +20,63 @@
  */
 package com.pyx4j.examples.site.client.crm.resource;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.essentials.client.crud.EntityListWidget;
+import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
+import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
+import com.pyx4j.examples.domain.crm.Resource;
+import com.pyx4j.examples.domain.crm.Resource.RepStatus;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 
-import com.pyx4j.site.client.InlineWidget;
+public class ResourceListWidget extends EntityListWidget<Resource> {
 
-public class ResourceListWidget extends VerticalPanel implements InlineWidget {
+    public ResourceListWidget() {
+        super(Resource.class, ExamplesSiteMap.Crm.Resource.class, ExamplesSiteMap.Crm.Resource.Edit.class, new EntitySearchCriteriaPanel<Resource>(Resource.class) {
 
-    @Override
-    public void populate(Map<String, String> args) {
-        // TODO Auto-generated method stub
+            @Override
+            protected CComponent<?>[][] getComponents() {
+                CComponent<?>[][] components = new CComponent[][] {
+
+                { form.create(form.meta().name()) },
+
+                { form.create(form.meta().status()) },
+
+                };
+
+                return components;
+            }
+
+            @Override
+            protected void enhanceComponents() {
+                ((CComboBox<RepStatus>) form.get(form.meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
+            }
+
+        }, new EntitySearchResultsPanel<Resource>(Resource.class) {
+
+            @Override
+            public List<ColumnDescriptor<Resource>> getColumnDescriptors() {
+                List<ColumnDescriptor<Resource>> columnDescriptors = new ArrayList<ColumnDescriptor<Resource>>();
+                ColumnDescriptor<Resource> name = ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name());
+                name.setWidth("200px");
+                name.setWordWrap(false);
+                columnDescriptors.add(name);
+
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().phone(), "80px"));
+
+                ColumnDescriptor<Resource> status = ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().status());
+                status.setWidth("200px");
+                status.setWordWrap(false);
+                columnDescriptors.add(status);
+                return columnDescriptors;
+            }
+        });
 
     }
 

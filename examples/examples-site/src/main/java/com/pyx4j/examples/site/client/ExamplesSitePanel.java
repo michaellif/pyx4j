@@ -57,7 +57,7 @@ public abstract class ExamplesSitePanel extends SitePanel {
                     @Override
                     public void onLogInComplete() {
                         dialog.hide();
-                        AbstractSiteDispatcher.show("crm&customers");
+                        AbstractSiteDispatcher.show(ExamplesSiteMap.Crm.Customers.class);
                     }
 
                 };

@@ -66,7 +66,7 @@ public class ExamplesSiteMap {
             }
         }
 
-        public interface Rep extends NavigNode {
+        public interface Resource extends NavigNode {
 
             public interface Edit extends NavigNode {
             }

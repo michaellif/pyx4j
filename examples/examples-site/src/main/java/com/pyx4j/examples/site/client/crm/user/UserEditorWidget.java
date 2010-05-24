@@ -18,55 +18,61 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.crm.resource;
+package com.pyx4j.examples.site.client.crm.user;
 
 import java.util.EnumSet;
 
+import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.EntityEditorPanel;
 import com.pyx4j.essentials.client.crud.EntityEditorWidget;
-import com.pyx4j.examples.domain.crm.Province;
-import com.pyx4j.examples.domain.crm.Resource;
-import com.pyx4j.examples.domain.crm.Resource.RepStatus;
+import com.pyx4j.examples.domain.ExamplesBehavior;
+import com.pyx4j.examples.rpc.EditableUser;
+import com.pyx4j.examples.rpc.ExamplesAdminServices;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.forms.client.ui.CComboBox;
 
-public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
+public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
 
-    public ResourceEditorWidget() {
-        super(Resource.class, ExamplesSiteMap.Crm.Resource.Edit.class, new EntityEditorPanel<Resource>(Resource.class) {
+    public UserEditorWidget() {
+        super(EditableUser.class, ExamplesSiteMap.Crm.Users.Edit.class, new EntityEditorPanel<EditableUser>(EditableUser.class) {
 
             @Override
             protected IObject<?>[][] getComponents() {
                 return new IObject[][] {
 
-                { meta().name(), meta().status() },
+                { meta().enabled(), null },
 
-                { meta().phone(), null },
-
-                { meta().address().street(), meta().address().city() },
-
-                { meta().address().province(), meta().address().zip() },
+                { meta().user().name(), meta().user().email() },
 
                 };
             }
 
             @Override
+            protected Class<? extends EntityServices.Save> getSaveService() {
+                return ExamplesAdminServices.Save.class;
+            }
+
+            @Override
             protected void enhanceComponents() {
-                ((CComboBox<RepStatus>) get(meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
-                ((CComboBox<Province>) get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
+                ((CComboBox<ExamplesBehavior>) get(meta().behavior())).setOptions(EnumSet.of(ExamplesBehavior.CRM_EMPLOYEE, ExamplesBehavior.CRM_ADMIN));
             }
 
         });
-
     }
 
     @Override
-    protected Resource createNewEntity() {
-        Resource rep = EntityFactory.create(Resource.class);
-        rep.status().setValue(RepStatus.ACTIVE);
-        return rep;
+    protected EditableUser createNewEntity() {
+        EditableUser u = EntityFactory.create(EditableUser.class);
+        u.enabled().setValue(Boolean.TRUE);
+        u.behavior().setValue(ExamplesBehavior.CRM_EMPLOYEE);
+        return u;
+    }
+
+    @Override
+    protected Class<? extends EntityServices.Retrieve> getRetrieveService() {
+        return ExamplesAdminServices.Retrieve.class;
     }
 
 }

@@ -24,14 +24,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.examples.rpc.PageType;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.examples.site.client.ExamplesSitePanel;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.client.LinkBarMessage;
 import com.pyx4j.site.client.PageLink;
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.site.client.SitePanelLoader;
 import com.pyx4j.site.shared.domain.Site;
 
 public class ExamplesCrmSitePanel extends ExamplesSitePanel {
@@ -42,10 +42,10 @@ public class ExamplesCrmSitePanel extends ExamplesSitePanel {
 
     private ExamplesCrmSitePanel(Site site) {
         super(site);
-        addFooterLink(new PageLink("Technical Support", PageType.crm$home$technicalSupport.getUri().uri().getValue()), false);
-        addFooterLink(new PageLink("Privacy Policy", PageType.crm$home$privacyPolicy.getUri().uri().getValue()), true);
-        addFooterLink(new PageLink("Terms of Use", PageType.crm$home$termsOfUse.getUri().uri().getValue()), true);
-        addFooterLink(new PageLink("Contact Us", PageType.crm$home$contactUs.getUri().uri().getValue()), true);
+        addFooterLink(new PageLink("Technical Support", ExamplesSiteMap.Crm.Home.TechnicalSupport.class), true);
+        addFooterLink(new PageLink("Privacy Policy", ExamplesSiteMap.Crm.Home.PrivacyPolicy.class), true);
+        addFooterLink(new PageLink("Terms of Use", ExamplesSiteMap.Crm.Home.TermsOfUse.class), true);
+        addFooterLink(new PageLink("Contact Us", ExamplesSiteMap.Crm.Home.ContactUs.class), true);
 
     }
 
@@ -69,23 +69,18 @@ public class ExamplesCrmSitePanel extends ExamplesSitePanel {
 
     }
 
-    public static void asyncLoadSite(final Site site, final AsyncCallback<SitePanel> callback) {
-        new SitePanelLoader() {
+    public static void asyncLoadSite(final AsyncCallback<SitePanel> callback) {
+        GWT.runAsync(new RunAsyncCallback() {
             @Override
-            public void createSite(final Site site, final AsyncCallback<SitePanel> callback) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onSuccess() {
-                        callback.onSuccess(new ExamplesCrmSitePanel(site));
-                    }
-
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        handleRunAsyncFailure(reason, site, callback);
-                    }
-                });
+            public void onSuccess() {
+                callback.onSuccess(new ExamplesCrmSitePanel(new CrmSiteFactory().createCrmSite()));
             }
-        }.createSite(site, callback);
+
+            @Override
+            public void onFailure(Throwable reason) {
+                throw new UnrecoverableClientError(reason);
+            }
+        });
     }
 
 }

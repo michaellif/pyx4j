@@ -22,16 +22,25 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.essentials.rpc.report.ReportColumn;
 
 public interface Order extends IEntity {
 
-    public enum Status {
+    public enum OrderStatus {
+
+        ESTIMATE("Estimate"),
 
         ACTIVE("Active"),
 
@@ -41,7 +50,7 @@ public interface Order extends IEntity {
 
         private final String descr;
 
-        private Status(String descr) {
+        private OrderStatus(String descr) {
             this.descr = descr;
         }
 
@@ -51,23 +60,52 @@ public interface Order extends IEntity {
         }
     }
 
-    @Owner
-    Customer customer();
-
-    IPrimitive<String> description();
-
-    IPrimitive<Status> status();
+    @ToString
+    @Indexed(global = '#', keywordLenght = 3)
+    @Caption(name = "Order #")
+    IPrimitive<Integer> orderNumber();
 
     @Format("MMM d, yyyy")
-    IPrimitive<Date> receivedDate();
+    IPrimitive<java.sql.Date> receivedDate();
 
-    IPrimitive<Date> completedDate();
-
-    IPrimitive<Date> dueDate();
-
+    @Format("#.00")
     IPrimitive<Double> cost();
 
-    IPrimitiveSet<String> notes();
+    @Owner
+    @Detached
+    @ReportColumn(ignore = true)
+    Customer customer();
 
-    ISet<Resource> resources();
+    /**
+     * Copy of data from customer
+     */
+    @Indexed(global = 'n', keywordLenght = 2)
+    IPrimitive<String> customerName();
+
+    /**
+     * Copy of data from customer
+     */
+    @Indexed(global = 'p', keywordLenght = 3)
+    @Phone
+    IPrimitive<String> customerPhone();
+
+    Resource resource();
+
+    @ToString
+    @Indexed(global = 'd', keywordLenght = 3)
+    IPrimitive<String> description();
+
+    IPrimitive<java.sql.Date> completedDate();
+
+    IPrimitive<java.sql.Date> dueDate();
+
+    @NotNull
+    @Indexed(global = 'o')
+    IPrimitive<OrderStatus> status();
+
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> notes();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 }

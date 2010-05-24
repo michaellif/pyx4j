@@ -20,18 +20,78 @@
  */
 package com.pyx4j.examples.site.client.crm.order;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.essentials.client.crud.ActionsPanel;
+import com.pyx4j.essentials.client.crud.EntityListWidget;
+import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
+import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
+import com.pyx4j.examples.domain.crm.Order;
+import com.pyx4j.examples.domain.crm.Resource;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 
-import com.pyx4j.site.client.InlineWidget;
+public class OrderListWidget extends EntityListWidget<Order> {
 
-public class OrderListWidget extends VerticalPanel implements InlineWidget {
+    public OrderListWidget() {
+        super(Order.class, ExamplesSiteMap.Crm.Orders.class, ExamplesSiteMap.Crm.Orders.Edit.class, new EntitySearchCriteriaPanel<Order>(Order.class) {
+
+            @Override
+            protected CComponent<?>[][] getComponents() {
+                return new CComponent[][] {
+
+                { form.create(form.meta().customerName()) },
+
+                { form.create(form.meta().customerPhone()) },
+
+                { form.create(form.meta().orderNumber()) },
+
+                { form.create(form.meta().description()) },
+
+                { form.create(form.meta().resource()) },
+
+                { form.create(form.meta().status()) },
+
+                };
+            }
+
+            @Override
+            protected void enhanceComponents() {
+                ((CComboBox<Order.OrderStatus>) form.get(form.meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
+            }
+
+            @Override
+            public void onDetach() {
+                // HACK
+                ((CEntityComboBox<Resource>) form.get(form.meta().resource())).resetOptions();
+                super.onDetach();
+            }
+
+        }, new EntitySearchResultsPanel<Order>(Order.class) {
+
+            @Override
+            public List<ColumnDescriptor<Order>> getColumnDescriptors() {
+                List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().customerName(), "100px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().orderNumber(), "50px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().resource(), "90px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().description(), "110px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().status(), "80px"));
+                return columnDescriptors;
+            }
+        });
+
+    }
 
     @Override
-    public void populate(Map<String, String> args) {
-        // TODO Auto-generated method stub
-
+    protected ActionsPanel createActionsPanel() {
+        return createActionsPanel(Action.REPORT);
     }
 
 }

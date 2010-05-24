@@ -14,44 +14,53 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on Apr 8, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.examples.site.client.crm;
 
-import com.pyx4j.examples.rpc.Widgets;
-import com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory;
+import com.pyx4j.examples.site.client.ExamplesWidgets.ExamplesCrmWidgets;
 import com.pyx4j.examples.site.client.crm.customer.CustomerEditorWidget;
 import com.pyx4j.examples.site.client.crm.customer.CustomerListWidget;
-import com.pyx4j.examples.site.client.crm.dashboard.DashboardWidget;
 import com.pyx4j.examples.site.client.crm.order.OrderEditorWidget;
 import com.pyx4j.examples.site.client.crm.order.OrderListWidget;
 import com.pyx4j.examples.site.client.crm.resource.ResourceEditorWidget;
 import com.pyx4j.examples.site.client.crm.resource.ResourceListWidget;
+import com.pyx4j.examples.site.client.crm.user.UserEditorWidget;
+import com.pyx4j.examples.site.client.crm.user.UserListWidget;
 import com.pyx4j.site.client.InlineWidget;
+import com.pyx4j.site.client.InlineWidgetFactory;
 
-public class CrmInlineWidgetFactory extends ExamplesInlineWidgetFactory {
+public class CrmInlineWidgetFactory implements InlineWidgetFactory {
 
     @Override
     public InlineWidget createWidget(String widgetId) {
-        if (Widgets.crm$dashboardWidget.name().equals(widgetId)) {
-            return new DashboardWidget();
-        } else if (Widgets.crm$customerListWidget.name().equals(widgetId)) {
+        ExamplesCrmWidgets id;
+        try {
+            id = ExamplesCrmWidgets.valueOf(widgetId);
+        } catch (Throwable e) {
+            return null;
+        }
+        switch (id) {
+        case crm$customerListWidget:
             return new CustomerListWidget();
-        } else if (Widgets.crm$customerEditorWidget.name().equals(widgetId)) {
+        case crm$customerEditorWidget:
             return new CustomerEditorWidget();
-        } else if (Widgets.crm$orderListWidget.name().equals(widgetId)) {
+        case crm$orderListWidget:
             return new OrderListWidget();
-        } else if (Widgets.crm$orderEditorWidget.name().equals(widgetId)) {
+        case crm$orderEditorWidget:
             return new OrderEditorWidget();
-        } else if (Widgets.crm$resourceListWidget.name().equals(widgetId)) {
+        case crm$repListWidget:
             return new ResourceListWidget();
-        } else if (Widgets.crm$resourceEditorWidget.name().equals(widgetId)) {
+        case crm$repEditorWidget:
             return new ResourceEditorWidget();
-        } else {
+        case crm$userListWidget:
+            return new UserListWidget();
+        case crm$userEditorWidget:
+            return new UserEditorWidget();
+        default:
             return null;
         }
     }
-
 }

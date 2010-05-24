@@ -14,12 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on 2010-04-29
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.examples.rpc;
 
-public enum Sites {
-    pub, crm, headless
+import com.pyx4j.entity.rpc.EntityServices;
+
+public interface ExamplesAdminServices extends EntityServices {
+
+    public interface Save extends EntityServices.Save {
+
+    };
+
+    public interface Retrieve extends EntityServices.Retrieve {
+
+    };
 }

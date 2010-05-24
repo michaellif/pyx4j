@@ -23,9 +23,6 @@ package com.pyx4j.examples.site.client.crm.customer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
@@ -40,7 +37,8 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.examples.domain.crm.Customer;
-import com.pyx4j.examples.rpc.PageType;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
+import com.pyx4j.examples.site.client.crm.CrmSiteResources;
 import com.pyx4j.geo.GeoCell;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
@@ -49,10 +47,9 @@ import com.pyx4j.gwt.geo.GeoBoxOverlay;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.site.client.themes.SiteCSSClass;
+import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CustomerListMapPanel extends SimplePanel {
-
-    private static Logger log = LoggerFactory.getLogger(CustomerListMapPanel.class);
 
     private MapWidget map;
 
@@ -85,7 +82,7 @@ public class CustomerListMapPanel extends SimplePanel {
         LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
 
         map = new MapWidget(pos, 10);
-        map.setSize("350px", "400px");
+        map.setSize("280px", "350px");
         map.setStyleName(SiteCSSClass.pyx4j_Site_Map.name());
 
         map.addControl(new LargeMapControl());
@@ -158,8 +155,8 @@ public class CustomerListMapPanel extends SimplePanel {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(customer.name().getValue());
 
-        Icon icon = Icon.newInstance("images/house.png");
-        icon.setShadowURL("images/house_shadow.png");
+        Icon icon = Icon.newInstance(CrmSiteResources.INSTANCE.mapMarkerHouse().getURL());
+        icon.setShadowURL(CrmSiteResources.INSTANCE.mapMarkerHouseShadow().getURL());
         icon.setIconSize(Size.newInstance(30, 30));
         icon.setShadowSize(Size.newInstance(44, 35));
         icon.setIconAnchor(Point.newInstance(15, 20));
@@ -175,12 +172,14 @@ public class CustomerListMapPanel extends SimplePanel {
                     map.getInfoWindow().open(
                             marker,
                             new InfoWindowContent("<div style='text-align:center; font-size:14px;background-color:white; padding:2px;'><a href='#"
-                                    + PageType.crm$customers$editor.getUri().uri().getValue() + "?entity_id=" + customer.getPrimaryKey() + "'><b>"
+                                    + SiteMap.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id=" + customer.getPrimaryKey() + "'><b>"
                                     + customer.name().getValue() + "</b></a><br>"
 
-                                    + customer.street().getValue()
+                                    + customer.address().street().getValue() + ", " + customer.address().city().getValue() + "<br/>"
+                                    + customer.address().province().getValue() + ", " + customer.address().zip().getValue()
 
                                     + "</div>"));
+
                 }
             });
             return marker;

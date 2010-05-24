@@ -21,6 +21,7 @@
 package com.pyx4j.examples.site.client.crm.customer;
 
 import com.google.gwt.ajaxloader.client.AjaxLoader;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
@@ -34,6 +35,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.site.client.crm.CrmSiteResources;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -52,8 +54,13 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
 
     private boolean mapLoadComplete = false;
 
+    private LatLng defaultPos;
+
     public CustomerEditorMapPanel() {
 
+        setWidth("100%");
+        getElement().getStyle().setMarginTop(10, Unit.PX);
+        getElement().getStyle().setMarginBottom(10, Unit.PX);
         GoogleAPI.ensureInitialized();
         AjaxLoader.loadApi("maps", "2", new Runnable() {
             public void run() {
@@ -64,26 +71,26 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
 
     private void mapsLoaded() {
 
-        LatLng pos = LatLng.newInstance(43.7571145, -79.5082499);
+        defaultPos = LatLng.newInstance(43.7571145, -79.5082499);
 
-        map = new MapWidget(pos, 2);
-        map.setSize("400px", "400px");
+        map = new MapWidget();
+        map.setSize("300px", "300px");
         map.setStyleName(SiteCSSClass.pyx4j_Site_Map.name());
-        map.setCenter(pos, 15);
 
         map.addControl(new LargeMapControl());
 
         markerOptions = MarkerOptions.newInstance();
 
-        Icon icon = Icon.newInstance("images/house.png");
-        icon.setShadowURL("images/house_shadow.png");
+        Icon icon = Icon.newInstance(CrmSiteResources.INSTANCE.mapMarkerHouse().getURL());
+        icon.setShadowURL(CrmSiteResources.INSTANCE.mapMarkerHouseShadow().getURL());
         icon.setIconSize(Size.newInstance(30, 30));
         icon.setShadowSize(Size.newInstance(44, 35));
-        icon.setIconAnchor(Point.newInstance(6, 20));
+        icon.setIconAnchor(Point.newInstance(15, 20));
         icon.setInfoWindowAnchor(Point.newInstance(15, 5));
+
         markerOptions.setIcon(icon);
 
-        marker = new Marker(pos, markerOptions);
+        marker = new Marker(defaultPos, markerOptions);
 
         add(map);
 
@@ -93,8 +100,9 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
         // Address to LatLng - http://maps.google.com/maps/geo?q={address}&output=csv
 
         streetViewHolder = new SimplePanel();
-        streetViewHolder.getElement().getStyle().setProperty("padding", "0px 10px 0px 10px");
+        streetViewHolder.getElement().getStyle().setProperty("padding", "0px 0px 0px 10px");
         add(streetViewHolder);
+        setCellHorizontalAlignment(streetViewHolder, HorizontalPanel.ALIGN_RIGHT);
 
         mapLoadComplete = true;
 
@@ -106,24 +114,45 @@ public class CustomerEditorMapPanel extends HorizontalPanel {
     void populate(Customer customer) {
         this.customer = customer;
         if (mapLoadComplete) {
-            map.removeOverlay(marker);
-            if (!customer.location().isNull()) {
-                markerOptions.setTitle(customer.name().getValue());
-                LatLng latLng = MapUtils.newLatLngInstance(customer.location().getValue());
-                marker.setLatLng(latLng);
-                map.setCenter(latLng);
-                map.addOverlay(marker);
-            }
+            if (customer == null) {
+                map.removeOverlay(marker);
+                map.setCenter(defaultPos, 2);
+                streetViewHolder.clear();
+            } else {
+                map.removeOverlay(marker);
+                map.setCenter(defaultPos, 15);
+                if (!customer.location().isNull()) {
+                    markerOptions.setTitle(customer.name().getValue());
+                    LatLng latLng = MapUtils.newLatLngInstance(customer.location().getValue());
+                    marker.setLatLng(latLng);
+                    map.setCenter(latLng);
+                    map.addOverlay(marker);
+                }
 
-            streetViewHolder.clear();
-            if (customer.panoId().getValue() != null) {
-                HTML streetView = new HTML(
-                        "<object type='application/x-shockwave-flash' name='panoflash1' id='panoflash1' align='middle' style='position: relative; visibility: visible; ' data='http://maps.gstatic.com/intl/en_ALL/mapfiles/cb/googlepano.104.swf' width='400' height='400'><param name='allowscriptaccess' value='always'><param name='scale' value='noScale'><param name='salign' value='lt'><param name='allowfullscreen' value='true'><param name='swliveconnect' value='false'><param name='wmode' value=''><param name='quality' value='high'><param name='bgcolor' value='#000000'><param name='flashvars' value='panoId="
-                                + customer.panoId().getValue()
-                                + "&amp;directionMap=N:N,W:W,S:S,E:E,NW:NW,NE:NE,SW:SW,SE:SE&amp;yaw=150.67939649880157&amp;zoom=0&amp;pitch=-10&amp;viewerId=1&amp;context=api&amp;useSsl=false&amp;csiCallback=&amp;userPhotoRepositories=all&amp;rtfArgs=hl:en,gl:,fs:1,sv:1,ph:0'></object>");
-                streetViewHolder.setWidget(streetView);
+                streetViewHolder.clear();
+                if (customer.panoId().getValue() != null) {
+                    HTML streetView = new HTML(
+                            "<object type='application/x-shockwave-flash' name='panoflash1' id='panoflash1' align='middle' style='position: relative; visibility: visible; ' data='http://maps.gstatic.com/intl/en_ALL/mapfiles/cb/googlepano.104.swf' width='300' height='300'>"
+                                    + "<param name='wmode' value='transparent'>"
+                                    + "<param name='allowscriptaccess' value='always'>"
+                                    + "<param name='scale' value='noScale'>"
+                                    + "<param name='salign' value='lt'>"
+                                    + "<param name='allowfullscreen' value='true'>"
+                                    + "<param name='swliveconnect' value='false'>"
+                                    + "<param name='wmode' value=''>"
+                                    + "<param name='quality' value='high'>"
+                                    + "<param name='bgcolor' value='#000000'>"
+                                    + "<param name='flashvars' value='panoId="
+                                    + customer.panoId().getValue()
+                                    + "&amp;directionMap=N:N,W:W,S:S,E:E,NW:NW,NE:NE,SW:SW,SE:SE&amp;yaw=150.67939649880157&amp;zoom=0&amp;pitch=-10&amp;viewerId=1&amp;context=api&amp;useSsl=false&amp;csiCallback=&amp;userPhotoRepositories=all&amp;rtfArgs=hl:en,gl:,fs:1,sv:1,ph:0'></object>");
+                    streetViewHolder.setWidget(streetView);
+                }
             }
         }
 
+    }
+
+    public String toStringForPrint() {
+        return map.toString();
     }
 }

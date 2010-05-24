@@ -27,51 +27,60 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.examples.domain.User;
+import com.pyx4j.essentials.rpc.report.ReportColumn;
+import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.geo.GeoPoint;
 
 public interface Customer extends IEntity {
 
     @NotNull
-    @Indexed(keywordLenght = 2)
+    @Indexed(global = 'n', keywordLenght = 2)
+    @ToString
     IPrimitive<String> name();
 
-    @Indexed(keywordLenght = 2)
-    // TODO Use IPrimitiveSet<String>
+    @Indexed(global = 'p', keywordLenght = 3)
+    @Phone
     IPrimitive<String> phone();
 
     @Caption(name = "Address")
-    @Indexed(keywordLenght = 2)
-    IPrimitive<String> street();
-
-    @Caption(name = "Zip/Postal")
-    IPrimitive<String> zip();
+    @Owned
+    Address address();
 
     @Indexed
     IPrimitive<GeoPoint> location();
 
+    @ReportColumn(ignore = true)
     IPrimitive<String> panoId();
 
+    @ReportColumn(ignore = true)
     IPrimitive<Double> panoYaw();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> note();
 
     @Timestamp
     IPrimitive<Date> updated();
 
-    @Owned
+    //Search columns
+
+    @RpcTransient
+    @ReportColumn(ignore = true)
+    @Detached
     ISet<Order> orders();
 
-    // TODO Use IPrimitiveSet<String>
-    @Editor(type = EditorType.textarea)
-    IPrimitive<String> note();
+    @ReportColumn(ignore = true)
+    @Caption(name = "Order Status")
+    @Indexed(global = 'o')
+    IPrimitiveSet<OrderStatus> orderStatus();
 
-    //IPrimitiveSet<String> notes();
-
-    @Detached
-    User user();
 }

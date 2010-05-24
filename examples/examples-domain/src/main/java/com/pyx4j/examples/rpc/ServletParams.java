@@ -14,20 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on May 18, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.site.client.headless;
+package com.pyx4j.examples.rpc;
 
-import com.pyx4j.examples.site.client.ExamplesInlineWidgetFactory;
-import com.pyx4j.site.client.InlineWidget;
+public class ServletParams {
 
-public class HeadlessInlineWidgetFactory extends ExamplesInlineWidgetFactory {
+    public static final String UPLOAD_RESPONSE_PREFIX = "UploadResponse";
 
-    @Override
-    public InlineWidget createWidget(String widgetId) {
-        return null;
-    }
+    public static final String ORDER_IMAGE_ORDER_ID = "order";
 
+    public static final String ORDER_IMAGE_DESCRIPTION = "description";
 }

@@ -20,60 +20,169 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.PathSearch;
+import com.pyx4j.essentials.client.crud.ActionsPanel;
+import com.pyx4j.essentials.client.crud.EntityEditorPanel;
+import com.pyx4j.essentials.client.crud.EntityEditorWidget;
+import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.domain.crm.Order;
+import com.pyx4j.examples.domain.crm.Province;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.gwt.commons.Print;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
-import com.pyx4j.site.client.InlineWidget;
+import com.pyx4j.site.client.AbstractSiteDispatcher;
+import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class CustomerEditorWidget extends VerticalPanel implements InlineWidget {
-
-    private static Logger log = LoggerFactory.getLogger(CustomerEditorWidget.class);
-
-    private final CustomerEditorPanel editorPanel;
+public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
 
     private final CustomerEditorMapPanel map;
 
+    private final EntityListPanel<Order> ordersPanel;
+
     public CustomerEditorWidget() {
-        editorPanel = new CustomerEditorPanel();
-        add(editorPanel);
+        super(Customer.class, ExamplesSiteMap.Crm.Customers.Edit.class, new EntityEditorPanel<Customer>(Customer.class) {
+
+            @Override
+            protected IObject<?>[][] getComponents() {
+                return new IObject[][] {
+
+                { meta().name(), meta().phone() },
+
+                { meta().address().street(), meta().address().city() },
+
+                { meta().address().province(), meta().address().zip() },
+
+                { meta().note(), meta().note() },
+
+                };
+            }
+
+            @Override
+            protected void enhanceComponents() {
+                get(meta().note()).setWidth("100%");
+                ((CComboBox<Province>) get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
+            }
+
+        });
+
+        ClickHandler prevHandler = new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                populateOrderList(getEditorPanel().getEntity(), ordersPanel.getDataTable().getDataTableModel().getPageNumber() - 1);
+            }
+
+        };
+        ClickHandler nextHandler = new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                populateOrderList(getEditorPanel().getEntity(), ordersPanel.getDataTable().getDataTableModel().getPageNumber() + 1);
+            }
+
+        };
+
+        ordersPanel = new EntityListPanel<Order>(Order.class, prevHandler, nextHandler);
+        List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(ordersPanel.getMetaEntity(), ordersPanel.getMetaEntity().description(), "140px"));
+        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(ordersPanel.getMetaEntity(), ordersPanel.getMetaEntity().status(), "80px"));
+
+        ordersPanel.setColumnDescriptors(columnDescriptors);
+
+        ordersPanel.setEditorPageType(ExamplesSiteMap.Crm.Orders.Edit.class);
+
+        getCenterPanel().add(ordersPanel);
 
         map = new CustomerEditorMapPanel();
-        add(map);
+        getCenterPanel().add(map);
+
     }
 
     @Override
-    public void populate(Map<String, String> args) {
-
-        final long customerId = Long.parseLong(args.get("entity_id"));
-
-        AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
-
-            public void onSuccess(IEntity result) {
-                if (result != null) {
-                    editorPanel.populateForm((Customer) result);
-                    map.populate((Customer) result);
+    protected ActionsPanel createActionsPanel() {
+        ActionsPanel actionsPanel = createActionsPanel(EditorAction.BACK);
+        actionsPanel.addItem("New Order", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                Customer customer = getEditorPanel().getEntity();
+                if (customer.getPrimaryKey() == null) {
+                    MessageDialog.warn("New Order is not allowed", "Customer should be saved first.");
                 } else {
-                    log.warn("Customer not found");
+                    AbstractSiteDispatcher.show(new NavigationUri(ExamplesSiteMap.Crm.Orders.Edit.class, "entity_id", "new", "parent_id", String
+                            .valueOf(customer.getPrimaryKey())));
                 }
             }
+        });
 
-            public void onFailure(Throwable caught) {
+        actionsPanel.addItem("Print", new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                Print.it(getEditorPanel().toStringForPrint() + ordersPanel.toStringForPrint() + map.toString());
+
             }
-        };
+        });
+        return actionsPanel;
+    }
 
-        RPCManager.execute(EntityServices.RetrieveByPK.class, EntityCriteriaByPK.create(Customer.class, customerId), callback);
+    @Override
+    protected Customer createNewEntity() {
+        Customer customer = EntityFactory.create(Customer.class);
+        return customer;
+    }
+
+    @Override
+    public void populateForm(Customer customer) {
+        super.populateForm(customer);
+        map.populate(customer);
+
+        ordersPanel.clearData();
+        if (customer != null) {
+            populateOrderList(customer, 0);
+        }
 
     }
 
+    @Override
+    protected void onUnload() {
+        ordersPanel.clearData();
+        super.onUnload();
+    }
+
+    void populateOrderList(Customer customer, final int pageNumber) {
+        AsyncCallback<EntitySearchResult<?>> callback = new RecoverableAsyncCallback<EntitySearchResult<?>>() {
+
+            @SuppressWarnings("unchecked")
+            public void onSuccess(EntitySearchResult<?> result) {
+                ordersPanel.populateData((List<Order>) result.getData(), pageNumber, result.hasMoreData());
+            }
+
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        };
+
+        EntitySearchCriteria<Order> criteria = new EntitySearchCriteria<Order>(Order.class);
+        criteria.setValue(new PathSearch(criteria.meta().customer()), customer);
+        RPCManager.execute(EntityServices.Search.class, criteria, callback);
+    }
 }

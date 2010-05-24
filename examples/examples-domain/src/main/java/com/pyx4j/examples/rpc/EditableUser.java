@@ -14,46 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on 2010-04-29
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.examples.rpc;
 
-public enum Widgets {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.examples.domain.ExamplesBehavior;
+import com.pyx4j.examples.domain.User;
 
-    //----pub-----//
+@Transient
+public interface EditableUser extends IEntity {
 
-    //    pub$videoWidget,
-    //
-    //    pub$searchWidget, pub$resultsWidget, pub$technologyWidget,
-    //
-    //    //----contractor-----//
-    //
-    //    contractor$profileWidget,
-    //
-    //    contractor$personalSettingsWidget,
+    User user();
 
-    //----employer-----//
+    IPrimitive<Boolean> enabled();
 
-    crm$dashboardWidget,
-
-    crm$customerListWidget,
-
-    crm$customerEditorWidget,
-
-    crm$orderListWidget,
-
-    crm$orderEditorWidget,
-
-    crm$resourceListWidget,
-
-    crm$resourceEditorWidget,
-
-    //    //----headless-----//
-    //
-    //    headless$activation,
-    //
-    //    headless$password,
+    IPrimitive<ExamplesBehavior> behavior();
 
 }

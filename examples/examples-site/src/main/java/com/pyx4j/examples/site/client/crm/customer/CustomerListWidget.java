@@ -20,90 +20,63 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.rpc.EntityServices;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
+import com.pyx4j.essentials.client.crud.EntityListWidget;
 import com.pyx4j.examples.domain.crm.Customer;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
-import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.rpc.client.RecoverableAsyncCallback;
-import com.pyx4j.site.client.InlineWidget;
 
-public class CustomerListWidget extends VerticalPanel implements InlineWidget {
+public class CustomerListWidget extends EntityListWidget<Customer> {
 
     private static Logger log = LoggerFactory.getLogger(CustomerListWidget.class);
 
-    private final CustomerSearchCriteriaPanel searchCriteriaPanel;
-
-    private final CustomerSearchResultsPanel searchResultsPanel;
-
     public CustomerListWidget() {
-        searchCriteriaPanel = new CustomerSearchCriteriaPanel(this);
-        add(searchCriteriaPanel);
-        setCellWidth(searchCriteriaPanel, "100%");
-        searchResultsPanel = new CustomerSearchResultsPanel();
-        add(searchResultsPanel);
-        setCellWidth(searchResultsPanel, "100%");
+        super(Customer.class, ExamplesSiteMap.Crm.Customers.class, ExamplesSiteMap.Crm.Customers.Edit.class, new CustomerSearchCriteriaPanel(),
+                new CustomerSearchResultsPanel());
     }
 
     @Override
-    public void populate(Map<String, String> args) {
-        //Execute default query
-        view();
-    }
+    protected void view(final int pageNumber, final boolean createHistoryToken) {
+        final CustomerSearchCriteriaPanel searchCriteriaPanel = (CustomerSearchCriteriaPanel) getSearchCriteriaPanel();
+        final CustomerSearchResultsPanel searchResultsPanel = (CustomerSearchResultsPanel) getSearchResultsPanel();
+        if (searchCriteriaPanel.hasDistanceCriteria()) {
+            MapUtils.obtainLatLang(searchCriteriaPanel.getFromLocationZip(), new LatLngCallback() {
 
-    public void view() {
-        searchResultsPanel.clearData();
-        final long start = System.currentTimeMillis();
+                @Override
+                public void onSuccess(LatLng fromCoordinates) {
 
-        AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
+                    GeoPoint geoPoint = MapUtils.newGeoPointInstance(fromCoordinates);
 
-            public void onSuccess(EntitySearchResult<? extends IEntity> result) {
-                log.debug("Loaded Customers in {} msec ", System.currentTimeMillis() - start);
-                List<Customer> entities = new ArrayList<Customer>();
-                for (IEntity entity : result.getData()) {
-                    if (entity instanceof Customer) {
-                        entities.add((Customer) entity);
+                    searchCriteriaPanel.getForm().setPropertyValue(new PathSearch(searchCriteriaPanel.getForm().meta().location(), "from"), geoPoint);
+                    CustomerListWidget.super.view(pageNumber, createHistoryToken);
+
+                    //call Distance Overlay
+                    Integer areaRadius = searchCriteriaPanel.getAreaRadius();
+                    if (areaRadius != null) {
+                        searchResultsPanel.setDistanceOverlay(fromCoordinates, areaRadius);
+                    } else {
+                        searchResultsPanel.setDistanceOverlay(null, 0);
                     }
                 }
-                long startPopulate = System.currentTimeMillis();
-                searchResultsPanel.populateData(entities);
-                log.debug("Populated Customers in {} msec ", System.currentTimeMillis() - startPopulate);
-            }
 
-            public void onFailure(Throwable caught) {
-            }
-        };
-
-        EntitySearchCriteria<Customer> criteria = searchCriteriaPanel.getEntityCriteria();
-        criteria.setPageSize(20);
-        // TODO CustomerListPanel get page ?
-        criteria.setPageNumber(0);
-        RPCManager.execute(EntityServices.Search.class, criteria, callback);
-
-        //call Distance Overlay
-        Integer areaRadius = (Integer) criteria.getValue(new PathSearch(criteria.meta().location(), "radius"));
-        if (areaRadius != null) {
-            GeoPoint geoPoint = (GeoPoint) criteria.getValue(new PathSearch(criteria.meta().location(), "from"));
-            LatLng fromCoordinates = MapUtils.newLatLngInstance(geoPoint);
-            searchResultsPanel.setDistanceOverlay(fromCoordinates, areaRadius);
+                @Override
+                public void onFailure() {
+                    log.warn("Can't find LatLng for distanceOverlay");
+                }
+            });
         } else {
             searchResultsPanel.setDistanceOverlay(null, 0);
+            searchCriteriaPanel.getForm().removePropertyValue(new PathSearch(searchCriteriaPanel.getForm().meta().location(), "from"));
+            super.view(pageNumber, createHistoryToken);
         }
+
     }
 
 }

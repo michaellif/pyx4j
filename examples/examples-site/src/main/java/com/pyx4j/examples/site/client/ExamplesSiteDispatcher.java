@@ -24,7 +24,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.essentials.client.BaseSiteDispatcher;
-import com.pyx4j.examples.rpc.Sites;
 import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSitePanel;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
@@ -64,7 +63,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     protected void onAfterLogOut() {
         super.onAfterLogOut();
         if (getCurrentSitePanel() != null) {
-            if (getCurrentSitePanel().equals(getSitePanels().get(Sites.crm.name()))) {
+            if (getCurrentSitePanel().equals(getSitePanels().get(ExamplesSiteMap.Sites.Crm.name()))) {
                 AbstractSiteDispatcher.show(ExamplesSiteMap.Pub.Home.class);
             }
         }
@@ -100,7 +99,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
                 ExamplesPublicSitePanel.asyncLoadSite(callback);
                 break;
             case Crm:
-                ExamplesCrmSitePanel.asyncLoadSite(null, callback);
+                ExamplesCrmSitePanel.asyncLoadSite(callback);
                 break;
             //                        case headless:
             //                            ExamplesHeadlessSitePanel.asyncLoadSite(site, callback);

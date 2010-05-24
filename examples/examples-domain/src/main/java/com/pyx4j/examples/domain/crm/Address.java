@@ -13,58 +13,37 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- *
- * Created on Feb 10, 2010
+ * 
+ * Created on Mar 4, 2010
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.examples.domain.crm;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Unindexed;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Phone;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Resource extends IEntity {
+@EmbeddedEntity
+@ToStringFormat("{0}, {1}, {2} {3}")
+public interface Address extends IEntity {
 
-    public enum RepStatus implements Serializable {
+    @ToString(index = 0)
+    @Indexed(global = 's', keywordLenght = 2)
+    IPrimitive<String> street();
 
-        ACTIVE,
+    @ToString(index = 1)
+    @Indexed(global = 'c', keywordLenght = 2)
+    IPrimitive<String> city();
 
-        INACTIVE;
+    @ToString(index = 2)
+    IPrimitive<Province> province();
 
-        RepStatus() {
-        }
-
-    }
-
-    @NotNull
-    @Indexed(keywordLenght = 2)
-    @ToString
-    IPrimitive<String> name();
-
-    @NotNull
-    IPrimitive<RepStatus> status();
-
-    @Unindexed
-    @Phone
-    IPrimitive<String> phone();
-
-    @Caption(name = "Address")
-    @Owned
-    @Unindexed
-    Address address();
-
-    @Timestamp
-    @Unindexed
-    IPrimitive<Date> updated();
+    @Caption(name = "Zip/Postal")
+    @ToString(index = 3)
+    IPrimitive<String> zip();
 }
