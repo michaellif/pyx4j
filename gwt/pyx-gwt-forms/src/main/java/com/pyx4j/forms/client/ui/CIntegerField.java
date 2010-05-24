@@ -22,6 +22,10 @@ package com.pyx4j.forms.client.ui;
 
 public class CIntegerField extends CNumberField<Integer> {
 
+    public CIntegerField() {
+        this(null);
+    }
+
     public CIntegerField(String title) {
         super(title, "Should be numeric in range from " + Integer.MIN_VALUE + " to " + Integer.MAX_VALUE);
     }

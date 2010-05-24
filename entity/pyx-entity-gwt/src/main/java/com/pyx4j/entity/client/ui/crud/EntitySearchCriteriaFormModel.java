@@ -39,7 +39,10 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
+import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CIntegerField;
+import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CTextBox;
@@ -118,6 +121,12 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             comp = new CComboBox();
         } else if (mm.getValueClass().equals(Date.class)) {
             comp = new CDatePicker();
+        } else if (mm.getValueClass().equals(Integer.class)) {
+            comp = new CIntegerField();
+        } else if (mm.getValueClass().equals(Long.class)) {
+            comp = new CLongField();
+        } else if (mm.getValueClass().equals(Double.class)) {
+            comp = new CDoubleField();
         } else {
             if (mm.isValidatorAnnotationPresent(Phone.class)) {
                 comp = new CPhoneField();

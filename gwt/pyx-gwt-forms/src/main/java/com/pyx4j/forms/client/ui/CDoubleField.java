@@ -24,6 +24,10 @@ import com.google.gwt.i18n.client.NumberFormat;
 
 public class CDoubleField extends CNumberField<Double> {
 
+    public CDoubleField() {
+        this(null);
+    }
+
     public CDoubleField(String title) {
         super(title, "Should be numeric value");
     }

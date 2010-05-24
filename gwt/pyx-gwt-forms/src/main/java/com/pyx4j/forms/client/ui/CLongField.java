@@ -22,6 +22,10 @@ package com.pyx4j.forms.client.ui;
 
 public class CLongField extends CNumberField<Long> {
 
+    public CLongField() {
+        this(null);
+    }
+
     public CLongField(String title) {
         super(title, "Should be numeric in range from " + Long.MIN_VALUE + " to " + Long.MAX_VALUE);
     }
