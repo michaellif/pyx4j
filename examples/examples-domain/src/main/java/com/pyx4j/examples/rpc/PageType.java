@@ -25,21 +25,21 @@ import com.pyx4j.site.shared.util.ResourceUriUtil;
 
 public enum PageType {
 
-    //----pub-----//
-
-    pub$home(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home")),
-
-    pub$examples(ResourceUriUtil.createResourceUri(Sites.pub.name(), "examples")),
-
-    pub$examples$widgets(ResourceUriUtil.createResourceUri(Sites.pub.name(), "examples", "video")),
-
-    pub$contactUs(ResourceUriUtil.createResourceUri(Sites.pub.name(), "contactUs")),
-
-    pub$home$technicalSupport(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "technicalSupport")),
-
-    pub$home$privacyPolicy(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "privacyPolicy")),
-
-    pub$home$termsOfUse(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "termsOfUse")),
+    //    //----pub-----//
+    //
+    //    pub$home(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home")),
+    //
+    //    pub$examples(ResourceUriUtil.createResourceUri(Sites.pub.name(), "examples")),
+    //
+    //    pub$examples$widgets(ResourceUriUtil.createResourceUri(Sites.pub.name(), "examples", "video")),
+    //
+    //    pub$contactUs(ResourceUriUtil.createResourceUri(Sites.pub.name(), "contactUs")),
+    //
+    //    pub$home$technicalSupport(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "technicalSupport")),
+    //
+    //    pub$home$privacyPolicy(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "privacyPolicy")),
+    //
+    //    pub$home$termsOfUse(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home", "termsOfUse")),
 
     //----crm-----//
 

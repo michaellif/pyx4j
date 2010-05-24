@@ -22,11 +22,13 @@ package com.pyx4j.examples.site.client;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.essentials.client.BaseLogInPanel;
 import com.pyx4j.examples.domain.DemoData;
 import com.pyx4j.examples.domain.ExamplesBehavior;
+import com.pyx4j.security.client.ClientContext;
 
 public abstract class LogInPanel extends BaseLogInPanel {
 
@@ -36,7 +38,13 @@ public abstract class LogInPanel extends BaseLogInPanel {
 
     public LogInPanel() {
 
+        rememberID.setVisible(false);
+        forgotPassword.setValue("Login using Google Accounts");
+
         if (ExamplesBehavior.development) {
+
+            add(new HTML("<br/>This is <B>DEMO</B> Application.<br/>Press <i>Ctrl+E</i> to login as Employee<br/>Press <i>Ctrl+A</i> to login as Admin"));
+
             addDomHandler(new KeyDownHandler() {
                 @Override
                 public void onKeyDown(KeyDownEvent event) {
@@ -84,7 +92,7 @@ public abstract class LogInPanel extends BaseLogInPanel {
 
     @Override
     public void onForgotPasswordRequest() {
-
+        ClientContext.googleAccountsLogin(ExamplesSiteDispatcher.getLogedInURL());
     }
 
 }

@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.examples.rpc.PageType;
+import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.InlineWidget;
 
@@ -67,7 +67,7 @@ public class TechnologyWidget extends SimplePanel implements InlineWidget {
         anchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AbstractSiteDispatcher.show(PageType.pub$examples$widgets.getUri().uri().getValue());
+                AbstractSiteDispatcher.show(ExamplesSiteMap.Pub.Examples.Video.class);
             }
         });
 

@@ -20,31 +20,23 @@
  */
 package com.pyx4j.examples.site.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.essentials.client.BaseSiteDispatcher;
 import com.pyx4j.examples.rpc.Sites;
 import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
-import com.pyx4j.examples.site.client.headless.ExamplesHeadlessSitePanel;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSitePanel;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
-import com.pyx4j.site.client.SiteCache;
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.util.ResourceUriUtil;
+import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
-
-    private static Logger log = LoggerFactory.getLogger(ExamplesSiteDispatcher.class);
 
     @Override
     public void onModuleLoad() {
@@ -62,7 +54,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1", ".pyx4j.com");
         CaptchaComposite.setPublicKey("6LdBxgoAAAAAAP7RdZ3kbHwVA99j1qKB97pdo6Mq");
 
-        setWelcomeUri(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home").uri().getValue());
+        setWelcomeUri(ExamplesSiteMap.Pub.Home.class);
 
         show();
 
@@ -73,7 +65,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         super.onAfterLogOut();
         if (getCurrentSitePanel() != null) {
             if (getCurrentSitePanel().equals(getSitePanels().get(Sites.crm.name()))) {
-                AbstractSiteDispatcher.show(ResourceUriUtil.createResourceUri(Sites.pub.name(), "home").uri().getValue());
+                AbstractSiteDispatcher.show(ExamplesSiteMap.Pub.Home.class);
             }
         }
     }
@@ -95,43 +87,26 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
 
         if (!getSitePanels().containsKey(siteName)) {
 
-            final Sites siteId;
+            final ExamplesSiteMap.Sites siteId;
             try {
-                siteId = Sites.valueOf(Sites.class, siteName);
+                siteId = ExamplesSiteMap.Sites.valueOf(ExamplesSiteMap.Sites.class, siteName);
             } catch (Throwable e) {
                 MessageDialog.error("Ooops", "We don't have site [" + siteName + "]");
                 return;
             }
 
-            final AsyncCallback<Site> rpcCallback = new AsyncCallback<Site>() {
+            switch (siteId) {
+            case Pub:
+                ExamplesPublicSitePanel.asyncLoadSite(callback);
+                break;
+            case Crm:
+                ExamplesCrmSitePanel.asyncLoadSite(null, callback);
+                break;
+            //                        case headless:
+            //                            ExamplesHeadlessSitePanel.asyncLoadSite(site, callback);
+            //                            break;
+            }
 
-                public void onFailure(Throwable t) {
-                    log.error(t.getClass().getName() + "[" + t.getMessage() + "]");
-                    // TODO create utility site
-                    MessageDialog.error("Ooops", "System is unavailable, try again later");
-                }
-
-                public void onSuccess(final Site site) {
-                    if (site == null) {
-                        MessageDialog.error("DB Empty", "Contact administrator.");
-                    } else {
-                        switch (siteId) {
-                        case pub:
-                            ExamplesPublicSitePanel.asyncLoadSite(site, callback);
-                            break;
-                        case crm:
-                            ExamplesCrmSitePanel.asyncLoadSite(site, callback);
-                            break;
-                        case headless:
-                            ExamplesHeadlessSitePanel.asyncLoadSite(site, callback);
-                            break;
-                        }
-                    }
-
-                }
-            };
-
-            SiteCache.obtain(siteId.name(), rpcCallback);
         } else {
             if (getSitePanels().containsKey(siteName)) {
                 callback.onSuccess(getSitePanels().get(siteName));
@@ -143,6 +118,18 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     @Override
     public String getAppId() {
         return "examples";
+    }
+
+    public static String getLogoutURL() {
+        return Window.Location.getPath() + Window.Location.getQueryString();
+    }
+
+    public static String getLogedInHistoryToken() {
+        return SiteMap.getPageUri(ExamplesSiteMap.Crm.Customers.class);
+    }
+
+    public static String getLogedInURL() {
+        return Window.Location.getPath() + Window.Location.getQueryString() + "#" + getLogedInHistoryToken();
     }
 
 }

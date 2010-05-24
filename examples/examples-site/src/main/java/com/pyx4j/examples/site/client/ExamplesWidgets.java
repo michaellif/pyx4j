@@ -14,46 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 9, 2010
+ * Created on May 24, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.examples.rpc;
+package com.pyx4j.examples.site.client;
 
-public enum Widgets {
+public interface ExamplesWidgets {
 
-    //----pub-----//
+    public enum ExamplesPubWidgets {
 
-    //    pub$videoWidget,
-    //
-    //    pub$searchWidget, pub$resultsWidget, pub$technologyWidget,
-    //
-    //    //----contractor-----//
-    //
-    //    contractor$profileWidget,
-    //
-    //    contractor$personalSettingsWidget,
+        pub$videoWidget,
 
-    //----employer-----//
+        pub$technologyWidget
 
-    crm$dashboardWidget,
+    }
 
-    crm$customerListWidget,
+    public enum ExamplesCrmWidgets {
 
-    crm$customerEditorWidget,
+        crm$customerListWidget,
 
-    crm$orderListWidget,
+        crm$customerEditorWidget,
 
-    crm$orderEditorWidget,
+        crm$orderListWidget,
 
-    crm$resourceListWidget,
+        crm$orderEditorWidget,
 
-    crm$resourceEditorWidget,
+        crm$repListWidget,
 
-    //    //----headless-----//
-    //
-    //    headless$activation,
-    //
-    //    headless$password,
+        crm$repEditorWidget,
+
+        crm$userListWidget,
+
+        crm$userEditorWidget
+
+    }
 
 }
