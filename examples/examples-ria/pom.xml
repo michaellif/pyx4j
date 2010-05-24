@@ -88,6 +88,7 @@
     </build>
 
     <profiles>
+<!-- Not used and maintained for now
         <profile>
             <id>gwtce</id>
             <build>
@@ -110,13 +111,11 @@
                             <sourceDirectories>
                                 <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                             </sourceDirectories>
-                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
                             <target>${basedir}/../examples-gae-server/war</target>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
-                            <!--compilerClass>com.google.gwt.dev.GWTCompiler</compilerClass-->
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>${gwtCompileReport}</compileReport>
@@ -125,7 +124,7 @@
                 </plugins>
             </build>
         </profile>
-
+-->
         <profile>
             <id>gwtcex</id>
             <build>
