@@ -146,7 +146,7 @@ public class SessionMonitor implements RPCStatusChangeHandler {
     }
 
     private void checkActivity() {
-        if (System.currentTimeMillis() > (this.lastActivity + this.maxInactiveInterval)) {
+        if ((maxInactiveInterval > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveInterval))) {
             onSessionInactive(true);
         } else {
             checkSessionCookie();

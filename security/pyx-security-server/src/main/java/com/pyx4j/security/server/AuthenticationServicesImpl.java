@@ -23,8 +23,12 @@ package com.pyx4j.security.server;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.appengine.api.users.UserServiceFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -41,12 +45,14 @@ import com.pyx4j.server.contexts.Lifecycle;
  */
 public class AuthenticationServicesImpl implements AuthenticationServices {
 
+    private static Logger log = LoggerFactory.getLogger(AuthenticationServicesImpl.class);
+
     public static AuthenticationResponse createAuthenticationResponse(String logoutApplicationUrl) {
         AuthenticationResponse ar = new AuthenticationResponse();
         ar.setLogoutURL(logoutApplicationUrl);
         if (Context.getSession() != null) {
             ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
-
+            log.debug("session maxInactiveInterval {} sec", ar.getMaxInactiveInterval());
             switch (ServerSideConfiguration.instance().getEnvironmentType()) {
             case LocalJVM:
                 ar.setSessionCookieName(System.getProperty("org.apache.catalina.SESSION_COOKIE_NAME", "JSESSIONID"));
@@ -54,6 +60,10 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
             case GAEDevelopment:
             case GAESandbox:
                 ar.setSessionCookieName("JSESSIONID");
+                if (ar.getMaxInactiveInterval() <= 0) {
+                    ar.setMaxInactiveInterval(24 * Consts.HOURS2SEC);
+                    log.debug("session maxInactiveInterval {} sec", ar.getMaxInactiveInterval());
+                }
             }
         }
         // Make it serializable by RPC
