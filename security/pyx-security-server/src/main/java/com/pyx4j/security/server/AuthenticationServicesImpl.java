@@ -46,6 +46,15 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
         ar.setLogoutURL(logoutApplicationUrl);
         if (Context.getSession() != null) {
             ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
+
+            switch (ServerSideConfiguration.instance().getEnvironmentType()) {
+            case LocalJVM:
+                ar.setSessionCookieName(System.getProperty("org.apache.catalina.SESSION_COOKIE_NAME", "JSESSIONID"));
+                break;
+            case GAEDevelopment:
+            case GAESandbox:
+                ar.setSessionCookieName("JSESSIONID");
+            }
         }
         // Make it serializable by RPC
         Set<Behavior> behaviors = new HashSet<Behavior>();

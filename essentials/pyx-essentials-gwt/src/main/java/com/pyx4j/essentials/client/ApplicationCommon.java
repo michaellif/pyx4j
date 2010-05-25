@@ -43,6 +43,8 @@ public class ApplicationCommon {
                 }
             }
         });
+
+        SessionMonitor.startMonitoring();
     }
 
 }

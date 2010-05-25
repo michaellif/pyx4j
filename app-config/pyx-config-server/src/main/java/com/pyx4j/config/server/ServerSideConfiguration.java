@@ -46,6 +46,10 @@ public class ServerSideConfiguration {
 
     private static ServerSideConfiguration instance;
 
+    public static enum EnvironmentType {
+        LocalJVM, GAEDevelopment, GAESandbox
+    }
+
     public static final ServerSideConfiguration instance() {
         // Fall back for Tests
         if (ServerSideConfiguration.instance == null) {
@@ -91,6 +95,19 @@ public class ServerSideConfiguration {
 
     public boolean useAppengineGoogleAccounts() {
         return false;
+    }
+
+    public EnvironmentType getEnvironmentType() {
+        SecurityManager sm = System.getSecurityManager();
+        if (sm == null) {
+            return EnvironmentType.LocalJVM;
+        } else if (sm.getClass().getName().startsWith("com.google.appengine.tools.development")) {
+            return EnvironmentType.GAEDevelopment;
+        } else if (sm.getClass().getName().startsWith("com.google.apphosting.")) {
+            return EnvironmentType.GAESandbox;
+        } else {
+            return EnvironmentType.LocalJVM;
+        }
     }
 
 }

@@ -35,6 +35,8 @@ public class AuthenticationResponse implements Serializable {
 
     private int maxInactiveInterval;
 
+    private String sessionCookieName;
+
     private String logoutURL;
 
     public AuthenticationResponse() {
@@ -59,6 +61,18 @@ public class AuthenticationResponse implements Serializable {
 
     public void setMaxInactiveInterval(int maxInactiveInterval) {
         this.maxInactiveInterval = maxInactiveInterval;
+    }
+
+    /**
+     * See http://tomcat.apache.org/tomcat-6.0-doc/config/systemprops.html on how to
+     * change COOKIE NAME.
+     */
+    public String getSessionCookieName() {
+        return sessionCookieName;
+    }
+
+    public void setSessionCookieName(String sessionCookieName) {
+        this.sessionCookieName = sessionCookieName;
     }
 
     public UserVisit getUserVisit() {

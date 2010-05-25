@@ -38,7 +38,30 @@ public class ClientContext {
 
     private static Logger log = LoggerFactory.getLogger(ClientContext.class);
 
+    public static class ServerSession {
+
+        private final String sessionCookieName;
+
+        private final int maxInactiveInterval;
+
+        public ServerSession(String sessionCookieName, int maxInactiveInterval) {
+            this.sessionCookieName = sessionCookieName;
+            this.maxInactiveInterval = maxInactiveInterval;
+        }
+
+        public int getMaxInactiveInterval() {
+            return maxInactiveInterval;
+        }
+
+        public String getSessionCookieName() {
+            return sessionCookieName;
+        }
+
+    }
+
     private static UserVisit userVisit;
+
+    private static ServerSession serverSession;
 
     private static boolean authenticationObtained = false;
 
@@ -56,11 +79,24 @@ public class ClientContext {
         return userVisit != null;
     }
 
+    public static boolean hasServerSession() {
+        return serverSession != null;
+    }
+
+    public static ServerSession getServerSession() {
+        return serverSession;
+    }
+
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         authenticationObtained = true;
         userVisit = authenticationResponse.getUserVisit();
         if (authenticationResponse.getLogoutURL() != null) {
             logoutURL = authenticationResponse.getLogoutURL();
+        }
+        if (authenticationResponse.getSessionCookieName() != null) {
+            serverSession = new ServerSession(authenticationResponse.getSessionCookieName(), authenticationResponse.getMaxInactiveInterval());
+        } else {
+            serverSession = null;
         }
         log.info("Authenticated {}", userVisit);
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());

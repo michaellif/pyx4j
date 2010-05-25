@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,8 +45,7 @@ public abstract class AbstractDataPreloader implements DataPreloader {
     }
 
     public static boolean isGAEDevelopment() {
-        SecurityManager sm = System.getSecurityManager();
-        return (sm != null) && (sm.getClass().getName().startsWith("com.google.appengine.tools.development"));
+        return (ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment);
     }
 
     protected static <T extends IEntity> String deleteAll(Class<T> entityClass) {
