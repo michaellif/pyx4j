@@ -43,11 +43,15 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E, CForm> 
         return metaModel.meta();
     }
 
+    public EntityEditorFormModel<E> getForm() {
+        return metaModel;
+    }
+
     @Override
     public CForm createForm() {
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
 
-        EntityEditorFormModel<E> model = EntityEditorFormModel.create((Class<E>) meta().getObjectClass());
+        EntityEditorFormModel<E> model = EntityEditorFormModel.create((Class<E>) metaModel.meta().getObjectClass());
 
         for (int i = 0; i < components.length; i++) {
             for (int j = 0; j < components[0].length; j++) {
@@ -58,6 +62,10 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E, CForm> 
                     components[i][j] = model.get(member);
                 } else {
                     components[i][j] = model.create(member);
+                }
+                // Hack
+                if (components[i][j] instanceof CEntityFormFolder) {
+                    ((CEntityFormFolder) components[i][j]).setFormMembers(((CEntityFormFolder) metaModel.get(member)).members);
                 }
             }
         }
