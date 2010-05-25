@@ -97,6 +97,11 @@ public class EntityFormModel<E extends IEntity> {
         return metaEntity;
     }
 
+    public void setComponets(IObject<?>[][] components2) {
+        // TODO Auto-generated method stub
+
+    }
+
     public CEditableComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         CEditableComponent<?> comp;
@@ -157,7 +162,7 @@ public class EntityFormModel<E extends IEntity> {
                 ((CDoubleField) comp).setNumberFormat(mm.getFormat());
             }
         } else if (mm.getObjectClass().equals(IList.class)) {
-            comp = new CFormFolder(mm.getCaption());
+            comp = new CEntityFormFolder(null);
         } else {
             comp = new CTextField(mm.getCaption());
         }

@@ -48,6 +48,8 @@ public class CForm extends CContainer {
 
     private final InfoImageAlignment infoImageAlignment;
 
+    private boolean subform = false;
+
     public CForm() {
         this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
@@ -56,14 +58,23 @@ public class CForm extends CContainer {
         this(null, allignment, InfoImageAlignment.AFTER);
     }
 
+    public CForm(LabelAlignment allignment, boolean isSubform) {
+        this(null, allignment, InfoImageAlignment.AFTER, isSubform);
+    }
+
     public CForm(String title) {
         this(title, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
-    public CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
+    protected CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment, boolean isSubform) {
         super(title);
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
+        this.subform = isSubform;
+    }
+
+    public CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
+        this(title, allignment, infoImageAlignment, false);
     }
 
     public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {
@@ -119,7 +130,7 @@ public class CForm extends CContainer {
     @Override
     public INativeComponent initNativeComponent() {
         if (nativeForm == null) {
-            nativeForm = new NativeForm(this, components, allignment, infoImageAlignment);
+            nativeForm = new NativeForm(this, components, allignment, infoImageAlignment, subform);
             applyAccessibilityRules();
         }
         return nativeForm;

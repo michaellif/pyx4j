@@ -57,6 +57,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
@@ -86,7 +87,9 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private int labelWidth;
 
-    public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
+    private final boolean subForm;
+
+    public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment, boolean isSubForm) {
         super();
         setBorderWidth(0);
         setCellSpacing(0);
@@ -95,6 +98,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
         columnCount = components[0].length;
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
+        this.subForm = isSubForm;
 
         switch (allignment) {
         case LEFT:
@@ -130,7 +134,11 @@ public class NativeForm extends FlexTable implements INativeComponent {
                 }
             }
         }
-
+        if (subForm) {
+            setWidget(components.length, 0, new Label("Toolbar"));
+            FlexCellFormatter cellFormatter = getFlexCellFormatter();
+            cellFormatter.setRowSpan(components.length, 0, columnCount);
+        }
     }
 
     private void addComponent(CComponent<?> component, int row, int column) {
@@ -492,7 +500,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
             container = new VerticalPanel();
             container.setWidth("100%");
-            container.add(new Label("CONTAINER"));
 
             label = new Label(folder.getTitle() == null ? "" : folder.getTitle());
             label.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -504,7 +511,15 @@ public class NativeForm extends FlexTable implements INativeComponent {
             addCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    // TODO Auto-generated method stub
+                    CForm form = new CForm(allignment, true);
+                    CComponent<?>[][] innerComponents = new CComponent<?>[][] {
+
+                    { new CTextField("Text 1"), new CTextField("Text 2") }
+
+                    };
+                    form.setComponents(innerComponents);
+
+                    container.add((Widget) form.initNativeComponent());
 
                 }
             });
