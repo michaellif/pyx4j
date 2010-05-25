@@ -71,10 +71,6 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return form;
     }
 
-    public <T extends IEntity> EntityEditorFormModel<T> createMetaSubForm(IList<T> member) {
-        return form.createMetaSubForm(member);
-    }
-
     public void populateForm(E entity) {
         form.populate(entity);
     }

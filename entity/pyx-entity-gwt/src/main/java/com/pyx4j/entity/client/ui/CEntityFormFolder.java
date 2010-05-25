@@ -20,54 +20,48 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import com.pyx4j.entity.client.ui.crud.EntityEditorFormModel;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.FormCreator;
 
-public class CEntityFormFolder extends CFormFolder implements FormCreator {
+public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E, CForm> implements FormCreator {
 
     private IObject<?>[][] members;
 
-    private final EntityFormModel model;
+    private final EntityEditorFormModel<E> metaModel;
 
-    public CEntityFormFolder(EntityFormModel model, IObject<?>[][] members) {
+    public CEntityFormFolder(Class<E> clazz) {
         super(null);
-        this.model = model;
-        this.members = members;
+        this.metaModel = EntityEditorFormModel.create(clazz);
+    }
+
+    public E meta() {
+        return metaModel.meta();
     }
 
     @Override
     public CForm createForm() {
-        CComponent<?>[][] components;
-        if (model != null) {
-            components = new CComponent<?>[members.length][members[0].length];
-            for (int i = 0; i < components.length; i++) {
-                for (int j = 0; j < components[0].length; j++) {
-                    IObject<?> member = members[i][j];
-                    if (member == null) {
-                        components[i][j] = null;
-                    } else if (model.contains(member)) {
-                        components[i][j] = model.get(member);
-                    } else {
-                        components[i][j] = model.create(member);
-                    }
+        CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
+
+        EntityEditorFormModel<E> model = EntityEditorFormModel.create((Class<E>) meta().getObjectClass());
+
+        for (int i = 0; i < components.length; i++) {
+            for (int j = 0; j < components[0].length; j++) {
+                IObject<?> member = members[i][j];
+                if (member == null) {
+                    components[i][j] = null;
+                } else if (model.contains(member)) {
+                    components[i][j] = model.get(member);
+                } else {
+                    components[i][j] = model.create(member);
                 }
             }
-        } else {
-
-            //TODO remove after integration
-
-            components = new CComponent[][] {
-
-            { new CTextField("Field 1"), new CTextField("Field 2") },
-
-            { new CTextField("Field 3"), new CTextField("Field 4") }
-
-            };
         }
+
         CForm form = new CForm(true);
 
         form.setComponents(components);
@@ -75,8 +69,8 @@ public class CEntityFormFolder extends CFormFolder implements FormCreator {
         return form;
     }
 
-    public void setComponets(IObject<?>[][] components2) {
-        members = components2;
+    public void setFormMembers(IObject<?>[][] members) {
+        this.members = members;
 
     }
 }

@@ -45,7 +45,6 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
-import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
@@ -162,9 +161,7 @@ public class EntityFormModel<E extends IEntity> {
                 ((CDoubleField) comp).setNumberFormat(mm.getFormat());
             }
         } else if (mm.getObjectClass().equals(IList.class)) {
-
-            //TODO
-            comp = new CEntityFormFolder(null, null);
+            comp = new CEntityFormFolder(((IList) member).$().getObjectClass());
         } else {
             comp = new CTextField(mm.getCaption());
         }
