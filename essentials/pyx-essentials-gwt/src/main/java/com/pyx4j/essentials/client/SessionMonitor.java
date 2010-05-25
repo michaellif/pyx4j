@@ -46,7 +46,7 @@ public class SessionMonitor implements RPCStatusChangeHandler {
 
     private boolean monitoring = false;
 
-    private long maxInactiveInterval;
+    private long maxInactiveIntervalMillis;
 
     private String sessionCookieName;
 
@@ -117,7 +117,7 @@ public class SessionMonitor implements RPCStatusChangeHandler {
     }
 
     private void start() {
-        maxInactiveInterval = ClientContext.getServerSession().getMaxInactiveInterval();
+        maxInactiveIntervalMillis = Consts.SEC2MSEC * ClientContext.getServerSession().getMaxInactiveInterval();
         sessionCookieName = ClientContext.getServerSession().getSessionCookieName();
         sessionCookieValue = Cookies.getCookie(sessionCookieName);
         sessionStart = System.currentTimeMillis();
@@ -146,7 +146,7 @@ public class SessionMonitor implements RPCStatusChangeHandler {
     }
 
     private void checkActivity() {
-        if ((maxInactiveInterval > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveInterval))) {
+        if ((maxInactiveIntervalMillis > 0) && (System.currentTimeMillis() > (lastActivity + maxInactiveIntervalMillis))) {
             onSessionInactive(true);
         } else {
             checkSessionCookie();
