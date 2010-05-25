@@ -169,8 +169,7 @@ public abstract class AbstractSiteDispatcher {
 
     //TODO handle wrong tokens !!!
     private void doShow(final NavigationUri navigationUri) {
-        log.debug("Page URI  {}", navigationUri.getPageUri());
-        log.debug("Page Args {}", navigationUri.getArgs());
+        log.debug("show page URI {}, args {}", navigationUri.getPageUri(), navigationUri.getArgs());
 
         if (!CommonsStringUtils.isStringSet(navigationUri.getPageUri())) {
             if (welcomeUri == null) {
@@ -183,7 +182,7 @@ public abstract class AbstractSiteDispatcher {
             @Override
             public void onFailure(Throwable caught) {
                 hideLoadingIndicator();
-                log.warn("obtainSite error", caught);
+                log.warn("obtainSite failure", caught);
                 //TODO handle SecurityViolationException to show login form
                 handleObtainSiteFailure(caught, navigationUri.getSiteName());
             }

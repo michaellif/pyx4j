@@ -174,6 +174,7 @@ public class ClientContext {
 
                     @Override
                     public void onSuccess(String result) {
+                        log.debug("go {}", result);
                         Window.Location.replace(result);
                     }
                 });
