@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.FormCreator;
 
 public class CEntityFormFolder extends CFormFolder implements FormCreator {
 
-    private final IObject<?>[][] members;
+    private IObject<?>[][] members;
 
     private final EntityFormModel model;
 
@@ -73,5 +73,10 @@ public class CEntityFormFolder extends CFormFolder implements FormCreator {
         form.setComponents(components);
 
         return form;
+    }
+
+    public void setComponets(IObject<?>[][] components2) {
+        members = components2;
+
     }
 }
