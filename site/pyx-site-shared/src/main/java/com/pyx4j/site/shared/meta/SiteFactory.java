@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
-import com.pyx4j.site.shared.domain.ResourceUri;
 import com.pyx4j.site.shared.domain.Site;
 
 public class SiteFactory {
@@ -69,21 +68,6 @@ public class SiteFactory {
         return createPage(null, caption, node, null, html, null, null, null);
     }
 
-    @Deprecated
-    public static Page createPage(String caption, ResourceUri uri, String html) {
-        return createPage(caption, uri, html, null, null, null);
-    }
-
-    @Deprecated
-    public static Page createSingleWidgetPage(String caption, ResourceUri uri, Enum<?> inlineWidget) {
-        return createSingleWidgetPage(caption, uri, inlineWidget, null, null);
-    }
-
-    @Deprecated
-    public static Page createSingleWidgetPage(String caption, ResourceUri uri, Enum<?> inlineWidget, Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        return createPage(caption, uri, inlineWidgetHtml(inlineWidget), leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
-    }
-
     protected static Page createPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, String html,
             Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = createPage(caption, node, discriminator, html, leftPortlets, rightPortlets, inlineWidgets);
@@ -114,37 +98,6 @@ public class SiteFactory {
         }
         page.uri().setValue(uri);
         page.discriminator().setValue(discriminator);
-        if (html == null) {
-            html = caption;
-        }
-        page.data().html().setValue(html);
-
-        if (leftPortlets != null) {
-            for (Portlet portlet : leftPortlets) {
-                page.data().leftPortlets().add(portlet);
-            }
-        }
-
-        if (rightPortlets != null) {
-            for (Portlet portlet : rightPortlets) {
-                page.data().rightPortlets().add(portlet);
-            }
-        }
-
-        if (inlineWidgets != null) {
-            for (String widgetId : inlineWidgets) {
-                page.data().inlineWidgetIds().add(widgetId);
-            }
-        }
-        return page;
-    }
-
-    //TODO 
-    @Deprecated
-    public static Page createPage(String caption, ResourceUri uri, String html, Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
-        Page page = EntityFactory.create(Page.class);
-        page.caption().setValue(caption);
-        page.uri().setValue(uri.uri().getValue());
         if (html == null) {
             html = caption;
         }

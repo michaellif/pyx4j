@@ -27,9 +27,6 @@ public interface Link extends IEntity {
 
     IPrimitive<String> html();
 
-    //Internal page
-    ResourceUri uri();
-
     //External link
     IPrimitive<String> href();
 
