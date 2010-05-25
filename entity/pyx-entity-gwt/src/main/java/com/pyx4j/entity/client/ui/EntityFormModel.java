@@ -162,7 +162,9 @@ public class EntityFormModel<E extends IEntity> {
                 ((CDoubleField) comp).setNumberFormat(mm.getFormat());
             }
         } else if (mm.getObjectClass().equals(IList.class)) {
-            comp = new CEntityFormFolder(null);
+
+            //TODO
+            comp = new CEntityFormFolder(null, null);
         } else {
             comp = new CTextField(mm.getCaption());
         }
@@ -173,7 +175,7 @@ public class EntityFormModel<E extends IEntity> {
         if (mm.getDescription() != null) {
             comp.setToolTip(mm.getDescription());
         }
-
+        comp.setTitle(mm.getCaption());
         bind(comp, member.getPath());
         return comp;
     }

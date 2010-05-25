@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -43,8 +44,10 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -57,7 +60,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
@@ -123,6 +125,12 @@ public class NativeForm extends FlexTable implements INativeComponent {
         if (!GWT.isScript()) {
             sinkEvents(Event.ONMOUSEOVER);
         }
+
+        if (isSubForm) {
+            getElement().getStyle().setBorderWidth(1, Unit.PX);
+            getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            getElement().getStyle().setBorderColor("#518BDC");
+        }
     }
 
     private void addAllComponents() {
@@ -135,9 +143,9 @@ public class NativeForm extends FlexTable implements INativeComponent {
             }
         }
         if (subForm) {
-            setWidget(components.length, 0, new Label("Toolbar"));
+            setWidget(components.length, 0, new Toolbar());
             FlexCellFormatter cellFormatter = getFlexCellFormatter();
-            cellFormatter.setRowSpan(components.length, 0, columnCount);
+            cellFormatter.setColSpan(components.length, 0, columnCount);
         }
     }
 
@@ -338,6 +346,26 @@ public class NativeForm extends FlexTable implements INativeComponent {
         return null;
     }
 
+    class Toolbar extends SimplePanel {
+
+        Toolbar() {
+            setWidth("100%");
+            HorizontalPanel actionsPanel = new HorizontalPanel();
+            Anchor removeCommand = new Anchor("remove");
+            styleAction(removeCommand);
+            actionsPanel.add(removeCommand);
+            Anchor upCommand = new Anchor("up");
+            styleAction(upCommand);
+            actionsPanel.add(upCommand);
+            Anchor downCommand = new Anchor("down");
+            styleAction(downCommand);
+            actionsPanel.add(downCommand);
+            setWidget(actionsPanel);
+            actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        }
+
+    }
+
     class WidgetContainer extends ComplexPanel {
 
         private final CComponent<?> component;
@@ -507,20 +535,16 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
             addCommand = new Anchor("add");
             addCommand.getElement().getStyle().setPosition(Position.ABSOLUTE);
-            addCommand.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
+            styleAction(addCommand);
             addCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    CForm form = new CForm(allignment, true);
-                    CComponent<?>[][] innerComponents = new CComponent<?>[][] {
-
-                    { new CTextField("Text 1"), new CTextField("Text 2") }
-
-                    };
-                    form.setComponents(innerComponents);
-
-                    container.add((Widget) form.initNativeComponent());
-
+                    CForm form = folder.createForm();
+                    Widget nativeForm = (Widget) form.initNativeComponent();
+                    nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
+                    nativeForm.setWidth("100%");
+                    container.add(nativeForm);
+                    container.setCellWidth(nativeForm, "100%");
                 }
             });
 
@@ -560,6 +584,13 @@ public class NativeForm extends FlexTable implements INativeComponent {
         protected void onLoad() {
             super.onLoad();
         }
+
+    }
+
+    private static void styleAction(Widget w) {
+        w.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
+        w.getElement().getStyle().setPaddingRight(5, Unit.PX);
+        w.getElement().getStyle().setColor("#518BDC");
 
     }
 }

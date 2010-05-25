@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface FormCreator<OBJ, FORM> {
+public interface FormCreator<OBJ, FORM extends CForm> {
 
     FORM createForm();
 

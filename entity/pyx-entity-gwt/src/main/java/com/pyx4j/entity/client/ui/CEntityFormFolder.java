@@ -21,13 +21,57 @@
 package com.pyx4j.entity.client.ui;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
+import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.FormCreator;
 
-public class CEntityFormFolder extends CFormFolder {
+public class CEntityFormFolder extends CFormFolder implements FormCreator {
 
-    public CEntityFormFolder(IObject<?>[][] components) {
+    private final IObject<?>[][] members;
+
+    private final EntityFormModel model;
+
+    public CEntityFormFolder(EntityFormModel model, IObject<?>[][] members) {
         super(null);
-        // TODO Auto-generated constructor stub
+        this.model = model;
+        this.members = members;
     }
 
+    @Override
+    public CForm createForm() {
+        CComponent<?>[][] components;
+        if (model != null) {
+            components = new CComponent<?>[members.length][members[0].length];
+            for (int i = 0; i < components.length; i++) {
+                for (int j = 0; j < components[0].length; j++) {
+                    IObject<?> member = members[i][j];
+                    if (member == null) {
+                        components[i][j] = null;
+                    } else if (model.contains(member)) {
+                        components[i][j] = model.get(member);
+                    } else {
+                        components[i][j] = model.create(member);
+                    }
+                }
+            }
+        } else {
+
+            //TODO remove after integration
+
+            components = new CComponent[][] {
+
+            { new CTextField("Field 1"), new CTextField("Field 2") },
+
+            { new CTextField("Field 3"), new CTextField("Field 4") }
+
+            };
+        }
+        CForm form = new CForm(true);
+
+        form.setComponents(components);
+
+        return form;
+    }
 }

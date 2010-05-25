@@ -54,6 +54,10 @@ public class CForm extends CContainer {
         this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
+    public CForm(boolean isSubform) {
+        this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER, isSubform);
+    }
+
     public CForm(LabelAlignment allignment) {
         this(null, allignment, InfoImageAlignment.AFTER);
     }

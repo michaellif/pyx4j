@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CFormFolder<OBJ, FORM extends CForm> extends CEditableComponent<List<OBJ>> {
+public abstract class CFormFolder<OBJ, FORM extends CForm> extends CEditableComponent<List<OBJ>> {
 
     private final List<FORM> forms;
 
@@ -34,9 +34,7 @@ public class CFormFolder<OBJ, FORM extends CForm> extends CEditableComponent<Lis
         forms = new ArrayList<FORM>();
     }
 
-    public FORM createForm() {
-        return creator.createForm();
-    }
+    public abstract FORM createForm();
 
     public void setFormCreator(FormCreator<OBJ, FORM> creator) {
         this.creator = creator;
