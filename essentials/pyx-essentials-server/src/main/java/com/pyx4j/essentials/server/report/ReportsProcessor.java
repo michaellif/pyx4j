@@ -131,5 +131,28 @@ public class ReportsProcessor {
             IOUtils.closeQuietly(zipOut);
         }
     }
+    
+    public static void createPDF(InputStream xslTransformation, InputStream data, OutputStream report) {
+    	ByteArrayOutputStream memOut = null;
+    	ByteArrayInputStream memIn = null;
+    	
+        // Transform data with document-transform
+        Transformer transformer;
+		try {
+			memOut = new ByteArrayOutputStream();
+			transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
+	        transformer.transform(new StreamSource(data), new StreamResult(memOut));
+	        
+	        memIn = new ByteArrayInputStream(memOut.toByteArray());
+	        HtmlToPDFParser.parse(memIn, report);
+	        
+		} catch (Throwable e) {
+            log.error("Unable to create report", e);
+            throw new RuntimeException("Report error", e);
+		} finally {
+			IOUtils.closeQuietly(memOut);
+			IOUtils.closeQuietly(memIn);
+		}
+    }
 
 }
