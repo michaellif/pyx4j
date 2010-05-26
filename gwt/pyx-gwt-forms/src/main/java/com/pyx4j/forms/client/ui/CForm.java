@@ -44,7 +44,7 @@ public class CForm extends CContainer {
 
     private final Collection<CComponent<?>> componentCollection = new ArrayList<CComponent<?>>();
 
-    private final LabelAlignment allignment;
+    private LabelAlignment allignment;
 
     private final InfoImageAlignment infoImageAlignment;
 
@@ -79,6 +79,17 @@ public class CForm extends CContainer {
 
     public CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         this(title, allignment, infoImageAlignment, null);
+    }
+
+    public LabelAlignment getAllignment() {
+        return allignment;
+    }
+
+    public void setAllignment(LabelAlignment allignment) {
+        if (nativeForm != null) {
+            throw new IllegalStateException();
+        }
+        this.allignment = allignment;
     }
 
     public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {

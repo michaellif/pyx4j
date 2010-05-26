@@ -26,14 +26,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -42,8 +39,6 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntityEditorPanel<E> {
-
-    private final CForm form;
 
     private EntityEditorWidget<E> parentWidget;
 
@@ -57,11 +52,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
         VerticalPanel contentPanel = new VerticalPanel();
         setWidget(contentPanel);
 
-        form = createForm(LabelAlignment.LEFT, getComponents());
-
-        contentPanel.add(((Widget) form.initNativeComponent()));
-
-        enhanceComponents();
+        contentPanel.add(createFormWidget(LabelAlignment.LEFT));
 
         if (getSaveService() != null) {
             saveButton = new Button("Save");
@@ -69,7 +60,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
                 @Override
                 public void onClick(ClickEvent event) {
                     parentWidget.setMessage(null);
-                    ValidationResults validationResults = form.getValidationResults();
+                    ValidationResults validationResults = getForm().getValidationResults();
                     if (validationResults.isValid()) {
                         doSave();
                     } else {
@@ -90,18 +81,8 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
         this.parentWidget = widget;
     }
 
-    protected abstract IObject<?>[][] getComponents();
-
-    protected void enhanceComponents() {
-
-    }
-
-    public CForm getCForm() {
-        return form;
-    }
-
     public String toStringForPrint() {
-        return form.getNativeComponent().toStringForPrint();
+        return getForm().getNativeComponent().toStringForPrint();
     }
 
     @Override

@@ -22,6 +22,7 @@ package com.pyx4j.examples.site.client.crm.user;
 
 import java.util.EnumSet;
 
+import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -39,7 +40,7 @@ public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
         super(EditableUser.class, ExamplesSiteMap.Crm.Users.Edit.class, new EntityEditorPanel<EditableUser>(EditableUser.class) {
 
             @Override
-            protected IObject<?>[][] getComponents() {
+            protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
                 { meta().enabled(), null },
@@ -55,7 +56,7 @@ public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
             }
 
             @Override
-            protected void enhanceComponents() {
+            protected void enhanceComponents(CEntityForm<EditableUser> form) {
                 ((CComboBox<ExamplesBehavior>) get(meta().behavior())).setOptions(EnumSet.of(ExamplesBehavior.CRM_EMPLOYEE, ExamplesBehavior.CRM_ADMIN));
             }
 

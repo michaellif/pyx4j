@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -63,7 +64,7 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
         super(Customer.class, ExamplesSiteMap.Crm.Customers.Edit.class, new EntityEditorPanel<Customer>(Customer.class) {
 
             @Override
-            protected IObject<?>[][] getComponents() {
+            protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
                 { meta().name(), meta().phone() },
@@ -78,7 +79,7 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
             }
 
             @Override
-            protected void enhanceComponents() {
+            protected void enhanceComponents(CEntityForm<Customer> form) {
                 get(meta().note()).setWidth("100%");
                 ((CComboBox<Province>) get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
             }

@@ -31,10 +31,15 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
 
     protected final E metaEntity;
 
-    private EditableComponentFactory editableComponentFactory;
+    private final EditableComponentFactory editableComponentFactory;
 
     public EntityFormFactory(Class<E> entityClass) {
+        this(entityClass, new BaseEditableComponentFactory());
+    }
+
+    public EntityFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
         metaEntity = EntityFactory.create(entityClass);
+        this.editableComponentFactory = editableComponentFactory;
     }
 
     public E meta() {
@@ -42,10 +47,6 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
     }
 
     protected abstract IObject<?>[][] getFormMembers();
-
-    public void setEditableComponentFactory(EditableComponentFactory editableComponentFactory) {
-        this.editableComponentFactory = editableComponentFactory;
-    }
 
     protected CEditableComponent<?> createComponent(IObject<?> member) {
         return editableComponentFactory.create(member);
@@ -60,10 +61,6 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
         CEntityForm<E> form = createFormInstance();
         IObject<?>[][] members = getFormMembers();
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
-
-        if (editableComponentFactory == null) {
-            editableComponentFactory = new BaseEditableComponentFactory();
-        }
 
         for (int i = 0; i < components.length; i++) {
             for (int j = 0; j < components[0].length; j++) {

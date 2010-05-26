@@ -31,6 +31,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.OptionsFilter;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
@@ -72,7 +73,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
         super(Order.class, ExamplesSiteMap.Crm.Orders.Edit.class, new EntityEditorPanel<Order>(Order.class) {
 
             @Override
-            protected IObject<?>[][] getComponents() {
+            protected IObject<?>[][] getFormMembers() {
 
                 getForm().bind(new CEntityHyperlink("Customer", SiteMap.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id="),
                         meta().customer().getPath());
@@ -95,7 +96,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             }
 
             @Override
-            protected void enhanceComponents() {
+            protected void enhanceComponents(CEntityForm<Order> form) {
                 ((CComboBox<Order.OrderStatus>) get(meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
                 get(meta().notes()).setWidth("100%");
 

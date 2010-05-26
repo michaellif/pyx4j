@@ -32,6 +32,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.EntityCSSClass;
+import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -39,9 +41,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
@@ -52,23 +52,62 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
 
-    private final CEntityEditorForm<E> form;
+    private final DelegatingEntityFormFactory<E> formFactory;
+
+    private final CEntityForm<E> form;
 
     private final Class<E> entityClass;
+
+    private class DelegatingEntityFormFactory<T extends IEntity> extends EntityFormFactory<T> {
+
+        public DelegatingEntityFormFactory(Class<T> entityClass) {
+            super(entityClass);
+        }
+
+        @Override
+        protected IObject<?>[][] getFormMembers() {
+            return AbstractEntityEditorPanel.this.getFormMembers();
+        }
+
+        @Override
+        protected CEditableComponent<?> createComponent(IObject<?> member) {
+            return AbstractEntityEditorPanel.this.createComponent(member);
+        }
+
+        protected CEditableComponent<?> defaultCreateComponent(IObject<?> member) {
+            return super.createComponent(member);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void enhanceComponents(CEntityForm<T> form) {
+            AbstractEntityEditorPanel.this.enhanceComponents((CEntityForm<E>) form);
+        }
+    }
 
     public AbstractEntityEditorPanel(Class<E> entityClass) {
         super();
         this.entityClass = entityClass;
-        form = CEntityEditorForm.create(entityClass);
+        formFactory = new DelegatingEntityFormFactory<E>(entityClass);
+        form = formFactory.createForm();
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
-    @Deprecated
-    public E meta() {
-        return form.meta();
+    protected abstract IObject<?>[][] getFormMembers();
+
+    protected CEditableComponent<?> createComponent(IObject<?> member) {
+        return formFactory.defaultCreateComponent(member);
     }
 
-    public CEntityEditorForm<E> getForm() {
+    protected void enhanceComponents(CEntityForm<E> form) {
+
+    }
+
+    public E meta() {
+        return formFactory.meta();
+    }
+
+    public CEntityForm<E> getForm() {
         return form;
     }
 
@@ -96,28 +135,9 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return form.get(member);
     }
 
-    public Widget createFormWidget(LabelAlignment allignment, IObject<?>[][] members) {
-        return (Widget) createForm(allignment, members).initNativeComponent();
-    }
-
-    public CForm createForm(LabelAlignment allignment, IObject<?>[][] members) {
-        CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
-        for (int i = 0; i < components.length; i++) {
-            for (int j = 0; j < components[0].length; j++) {
-                IObject<?> member = members[i][j];
-                if (member == null) {
-                    components[i][j] = null;
-                } else if (form.contains(member)) {
-                    components[i][j] = get(member);
-                } else {
-                    components[i][j] = form.create(member);
-                }
-            }
-        }
-        CForm form = new CForm(allignment);
-        form.setComponents(components);
-
-        return form;
+    public Widget createFormWidget(LabelAlignment allignment) {
+        form.setAllignment(allignment);
+        return (Widget) form.initNativeComponent();
     }
 
     /**

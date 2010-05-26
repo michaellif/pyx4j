@@ -22,6 +22,7 @@ package com.pyx4j.examples.site.client.crm.resource;
 
 import java.util.EnumSet;
 
+import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.EntityEditorPanel;
@@ -38,7 +39,7 @@ public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
         super(Resource.class, ExamplesSiteMap.Crm.Resource.Edit.class, new EntityEditorPanel<Resource>(Resource.class) {
 
             @Override
-            protected IObject<?>[][] getComponents() {
+            protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
                 { meta().name(), meta().status() },
@@ -53,7 +54,7 @@ public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
             }
 
             @Override
-            protected void enhanceComponents() {
+            protected void enhanceComponents(CEntityForm<Resource> form) {
                 ((CComboBox<RepStatus>) get(meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
                 ((CComboBox<Province>) get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
             }
