@@ -14,29 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 18, 2010
+ * Created on May 26, 2010
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.entity.client.ui;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.annotations.validator.Phone;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -53,54 +45,9 @@ import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 
-public class EntityFormModel<E extends IEntity> {
+public class BaseEditableComponentFactory implements EditableComponentFactory {
 
-    private final E metaEntity;
-
-    private E origEntity;
-
-    private E editableEntity;
-
-    private final HashMap<CEditableComponent<?>, Path> binding = new HashMap<CEditableComponent<?>, Path>();
-
-    @SuppressWarnings("unchecked")
-    private final ValueChangeHandler valuePropagation;
-
-    @SuppressWarnings("unchecked")
-    private class ValuePropagation implements ValueChangeHandler {
-
-        @Override
-        public void onValueChange(ValueChangeEvent event) {
-            Path memberPath = binding.get(event.getSource());
-            if ((memberPath != null) && (editableEntity != null)) {
-                Object value = event.getValue();
-                if (value instanceof IEntity) {
-                    value = ((IEntity) value).getValue();
-                } else if ((value instanceof Date)) {
-                    Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                    if (cls.equals(java.sql.Date.class)) {
-                        value = new java.sql.Date(((Date) value).getTime());
-                    }
-                }
-                editableEntity.setValue(memberPath, value);
-            }
-        }
-    }
-
-    public EntityFormModel(Class<E> clazz) {
-        metaEntity = EntityFactory.create(clazz);
-        valuePropagation = new ValuePropagation();
-    }
-
-    public E meta() {
-        return metaEntity;
-    }
-
-    public void setComponets(IObject<?>[][] components2) {
-        // TODO Auto-generated method stub
-
-    }
-
+    @Override
     public CEditableComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         CEditableComponent<?> comp;
@@ -160,8 +107,6 @@ public class EntityFormModel<E extends IEntity> {
             if (mm.getFormat() != null) {
                 ((CDoubleField) comp).setNumberFormat(mm.getFormat());
             }
-        } else if (mm.getObjectClass().equals(IList.class)) {
-            comp = new CEntityFormFolder(((IList) member).$().getObjectClass());
         } else {
             comp = new CTextField(mm.getCaption());
         }
@@ -173,68 +118,6 @@ public class EntityFormModel<E extends IEntity> {
             comp.setToolTip(mm.getDescription());
         }
         comp.setTitle(mm.getCaption());
-        bind(comp, member.getPath());
         return comp;
     }
-
-    @SuppressWarnings("unchecked")
-    public <T extends IEntity> CEditableComponent<T> get(T member) {
-        return (CEditableComponent<T>) get((IObject<?>) member);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> CEditableComponent<T> get(IObject<T> member) {
-        Path memberPath = member.getPath();
-        for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
-            if (me.getValue().equals(memberPath)) {
-                return (CEditableComponent<T>) me.getKey();
-            }
-        }
-        throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
-    }
-
-    public boolean contains(IObject<?> member) {
-        Path memberPath = member.getPath();
-        for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
-            if (me.getValue().equals(memberPath)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @SuppressWarnings("unchecked")
-    public void bind(CEditableComponent<?> component, Path path) {
-        binding.put(component, path);
-        component.addValueChangeHandler(valuePropagation);
-    }
-
-    @SuppressWarnings("unchecked")
-    public void populate(E entity) {
-        this.origEntity = entity;
-        if (entity != null) {
-            this.editableEntity = (E) entity.cloneEntity();
-        } else {
-            this.editableEntity = EntityFactory.create((Class<E>) meta().getObjectClass());
-        }
-
-        for (CEditableComponent component : binding.keySet()) {
-            Path memberPath = binding.get(component);
-            IObject<?> m = editableEntity.getMember(memberPath);
-            if (m instanceof IEntity) {
-                component.setValue(m);
-            } else {
-                component.setValue(m.getValue());
-            }
-        }
-    }
-
-    public E getValue() {
-        return editableEntity;
-    }
-
-    public E getOrigValue() {
-        return origEntity;
-    }
-
 }

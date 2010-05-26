@@ -20,38 +20,37 @@
  */
 package com.pyx4j.entity.client.ui;
 
-import com.pyx4j.entity.client.ui.crud.EntityEditorFormModel;
+import com.pyx4j.entity.client.ui.crud.CEntityEditorForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
-import com.pyx4j.forms.client.ui.FormCreator;
+import com.pyx4j.forms.client.ui.FormFactory;
 
-public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E, CForm> implements FormCreator {
+public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
 
     private IObject<?>[][] members;
 
-    private final EntityEditorFormModel<E> metaModel;
+    private final CEntityEditorForm<E> metaModel;
 
-    public CEntityFormFolder(Class<E> clazz) {
-        super(null);
-        this.metaModel = EntityEditorFormModel.create(clazz);
+    public CEntityFormFolder(Class<E> clazz, EntityFormFactory<E> factory) {
+        super(factory);
+        this.metaModel = CEntityEditorForm.create(clazz);
     }
 
     public E meta() {
         return metaModel.meta();
     }
 
-    public EntityEditorFormModel<E> getForm() {
+    public CEntityEditorForm<E> getForm() {
         return metaModel;
     }
 
-    @Override
-    public CForm createForm() {
+    public CForm OLDcreateForm() {
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
 
-        EntityEditorFormModel<E> model = EntityEditorFormModel.create((Class<E>) metaModel.meta().getObjectClass());
+        CEntityEditorForm<E> model = CEntityEditorForm.create((Class<E>) metaModel.meta().getObjectClass());
 
         for (int i = 0; i < components.length; i++) {
             for (int j = 0; j < components[0].length; j++) {

@@ -510,7 +510,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     class FolderContainer extends ComplexPanel {
 
-        private final CFormFolder<?, ?> folder;
+        private final CFormFolder<?> folder;
 
         private final Anchor addCommand;
 
@@ -518,7 +518,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
         private final VerticalPanel container;
 
-        FolderContainer(final CFormFolder<?, ?> folder) {
+        FolderContainer(final CFormFolder<?> folder) {
             setElement(DOM.createDiv());
 
             this.folder = folder;

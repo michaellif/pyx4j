@@ -14,14 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 23, 2010
- * @author Misha
+ * Created on May 26, 2010
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.entity.client.ui;
 
-public interface FormCreator<OBJ, FORM extends CForm> {
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
-    FORM createForm();
+public interface EditableComponentFactory {
+
+    CEditableComponent<?> create(IObject<?> member);
 
 }

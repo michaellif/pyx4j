@@ -45,7 +45,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
 
     private final CForm form;
 
-    private EntityEditorWidget<E> widget;
+    private EntityEditorWidget<E> parentWidget;
 
     protected final Button saveButton;
 
@@ -68,7 +68,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
             saveButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    widget.setMessage(null);
+                    parentWidget.setMessage(null);
                     ValidationResults validationResults = form.getValidationResults();
                     if (validationResults.isValid()) {
                         doSave();
@@ -87,7 +87,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
     }
 
     public void setParentWidget(EntityEditorWidget<E> widget) {
-        this.widget = widget;
+        this.parentWidget = widget;
     }
 
     protected abstract IObject<?>[][] getComponents();
@@ -123,8 +123,8 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
             @Override
             public void onSuccess(E result) {
                 DomainManager.entityUpdated(result);
-                widget.populateForm(result);
-                widget.setMessage("Entity is saved.");
+                parentWidget.populateForm(result);
+                parentWidget.setMessage("Entity is saved.");
             }
 
         };

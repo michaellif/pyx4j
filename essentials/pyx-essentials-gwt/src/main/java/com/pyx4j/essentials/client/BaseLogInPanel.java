@@ -28,7 +28,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.client.ui.crud.EntityEditorFormModel;
+import com.pyx4j.entity.client.ui.crud.CEntityEditorForm;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -54,7 +54,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     private static final Logger log = LoggerFactory.getLogger(BaseLogInPanel.class);
 
-    private final EntityEditorFormModel<AuthenticationRequest> form;
+    private final CEntityEditorForm<AuthenticationRequest> form;
 
     protected CCheckBox rememberID;
 
@@ -65,7 +65,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         getElement().getStyle().setPadding(30, Unit.PX);
         getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-        form = EntityEditorFormModel.create(AuthenticationRequest.class);
+        form = CEntityEditorForm.create(AuthenticationRequest.class);
 
         forgotPassword = new CHyperlink(null, new Command() {
 
@@ -169,7 +169,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         return false;
     }
 
-    protected EntityEditorFormModel<AuthenticationRequest> getForm() {
+    protected CEntityEditorForm<AuthenticationRequest> getForm() {
         return form;
     }
 

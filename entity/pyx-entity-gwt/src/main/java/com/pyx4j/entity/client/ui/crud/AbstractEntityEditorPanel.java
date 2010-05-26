@@ -52,22 +52,23 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
 
-    private final EntityEditorFormModel<E> form;
+    private final CEntityEditorForm<E> form;
 
     private final Class<E> entityClass;
 
     public AbstractEntityEditorPanel(Class<E> entityClass) {
         super();
         this.entityClass = entityClass;
-        form = EntityEditorFormModel.create(entityClass);
+        form = CEntityEditorForm.create(entityClass);
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
     }
 
+    @Deprecated
     public E meta() {
         return form.meta();
     }
 
-    public EntityEditorFormModel<E> getForm() {
+    public CEntityEditorForm<E> getForm() {
         return form;
     }
 
@@ -176,6 +177,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return true;
     }
 
+    //TODO move to EntityEditorWidget
     public void onPageLeaving(PageLeavingEvent event) {
         if (isChanged()) {
             event.addMessage(meta().getEntityMeta().getCaption() + " " + getEntity().getStringView() + " wasn't saved");
