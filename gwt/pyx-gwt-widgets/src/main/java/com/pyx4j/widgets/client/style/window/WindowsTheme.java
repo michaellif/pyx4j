@@ -20,9 +20,6 @@
  */
 package com.pyx4j.widgets.client.style.window;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
@@ -125,20 +122,16 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initProgressBarStyles() {
-        List<Style> styles = new ArrayList<Style>();
-
         Style style = new Style(".gwt-ProgressBar-shell");
         style.addProperty("background-color", ThemeColor.BORDER);
-        styles.add(style);
+        addStyle(style);
 
         style = new Style(".gwt-ProgressBar-bar");
         style.addProperty("background-color", ThemeColor.SELECTION);
-        styles.add(style);
+        addStyle(style);
 
         style = new Style(".gwt-ProgressBar-text");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        styles.add(style);
-
         addStyle(style);
     }
 
