@@ -374,4 +374,8 @@ public class LightTheme extends SiteTheme {
         addStyle(style);
     }
 
+    @Override
+    protected void initSlideshowButtonStyles() {
+    }
+
 }

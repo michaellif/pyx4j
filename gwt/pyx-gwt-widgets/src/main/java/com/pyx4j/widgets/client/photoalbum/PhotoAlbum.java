@@ -22,6 +22,9 @@ package com.pyx4j.widgets.client.photoalbum;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -51,8 +54,11 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.Tooltip;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 public abstract class PhotoAlbum extends DockPanel {
+
+    private static final Logger log = LoggerFactory.getLogger(PhotoAlbum.class);
 
     private final ActionPanel actionPanel;
 
@@ -60,7 +66,12 @@ public abstract class PhotoAlbum extends DockPanel {
 
     private PhotoAlbumModel model;
 
-    public PhotoAlbum() {
+    private final String buttonStyle;
+
+    public PhotoAlbum(String buttonStyle) {
+
+        this.buttonStyle = buttonStyle;
+
         actionPanel = new ActionPanel();
         add(actionPanel, DockPanel.NORTH);
 
@@ -100,9 +111,13 @@ public abstract class PhotoAlbum extends DockPanel {
             image.getElement().getStyle().setProperty("textAlign", "center");
 
             DockPanel frame = new DockPanel();
-            frame.setSize("200px", "200px");
-            ImageResource background = ImageFactory.getImages().photoFrame();
-            frame.getElement().getStyle().setProperty("background", "url(" + background.getURL() + ") no-repeat 100% 100%");
+            frame.setSize("200px", "210px");
+            frame.getElement().getStyle().setBackgroundColor("#F6F9FF");
+            frame.getElement().getStyle().setBorderColor("#E5ECF9");
+            frame.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            frame.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            frame.getElement().getStyle().setProperty("WebkitBoxShadow", "4px 4px 2px #aaa");
+            frame.getElement().getStyle().setProperty("MozBoxShadow", "4px 4px 2px #aaa");
 
             frame.add(image, CENTER);
             frame.setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
@@ -116,7 +131,7 @@ public abstract class PhotoAlbum extends DockPanel {
             caption.getElement().getStyle().setProperty("overflow", "hidden");
             tooltip = Tooltip.tooltip(caption, photo.getCaption());
             frame.add(caption, SOUTH);
-            frame.setCellHeight(caption, "2em");
+            frame.setCellHeight(caption, "1.6em");
             add(frame, 10, 0);
 
             ImageResource viewMenu = ImageFactory.getImages().viewMenu();
@@ -242,7 +257,7 @@ public abstract class PhotoAlbum extends DockPanel {
     }
 
     protected void slideshow(int startFrom, boolean run) {
-        Slideshow slideshow = new Slideshow(640, 510, null, startFrom, run);
+        Slideshow slideshow = new Slideshow(640, 510, buttonStyle, startFrom, run);
         List<Photo> photoList = model.getPhotoList();
         for (Photo photo : photoList) {
             HorizontalPanel holder = new HorizontalPanel();
@@ -255,8 +270,8 @@ public abstract class PhotoAlbum extends DockPanel {
             slideshow.addItem(holder);
         }
         PopupPanel popup = new PopupPanel(true);
-        popup.getElement().getStyle().setBackgroundColor("#EDEDFF");
-        popup.getElement().getStyle().setBorderColor("gray");
+        popup.getElement().getStyle().setBackgroundColor("#F6F9FF");
+        popup.getElement().getStyle().setBorderColor("#E5ECF9");
         popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
         popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");

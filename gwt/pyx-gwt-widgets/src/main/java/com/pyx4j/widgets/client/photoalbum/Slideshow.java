@@ -42,6 +42,8 @@ public class Slideshow extends AbsolutePanel {
 
     private static final Logger log = LoggerFactory.getLogger(Slideshow.class);
 
+    private static final int ANIMATION_ITTERATIONS = 50;
+
     private final List<Widget> items;
 
     private final int width;
@@ -153,12 +155,12 @@ public class Slideshow extends AbsolutePanel {
                     @Override
                     public void run() {
 
-                        setOpacity(fadeIn, ((double) iterationCounter) / 20);
+                        setOpacity(fadeIn, ((double) iterationCounter) / ANIMATION_ITTERATIONS);
                         if (fadeOut != null) {
-                            setOpacity(fadeOut, (1 - ((double) iterationCounter) / 20));
+                            setOpacity(fadeOut, (1 - ((double) iterationCounter) / ANIMATION_ITTERATIONS));
                         }
                         iterationCounter++;
-                        if (iterationCounter == 20) {
+                        if (iterationCounter == ANIMATION_ITTERATIONS) {
                             if (fadeOut != null) {
                                 fadeOut.setVisible(false);
                             }
@@ -168,7 +170,7 @@ public class Slideshow extends AbsolutePanel {
                         }
                     }
                 };
-                animationTimer.scheduleRepeating(20);
+                animationTimer.scheduleRepeating(500 / ANIMATION_ITTERATIONS);
             }
         });
     }

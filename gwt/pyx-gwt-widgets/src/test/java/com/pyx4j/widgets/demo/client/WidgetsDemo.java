@@ -94,7 +94,7 @@ public class WidgetsDemo implements EntryPoint {
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
 
         {
-            PhotoAlbum photoAlbum = new PhotoAlbum() {
+            PhotoAlbum photoAlbum = new PhotoAlbum("") {
 
                 @Override
                 public void addPhotoCommand() {

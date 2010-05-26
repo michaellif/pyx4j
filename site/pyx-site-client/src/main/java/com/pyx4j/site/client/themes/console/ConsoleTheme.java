@@ -363,4 +363,8 @@ public class ConsoleTheme extends SiteTheme {
         addStyle(style);
     }
 
+    @Override
+    protected void initSlideshowButtonStyles() {
+    }
+
 }

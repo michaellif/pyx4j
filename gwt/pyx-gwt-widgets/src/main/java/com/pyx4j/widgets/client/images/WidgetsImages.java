@@ -29,8 +29,6 @@ public interface WidgetsImages extends ClientBundle {
 
     public ImageResource groupBoxClose();
 
-    public ImageResource photoFrame();
-
     public ImageResource viewMenu();
 
 }
