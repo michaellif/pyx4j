@@ -48,37 +48,37 @@ public class CForm extends CContainer {
 
     private final InfoImageAlignment infoImageAlignment;
 
-    private boolean subform = false;
+    private final CFormFolder folder;
 
     public CForm() {
         this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
-    public CForm(boolean isSubform) {
-        this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER, isSubform);
+    public CForm(CFormFolder folder) {
+        this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER, folder);
     }
 
     public CForm(LabelAlignment allignment) {
         this(null, allignment, InfoImageAlignment.AFTER);
     }
 
-    public CForm(LabelAlignment allignment, boolean isSubform) {
-        this(null, allignment, InfoImageAlignment.AFTER, isSubform);
+    public CForm(LabelAlignment allignment, CFormFolder folder) {
+        this(null, allignment, InfoImageAlignment.AFTER, folder);
     }
 
     public CForm(String title) {
         this(title, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
-    protected CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment, boolean isSubform) {
+    protected CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment, CFormFolder folder) {
         super(title);
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
-        this.subform = isSubform;
+        this.folder = folder;
     }
 
     public CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
-        this(title, allignment, infoImageAlignment, false);
+        this(title, allignment, infoImageAlignment, null);
     }
 
     public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {
@@ -131,10 +131,14 @@ public class CForm extends CContainer {
         return nativeForm;
     }
 
+    public CFormFolder getFolder() {
+        return folder;
+    }
+
     @Override
     public INativeComponent initNativeComponent() {
         if (nativeForm == null) {
-            nativeForm = new NativeForm(this, components, allignment, infoImageAlignment, subform);
+            nativeForm = new NativeForm(this, components, allignment, infoImageAlignment);
             applyAccessibilityRules();
         }
         return nativeForm;

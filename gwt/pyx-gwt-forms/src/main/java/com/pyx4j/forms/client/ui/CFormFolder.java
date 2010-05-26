@@ -40,11 +40,6 @@ public abstract class CFormFolder<OBJ, FORM extends CForm> extends CEditableComp
         this.creator = creator;
     }
 
-    @Override
-    public void setValue(List<OBJ> value) {
-        super.setValue(value);
-    }
-
     /**
      * Has no native component. Explicitly handled by CForm
      */

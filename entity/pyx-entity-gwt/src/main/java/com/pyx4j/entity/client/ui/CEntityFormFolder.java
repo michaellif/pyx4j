@@ -70,7 +70,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E, CForm> 
             }
         }
 
-        CForm form = new CForm(true);
+        CForm form = new CForm(this);
 
         form.setComponents(components);
 

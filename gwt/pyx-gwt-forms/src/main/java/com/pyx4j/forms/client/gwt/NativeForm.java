@@ -89,9 +89,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private int labelWidth;
 
-    private final boolean subForm;
-
-    public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment, boolean isSubForm) {
+    public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
         setBorderWidth(0);
         setCellSpacing(0);
@@ -100,7 +98,6 @@ public class NativeForm extends FlexTable implements INativeComponent {
         columnCount = components[0].length;
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
-        this.subForm = isSubForm;
 
         switch (allignment) {
         case LEFT:
@@ -126,7 +123,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             sinkEvents(Event.ONMOUSEOVER);
         }
 
-        if (isSubForm) {
+        if (form.getFolder() != null) {
             getElement().getStyle().setBorderWidth(1, Unit.PX);
             getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
             getElement().getStyle().setBorderColor("#518BDC");
@@ -142,7 +139,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
                 }
             }
         }
-        if (subForm) {
+        if (form.getFolder() != null) {
             setWidget(components.length, 0, new Toolbar());
             FlexCellFormatter cellFormatter = getFlexCellFormatter();
             cellFormatter.setColSpan(components.length, 0, columnCount);
