@@ -545,6 +545,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
                     nativeForm.setWidth("100%");
                     container.add(nativeForm);
                     container.setCellWidth(nativeForm, "100%");
+                    container.getElement().getStyle().setPadding(10, Unit.PX);
                 }
             });
 
