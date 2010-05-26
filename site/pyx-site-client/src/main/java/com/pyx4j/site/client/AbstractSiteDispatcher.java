@@ -73,6 +73,7 @@ public abstract class AbstractSiteDispatcher {
     private final ValueChangeHandler<String> historyChangeHandler;
 
     public AbstractSiteDispatcher() {
+        pathShown = new NavigationUri(History.getToken());
         historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
             public void onValueChange(final ValueChangeEvent<String> event) {
@@ -148,6 +149,7 @@ public abstract class AbstractSiteDispatcher {
     }
 
     public static void show(String path) {
+        log.debug("new history {}", path);
         History.newItem(path);
     }
 
@@ -160,6 +162,7 @@ public abstract class AbstractSiteDispatcher {
     }
 
     public static void back() {
+        log.debug("back");
         History.back();
     }
 
@@ -169,7 +172,7 @@ public abstract class AbstractSiteDispatcher {
 
     //TODO handle wrong tokens !!!
     private void doShow(final NavigationUri navigationUri) {
-        log.debug("show page URI {}, args {}", navigationUri.getPageUri(), navigationUri.getArgs());
+        log.debug("show page URI [{}], args [{}]", navigationUri.getPageUri(), navigationUri.getArgs());
 
         if (!CommonsStringUtils.isStringSet(navigationUri.getPageUri())) {
             if (welcomeUri == null) {

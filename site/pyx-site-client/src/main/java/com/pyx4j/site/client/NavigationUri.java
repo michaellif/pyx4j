@@ -169,4 +169,9 @@ public class NavigationUri {
         path = null;
     }
 
+    @Override
+    public String toString() {
+        return getPath();
+    }
+
 }
