@@ -174,4 +174,9 @@ public class NavigationUri {
         return getPath();
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof NavigationUri) && getPath().equals(((NavigationUri) other).getPath());
+    }
+
 }

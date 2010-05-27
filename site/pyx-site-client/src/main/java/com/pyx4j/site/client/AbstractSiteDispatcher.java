@@ -203,7 +203,9 @@ public abstract class AbstractSiteDispatcher {
                             currentSitePanel = sitePanel;
                             RootPanel.get().add(currentSitePanel);
                         }
-                        GoogleAnalytics.track("#" + navigationUri.getPageUri());
+                        if (!navigationUri.equals(pathShown)) {
+                            GoogleAnalytics.track("#" + navigationUri.getPageUri());
+                        }
                         sitePanel.show(navigationUri.getPageUri(), navigationUri.getArgs());
 
                         pathShown = navigationUri;
