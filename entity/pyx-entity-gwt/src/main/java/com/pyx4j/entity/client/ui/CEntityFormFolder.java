@@ -22,21 +22,16 @@ package com.pyx4j.entity.client.ui;
 
 import com.pyx4j.entity.client.ui.crud.CEntityEditorForm;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
-import com.pyx4j.forms.client.ui.FormFactory;
 
 public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
 
-    private IObject<?>[][] members;
-
     private final CEntityEditorForm<E> metaModel;
 
-    public CEntityFormFolder(Class<E> clazz, EntityFormFactory<E> factory) {
+    public CEntityFormFolder(String title, Class<E> clazz, EntityFormFactory<E> factory) {
         super(factory);
         this.metaModel = CEntityEditorForm.create(clazz);
+        this.setTitle(title);
     }
 
     public E meta() {
@@ -47,37 +42,4 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
         return metaModel;
     }
 
-    public CForm OLDcreateForm() {
-        CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
-
-        CEntityEditorForm<E> model = CEntityEditorForm.create((Class<E>) metaModel.meta().getObjectClass());
-
-        for (int i = 0; i < components.length; i++) {
-            for (int j = 0; j < components[0].length; j++) {
-                IObject<?> member = members[i][j];
-                if (member == null) {
-                    components[i][j] = null;
-                } else if (model.contains(member)) {
-                    components[i][j] = model.get(member);
-                } else {
-                    components[i][j] = model.create(member);
-                }
-                // Hack
-                if (components[i][j] instanceof CEntityFormFolder) {
-                    ((CEntityFormFolder) components[i][j]).setFormMembers(((CEntityFormFolder) metaModel.get(member)).members);
-                }
-            }
-        }
-
-        CForm form = new CForm(this);
-
-        form.setComponents(components);
-
-        return form;
-    }
-
-    public void setFormMembers(IObject<?>[][] members) {
-        this.members = members;
-
-    }
 }

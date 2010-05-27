@@ -27,7 +27,6 @@ import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.annotations.validator.Phone;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCaptcha;
@@ -56,23 +55,23 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
         if (editorType != null) {
             switch (editorType) {
             case text:
-                comp = new CTextField(mm.getCaption());
+                comp = new CTextField();
                 break;
             case password:
-                comp = new CPasswordTextField(mm.getCaption());
+                comp = new CPasswordTextField();
                 break;
             case textarea:
-                comp = new CTextArea(mm.getCaption());
+                comp = new CTextArea();
                 break;
             case combo:
                 if (mm.isEntity()) {
                     comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
                 } else {
-                    comp = new CComboBox(mm.getCaption());
+                    comp = new CComboBox();
                 }
                 break;
             case suggest:
-                comp = new CSuggestBox(mm.getCaption());
+                comp = new CSuggestBox();
                 break;
             case captcha:
                 comp = new CCaptcha();
@@ -82,33 +81,33 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             }
         } else if (mm.getValueClass().equals(String.class)) {
             if (mm.isValidatorAnnotationPresent(Password.class)) {
-                comp = new CPasswordTextField(mm.getCaption());
+                comp = new CPasswordTextField();
             } else if (mm.isValidatorAnnotationPresent(Email.class)) {
-                comp = new CEmailField(mm.getCaption());
+                comp = new CEmailField();
             } else if (mm.isValidatorAnnotationPresent(Phone.class)) {
-                comp = new CPhoneField(mm.getCaption());
+                comp = new CPhoneField();
             } else {
-                comp = new CTextField(mm.getCaption());
+                comp = new CTextField();
             }
         } else if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {
-            comp = new CComboBox(mm.getCaption());
+            comp = new CComboBox();
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            comp = new CDatePicker(mm.getCaption());
+            comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            comp = new CCheckBox(mm.getCaption());
+            comp = new CCheckBox();
         } else if (mm.getValueClass().equals(Integer.class)) {
-            comp = new CIntegerField(mm.getCaption());
+            comp = new CIntegerField();
         } else if (mm.getValueClass().equals(Long.class)) {
-            comp = new CLongField(mm.getCaption());
+            comp = new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
-            comp = new CDoubleField(mm.getCaption());
+            comp = new CDoubleField();
             if (mm.getFormat() != null) {
                 ((CDoubleField) comp).setNumberFormat(mm.getFormat());
             }
         } else {
-            comp = new CTextField(mm.getCaption());
+            comp = new CTextField();
         }
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
             comp.setMandatory(true);
