@@ -58,12 +58,15 @@ public class DynamicHTML extends HTMLPanel {
             for (int i = 0; i < linkElements.getLength(); i++) {
                 AnchorElement el = AnchorElement.as(linkElements.getItem(i));
                 if (el.getHref().startsWith(baseUrl)) {
-                    Widget widget = new IEHistoryAnchor(el, el.getHref().substring(baseUrl.length()));
-                    getChildren().add(widget);
-                    adopt(widget);
+                    adoptChild(new HistoryAnchor(el, el.getHref().substring(baseUrl.length())));
                     log.debug("replace href {}", el.getHref());
                 }
             }
         }
+    }
+
+    public void adoptChild(Widget widget) {
+        getChildren().add(widget);
+        adopt(widget);
     }
 }

@@ -31,11 +31,11 @@ import com.google.gwt.user.client.ui.Anchor;
  * @see http://code.google.com/p/google-web-toolkit/issues/detail?id=2152
  * 
  */
-class IEHistoryAnchor extends Anchor implements ClickHandler {
+public class HistoryAnchor extends Anchor implements ClickHandler {
 
     private final String targetHistoryToken;
 
-    IEHistoryAnchor(Element element, String targetHistoryToken) {
+    public HistoryAnchor(Element element, String targetHistoryToken) {
         super(element);
         this.targetHistoryToken = targetHistoryToken;
         this.addClickHandler(this);
