@@ -99,6 +99,9 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             detailsMessage = "\n\nErrorCode [" + errorCode + "]";
         }
         if (caught != null) {
+            if (detailsMessage == null) {
+                detailsMessage = "";
+            }
             if ((caught instanceof UnrecoverableClientError) && (caught.getCause() != null)) {
                 caught = caught.getCause();
             }
