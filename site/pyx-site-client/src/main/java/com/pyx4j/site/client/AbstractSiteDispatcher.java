@@ -72,6 +72,8 @@ public abstract class AbstractSiteDispatcher {
 
     private final ValueChangeHandler<String> historyChangeHandler;
 
+    private boolean initialization = true;
+
     public AbstractSiteDispatcher() {
         pathShown = new NavigationUri(History.getToken());
         historyChangeHandler = new ValueChangeHandler<String>() {
@@ -184,7 +186,9 @@ public abstract class AbstractSiteDispatcher {
         AsyncCallback<SitePanel> callback = new AsyncCallback<SitePanel>() {
             @Override
             public void onFailure(Throwable caught) {
-                hideLoadingIndicator();
+                if (initialization) {
+                    hideLoadingIndicator();
+                }
                 log.warn("obtainSite failure", caught);
                 //TODO handle SecurityViolationException to show login form
                 handleObtainSiteFailure(caught, navigationUri.getSiteName());
@@ -213,7 +217,9 @@ public abstract class AbstractSiteDispatcher {
                         throw new Error("sitePanel is not found");
                     }
                 } finally {
-                    hideLoadingIndicator();
+                    if (initialization) {
+                        hideLoadingIndicator();
+                    }
                 }
             }
         };
@@ -346,7 +352,8 @@ public abstract class AbstractSiteDispatcher {
     /**
      * Hide loading image if you had shown one.
      */
-    public static void hideLoadingIndicator() {
+    public void hideLoadingIndicator() {
+        initialization = false;
         // Remove the loading icon
         RootPanel loading = RootPanel.get("loading");
         if (loading != null) {
