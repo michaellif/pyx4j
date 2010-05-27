@@ -36,6 +36,10 @@ public class StyleManger {
 
     private Theme theme;
 
+    private static String[] alternativeHostnames;
+
+    private static int alternativeHostnameIdx;
+
     private StyleManger() {
     }
 
@@ -46,16 +50,32 @@ public class StyleManger {
         return instance;
     }
 
+    public static void setAlternativeHostnames(String... names) {
+        alternativeHostnames = names;
+    }
+
+    static String getAlternativeHostname() {
+        if (alternativeHostnames == null) {
+            return "";
+        }
+        int idx = alternativeHostnameIdx;
+        alternativeHostnameIdx++;
+        if (alternativeHostnameIdx >= alternativeHostnames.length) {
+            alternativeHostnameIdx = 0;
+        }
+        return "http://" + alternativeHostnames[idx] + "/";
+    }
+
     public static void installTheme(Theme theme) {
         if (instance().theme != null && instance().theme.equals(theme)) {
             return;
         }
         instance().theme = theme;
+        alternativeHostnameIdx = 0;
         StringBuilder stylesString = new StringBuilder();
         for (Style style : theme.getAllStyles()) {
             stylesString.append(style.toString(theme));
         }
-
         cleanUpInjectedStyles();
         log.debug("install style {} ", theme.getClass().getName());
         log.trace("{}", stylesString.toString());

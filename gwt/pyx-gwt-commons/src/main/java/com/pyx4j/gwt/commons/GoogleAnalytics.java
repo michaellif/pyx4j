@@ -63,7 +63,7 @@ public class GoogleAnalytics {
 
     public static void setGoogleAnalyticsTracker(String googleAnalyticsTracker, String domainName) {
         String h = Window.Location.getHostName();
-        if (!"localhost".equals(h) && !"127.1.1.1".equals(h)) {
+        if (!"localhost".equals(h) && !"127.0.0.1".equals(h)) {
             GoogleAnalytics.googleAnalyticsTracker = googleAnalyticsTracker;
             GoogleAnalytics.domainName = domainName;
         }
