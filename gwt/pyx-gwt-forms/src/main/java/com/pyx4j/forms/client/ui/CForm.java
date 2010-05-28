@@ -48,37 +48,32 @@ public class CForm extends CContainer {
 
     private final InfoImageAlignment infoImageAlignment;
 
-    private final CFormFolder folder;
+    private CFormFolder folder;
 
     public CForm() {
         this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
     public CForm(CFormFolder folder) {
-        this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER, folder);
+        this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
     public CForm(LabelAlignment allignment) {
         this(null, allignment, InfoImageAlignment.AFTER);
     }
 
-    public CForm(LabelAlignment allignment, CFormFolder folder) {
-        this(null, allignment, InfoImageAlignment.AFTER, folder);
-    }
-
     public CForm(String title) {
         this(title, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
-    protected CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment, CFormFolder folder) {
+    protected CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super(title);
         this.allignment = allignment;
         this.infoImageAlignment = infoImageAlignment;
-        this.folder = folder;
     }
 
-    public CForm(String title, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
-        this(title, allignment, infoImageAlignment, null);
+    public void setFolder(CFormFolder folder) {
+        this.folder = folder;
     }
 
     public LabelAlignment getAllignment() {

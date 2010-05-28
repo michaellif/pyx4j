@@ -20,26 +20,14 @@
  */
 package com.pyx4j.entity.client.ui;
 
-import com.pyx4j.entity.client.ui.crud.CEntityEditorForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CFormFolder;
 
 public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
 
-    private final CEntityEditorForm<E> metaModel;
-
     public CEntityFormFolder(String title, Class<E> clazz, EntityFormFactory<E> factory) {
         super(factory);
-        this.metaModel = CEntityEditorForm.create(clazz);
         this.setTitle(title);
-    }
-
-    public E meta() {
-        return metaModel.meta();
-    }
-
-    public CEntityEditorForm<E> getForm() {
-        return metaModel;
     }
 
 }

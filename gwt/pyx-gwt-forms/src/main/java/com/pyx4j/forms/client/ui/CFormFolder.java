@@ -36,7 +36,9 @@ public abstract class CFormFolder<OBJ> extends CEditableComponent<List<OBJ>> {
     }
 
     public final CForm createForm() {
-        return factory.createForm();
+        CForm form = factory.createForm();
+        form.setFolder(this);
+        return form;
     }
 
     /**
