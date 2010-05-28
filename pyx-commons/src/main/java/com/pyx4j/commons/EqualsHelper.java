@@ -87,7 +87,7 @@ public abstract class EqualsHelper {
             Iterator<?> iter1 = value1.iterator();
             Iterator<?> iter2 = value2.iterator();
             for (; iter1.hasNext() && iter2.hasNext();) {
-                if (!iter1.next().equals(iter2.next())) {
+                if (!equals(iter1.next(), iter2.next())) {
                     return false;
                 }
             }
