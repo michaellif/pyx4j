@@ -23,11 +23,15 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CFormFolder<OBJ> extends CEditableComponent<List<OBJ>> {
+import com.pyx4j.forms.client.gwt.NativeFormFolder;
+
+public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     private final List<CForm> forms;
 
     private final FormFactory factory;
+
+    private NativeFormFolder nativeFormFolder;
 
     public CFormFolder(FormFactory factory) {
         super();
@@ -41,19 +45,43 @@ public abstract class CFormFolder<OBJ> extends CEditableComponent<List<OBJ>> {
         return form;
     }
 
-    /**
-     * Has no native component. Explicitly handled by CForm
-     */
-    @Override
-    public INativeEditableComponent<List<OBJ>> getNativeComponent() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<CForm> getForms() {
+        return forms;
     }
 
     @Override
-    public INativeEditableComponent<List<OBJ>> initNativeComponent() {
-        // TODO Auto-generated method stub
-        return null;
+    public void setValue(List<E> value) {
+        getForms().clear();
+        if (value != null) {
+            for (E entity : value) {
+                CForm form = createForm();
+                getForms().add(form);
+            }
+        }
+        super.setValue(value);
     }
 
+    @Override
+    public INativeEditableComponent<List<E>> getNativeComponent() {
+        return nativeFormFolder;
+    }
+
+    @Override
+    public INativeEditableComponent<List<E>> initNativeComponent() {
+        if (nativeFormFolder == null) {
+            nativeFormFolder = new NativeFormFolder<E>(this);
+        }
+        return nativeFormFolder;
+    }
+
+    public void addItem(E value) {
+        if (getValue() == null) {
+            setValue(new ArrayList<E>());
+        }
+
+        List<E> newValue = new ArrayList<E>(getValue());
+        newValue.add(value);
+        forms.add(createForm());
+        setValue(newValue);
+    }
 }

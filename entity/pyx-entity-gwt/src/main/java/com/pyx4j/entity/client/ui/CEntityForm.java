@@ -24,6 +24,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -32,6 +35,7 @@ import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.annotations.validator.Phone;
+import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -55,6 +59,8 @@ import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
 
 public class CEntityForm<E extends IEntity> extends CForm {
+
+    private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
     private final E metaEntity;
 

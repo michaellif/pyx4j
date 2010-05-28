@@ -20,7 +20,10 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import java.util.List;
+
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
 
 public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {

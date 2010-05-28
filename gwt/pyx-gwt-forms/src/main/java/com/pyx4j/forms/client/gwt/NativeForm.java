@@ -67,9 +67,9 @@ import com.pyx4j.widgets.client.Tooltip;
 
 public class NativeForm extends FlexTable implements INativeComponent {
 
-    private final int LEFT_LABEL_WIDTH = 100;
+    public static final int LEFT_LABEL_WIDTH = 100;
 
-    private final int TOP_LABEL_WIDTH = 200;
+    public static final int TOP_LABEL_WIDTH = 200;
 
     private final static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("MMM d, yyyy");
 
@@ -149,7 +149,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
     private void addComponent(CComponent<?> component, int row, int column) {
 
         if (component instanceof CFormFolder) {
-            setWidget(row, column, new FolderContainer((CFormFolder) component));
+            setWidget(row, column, (Widget) component.initNativeComponent());
         } else {
             setWidget(row, column, new WidgetContainer(component));
         }
@@ -508,84 +508,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     }
 
-    class FolderContainer extends ComplexPanel {
-
-        private final CFormFolder<?> folder;
-
-        private final Anchor addCommand;
-
-        private final Label label;
-
-        private final VerticalPanel container;
-
-        FolderContainer(final CFormFolder<?> folder) {
-            setElement(DOM.createDiv());
-
-            this.folder = folder;
-
-            container = new VerticalPanel();
-            container.setWidth("100%");
-
-            label = new Label(folder.getTitle() == null ? "" : folder.getTitle());
-            label.getElement().getStyle().setPosition(Position.ABSOLUTE);
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
-            addCommand = new Anchor("add");
-            addCommand.getElement().getStyle().setPosition(Position.ABSOLUTE);
-            setActionStyles(addCommand);
-            addCommand.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    CForm form = folder.createForm();
-                    Widget nativeForm = (Widget) form.initNativeComponent();
-                    nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
-                    nativeForm.setWidth("100%");
-                    container.add(nativeForm);
-                    container.setCellWidth(nativeForm, "100%");
-                    container.getElement().getStyle().setPadding(10, Unit.PX);
-                }
-            });
-
-            label.setVisible(folder.isVisible());
-            setVisible(folder.isVisible());
-
-            folder.addPropertyChangeHandler(new PropertyChangeHandler() {
-                public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
-                        label.setVisible(folder.isVisible());
-                        setVisible(folder.isVisible());
-                    } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
-                        label.setText(folder.getTitle() + ":");
-                    }
-                }
-            });
-
-            add(container, getElement());
-
-            add(label, getElement());
-
-            add(addCommand, getElement());
-
-            label.setWordWrap(false);
-            label.getElement().getStyle().setProperty("top", "5px");
-            label.getElement().getStyle().setProperty("left", "15px");
-
-            addCommand.getElement().getStyle().setProperty("left", (labelWidth + 25) + "px");
-            addCommand.getElement().getStyle().setProperty("top", "5px");
-
-            getElement().getStyle().setPaddingTop(25, Unit.PX);
-            getElement().getStyle().setPaddingBottom(20, Unit.PX);
-            getElement().getStyle().setPosition(Position.RELATIVE);
-        }
-
-        @Override
-        protected void onLoad() {
-            super.onLoad();
-        }
-
-    }
-
-    private static void setActionStyles(Widget w) {
+    static void setActionStyles(Widget w) {
         w.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
         w.getElement().getStyle().setPaddingRight(5, Unit.PX);
         w.getElement().getStyle().setColor("#518BDC");
