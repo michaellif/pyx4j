@@ -50,6 +50,16 @@ public class ReportsProcessor {
         return TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", Thread.currentThread().getContextClassLoader());
     }
 
+    public static void transform(InputStream input, InputStream xslTransformation, OutputStream transformationOut) {
+        try {
+            Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
+            transformer.transform(new StreamSource(input), new StreamResult(new OutputStreamWriter(transformationOut)));
+        } catch (Throwable e) {
+            log.error("Unable to perform transformation", e);
+            throw new RuntimeException("Transformation error", e);
+        }
+    }
+
     public static void createTransformation(InputStream binaryZip, InputStream xslTransformation, OutputStream transformationOut) {
         ZipInputStream zip = new ZipInputStream(binaryZip);
         try {
@@ -72,8 +82,7 @@ public class ReportsProcessor {
                         }
                         in = new ByteArrayInputStream(b.toByteArray());
                         // Output original document.xml entry to template.xml
-                        Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
-                        transformer.transform(new StreamSource(in), new StreamResult(new OutputStreamWriter(transformationOut)));
+                        transform(in, xslTransformation, transformationOut);
                         zip.closeEntry();
                     } finally {
                         IOUtils.closeQuietly(b);
@@ -106,8 +115,7 @@ public class ReportsProcessor {
                 zipOut.putNextEntry(new ZipEntry(entry.getName()));
                 if (entry.getName().equals("word/document.xml")) {
                     // Transform data with document-transform
-                    Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
-                    transformer.transform(new StreamSource(data), new StreamResult(new OutputStreamWriter(zipOut)));
+                    transform(data, xslTransformation, zipOut);
                 } else if ((media != null) && media.containsKey(entry.getName())) {
                     zipOut.write(media.get(entry.getName()));
                 } else {
@@ -131,28 +139,25 @@ public class ReportsProcessor {
             IOUtils.closeQuietly(zipOut);
         }
     }
-    
+
     public static void createPDF(InputStream xslTransformation, InputStream data, OutputStream report) {
-    	ByteArrayOutputStream memOut = null;
-    	ByteArrayInputStream memIn = null;
-    	
+        ByteArrayOutputStream memOut = null;
+        ByteArrayInputStream memIn = null;
+
         // Transform data with document-transform
-        Transformer transformer;
-		try {
-			memOut = new ByteArrayOutputStream();
-			transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
-	        transformer.transform(new StreamSource(data), new StreamResult(memOut));
-	        
-	        memIn = new ByteArrayInputStream(memOut.toByteArray());
-	        HtmlToPDFParser.parse(memIn, report);
-	        
-		} catch (Throwable e) {
+        try {
+            memOut = new ByteArrayOutputStream();
+            transform(data, xslTransformation, memOut);
+
+            memIn = new ByteArrayInputStream(memOut.toByteArray());
+            HtmlToPDFParser.parse(memIn, report);
+        } catch (Throwable e) {
             log.error("Unable to create report", e);
             throw new RuntimeException("Report error", e);
-		} finally {
-			IOUtils.closeQuietly(memOut);
-			IOUtils.closeQuietly(memIn);
-		}
+        } finally {
+            IOUtils.closeQuietly(memOut);
+            IOUtils.closeQuietly(memIn);
+        }
     }
 
 }
