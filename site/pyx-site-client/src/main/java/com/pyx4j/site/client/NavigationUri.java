@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.http.client.URL;
 
 import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 
 public class NavigationUri {
 
@@ -58,16 +58,16 @@ public class NavigationUri {
     }
 
     public NavigationUri(Class<? extends NavigNode> page) {
-        setPath(SiteMap.getPageUri(page));
+        setPath(NavigUtils.getPageUri(page));
     }
 
     public NavigationUri(Class<? extends NavigNode> page, String name, String value) {
-        setPath(SiteMap.getPageUri(page));
+        setPath(NavigUtils.getPageUri(page));
         addArg(name, value);
     }
 
     public NavigationUri(Class<? extends NavigNode> page, String name1, String value1, String name2, String value2) {
-        setPath(SiteMap.getPageUri(page));
+        setPath(NavigUtils.getPageUri(page));
         addArg(name1, value1);
         addArg(name2, value2);
     }

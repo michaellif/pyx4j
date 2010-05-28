@@ -47,7 +47,7 @@ import com.pyx4j.gwt.geo.GeoBoxOverlay;
 import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.site.client.themes.SiteCSSClass;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 
 public class CustomerListMapPanel extends SimplePanel {
 
@@ -172,7 +172,7 @@ public class CustomerListMapPanel extends SimplePanel {
                     map.getInfoWindow().open(
                             marker,
                             new InfoWindowContent("<div style='text-align:center; font-size:14px;background-color:white; padding:2px;'><a href='#"
-                                    + SiteMap.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id=" + customer.getPrimaryKey() + "'><b>"
+                                    + NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id=" + customer.getPrimaryKey() + "'><b>"
                                     + customer.name().getValue() + "</b></a><br>"
 
                                     + customer.address().street().getValue() + ", " + customer.address().city().getValue() + "<br/>"

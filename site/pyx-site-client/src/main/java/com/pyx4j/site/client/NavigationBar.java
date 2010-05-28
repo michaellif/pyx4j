@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NavigationBar extends ComplexPanel {
@@ -104,7 +104,7 @@ public class NavigationBar extends ComplexPanel {
 
     public void setSelected(String uri) {
         for (NavigationTab tab : tabs) {
-            tab.setSelected(SiteMap.isContained(tab.uri, uri));
+            tab.setSelected(NavigUtils.isContained(tab.uri, uri));
         }
     }
 

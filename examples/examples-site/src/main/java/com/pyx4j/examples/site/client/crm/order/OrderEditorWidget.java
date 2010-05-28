@@ -56,7 +56,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
 import com.pyx4j.widgets.client.photoalbum.Photo;
@@ -75,7 +75,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             @Override
             protected IObject<?>[][] getFormMembers() {
 
-                getForm().bind(new CEntityHyperlink("Customer", SiteMap.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id="),
+                getForm().bind(new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id="),
                         meta().customer().getPath());
 
                 return new IObject[][] {

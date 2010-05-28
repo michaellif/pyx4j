@@ -9,7 +9,7 @@
 package com.pyx4j.site.client;
 
 import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 
 public class PageLink extends LinkBarItem {
 
@@ -21,7 +21,7 @@ public class PageLink extends LinkBarItem {
     }
 
     public PageLink(String html, Class<? extends NavigNode> node) {
-        this(html, SiteMap.getPageUri(node));
+        this(html, NavigUtils.getPageUri(node));
     }
 
 }

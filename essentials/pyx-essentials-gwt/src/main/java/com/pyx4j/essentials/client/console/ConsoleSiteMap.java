@@ -21,9 +21,9 @@
 package com.pyx4j.essentials.client.console;
 
 import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 
-public class ConsoleSiteMap extends SiteMap {
+public class ConsoleSiteMap extends NavigUtils {
 
     public interface console extends NavigNode {
 

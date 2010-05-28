@@ -49,7 +49,7 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.DialogOptions;
@@ -156,7 +156,7 @@ public abstract class AbstractSiteDispatcher {
     }
 
     public static void show(Class<? extends NavigNode> page) {
-        show(SiteMap.getPageUri(page));
+        show(NavigUtils.getPageUri(page));
     }
 
     public static void show(NavigationUri uri) {
@@ -318,7 +318,7 @@ public abstract class AbstractSiteDispatcher {
     }
 
     public void setWelcomeUri(Class<? extends NavigNode> welcomePage) {
-        setWelcomeUri(SiteMap.getPageUri(welcomePage));
+        setWelcomeUri(NavigUtils.getPageUri(welcomePage));
     }
 
     public SitePanel getCurrentSitePanel() {

@@ -50,7 +50,7 @@ import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.style.StyleManger;
 
@@ -391,7 +391,7 @@ public abstract class SitePanel extends SimplePanel {
         if (sameUriPages == null) {
             sameUriPages = new ArrayList<Page>();
             pages.put(page.uri().getValue(), sameUriPages);
-            if (SiteMap.isRoot(page.uri().getValue())) {
+            if (NavigUtils.isRoot(page.uri().getValue())) {
                 if (page.tabName().getValue() == null) {
                     primaryNavigationBar.add(page.caption().getValue(), page.uri().getValue());
                 } else {

@@ -96,7 +96,7 @@ public class SiteFactory {
             Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
-        String uri = SiteMap.getPageUri(node);
+        String uri = NavigUtils.getPageUri(node);
         if (!uriRegistry.contains(uri)) {
             uriRegistry.add(uri);
         }

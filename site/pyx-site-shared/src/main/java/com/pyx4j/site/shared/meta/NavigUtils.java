@@ -25,7 +25,7 @@ import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SiteMap {
+public class NavigUtils {
 
     public static String getPageUri(Class<? extends NavigNode> page) {
         String[] parts = page.getName().split("\\$");

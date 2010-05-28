@@ -31,7 +31,7 @@ import com.pyx4j.gwt.geo.GoogleAPI;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -124,7 +124,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     }
 
     public static String getLogedInHistoryToken() {
-        return SiteMap.getPageUri(ExamplesSiteMap.Crm.Customers.class);
+        return NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.class);
     }
 
     public static String getLogedInURL() {
