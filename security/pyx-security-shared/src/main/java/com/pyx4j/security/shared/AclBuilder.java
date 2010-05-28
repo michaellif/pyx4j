@@ -30,16 +30,20 @@ public class AclBuilder implements AclCreator {
 
     private static class PermissionsGroup {
 
+        private Set<Behavior> behaviors = new HashSet<Behavior>();
+
         private Set<Permission> permissions = new HashSet<Permission>();
 
         private Set<Restriction> restrictions = new HashSet<Restriction>();
 
         protected void add(PermissionsGroup pg) {
+            behaviors.addAll(pg.behaviors);
             permissions.addAll(pg.permissions);
             restrictions.addAll(pg.restrictions);
         }
 
         protected void freeze() {
+            behaviors = Collections.unmodifiableSet(behaviors);
             permissions = Collections.unmodifiableSet(permissions);
             restrictions = Collections.unmodifiableSet(restrictions);
         }
@@ -74,14 +78,20 @@ public class AclBuilder implements AclCreator {
         }
         PermissionsGroup g = new PermissionsGroup();
         g.add(global);
+        addRecurcive(g, behaviors);
+        g.freeze();
+        return new AclSerializable(g.behaviors, g.permissions, g.restrictions);
+    }
+
+    private void addRecurcive(PermissionsGroup target, Set<Behavior> behaviors) {
+        target.behaviors.addAll(behaviors);
         for (Behavior behavior : behaviors) {
             PermissionsGroup bg = groups.get(behavior);
             if (bg != null) {
-                g.add(bg);
+                target.add(bg);
+                addRecurcive(target, bg.behaviors);
             }
         }
-        g.freeze();
-        return new AclSerializable(Collections.unmodifiableSet(behaviors), g.permissions, g.restrictions);
     }
 
     protected void grant(Permission permission) {
@@ -107,6 +117,13 @@ public class AclBuilder implements AclCreator {
 
     protected void grant(Behavior behavior, Permission permission) {
         getGroup(behavior).permissions.add(permission);
+    }
+
+    protected void grant(Behavior behaviorDest, Behavior behaviorGranted) {
+        if (behaviorDest.equals(behaviorGranted)) {
+            throw new IllegalArgumentException();
+        }
+        getGroup(behaviorDest).behaviors.add(behaviorGranted);
     }
 
     protected void revoke(Behavior behavior, Permission restriction) {
