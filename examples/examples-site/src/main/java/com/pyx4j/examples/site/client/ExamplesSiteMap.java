@@ -25,14 +25,6 @@ import com.pyx4j.site.shared.meta.SiteMap;
 
 public class ExamplesSiteMap implements SiteMap {
 
-    public enum Sites {
-
-        Pub,
-
-        Crm
-
-    }
-
     public interface Pub extends NavigNode {
 
         public interface Home extends NavigNode {

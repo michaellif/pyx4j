@@ -26,12 +26,13 @@ import com.pyx4j.examples.site.client.ExamplesWidgets.ExamplesCrmWidgets;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSiteResources;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.site.shared.meta.SiteFactory;
 
 public class CrmSiteFactory extends SiteFactory {
 
     public Site createCrmSite() {
-        Site site = createSite(ExamplesSiteMap.Sites.Crm.name(), "Pyx CRM");
+        Site site = createSite(NavigUtils.getSiteId(ExamplesSiteMap.Crm.class), "Pyx CRM");
 
         //site.pages().add(createSingleWidgetPage("Dashboard", ExamplesSiteMap.Crm.Dashboard.class, ExamplesCrmWidgets.crm$dashboardWidget));
 

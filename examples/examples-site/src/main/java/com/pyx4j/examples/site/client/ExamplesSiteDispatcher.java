@@ -63,7 +63,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     protected void onAfterLogOut() {
         super.onAfterLogOut();
         if (getCurrentSitePanel() != null) {
-            if (getCurrentSitePanel().equals(getSitePanels().get(ExamplesSiteMap.Sites.Crm.name()))) {
+            if (getCurrentSitePanel().equals(getSitePanels().get(NavigUtils.getSiteId(ExamplesSiteMap.Crm.class)))) {
                 AbstractSiteDispatcher.show(ExamplesSiteMap.Pub.Home.class);
             }
         }
@@ -85,27 +85,13 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
     protected void obtainSite(final String siteName, final AsyncCallback<SitePanel> callback) {
 
         if (!getSitePanels().containsKey(siteName)) {
-
-            final ExamplesSiteMap.Sites siteId;
-            try {
-                siteId = ExamplesSiteMap.Sites.valueOf(ExamplesSiteMap.Sites.class, siteName);
-            } catch (Throwable e) {
-                MessageDialog.error("Ooops", "We don't have site [" + siteName + "]");
-                return;
-            }
-
-            switch (siteId) {
-            case Pub:
+            if (NavigUtils.getSiteId(ExamplesSiteMap.Pub.class).equals(siteName)) {
                 ExamplesPublicSitePanel.asyncLoadSite(callback);
-                break;
-            case Crm:
+            } else if (NavigUtils.getSiteId(ExamplesSiteMap.Crm.class).equals(siteName)) {
                 ExamplesCrmSitePanel.asyncLoadSite(callback);
-                break;
-            //                        case headless:
-            //                            ExamplesHeadlessSitePanel.asyncLoadSite(site, callback);
-            //                            break;
+            } else {
+                MessageDialog.error("Ooops", "We don't have site [" + siteName + "]");
             }
-
         } else {
             if (getSitePanels().containsKey(siteName)) {
                 callback.onSuccess(getSitePanels().get(siteName));

@@ -25,6 +25,7 @@ import com.pyx4j.examples.site.client.pub.ExamplesPublicSiteResources;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.site.shared.meta.SiteFactory;
 
 public class ExamplesSiteFactory extends SiteFactory {
@@ -39,7 +40,7 @@ public class ExamplesSiteFactory extends SiteFactory {
 
     public Site createPubSite() {
 
-        Site site = createSite(ExamplesSiteMap.Sites.Pub.name(), "pyx4j.com");
+        Site site = createSite(NavigUtils.getSiteId(ExamplesSiteMap.Pub.class), "pyx4j.com");
 
         Page pageHome = createPage("Home", ExamplesSiteMap.Pub.Home.class, ExamplesPublicSiteResources.INSTANCE.pageHome().getText());
         pageHome.data().rightPortlets().add(createTechnologyPortlet());

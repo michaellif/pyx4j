@@ -27,8 +27,8 @@ import java.util.List;
 
 public class NavigUtils {
 
-    public static String getPageUri(Class<? extends NavigNode> page) {
-        String[] parts = page.getName().split("\\$");
+    public static String getPageUri(Class<? extends NavigNode> node) {
+        String[] parts = node.getName().split("\\$");
 
         StringBuilder builder = new StringBuilder();
         for (int i = 1; i < parts.length; i++) {
@@ -39,6 +39,14 @@ public class NavigUtils {
         }
 
         return builder.toString();
+    }
+
+    public static String getSiteId(Class<? extends NavigNode> node) {
+        String[] parts = node.getName().split("\\$");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Node is not a site node");
+        }
+        return parts[1];
     }
 
     public static List<String> parseResourceUri(String uri) {
