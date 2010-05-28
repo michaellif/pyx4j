@@ -14,36 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 4, 2010
+ * Created on 2010-05-28
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client.console;
+package com.pyx4j.site.shared.meta;
 
-import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.SiteMap;
-
-public class ConsoleSiteMap implements SiteMap {
-
-    public interface console extends NavigNode {
-
-        public interface Preload extends NavigNode {
-        }
-
-        public interface Sessions extends NavigNode {
-        }
-
-        public interface More extends NavigNode {
-        }
-
-    }
-
-    public enum Widgets {
-
-        console$preloadWidget,
-
-        console$sessionsAdminWidget
-
-    }
+public interface SiteMap {
 
 }

@@ -21,8 +21,9 @@
 package com.pyx4j.examples.site.client;
 
 import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.SiteMap;
 
-public class ExamplesSiteMap {
+public class ExamplesSiteMap implements SiteMap {
 
     public enum Sites {
 
