@@ -252,14 +252,13 @@ public class DialogPanel extends PopupPanel {
         NativeEvent nativeEvent = event.getNativeEvent();
 
         EventTarget target = nativeEvent.getEventTarget();
-
-        String className = Element.as(target).getClassName();
-
-        if (!event.isCanceled() && (event.getTypeInt() == Event.ONMOUSEDOWN)
-                && (CSSClass.pyx4j_Dialog_Resizer.name().equals(className) || CSSClass.pyx4j_Dialog_Caption.name().equals(className))) {
-            nativeEvent.preventDefault();
+        if (target != null) {
+            String className = Element.as(target).getClassName();
+            if (!event.isCanceled() && (event.getTypeInt() == Event.ONMOUSEDOWN)
+                    && (CSSClass.pyx4j_Dialog_Resizer.name().equals(className) || CSSClass.pyx4j_Dialog_Caption.name().equals(className))) {
+                nativeEvent.preventDefault();
+            }
         }
-
         super.onPreviewNativeEvent(event);
     }
 

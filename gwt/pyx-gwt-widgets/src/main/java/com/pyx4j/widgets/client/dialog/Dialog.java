@@ -453,7 +453,10 @@ public class Dialog extends DialogPanel {
         } else {
             log.trace("Last dialog Closed");
             if (documentActiveElement != null) {
-                documentActiveElement.focus();
+                try {
+                    documentActiveElement.focus();
+                } catch (Throwable ignore) {
+                }
                 documentActiveElement = null;
             }
         }
