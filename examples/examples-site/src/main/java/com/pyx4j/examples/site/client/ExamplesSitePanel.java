@@ -26,9 +26,12 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.CommandLink;
 import com.pyx4j.site.client.SitePanel;
+import com.pyx4j.site.client.SkinFactory;
+import com.pyx4j.site.client.themes.crm.CrmTheme;
 import com.pyx4j.site.shared.domain.Link;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.style.Theme;
 
 public abstract class ExamplesSitePanel extends SitePanel {
 
@@ -38,6 +41,13 @@ public abstract class ExamplesSitePanel extends SitePanel {
 
     protected ExamplesSitePanel(Site site) {
         super(site);
+
+        setSkinFactory(new SkinFactory() {
+            @Override
+            public Theme createSkin(String skinName) {
+                return new CrmTheme();
+            }
+        });
 
         {
             boolean hasSeparator = false;
