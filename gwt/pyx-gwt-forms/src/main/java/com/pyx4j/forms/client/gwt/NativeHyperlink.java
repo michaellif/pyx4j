@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.INativeFocusComponent;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeHyperlink extends Anchor implements INativeFocusComponent {
 
@@ -43,6 +44,8 @@ public class NativeHyperlink extends Anchor implements INativeFocusComponent {
     public NativeHyperlink(CHyperlink hyperlink, Command comand) {
         super(hyperlink.getValue());
         this.cHyperlink = hyperlink;
+        setStyleName(CSSClass.pyx4j_Hyperlink.name());
+
         setTabIndex(hyperlink.getTabIndex());
         setCommand(comand);
 
@@ -86,6 +89,11 @@ public class NativeHyperlink extends Anchor implements INativeFocusComponent {
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if (enabled) {
+            addStyleDependentName("enabled");
+        } else {
+            removeStyleDependentName("enabled");
+        }
     }
 
     @Override

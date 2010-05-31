@@ -23,6 +23,7 @@ package com.pyx4j.site.client.themes.crm;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.SiteTheme;
+import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
@@ -34,7 +35,7 @@ public class CrmTheme extends SiteTheme {
         putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
         putThemeColor(ThemeColor.OBJECT_TONE2, "#F6F9FF");
         putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
-        putThemeColor(ThemeColor.BORDER, "#E5ECF9");
+        putThemeColor(ThemeColor.BORDER, "#D0CAC4");
         putThemeColor(ThemeColor.SELECTION, "#86adc4");
         putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
         putThemeColor(ThemeColor.TEXT, "#000000");
@@ -134,7 +135,7 @@ public class CrmTheme extends SiteTheme {
         style.addProperty("background", "transparent");
         style.addProperty("height", "30px");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", "#D0CAC4");
+        style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("margin-top", "30px");
 
         addStyle(style);

@@ -52,6 +52,7 @@ public class WindowsTheme extends Theme {
         initCheckBoxStyle();
         initListBoxStyle();
         initDatePickerStyle();
+        initHyperlinkStyle();
     }
 
     protected void initThemeColors() {
@@ -480,4 +481,6 @@ public class WindowsTheme extends Theme {
 
     }
 
+    protected void initHyperlinkStyle() {
+    }
 }
