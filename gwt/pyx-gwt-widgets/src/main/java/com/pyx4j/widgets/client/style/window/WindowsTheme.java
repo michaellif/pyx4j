@@ -61,6 +61,7 @@ public class WindowsTheme extends Theme {
         putThemeColor(ThemeColor.OBJECT_TONE2, "#fdfae9");
         putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
         putThemeColor(ThemeColor.BORDER, "#666666");
+        putThemeColor(ThemeColor.GROUP_BORDER, "#387CBB");
         putThemeColor(ThemeColor.SELECTION, "#86adc4");
         putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
         putThemeColor(ThemeColor.TEXT, "#000000");
@@ -490,19 +491,24 @@ public class WindowsTheme extends Theme {
         Style style = new Style("." + CSSClass.pyx4j_GroupBox.name());
         style.addProperty("padding", "5px");
         style.addProperty("margin", "3px");
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_GroupBox.name() + "-expanded");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemeColor.GROUP_BORDER);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_GroupBox.name() + "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemeColor.GROUP_BORDER);
+        addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_GroupBox_Caption.name());
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
+        style.addProperty("color", ThemeColor.GROUP_BORDER);
+        addStyle(style);
     }
 
 }

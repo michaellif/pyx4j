@@ -90,7 +90,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
             Cursor.setDefault(legend.getElement());
             Cursor.setDefault(caption.getElement());
             legend.add(caption);
-            addStyleDependentName("expended");
+            addStyleDependentName("expanded");
             break;
         case COLLAPSIBLE:
             collapseImage = new Image();
@@ -135,8 +135,6 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         default:
             throw new IllegalArgumentException();
         }
-
-        legend.getElement().getStyle().setProperty("color", "#387cbb");
 
         this.setWidth(panel.getWidth());
         if (panel.getHeight() != null) {
@@ -208,13 +206,13 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         }
 
         if (expended) {
-            addStyleDependentName("expended");
+            addStyleDependentName("expanded");
             removeStyleDependentName("collapsed");
             // Fix trigger element moving because border is bigger now
             legend.getElement().getStyle().setProperty("paddingLeft", "0px");
         } else {
             addStyleDependentName("collapsed");
-            removeStyleDependentName("expended");
+            removeStyleDependentName("expanded");
             // Fix trigger element moving because border is smaller
             legend.getElement().getStyle().setProperty("paddingLeft", "1px");
         }
