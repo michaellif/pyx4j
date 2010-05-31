@@ -59,4 +59,7 @@ public enum CSSClass {
     //Hyperlink
     pyx4j_Hyperlink,
 
+    //GroupBox
+    pyx4j_GroupBox, pyx4j_GroupBox_Caption,
+
 }

@@ -53,6 +53,7 @@ public class WindowsTheme extends Theme {
         initListBoxStyle();
         initDatePickerStyle();
         initHyperlinkStyle();
+        initGroupBoxStyle();
     }
 
     protected void initThemeColors() {
@@ -483,4 +484,25 @@ public class WindowsTheme extends Theme {
 
     protected void initHyperlinkStyle() {
     }
+
+    protected void initGroupBoxStyle() {
+
+        Style style = new Style("." + CSSClass.pyx4j_GroupBox.name());
+        style.addProperty("padding", "5px");
+        style.addProperty("margin", "3px");
+
+        style = new Style("." + CSSClass.pyx4j_GroupBox.name() + "-expanded");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
+
+        style = new Style("." + CSSClass.pyx4j_GroupBox.name() + "-collapsed");
+        style.addProperty("border", "none");
+        style.addProperty("border-top", "1px solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
+
+        style = new Style("." + CSSClass.pyx4j_GroupBox_Caption.name());
+        style.addProperty("padding", "5px 2px 2px 2px");
+        style.addProperty("verticalAlign", "top");
+    }
+
 }

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import org.apache.catalina.startup.SetDocBaseRule;
+
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,6 +44,7 @@ import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.INativeSimplePanel;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.pyx4j.widgets.client.Tooltip;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeSimplePanel {
 
@@ -74,20 +77,20 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
     public NativeGroupBoxPanel(final CGroupBoxPanel panel, final Layout layout) {
         super();
         this.panel = panel;
+        setStyleName(CSSClass.pyx4j_GroupBox.name());
 
         legend = new NativeLegendPanel();
         super.add(legend);
 
         caption = new InlineHTML();
-        Style captionStyle = caption.getElement().getStyle();
-        captionStyle.setProperty("padding", "5px 2px 2px 2px");
-        captionStyle.setProperty("verticalAlign", "top");
+        caption.setStyleName(CSSClass.pyx4j_GroupBox_Caption.name());
 
         switch (layout) {
         case PLAIN:
             Cursor.setDefault(legend.getElement());
             Cursor.setDefault(caption.getElement());
             legend.add(caption);
+            addStyleDependentName("expended");
             break;
         case COLLAPSIBLE:
             collapseImage = new Image();
@@ -113,9 +116,6 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
             break;
         case CHECKBOX_TOGGLE:
             collapseCheckBox = new PlainCheckBox();
-            // CheckBox is higher and align middle somehow is not working inside Legend  
-            captionStyle.setProperty("verticalAlign", "4px");
-
             ClickHandler expandClickHandlerCheckBox = new ClickHandler() {
                 public void onClick(ClickEvent event) {
                     setExpanded(!panel.isExpended());
@@ -134,14 +134,6 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
             break;
         default:
             throw new IllegalArgumentException();
-        }
-
-        Style borderStyle = this.getElement().getStyle();
-        borderStyle.setProperty("padding", "5px");
-        borderStyle.setProperty("margin", "3px");
-        if (layout == Layout.PLAIN) {
-            borderStyle.setProperty("border", "1px solid");
-            borderStyle.setProperty("borderColor", "#387cbb");
         }
 
         legend.getElement().getStyle().setProperty("color", "#387cbb");
@@ -215,16 +207,14 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
             container.setVisible(expended);
         }
 
-        Style borderStyle = this.getElement().getStyle();
         if (expended) {
-            borderStyle.setProperty("border", "1px solid");
-            borderStyle.setProperty("borderColor", "#387cbb");
+            addStyleDependentName("expended");
+            removeStyleDependentName("collapsed");
             // Fix trigger element moving because border is bigger now
             legend.getElement().getStyle().setProperty("paddingLeft", "0px");
         } else {
-            borderStyle.setProperty("border", "none");
-            borderStyle.setProperty("borderTop", "1px solid");
-            borderStyle.setProperty("borderColor", "#387cbb");
+            addStyleDependentName("collapsed");
+            removeStyleDependentName("expended");
             // Fix trigger element moving because border is smaller
             legend.getElement().getStyle().setProperty("paddingLeft", "1px");
         }
