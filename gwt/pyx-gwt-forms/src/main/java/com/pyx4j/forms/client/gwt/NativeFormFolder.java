@@ -65,7 +65,7 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
 
         addCommand = new Anchor("add");
         addCommand.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        NativeForm.setActionStyles(addCommand);
+        NativeForm.installActionStyles(addCommand);
         addCommand.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

@@ -349,13 +349,13 @@ public class NativeForm extends FlexTable implements INativeComponent {
             setWidth("100%");
             HorizontalPanel actionsPanel = new HorizontalPanel();
             Anchor removeCommand = new Anchor("remove");
-            setActionStyles(removeCommand);
+            installActionStyles(removeCommand);
             actionsPanel.add(removeCommand);
             Anchor upCommand = new Anchor("up");
-            setActionStyles(upCommand);
+            installActionStyles(upCommand);
             actionsPanel.add(upCommand);
             Anchor downCommand = new Anchor("down");
-            setActionStyles(downCommand);
+            installActionStyles(downCommand);
             actionsPanel.add(downCommand);
             setWidget(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
@@ -508,7 +508,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     }
 
-    static void setActionStyles(Widget w) {
+    static void installActionStyles(Widget w) {
         w.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
         w.getElement().getStyle().setPaddingRight(5, Unit.PX);
         w.getElement().getStyle().setColor("#518BDC");
