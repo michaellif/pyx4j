@@ -37,6 +37,7 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertTrue("Not owned Yet", department.organization().isNull());
 
         org.departments().add(department);
+        assertEquals("set size", 1, org.departments().size());
 
         Department orgDepartment = org.departments().iterator().next();
         assertNull("Direct value access", orgDepartment.getMemberValue("organization"));

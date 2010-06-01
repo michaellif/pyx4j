@@ -95,6 +95,9 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         employee1.salary().setValue(120000.0);
         srv.persist(org);
 
+        Organization org2 = srv.retrieve(Organization.class, org.getPrimaryKey());
+        assertEquals("set size", 1, org2.departments().size());
+
         Employee employee1r = srv.retrieve(Employee.class, employee1.getPrimaryKey());
         Assert.assertEquals("salary no update", origSalary, employee1r.salary().getValue());
     }
