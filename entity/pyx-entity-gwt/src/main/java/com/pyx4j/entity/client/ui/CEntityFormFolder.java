@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui;
 import java.util.Iterator;
 import java.util.List;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CForm;
@@ -30,9 +31,12 @@ import com.pyx4j.forms.client.ui.CFormFolder;
 
 public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> implements DelegatingEntityEditableComponent<List<E>> {
 
-    public CEntityFormFolder(String title, Class<E> clazz, EntityFormFactory<E> factory) {
+    private final Class<E> entityClass;
+
+    public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory) {
         super(factory);
         this.setTitle(title);
+        this.entityClass = entityClass;
     }
 
     // data type asserts.
@@ -59,5 +63,13 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
                 }
             }
         }
+    }
+
+    @Override
+    public void addItem(E value) {
+        if (value == null) {
+            value = EntityFactory.create(entityClass);
+        }
+        super.addItem(value);
     }
 }

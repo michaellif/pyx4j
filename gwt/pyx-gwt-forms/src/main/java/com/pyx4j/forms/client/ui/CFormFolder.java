@@ -78,10 +78,9 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
         if (getValue() == null) {
             setValue(new ArrayList<E>());
         }
-
-        List<E> newValue = new ArrayList<E>(getValue());
-        newValue.add(value);
-        forms.add(createForm());
-        setValue(newValue);
+        getValue().add(value);
+        CForm form = createForm();
+        forms.add(form);
+        super.setNativeComponentValue(getValue());
     }
 }
