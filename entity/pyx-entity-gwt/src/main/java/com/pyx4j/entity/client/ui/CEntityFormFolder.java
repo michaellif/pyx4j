@@ -28,13 +28,14 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
 
-public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
+public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> implements DelegatingEntityEditableComponent<List<E>> {
 
     public CEntityFormFolder(String title, Class<E> clazz, EntityFormFactory<E> factory) {
         super(factory);
         this.setTitle(title);
     }
 
+    // data type asserts.
     @Override
     public void populate(List<E> value) {
         assert (value == null || value instanceof IList);
@@ -42,16 +43,19 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
     }
 
     @Override
-    protected void setNativeComponentValue(List<E> value) {
-        super.setNativeComponentValue(value);
+    public void populateModel(List<E> orig, List<E> value) {
+
+        //hack to create Forms array, TODO remove this. think better way to create forms
+        populate(value);
+
         if (value != null) {
             Iterator<CForm> formIt = getForms().iterator();
             Iterator<E> valueIt = value.iterator();
             while (formIt.hasNext()) {
                 CForm f = formIt.next();
                 E v = valueIt.next();
-                if (f instanceof CEntityForm) {
-                    ((CEntityForm) f).populate(v);
+                if (f instanceof DelegatingEntityEditableComponent) {
+                    ((DelegatingEntityEditableComponent) f).populateModel(null, v);
                 }
             }
         }

@@ -38,7 +38,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
 
-public class CEntityForm<E extends IEntity> extends CForm {
+public class CEntityForm<E extends IEntity> extends CForm implements DelegatingEntityEditableComponent<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
@@ -124,11 +124,23 @@ public class CEntityForm<E extends IEntity> extends CForm {
         } else {
             this.editableEntity = EntityFactory.create((Class<E>) meta().getObjectClass());
         }
+        populateComponents();
+    }
 
+    @Override
+    public void populateModel(E orig, E entity) {
+        origEntity = entity;
+        editableEntity = entity;
+        populateComponents();
+    }
+
+    protected void populateComponents() {
         for (CEditableComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);
             IObject<?> m = editableEntity.getMember(memberPath);
-            if ((m instanceof IEntity) || (m instanceof ICollection)) {
+            if (component instanceof DelegatingEntityEditableComponent) {
+                ((DelegatingEntityEditableComponent) component).populateModel((origEntity == null) ? null : origEntity.getMember(memberPath), m);
+            } else if ((m instanceof IEntity) || (m instanceof ICollection)) {
                 component.populate(m);
             } else {
                 try {
