@@ -51,4 +51,26 @@ public class CreateReportTest extends TestCase {
             Assert.assertTrue("Report created and is not empty", repData.length > 5 * 1024);
         }
     }
+    
+    public void testPdfReport() {
+        ByteArrayOutputStream xslTransformationBuffer = new ByteArrayOutputStream();
+        // Create reusable XSL
+        {
+            InputStream template = Thread.currentThread().getContextClassLoader().getResourceAsStream("report-template.html");
+            Assert.assertNotNull("Can't find PDF template", template);
+            InputStream xslTransformation = Thread.currentThread().getContextClassLoader().getResourceAsStream("pdf-transform.xsl");
+            ReportsProcessor.transform(template, xslTransformation, xslTransformationBuffer);
+        }
+
+        // Create report
+        {
+            InputStream data = Thread.currentThread().getContextClassLoader().getResourceAsStream("report-data.xml");
+            InputStream xslTransformation = new ByteArrayInputStream(xslTransformationBuffer.toByteArray());
+
+            ByteArrayOutputStream report = new ByteArrayOutputStream();
+            ReportsProcessor.createPDF(xslTransformation, data, report);
+            byte[] repData = report.toByteArray();
+            Assert.assertTrue("PDF report created and is not empty", repData.length > 1024);
+        }
+    }
 }

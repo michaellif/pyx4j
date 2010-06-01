@@ -1,0 +1,75 @@
+<html xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pyx="anything">
+  <head>
+	<title>
+	  <xsl:value-of select="Name">John Smith</xsl:value-of>
+	  <xsl:text>'s resume</xsl:text>
+	</title>
+	<style type="text/css">
+	</style>
+  </head>
+  <body>
+	<h1 style="margin-bottom: 1em">
+	  <xsl:value-of select="Name">John Smith</xsl:value-of>
+	</h1>
+	<p>
+	  <b>Address:</b>
+	  <xsl:value-of select="Address">address</xsl:value-of>
+	</p>
+	<p>
+	  <b>Phone:</b>
+	  <xsl:value-of select="Phone">(000) 000-0000</xsl:value-of>
+	</p>
+	<p>
+	  <b>E-mail:</b>
+	  <xsl:variable name="email" select="E-mail"/>
+	  <a href="mailto:{E-mail}">
+		<xsl:value-of select="E-mail">john.smith@example.com</xsl:value-of>
+	  </a>
+	</p>
+
+	<xsl:if test="Experience">
+	  <h2>Experiences</h2>
+	  <xsl:for-each select="Experience">
+		<h3>
+		  <xsl:value-of select="Company">pyx4j</xsl:value-of>
+		</h3>
+		<h4>
+		  <xsl:value-of select="Position">software developer</xsl:value-of>
+		</h4>
+		<p>
+		  <xsl:value-of select="StartDate">past</xsl:value-of> - <xsl:value-of select="EndDate">present</xsl:value-of>
+		</p>
+		<ul>
+		  <xsl:for-each select="Detail">
+			<li>
+			  <xsl:apply-templates><pyx:comment>sample experience</pyx:comment></xsl:apply-templates>
+			</li>
+		  </xsl:for-each>
+		</ul>
+	  </xsl:for-each>
+	</xsl:if>
+
+	<xsl:if test="Education">
+	  <h2>Education</h2>
+	  <xsl:for-each select="Education">
+		<h3>
+		  <xsl:value-of select="Institution">institution</xsl:value-of>
+		</h3>
+		<h4>
+		  <xsl:value-of select="Program">program</xsl:value-of>
+		</h4>
+		<p>
+		  <xsl:value-of select="StartDate">past</xsl:value-of> - <xsl:value-of select="EndDate">present</xsl:value-of>
+		</p>
+		<ul>
+		  <xsl:for-each select="Detail">
+			<li>
+			  <xsl:apply-templates><pyx:comment>sample education</pyx:comment></xsl:apply-templates>
+			</li>
+		  </xsl:for-each>
+		</ul>
+	  </xsl:for-each>
+	</xsl:if>
+
+  </body>
+</html>
