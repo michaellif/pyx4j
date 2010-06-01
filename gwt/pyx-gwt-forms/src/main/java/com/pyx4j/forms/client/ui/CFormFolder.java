@@ -50,7 +50,7 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
     }
 
     @Override
-    public void setValue(List<E> value) {
+    protected void setNativeComponentValue(List<E> value) {
         getForms().clear();
         if (value != null) {
             for (E entity : value) {
@@ -58,7 +58,7 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
                 getForms().add(form);
             }
         }
-        super.setValue(value);
+        super.setNativeComponentValue(value);
     }
 
     @Override

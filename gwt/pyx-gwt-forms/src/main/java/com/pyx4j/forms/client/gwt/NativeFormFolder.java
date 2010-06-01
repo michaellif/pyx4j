@@ -122,6 +122,7 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
 
     @Override
     public void setNativeValue(List<E> value) {
+        container.clear();
         List<CForm> forms = folder.getForms();
         for (CForm form : forms) {
             Widget nativeForm = (Widget) form.initNativeComponent();

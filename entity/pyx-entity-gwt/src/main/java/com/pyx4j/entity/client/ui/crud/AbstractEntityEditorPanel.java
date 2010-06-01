@@ -219,6 +219,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     @SuppressWarnings("unchecked")
     protected void doSave() {
         onBeforeSave();
+        log.debug("saving {}", getEntity());
         final AsyncCallback handlingCallback = new BlockingAsyncCallback<E>() {
 
             @Override

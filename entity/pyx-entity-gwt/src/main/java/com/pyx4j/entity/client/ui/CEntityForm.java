@@ -35,10 +35,9 @@ import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.annotations.validator.Phone;
-import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -220,6 +219,7 @@ public class CEntityForm<E extends IEntity> extends CForm {
     public void populate(E entity) {
         this.origEntity = entity;
         if (entity != null) {
+            log.debug("populate {}", entity);
             this.editableEntity = (E) entity.cloneEntity();
         } else {
             this.editableEntity = EntityFactory.create((Class<E>) meta().getObjectClass());
@@ -228,10 +228,16 @@ public class CEntityForm<E extends IEntity> extends CForm {
         for (CEditableComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);
             IObject<?> m = editableEntity.getMember(memberPath);
-            if (m instanceof IEntity) {
-                component.setValue(m);
+            if ((m instanceof IEntity) || (m instanceof ICollection)) {
+                component.populate(m);
             } else {
-                component.setValue(m.getValue());
+                try {
+                    component.populate(m.getValue());
+                } catch (ClassCastException e) {
+                    // TODO Auto-generated catch block
+                    log.error("Error", e);
+                    throw new ClassCastException("property " + memberPath + " ValueClass:" + m.getMeta().getValueClass() + " Error:" + e.getMessage());
+                }
             }
         }
     }

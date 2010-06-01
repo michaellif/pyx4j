@@ -272,6 +272,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     public int size() {
         List<?> value = getValue();
         if (value != null) {
+            assert (value != this) : this.getFieldName() + " IList structure error";
             return value.size();
         } else {
             return 0;

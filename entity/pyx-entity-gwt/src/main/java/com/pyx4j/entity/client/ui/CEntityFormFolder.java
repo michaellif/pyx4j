@@ -20,9 +20,11 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
 
@@ -33,4 +35,25 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> {
         this.setTitle(title);
     }
 
+    @Override
+    public void populate(List<E> value) {
+        assert (value == null || value instanceof IList);
+        super.populate(value);
+    }
+
+    @Override
+    protected void setNativeComponentValue(List<E> value) {
+        super.setNativeComponentValue(value);
+        if (value != null) {
+            Iterator<CForm> formIt = getForms().iterator();
+            Iterator<E> valueIt = value.iterator();
+            while (formIt.hasNext()) {
+                CForm f = formIt.next();
+                E v = valueIt.next();
+                if (f instanceof CEntityForm) {
+                    ((CEntityForm) f).populate(v);
+                }
+            }
+        }
+    }
 }
