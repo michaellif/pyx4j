@@ -21,6 +21,7 @@
 package com.pyx4j.security.rpc;
 
 import com.pyx4j.commons.Pair;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.Email;
@@ -41,6 +42,9 @@ public interface AuthenticationRequest extends IEntity {
     @Password
     @NotNull
     IPrimitive<String> password();
+
+    @Caption(name = "Remember my ID")
+    IPrimitive<Boolean> rememberID();
 
     /**
      * Text from image for human verification.

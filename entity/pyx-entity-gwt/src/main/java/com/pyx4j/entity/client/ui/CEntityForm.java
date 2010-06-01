@@ -30,32 +30,13 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.validator.Email;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Password;
-import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CIntegerField;
-import com.pyx4j.forms.client.ui.CLongField;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CPhoneField;
-import com.pyx4j.forms.client.ui.CSuggestBox;
-import com.pyx4j.forms.client.ui.CTextArea;
-import com.pyx4j.forms.client.ui.CTextField;
 
 public class CEntityForm<E extends IEntity> extends CForm {
 
@@ -100,87 +81,6 @@ public class CEntityForm<E extends IEntity> extends CForm {
 
     public E meta() {
         return metaEntity;
-    }
-
-    @Deprecated
-    public void setComponets(IObject<?>[][] components2) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Deprecated
-    public CEditableComponent<?> create(IObject<?> member) {
-        MemberMeta mm = member.getMeta();
-        CEditableComponent<?> comp;
-        EditorType editorType = mm.getEditorType();
-
-        if (editorType != null) {
-            switch (editorType) {
-            case text:
-                comp = new CTextField(mm.getCaption());
-                break;
-            case password:
-                comp = new CPasswordTextField(mm.getCaption());
-                break;
-            case textarea:
-                comp = new CTextArea(mm.getCaption());
-                break;
-            case combo:
-                if (mm.isEntity()) {
-                    comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
-                } else {
-                    comp = new CComboBox(mm.getCaption());
-                }
-                break;
-            case suggest:
-                comp = new CSuggestBox(mm.getCaption());
-                break;
-            case captcha:
-                comp = new CCaptcha();
-                break;
-            default:
-                throw new Error("Unknown ");
-            }
-        } else if (mm.getValueClass().equals(String.class)) {
-            if (mm.isValidatorAnnotationPresent(Password.class)) {
-                comp = new CPasswordTextField(mm.getCaption());
-            } else if (mm.isValidatorAnnotationPresent(Email.class)) {
-                comp = new CEmailField(mm.getCaption());
-            } else if (mm.isValidatorAnnotationPresent(Phone.class)) {
-                comp = new CPhoneField(mm.getCaption());
-            } else {
-                comp = new CTextField(mm.getCaption());
-            }
-        } else if (mm.isEntity()) {
-            comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
-        } else if (mm.getValueClass().isEnum()) {
-            comp = new CComboBox(mm.getCaption());
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            comp = new CDatePicker(mm.getCaption());
-        } else if (mm.getValueClass().equals(Boolean.class)) {
-            comp = new CCheckBox(mm.getCaption());
-        } else if (mm.getValueClass().equals(Integer.class)) {
-            comp = new CIntegerField(mm.getCaption());
-        } else if (mm.getValueClass().equals(Long.class)) {
-            comp = new CLongField(mm.getCaption());
-        } else if (mm.getValueClass().equals(Double.class)) {
-            comp = new CDoubleField(mm.getCaption());
-            if (mm.getFormat() != null) {
-                ((CDoubleField) comp).setNumberFormat(mm.getFormat());
-            }
-        } else {
-            comp = new CTextField(mm.getCaption());
-        }
-        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
-            comp.setMandatory(true);
-        }
-
-        if (mm.getDescription() != null) {
-            comp.setToolTip(mm.getDescription());
-        }
-        comp.setTitle(mm.getCaption());
-        bind(comp, member.getPath());
-        return comp;
     }
 
     @SuppressWarnings("unchecked")

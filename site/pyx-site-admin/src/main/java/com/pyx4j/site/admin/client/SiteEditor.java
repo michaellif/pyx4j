@@ -27,10 +27,10 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.crud.CEntityEditorForm;
+import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.EntityFormFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.ria.client.AbstractView;
 import com.pyx4j.site.shared.domain.DefaultSkins;
@@ -38,29 +38,40 @@ import com.pyx4j.site.shared.domain.Site;
 
 public class SiteEditor extends AbstractView {
 
-    private final CEntityEditorForm<Site> form;
+    private final CEntityForm<Site> form;
 
     public SiteEditor(Site site) {
         super(new VerticalPanel(), site.siteId().getValue(), ImageFactory.getImages().image());
 
         VerticalPanel contentPane = (VerticalPanel) getContentPane();
 
-        form = CEntityEditorForm.create(Site.class);
+        EntityFormFactory<Site> formFactory = new EntityFormFactory<Site>(Site.class) {
 
-        CComponent<?>[][] components = new CComponent[][] {
+            @Override
+            protected IObject<?>[][] getFormMembers() {
 
-        { form.create(form.meta().siteCaption()), form.create(form.meta().logoUrl()) },
+                return new IObject[][] {
 
-        { form.create(form.meta().skinType()), form.create(form.meta().footerCopiright()) },
+                { meta().siteCaption(), meta().logoUrl() },
 
+                { meta().skinType(), meta().footerCopiright() },
+
+                };
+            }
+
+            @Override
+            protected void enhanceComponents(CEntityForm<Site> form) {
+                ((CComboBox<String>) (form.get(meta().skinType()))).setOptions(Arrays.asList(new String[] { DefaultSkins.light.name(),
+                        DefaultSkins.dark.name(), DefaultSkins.business.name() }));
+            }
         };
 
-        ((CComboBox<String>) (form.get(form.meta().skinType()))).setOptions(Arrays.asList(new String[] { DefaultSkins.light.name(), DefaultSkins.dark.name(),
-                DefaultSkins.business.name() }));
+        form = formFactory.createForm();
 
         form.populate(site);
 
-        contentPane.add(CForm.createFormWidget(LabelAlignment.LEFT, components));
+        form.setAllignment(LabelAlignment.LEFT);
+        contentPane.add((Widget) form.initNativeComponent());
 
     }
 

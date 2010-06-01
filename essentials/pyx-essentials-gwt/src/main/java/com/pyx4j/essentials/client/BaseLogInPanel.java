@@ -27,12 +27,14 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.client.ui.crud.CEntityEditorForm;
+import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.EntityFormFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
@@ -54,7 +56,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     private static final Logger log = LoggerFactory.getLogger(BaseLogInPanel.class);
 
-    private final CEntityEditorForm<AuthenticationRequest> form;
+    private final CEntityForm<AuthenticationRequest> form;
 
     protected CCheckBox rememberID;
 
@@ -65,7 +67,31 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         getElement().getStyle().setPadding(30, Unit.PX);
         getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-        form = CEntityEditorForm.create(AuthenticationRequest.class);
+        EntityFormFactory<AuthenticationRequest> formFactory = new EntityFormFactory<AuthenticationRequest>(AuthenticationRequest.class) {
+
+            @Override
+            protected IObject<?>[][] getFormMembers() {
+
+                return new IObject[][] {
+
+                { meta().email() },
+
+                { meta().password() },
+
+                { meta().rememberID() },
+
+                { meta().captcha() },
+
+                };
+            }
+
+            @Override
+            protected void enhanceComponents(CEntityForm<AuthenticationRequest> form) {
+                form.get(meta().captcha()).setVisible(false);
+            }
+        };
+        form = formFactory.createForm();
+        form.populate(null);
 
         forgotPassword = new CHyperlink(null, new Command() {
 
@@ -77,21 +103,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         });
         forgotPassword.setValue("Did you forget your password?");
 
-        CComponent<?>[][] components = new CComponent[][] {
-
-        { form.create(form.meta().email()) },
-
-        { form.create(form.meta().password()) },
-
-        { rememberID = new CCheckBox("Remember my ID") },
-
-        { form.create(form.meta().captcha()) },
-
-        { forgotPassword },
-
-        };
-        form.get(form.meta().captcha()).setVisible(false);
-        form.populate(null);
+        rememberID = (CCheckBox) form.get(form.meta().rememberID());
 
         if (HTML5LocalStorage.isSupported()) {
             String userId = HTML5LocalStorage.getLocalStorage().getItem(BaseLogInPanel.HTML5_KEY);
@@ -103,7 +115,10 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
             rememberID.setVisible(false);
         }
 
-        add(CForm.createFormWidget(LabelAlignment.TOP, components));
+        form.setAllignment(LabelAlignment.TOP);
+        add((Widget) form.initNativeComponent());
+
+        add(forgotPassword.initNativeComponent());
 
     }
 
@@ -169,7 +184,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         return false;
     }
 
-    protected CEntityEditorForm<AuthenticationRequest> getForm() {
+    protected CEntityForm<AuthenticationRequest> getForm() {
         return form;
     }
 
