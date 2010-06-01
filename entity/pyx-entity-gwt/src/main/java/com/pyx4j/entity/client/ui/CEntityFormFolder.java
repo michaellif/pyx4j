@@ -71,5 +71,9 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
             value = EntityFactory.create(entityClass);
         }
         super.addItem(value);
+
+        // Hack again
+        ((DelegatingEntityEditableComponent) getForms().get(getForms().size() - 1)).populateModel(null, value);
+
     }
 }
