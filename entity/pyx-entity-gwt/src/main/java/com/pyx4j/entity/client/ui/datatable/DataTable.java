@@ -51,6 +51,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private final boolean checkboxColumnShown;
 
+    private boolean hasDetailsNavigation;
+
     private final ArrayList<SelectionCheckBox> selectionCheckBoxes = new ArrayList<SelectionCheckBox>();
 
     private SelectionCheckBox selectionCheckBoxAll;
@@ -124,6 +126,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-even", true);
             } else {
                 UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-odd", true);
+            }
+            if (!hasDetailsNavigation()) {
+                UIObject.setStyleName(rowElement, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-nodetails", true);
             }
 
             rowIndex++;
@@ -241,6 +246,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 }
             });
         }
+    }
+
+    public boolean hasDetailsNavigation() {
+        return hasDetailsNavigation;
+    }
+
+    public void setHasDetailsNavigation(boolean hasDetailsNavigation) {
+        this.hasDetailsNavigation = hasDetailsNavigation;
     }
 
 }

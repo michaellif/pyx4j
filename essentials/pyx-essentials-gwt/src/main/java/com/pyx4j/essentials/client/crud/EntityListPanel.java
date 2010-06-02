@@ -135,7 +135,8 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     public void setEditorPageType(Class<? extends NavigNode> editorPage) {
         this.editorPage = editorPage;
-        //TODO change Cursor style to arrow
+        // change Cursor style to arrow
+        dataTable.setHasDetailsNavigation(this.editorPage != null);
     }
 
     public String toStringForPrint() {
