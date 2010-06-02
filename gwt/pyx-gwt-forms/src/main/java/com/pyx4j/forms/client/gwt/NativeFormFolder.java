@@ -122,7 +122,6 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
 
     @Override
     public void setNativeValue(List<E> value) {
-        System.out.println("+++++++++++++");
         container.clear();
         if (value != null) {
             LinkedHashMap map = folder.getFormsMap();

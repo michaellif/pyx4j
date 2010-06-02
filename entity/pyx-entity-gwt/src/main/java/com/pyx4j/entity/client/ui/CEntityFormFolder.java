@@ -52,7 +52,6 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
         LinkedHashMap<E, CForm> oldMap = new LinkedHashMap<E, CForm>(getFormsMap());
         getFormsMap().clear();
         if (value != null) {
-            System.out.println("----------");
             for (E item : value) {
                 CForm form = null;
                 if (oldMap.containsKey(item)) {
