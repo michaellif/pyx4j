@@ -64,11 +64,6 @@ public class LinkBar extends ComplexPanel {
             break;
         }
 
-        if (BrowserType.isFirefox()) {
-            ul.getStyle().setProperty("cssFloat", "right");
-        } else {
-            ul.getStyle().setProperty("float", "right");
-        }
         ul.getStyle().setProperty("listStyleType", "none");
         ul.getStyle().setProperty("height", "100%");
         ul.getStyle().setProperty("margin", "0");
