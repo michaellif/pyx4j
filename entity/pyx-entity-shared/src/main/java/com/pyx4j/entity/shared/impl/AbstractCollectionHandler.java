@@ -20,6 +20,11 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -48,4 +53,26 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     }
 
     //TODO move common function from  ISet or IList to this class 
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(getObjectClass().getName()).append(" ");
+        VALUE_TYPE value = getValue();
+        if (value != null) {
+            Set<Map> processed = new HashSet<Map>();
+            b.append('[');
+            for (Object o : (Collection<?>) value) {
+                if (o instanceof Map<?, ?>) {
+                    EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed);
+                } else {
+                    b.append(o);
+                }
+            }
+            b.append(']');
+        } else {
+            b.append("{null}");
+        }
+        return b.toString();
+    }
 }
