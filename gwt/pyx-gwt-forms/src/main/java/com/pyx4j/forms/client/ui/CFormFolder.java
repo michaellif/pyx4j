@@ -64,4 +64,9 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
     }
 
     public abstract void addItem();
+
+    public abstract void removeItem(CForm cForm);
+
+    public abstract void moveItem(CForm cForm, boolean up);
+
 }

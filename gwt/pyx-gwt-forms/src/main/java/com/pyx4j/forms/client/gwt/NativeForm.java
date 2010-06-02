@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.FontStyle;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -48,7 +47,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -349,12 +347,32 @@ public class NativeForm extends FlexTable implements INativeComponent {
             setWidth("100%");
             HorizontalPanel actionsPanel = new HorizontalPanel();
             Anchor removeCommand = new Anchor("remove");
+            removeCommand.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    getCComponent().getFolder().removeItem(getCComponent());
+                }
+            });
             installActionStyles(removeCommand);
             actionsPanel.add(removeCommand);
+
             Anchor upCommand = new Anchor("up");
+            upCommand.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    getCComponent().getFolder().moveItem(getCComponent(), true);
+                }
+            });
             installActionStyles(upCommand);
             actionsPanel.add(upCommand);
+
             Anchor downCommand = new Anchor("down");
+            downCommand.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    getCComponent().getFolder().moveItem(getCComponent(), false);
+                }
+            });
             installActionStyles(downCommand);
             actionsPanel.add(downCommand);
             setWidget(actionsPanel);

@@ -20,8 +20,10 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -76,6 +78,43 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
 
         setNativeComponentValue(getValue());
 
+    }
+
+    @Override
+    public void removeItem(CForm cForm) {
+        Map<E, CForm> map = getFormsMap();
+        for (E value : map.keySet()) {
+            if (cForm.equals(map.get(value))) {
+                getValue().remove(value);
+                getFormsMap().remove(value);
+                setNativeComponentValue(getValue());
+                return;
+            }
+        }
+
+    }
+
+    @Override
+    public void moveItem(CForm cForm, boolean up) {
+        Map<E, CForm> map = getFormsMap();
+        for (E value : map.keySet()) {
+            if (cForm.equals(map.get(value))) {
+                int index = getValue().indexOf(value);
+                getValue().remove(index);
+                index += (up ? -1 : +1);
+                if (index < 0 || index > getValue().size()) {
+                    return;
+                }
+                getValue().add(index, value);
+                Map<E, CForm> oldMap = new HashMap<E, CForm>(getFormsMap());
+                getFormsMap().clear();
+                for (E item : getValue()) {
+                    getFormsMap().put(item, oldMap.get(item));
+                }
+                setNativeComponentValue(getValue());
+                return;
+            }
+        }
     }
 
 }
