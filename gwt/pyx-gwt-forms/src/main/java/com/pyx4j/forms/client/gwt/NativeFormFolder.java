@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -69,8 +70,7 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
         addCommand.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                //TODO
-                folder.addItem(null);
+                folder.addItem();
             }
         });
 
@@ -122,15 +122,18 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
 
     @Override
     public void setNativeValue(List<E> value) {
+        System.out.println("+++++++++++++");
         container.clear();
-        List<CForm> forms = folder.getForms();
-        for (CForm form : forms) {
-            Widget nativeForm = (Widget) form.initNativeComponent();
-            nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
-            nativeForm.setWidth("100%");
-            container.add(nativeForm);
-            container.setCellWidth(nativeForm, "100%");
-            container.getElement().getStyle().setPadding(10, Unit.PX);
+        if (value != null) {
+            LinkedHashMap map = folder.getFormsMap();
+            for (E item : value) {
+                Widget nativeForm = (Widget) ((CForm) map.get(item)).initNativeComponent();
+                nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
+                nativeForm.setWidth("100%");
+                container.add(nativeForm);
+                container.setCellWidth(nativeForm, "100%");
+                container.getElement().getStyle().setPadding(10, Unit.PX);
+            }
         }
     }
 

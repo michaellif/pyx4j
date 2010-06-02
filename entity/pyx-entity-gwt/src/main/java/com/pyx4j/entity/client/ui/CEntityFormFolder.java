@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.client.ui;
 
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -42,38 +42,41 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
     // data type asserts.
     @Override
     public void populate(List<E> value) {
-        assert (value == null || value instanceof IList);
-        super.populate(value);
+        populateModel(null, value);
+
     }
 
     @Override
     public void populateModel(List<E> orig, List<E> value) {
-
-        //hack to create Forms array, TODO remove this. think better way to create forms
-        populate(value);
-
+        assert (value == null || value instanceof IList);
+        LinkedHashMap<E, CForm> oldMap = new LinkedHashMap<E, CForm>(getFormsMap());
+        getFormsMap().clear();
         if (value != null) {
-            Iterator<CForm> formIt = getForms().iterator();
-            Iterator<E> valueIt = value.iterator();
-            while (formIt.hasNext()) {
-                CForm f = formIt.next();
-                E v = valueIt.next();
-                if (f instanceof DelegatingEntityEditableComponent) {
-                    ((DelegatingEntityEditableComponent) f).populateModel(null, v);
+            System.out.println("----------");
+            for (E item : value) {
+                CForm form = null;
+                if (oldMap.containsKey(item)) {
+                    form = oldMap.get(item);
+                } else {
+                    form = createForm();
                 }
+                ((DelegatingEntityEditableComponent) form).populateModel(null, item);
+                getFormsMap().put(item, form);
             }
         }
+        super.populate(value);
     }
 
     @Override
-    public void addItem(E value) {
-        if (value == null) {
-            value = EntityFactory.create(entityClass);
-        }
-        super.addItem(value);
+    public void addItem() {
+        E item = EntityFactory.create(entityClass);
+        getValue().add(item);
+        CForm form = createForm();
+        ((DelegatingEntityEditableComponent) form).populateModel(null, item);
+        getFormsMap().put(item, form);
 
-        // Hack again
-        ((DelegatingEntityEditableComponent) getForms().get(getForms().size() - 1)).populateModel(null, value);
+        setNativeComponentValue(getValue());
 
     }
+
 }

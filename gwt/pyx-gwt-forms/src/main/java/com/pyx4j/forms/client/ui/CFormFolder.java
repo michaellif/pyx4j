@@ -20,23 +20,23 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.pyx4j.forms.client.gwt.NativeFormFolder;
 
 public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
-    private final List<CForm> forms;
+    private final LinkedHashMap<E, CForm> formsMap;
 
     private final FormFactory factory;
 
-    private NativeFormFolder nativeFormFolder;
+    private NativeFormFolder<E> nativeFormFolder;
 
     public CFormFolder(FormFactory factory) {
         super();
         this.factory = factory;
-        forms = new ArrayList<CForm>();
+        formsMap = new LinkedHashMap<E, CForm>();
     }
 
     public final CForm createForm() {
@@ -45,20 +45,8 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
         return form;
     }
 
-    public List<CForm> getForms() {
-        return forms;
-    }
-
-    @Override
-    protected void setNativeComponentValue(List<E> value) {
-        getForms().clear();
-        if (value != null) {
-            for (E entity : value) {
-                CForm form = createForm();
-                getForms().add(form);
-            }
-        }
-        super.setNativeComponentValue(value);
+    public LinkedHashMap<E, CForm> getFormsMap() {
+        return formsMap;
     }
 
     @Override
@@ -70,17 +58,10 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
     public INativeEditableComponent<List<E>> initNativeComponent() {
         if (nativeFormFolder == null) {
             nativeFormFolder = new NativeFormFolder<E>(this);
+            setNativeComponentValue(getValue());
         }
         return nativeFormFolder;
     }
 
-    public void addItem(E value) {
-        if (getValue() == null) {
-            setValue(new ArrayList<E>());
-        }
-        getValue().add(value);
-        CForm form = createForm();
-        forms.add(form);
-        super.setNativeComponentValue(getValue());
-    }
+    public abstract void addItem();
 }
