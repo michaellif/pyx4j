@@ -83,6 +83,9 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
             @Override
             public void onClick(ClickEvent event) {
+                if (editorPage == null) {
+                    return;
+                }
                 Cell cell = dataTable.getCellForEvent(event);
                 if (cell.getRowIndex() > 0) {
                     E entity = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
@@ -132,6 +135,7 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     public void setEditorPageType(Class<? extends NavigNode> editorPage) {
         this.editorPage = editorPage;
+        //TODO change Cursor style to arrow
     }
 
     public String toStringForPrint() {
