@@ -41,6 +41,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -48,6 +49,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Printable;
@@ -63,7 +65,7 @@ import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class NativeForm extends FlexTable implements INativeComponent {
+public class NativeForm extends FlowPanel implements INativeComponent {
 
     enum ToolbarMode {
         First, Last, Only, Inner
@@ -76,6 +78,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
     private final static DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("MMM d, yyyy");
 
     private static final Logger log = LoggerFactory.getLogger(NativeForm.class);
+
+    private final FlexTable grid;
 
     private final CForm form;
 
@@ -91,12 +95,22 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     private int labelWidth;
 
+    private final SimplePanel toolbarHolder;
+
     private Toolbar toolbar;
 
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
-        setBorderWidth(0);
-        setCellSpacing(0);
+
+        toolbarHolder = new SimplePanel();
+        toolbarHolder.setWidth("100%");
+        add(toolbarHolder);
+
+        grid = new FlexTable();
+        add(grid);
+
+        grid.setBorderWidth(0);
+        grid.setCellSpacing(0);
         this.form = form;
         components = comp;
         columnCount = components[0].length;
@@ -145,21 +159,19 @@ public class NativeForm extends FlexTable implements INativeComponent {
         }
         if (form.getFolder() != null) {
             toolbar = new Toolbar();
-            setWidget(components.length, 0, toolbar);
-            FlexCellFormatter cellFormatter = getFlexCellFormatter();
-            cellFormatter.setColSpan(components.length, 0, columnCount);
+            toolbarHolder.setWidget(toolbar);
         }
     }
 
     private void addComponent(CComponent<?> component, int row, int column) {
 
         if (component instanceof CFormFolder) {
-            setWidget(row, column, (Widget) component.initNativeComponent());
+            grid.setWidget(row, column, (Widget) component.initNativeComponent());
         } else {
-            setWidget(row, column, new WidgetContainer(component));
+            grid.setWidget(row, column, new WidgetContainer(component));
         }
 
-        FlexCellFormatter cellFormatter = getFlexCellFormatter();
+        FlexCellFormatter cellFormatter = grid.getFlexCellFormatter();
         cellFormatter.setRowSpan(row, column, spans[row][column][0]);
         cellFormatter.setColSpan(row, column, spans[row][column][1]);
 
@@ -348,7 +360,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
         return null;
     }
 
-    class Toolbar extends SimplePanel {
+    class Toolbar extends HorizontalPanel {
 
         Anchor removeCommand;
 
@@ -356,8 +368,19 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
         Anchor downCommand;
 
+        Image collapseImage;
+
         Toolbar() {
             setWidth("100%");
+
+            collapseImage = new Image();
+            ClickHandler expandClickHandler = new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                }
+            };
+            collapseImage.setResource(ImageFactory.getImages().groupBoxOpen());
+            add(collapseImage);
+
             HorizontalPanel actionsPanel = new HorizontalPanel();
             removeCommand = new Anchor("remove");
             removeCommand.addClickHandler(new ClickHandler() {
@@ -388,7 +411,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             });
             installActionStyles(downCommand);
             actionsPanel.add(downCommand);
-            setWidget(actionsPanel);
+            add(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         }
 
