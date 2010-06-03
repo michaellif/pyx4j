@@ -83,6 +83,9 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
         getValue().add(item);
         CForm form = createForm();
         ((DelegatingEntityEditableComponent) form).populateModel(null, item);
+        for (CForm f : getFormsMap().values()) {
+            f.setExpended(false);
+        }
         getFormsMap().put(item, form);
 
         setNativeComponentValue(getValue());
