@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -107,6 +108,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         add(toolbarHolder);
 
         grid = new FlexTable();
+        grid.setWidth("100%");
         add(grid);
 
         grid.setBorderWidth(0);
@@ -370,16 +372,23 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         Image collapseImage;
 
+        HTML caption;
+
         Toolbar() {
             setWidth("100%");
 
             collapseImage = new Image();
-            ClickHandler expandClickHandler = new ClickHandler() {
+            collapseImage.addClickHandler(new ClickHandler() {
                 public void onClick(ClickEvent event) {
+                    form.setExpended(!form.isExpended());
                 }
-            };
-            collapseImage.setResource(ImageFactory.getImages().groupBoxOpen());
+            });
             add(collapseImage);
+
+            caption = new HTML();
+            caption.getElement().getStyle().setPaddingLeft(5, Unit.PX);
+            caption.getElement().getStyle().setPaddingRight(5, Unit.PX);
+            add(caption);
 
             HorizontalPanel actionsPanel = new HorizontalPanel();
             removeCommand = new Anchor("remove");
@@ -593,5 +602,15 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         w.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
         w.getElement().getStyle().setPaddingRight(5, Unit.PX);
         w.getElement().getStyle().setColor("#518BDC");
+    }
+
+    public void setExpanded(boolean expanded) {
+        grid.setVisible(expanded);
+        if (toolbar != null) {
+            toolbar.caption.setHTML(form.getTitle());
+            toolbar.caption.setVisible(!expanded);
+            toolbar.collapseImage.setResource(expanded ? ImageFactory.getImages().groupBoxOpen() : ImageFactory.getImages().groupBoxClose());
+        }
+
     }
 }

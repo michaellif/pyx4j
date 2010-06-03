@@ -50,6 +50,10 @@ public class CForm extends CContainer {
 
     private CFormFolder folder;
 
+    private boolean expended = true;
+
+    private boolean collapsible = true;
+
     public CForm() {
         this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
@@ -85,6 +89,28 @@ public class CForm extends CContainer {
             throw new IllegalStateException();
         }
         this.allignment = allignment;
+    }
+
+    public void setExpended(boolean expended) {
+        this.expended = expended;
+        if (expended) {
+            //initInnerComponent();
+        }
+        if (nativeForm != null && isCollapsible()) {
+            nativeForm.setExpanded(expended);
+        }
+    }
+
+    public boolean isExpended() {
+        return expended;
+    }
+
+    public void setCollapsible(boolean collapsible) {
+        this.collapsible = collapsible;
+    }
+
+    public boolean isCollapsible() {
+        return collapsible;
     }
 
     public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {
@@ -145,6 +171,7 @@ public class CForm extends CContainer {
     public INativeComponent initNativeComponent() {
         if (nativeForm == null) {
             nativeForm = new NativeForm(this, components, allignment, infoImageAlignment);
+            nativeForm.setExpanded(isExpended());
             applyAccessibilityRules();
         }
         return nativeForm;
