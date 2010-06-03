@@ -20,15 +20,20 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implements IPrimitiveSet<TYPE> {
 
@@ -210,6 +215,43 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
             return false;
         }
         return EqualsHelper.equals(thisValue, ((IPrimitiveSet<?>) other).getValue());
+    }
+
+    private class StringConverter implements ToStringConverter<TYPE> {
+
+        private final MemberMeta memberMeta;
+
+        public StringConverter(MemberMeta memberMeta) {
+            this.memberMeta = memberMeta;
+        }
+
+        public String toString(TYPE value) {
+            if (value == null) {
+                return memberMeta.getNullString();
+            } else if (memberMeta.useMessageFormat()) {
+                return MessageFormat.format(memberMeta.getFormat(), value);
+            } else if (value instanceof Date) {
+                return MessageFormat.format("{0,date," + memberMeta.getFormat() + "}", value);
+            } else if (value instanceof Number) {
+                return MessageFormat.format("{0,number," + memberMeta.getFormat() + "}", value);
+            } else {
+                return String.valueOf(value);
+            }
+        }
+    }
+
+    @Override
+    public String getStringView() {
+        MemberMeta mm = getMeta();
+        String format = mm.getFormat();
+        Set<TYPE> thisValue = this.getValue();
+        if (thisValue == null) {
+            return mm.getNullString();
+        } else if (format == null) {
+            return String.valueOf(thisValue);
+        } else {
+            return ConverterUtils.convertCollection(thisValue, new StringConverter(mm));
+        }
     }
 
     @Override

@@ -79,12 +79,5 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public List<Validator> getValidators(Path memberPath);
 
-    /**
-     * Business toString() presentation. @see com.pyx4j.entity.annotations.ToString
-     * 
-     * @return String value of members annotated with ToString
-     */
-    public String getStringView();
-
     public IEntity cloneEntity();
 }

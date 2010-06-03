@@ -36,6 +36,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
@@ -55,6 +56,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
     private OptionsFilter<E> optionsFilter;
 
     private Comparator<E> comparator = null;
+
+    private String stringViewMemberName;
 
     private boolean optionsLoaded;
 
@@ -272,6 +275,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
         }
     }
 
+    public void setStringViewMember(IObject<?> member) {
+        stringViewMemberName = member.getFieldName();
+    }
+
     @Override
     public String getItemName(E o) {
         if ((o == null) || (o.isNull())) {
@@ -283,6 +290,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                 // Get super's NULL presentation
                 return super.getItemName(null);
             }
+        } else if (stringViewMemberName != null) {
+            return o.getMember(stringViewMemberName).getStringView();
         } else {
             return o.getStringView();
         }

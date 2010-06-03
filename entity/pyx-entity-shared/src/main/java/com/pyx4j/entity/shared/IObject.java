@@ -50,4 +50,16 @@ public interface IObject<VALUE_TYPE> {
 
     public MemberMeta getMeta();
 
+    /**
+     * Business toString() presentation.
+     * 
+     * @return String value of member formated using annotation
+     *         com.pyx4j.entity.annotations.Format or String value of members annotated
+     *         with ToString for IEntity
+     * 
+     * @see com.pyx4j.entity.annotations.Format
+     * @see com.pyx4j.entity.annotations.ToString
+     */
+    public String getStringView();
+
 }

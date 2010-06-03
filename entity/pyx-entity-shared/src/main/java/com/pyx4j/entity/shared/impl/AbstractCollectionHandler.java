@@ -25,10 +25,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE> extends ObjectHandler<VALUE_TYPE> implements ICollection<TYPE, VALUE_TYPE> {
 
@@ -53,6 +56,25 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
     }
 
     //TODO move common function from  ISet or IList to this class 
+
+    private static class StringConverter implements ToStringConverter<IEntity> {
+
+        public String toString(IEntity value) {
+            return value.getStringView();
+        }
+
+    }
+
+    @Override
+    public String getStringView() {
+        MemberMeta mm = getMeta();
+        VALUE_TYPE thisValue = getValue();
+        if (thisValue == null) {
+            return mm.getNullString();
+        } else {
+            return ConverterUtils.convertCollection((Collection<IEntity>) thisValue, new StringConverter());
+        }
+    }
 
     @Override
     public String toString() {
