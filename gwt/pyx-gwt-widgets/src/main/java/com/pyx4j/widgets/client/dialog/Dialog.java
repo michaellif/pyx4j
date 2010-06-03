@@ -41,6 +41,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -129,7 +130,12 @@ public class Dialog extends DialogPanel {
     public Dialog(String caption, String message, Type type, DialogOptions options) {
         this(caption, options);
         MessagePanel messagePanel = new MessagePanel(message, type);
-        messagePanel.setSize("400px", "200px");
+        int width = 400;
+        //Resize dialog for mobile.
+        if (width > Window.getClientWidth() - 16) {
+            width = Window.getClientWidth() - 16;
+        }
+        messagePanel.setPixelSize(width, 200);
 
         setBody(messagePanel);
     }
