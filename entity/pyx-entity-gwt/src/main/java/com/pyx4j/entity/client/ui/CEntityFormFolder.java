@@ -99,13 +99,13 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
         Map<E, CForm> map = getFormsMap();
         for (E value : map.keySet()) {
             if (cForm.equals(map.get(value))) {
-                int index = getValue().indexOf(value);
-                getValue().remove(index);
-                index += (up ? -1 : +1);
-                if (index < 0 || index > getValue().size()) {
+                int indexBefore = getValue().indexOf(value);
+                int indexAfter = indexBefore + (up ? -1 : +1);
+                if (indexAfter < 0 || indexAfter > getValue().size()) {
                     return;
                 }
-                getValue().add(index, value);
+                getValue().remove(indexBefore);
+                getValue().add(indexAfter, value);
                 Map<E, CForm> oldMap = new HashMap<E, CForm>(getFormsMap());
                 getFormsMap().clear();
                 for (E item : getValue()) {

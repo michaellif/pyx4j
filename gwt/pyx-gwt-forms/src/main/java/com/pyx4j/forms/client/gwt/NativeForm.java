@@ -65,6 +65,10 @@ import com.pyx4j.widgets.client.Tooltip;
 
 public class NativeForm extends FlexTable implements INativeComponent {
 
+    enum ToolbarMode {
+        First, Last, Only, Inner
+    }
+
     public static final int LEFT_LABEL_WIDTH = 100;
 
     public static final int TOP_LABEL_WIDTH = 200;
@@ -86,6 +90,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
     private final InfoImageAlignment infoImageAlignment;
 
     private int labelWidth;
+
+    private Toolbar toolbar;
 
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
@@ -138,7 +144,8 @@ public class NativeForm extends FlexTable implements INativeComponent {
             }
         }
         if (form.getFolder() != null) {
-            setWidget(components.length, 0, new Toolbar());
+            toolbar = new Toolbar();
+            setWidget(components.length, 0, toolbar);
             FlexCellFormatter cellFormatter = getFlexCellFormatter();
             cellFormatter.setColSpan(components.length, 0, columnCount);
         }
@@ -343,10 +350,16 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     class Toolbar extends SimplePanel {
 
+        Anchor removeCommand;
+
+        Anchor upCommand;
+
+        Anchor downCommand;
+
         Toolbar() {
             setWidth("100%");
             HorizontalPanel actionsPanel = new HorizontalPanel();
-            Anchor removeCommand = new Anchor("remove");
+            removeCommand = new Anchor("remove");
             removeCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -356,7 +369,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             installActionStyles(removeCommand);
             actionsPanel.add(removeCommand);
 
-            Anchor upCommand = new Anchor("up");
+            upCommand = new Anchor("up");
             upCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -366,7 +379,7 @@ public class NativeForm extends FlexTable implements INativeComponent {
             installActionStyles(upCommand);
             actionsPanel.add(upCommand);
 
-            Anchor downCommand = new Anchor("down");
+            downCommand = new Anchor("down");
             downCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -526,10 +539,36 @@ public class NativeForm extends FlexTable implements INativeComponent {
 
     }
 
+    public void setToolbarMode(ToolbarMode mode) {
+        if (toolbar == null) {
+            return;
+        }
+        switch (mode) {
+        case First:
+            toolbar.upCommand.setVisible(false);
+            toolbar.downCommand.setVisible(true);
+            break;
+        case Last:
+            toolbar.upCommand.setVisible(true);
+            toolbar.downCommand.setVisible(false);
+            break;
+        case Only:
+            toolbar.upCommand.setVisible(false);
+            toolbar.downCommand.setVisible(false);
+            break;
+        case Inner:
+            toolbar.upCommand.setVisible(true);
+            toolbar.downCommand.setVisible(true);
+            break;
+
+        default:
+            break;
+        }
+    }
+
     static void installActionStyles(Widget w) {
         w.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
         w.getElement().getStyle().setPaddingRight(5, Unit.PX);
         w.getElement().getStyle().setColor("#518BDC");
-
     }
 }

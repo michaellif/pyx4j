@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.gwt.NativeForm.ToolbarMode;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
@@ -102,7 +103,6 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
         addCommand.getElement().getStyle().setProperty("top", "5px");
 
         getElement().getStyle().setPaddingTop(25, Unit.PX);
-        getElement().getStyle().setPaddingBottom(20, Unit.PX);
         getElement().getStyle().setPosition(Position.RELATIVE);
     }
 
@@ -125,13 +125,24 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
         container.clear();
         if (value != null) {
             LinkedHashMap map = folder.getFormsMap();
-            for (E item : value) {
-                Widget nativeForm = (Widget) ((CForm) map.get(item)).initNativeComponent();
+            for (int i = 0; i < value.size(); i++) {
+                E item = value.get(i);
+                NativeForm nativeForm = (NativeForm) ((CForm) map.get(item)).initNativeComponent();
                 nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
                 nativeForm.setWidth("100%");
                 container.add(nativeForm);
                 container.setCellWidth(nativeForm, "100%");
                 container.getElement().getStyle().setPadding(10, Unit.PX);
+                if (i == 0 && value.size() == 1) {
+                    nativeForm.setToolbarMode(ToolbarMode.Only);
+                } else if (i == 0) {
+                    nativeForm.setToolbarMode(ToolbarMode.First);
+                } else if (i == value.size() - 1) {
+                    nativeForm.setToolbarMode(ToolbarMode.Last);
+                } else {
+                    nativeForm.setToolbarMode(ToolbarMode.Inner);
+                }
+
             }
         }
     }
