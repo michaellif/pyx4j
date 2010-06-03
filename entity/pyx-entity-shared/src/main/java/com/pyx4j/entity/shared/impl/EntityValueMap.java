@@ -32,6 +32,19 @@ import com.pyx4j.entity.shared.IEntity;
 @SuppressWarnings("serial")
 public class EntityValueMap extends HashMap<String, Object> {
 
+    private final transient int identityHashCode;
+
+    public EntityValueMap() {
+        super();
+        //Just create Unique hashCode
+        this.identityHashCode = new Object().hashCode();
+    }
+
+    public EntityValueMap(int identityHashCode) {
+        super();
+        this.identityHashCode = identityHashCode;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -67,7 +80,7 @@ public class EntityValueMap extends HashMap<String, Object> {
     public int hashCode() {
         Object pk = this.get(IEntity.PRIMARY_KEY);
         if (pk == null) {
-            return super.hashCode();
+            return identityHashCode;
         } else {
             return pk.hashCode();
         }
@@ -114,4 +127,5 @@ public class EntityValueMap extends HashMap<String, Object> {
         EntityValueMap.dumpMap(b, this, new HashSet<Map>());
         return b.toString();
     }
+
 }

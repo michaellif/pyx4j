@@ -107,7 +107,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     protected Map<String, Object> ensureValue() {
         Map<String, Object> v = getValue();
         if (v == null) {
-            setValue(v = new EntityValueMap());
+            setValue(v = new EntityValueMap(super.hashCode()));
         }
         return v;
     }

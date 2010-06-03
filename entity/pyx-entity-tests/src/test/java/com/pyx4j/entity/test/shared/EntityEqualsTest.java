@@ -28,15 +28,29 @@ import com.pyx4j.entity.test.shared.domain.Task;
 
 public class EntityEqualsTest extends InitializerTestCase {
 
+    static public void assertNotEquals(String message, long expected, long actual) {
+        if (expected != actual) {
+            return;
+        } else {
+            failNotEquals(message, expected, actual);
+        }
+    }
+
     public void testNewEntity() {
 
         Task task1 = EntityFactory.create(Task.class);
-        task1.status().setValue(Status.ACTIVE);
 
         Task task2 = EntityFactory.create(Task.class);
+        assertNotEquals("new Items should have diferent hashCode", task1.hashCode(), task2.hashCode());
+
+        long nullEntityHashCode = task1.hashCode();
+        task1.status().setValue(Status.ACTIVE);
+        assertEquals("hashCode should not change on non PK values", nullEntityHashCode, task1.hashCode());
+
         task2.status().setValue(Status.ACTIVE);
 
         assertFalse("new Items are diferent", task1.equals(task2));
+        assertNotEquals("new Items should have diferent hashCode", task1.hashCode(), task2.hashCode());
     }
 
     public void testSameValue() {
@@ -47,7 +61,8 @@ public class EntityEqualsTest extends InitializerTestCase {
         Task task2 = EntityFactory.create(Task.class);
         task2.set(task1);
 
-        assertTrue("new Items have same value", task1.equals(task2));
+        assertTrue("copied Items have same value", task1.equals(task2));
+        assertEquals("copied Items have same hashCode", task1.hashCode(), task2.hashCode());
     }
 
     public void testEqualsWithSet() {
@@ -65,5 +80,6 @@ public class EntityEqualsTest extends InitializerTestCase {
         department2.setPrimaryKey(11L);
 
         assertEquals("same key", department1, department2);
+        assertEquals("same key same hashCode", department1.hashCode(), department2.hashCode());
     }
 }
