@@ -333,7 +333,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public String getStringView() {
         if (isNull()) {
-            return "";
+            return getEntityMeta().getNullString();
         }
         List<String> sm = getEntityMeta().getToStringMemberNames();
         String format = getEntityMeta().getToStringFormat();
@@ -344,10 +344,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
             return MessageFormat.format(format, values.toArray());
         } else {
-
             switch (sm.size()) {
             case 0:
-                return "";
+                return getEntityMeta().getNullString();
             case 1:
                 return CommonsStringUtils.nvl(getMemberStringView(sm.get(0)));
             case 2:
@@ -355,7 +354,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             default:
                 Map<String, Object> entityValue = getValue();
                 if (entityValue == null) {
-                    return "";
+                    return getEntityMeta().getNullString();
                 }
                 StringBuilder sb = new StringBuilder();
                 for (String memeberName : sm) {

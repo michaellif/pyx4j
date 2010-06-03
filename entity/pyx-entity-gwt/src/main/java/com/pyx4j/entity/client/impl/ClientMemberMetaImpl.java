@@ -70,13 +70,15 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final boolean useMessageFormat;
 
+    private final String nullString;
+
     private EditorType editorType;
 
     private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, String fieldName, String caption,
             String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner,
-            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat) {
+            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
         super();
         this.fieldName = fieldName;
         this.entity = entity;
@@ -94,6 +96,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.stringLength = stringLength;
         this.format = format;
         this.useMessageFormat = useMessageFormat;
+        this.nullString = nullString;
     }
 
     @Override
@@ -178,6 +181,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public boolean useMessageFormat() {
         return useMessageFormat;
+    }
+
+    @Override
+    public String getNullString() {
+        return nullString;
     }
 
     @Override

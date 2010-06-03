@@ -69,6 +69,8 @@ public interface EntityMeta {
 
     public String getToStringFormat();
 
+    public String getNullString();
+
     public List<String> getToStringMemberNames();
 
     /**

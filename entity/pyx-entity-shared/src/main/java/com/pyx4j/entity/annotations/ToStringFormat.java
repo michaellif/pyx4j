@@ -35,4 +35,9 @@ public @interface ToStringFormat {
      * @see java.text.MessageFormat.format
      */
     String value();
+
+    /**
+     * String presentations for 'isNull()' IEntity values
+     */
+    String nil() default "";
 }

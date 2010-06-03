@@ -25,6 +25,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
 
@@ -112,16 +113,15 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
 
     @Override
     public String getStringView() {
-        String format = getMeta().getFormat();
+        MemberMeta mm = getMeta();
+        String format = mm.getFormat();
         TYPE thisValue = this.getValue();
-        if (format == null) {
-            if (thisValue == null) {
-                return null;
-            } else {
-                return String.valueOf(thisValue);
-            }
+        if (thisValue == null) {
+            return mm.getNullString();
+        } else if (format == null) {
+            return String.valueOf(thisValue);
         }
-        if (getMeta().useMessageFormat()) {
+        if (mm.useMessageFormat()) {
             return MessageFormat.format(format, thisValue);
         } else {
             if (thisValue == null) {

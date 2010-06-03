@@ -52,8 +52,10 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final List<String> toStringMemberNames;
 
+    private final String nullString;
+
     public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient, boolean rpcTransient,
-            String toStringFormat, String[] memberNamesToString) {
+            String toStringFormat, String nullString, String[] memberNamesToString) {
         this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
@@ -61,6 +63,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         this.rpcTransient = rpcTransient;
         this.toStringFormat = toStringFormat;
         this.toStringMemberNames = Arrays.asList(memberNamesToString);
+        this.nullString = nullString;
     }
 
     @Override
@@ -138,6 +141,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public String getToStringFormat() {
         return toStringFormat;
+    }
+
+    @Override
+    public String getNullString() {
+        return nullString;
     }
 
     @Override

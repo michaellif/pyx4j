@@ -109,6 +109,8 @@ public interface MemberMeta {
 
     public boolean useMessageFormat();
 
+    public String getNullString();
+
     public EditorType getEditorType();
 
     public List<Validator> getValidators();

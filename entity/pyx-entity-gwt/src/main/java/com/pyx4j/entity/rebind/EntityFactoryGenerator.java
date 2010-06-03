@@ -309,8 +309,10 @@ public class EntityFactoryGenerator extends Generator {
         ToStringFormat toStringFormatAnnotation = interfaceType.getAnnotation(ToStringFormat.class);
         if (toStringFormatAnnotation != null) {
             writer.print(escapeSourceString(toStringFormatAnnotation.value()));
+            writer.print(", ");
+            writer.print(escapeSourceString(toStringFormatAnnotation.nil()));
         } else {
-            writer.print("null");
+            writer.print("null, \"\"");
         }
         writer.print(", ");
 
@@ -444,8 +446,10 @@ public class EntityFactoryGenerator extends Generator {
                 writer.print(escapeSourceString(formatAnnotation.value()));
                 writer.print(", ");
                 writer.print(Boolean.valueOf(formatAnnotation.messageFormat()).toString());
+                writer.print(", ");
+                writer.print(escapeSourceString(formatAnnotation.nil()));
             } else {
-                writer.print("null, false");
+                writer.print("null, false, \"\"");
             }
 
             writer.println(");");

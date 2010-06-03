@@ -211,6 +211,15 @@ public class EntityMetaImpl implements EntityMeta {
         }
     }
 
+    public String getNullString() {
+        ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
+        if (annotation != null) {
+            return annotation.nil();
+        } else {
+            return "";
+        }
+    }
+
     @Override
     public synchronized List<String> getToStringMemberNames() {
         //TODO move this list creation to EntityImplGenerator for better performance

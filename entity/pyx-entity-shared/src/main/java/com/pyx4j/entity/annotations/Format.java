@@ -38,4 +38,9 @@ public @interface Format {
 
     boolean messageFormat() default false;
 
+    /**
+     * String presentations for 'null' values
+     */
+    String nil() default "";
+
 }

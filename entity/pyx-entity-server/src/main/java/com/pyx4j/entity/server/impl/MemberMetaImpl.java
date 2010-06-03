@@ -241,6 +241,16 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public String getNullString() {
+        Format formatAnnotation = method.getAnnotation(Format.class);
+        if (formatAnnotation != null) {
+            return formatAnnotation.nil();
+        } else {
+            return "";
+        }
+    }
+
+    @Override
     public EditorType getEditorType() {
         Editor editorAnnotation = method.getAnnotation(Editor.class);
         if (editorAnnotation == null) {
