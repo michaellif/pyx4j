@@ -42,6 +42,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -70,7 +71,7 @@ import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class NativeForm extends FlowPanel implements INativeComponent, MouseOverHandler, MouseOutHandler {
+public class NativeForm extends FlowPanel implements INativeComponent {
 
     enum ToolbarMode {
         First, Last, Only, Inner
@@ -109,9 +110,6 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
 
-        addDomHandler(this, MouseOutEvent.getType());
-        addDomHandler(this, MouseOverEvent.getType());
-
         toolbarHolder = new SimplePanel();
         toolbarHolder.setWidth("100%");
         add(toolbarHolder);
@@ -148,9 +146,8 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
         setWidth(form.getWidth());
         setHeight(form.getHeight());
 
-        if (!GWT.isScript()) {
-            sinkEvents(Event.ONMOUSEOVER);
-        }
+        sinkEvents(Event.ONMOUSEOVER);
+        sinkEvents(Event.ONMOUSEOUT);
 
         if (form.getFolder() != null) {
             getElement().getStyle().setBorderWidth(1, Unit.PX);
@@ -342,18 +339,30 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
         return true;
     }
 
-    /**
-     * Show toString of CComponent in tooltip while mouse-over component and Shift pressed
-     */
     @Override
     public void onBrowserEvent(Event event) {
+
+        //Show toString of CComponent in tooltip while mouse-over component and Shift pressed
+
         if (!GWT.isScript()) {
             CComponent<?> component = findItem(DOM.eventGetTarget(event));
             if (event.getShiftKey() && component != null) {
                 log.debug(component.toString());
             }
         }
+
         super.onBrowserEvent(event);
+        switch (event.getTypeInt()) {
+        case Event.ONMOUSEOUT:
+            mouseOver = false;
+            installMouseOverStyles();
+            break;
+        case Event.ONMOUSEOVER:
+            mouseOver = true;
+            installMouseOverStyles();
+            break;
+        }
+
     }
 
     private CComponent<?> findItem(Element hItem) {
@@ -628,18 +637,6 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
         }
     }
 
-    @Override
-    public void onMouseOver(MouseOverEvent event) {
-        mouseOver = true;
-        installMouseOverStyles();
-    }
-
-    @Override
-    public void onMouseOut(MouseOutEvent event) {
-        mouseOver = false;
-        installMouseOverStyles();
-    }
-
     private void installMouseOverStyles() {
         if (mouseOver) {
             if (toolbar != null) {
@@ -660,4 +657,5 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
         }
 
     }
+
 }
