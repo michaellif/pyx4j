@@ -63,6 +63,7 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("03/01/70", "{0,date,short}", date);
         assertMessageFormat("3-Jan-1970", "{0,date,medium}", date);
         assertMessageFormat("January 3, 1970", "{0,date,long}", date);
+        assertMessageFormat("January 1970", "{0,date,MMMM yyyy}", date);
         assertMessageFormat("Saturday, January 3, 1970", "{0,date,full}", date);
     }
 
