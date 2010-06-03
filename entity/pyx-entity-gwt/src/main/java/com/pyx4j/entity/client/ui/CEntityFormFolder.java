@@ -35,10 +35,17 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
 
     private final Class<E> entityClass;
 
+    private boolean expended;
+
     public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory) {
+        this(title, entityClass, factory, true);
+    }
+
+    public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory, boolean expended) {
         super(factory);
         this.setTitle(title);
         this.entityClass = entityClass;
+        this.expended = expended;
     }
 
     // data type asserts.
@@ -60,6 +67,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
                     form = oldMap.get(item);
                 } else {
                     form = createForm();
+                    form.setExpended(expended);
                 }
                 ((DelegatingEntityEditableComponent) form).populateModel(null, item);
                 getFormsMap().put(item, form);
