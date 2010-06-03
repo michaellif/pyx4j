@@ -50,6 +50,7 @@ import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -81,6 +82,8 @@ public abstract class SitePanel extends SimplePanel {
     private Label headerCaptions;
 
     private Image logoImage;
+
+    private Class<? extends NavigNode> logoImageLink;
 
     private HTML copitightHtml;
 
@@ -320,13 +323,14 @@ public abstract class SitePanel extends SimplePanel {
     protected void createLogoImagePanel() {
         logoImage = new Image();
         logoImage.setStyleName(SiteCSSClass.pyx4j_Site_Logo.name());
-        logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
 
         addToHeaderPanel(logoImage);
         logoImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AbstractSiteDispatcher.show("");
+                if (logoImageLink != null) {
+                    AbstractSiteDispatcher.show(logoImageLink);
+                }
             }
         });
     }
@@ -341,6 +345,13 @@ public abstract class SitePanel extends SimplePanel {
             logoImage.setUrl(logoUrl);
         } else {
             logoImage.setVisible(false);
+        }
+    }
+
+    public void setLogoImageLink(Class<? extends NavigNode> page) {
+        logoImageLink = page;
+        if (logoImageLink != null) {
+            logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
         }
     }
 
