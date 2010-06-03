@@ -34,6 +34,10 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -66,7 +70,7 @@ import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class NativeForm extends FlowPanel implements INativeComponent {
+public class NativeForm extends FlowPanel implements INativeComponent, MouseOverHandler, MouseOutHandler {
 
     enum ToolbarMode {
         First, Last, Only, Inner
@@ -102,6 +106,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
+
+        addDomHandler(this, MouseOutEvent.getType());
+        addDomHandler(this, MouseOverEvent.getType());
 
         toolbarHolder = new SimplePanel();
         toolbarHolder.setWidth("100%");
@@ -145,7 +152,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         if (form.getFolder() != null) {
             getElement().getStyle().setBorderWidth(1, Unit.PX);
-            getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
             getElement().getStyle().setBorderColor("#518BDC");
         }
     }
@@ -424,6 +431,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             actionsPanel.add(downCommand);
             add(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+
+            removeCommand.getElement().getStyle().setOpacity(0.3);
+            upCommand.getElement().getStyle().setOpacity(0.3);
+            downCommand.getElement().getStyle().setOpacity(0.3);
+
         }
 
     }
@@ -614,5 +626,25 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             toolbar.collapseImage.setResource(expanded ? ImageFactory.getImages().groupBoxOpen() : ImageFactory.getImages().groupBoxClose());
         }
 
+    }
+
+    @Override
+    public void onMouseOver(MouseOverEvent event) {
+        if (toolbar != null) {
+            getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            toolbar.removeCommand.getElement().getStyle().setOpacity(1);
+            toolbar.upCommand.getElement().getStyle().setOpacity(1);
+            toolbar.downCommand.getElement().getStyle().setOpacity(1);
+        }
+    }
+
+    @Override
+    public void onMouseOut(MouseOutEvent event) {
+        if (toolbar != null) {
+            getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+            toolbar.removeCommand.getElement().getStyle().setOpacity(0.3);
+            toolbar.upCommand.getElement().getStyle().setOpacity(0.3);
+            toolbar.downCommand.getElement().getStyle().setOpacity(0.3);
+        }
     }
 }

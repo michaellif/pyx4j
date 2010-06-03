@@ -67,8 +67,9 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
                     form = oldMap.get(item);
                 } else {
                     form = createForm();
-                    form.setExpended(expended);
                 }
+                form.setExpended(expended);
+
                 ((DelegatingEntityEditableComponent) form).populateModel(null, item);
                 getFormsMap().put(item, form);
             }
