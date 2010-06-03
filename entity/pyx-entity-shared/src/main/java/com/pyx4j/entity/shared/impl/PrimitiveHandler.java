@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.text.MessageFormat;
+import java.util.Date;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -104,6 +107,32 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             return super.hashCode();
         } else {
             return thisValue.hashCode();
+        }
+    }
+
+    @Override
+    public String getStringView() {
+        String format = getMeta().getFormat();
+        TYPE thisValue = this.getValue();
+        if (format == null) {
+            if (thisValue == null) {
+                return null;
+            } else {
+                return String.valueOf(thisValue);
+            }
+        }
+        if (getMeta().useMessageFormat()) {
+            return MessageFormat.format(format, thisValue);
+        } else {
+            if (thisValue == null) {
+                return null;
+            } else if (thisValue instanceof Date) {
+                return MessageFormat.format("{0,date," + format + "}", thisValue);
+            } else if (thisValue instanceof Number) {
+                return MessageFormat.format("{0,number," + format + "}", thisValue);
+            } else {
+                return String.valueOf(thisValue);
+            }
         }
     }
 

@@ -14,28 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 18, 2010
+ * Created on 2010-06-03
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.client.ui.datatable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.Path;
 
-@Target( { ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Format {
+public class MemberPrimitiveColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
-    /**
-     * If messageFormat set to 'true' then value use as argument MessageFormat.format.
-     * 
-     * @see java.text.MessageFormat.format
-     */
-    String value();
+    public MemberPrimitiveColumnDescriptor(Path columnPath, String columnTitle) {
+        super(columnPath, columnTitle, null);
+    }
 
-    boolean messageFormat() default false;
+    @Override
+    public String convert(E entity) {
+        return ((IPrimitive<?>) entity.getMember(getColumnPath())).getStringView();
+    }
 
 }

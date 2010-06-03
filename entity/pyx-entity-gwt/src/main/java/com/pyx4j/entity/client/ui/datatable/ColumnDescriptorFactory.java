@@ -20,11 +20,10 @@
  */
 package com.pyx4j.entity.client.ui.datatable;
 
-import java.util.Date;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -35,12 +34,12 @@ public class ColumnDescriptorFactory {
         MemberMeta mm = member.getMeta();
         if (mm.isEntity()) {
             return new MemberEntityColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
-        } else if (mm.getValueClass().equals(Date.class)) {
-            return new MemberDateColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if ((member instanceof ISet<?>) || (member instanceof IList<?>)) {
             return new MemberEntityCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         } else if (member instanceof IPrimitiveSet<?>) {
             return new MemberCollectionColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
+        } else if (member instanceof IPrimitive<?>) {
+            return new MemberPrimitiveColumnDescriptor<E>(member.getPath(), mm.getCaption());
         } else {
             return new MemberColumnDescriptor<E>(member.getPath(), mm.getCaption(), mm.getFormat());
         }

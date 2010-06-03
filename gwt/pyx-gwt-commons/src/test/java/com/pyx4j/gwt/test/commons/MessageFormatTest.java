@@ -56,7 +56,7 @@ public class MessageFormatTest extends TestCase {
      * This can't be tested in generic way. Since we don't want to define java.util.Locale
      * in this implementation.
      */
-    public void Off_testDateFormat() {
+    public void testDateFormat() {
         int offset = (new Date(0)).getTimezoneOffset();
         Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
         assertMessageFormat("3-Jan-1970", "{0,date}", date);

@@ -53,7 +53,6 @@ public class MemberColumnDescriptor<E extends IEntity> extends ColumnDescriptor<
         if (value == null) {
             return "";
         } else {
-            //TODO Use formatPattern
             return value.toString();
         }
     }

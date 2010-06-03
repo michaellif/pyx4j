@@ -68,13 +68,15 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final String format;
 
+    private final boolean useMessageFormat;
+
     private EditorType editorType;
 
     private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, String fieldName, String caption,
             String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner,
-            boolean embedded, boolean indexed, int stringLength, String format) {
+            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat) {
         super();
         this.fieldName = fieldName;
         this.entity = entity;
@@ -91,6 +93,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.description = description;
         this.stringLength = stringLength;
         this.format = format;
+        this.useMessageFormat = useMessageFormat;
     }
 
     @Override
@@ -170,6 +173,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public String getFormat() {
         return format;
+    }
+
+    @Override
+    public boolean useMessageFormat() {
+        return useMessageFormat;
     }
 
     @Override

@@ -40,6 +40,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
 public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug {
@@ -319,8 +320,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     }
 
     private Object getMemberStringView(String memberName) {
-        if (getEntityMeta().getMemberMeta(memberName).isEntity()) {
+        MemberMeta mm = getEntityMeta().getMemberMeta(memberName);
+        if (mm.isEntity()) {
             return ((IEntity) getMember(memberName)).getStringView();
+        } else if (IPrimitive.class.equals(mm.getObjectClass())) {
+            return ((IPrimitive<?>) getMember(memberName)).getStringView();
         } else {
             return getMemberValue(memberName);
         }

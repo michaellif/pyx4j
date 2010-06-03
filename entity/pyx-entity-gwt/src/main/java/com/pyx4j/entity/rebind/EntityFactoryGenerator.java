@@ -442,8 +442,10 @@ public class EntityFactoryGenerator extends Generator {
             Format formatAnnotation = method.getAnnotation(Format.class);
             if (formatAnnotation != null) {
                 writer.print(escapeSourceString(formatAnnotation.value()));
+                writer.print(", ");
+                writer.print(Boolean.valueOf(formatAnnotation.messageFormat()).toString());
             } else {
-                writer.print("null");
+                writer.print("null, false");
             }
 
             writer.println(");");

@@ -23,15 +23,22 @@ package com.pyx4j.entity.client.ui.datatable;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 
 public class MemberDateColumnDescriptor<E extends IEntity> extends MemberColumnDescriptor<E> {
 
-    public static String DEFAULT_DATE_FORMAT = "EEE, MMM d, yyyy - h:mm a";
+    public static String DEFAULT_DATE_TIME_FORMAT = "EEE, MMM d, yyyy - h:mm a";
+
+    public static String DEFAULT_DATE_FORMAT = "MMM d, yyyy";
 
     public MemberDateColumnDescriptor(Path columnPath, String columnTitle, String dateTimeFormatPattern) {
-        super(columnPath, columnTitle, (dateTimeFormatPattern == null) ? DEFAULT_DATE_FORMAT : dateTimeFormatPattern);
+        super(columnPath, columnTitle, (dateTimeFormatPattern == null) ? DEFAULT_DATE_TIME_FORMAT : dateTimeFormatPattern);
+    }
+
+    public MemberDateColumnDescriptor(Path columnPath, String columnTitle, String dateTimeFormatPattern, String defaultDateTimeFormatPattern) {
+        super(columnPath, columnTitle, (dateTimeFormatPattern == null) ? defaultDateTimeFormatPattern : dateTimeFormatPattern);
     }
 
     @Override

@@ -107,6 +107,8 @@ public interface MemberMeta {
      */
     public String getFormat();
 
+    public boolean useMessageFormat();
+
     public EditorType getEditorType();
 
     public List<Validator> getValidators();

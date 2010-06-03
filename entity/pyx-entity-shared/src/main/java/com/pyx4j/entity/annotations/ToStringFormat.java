@@ -30,6 +30,7 @@ import java.lang.annotation.Target;
 public @interface ToStringFormat {
 
     /**
+     * All arguments are converted to Strings
      * 
      * @see java.text.MessageFormat.format
      */

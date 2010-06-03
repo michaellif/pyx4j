@@ -231,6 +231,16 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public boolean useMessageFormat() {
+        Format formatAnnotation = method.getAnnotation(Format.class);
+        if (formatAnnotation != null) {
+            return formatAnnotation.messageFormat();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public EditorType getEditorType() {
         Editor editorAnnotation = method.getAnnotation(Editor.class);
         if (editorAnnotation == null) {

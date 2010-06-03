@@ -29,9 +29,12 @@ public interface IPrimitive<TYPE> extends IObject<TYPE> {
     public TYPE pars(String value);
 
     /**
-     * TODO Business toString() presentation. @see com.pyx4j.entity.annotations.Format
+     * Business toString() presentation.
      * 
-     * @return String value of member formated using annotation @Format
+     * @return String value of member formated using annotation
+     * @com.pyx4j.entity.annotations.Format
+     * 
+     * @see com.pyx4j.entity.annotations.Format
      */
-    //public String getStringView();
+    public String getStringView();
 }
