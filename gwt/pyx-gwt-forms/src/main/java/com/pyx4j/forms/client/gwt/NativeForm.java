@@ -386,9 +386,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             add(collapseImage);
 
             caption = new HTML();
+            caption.setWidth("100%");
             caption.getElement().getStyle().setPaddingLeft(5, Unit.PX);
             caption.getElement().getStyle().setPaddingRight(5, Unit.PX);
             add(caption);
+            setCellWidth(caption, "100%");
 
             HorizontalPanel actionsPanel = new HorizontalPanel();
             removeCommand = new Anchor("remove");

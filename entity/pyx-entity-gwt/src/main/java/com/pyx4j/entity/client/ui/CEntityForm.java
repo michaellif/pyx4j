@@ -164,7 +164,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
 
     @Override
     public String getTitle() {
-        return editableEntity.toString();
+        return editableEntity.getStringView();
     }
 
 }
