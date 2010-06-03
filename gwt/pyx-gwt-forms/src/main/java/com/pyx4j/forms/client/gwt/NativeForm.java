@@ -104,6 +104,8 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
 
     private Toolbar toolbar;
 
+    private boolean mouseOver = false;
+
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
 
@@ -432,9 +434,7 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
             add(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
-            removeCommand.getElement().getStyle().setOpacity(0.3);
-            upCommand.getElement().getStyle().setOpacity(0.3);
-            downCommand.getElement().getStyle().setOpacity(0.3);
+            installMouseOverStyles();
 
         }
 
@@ -624,27 +624,40 @@ public class NativeForm extends FlowPanel implements INativeComponent, MouseOver
             toolbar.caption.setHTML(form.getTitle());
             toolbar.caption.setVisible(!expanded);
             toolbar.collapseImage.setResource(expanded ? ImageFactory.getImages().groupBoxOpen() : ImageFactory.getImages().groupBoxClose());
+            installMouseOverStyles();
         }
-
     }
 
     @Override
     public void onMouseOver(MouseOverEvent event) {
-        if (toolbar != null) {
-            getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            toolbar.removeCommand.getElement().getStyle().setOpacity(1);
-            toolbar.upCommand.getElement().getStyle().setOpacity(1);
-            toolbar.downCommand.getElement().getStyle().setOpacity(1);
-        }
+        mouseOver = true;
+        installMouseOverStyles();
     }
 
     @Override
     public void onMouseOut(MouseOutEvent event) {
-        if (toolbar != null) {
-            getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-            toolbar.removeCommand.getElement().getStyle().setOpacity(0.3);
-            toolbar.upCommand.getElement().getStyle().setOpacity(0.3);
-            toolbar.downCommand.getElement().getStyle().setOpacity(0.3);
+        mouseOver = false;
+        installMouseOverStyles();
+    }
+
+    private void installMouseOverStyles() {
+        if (mouseOver) {
+            if (toolbar != null) {
+                getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+                toolbar.removeCommand.getElement().getStyle().setOpacity(1);
+                toolbar.upCommand.getElement().getStyle().setOpacity(1);
+                toolbar.downCommand.getElement().getStyle().setOpacity(1);
+                toolbar.collapseImage.getElement().getStyle().setOpacity(1);
+            }
+        } else {
+            if (toolbar != null) {
+                getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+                toolbar.removeCommand.getElement().getStyle().setOpacity(0.3);
+                toolbar.upCommand.getElement().getStyle().setOpacity(0.3);
+                toolbar.downCommand.getElement().getStyle().setOpacity(0.3);
+                toolbar.collapseImage.getElement().getStyle().setOpacity(0.3);
+            }
         }
+
     }
 }
