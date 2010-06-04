@@ -28,22 +28,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -409,6 +402,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             caption = new HTML();
             caption.setWidth("100%");
+            caption.addClickHandler(new ClickHandler() {
+                public void onClick(ClickEvent event) {
+                    form.setExpended(!form.isExpended());
+                }
+            });
 
             captionHolder.setWidget(caption);
 
@@ -425,6 +423,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 @Override
                 public void onClick(ClickEvent event) {
                     getCComponent().getFolder().moveItem(getCComponent(), true);
+                    mouseOver = false;
+                    installMouseOverStyles();
                 }
             });
             actionsPanel.add(upCommand);
@@ -437,6 +437,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 @Override
                 public void onClick(ClickEvent event) {
                     getCComponent().getFolder().moveItem(getCComponent(), false);
+                    mouseOver = false;
+                    installMouseOverStyles();
                 }
             });
             actionsPanel.add(downCommand);
