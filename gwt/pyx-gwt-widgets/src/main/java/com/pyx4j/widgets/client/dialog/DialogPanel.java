@@ -111,13 +111,13 @@ public class DialogPanel extends PopupPanel {
 
     private int dragStartY;
 
-    private int windowWidth;
+    private int clientWindowLeft;
 
-    private int windowHeight;
+    private int clientWindowRight;
 
-    private final int clientLeft;
+    private int clientWindowTop;
 
-    private final int clientTop;
+    private int clientWindowBottom;
 
     public DialogPanel(boolean autoHide, boolean modal) {
         super(autoHide, modal);
@@ -134,10 +134,7 @@ public class DialogPanel extends PopupPanel {
 
         getElement().getStyle().setProperty("zIndex", "20");
 
-        windowWidth = Window.getClientWidth();
-        windowHeight = Window.getClientHeight();
-        clientLeft = Document.get().getBodyOffsetLeft();
-        clientTop = Document.get().getBodyOffsetTop();
+        updateClientWindowPosition();
 
         contentPanel = new SimplePanel();
         contentPanel.setStylePrimaryName(CSSClass.pyx4j_Dialog_Content.name());
@@ -172,7 +169,8 @@ public class DialogPanel extends PopupPanel {
             int absY = event.getY() + getAbsoluteTop();
             // if the mouse is off the screen to the left, right, or top, don't
             // move or resize the dialog box.
-            if (absX < clientLeft || absX >= windowWidth || absY < clientTop || absY >= windowHeight) {
+
+            if (absX < clientWindowLeft || absX >= clientWindowRight || absY < clientWindowTop || absY >= clientWindowBottom) {
                 return;
             }
 
@@ -231,13 +229,20 @@ public class DialogPanel extends PopupPanel {
         super.hide();
     }
 
+    private void updateClientWindowPosition() {
+        clientWindowLeft = Document.get().getScrollLeft();
+        clientWindowRight = clientWindowLeft + Window.getClientWidth();
+        clientWindowTop = Document.get().getScrollTop();
+        clientWindowBottom = clientWindowTop + Window.getClientHeight();
+    }
+
     @Override
     public void show() {
+        updateClientWindowPosition();
         if (resizeHandlerRegistration == null) {
             resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
                 public void onResize(ResizeEvent event) {
-                    windowWidth = event.getWidth();
-                    windowHeight = event.getHeight();
+                    updateClientWindowPosition();
                 }
             });
         }
