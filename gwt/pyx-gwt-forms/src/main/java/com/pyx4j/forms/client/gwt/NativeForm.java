@@ -388,13 +388,18 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         Toolbar() {
             setWidth("100%");
 
+            SimplePanel collapseImageHolder = new SimplePanel();
+            collapseImageHolder.getElement().getStyle().setPadding(2, Unit.PX);
+
             collapseImage = new Image();
             collapseImage.addClickHandler(new ClickHandler() {
                 public void onClick(ClickEvent event) {
                     form.setExpended(!form.isExpended());
                 }
             });
-            add(collapseImage);
+            collapseImageHolder.setWidget(collapseImage);
+
+            add(collapseImageHolder);
 
             SimplePanel captionHolder = new SimplePanel();
             captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
