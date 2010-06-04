@@ -20,9 +20,13 @@
  */
 package com.pyx4j.essentials.server.preloader;
 
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@RpcTransient
+@Transient
 public interface AddressInfo extends IEntity {
 
     IPrimitive<String> streetName();
