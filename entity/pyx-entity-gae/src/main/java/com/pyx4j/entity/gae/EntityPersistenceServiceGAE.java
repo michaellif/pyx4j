@@ -564,6 +564,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
         List<Entity> entityList = new Vector<Entity>();
         for (IEntity iEntity : entityIterable) {
+            if (entityList.size() >= 500) {
+                datastoreCallStats.get().count++;
+                datastore.put(entityList);
+                entityList.clear();
+            }
             entityList.add(createEntity(iEntity, false));
         }
         datastoreCallStats.get().count++;
