@@ -514,7 +514,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return false;
     }
 
-    private Key persistImpl(IEntity iEntity, boolean merge) {
+    private Entity createEntity(IEntity iEntity, boolean merge) {
         EntityMeta entityMeta = iEntity.getEntityMeta();
         if (entityMeta.isTransient()) {
             throw new Error("Can't persist Transient Entity");
@@ -550,10 +550,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             iEntity.setMemberValue(updatedTs, new Date());
         }
         updateEntityProperties(entity, iEntity, merge);
+        return entity;
+    }
+
+    private Key persistImpl(IEntity iEntity, boolean merge) {
+        Entity entity = createEntity(iEntity, merge);
         datastoreCallStats.get().count++;
         Key keyCreated = datastore.put(entity);
         iEntity.setPrimaryKey(keyCreated.getId());
         return keyCreated;
+    }
+
+    public <T extends IEntity> void persist(Iterable<T> entityIterable) {
+        List<Entity> entityList = new Vector<Entity>();
+        for (IEntity iEntity : entityIterable) {
+            entityList.add(createEntity(iEntity, false));
+        }
+        datastoreCallStats.get().count++;
+        datastore.put(entityList);
     }
 
     private Object deserializeValue(IEntity iEntity, String keyName, Object value, Map<Key, IEntity> retrievedMap) {

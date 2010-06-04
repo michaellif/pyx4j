@@ -42,6 +42,8 @@ public interface IEntityPersistenceService {
 
     public void persist(IEntity entity);
 
+    public <T extends IEntity> void persist(Iterable<T> entityIterable);
+
     public void merge(IEntity entity);
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey);
