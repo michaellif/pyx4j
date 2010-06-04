@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.images;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface FormImages extends ClientBundle {
 
@@ -74,5 +75,19 @@ public interface FormImages extends ClientBundle {
     // ---
 
     ImageResource mandatory();
+
+    // --- CForm tools
+
+    @Source("arrow_up.png")
+    ImageResource moveUp();
+
+    @Source("arrow_down.png")
+    ImageResource moveDown();
+
+    @Source("add.png")
+    ImageResource addItem();
+
+    @Source("cross.png")
+    ImageResource deleteItem();
 
 }

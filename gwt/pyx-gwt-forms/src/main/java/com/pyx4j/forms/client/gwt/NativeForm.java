@@ -382,11 +382,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     class Toolbar extends HorizontalPanel {
 
-        Anchor removeCommand;
+        Image removeCommand;
 
-        Anchor upCommand;
+        Image upCommand;
 
-        Anchor downCommand;
+        Image downCommand;
 
         Image collapseImage;
 
@@ -411,35 +411,40 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             setCellWidth(caption, "100%");
 
             HorizontalPanel actionsPanel = new HorizontalPanel();
-            removeCommand = new Anchor("remove");
-            removeCommand.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    getCComponent().getFolder().removeItem(getCComponent());
-                }
-            });
-            installActionStyles(removeCommand);
-            actionsPanel.add(removeCommand);
 
-            upCommand = new Anchor("up");
+            upCommand = new Image();
+            upCommand.setResource(ImageFactory.getImages().moveUp());
+            upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
             upCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     getCComponent().getFolder().moveItem(getCComponent(), true);
                 }
             });
-            installActionStyles(upCommand);
             actionsPanel.add(upCommand);
 
-            downCommand = new Anchor("down");
+            downCommand = new Image();
+            downCommand.setResource(ImageFactory.getImages().moveDown());
+            downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
             downCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     getCComponent().getFolder().moveItem(getCComponent(), false);
                 }
             });
-            installActionStyles(downCommand);
             actionsPanel.add(downCommand);
+
+            removeCommand = new Image();
+            removeCommand.setResource(ImageFactory.getImages().deleteItem());
+            removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+            removeCommand.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    getCComponent().getFolder().removeItem(getCComponent());
+                }
+            });
+            actionsPanel.add(removeCommand);
+
             add(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
@@ -619,12 +624,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         default:
             break;
         }
-    }
-
-    static void installActionStyles(Widget w) {
-        w.getElement().getStyle().setFontStyle(FontStyle.OBLIQUE);
-        w.getElement().getStyle().setPaddingRight(5, Unit.PX);
-        w.getElement().getStyle().setColor("#518BDC");
     }
 
     public void setExpanded(boolean expanded) {

@@ -23,17 +23,19 @@ package com.pyx4j.forms.client.gwt;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeForm.ToolbarMode;
@@ -46,7 +48,7 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
 
     private final CFormFolder<?> folder;
 
-    private final Anchor addCommand;
+    private final Image addCommand;
 
     private final Label label;
 
@@ -64,9 +66,10 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
         label.getElement().getStyle().setPosition(Position.ABSOLUTE);
         label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-        addCommand = new Anchor("add");
+        addCommand = new Image();
+        addCommand.setResource(ImageFactory.getImages().addItem());
+        addCommand.getElement().getStyle().setCursor(Cursor.POINTER);
         addCommand.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        NativeForm.installActionStyles(addCommand);
         addCommand.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
