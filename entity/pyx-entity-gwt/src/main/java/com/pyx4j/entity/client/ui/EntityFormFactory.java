@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.client.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -28,6 +31,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.FormFactory;
 
 public abstract class EntityFormFactory<E extends IEntity> implements FormFactory {
+
+    private static final Logger log = LoggerFactory.getLogger(EntityFormFactory.class);
 
     protected final E metaEntity;
 
@@ -58,6 +63,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
 
     @Override
     public CEntityForm<E> createForm() {
+        log.debug("createFormInstance of {}", metaEntity.getObjectClass());
         CEntityForm<E> form = createFormInstance();
         IObject<?>[][] members = getFormMembers();
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
@@ -76,10 +82,12 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
             }
         }
         form.setComponents(components);
+        log.debug("enhanceComponents of {}", metaEntity.getObjectClass());
         enhanceComponents(form);
         return form;
     }
 
+    @SuppressWarnings("unchecked")
     protected CEntityForm<E> createFormInstance() {
         return new CEntityForm(metaEntity.getObjectClass());
     }

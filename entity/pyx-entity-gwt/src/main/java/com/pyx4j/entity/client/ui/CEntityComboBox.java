@@ -117,9 +117,13 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                         optFiltered.add(en);
                     }
                 }
+                log.debug("filtered {}", this);
+            } else {
+                optFiltered.addAll(opt);
             }
             if (comparator != null) {
                 Collections.sort(optFiltered, comparator);
+                log.debug("sorted {}", this);
             }
             super.setOptions(optFiltered);
         }
@@ -177,6 +181,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
 
                 @Override
                 public void onSuccess(List<E> result) {
+                    log.debug("loaded {} {}", result.size(), CEntityComboBox.this);
                     isLoading = false;
                     isUnavailable = false;
                     if (unavailableValidator != null) {
@@ -295,6 +300,19 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
         } else {
             return o.getStringView();
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(super.toString());
+        b.append("\noptionsLoaded " + optionsLoaded + "; ");
+        b.append("filtered=" + (optionsFilter != null) + "; ");
+        b.append("sorted=" + (comparator != null) + "; ");
+        if (getOptions() != null) {
+            b.append("options=" + getOptions().size() + "; ");
+        }
+        return b.toString();
     }
 
 }
