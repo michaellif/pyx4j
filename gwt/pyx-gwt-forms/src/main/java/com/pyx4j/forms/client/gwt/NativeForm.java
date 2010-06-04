@@ -403,18 +403,24 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             });
             add(collapseImage);
 
+            SimplePanel captionHolder = new SimplePanel();
+            captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
+            captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
+
             caption = new HTML();
             caption.setWidth("100%");
-            caption.getElement().getStyle().setPaddingLeft(5, Unit.PX);
-            caption.getElement().getStyle().setPaddingRight(5, Unit.PX);
-            add(caption);
-            setCellWidth(caption, "100%");
+
+            captionHolder.setWidget(caption);
+
+            add(captionHolder);
+            setCellWidth(captionHolder, "100%");
 
             HorizontalPanel actionsPanel = new HorizontalPanel();
 
             upCommand = new Image();
             upCommand.setResource(ImageFactory.getImages().moveUp());
             upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+            upCommand.getElement().getStyle().setMargin(2, Unit.PX);
             upCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -426,6 +432,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             downCommand = new Image();
             downCommand.setResource(ImageFactory.getImages().moveDown());
             downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+            downCommand.getElement().getStyle().setMargin(2, Unit.PX);
             downCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -437,6 +444,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             removeCommand = new Image();
             removeCommand.setResource(ImageFactory.getImages().deleteItem());
             removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+            removeCommand.getElement().getStyle().setMargin(2, Unit.PX);
             removeCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
