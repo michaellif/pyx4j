@@ -40,6 +40,7 @@ import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -62,6 +63,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 break;
             case textarea:
                 comp = new CTextArea();
+                break;
+            case richtextarea:
+                comp = new CRichTextArea();
                 break;
             case combo:
                 if (mm.isEntity()) {
