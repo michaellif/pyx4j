@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 public @interface Editor {
 
     public static enum EditorType {
-        text, password, textarea, combo, suggest, captcha
+        text, password, textarea, richtextarea, combo, suggest, captcha
     }
 
     /**
