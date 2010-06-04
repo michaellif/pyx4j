@@ -70,7 +70,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         First, Last, Only, Inner
     }
 
-    public static final int LEFT_LABEL_WIDTH = 100;
+    public static final int LEFT_LABEL_WIDTH = 140;
 
     public static final int TOP_LABEL_WIDTH = 200;
 
@@ -555,7 +555,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 label.setWordWrap(true);
                 getElement().getStyle().setPaddingTop(5, Unit.PX);
                 getElement().getStyle().setPaddingLeft(labelWidth + 20, Unit.PX);
-                getElement().getStyle().setPaddingBottom(20, Unit.PX);
+                getElement().getStyle().setPaddingBottom(5, Unit.PX);
                 imageInfoWarn.getElement().getStyle().setProperty("top", "6px");
             } else {
                 getElement().getStyle().setPaddingTop(25, Unit.PX);
