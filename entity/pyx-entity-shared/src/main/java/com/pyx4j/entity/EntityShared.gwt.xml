@@ -8,4 +8,6 @@
     <source path="annotations"/>
 	<source path="security"/>
 	<source path="shared"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.entity.annotations.*" />
 </module>
