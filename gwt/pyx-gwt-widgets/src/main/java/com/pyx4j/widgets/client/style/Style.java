@@ -58,6 +58,11 @@ public class Style {
         }
     }
 
+    public void replaceProperty(String name, String value) {
+        removeProperty(name);
+        addProperty(name, value);
+    }
+
     public void addProperties(String styleText) {
         String[] lines = styleText.split(";");
         for (String line : lines) {
