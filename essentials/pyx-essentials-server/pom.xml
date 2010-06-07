@@ -115,8 +115,9 @@
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
-			<version>5.0.2</version>
+			<optional>true</optional>
 		</dependency>
+
     </dependencies>
 
     <build>
