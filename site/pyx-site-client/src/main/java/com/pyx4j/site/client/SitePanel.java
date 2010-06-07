@@ -81,7 +81,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private Label headerCaptions;
 
-    private Image logoImage;
+    protected Image logoImage;
 
     private String logoImageLink;
 
@@ -328,11 +328,15 @@ public abstract class SitePanel extends SimplePanel {
         logoImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (logoImageLink != null) {
-                    AbstractSiteDispatcher.show(logoImageLink);
-                }
+                logoImageOnClick();
             }
         });
+    }
+
+    protected void logoImageOnClick() {
+        if (logoImageLink != null) {
+            AbstractSiteDispatcher.show(logoImageLink);
+        }
     }
 
     public String getSiteName() {
