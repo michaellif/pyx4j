@@ -37,7 +37,11 @@ public class NavigUtils {
                 builder.append(PAGE_SEPARATOR);
             }
         }
-
+        // This is site
+        if (parts.length == 2) {
+            // Assume home page of site
+            builder.append(PAGE_SEPARATOR);
+        }
         return builder.toString();
     }
 
