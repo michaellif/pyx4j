@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api</artifactId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -168,7 +168,7 @@
                             <includeScope>provided</includeScope>
                             <outputDirectory>${basedir}/war/WEB-INF/lib</outputDirectory>
                             <!-- this would be renamed by ant to names compatible with GAE Eclipse plugin -->
-                            <includeArtifactIds>appengine-api</includeArtifactIds>
+                            <includeArtifactIds>appengine-api-1.0-sdk</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -183,7 +183,7 @@
                         <goals><goal>run</goal></goals>
                         <configuration>
                             <tasks>
-                                <move file="${basedir}/war/WEB-INF/lib/appengine-api.jar" tofile="${basedir}/war/WEB-INF/lib/appengine-api-1.0-sdk-${gaeVersion}.jar"/>
+                                <move file="${basedir}/war/WEB-INF/lib/appengine-api-1.0-sdk.jar" tofile="${basedir}/war/WEB-INF/lib/appengine-api-1.0-sdk-${gaeVersion}.jar"/>
                             </tasks>
                         </configuration>
                     </execution>

@@ -16,7 +16,7 @@
     <artifactId>pyx-essentials-server</artifactId>
     <name>pyx-essentials-server</name>
     <description>Essentials Server Side Implementations</description>
-    
+
     <repositories>
     	<repository>
     		<id>iText</id>
@@ -78,7 +78,7 @@
 
         <dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api</artifactId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>

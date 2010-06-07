@@ -30,26 +30,26 @@
             <artifactId>pyx-security-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-config-server</artifactId>
             <version>${project.version}</version>
-        </dependency>   
+        </dependency>
 
         <dependency>
             <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api</artifactId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
-        
+
 		<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
