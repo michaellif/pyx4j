@@ -83,7 +83,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private Image logoImage;
 
-    private Class<? extends NavigNode> logoImageLink;
+    private String logoImageLink;
 
     private HTML copitightHtml;
 
@@ -349,7 +349,11 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     public void setLogoImageLink(Class<? extends NavigNode> page) {
-        logoImageLink = page;
+        setLogoImageLink(NavigUtils.getPageUri(page));
+    }
+
+    public void setLogoImageLink(String path) {
+        logoImageLink = path;
         if (logoImageLink != null) {
             logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
         }
