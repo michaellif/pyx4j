@@ -91,7 +91,8 @@ public class BrowserType {
 
     public static final boolean isMobile() {
         if (isMobile == null) {
-            isMobile = getUserAgent().toLowerCase().contains("mobile");
+            String ua = getUserAgent().toLowerCase();
+            isMobile = ua.contains("mobile") || ua.contains("symbian");
         }
         return isMobile;
     }
