@@ -7,6 +7,7 @@
     <inherits name='com.pyx4j.widgets.BrowserType' />
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.pyx4j.gwt.GwtCommons'/>
+    <inherits name='com.pyx4j.i18n.I18N'/>
 
     <source path="client" />
 
