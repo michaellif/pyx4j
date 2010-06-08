@@ -54,8 +54,9 @@ public class SessionInactiveDialog {
         if (!timeout) {
             reasonMessage += "\n" + i18n.tr("Open another browser instance to keep multiple active sessions.");
         } else {
-            reasonMessage += "\n" + i18n.tr("Session duration ") + TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()) + ", inactive for "
-                    + TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime());
+            reasonMessage += "\n"
+                    + i18n.tr("Session duration {0}, inactive for {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()), TimeUtils
+                            .minutesSince(SessionMonitor.getSessionInactiveTime()));
         }
 
         MessageDialog.info(title, reasonMessage).addCloseHandler(new CloseHandler<PopupPanel>() {

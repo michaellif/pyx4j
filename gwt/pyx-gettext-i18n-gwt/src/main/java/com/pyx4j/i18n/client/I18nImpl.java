@@ -34,11 +34,16 @@ public class I18nImpl {
     }
 
     public String tr(String text) {
-        return bundle.getString(text);
+        String value = bundle.getString(text);
+        if (value == null) {
+            return text;
+        } else {
+            return value;
+        }
     }
 
     public String tr(String text, Object... objects) {
-        return MessageFormat.format(bundle.getString(text), objects);
+        return MessageFormat.format(tr(text), objects);
     }
 
     public String trn(String text, String pluralText, long n) {

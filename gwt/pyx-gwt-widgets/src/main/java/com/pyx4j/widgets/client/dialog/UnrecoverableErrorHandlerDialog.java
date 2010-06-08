@@ -124,7 +124,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         + "describing the steps taken prior to the error.\n")
 
-        + ((sessionClosed) ? i18n.tr("\nThis session has been terminated to prevent data corruption.") : "")
+        + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
 
         + ((detailsMessage != null) ? detailsMessage : ""), Type.Error, new OkOption() {
             @Override
