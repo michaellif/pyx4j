@@ -102,10 +102,13 @@ public class I18nResourceBundleGenerator extends Generator {
         while (en.hasMoreElements()) {
             String key = en.nextElement();
             if (key.length() > 0) {
-                writer.print(escapeSourceString(key));
-                writer.print(", ");
-                writer.print(escapeSourceString(i18n.tr(key)));
-                writer.println(",");
+                String value = i18n.tr(key);
+                if (value.length() > 0) {
+                    writer.print(escapeSourceString(key));
+                    writer.print(", ");
+                    writer.print(escapeSourceString(value));
+                    writer.println(",");
+                }
             }
         }
 
