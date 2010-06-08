@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.client.crud;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,6 +43,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntityEditorPanel<E> {
 
+    private static I18n i18n = I18nFactory.getI18n(EntityEditorPanel.class);
+
     private EntityEditorWidget<E> parentWidget;
 
     protected final Button saveButton;
@@ -55,7 +60,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
         contentPanel.add(createFormWidget(LabelAlignment.LEFT));
 
         if (getSaveService() != null) {
-            saveButton = new Button("Save");
+            saveButton = new Button(i18n.tr("Save"));
             saveButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -64,7 +69,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
                     if (validationResults.isValid()) {
                         doSave();
                     } else {
-                        MessageDialog.warn("Validation failed.", validationResults.getMessagesText());
+                        MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText());
                     }
                 }
             });
@@ -105,7 +110,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
             public void onSuccess(E result) {
                 DomainManager.entityUpdated(result);
                 parentWidget.populateForm(result);
-                parentWidget.setMessage("Entity is saved.");
+                parentWidget.setMessage(i18n.tr("{0} is saved.", result.getEntityMeta().getCaption()));
             }
 
         };

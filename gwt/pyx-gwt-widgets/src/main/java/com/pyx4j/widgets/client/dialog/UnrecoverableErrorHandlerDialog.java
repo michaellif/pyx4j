@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
@@ -32,6 +35,8 @@ import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
 public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandler {
+
+    private static I18n i18n = I18nFactory.getI18n(UnrecoverableErrorHandlerDialog.class);
 
     /**
      * Only one instance of Dialog is shown.
@@ -80,9 +85,9 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
                 return true;
             }
         };
-        String message = "We updated our application.\n In order to continue using this application you need to refresh the page."
-                + "\n Do you want to refresh client now?";
-        Dialog d = new Dialog("System error", message, Type.Error, optYesNo);
+        String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
+                + "\n Do you want to refresh client now?");
+        Dialog d = new Dialog(i18n.tr("System error"), message, Type.Error, optYesNo);
         d.show();
     }
 
@@ -113,13 +118,13 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         boolean sessionClosed = closeSessionOnUnrecoverableError();
 
-        Dialog d = new Dialog("An Unexpected Error Has Occurred",
+        Dialog d = new Dialog(i18n.tr("An Unexpected Error Has Occurred"),
 
-        "Please report the incident to technical support,\n"
+        i18n.tr("Please report the incident to technical support,\n"
 
-        + "describing the steps taken prior to the error.\n"
+        + "describing the steps taken prior to the error.\n")
 
-        + ((sessionClosed) ? "\nThis session has been terminated to prevent data corruption." : "")
+        + ((sessionClosed) ? i18n.tr("\nThis session has been terminated to prevent data corruption.") : "")
 
         + ((detailsMessage != null) ? detailsMessage : ""), Type.Error, new OkOption() {
             @Override

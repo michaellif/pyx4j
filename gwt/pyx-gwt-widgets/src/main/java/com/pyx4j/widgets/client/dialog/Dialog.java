@@ -26,6 +26,8 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -70,6 +72,8 @@ import com.pyx4j.widgets.client.style.CSSClass;
 public class Dialog extends DialogPanel {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
+
+    private static I18n i18n = I18nFactory.getI18n(Dialog.class);
 
     public static enum Type {
         Error, Warning, Info, Confirm
@@ -117,7 +121,7 @@ public class Dialog extends DialogPanel {
     private static final List<Dialog> openDialogs = new Vector<Dialog>();
 
     public Dialog(String message) {
-        this("Information", message, Type.Info, new OkOption() {
+        this(i18n.tr("Information"), message, Type.Info, new OkOption() {
 
             @Override
             public boolean onClickOk() {
@@ -234,11 +238,11 @@ public class Dialog extends DialogPanel {
         }
 
         if (options instanceof YesOption) {
-            yesButton = createButton("Yes", buttonListener, true);
+            yesButton = createButton(i18n.tr("Yes"), buttonListener, true);
             buttonsPanel.add(yesButton);
         }
         if (options instanceof NoOption) {
-            noButton = createButton("No", buttonListener, true);
+            noButton = createButton(i18n.tr("No"), buttonListener, true);
             buttonsPanel.add(noButton);
         }
         if (options instanceof OkOption) {
@@ -270,7 +274,7 @@ public class Dialog extends DialogPanel {
         if (options instanceof OkOptionText) {
             return ((OkOptionText) options).optionTextOk();
         } else {
-            return "Ok";
+            return i18n.tr("Ok");
         }
     }
 
@@ -283,7 +287,7 @@ public class Dialog extends DialogPanel {
         if (options instanceof CancelOptionText) {
             return ((CancelOptionText) options).optionTextCancel();
         } else {
-            return "Cancel";
+            return i18n.tr("Cancel");
         }
     }
 
@@ -293,7 +297,7 @@ public class Dialog extends DialogPanel {
      * @return text for 'Close' button
      */
     protected String optionTextClose() {
-        return "Close";
+        return i18n.tr("Close");
     }
 
     private Button createButton(String text, ClickHandler buttonListener, boolean canHaveFocus) {

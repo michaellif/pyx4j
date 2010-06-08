@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.client;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -29,6 +32,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class SessionInactiveDialog {
 
+    private static I18n i18n = I18nFactory.getI18n(SessionInactiveDialog.class);
+
     private static boolean shown;
 
     public static void showSessionInactive(boolean timeout) {
@@ -36,21 +41,20 @@ public class SessionInactiveDialog {
             return;
         }
         shown = true;
-        String title = timeout ? "Session inactive" : "Your session has been terminated";
+        String title = timeout ? i18n.tr("Session inactive") : i18n.tr("Your session has been terminated");
         String reasonMessage;
         if (timeout) {
-            reasonMessage = "You have been logged out due to inactivity.";
+            reasonMessage = i18n.tr("You have been logged out due to inactivity.");
         } else {
-            reasonMessage = "Your session has been terminated.";
-            reasonMessage += "\nOnly one Application session can be active in a browser.";
+            reasonMessage = i18n.tr("Your session has been terminated." + "\nOnly one Application session can be active in a browser.");
         }
 
-        reasonMessage += "\n\nPlease login again.\n";
+        reasonMessage += "\n\n" + i18n.tr("Please login again.") + "\n";
 
         if (!timeout) {
-            reasonMessage += "\nOpen another browser instance to keep multiple active sessions.";
+            reasonMessage += "\n" + i18n.tr("Open another browser instance to keep multiple active sessions.");
         } else {
-            reasonMessage += "\nSession duration " + TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()) + ", inactive for "
+            reasonMessage += "\n" + i18n.tr("Session duration ") + TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()) + ", inactive for "
                     + TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime());
         }
 

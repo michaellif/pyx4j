@@ -29,6 +29,8 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -61,6 +63,8 @@ import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 public abstract class AbstractSiteDispatcher {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractSiteDispatcher.class);
+
+    private static I18n i18n = I18nFactory.getI18n(AbstractSiteDispatcher.class);
 
     private final HashMap<String, SitePanel> sitePanels = new HashMap<String, SitePanel>();
 
@@ -106,8 +110,9 @@ public abstract class AbstractSiteDispatcher {
                             }
                         };
 
-                        Dialog d = new Dialog("Confirm", "Are you sure you want to navigate away from this page?\n" + ple.getMessage()
-                                + "\nPress OK to continue, or Cancel to stay on the current page.", Dialog.Type.Confirm, options);
+                        Dialog d = new Dialog(i18n.tr("Confirm"), i18n.tr(
+                                "Are you sure you want to navigate away from this page?\n{0}\nPress OK to continue, or Cancel to stay on the current page.",
+                                ple.getMessage()), Dialog.Type.Confirm, options);
 
                         d.show();
                         return;
@@ -247,7 +252,7 @@ public abstract class AbstractSiteDispatcher {
                 return true;
             }
         }
-        MessageDialog.error("Application error", caught.getMessage() + "\nContact administrator.");
+        MessageDialog.error(i18n.tr("Application error"), caught.getMessage() + "\n" + i18n.tr("Contact administrator."));
         return true;
     }
 
@@ -264,7 +269,7 @@ public abstract class AbstractSiteDispatcher {
     }
 
     protected void showGoogleAccountsLoginRedirect(String title) {
-        Dialog d = new Dialog(title, "Redirect to Google login page?", Dialog.Type.Confirm, new YesNoOption() {
+        Dialog d = new Dialog(title, i18n.tr("Redirect to Google login page?"), Dialog.Type.Confirm, new YesNoOption() {
             @Override
             public boolean onClickYes() {
                 ClientContext.googleAccountsLogin();
