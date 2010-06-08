@@ -100,6 +100,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     private boolean mouseOver = false;
 
+    private boolean componentsInitialized = false;
+
     public NativeForm(final CForm form, CComponent<?>[][] comp, LabelAlignment allignment, InfoImageAlignment infoImageAlignment) {
         super();
 
@@ -134,7 +136,15 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         spans = new int[components.length][components[0].length][2];
         preprocess();
-        addAllComponents();
+        if (form.isExpended()) {
+            addAllComponents();
+            componentsInitialized = true;
+        }
+
+        if (form.getFolder() != null) {
+            toolbar = new Toolbar();
+            toolbarHolder.setWidget(toolbar);
+        }
 
         setWidth(form.getWidth());
         setHeight(form.getHeight());
@@ -157,10 +167,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     addComponent(component, i, j);
                 }
             }
-        }
-        if (form.getFolder() != null) {
-            toolbar = new Toolbar();
-            toolbarHolder.setWidget(toolbar);
         }
     }
 
@@ -642,6 +648,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
     }
 
     public void setExpanded(boolean expanded) {
+        if (expanded && !componentsInitialized) {
+            addAllComponents();
+            componentsInitialized = true;
+        }
+
         grid.setVisible(expanded);
         if (toolbar != null) {
             toolbar.caption.setHTML(form.getTitle());
