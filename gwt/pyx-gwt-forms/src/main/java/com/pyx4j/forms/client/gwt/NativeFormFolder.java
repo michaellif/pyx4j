@@ -105,6 +105,8 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
         addCommand.getElement().getStyle().setProperty("top", "5px");
 
         getElement().getStyle().setPaddingTop(25, Unit.PX);
+        getElement().getStyle().setPaddingLeft(5, Unit.PX);
+        getElement().getStyle().setPaddingRight(5, Unit.PX);
         getElement().getStyle().setPosition(Position.RELATIVE);
     }
 
