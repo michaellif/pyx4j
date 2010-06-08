@@ -110,6 +110,7 @@
         <module>log/pyx-log-gwt</module>
 
         <module>gwt/pyx-gwt-commons</module>
+        <module>gwt/pyx-gettext-i18n-gwt</module>
         <module>rpc/pyx-rpc-gwt</module>
         <module>security/pyx-security-gwt</module>
         <module>log/pyx-log-gwt-rpcappender</module>
@@ -184,6 +185,17 @@
         <repository>
             <id>maven-gae-plugin-googlecode-repository</id>
             <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+        <repository>
+            <id>gettext-commons-site</id>
+            <url>http://gettext-commons.googlecode.com/svn/maven-repository/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -374,6 +386,18 @@
                 <artifactId>javassist</artifactId>
                 <version>3.11.0.GA</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.xnap.commons</groupId>
+	            <artifactId>gettext-commons</artifactId>
+	            <version>0.9.6</version>
+	            <exclusions>
+				    <exclusion>
+	                    <groupId>org.xnap.commons</groupId>
+			            <artifactId>maven-gettext-plugin</artifactId>
+				    </exclusion>
+			    </exclusions>
+	        </dependency>
 
             <dependency>
                 <groupId>saxon</groupId>
