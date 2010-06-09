@@ -20,6 +20,9 @@
  */
 package org.xnap.commons.i18n;
 
+import java.text.MessageFormat;
+import java.util.MissingResourceException;
+
 import com.pyx4j.i18n.client.I18nResourceBundle;
 
 /**
@@ -29,5 +32,29 @@ public class I18n extends com.pyx4j.i18n.client.I18nImpl {
 
     public I18n(I18nResourceBundle bundle) {
         super(bundle);
+    }
+    
+    public final String tr(String text) {
+        return super.tr(text);
+    }
+
+    public final String tr(String text, Object[] objects) {
+        return super.tr(text, objects);
+    }
+
+    public final String tr(String text, Object o1) {
+        return super.tr(text, o1);
+    }
+
+    public final String tr(String text, Object o1, Object o2) {
+        return super.tr(text, o1, o2);
+    }
+
+    public final String tr(String text, Object o1, Object o2, Object o3) {
+        return super.tr(text, o1, o2, o3);
+    }
+
+    public final String tr(String text, Object o1, Object o2, Object o3, Object o4) {
+        return super.tr(text, o1, o2, o3, o4);
     }
 }
