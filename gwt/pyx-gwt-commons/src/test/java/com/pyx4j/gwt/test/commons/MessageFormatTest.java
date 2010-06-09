@@ -52,8 +52,24 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("2000.21", "{0,number,#.##}", 2000.21);
     }
 
-    public void TODO_testChoiceFormat() {
+    public void testChoiceFormat() {
         assertMessageFormat("One", "{0,choice,0#Zero|1#One}", 1);
+        assertMessageFormat("1st", "{0,choice,1#{0}st|2#{0}nd}", 1);
+        assertMessageFormat("2st", "{0,choice,1#{1}st|2#{1}nd}", 1, 2);
+        assertMessageFormat("2nd", "{0,choice,1#{1}st|2#{1}nd}", 2, 2);
+
+        String pattern = "{0,choice,-1#is negative|0#is zero or fraction|1#is one|1.0<is 1+|2#is two|3<is more than 3}";
+        assertMessageFormat("is negative", pattern, -2);
+        assertMessageFormat("is negative", pattern, -1);
+        assertMessageFormat("is negative", pattern, -0.1);
+        assertMessageFormat("is zero or fraction", pattern, 0);
+        assertMessageFormat("is zero or fraction", pattern, 0.1);
+        assertMessageFormat("is one", pattern, 1);
+        assertMessageFormat("is 1+", pattern, 1.1);
+        assertMessageFormat("is two", pattern, 2);
+        assertMessageFormat("is two", pattern, 2.1);
+        assertMessageFormat("is two", pattern, 3);
+        assertMessageFormat("is more than 3", pattern, 3.1);
     }
 
     /**

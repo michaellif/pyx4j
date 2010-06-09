@@ -23,7 +23,9 @@ package com.pyx4j.i18n.client;
 import java.text.MessageFormat;
 
 /**
- * Port of gettext-commons to GWT
+ * Port of gettext-commons to GWT.
+ * 
+ * N.B. Plural forms of gettext not supported, use java.text.MessageFormat choice format.
  */
 public class I18nImpl {
 
@@ -46,12 +48,12 @@ public class I18nImpl {
         return MessageFormat.format(tr(text), objects);
     }
 
-    public String trn(String text, String pluralText, long n) {
-        //TODO
-        return null;
-    }
-
-    public final String trn(String text, String pluralText, long n, Object... objects) {
-        return MessageFormat.format(trn(text, pluralText, n), objects);
-    }
+    //    public String trn(String text, String pluralText, long n) {
+    //        //TODO
+    //        return null;
+    //    }
+    //
+    //    public final String trn(String text, String pluralText, long n, Object... objects) {
+    //        return MessageFormat.format(trn(text, pluralText, n), objects);
+    //    }
 }

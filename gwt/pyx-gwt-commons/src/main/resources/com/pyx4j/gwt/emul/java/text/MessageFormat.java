@@ -19,6 +19,7 @@
  * @version $Id$
  */
 //package com.pyx4j.gwt.emul.java.text;
+
 package java.text;
 
 import java.util.Date;
@@ -46,6 +47,7 @@ public class MessageFormat {
 
         StringBuilder formatPattern = null;
 
+        int formatRecursion = 0;
         char c = '\0';
         char pc;
         for (int index = 0; index < pattern.length(); index++) {
@@ -60,11 +62,19 @@ public class MessageFormat {
                 continue;
             } else if (formatElement) {
                 if (c == DELIM_STOP) {
-                    format(result, formatPattern.toString(), arguments);
-                    formatElement = false;
-                    formatPattern = null;
+                    if (formatRecursion > 0) {
+                        formatRecursion--;
+                        formatPattern.append(c);
+                    } else {
+                        format(result, formatPattern.toString(), arguments);
+                        formatElement = false;
+                        formatPattern = null;
+                    }
                 } else {
                     formatPattern.append(c);
+                    if (c == DELIM_START) {
+                        formatRecursion++;
+                    }
                 }
                 continue;
             }
@@ -104,7 +114,7 @@ public class MessageFormat {
             argumentIndex = Integer.valueOf(formatPattern);
         }
         Object value = arguments[argumentIndex];
-        Object formatedValue;
+        Object formatedValue = null;
         if ((formatType == null) || (value == null)) {
             formatedValue = value;
         } else {
@@ -155,6 +165,48 @@ public class MessageFormat {
                     fmt = DateTimeFormat.getFormat(formatStyle);
                 }
                 formatedValue = fmt.format((Date) value);
+            } else if (formatType.equals("choice")) {
+                String[] choices = formatStyle.split("\\|");
+                double selectorValue = toDouble(value);
+                String prevFormat = null;
+                for (String choice : choices) {
+                    int comparatorIdx = choice.indexOf('#');
+                    if (comparatorIdx > 0) {
+                        double choiceValue = Double.valueOf(choice.substring(0, comparatorIdx)).doubleValue();
+                        String choiceFormat = choice.substring(comparatorIdx + 1, choice.length());
+                        if (selectorValue == choiceValue) {
+                            formatedValue = format(choiceFormat, arguments);
+                            break;
+                        } else if (selectorValue < choiceValue) {
+                            formatedValue = format(prevFormat == null ? choiceFormat : prevFormat, arguments);
+                            break;
+                        } else {
+                            prevFormat = choiceFormat;
+                            continue;
+                        }
+                    } else {
+                        comparatorIdx = choice.indexOf('<');
+                        if (comparatorIdx > 0) {
+                            double choiceValue = Double.valueOf(choice.substring(0, comparatorIdx)).doubleValue();
+                            String choiceFormat = choice.substring(comparatorIdx + 1, choice.length());
+                            if (selectorValue <= choiceValue) {
+                                formatedValue = format(prevFormat == null ? choiceFormat : prevFormat, arguments);
+                                break;
+                            } else {
+                                prevFormat = choiceFormat;
+                            }
+                        } else {
+                            throw new IllegalArgumentException();
+                        }
+                    }
+                }
+                if (formatedValue == null) {
+                    if (prevFormat != null) {
+                        formatedValue = format(prevFormat, arguments);
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                }
             } else {
                 formatedValue = value;
             }
