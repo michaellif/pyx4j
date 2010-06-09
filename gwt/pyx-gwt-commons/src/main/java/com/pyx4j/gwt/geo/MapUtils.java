@@ -32,12 +32,13 @@ public class MapUtils {
     public static void obtainLatLang(final String address, final LatLngCallback callback) {
 
         GoogleAPI.ensureInitialized();
+        AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
+        settings.setOtherParms("sensor=false");
         AjaxLoader.loadApi("maps", "2", new Runnable() {
             public void run() {
                 new Geocoder().getLatLng(address, callback);
-
             }
-        }, null);
+        }, settings);
     }
 
     public static LatLng newLatLngInstance(GeoPoint geoPoint) {
