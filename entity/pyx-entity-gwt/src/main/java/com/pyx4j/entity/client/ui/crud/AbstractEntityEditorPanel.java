@@ -147,16 +147,18 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return !equalRecursive(form.getOrigValue(), getEntity(), new HashSet<IEntity>());
     }
 
-    private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
+    public static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
         if (((entity2 == null) || entity2.isNull())) {
             return (entity1 == null) || entity1.isNull();
         } else if ((entity1 == null) || entity1.isNull()) {
             return false;
         }
-        if (processed.contains(entity1)) {
-            return true;
+        if (processed != null) {
+            if (processed.contains(entity1)) {
+                return true;
+            }
+            processed.add(entity1);
         }
-        processed.add(entity1);
         EntityMeta em = entity1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
