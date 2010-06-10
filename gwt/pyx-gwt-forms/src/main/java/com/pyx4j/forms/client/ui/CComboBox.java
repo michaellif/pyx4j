@@ -90,9 +90,25 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
         return addHandler(handler, OptionsChangeEvent.getType());
     }
 
+    @SuppressWarnings("serial")
+    private List<E> createOptionsImpl() {
+        return new ArrayList<E>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public int indexOf(Object o) {
+                for (int i = 0; i < this.size(); i++) {
+                    if (isValuesEquals(this.get(i), (E) o)) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+        };
+    }
+
     public void setOptions(Collection<E> opt) {
         if (options == null) {
-            options = new ArrayList<E>();
+            options = createOptionsImpl();
         }
         options.clear();
         if (opt != null) {
@@ -122,14 +138,14 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
             nativeComboBox.removeOption(opt);
         }
         options.remove(opt);
-        if (Utils.equals(getValue(), opt)) {
+        if (isValuesEquals(getValue(), opt)) {
             setValue(null);
         }
     }
 
     public void updateOption(E opt) {
         if (options == null) {
-            options = new ArrayList<E>();
+            options = createOptionsImpl();
         }
         if (options.contains(opt)) {
             if (nativeComboBox != null) {

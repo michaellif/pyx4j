@@ -32,6 +32,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ICloneable;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
@@ -206,7 +207,7 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
             nativeListBox.removeItem(getValueIndex(v));
         }
         getValue().remove(v);
-        if (Utils.equals(selected, v)) {
+        if (EqualsHelper.equals(selected, v)) {
             setSelected(null);
         }
     }

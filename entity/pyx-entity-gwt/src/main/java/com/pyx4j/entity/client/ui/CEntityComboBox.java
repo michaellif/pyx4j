@@ -34,6 +34,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -64,6 +65,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
     private boolean isLoading = false;
 
     private boolean isUnavailable = false;
+
+    private boolean useNamesComparison = false;
 
     private EditableValueValidator<E> unavailableValidator;
 
@@ -275,6 +278,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
     public boolean isValuesEquals(E value1, E value2) {
         if (((value1 == null) || value1.isNull()) && ((value2 == null) || value2.isNull())) {
             return true;
+        } else if (isUseNamesComparison()) {
+            return EqualsHelper.equals(getItemName(value1), getItemName(value2));
         } else {
             return super.isValuesEquals(value1, value2);
         }
@@ -282,6 +287,14 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
 
     public void setStringViewMember(IObject<?> member) {
         stringViewMemberName = member.getFieldName();
+    }
+
+    public boolean isUseNamesComparison() {
+        return useNamesComparison;
+    }
+
+    public void setUseNamesComparison(boolean useNamesComparison) {
+        this.useNamesComparison = useNamesComparison;
     }
 
     @Override
