@@ -63,6 +63,7 @@ import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.Tooltip;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeForm extends FlowPanel implements INativeComponent {
 
@@ -70,7 +71,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         First, Last, Only, Inner
     }
 
-    public static final int LEFT_LABEL_WIDTH = 140;
+    public static final int LEFT_LABEL_WIDTH = 150;
 
     public static final int TOP_LABEL_WIDTH = 200;
 
@@ -468,6 +469,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             add(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+            if (BrowserType.isIE7()) {
+                actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
+            }
 
             installMouseOverStyles();
 

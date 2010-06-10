@@ -31,6 +31,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -43,8 +45,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.widgets.client.util.BrowserType;
 
-public class NativeFormFolder<E> extends ComplexPanel implements INativeEditableComponent<List<E>> {
+public class NativeFormFolder<E> extends DockPanel implements INativeEditableComponent<List<E>> {
 
     private final CFormFolder<?> folder;
 
@@ -55,7 +58,7 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
     private final VerticalPanel container;
 
     public NativeFormFolder(final CFormFolder<?> folder) {
-        setElement(DOM.createDiv());
+        setWidth("100%");
 
         this.folder = folder;
 
@@ -63,13 +66,13 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
         container.setWidth("100%");
 
         label = new Label(folder.getTitle() == null ? "" : folder.getTitle());
-        label.getElement().getStyle().setPosition(Position.ABSOLUTE);
         label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        label.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        label.getElement().getStyle().setPaddingRight(25, Unit.PX);
 
         addCommand = new Image();
         addCommand.setResource(ImageFactory.getImages().addItem());
         addCommand.getElement().getStyle().setCursor(Cursor.POINTER);
-        addCommand.getElement().getStyle().setPosition(Position.ABSOLUTE);
         addCommand.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -91,28 +94,25 @@ public class NativeFormFolder<E> extends ComplexPanel implements INativeEditable
             }
         });
 
-        add(container, getElement());
+        add(container, CENTER);
 
-        add(label, getElement());
+        HorizontalPanel labelHolder = new HorizontalPanel();
 
-        add(addCommand, getElement());
+        labelHolder.add(label);
+
+        labelHolder.add(addCommand);
+
+        add(labelHolder, NORTH);
 
         label.setWordWrap(false);
-        label.getElement().getStyle().setProperty("top", "5px");
-        label.getElement().getStyle().setProperty("left", "15px");
 
         addCommand.getElement().getStyle().setProperty("left", (NativeForm.LEFT_LABEL_WIDTH + 25) + "px");
         addCommand.getElement().getStyle().setProperty("top", "5px");
 
-        getElement().getStyle().setPaddingTop(25, Unit.PX);
-        getElement().getStyle().setPaddingLeft(5, Unit.PX);
-        getElement().getStyle().setPaddingRight(5, Unit.PX);
-        getElement().getStyle().setPosition(Position.RELATIVE);
-    }
+        if (BrowserType.isIE7()) {
+            getElement().getStyle().setMarginLeft(5, Unit.PX);
+        }
 
-    @Override
-    protected void onLoad() {
-        super.onLoad();
     }
 
     @Override
