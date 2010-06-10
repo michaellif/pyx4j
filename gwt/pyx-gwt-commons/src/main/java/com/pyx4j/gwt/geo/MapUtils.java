@@ -23,6 +23,7 @@ package com.pyx4j.gwt.geo;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.maps.client.geocode.Geocoder;
 import com.google.gwt.maps.client.geocode.LatLngCallback;
+import com.google.gwt.maps.client.geocode.LocationCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 
 import com.pyx4j.geo.GeoPoint;
@@ -30,13 +31,23 @@ import com.pyx4j.geo.GeoPoint;
 public class MapUtils {
 
     public static void obtainLatLang(final String address, final LatLngCallback callback) {
-
         GoogleAPI.ensureInitialized();
         AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
         settings.setOtherParms("sensor=false");
         AjaxLoader.loadApi("maps", "2", new Runnable() {
             public void run() {
                 new Geocoder().getLatLng(address, callback);
+            }
+        }, settings);
+    }
+
+    public static void obtainLocations(final String address, final LocationCallback callback) {
+        GoogleAPI.ensureInitialized();
+        AjaxLoader.AjaxLoaderOptions settings = AjaxLoader.AjaxLoaderOptions.newInstance();
+        settings.setOtherParms("sensor=false");
+        AjaxLoader.loadApi("maps", "2", new Runnable() {
+            public void run() {
+                new Geocoder().getLocations(address, callback);
             }
         }, settings);
     }
