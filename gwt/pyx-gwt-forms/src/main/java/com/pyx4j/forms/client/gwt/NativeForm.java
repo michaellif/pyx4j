@@ -37,7 +37,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -475,7 +475,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     }
 
-    class WidgetContainer extends ComplexPanel {
+    class WidgetContainer extends DockPanel {
 
         private final CComponent<?> component;
 
@@ -483,19 +483,24 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         private final Label label;
 
-        private final Image imageInfoWarn;
+        private final ImageHolder imageMandatoryHolder;
 
-        private final Image imageMandatory;
+        private Image imageInfoWarn;
 
-        private final Tooltip tooltip;
+        private final ImageHolder imageInfoWarnHolder;
+
+        private Image imageMandatory;
+
+        private Tooltip tooltip;
 
         WidgetContainer(final CComponent<?> component) {
-            setElement(DOM.createDiv());
+
+            getElement().getStyle().setPadding(2, Unit.PX);
 
             this.component = component;
             nativeComponent = (Widget) component.initNativeComponent();
+
             label = new Label(component.getTitle() == null ? "" : component.getTitle() + ":");
-            label.getElement().getStyle().setPosition(Position.ABSOLUTE);
             Cursor.setDefault(label.getElement());
 
             if (nativeComponent == null) {
@@ -518,17 +523,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 });
             }
 
-            imageInfoWarn = new Image();
-            imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
-            imageInfoWarn.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            imageInfoWarnHolder = new ImageHolder("18px");
 
-            imageMandatory = new Image();
-            imageMandatory.setResource(ImageFactory.getImages().mandatory());
-            imageMandatory.getElement().getStyle().setPosition(Position.ABSOLUTE);
-
-            tooltip = Tooltip.tooltip(imageInfoWarn, "");
-
-            Tooltip.tooltip(imageMandatory, "This field is mandatory");
+            imageMandatoryHolder = new ImageHolder("7px");
 
             renderToolTip();
             renderMandatoryStar();
@@ -544,80 +541,103 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
                         label.setText(component.getTitle() + ":");
                     }
-                    positionImageInfoWarn();
                     renderToolTip();
                     renderMandatoryStar();
                 }
             });
 
-            add(nativeComponent, getElement());
-            add(imageInfoWarn, getElement());
-            add(imageMandatory, getElement());
-            add(label, getElement());
+            HorizontalPanel labelHolder = new HorizontalPanel();
+            labelHolder.add(imageMandatoryHolder);
+
+            labelHolder.add(label);
+
+            if (allignment.equals(LabelAlignment.LEFT)) {
+                add(labelHolder, WEST);
+            } else {
+                add(labelHolder, NORTH);
+                nativeComponent.getElement().getStyle().setMarginLeft(7, Unit.PX);
+            }
+
+            HorizontalPanel nativeComponentHolder = new HorizontalPanel();
+            nativeComponentHolder.setWidth("100%");
+            nativeComponentHolder.add(nativeComponent);
+            nativeComponentHolder.setCellWidth(nativeComponent, "100%");
+            nativeComponentHolder.add(imageInfoWarnHolder);
+
+            add(nativeComponentHolder, CENTER);
+            setCellWidth(nativeComponentHolder, "100%");
 
             label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
-            if (allignment.equals(LabelAlignment.LEFT)) {
-                label.getElement().getStyle().setOverflow(Overflow.HIDDEN);
-                label.setWordWrap(true);
-                getElement().getStyle().setPaddingTop(5, Unit.PX);
-                getElement().getStyle().setPaddingLeft(labelWidth + 20, Unit.PX);
-                getElement().getStyle().setPaddingBottom(5, Unit.PX);
-                imageInfoWarn.getElement().getStyle().setProperty("top", "6px");
-            } else {
-                getElement().getStyle().setPaddingTop(25, Unit.PX);
-                getElement().getStyle().setPaddingLeft(5, Unit.PX);
-                getElement().getStyle().setPaddingBottom(5, Unit.PX);
-                imageInfoWarn.getElement().getStyle().setProperty("top", "26px");
-            }
-            label.getElement().getStyle().setProperty("top", "5px");
-            label.getElement().getStyle().setProperty("left", "15px");
 
-            imageMandatory.getElement().getStyle().setProperty("top", "5px");
-            imageMandatory.getElement().getStyle().setProperty("left", "5px");
-
-            getElement().getStyle().setPaddingRight(30, Unit.PX);
-            getElement().getStyle().setPosition(Position.RELATIVE);
-        }
-
-        @Override
-        protected void onLoad() {
-            super.onLoad();
-            positionImageInfoWarn();
-        }
-
-        private void positionImageInfoWarn() {
-            if (allignment.equals(LabelAlignment.LEFT)) {
-                imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + labelWidth + 25) + "px");
-            } else {
-                imageInfoWarn.getElement().getStyle().setProperty("left", (nativeComponent.getOffsetWidth() + 10) + "px");
-            }
         }
 
         private void renderToolTip() {
             if (!InfoImageAlignment.HIDDEN.equals(infoImageAlignment)) {
-                tooltip.setTooltipText(component.getToolTip());
                 if (component.getToolTip() == null || component.getToolTip().trim().length() == 0) {
-                    imageInfoWarn.setVisible(false);
+                    imageInfoWarnHolder.clear();
                 } else {
+                    if (imageInfoWarn == null) {
+                        imageInfoWarn = new Image();
+                        imageInfoWarn.getElement().getStyle().setMarginLeft(7, Unit.PX);
+                        tooltip = Tooltip.tooltip(imageInfoWarn, "");
+                    }
                     if (component instanceof CEditableComponent<?> && ((CEditableComponent<?>) component).isMandatoryConditionMet()
                             && !((CEditableComponent<?>) component).isValid()) {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
                     } else {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
                     }
-                    imageInfoWarn.setVisible(true);
+                    imageInfoWarnHolder.setWidget(imageInfoWarn);
+                    tooltip.setTooltipText(component.getToolTip());
                 }
             }
         }
 
         private void renderMandatoryStar() {
             if (component instanceof CEditableComponent<?>) {
-                imageMandatory.setVisible(!((CEditableComponent<?>) component).isMandatoryConditionMet());
+                if (!((CEditableComponent<?>) component).isMandatoryConditionMet()) {
+                    if (imageMandatory == null) {
+                        imageMandatory = new Image();
+                        Tooltip.tooltip(imageMandatory, "This field is mandatory");
+                        imageMandatory.setResource(ImageFactory.getImages().mandatory());
+                    }
+                    imageMandatoryHolder.setWidget(imageMandatory);
+                } else {
+                    imageMandatoryHolder.clear();
+                }
             } else {
-                imageMandatory.setVisible(false);
+                imageMandatoryHolder.clear();
             }
         }
 
+    }
+
+    class ImageHolder extends SimplePanel {
+
+        private final String width;
+
+        private HTML spaceHolder;
+
+        ImageHolder(String width) {
+            this.width = width;
+            clear();
+        }
+
+        @Override
+        public void setWidget(Widget w) {
+            super.setWidget(w);
+            w.setWidth(width);
+        }
+
+        @Override
+        public void clear() {
+            super.clear();
+            if (spaceHolder == null) {
+                spaceHolder = new HTML("&nbsp;");
+
+            }
+            setWidget(spaceHolder);
+        }
     }
 
     public void setToolbarMode(ToolbarMode mode) {
