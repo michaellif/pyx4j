@@ -66,6 +66,11 @@ public interface MemberMeta {
      */
     public boolean isDetached();
 
+    /**
+     * See com.pyx4j.entity.annotations.Owned
+     * 
+     * See com.pyx4j.entity.annotations.EmbeddedEntity
+     */
     public boolean isOwnedRelationships();
 
     /**

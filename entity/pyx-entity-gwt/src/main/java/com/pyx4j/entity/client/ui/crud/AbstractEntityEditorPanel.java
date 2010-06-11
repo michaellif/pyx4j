@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.crud;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -149,9 +151,9 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     public static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
         if (((entity2 == null) || entity2.isNull())) {
-            return (entity1 == null) || entity1.isNull();
+            return isEmptyEntity(entity1);
         } else if ((entity1 == null) || entity1.isNull()) {
-            return false;
+            return isEmptyEntity(entity2);
         }
         if (processed != null) {
             if (processed.contains(entity1)) {
@@ -181,18 +183,69 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
                     return false;
                 }
             } else if (ISet.class.equals(memberMeta.getObjectClass())) {
+                //TODO OwnedRelationships
                 if (!EqualsHelper.equals((ISet<?>) entity1.getMember(memberName), (ISet<?>) entity2.getMember(memberName))) {
                     log.debug("changed {}", memberName);
                     return false;
                 }
             } else if (IList.class.equals(memberMeta.getObjectClass())) {
-                if (!EqualsHelper.equals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName))) {
+                if (memberMeta.isOwnedRelationships()) {
+                    if (!listValuesEquals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName), processed)) {
+                        log.debug("changed {}", memberName);
+                        return false;
+                    }
+                } else if (!EqualsHelper.equals((IList<?>) entity1.getMember(memberName), (IList<?>) entity2.getMember(memberName))) {
                     log.debug("changed {}", memberName);
                     return false;
                 }
             } else if (!EqualsHelper.equals(entity1.getMember(memberName), entity2.getMember(memberName))) {
                 log.debug("changed {}", memberName);
                 log.debug("[{}] -> [{}]", entity1.getMember(memberName), entity2.getMember(memberName));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
+        if (value1.size() != value2.size()) {
+            return false;
+        }
+        Iterator<?> iter1 = value1.iterator();
+        Iterator<?> iter2 = value2.iterator();
+        for (; iter1.hasNext() && iter2.hasNext();) {
+            if (!equalRecursive((IEntity) iter1.next(), (IEntity) iter2.next(), processed)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isEmptyEntity(IEntity entity) {
+        if ((entity == null) || entity.isNull()) {
+            return true;
+        }
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isDetached() || memberMeta.isTransient() || memberMeta.isRpcTransient()) {
+                continue;
+            }
+            IObject<?> member = entity.getMember(memberName);
+            if (member.isNull()) {
+                continue;
+            } else if (memberMeta.isEntity()) {
+                if (!isEmptyEntity((IEntity) member)) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else if ((ISet.class.equals(memberMeta.getObjectClass())) || (IList.class.equals(memberMeta.getObjectClass()))) {
+                if (!((ICollection<?, ?>) member).isEmpty()) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
+            } else {
+                log.debug("member {} not empty; {}", memberName, member);
                 return false;
             }
         }

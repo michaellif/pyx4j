@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -39,6 +41,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.impl.SetHandler.ElementsComparator;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
@@ -389,16 +392,33 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     private void cloneMap(Map<String, Object> src, Map<String, Object> dst) {
         for (Map.Entry<String, Object> me : src.entrySet()) {
-            if (me.getValue() instanceof Map<?, ?>) {
-                Map<String, Object> data2 = new EntityValueMap();
-                cloneMap((Map<String, Object>) me.getValue(), data2);
-                dst.put(me.getKey(), data2);
-            } else {
-                dst.put(me.getKey(), me.getValue());
+            dst.put(me.getKey(), cloneValue(me.getValue()));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object cloneValue(Object value) {
+        if (value instanceof Map<?, ?>) {
+            Map<String, Object> m = new EntityValueMap();
+            cloneMap((Map<String, Object>) value, m);
+            return m;
+        } else if (value instanceof List<?>) {
+            List l = new Vector();
+            for (Object lm : (List<?>) value) {
+                l.add(cloneValue(lm));
             }
+            return l;
+        } else if (value instanceof Set<?>) {
+            Set s = new TreeSet<Map<String, Object>>(new ElementsComparator());
+            for (Object lm : (Set<?>) value) {
+                s.add(cloneValue(lm));
+            }
+            return s;
+        } else {
+            // Primitive values, non-mutable anyway
+            return value;
         }
     }
 
