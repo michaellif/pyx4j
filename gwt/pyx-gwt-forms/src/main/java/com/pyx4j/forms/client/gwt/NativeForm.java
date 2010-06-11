@@ -504,7 +504,12 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             this.component = component;
             nativeComponent = (Widget) component.initNativeComponent();
 
-            label = new Label(component.getTitle() == null ? "" : component.getTitle() + ":");
+            label = new Label(component.getTitle() == null ? "" : component.getTitle());
+
+            if (allignment.equals(LabelAlignment.LEFT)) {
+                label.getElement().getStyle().setProperty("textAlign", "right");
+            }
+
             Cursor.setDefault(label.getElement());
 
             if (nativeComponent == null) {
@@ -551,9 +556,10 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             });
 
             HorizontalPanel labelHolder = new HorizontalPanel();
-            labelHolder.add(imageMandatoryHolder);
+            labelHolder.getElement().getStyle().setPaddingRight(10, Unit.PX);
 
             labelHolder.add(label);
+            labelHolder.add(imageMandatoryHolder);
 
             if (allignment.equals(LabelAlignment.LEFT)) {
                 add(labelHolder, WEST);
