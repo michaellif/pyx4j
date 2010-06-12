@@ -20,47 +20,15 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.forms.client.gwt.NativeLabel;
 
-public class CLabel extends CEditableComponent<String> {
-
-    private NativeLabel nativeLabel;
-
-    private boolean wordWrap = false;
+public class CLabel extends CAbstractLabel<String> {
 
     public CLabel() {
-        this(null);
+        super();
     }
 
     public CLabel(String title) {
         super(title);
-        setWidth("180px");
-    }
-
-    public void setWordWrap(boolean wrap) {
-        if (nativeLabel != null) {
-            nativeLabel.setWordWrap(wrap);
-        }
-        wordWrap = wrap;
-    }
-
-    public boolean isWordWrap() {
-        return wordWrap;
-    }
-
-    @Override
-    public INativeEditableComponent<String> getNativeComponent() {
-        return nativeLabel;
-    }
-
-    @Override
-    public INativeEditableComponent<String> initNativeComponent() {
-        if (nativeLabel == null) {
-            nativeLabel = new NativeLabel(this);
-            setNativeComponentValue(getValue());
-            applyAccessibilityRules();
-        }
-        return nativeLabel;
     }
 
 }

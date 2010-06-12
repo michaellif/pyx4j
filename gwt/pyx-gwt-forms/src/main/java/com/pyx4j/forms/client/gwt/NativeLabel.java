@@ -23,21 +23,18 @@ package com.pyx4j.forms.client.gwt;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeLabel extends Label implements INativeEditableComponent<String> {
+public class NativeLabel<E> extends Label implements INativeEditableComponent<E> {
 
-    private final CLabel cLabel;
+    private final CComponent cComponent;
 
-    public NativeLabel(CLabel label) {
-        this.cLabel = label;
-        setWordWrap(cLabel.isWordWrap());
-        setWidth(cLabel.getWidth());
+    public NativeLabel(CComponent cComponent) {
+        this.cComponent = cComponent;
     }
 
     public CComponent<?> getCComponent() {
-        return cLabel;
+        return cComponent;
     }
 
     public boolean isEnabled() {
@@ -55,8 +52,12 @@ public class NativeLabel extends Label implements INativeEditableComponent<Strin
     public void setEditable(boolean editable) {
     }
 
-    public void setNativeValue(String value) {
-        setText(value);
+    public void setNativeValue(E value) {
+        if (value == null) {
+            setText("");
+        } else {
+            setText(value.toString());
+        }
     }
 
     public void setReadOnly(boolean readOnly) {
