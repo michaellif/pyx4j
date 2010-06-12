@@ -69,7 +69,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
                     form = createForm();
                     form.setExpended(expended);
                 }
-
+                TODO_OnPopulate((CEntityForm<E>) form, item);
                 ((DelegatingEntityEditableComponent) form).populateModel(null, item);
                 getFormsMap().put(item, form);
             }
@@ -77,11 +77,25 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
         super.populate(value);
     }
 
+    /**
+     * TODO
+     */
+    protected void TODO_OnCreateNew(CEntityForm<E> form, E value) {
+    }
+
+    /**
+     * TODO
+     */
+    protected void TODO_OnPopulate(CEntityForm<E> form, E value) {
+    }
+
     @Override
     public void addItem() {
         E item = EntityFactory.create(entityClass);
         getValue().add(item);
         CForm form = createForm();
+        TODO_OnCreateNew((CEntityForm<E>) form, item);
+        TODO_OnPopulate((CEntityForm<E>) form, item);
         ((DelegatingEntityEditableComponent) form).populateModel(null, item);
         for (CForm f : getFormsMap().values()) {
             f.setExpended(false);
