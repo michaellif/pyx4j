@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.shared.meta;
 
+import static com.pyx4j.site.shared.meta.NavigNode.ARGS_GROUP_SEPARATOR;
+import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
+import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
 import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
 
 import java.util.ArrayList;
@@ -51,6 +54,34 @@ public class NavigUtils {
             throw new IllegalArgumentException("Node is not a site node");
         }
         return parts[1];
+    }
+
+    /**
+     * Warning: it does not encode Component!
+     */
+    public static String absoluteUrl(String appUrl, Class<? extends NavigNode> node, String... encodedComponentsNameValue) {
+        StringBuilder b = new StringBuilder();
+        b.append(appUrl);
+        b.append("#");
+        b.append(NavigUtils.getPageUri(node));
+
+        if (encodedComponentsNameValue != null) {
+            boolean first = true;
+            boolean name = true;
+            for (String encodedComponent : encodedComponentsNameValue) {
+                if (first) {
+                    b.append(ARGS_GROUP_SEPARATOR);
+                    first = false;
+                } else if (name) {
+                    b.append(ARGS_SEPARATOR);
+                } else {
+                    b.append(NAME_VALUE_SEPARATOR);
+                }
+                name = !name;
+                b.append(encodedComponent);
+            }
+        }
+        return b.toString();
     }
 
     public static List<String> parseResourceUri(String uri) {
