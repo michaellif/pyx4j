@@ -60,7 +60,6 @@ import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
-import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeForm extends FlowPanel implements INativeComponent {
@@ -603,8 +602,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 if (!((CEditableComponent<?>) component).isMandatoryConditionMet()) {
                     if (imageMandatory == null) {
                         imageMandatory = new Image();
-                        Tooltip.tooltip(imageMandatory, "This field is mandatory");
                         imageMandatory.setResource(ImageFactory.getImages().mandatory());
+                        imageMandatory.setTitle("This field is mandatory");
                     }
                     imageMandatoryHolder.setWidget(imageMandatory);
                 } else {
