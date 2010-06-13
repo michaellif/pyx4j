@@ -26,6 +26,8 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -53,6 +55,8 @@ import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel implements PageLeavingHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
+
+    private static I18n i18n = I18nFactory.getI18n(AbstractEntityEditorPanel.class);
 
     private final DelegatingEntityFormFactory<E> formFactory;
 
@@ -255,7 +259,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     //TODO move to EntityEditorWidget
     public void onPageLeaving(PageLeavingEvent event) {
         if (isChanged()) {
-            event.addMessage(meta().getEntityMeta().getCaption() + " " + getEntity().getStringView() + " wasn't saved");
+            event.addMessage(i18n.tr("Changes to {0} {1} wasn't saved", meta().getEntityMeta().getCaption(), getEntity().getStringView()));
         }
     }
 
