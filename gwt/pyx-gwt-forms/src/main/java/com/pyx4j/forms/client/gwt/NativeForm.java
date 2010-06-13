@@ -28,8 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -71,7 +69,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         First, Last, Only, Inner
     }
 
-    public static final int LEFT_LABEL_WIDTH = 130;
+    public static final int LEFT_LABEL_WIDTH = 150;
 
     public static final int TOP_LABEL_WIDTH = 200;
 
@@ -495,8 +493,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         private Image imageMandatory;
 
-        private Tooltip tooltip;
-
         WidgetContainer(final CComponent<?> component) {
 
             getElement().getStyle().setPadding(2, Unit.PX);
@@ -589,7 +585,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     if (imageInfoWarn == null) {
                         imageInfoWarn = new Image();
                         imageInfoWarn.getElement().getStyle().setMarginLeft(7, Unit.PX);
-                        tooltip = Tooltip.tooltip(imageInfoWarn, "");
                     }
                     if (component instanceof CEditableComponent<?> && ((CEditableComponent<?>) component).isMandatoryConditionMet()
                             && !((CEditableComponent<?>) component).isValid()) {
@@ -598,7 +593,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
                     }
                     imageInfoWarnHolder.setWidget(imageInfoWarn);
-                    tooltip.setTooltipText(component.getToolTip());
+                    imageInfoWarn.setTitle(component.getToolTip());
                 }
             }
         }
