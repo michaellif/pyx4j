@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -86,8 +87,8 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             monthSelector.setSelectedIndex(0);
             yearBox.setText("");
         } else {
-            monthSelector.setSelectedIndex(date.getMonth());
-            yearBox.setText(String.valueOf(date.getYear()));
+            monthSelector.setSelectedIndex(date.getMonth() + 1);
+            yearBox.setText(String.valueOf(date.getYear() + 1900));
         }
     }
 
@@ -95,7 +96,9 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         if (yearBox.getText() == null || yearBox.getText().trim().equals("")) {
             return null;
         }
-        return new Date(Integer.parseInt(yearBox.getText()), monthSelector.getSelectedIndex() == 0 ? 1 : monthSelector.getSelectedIndex(), 1);
+        int year = Integer.parseInt(yearBox.getText()) - 1900;
+        int month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
+        return new Date(year, month, 1);
     }
 
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
