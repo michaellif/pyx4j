@@ -97,6 +97,10 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    public String getMainApplicationURL() {
+        return System.getProperty("com.pyx4j.appUrl");
+    }
+
     public EnvironmentType getEnvironmentType() {
         SecurityManager sm = System.getSecurityManager();
         if (sm == null) {
