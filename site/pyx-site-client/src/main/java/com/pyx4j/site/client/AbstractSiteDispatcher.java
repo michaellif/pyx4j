@@ -20,11 +20,7 @@
  */
 package com.pyx4j.site.client;
 
-import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
-import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
-
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -34,7 +30,6 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -332,26 +327,6 @@ public abstract class AbstractSiteDispatcher {
 
     public void setCurrentSitePanel(SitePanel currentSitePanel) {
         this.currentSitePanel = currentSitePanel;
-    }
-
-    /**
-     * TODO mode to HistoryUtils.
-     */
-    private Map<String, String> parsArgs(String substring) {
-        Map<String, String> args = null;
-        String[] nameValues = substring.split(ARGS_SEPARATOR);
-        if (nameValues.length > 0) {
-            args = new HashMap<String, String>();
-            for (int i = 0; i < nameValues.length; i++) {
-                String[] nameAndValue = nameValues[i].split(NAME_VALUE_SEPARATOR);
-                if (nameAndValue.length == 2) {
-                    args.put(nameAndValue[0], URL.decode(nameAndValue[1]));
-                } else {
-                    log.warn("Can't pars argument {}", nameValues[i]);
-                }
-            }
-        }
-        return args;
     }
 
     /**
