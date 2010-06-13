@@ -553,12 +553,13 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             HorizontalPanel labelHolder = new HorizontalPanel();
             labelHolder.getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-            labelHolder.add(label);
-            labelHolder.add(imageMandatoryHolder);
-
             if (allignment.equals(LabelAlignment.LEFT)) {
+                labelHolder.add(label);
+                labelHolder.add(imageMandatoryHolder);
                 add(labelHolder, WEST);
             } else {
+                labelHolder.add(imageMandatoryHolder);
+                labelHolder.add(label);
                 add(labelHolder, NORTH);
                 nativeComponent.getElement().getStyle().setMarginLeft(7, Unit.PX);
             }
