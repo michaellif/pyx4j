@@ -14,28 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
- * @author vlads
+ * Created on Jan 11, 2010
+ * @author Michael
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.forms.client.ui;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-@Target( { ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Editor {
+public interface INativeComboBox<E> extends INativeEditableComponent<E> {
 
-    public static enum EditorType {
-        text, password, textarea, richtextarea, combo, suggest, captcha, monthyearpicker
-    }
+    public void setOptions(List<E> opt);
 
-    /**
-     * UI Editor type of the member.
-     */
-    EditorType type();
+    public void refreshOptions();
+
+    public void removeOption(E opt);
+
+    public void refreshOption(E opt);
 
 }

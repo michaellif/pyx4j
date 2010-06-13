@@ -14,22 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Jun 11, 2010
+ * @author Misha
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.List;
+import java.util.Date;
 
-public interface INativeNativeComboBox<E> extends INativeEditableComponent<E> {
+import com.pyx4j.forms.client.gwt.NativeMonthYearPicker;
 
-    public void setOptions(List<E> opt);
+public class CMonthYearPicker extends CEditableComponent<Date> {
 
-    public void refreshOptions();
+    private NativeMonthYearPicker nativePanel;
 
-    public void removeOption(E opt);
+    @Override
+    public INativeEditableComponent<Date> getNativeComponent() {
+        return nativePanel;
+    }
 
-    public void refreshOption(E opt);
+    @Override
+    public INativeEditableComponent<Date> initNativeComponent() {
+        if (nativePanel == null) {
+            nativePanel = new NativeMonthYearPicker(this);
+        }
+        return nativePanel;
+    }
 
 }

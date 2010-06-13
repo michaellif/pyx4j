@@ -71,7 +71,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         First, Last, Only, Inner
     }
 
-    public static final int LEFT_LABEL_WIDTH = 150;
+    public static final int LEFT_LABEL_WIDTH = 130;
 
     public static final int TOP_LABEL_WIDTH = 200;
 

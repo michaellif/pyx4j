@@ -28,14 +28,14 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.INativeNativeComboBox;
+import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.widgets.client.ListBox;
 
 /**
  *
  */
-public class NativeComboBox<E> extends ListBox implements INativeNativeComboBox<E> {
+public class NativeComboBox<E> extends ListBox implements INativeComboBox<E> {
 
     private final CComboBox<E> comboBox;
 

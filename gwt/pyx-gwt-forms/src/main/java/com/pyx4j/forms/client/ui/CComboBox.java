@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
 public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsChangeHandlers<List<E>> {
 
-    private INativeNativeComboBox<E> nativeComboBox;
+    private INativeComboBox<E> nativeComboBox;
 
     private List<E> options;
 
@@ -70,12 +70,12 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
     }
 
     @Override
-    public INativeNativeComboBox<E> getNativeComponent() {
+    public INativeComboBox<E> getNativeComponent() {
         return nativeComboBox;
     }
 
     @Override
-    public INativeNativeComboBox<E> initNativeComponent() {
+    public INativeComboBox<E> initNativeComponent() {
         if (nativeComboBox == null) {
             nativeComboBox = new NativeComboBox<E>(this);
             applyAccessibilityRules();

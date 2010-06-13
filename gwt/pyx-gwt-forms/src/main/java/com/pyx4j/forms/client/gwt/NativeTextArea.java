@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.TextArea;
 
 public class NativeTextArea extends TextArea implements INativeEditableComponent<String> {
 
-    private final CTextArea textArea;
+    private final CTextArea cComponent;
 
     private boolean nativeValueUpdate = false;
 
@@ -48,7 +48,7 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
 
     public NativeTextArea(CTextArea textArea) {
         super();
-        this.textArea = textArea;
+        this.cComponent = textArea;
 
         getElement().getStyle().setProperty("resize", "none");
 
@@ -124,7 +124,7 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;
         try {
-            textArea.setValue(getText());
+            cComponent.setValue(getText());
         } finally {
             nativeValueUpdate = false;
         }
@@ -141,7 +141,7 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
     }
 
     public CTextArea getCComponent() {
-        return textArea;
+        return cComponent;
     }
 
     @Override

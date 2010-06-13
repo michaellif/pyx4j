@@ -38,6 +38,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
 import com.pyx4j.forms.client.ui.CIntegerField;
 import com.pyx4j.forms.client.ui.CLongField;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -79,6 +80,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 break;
             case captcha:
                 comp = new CCaptcha();
+                break;
+            case monthyearpicker:
+                comp = new CMonthYearPicker();
                 break;
             default:
                 throw new Error("Unknown ");
