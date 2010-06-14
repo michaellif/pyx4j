@@ -20,26 +20,32 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.RichTextArea;
-import com.pyx4j.widgets.client.richtext.RichTextToolbar;
+import com.pyx4j.widgets.client.richtext.VerticalRichTextToolbar;
 
-public class NativeRichTextArea extends VerticalPanel implements INativeEditableComponent<String> {
+public class NativeRichTextArea extends DockPanel implements INativeEditableComponent<String> {
 
     private final RichTextArea richTextArea;
 
     private final CRichTextArea textArea;
 
     private boolean nativeValueUpdate = false;
+
+    private final VerticalRichTextToolbar toolbar;
 
     private final Timer keyTimer = new Timer() {
         @Override
@@ -57,24 +63,16 @@ public class NativeRichTextArea extends VerticalPanel implements INativeEditable
 
         textArea.setWidth("100%");
 
-        RichTextToolbar toolbar = new RichTextToolbar(richTextArea);
-        toolbar.setWidth("100%");
+        toolbar = new VerticalRichTextToolbar(richTextArea);
+        toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
+        toolbar.setHeight("100%");
 
-        add(toolbar);
-        setCellWidth(toolbar, "100%");
-        add(richTextArea);
+        add(toolbar, EAST);
+        setCellHeight(toolbar, "100%");
+        add(richTextArea, CENTER);
         setCellWidth(richTextArea, "100%");
 
         getElement().getStyle().setProperty("resize", "none");
-
-        //        richTextArea.addChangeHandler(new ChangeHandler() {
-        //
-        //            @Override
-        //            public void onChange(ChangeEvent event) {
-        //                keyTimer.cancel();
-        //                nativeValueUpdate();
-        //            }
-        //        });
 
         richTextArea.addKeyUpHandler(new KeyUpHandler() {
 
@@ -85,18 +83,11 @@ public class NativeRichTextArea extends VerticalPanel implements INativeEditable
             }
         });
 
-        //        //        addFocusHandler(new FocusHandler() {
-        //        //            public void onFocus(FocusEvent event) {
-        //        //                //textArea.onEditingStart();
-        //        //            }
-        //        //        });
-
         richTextArea.addBlurHandler(new BlurHandler() {
 
             @Override
             public void onBlur(BlurEvent event) {
                 nativeValueUpdate();
-                //textArea.onEditingStop();
             }
         });
 
@@ -104,6 +95,11 @@ public class NativeRichTextArea extends VerticalPanel implements INativeEditable
 
         setWidth(textArea.getWidth());
         setHeight(textArea.getHeight());
+
+        toolbar.getElement().getStyle().setOpacity(0.3);
+
+        sinkEvents(Event.ONMOUSEOVER);
+        sinkEvents(Event.ONMOUSEOUT);
 
     }
 
@@ -186,6 +182,19 @@ public class NativeRichTextArea extends VerticalPanel implements INativeEditable
     public void setTabIndex(int tabIndex) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void onBrowserEvent(Event event) {
+        super.onBrowserEvent(event);
+        switch (event.getTypeInt()) {
+        case Event.ONMOUSEOUT:
+            toolbar.getElement().getStyle().setOpacity(0.3);
+            break;
+        case Event.ONMOUSEOVER:
+            toolbar.getElement().getStyle().setOpacity(1);
+            break;
+        }
     }
 
 }
