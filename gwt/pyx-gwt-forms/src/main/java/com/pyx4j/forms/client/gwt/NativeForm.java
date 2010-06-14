@@ -573,6 +573,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             add(nativeComponentHolder, CENTER);
             setCellWidth(nativeComponentHolder, "100%");
 
+            setWidth("100%");
             label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
 
         }
