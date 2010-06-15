@@ -322,12 +322,18 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         ensureValue().put(member.getFieldName(), value.getValue());
     }
 
-    private Object getMemberStringView(String memberName) {
+    private Object getMemberStringView(String memberName, boolean forMessageFormatFormat) {
         MemberMeta mm = getEntityMeta().getMemberMeta(memberName);
         if (mm.isEntity()) {
             return ((IEntity) getMember(memberName)).getStringView();
         } else if (IPrimitive.class.equals(mm.getObjectClass())) {
-            return ((IPrimitive<?>) getMember(memberName)).getStringView();
+            IPrimitive<?> member = ((IPrimitive<?>) getMember(memberName));
+            Object value = member.getValue();
+            if (forMessageFormatFormat && (value instanceof Number)) {
+                return value;
+            } else {
+                return member.getStringView();
+            }
         } else {
             return getMemberValue(memberName);
         }
@@ -343,7 +349,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         if (format != null) {
             List<Object> values = new Vector<Object>();
             for (String memeberName : sm) {
-                values.add(CommonsStringUtils.nvl(getMemberStringView(memeberName)));
+                values.add(getMemberStringView(memeberName, true));
             }
             return MessageFormat.format(format, values.toArray());
         } else {
@@ -351,9 +357,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             case 0:
                 return getEntityMeta().getNullString();
             case 1:
-                return CommonsStringUtils.nvl(getMemberStringView(sm.get(0)));
+                return CommonsStringUtils.nvl(getMemberStringView(sm.get(0), false));
             case 2:
-                return CommonsStringUtils.nvl_concat(getMemberStringView(sm.get(0)), getMemberStringView(sm.get(1)), " ");
+                return CommonsStringUtils.nvl_concat(getMemberStringView(sm.get(0), false), getMemberStringView(sm.get(1), false), " ");
             default:
                 Map<String, Object> entityValue = getValue();
                 if (entityValue == null) {
@@ -366,7 +372,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                         if (sb.length() > 0) {
                             sb.append(" ");
                         }
-                        sb.append(getMemberStringView(memeberName));
+                        sb.append(getMemberStringView(memeberName, false));
                     }
                 }
                 return sb.toString();
