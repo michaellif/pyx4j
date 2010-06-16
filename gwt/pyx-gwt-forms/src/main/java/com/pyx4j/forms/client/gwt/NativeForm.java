@@ -166,6 +166,15 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 }
             }
         }
+        //Prevent collapsing invisible column
+        if (components.length > 0) {
+            FlexCellFormatter cellFormatter = grid.getFlexCellFormatter();
+            for (int j = 0; j < components[0].length; j++) {
+                grid.setWidget(components.length, j, new HTML("&nbsp;"));
+                cellFormatter.setWidth(components.length, j, Math.round((double) 100 / columnCount) + "%");
+            }
+        }
+
     }
 
     private void addComponent(CComponent<?> component, int row, int column) {
@@ -309,13 +318,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     cellFormatter.setVerticalAlignment(labelRow, labelColumn, HasVerticalAlignment.ALIGN_TOP);
                     cellFormatter.setVerticalAlignment(widgetRow, widgetColumn, HasVerticalAlignment.ALIGN_TOP);
                 }
-
-                //                if (allignment.equals(LabelAlignment.LEFT)) {
-                //                    cellFormatter.setWidth(labelRow, labelColumn, Math.round((double) 2 / 5 * 100 / columnCount) + "%");
-                //                    cellFormatter.setWidth(widgetRow, widgetColumn, Math.round((double) 3 / 5 * 100 / columnCount + (double) (columnSpan - 1) * 100
-                //                            / columnCount)
-                //                            + "%");
-                //                }
 
                 cellFormatter.setWordWrap(labelRow, labelColumn, false);
 
