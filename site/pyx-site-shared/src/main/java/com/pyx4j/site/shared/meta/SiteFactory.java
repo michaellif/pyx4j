@@ -90,7 +90,16 @@ public class SiteFactory {
 
     public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
             Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        return createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
+        return createSingleWidgetPage(null, caption, node, discriminator, inlineWidget, leftPortlets, rightPortlets);
+    }
+
+    public static Page createSingleWidgetPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
+            Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
+        if (tabName != null) {
+            page.tabName().setValue(tabName);
+        }
+        return page;
     }
 
     public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html) {
