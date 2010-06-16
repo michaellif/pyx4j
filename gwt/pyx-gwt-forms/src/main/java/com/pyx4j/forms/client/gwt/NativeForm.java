@@ -68,7 +68,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         First, Last, Only, Inner
     }
 
-    public static final int LEFT_LABEL_WIDTH = 150;
+    public static final int LEFT_LABEL_WIDTH = 120;
 
     public static final int TOP_LABEL_WIDTH = 200;
 
@@ -310,12 +310,12 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     cellFormatter.setVerticalAlignment(widgetRow, widgetColumn, HasVerticalAlignment.ALIGN_TOP);
                 }
 
-                if (allignment.equals(LabelAlignment.LEFT)) {
-                    cellFormatter.setWidth(labelRow, labelColumn, Math.round((double) 2 / 5 * 100 / columnCount) + "%");
-                    cellFormatter.setWidth(widgetRow, widgetColumn, Math.round((double) 3 / 5 * 100 / columnCount + (double) (columnSpan - 1) * 100
-                            / columnCount)
-                            + "%");
-                }
+                //                if (allignment.equals(LabelAlignment.LEFT)) {
+                //                    cellFormatter.setWidth(labelRow, labelColumn, Math.round((double) 2 / 5 * 100 / columnCount) + "%");
+                //                    cellFormatter.setWidth(widgetRow, widgetColumn, Math.round((double) 3 / 5 * 100 / columnCount + (double) (columnSpan - 1) * 100
+                //                            / columnCount)
+                //                            + "%");
+                //                }
 
                 cellFormatter.setWordWrap(labelRow, labelColumn, false);
 

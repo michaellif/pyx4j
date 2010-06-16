@@ -38,7 +38,7 @@ public abstract class CTextBox<E> extends CEditableComponent<E> {
 
     public CTextBox(String title) {
         super(title);
-        setWidth("180px");
+        setWidth("100%");
     }
 
     public CTextBox() {

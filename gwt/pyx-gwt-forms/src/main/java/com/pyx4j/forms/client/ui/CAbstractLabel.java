@@ -34,7 +34,7 @@ public class CAbstractLabel<E> extends CEditableComponent<E> {
 
     public CAbstractLabel(String title) {
         super(title);
-        setWidth("180px");
+        setWidth("100%");
     }
 
     public void setWordWrap(boolean wrap) {

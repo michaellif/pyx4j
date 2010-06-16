@@ -25,12 +25,9 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -129,6 +126,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         container.clear();
         if (value != null) {
             LinkedHashMap map = folder.getFormsMap();
+            container.getElement().getStyle().setPadding(10, Unit.PX);
             for (int i = 0; i < value.size(); i++) {
                 E item = value.get(i);
                 NativeForm nativeForm = (NativeForm) ((CForm) map.get(item)).initNativeComponent();
@@ -136,7 +134,6 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
                 nativeForm.setWidth("100%");
                 container.add(nativeForm);
                 container.setCellWidth(nativeForm, "100%");
-                container.getElement().getStyle().setPadding(10, Unit.PX);
                 if (i == 0 && value.size() == 1) {
                     nativeForm.setToolbarMode(ToolbarMode.Only);
                 } else if (i == 0) {
