@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
@@ -76,30 +77,36 @@ public class Lifecycle {
     }
 
     @SuppressWarnings("unchecked")
-    public static void beginSession(UserVisit userVisit, Set<Behavior> behaviors) {
-        HttpSession session = Context.getSession();
-        // Preserve some administration and debug session attributes 
-        Map<String, Object> keepAttributes = new HashMap<String, Object>();
-        if (session != null) {
-            for (Enumeration<String> en = session.getAttributeNames(); en.hasMoreElements();) {
-                String attrName = en.nextElement();
-                if (attrName.startsWith("com.pyx4j.keep.")) {
-                    keepAttributes.put(attrName, session.getAttribute(attrName));
+    public static void beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
+        Visit currentVisit = Context.getVisit();
+        if ((currentVisit != null) && (currentVisit.isUserLoggedIn())
+                && EqualsHelper.equals(userVisit.getPrincipalPrimaryKey(), currentVisit.getUserVisit().getPrincipalPrimaryKey())) {
+            // The same user. No need to create new session, consider that behaviours are updated
+        } else {
+            HttpSession session = Context.getSession();
+            // Preserve some administration and debug session attributes 
+            Map<String, Object> keepAttributes = new HashMap<String, Object>();
+            if (session != null) {
+                for (Enumeration<String> en = session.getAttributeNames(); en.hasMoreElements();) {
+                    String attrName = en.nextElement();
+                    if (attrName.startsWith("com.pyx4j.keep.")) {
+                        keepAttributes.put(attrName, session.getAttribute(attrName));
+                    }
+                }
+                try {
+                    log.info("Session {} ends", session.getId());
+                    session.invalidate();
+                } catch (IllegalStateException e) {
                 }
             }
-            try {
-                log.info("Session {} ends", session.getId());
-                session.invalidate();
-            } catch (IllegalStateException e) {
+            HttpSession newSession = Context.getRequest().getSession(true);
+            log.info("Session {} starts for {}", newSession.getId(), userVisit.getName());
+            for (Map.Entry<String, Object> me : keepAttributes.entrySet()) {
+                newSession.setAttribute(me.getKey(), me.getValue());
             }
+            beginSession(newSession);
         }
-        HttpSession newSession = Context.getRequest().getSession(true);
-        log.info("Session {} starts for {}", newSession.getId(), userVisit.getName());
-        for (Map.Entry<String, Object> me : keepAttributes.entrySet()) {
-            newSession.setAttribute(me.getKey(), me.getValue());
-        }
-        beginSession(newSession);
-        Context.getVisit().beginSession(userVisit, SecurityController.instance().authenticate(behaviors));
+        Context.getVisit().beginSession(userVisit, SecurityController.instance().authenticate(behaviours));
     }
 
     public static void beginSession(HttpSession session) {
