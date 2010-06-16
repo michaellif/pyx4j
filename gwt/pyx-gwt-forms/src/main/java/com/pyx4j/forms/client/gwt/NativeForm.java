@@ -528,6 +528,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             }
 
             imageInfoWarnHolder = new ImageHolder("18px");
+            imageInfoWarnHolder.getElement().getStyle().setPaddingTop(3, Unit.PX);
+            imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(7, Unit.PX);
 
             imageMandatoryHolder = new ImageHolder("7px");
 
@@ -585,7 +587,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 } else {
                     if (imageInfoWarn == null) {
                         imageInfoWarn = new Image();
-                        imageInfoWarn.getElement().getStyle().setMarginLeft(7, Unit.PX);
                     }
                     if (component instanceof CEditableComponent<?> && ((CEditableComponent<?>) component).isMandatoryConditionMet()
                             && !((CEditableComponent<?>) component).isValid()) {
