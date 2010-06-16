@@ -36,22 +36,28 @@ public class PortletPanel extends VerticalPanel {
         super();
         this.parent = parent;
         this.portlet = portlet;
-        setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortlet.name());
+
+        String styleName = portlet.styleName().getValue();
+        if (styleName == null) {
+            styleName = SiteCSSClass.pyx4j_Site_HtmlPortlet.name();
+        }
+
+        setStyleName(styleName);
 
         if (portlet.capture().getValue() != null) {
             HTML capturePanel = new HTML(portlet.capture().getValue());
             capturePanel.setWordWrap(false);
             add(capturePanel);
-            capturePanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletHeader.name());
+            capturePanel.setStyleName(styleName + "Header");
         } else {
             HTML headerPanel = new HTML();
             add(headerPanel);
-            headerPanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletEmptyHeader.name());
+            headerPanel.setStyleName(styleName + "EmptyHeader");
         }
 
         DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), false);
         add(bodyPanel);
-        bodyPanel.setStyleName(SiteCSSClass.pyx4j_Site_HtmlPortletBody.name());
+        bodyPanel.setStyleName(styleName + "Body");
 
     }
 

@@ -32,6 +32,8 @@ public interface Portlet extends IEntity {
 
     IPrimitive<String> capture();
 
+    IPrimitive<String> styleName();
+
     @StringLength(4096)
     IPrimitive<String> html();
 

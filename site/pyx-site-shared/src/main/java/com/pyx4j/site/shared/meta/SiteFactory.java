@@ -34,9 +34,14 @@ public class SiteFactory {
     private static final List<String> uriRegistry = new ArrayList<String>();
 
     protected Portlet createPortlet(String portletId, String caption, String html) {
+        return createPortlet(portletId, caption, html, null);
+    }
+
+    protected Portlet createPortlet(String portletId, String caption, String html, String styleName) {
         Portlet portlet = EntityFactory.create(Portlet.class);
         portlet.portletId().setValue(portletId);
         portlet.capture().setValue(caption);
+        portlet.styleName().setValue(styleName);
         portlet.html().setValue(html);
         return portlet;
     }
