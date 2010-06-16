@@ -248,6 +248,12 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
                     log.debug("member {} not empty; {}", memberName, member);
                     return false;
                 }
+            } else if (Boolean.class.equals(memberMeta.getValueClass())) {
+                // Special case for values presented by CheckBox
+                if (member.getValue() == Boolean.TRUE) {
+                    log.debug("member {} not empty; {}", memberName, member);
+                    return false;
+                }
             } else {
                 log.debug("member {} not empty; {}", memberName, member);
                 return false;
