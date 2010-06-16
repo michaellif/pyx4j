@@ -43,7 +43,7 @@ public class MessagePanel extends HorizontalPanel {
         messageHolder.getElement().getStyle().setBorderColor("#fbf18f");
         messageHolder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         messageHolder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        messageHolder.getElement().getStyle().setColor("#0066CC");
+        messageHolder.getElement().getStyle().setColor("#000000");
         messageHolder.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         messageHolder.getElement().getStyle().setFontSize(1.1, Unit.EM);
         messageHolder.getElement().getStyle().setProperty("display", "inline-block");
