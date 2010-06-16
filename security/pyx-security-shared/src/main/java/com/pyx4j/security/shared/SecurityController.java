@@ -46,14 +46,14 @@ public abstract class SecurityController {
 
     public abstract Acl getAcl();
 
-    public abstract Acl authenticate(Set<Behavior> behaviors);
+    public abstract Acl authenticate(Set<Behavior> behaviours);
 
     public static boolean checkBehavior(Behavior behavior) {
         return controller.getAcl().checkBehavior(behavior);
     }
 
     public static Set<Behavior> getBehaviors() {
-        return controller.getAcl().getBehaviors();
+        return controller.getAcl().getBehaviours();
     }
 
     public static boolean checkPermission(Permission permission) {

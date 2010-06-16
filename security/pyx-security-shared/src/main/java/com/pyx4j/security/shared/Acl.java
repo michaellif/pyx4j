@@ -26,7 +26,7 @@ public interface Acl {
 
     public boolean checkBehavior(Behavior behavior);
 
-    public Set<Behavior> getBehaviors();
+    public Set<Behavior> getBehaviours();
 
     public boolean checkPermission(Permission permission);
 

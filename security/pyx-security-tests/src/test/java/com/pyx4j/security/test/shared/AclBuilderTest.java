@@ -69,8 +69,8 @@ public class AclBuilderTest extends TestCase {
         assertTrue(acl.checkPermission(new EntityPermission("Public", EntityPermission.READ)));
         assertFalse(acl.checkPermission(new EntityPermission("Private", EntityPermission.READ)));
 
-        assertNotNull(acl.getBehaviors());
-        assertEquals(0, acl.getBehaviors().size());
+        assertNotNull(acl.getBehaviours());
+        assertEquals(0, acl.getBehaviours().size());
 
         assertTrue(acl.checkPermission(new ServiceExecutePermission("Read.Me")));
         assertFalse(acl.checkPermission(new ServiceExecutePermission("Write.Me")));
@@ -84,8 +84,8 @@ public class AclBuilderTest extends TestCase {
 
         Acl acl = new AccessControlList().createAcl(roles);
         log.debug("Emp ACL {}", acl);
-        assertNotNull(acl.getBehaviors());
-        assertEquals(1, acl.getBehaviors().size());
+        assertNotNull(acl.getBehaviours());
+        assertEquals(1, acl.getBehaviours().size());
 
         assertTrue(acl.checkPermission(new EntityPermission("Public", EntityPermission.READ)));
         assertFalse(acl.checkPermission(new EntityPermission("Private", EntityPermission.READ)));

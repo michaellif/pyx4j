@@ -65,7 +65,7 @@ public class AclSerializable implements Acl, Serializable {
     }
 
     @Override
-    public Set<Behavior> getBehaviors() {
+    public Set<Behavior> getBehaviours() {
         return behaviors;
     }
 

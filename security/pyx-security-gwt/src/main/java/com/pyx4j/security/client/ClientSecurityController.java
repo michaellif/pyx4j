@@ -46,11 +46,11 @@ public class ClientSecurityController extends SecurityController implements HasV
     // Allow everything from Permission point of view
     private static class AclImpl implements Acl {
 
-        private Set<Behavior> behaviors = new HashSet<Behavior>();
+        private Set<Behavior> behaviours = new HashSet<Behavior>();
 
         @Override
         public boolean checkBehavior(Behavior behavior) {
-            return behaviors.contains(behavior);
+            return behaviours.contains(behavior);
         }
 
         @Override
@@ -59,8 +59,8 @@ public class ClientSecurityController extends SecurityController implements HasV
         }
 
         @Override
-        public Set<Behavior> getBehaviors() {
-            return behaviors;
+        public Set<Behavior> getBehaviours() {
+            return behaviours;
         }
 
     }
@@ -74,9 +74,9 @@ public class ClientSecurityController extends SecurityController implements HasV
     }
 
     @Override
-    public Acl authenticate(Set<Behavior> behaviors) {
-        acl.behaviors = Collections.unmodifiableSet(behaviors);
-        ValueChangeEvent.fire(instance(), instance().acl.getBehaviors());
+    public Acl authenticate(Set<Behavior> behaviours) {
+        acl.behaviours = Collections.unmodifiableSet(behaviours);
+        ValueChangeEvent.fire(instance(), instance().acl.getBehaviours());
         return acl;
     }
 
