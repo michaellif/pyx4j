@@ -129,6 +129,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return form.getValue();
     }
 
+    protected E getEntityForSave() {
+        return getEntity();
+    }
+
     public Class<E> getEntityClass() {
         return entityClass;
     }
@@ -150,7 +154,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
      * @return true when any filed in Entity has been changes.
      */
     public boolean isChanged() {
-        return !equalRecursive(form.getOrigValue(), getEntity(), new HashSet<IEntity>());
+        return !equalRecursive(form.getOrigValue(), getEntityForSave(), new HashSet<IEntity>());
     }
 
     public static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
@@ -284,7 +288,8 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     @SuppressWarnings("unchecked")
     protected void doSave() {
         onBeforeSave();
-        log.debug("saving {}", getEntity());
+        E entityForSave = getEntityForSave();
+        log.debug("saving {}", entityForSave);
         final AsyncCallback handlingCallback = new BlockingAsyncCallback<E>() {
 
             @Override
@@ -299,6 +304,6 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             }
 
         };
-        RPCManager.execute(getSaveService(), getEntity(), handlingCallback);
+        RPCManager.execute(getSaveService(), entityForSave, handlingCallback);
     }
 }
