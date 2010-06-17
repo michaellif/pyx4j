@@ -196,13 +196,18 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public Class<?> getValueClass() {
+        return valueClass;
+    }
+
+    @Override
     public boolean isEntity() {
         return entity;
     }
 
     @Override
-    public Class<?> getValueClass() {
-        return valueClass;
+    public boolean isNumberValueClass() {
+        return Number.class.isAssignableFrom(valueClass);
     }
 
     @Override

@@ -328,9 +328,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return ((IEntity) getMember(memberName)).getStringView();
         } else if (IPrimitive.class.equals(mm.getObjectClass())) {
             IPrimitive<?> member = ((IPrimitive<?>) getMember(memberName));
-            Object value = member.getValue();
-            if (forMessageFormatFormat && (value instanceof Number)) {
-                return value;
+            if (forMessageFormatFormat && (mm.isNumberValueClass())) {
+                return member.getValue();
             } else {
                 return member.getStringView();
             }

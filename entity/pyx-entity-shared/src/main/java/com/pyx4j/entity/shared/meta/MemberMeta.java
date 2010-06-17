@@ -83,9 +83,11 @@ public interface MemberMeta {
      */
     public boolean isEmbedded();
 
+    public Class<?> getValueClass();
+
     public boolean isEntity();
 
-    public Class<?> getValueClass();
+    public boolean isNumberValueClass();
 
     /**
      * IList, ISet, IPrimitive, or extends IEntity

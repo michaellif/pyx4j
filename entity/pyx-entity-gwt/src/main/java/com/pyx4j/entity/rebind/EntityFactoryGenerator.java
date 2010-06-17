@@ -94,6 +94,8 @@ public class EntityFactoryGenerator extends Generator {
 
     private JClassType iPrimitiveSetInterfaceType;
 
+    private JClassType numberType;
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         TypeOracle oracle = context.getTypeOracle();
@@ -126,6 +128,7 @@ public class EntityFactoryGenerator extends Generator {
             iSetInterfaceType = oracle.getType(ISet.class.getName());
             iListInterfaceType = oracle.getType(IList.class.getName());
             iPrimitiveSetInterfaceType = oracle.getType(IPrimitiveSet.class.getName());
+            numberType = oracle.getType(Number.class.getName());
 
             List<JClassType> cases = new Vector<JClassType>();
 
@@ -364,6 +367,8 @@ public class EntityFactoryGenerator extends Generator {
                 writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
+                writer.print(Boolean.valueOf(isNumber(valueClass)).toString());
+                writer.println(", ");
             } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
@@ -374,6 +379,8 @@ public class EntityFactoryGenerator extends Generator {
                 writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
+                writer.print(Boolean.valueOf(isNumber(valueClass)).toString());
+                writer.println(", ");
             } else if (type.isAssignableTo(iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
@@ -383,6 +390,7 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(valueClass.getQualifiedSourceName() + ".class, ");
                 writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
+                writer.println("false, ");
                 writer.println("false, ");
             } else if (type.isAssignableTo(iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
@@ -394,11 +402,13 @@ public class EntityFactoryGenerator extends Generator {
                 writer.print("(Class<? extends IObject<?>>)");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("false, ");
+                writer.println("false, ");
             } else if (type.isAssignableTo(iEnentityInterfaceType)) {
                 valueClass = type;
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println(type.getQualifiedSourceName() + ".class, ");
                 writer.println("true, ");
+                writer.println("false, ");
             } else {
                 throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
                         + interfaceType.getQualifiedSourceName() + "'");
@@ -484,6 +494,10 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("throw new RuntimeException(\"Unknown member \" + memberName);");
         writer.outdent();
         writer.println("}");
+    }
+
+    private boolean isNumber(JClassType valueClass) {
+        return numberType == valueClass.getSuperclass();
     }
 
     private boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {

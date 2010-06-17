@@ -48,9 +48,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final boolean indexed;
 
+    private final Class<?> valueClass;
+
     private final boolean entity;
 
-    private final Class<?> valueClass;
+    private final boolean valueClassIsNumber;
 
     private final Class<? extends IObject<?>> objectClass;
 
@@ -76,12 +78,14 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private Set<Class<?>> annotations;
 
-    public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, String fieldName, String caption,
-            String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner,
-            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
+    public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, boolean valueClassIsNumber, String fieldName,
+            String caption, String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships,
+            boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
         super();
-        this.fieldName = fieldName;
+        this.valueClass = valueClass;
+        this.valueClassIsNumber = valueClassIsNumber;
         this.entity = entity;
+        this.fieldName = fieldName;
         this.persistenceTransient = persistenceTransient;
         this.rpcTransient = rpcTransient;
         this.detached = detached;
@@ -89,7 +93,6 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.owner = owner;
         this.embedded = embedded;
         this.indexed = indexed;
-        this.valueClass = valueClass;
         this.objectClass = objectClass;
         this.caption = caption;
         this.description = description;
@@ -150,13 +153,18 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
+    public Class<?> getValueClass() {
+        return valueClass;
+    }
+
+    @Override
     public boolean isEntity() {
         return entity;
     }
 
     @Override
-    public Class<?> getValueClass() {
-        return valueClass;
+    public boolean isNumberValueClass() {
+        return valueClassIsNumber;
     }
 
     @Override
