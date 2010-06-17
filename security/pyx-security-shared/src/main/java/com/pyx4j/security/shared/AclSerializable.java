@@ -23,8 +23,9 @@ package com.pyx4j.security.shared;
 import java.io.Serializable;
 import java.util.Set;
 
-@SuppressWarnings("serial")
 public class AclSerializable implements Acl, Serializable {
+
+    private static final long serialVersionUID = -1200104334832884170L;
 
     private Set<Behavior> behaviors;
 
