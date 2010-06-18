@@ -88,7 +88,7 @@ public class Property {
             return name + ": " + theme.getThemeColor(color) + ";";
         }
         int urlIdx = value.indexOf("url(");
-        if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1)) {
+        if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {
             return name + ": " + value.substring(0, urlIdx) + " url(" + StyleManger.getAlternativeHostname() + GWT.getModuleName() + "/"
                     + value.substring(urlIdx + 4) + ";";
         } else {
