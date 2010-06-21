@@ -77,10 +77,12 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
         addAccessAdapter(defaultAccessAdapter);
     }
 
+    @Deprecated
     public String getName() {
         return name;
     }
 
+    @Deprecated
     public void setName(String name) {
         this.name = name;
     }

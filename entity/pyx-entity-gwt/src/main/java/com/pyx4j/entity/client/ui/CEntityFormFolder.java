@@ -25,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.resources.client.ImageResource;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -37,12 +39,21 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
 
     private boolean expended;
 
+    public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory, ImageResource image) {
+        this(title, entityClass, factory, true, image);
+    }
+
     public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory) {
-        this(title, entityClass, factory, true);
+        this(title, entityClass, factory, true, null);
     }
 
     public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory, boolean expended) {
+        this(title, entityClass, factory, expended, null);
+    }
+
+    public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory, boolean expended, ImageResource image) {
         super(factory);
+        this.setTitleImage(image);
         this.setTitle(title);
         this.entityClass = entityClass;
         this.expended = expended;

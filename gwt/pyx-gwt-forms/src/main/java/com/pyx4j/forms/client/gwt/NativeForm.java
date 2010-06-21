@@ -407,7 +407,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             add(collapseImageHolder);
 
-            SimplePanel captionHolder = new SimplePanel();
+            HorizontalPanel captionHolder = new HorizontalPanel();
             captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
             captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
 
@@ -419,7 +419,12 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 }
             });
 
-            captionHolder.setWidget(caption);
+            if (form.getFolder() != null && form.getFolder().getTitleImage() != null) {
+                Image image = new Image(form.getFolder().getTitleImage());
+                image.getElement().getStyle().setPaddingRight(2, Unit.PX);
+                captionHolder.add(image);
+            }
+            captionHolder.add(caption);
 
             add(captionHolder);
             setCellWidth(captionHolder, "100%");
@@ -475,7 +480,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             installMouseOverStyles();
 
         }
-
     }
 
     class WidgetContainer extends DockPanel {

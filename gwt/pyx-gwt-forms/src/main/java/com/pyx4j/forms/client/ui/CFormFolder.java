@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.resources.client.ImageResource;
+
 import com.pyx4j.forms.client.gwt.NativeFormFolder;
 
 public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
@@ -32,6 +34,8 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
     private final FormFactory factory;
 
     private NativeFormFolder<E> nativeFormFolder;
+
+    private ImageResource image;
 
     public CFormFolder(FormFactory factory) {
         super();
@@ -47,6 +51,14 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     public LinkedHashMap<E, CForm> getFormsMap() {
         return formsMap;
+    }
+
+    public void setTitleImage(ImageResource image) {
+        this.image = image;
+    }
+
+    public ImageResource getTitleImage() {
+        return image;
     }
 
     @Override
