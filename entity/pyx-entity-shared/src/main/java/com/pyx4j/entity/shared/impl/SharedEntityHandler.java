@@ -415,7 +415,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 l.add(cloneValue(lm));
             }
             return l;
-        } else if (value instanceof Set<?>) {
+        } else if (value instanceof HashSet<?>) {
+            //IPrimitiveSet
+            Set s = new HashSet<Object>();
+            for (Object lm : (Set<?>) value) {
+                s.add(cloneValue(lm));
+            }
+            return s;
+        } else if (value instanceof TreeSet<?>) {
             Set s = new TreeSet<Map<String, Object>>(new ElementsComparator());
             for (Object lm : (Set<?>) value) {
                 s.add(cloneValue(lm));
