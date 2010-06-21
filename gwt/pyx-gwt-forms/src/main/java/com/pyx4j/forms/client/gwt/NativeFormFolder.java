@@ -23,6 +23,9 @@ package com.pyx4j.forms.client.gwt;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -45,6 +48,8 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeFormFolder<E> extends DockPanel implements INativeEditableComponent<List<E>> {
+
+    private static final I18n i18n = I18nFactory.getI18n(NativeFormFolder.class);
 
     private final CFormFolder<?> folder;
 
@@ -105,6 +110,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
         addCommand.getElement().getStyle().setProperty("left", (NativeForm.LEFT_LABEL_WIDTH + 25) + "px");
         addCommand.getElement().getStyle().setProperty("top", "5px");
+        addCommand.setTitle(i18n.tr("Add Item"));
 
         if (BrowserType.isIE7()) {
             getElement().getStyle().setMarginLeft(5, Unit.PX);

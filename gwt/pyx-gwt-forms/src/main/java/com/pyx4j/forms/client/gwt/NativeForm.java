@@ -25,6 +25,8 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -63,6 +65,8 @@ import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeForm extends FlowPanel implements INativeComponent {
+
+    private static final I18n i18n = I18nFactory.getI18n(NativeForm.class);
 
     enum ToolbarMode {
         First, Last, Only, Inner
@@ -445,6 +449,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 }
             });
             actionsPanel.add(upCommand);
+            upCommand.setTitle(i18n.tr("Move up"));
 
             downCommand = new Image();
             downCommand.setResource(ImageFactory.getImages().moveDown());
@@ -459,6 +464,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 }
             });
             actionsPanel.add(downCommand);
+            downCommand.setTitle(i18n.tr("Move down"));
 
             removeCommand = new Image();
             removeCommand.setResource(ImageFactory.getImages().deleteItem());
@@ -471,6 +477,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 }
             });
             actionsPanel.add(removeCommand);
+            removeCommand.setTitle(i18n.tr("Delete Item"));
 
             add(actionsPanel);
             actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
