@@ -421,6 +421,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             if (form.getFolder() != null && form.getFolder().getTitleImage() != null) {
                 Image image = new Image(form.getFolder().getTitleImage());
+                image.getElement().getStyle().setMarginTop(2, Unit.PX);
                 image.getElement().getStyle().setPaddingRight(2, Unit.PX);
                 captionHolder.add(image);
             }
