@@ -20,16 +20,12 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -38,7 +34,9 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     private final ListBox monthSelector;
 
-    private final TextBox yearBox;
+    private final ListBox yearSelector;
+
+    private final int lastYear = new Date().getYear() + 7;
 
     public MonthYearPicker() {
 
@@ -59,44 +57,33 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         setCellWidth(monthSelector, "50%");
         monthSelector.addChangeHandler(changeHandler);
 
-        yearBox = new TextBox();
-        yearBox.setWidth("75px");
-        add(yearBox);
-        yearBox.getElement().getStyle().setMarginLeft(9, Unit.PX);
-        setCellWidth(yearBox, "50%");
-        yearBox.addChangeHandler(changeHandler);
-
-        yearBox.addKeyDownHandler(new KeyDownHandler() {
-
-            @Override
-            public void onKeyDown(KeyDownEvent event) {
-                int keyCode = event.getNativeKeyCode();
-                if (!Character.isDigit((char) keyCode) && (keyCode != (char) KeyCodes.KEY_TAB) && (keyCode != (char) KeyCodes.KEY_BACKSPACE)
-                        && (keyCode != (char) KeyCodes.KEY_DELETE) && (keyCode != (char) KeyCodes.KEY_ENTER) && (keyCode != (char) KeyCodes.KEY_HOME)
-                        && (keyCode != (char) KeyCodes.KEY_END) && (keyCode != (char) KeyCodes.KEY_LEFT) && (keyCode != (char) KeyCodes.KEY_UP)
-                        && (keyCode != (char) KeyCodes.KEY_RIGHT) && (keyCode != (char) KeyCodes.KEY_DOWN)) {
-                    ((TextBox) event.getSource()).cancelKey();
-                }
-            }
-        });
+        yearSelector = new ListBox();
+        add(yearSelector);
+        yearSelector.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        yearSelector.addItem(null);
+        for (int i = lastYear; i >= 0; i--) {
+            yearSelector.addItem(String.valueOf(i + 1900));
+        }
+        setCellWidth(yearSelector, "50%");
+        yearSelector.addChangeHandler(changeHandler);
 
     }
 
     public void setDate(Date date) {
         if (date == null) {
             monthSelector.setSelectedIndex(0);
-            yearBox.setText("");
+            yearSelector.setSelectedIndex(0);
         } else {
             monthSelector.setSelectedIndex(date.getMonth() + 1);
-            yearBox.setText(String.valueOf(date.getYear() + 1900));
+            yearSelector.setSelectedIndex(lastYear - date.getYear() + 1);
         }
     }
 
     public Date getDate() {
-        if (yearBox.getText() == null || yearBox.getText().trim().equals("")) {
+        if (yearSelector.getSelectedIndex() == 0) {
             return null;
         }
-        int year = Integer.parseInt(yearBox.getText()) - 1900;
+        int year = lastYear - yearSelector.getSelectedIndex() + 1;
         int month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
         return new Date(year, month, 1);
     }
@@ -107,13 +94,13 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     public void setEnabled(boolean enabled) {
         monthSelector.setEnabled(enabled);
-        yearBox.setEnabled(enabled);
+        yearSelector.setEnabled(enabled);
     }
 
     public void setFocus(boolean focused) {
         monthSelector.setFocus(focused);
         if (!focused) {
-            yearBox.setFocus(false);
+            yearSelector.setFocus(false);
         }
     }
 

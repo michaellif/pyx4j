@@ -32,6 +32,8 @@ public class MessagePanel extends HorizontalPanel {
 
     private final HTML messageHolder;
 
+    private Timer showTimer;
+
     public MessagePanel() {
         setWidth("100%");
         getElement().getStyle().setMarginBottom(10, Unit.PX);
@@ -54,12 +56,15 @@ public class MessagePanel extends HorizontalPanel {
     }
 
     public void setMessage(String message) {
+        if (showTimer != null) {
+            showTimer.cancel();
+        }
         messageHolder.setHTML("&nbsp;" + message);
         if (message == null) {
             messageHolder.getElement().getStyle().setVisibility(Visibility.HIDDEN);
         } else {
             messageHolder.getElement().getStyle().setVisibility(Visibility.VISIBLE);
-            Timer showTimer = new Timer() {
+            showTimer = new Timer() {
                 @Override
                 public void run() {
                     setMessage(null);
