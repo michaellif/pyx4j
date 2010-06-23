@@ -189,8 +189,9 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".gwt-PopupPanelGlass");
         style.addProperty("background-color", "#000");
-        style.addProperty("opacity", "0.2");
-        style.addProperty("filter", "alpha(opacity=20)");
+        style.addProperty("opacity", "0.1");
+        style.addProperty("filter", "alpha(opacity=10)");
+        style.addProperty("z-index", "20");
         addStyle(style);
     }
 
@@ -201,16 +202,16 @@ public class WindowsTheme extends Theme {
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Caption.name());
         style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("filter", "alpha(opacity=90)");
-        style.addProperty("opacity", "0.9");
+        style.addProperty("filter", "alpha(opacity=95)");
+        style.addProperty("opacity", "0.95");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Resizer.name());
         style.addProperty("background", ThemeColor.SELECTION);
-        style.addProperty("filter", "alpha(opacity=90)");
-        style.addProperty("opacity", "0.9");
+        style.addProperty("filter", "alpha(opacity=95)");
+        style.addProperty("opacity", "0.95");
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Content.name());
