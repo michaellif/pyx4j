@@ -189,11 +189,11 @@ public class ClientContext {
     }
 
     public static void obtainAuthenticationData(final Runnable onAuthenticationAvalable) {
-        obtainAuthenticationData(onAuthenticationAvalable, true);
+        obtainAuthenticationData(onAuthenticationAvalable, false, true);
     }
 
-    public static void obtainAuthenticationData(final Runnable onAuthenticationAvalable, boolean executeBackground) {
-        if (authenticationObtained) {
+    public static void obtainAuthenticationData(final Runnable onAuthenticationAvalable, boolean force, boolean executeBackground) {
+        if (!force && authenticationObtained) {
             if (onAuthenticationAvalable != null) {
                 onAuthenticationAvalable.run();
             }
