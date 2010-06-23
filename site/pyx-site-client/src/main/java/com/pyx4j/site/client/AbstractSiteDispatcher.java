@@ -346,6 +346,11 @@ public abstract class AbstractSiteDispatcher {
     }
 
     private void initSitePanel(String name, SitePanel sitePanel) {
+        SitePanel orig = sitePanels.get(name);
+        if (orig == sitePanel) {
+            // Avoid double call onAfterLogIn for the same SitePanel
+            return;
+        }
         sitePanels.put(name, sitePanel);
         if (ClientContext.isAuthenticated()) {
             sitePanel.onAfterLogIn();
