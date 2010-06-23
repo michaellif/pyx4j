@@ -573,6 +573,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 labelHolder.add(label);
                 labelHolder.add(imageMandatoryHolder);
                 add(labelHolder, WEST);
+                setCellVerticalAlignment(labelHolder, ALIGN_MIDDLE);
             } else {
                 labelHolder.add(imageMandatoryHolder);
                 labelHolder.add(label);
