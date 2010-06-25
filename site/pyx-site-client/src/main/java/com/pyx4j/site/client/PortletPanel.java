@@ -44,8 +44,8 @@ public class PortletPanel extends VerticalPanel {
 
         setStyleName(styleName);
 
-        if (portlet.capture().getValue() != null) {
-            HTML capturePanel = new HTML(portlet.capture().getValue());
+        if (portlet.caption().getValue() != null) {
+            HTML capturePanel = new HTML(portlet.caption().getValue());
             capturePanel.setWordWrap(false);
             add(capturePanel);
             capturePanel.setStyleName(styleName + "Header");

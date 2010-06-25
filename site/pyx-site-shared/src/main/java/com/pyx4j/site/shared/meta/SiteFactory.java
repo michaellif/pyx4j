@@ -40,7 +40,7 @@ public class SiteFactory {
     protected Portlet createPortlet(String portletId, String caption, String html, String styleName) {
         Portlet portlet = EntityFactory.create(Portlet.class);
         portlet.portletId().setValue(portletId);
-        portlet.capture().setValue(caption);
+        portlet.caption().setValue(caption);
         portlet.styleName().setValue(styleName);
         portlet.html().setValue(html);
         return portlet;

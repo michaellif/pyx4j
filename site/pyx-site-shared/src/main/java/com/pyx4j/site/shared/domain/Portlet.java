@@ -30,7 +30,7 @@ public interface Portlet extends IEntity {
 
     IPrimitive<String> portletId();
 
-    IPrimitive<String> capture();
+    IPrimitive<String> caption();
 
     IPrimitive<String> styleName();
 
