@@ -13,7 +13,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>pyx-rpc-j2se/artifactId>
+    <artifactId>pyx-rpc-j2se</artifactId>
     <name>pyx-rpc-j2se</name>
     <description>pyx-rpc J2SE Client Side Implementations</description>
 
