@@ -105,6 +105,7 @@
         <module>gwt/pyx-gwt-server</module>
         <module>security/pyx-security-server</module>
         <module>rpc/pyx-rpc-server</module>
+        <module>rpc/pyx-rpc-j2se</module>
 
         <module>log/pyx-slf4j-api-gwt</module>
         <module>log/pyx-log-gwt</module>

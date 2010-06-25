@@ -69,6 +69,10 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    public IServiceFactory getJ2SEServiceFactory() {
+        return null;
+    }
+
     /**
      * @return empty List to avoid Entity Implementations creation.
      */
