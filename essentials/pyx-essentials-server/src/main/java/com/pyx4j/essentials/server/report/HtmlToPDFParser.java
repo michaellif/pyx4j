@@ -89,6 +89,8 @@ public class HtmlToPDFParser extends DefaultHandler {
 
         public static final String LIST_STYLE_TYPE = "list-style-type";
 
+        public static final String LIST_STYLE_TYPE_NONE = "none";
+        
         public static final String LIST_STYLE_TYPE_CIRCLE = "circle";
 
         public static final String LIST_STYLE_TYPE_DISC = "disc";
@@ -522,6 +524,9 @@ public class HtmlToPDFParser extends DefaultHandler {
             String listStyleAttr = style.get(StyleTags.LIST_STYLE_TYPE);
             if (listStyleAttr == null) {
                 list = new List(List.UNORDERED);
+            } else if (listStyleAttr.equals(StyleTags.LIST_STYLE_TYPE_NONE)) {
+                list = new List(List.UNORDERED);
+                list.setListSymbol("    ");
             } else if (listStyleAttr.equals(StyleTags.LIST_STYLE_TYPE_DECIMAL)) {
                 list = new List(List.ORDERED, List.NUMERICAL);
             } else if (listStyleAttr.equals(StyleTags.LIST_STYLE_TYPE_LOWER_ALPHA)) {
