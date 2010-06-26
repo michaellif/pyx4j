@@ -71,6 +71,9 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
             serviceFactory = ServerSideConfiguration.instance().getJ2SEServiceFactory();
         }
         if (serviceFactory == null) {
+            serviceFactory = ServerSideConfiguration.instance().getRPCServiceFactory();
+        }
+        if (serviceFactory == null) {
             serviceFactory = new ReflectionServiceFactory();
         }
         implementation = new RemoteServiceImpl("J2SE", serviceFactory);
@@ -81,7 +84,7 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
         ServletOutputStream os = null;
         ServletInputStream is = null;
         try {
-            log.debug("Request", requestCount++);
+            log.debug("request# {}", requestCount++);
             is = req.getInputStream();
 
             ObjectInputStream ois = new ObjectInputStream(is);
