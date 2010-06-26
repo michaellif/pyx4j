@@ -72,7 +72,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         } else if (valueClass.isEnum()) {
             converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
         } else {
-            throw new RuntimeException("Unsupported type " + valueClass.getCanonicalName());
+            throw new RuntimeException("Unsupported type " + valueClass.getName());
         }
         return converted;
     }
