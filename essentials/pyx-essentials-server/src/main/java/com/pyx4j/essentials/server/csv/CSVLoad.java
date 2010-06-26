@@ -66,11 +66,14 @@ public class CSVLoad {
     }
 
     public static void loadFile(InputStream is, CSVReciver reciver) {
+        int lineNumber = 0;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = null;
             boolean header = true;
+
             while (((line = reader.readLine()) != null) && (reciver.canContuneLoad())) {
+                lineNumber++;
                 if (line.startsWith("#") || (line.length() == 0)) {
                     continue;
                 }
@@ -85,7 +88,7 @@ public class CSVLoad {
         } catch (IOException ioe) {
             throw new RuntimeException("Load file error", ioe);
         } catch (Exception e) {
-            throw new RuntimeException("Load file error", e);
+            throw new RuntimeException("Load file error, Line# " + lineNumber, e);
         } finally {
             try {
                 if (is != null) {

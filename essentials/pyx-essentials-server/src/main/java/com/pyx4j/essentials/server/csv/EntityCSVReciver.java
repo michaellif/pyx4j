@@ -20,10 +20,14 @@
  */
 package com.pyx4j.essentials.server.csv;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -31,8 +35,11 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.gwt.server.DateUtils;
 
 public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
+
+    private final static Logger log = LoggerFactory.getLogger(EntityCSVReciver.class);
 
     private final Class<E> entityClass;
 
@@ -50,6 +57,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     @Override
     public void onHeader(String[] headers) {
+        log.debug("headers {}", (Object) headers);
         E entity = EntityFactory.create(entityClass);
         EntityMeta em = entity.getEntityMeta();
         Map<String, Path> memebersNames = new HashMap<String, Path>();
@@ -60,7 +68,33 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             }
         }
         for (String header : headers) {
-            headersPath.add(memebersNames.get(header));
+            Path path = memebersNames.get(header);
+            if (path != null) {
+                headersPath.add(path);
+                continue;
+            }
+            try {
+                headersPath.add(entity.getMember(header).getPath());
+                continue;
+            } catch (RuntimeException e) {
+                // Unknown member
+            }
+            if (header.contains(".")) {
+                IEntity ent = entity;
+                IObject<?> member = null;
+                for (String headerPart : header.split("\\.")) {
+                    member = ent.getMember(headerPart);
+                    if (member instanceof IEntity) {
+                        ent = (IEntity) member;
+                    } else {
+                        ent = null;
+                    }
+                }
+                headersPath.add(member.getPath());
+            } else {
+                log.warn("Unknown header [{}]", header);
+                headersPath.add(null);
+            }
         }
     }
 
@@ -76,13 +110,14 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     @SuppressWarnings("unchecked")
     @Override
     public void onRow(String[] value) {
+        //log.debug("value line {}", (Object) value);
         E entity = EntityFactory.create(entityClass);
 
         int i = 0;
         for (Path path : headersPath) {
             if (path != null) {
                 IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
-                primitive.setValue(primitive.pars(value[i]));
+                primitive.setValue(parsValue(primitive, value[i]));
             }
             i++;
             if (i >= value.length) {
@@ -91,6 +126,17 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         }
 
         list.add(entity);
+    }
+
+    protected Object parsValue(IPrimitive<?> primitive, String value) {
+        if (Date.class.isAssignableFrom(primitive.getValueClass())) {
+            return DateUtils.detectDateformat(value);
+        } else if (Number.class.isAssignableFrom(primitive.getValueClass())) {
+            // Is Local English?
+            return primitive.pars(value.replaceAll(",", ""));
+        } else {
+            return primitive.pars(value);
+        }
     }
 
     public List<E> getEntities() {

@@ -43,6 +43,8 @@ public class CSVParser {
                         if (doubleQuote) {
                             col.append(c);
                             doubleQuote = false;
+                        } else {
+                            quoted = false;
                         }
                     } else {
                         if (col.length() == 0) {
@@ -54,9 +56,13 @@ public class CSVParser {
                     }
                     break;
                 case ',':
-                    columns.add(col.toString());
-                    col = new StringBuilder();
-                    quoted = false;
+                    if (quoted) {
+                        col.append(c);
+                    } else {
+                        columns.add(col.toString());
+                        col = new StringBuilder();
+                        quoted = false;
+                    }
                     break;
                 case '\\':
                     escape = true;

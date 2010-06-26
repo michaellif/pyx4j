@@ -23,6 +23,7 @@ package com.pyx4j.entity.shared.impl;
 import java.text.MessageFormat;
 import java.util.Date;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -52,6 +53,9 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     @SuppressWarnings("unchecked")
     @Override
     public TYPE pars(String value) {
+        if (CommonsStringUtils.isEmpty(value)) {
+            return null;
+        }
         TYPE converted;
         if (valueClass.equals(String.class)) {
             converted = (TYPE) value;
@@ -63,10 +67,12 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             converted = (TYPE) Long.valueOf(value);
         } else if (valueClass.equals(Integer.class)) {
             converted = (TYPE) Integer.valueOf(value);
+        } else if (valueClass.equals(java.sql.Date.class)) {
+            converted = (TYPE) java.sql.Date.valueOf(value);
         } else if (valueClass.isEnum()) {
             converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
         } else {
-            throw new RuntimeException("Unsupported type");
+            throw new RuntimeException("Unsupported type " + valueClass.getCanonicalName());
         }
         return converted;
     }
