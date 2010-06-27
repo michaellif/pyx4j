@@ -51,7 +51,7 @@ public class J2SEService {
         try {
 
             String url = System.getProperty(SERVER_SYSTEM_PROPERTY);
-            URL u = new URL(url);
+            URL u = new URL(url + serviceInterface.getSimpleName().replace('$', '.'));
             conn = (HttpURLConnection) u.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
