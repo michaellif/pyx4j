@@ -42,6 +42,8 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("A, null, C", "{0}, {1}, {2}", "A", null, "C");
 
         assertMessageFormat("{0}", "'{0}'", "A");
+        assertMessageFormat("As", "A's");
+        assertMessageFormat("A's", "A''s");
     }
 
     public void testNumberFormat() {
