@@ -75,7 +75,7 @@ public class SiteFactory {
 
     protected static Page createPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, String html,
             Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
-        Page page = createPage(caption, node, discriminator, html, leftPortlets, rightPortlets, inlineWidgets);
+        Page page = createPage(caption, node, discriminator, html, null, leftPortlets, rightPortlets, inlineWidgets);
         page.tabName().setValue(tabName);
         return page;
     }
@@ -88,14 +88,15 @@ public class SiteFactory {
         return createPage(null, caption, node, discriminator, inlineWidgetHtml(inlineWidget), null, null, new String[] { inlineWidget.name() });
     }
 
-    public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
+    public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget, String helpHtml,
             Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        return createSingleWidgetPage(null, caption, node, discriminator, inlineWidget, leftPortlets, rightPortlets);
+        return createSingleWidgetPage(null, caption, node, discriminator, inlineWidget, helpHtml, leftPortlets, rightPortlets);
     }
 
     public static Page createSingleWidgetPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
-            Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), leftPortlets, rightPortlets, new String[] { inlineWidget.name() });
+            String helpHtml, Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), helpHtml, leftPortlets, rightPortlets, new String[] { inlineWidget
+                .name() });
         if (tabName != null) {
             page.tabName().setValue(tabName);
         }
@@ -103,10 +104,10 @@ public class SiteFactory {
     }
 
     public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html) {
-        return createPage(caption, node, discriminator, html, null, null, null);
+        return createPage(caption, node, discriminator, html, null, null, null, null);
     }
 
-    public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html, Portlet[] leftPortlets,
+    public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html, String helpHtml, Portlet[] leftPortlets,
             Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = EntityFactory.create(Page.class);
         page.caption().setValue(caption);
@@ -120,6 +121,8 @@ public class SiteFactory {
             html = caption;
         }
         page.data().html().setValue(html);
+
+        page.data().help().setValue(helpHtml);
 
         if (leftPortlets != null) {
             for (Portlet portlet : leftPortlets) {

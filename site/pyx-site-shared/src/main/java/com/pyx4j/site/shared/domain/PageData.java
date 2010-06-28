@@ -32,6 +32,9 @@ public interface PageData extends IEntity {
     @StringLength(8192)
     IPrimitive<String> html();
 
+    @StringLength(8192)
+    IPrimitive<String> help();
+
     @Owned
     IPrimitiveSet<String> inlineWidgetIds();
 
