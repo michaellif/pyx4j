@@ -33,6 +33,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -99,8 +100,11 @@ public abstract class SitePanel extends SimplePanel {
 
     private SkinFactory skinFactory;
 
-    public SitePanel(Site site) {
+    private final ClientBundleWithLookup bundle;
+
+    public SitePanel(Site site, ClientBundleWithLookup bundle) {
         this.site = site;
+        this.bundle = bundle;
         setSize("100%", "100%");
 
         setWidget(createContentPanel());
@@ -160,7 +164,7 @@ public abstract class SitePanel extends SimplePanel {
             currentPagePanel = cachedPanels.get(key);
             mainSectionPanel.setWidget(currentPagePanel);
         } else {
-            currentPagePanel = new PagePanel(this, page);
+            currentPagePanel = new PagePanel(this, page, bundle);
             cachedPanels.put(key, currentPagePanel);
             mainSectionPanel.setWidget(currentPagePanel);
             currentPagePanel.createInlineWidgets();
@@ -175,7 +179,7 @@ public abstract class SitePanel extends SimplePanel {
         leftSectionPanel.clear();
         if (page.data().leftPortlets().size() > 0) {
             for (Portlet portlet : page.data().leftPortlets()) {
-                PortletPanel portletPanel = new PortletPanel(this, portlet);
+                PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
                 leftSectionPanel.add(portletPanel);
                 portletPanel.createInlineWidgets();
                 portletPanel.populateInlineWidgets(args);
@@ -185,7 +189,7 @@ public abstract class SitePanel extends SimplePanel {
         rightSectionPanel.clear();
         if (page.data().rightPortlets().size() > 0) {
             for (Portlet portlet : page.data().rightPortlets()) {
-                PortletPanel portletPanel = new PortletPanel(this, portlet);
+                PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
                 rightSectionPanel.add(portletPanel);
                 portletPanel.createInlineWidgets();
                 portletPanel.populateInlineWidgets(args);

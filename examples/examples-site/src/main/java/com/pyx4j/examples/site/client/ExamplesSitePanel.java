@@ -40,7 +40,7 @@ public abstract class ExamplesSitePanel extends SitePanel {
     private final CommandLink logInLink;
 
     protected ExamplesSitePanel(Site site) {
-        super(site);
+        super(site, null);
 
         setSkinFactory(new SkinFactory() {
             @Override

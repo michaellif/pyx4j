@@ -33,7 +33,7 @@ import com.pyx4j.site.client.SitePanel;
 public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 
     public ConsoleSitePanel() {
-        super(ConsoleSiteFactory.createSite());
+        super(ConsoleSiteFactory.createSite(), null);
     }
 
     @Override

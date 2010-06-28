@@ -31,6 +31,7 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
@@ -47,8 +48,8 @@ public class PagePanel extends DynamicHTML {
 
     private final Page page;
 
-    public PagePanel(SitePanel parent, Page page) {
-        super(page.data().html().getValue(), true);
+    public PagePanel(SitePanel parent, Page page, ClientBundleWithLookup bundle) {
+        super(page.data().html().getValue(), bundle, true);
         this.parent = parent;
         this.page = page;
         setStyleName(SiteCSSClass.pyx4j_Site_PageWidget.name());

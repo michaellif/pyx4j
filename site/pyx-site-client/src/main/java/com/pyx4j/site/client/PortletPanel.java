@@ -15,6 +15,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,7 +33,7 @@ public class PortletPanel extends VerticalPanel {
 
     private final Portlet portlet;
 
-    public PortletPanel(SitePanel parent, Portlet portlet) {
+    public PortletPanel(SitePanel parent, Portlet portlet, ClientBundleWithLookup bundle) {
         super();
         this.parent = parent;
         this.portlet = portlet;
@@ -55,7 +56,7 @@ public class PortletPanel extends VerticalPanel {
             headerPanel.setStyleName(styleName + "EmptyHeader");
         }
 
-        DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), false);
+        DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), bundle, false);
         add(bodyPanel);
         bodyPanel.setStyleName(styleName + "Body");
 
