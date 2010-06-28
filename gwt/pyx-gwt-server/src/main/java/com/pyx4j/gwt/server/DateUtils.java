@@ -31,6 +31,27 @@ import com.pyx4j.commons.TimeUtils;
 
 public class DateUtils extends TimeUtils {
 
+    public static void dayStart(Calendar calendar) {
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+    }
+
+    public static void dayEnd(Calendar calendar) {
+        dayStart(calendar);
+        calendar.add(Calendar.DATE, 1);
+        calendar.add(Calendar.SECOND, -1);
+    }
+
+    public static boolean isSameDay(Calendar d1, Calendar d2) {
+        if (d1 == null || d2 == null) {
+            return false;
+        } else {
+            return (d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR) && d1.get(Calendar.DAY_OF_YEAR) == d2.get(Calendar.DAY_OF_YEAR));
+        }
+    }
+
     public static Date detectDateformat(String str) {
         final String[] formats = {
 
