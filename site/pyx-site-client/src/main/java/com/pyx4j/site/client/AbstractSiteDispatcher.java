@@ -105,9 +105,8 @@ public abstract class AbstractSiteDispatcher {
                             }
                         };
 
-                        Dialog d = new Dialog(i18n.tr("Confirm"), i18n.tr(
-                                "Are you sure you want to navigate away from this page?\n{0}\nPress OK to continue, or Cancel to stay on the current page.",
-                                ple.getMessage()), Dialog.Type.Confirm, options);
+                        Dialog d = new Dialog(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n\n" + "{0}\n\n"
+                                + "Press OK to continue, or Cancel to stay on the current page.", ple.getMessage()), Dialog.Type.Confirm, options);
 
                         d.show();
                         return;
