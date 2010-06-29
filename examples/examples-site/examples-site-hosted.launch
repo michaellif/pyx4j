@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="com.google.gdt.eclipse.suite.webapp">
+<booleanAttribute key="com.google.gdt.eclipse.core.AUTO_PORT_SELECTION" value="true"/>
 <booleanAttribute key="com.google.gdt.eclipse.core.RUN_SERVER" value="false"/>
 <stringAttribute key="com.google.gdt.eclipse.suiteMainTypeProcessor.PREVIOUSLY_SET_MAIN_TYPE_NAME" value="com.google.gwt.dev.GWTShell"/>
 <stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://localhost:8888/index.html"/>
@@ -15,8 +16,8 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gwt.eclipse.core.moduleClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.GWTShell"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-logLevel INFO -noserver -port 8888 -out &quot;${workspace_loc:examples-site}/target/hosted-out&quot; -gen &quot;${workspace_loc:examples-site}/target/hosted-gen&quot; http://localhost:8888/index.html"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://localhost:8888/index.html -logLevel INFO -noserver -extra &quot;${workspace_loc:examples-site}/target/hosted-extra&quot; -gen &quot;${workspace_loc:examples-site}/target/hosted-gen&quot; -war &quot;${workspace_loc:examples-gae-server}/war&quot; g.siteDeveloper"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="examples-site"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
 </launchConfiguration>
