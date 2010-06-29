@@ -1,7 +1,7 @@
 ========= Install Eclipse =========
 
 1. Get: Eclipse SDK
-       eclipse-SDK-3.6.0-win32.zip
+       eclipse-SDK-3.6-win32.zip
 
 2. Unzip it to directory: eclipse-3.6.0   (Optionally)
 
