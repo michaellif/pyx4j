@@ -1,7 +1,7 @@
 ========= Install Eclipse =========
 
-1. Get: Eclipse SDK
-       eclipse-SDK-3.6-win32.zip
+1. Get: Eclipse SDK  or  Eclipse IDE for Java EE Developers
+       eclipse-SDK-3.6-win32.zip or eclipse-jee-helios-win32.zip
 
 2. Unzip it to directory: eclipse-3.6.0   (Optionally)
 
@@ -10,7 +10,7 @@
         D:\prog\dev\eclipse\eclipse-3.6.0\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
 
 4. Install Eclipse Plugins.
-    - Subclipse
+    - Subclipse                  (From Eclipse Marketplace)
     - Google plugins for Eclipse (From Eclipse Marketplace)
     - Google Web Toolkin SDK     (From Eclipse Marketplace)
     - Google App Engine SDK      (From Eclipse Marketplace)
