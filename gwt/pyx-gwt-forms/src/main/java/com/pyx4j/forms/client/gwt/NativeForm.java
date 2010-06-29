@@ -157,7 +157,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         if (form.getFolder() != null) {
             getElement().getStyle().setBorderWidth(1, Unit.PX);
             getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-            getElement().getStyle().setBorderColor("#518BDC");
+            getElement().getStyle().setBorderColor("#5B7575");
         }
     }
 
