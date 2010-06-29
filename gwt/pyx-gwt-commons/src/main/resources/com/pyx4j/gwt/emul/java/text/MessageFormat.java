@@ -54,10 +54,14 @@ public class MessageFormat {
             pc = c;
             c = pattern.charAt(index);
             if (quotedString) {
-                if ((c == '\'') && (pc == '\'')) {
+                if (c == '\'') {
+                    if (pc == '\'') {
+                        result.append(c);
+                    }
+                    quotedString = false;
+                } else {
                     result.append(c);
                 }
-                quotedString = false;
                 continue;
             } else if (formatElement) {
                 if (c == DELIM_STOP) {
