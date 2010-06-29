@@ -1,37 +1,30 @@
 ========= Install Eclipse =========
 
 1. Get: Eclipse SDK
-       eclipse-SDK-3.5.2-win32.zip
+       eclipse-SDK-3.6.0-win32.zip
 
-2. Unzip it to directory: eclipse-3.5.2   (Optionally)
+2. Unzip it to directory: eclipse-3.6.0   (Optionally)
 
-3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_15\bin\javaw.exe")
+3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_20\bin\javaw.exe")
    Or full Target on Windows 32:
-        D:\prog\dev\eclipse\eclipse-3.5.2\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
+        D:\prog\dev\eclipse\eclipse-3.6.0\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
 
 4. Install Eclipse Plugins.
     - Subclipse
-    - Google plugins for Eclipse
-    - Google Web Toolkin SDK
-    - Google App Engine SDK
+    - Google plugins for Eclipse (From Eclipse Marketplace)
+    - Google Web Toolkin SDK     (From Eclipse Marketplace)
+    - Google App Engine SDK      (From Eclipse Marketplace)
     - M2-Eclipse **
-
-    All Eclipse Plugins required by our development team are stored in our repository.
-    Our Eclipse Update site is: http://pyx4j.com/eclipse/svn/trunk/3.5/
-    The stable update site url for this project as of March 2010 is http://pyx4j.com/eclipse/svn/tags/2010-03/
-
-    ** There is a copy of M2-Eclipse as aditional site
-      http://pyx4j.com/eclipse/svn/trunk/3.5/m2e  or http://pyx4j.com/eclipse/svn/tags/2010-03/m2e
 
 ========= Install Subclipse =========
 
-     Subclipse for SVN 1.6
+     Subclipse for SVN 1.6  From Eclipse Marketplace
      Official Update Site:  http://subclipse.tigris.org/update_1.6.x
 
 ========= Install M2-Eclipse =========
 
     Use the latest plugin http://m2eclipse.sonatype.org/
-    Official Update Site:  http://m2eclipse.sonatype.org/sites/m2e
+    Official Update Site: http://m2eclipse.sonatype.org/sites/m2e
 
 ========= maven build =========
 
@@ -60,17 +53,16 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 ========= Install Google App Engine SDK for Java =========
 
-1. Install "Google plugins for Eclipse 3.5 version 1.2.0"
-    site url: http://pyx4j.com/internal/eclipse/eclipse3.5-google-gpe-1.2.0/
-    Do not install default latest one from google site:  http://dl.google.com/eclipse/plugin/3.5
+1. Install "Google plugins for Eclipse 3.6 version 1.3.3"
+    site url: http://dl.google.com/eclipse/plugin/3.6
 
     You may install SDKs bundle for GAE and GWT from google site for faster download.
 
 -- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
-2. Download and unzip appengine-java-sdk-1.3.1.zip
-		from http://code.google.com/p/googleappengine/downloads/detail?name=appengine-java-sdk-1.3.1.zip&can=2&q=
+2. Download and unzip appengine-java-sdk-1.3.4.zip
+		from http://code.google.com/p/googleappengine/downloads/detail?name=appengine-java-sdk-1.3.4.zip&can=2&q=
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
-   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.1-patch.zip
+   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.4-patch.zip
 4. Copy/Add results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
 
 ========= Eclipse Configuration for a new Workspace =========
@@ -100,8 +92,8 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 Cleaning up Indexes in Google App Engine/Java
   Use Python  SDK
-    D:\etc\3p-libs\gae\appengine-python-1.3.1/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
-    D:\etc\3p-libs\gae\appengine-python-1.3.1/appcfg.py vacuum_indexes D:\devGwt\pyx4j\examples\examples-gae-server
+    D:\etc\3p-libs\gae\appengine-python-1.3.4/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
+    D:\etc\3p-libs\gae\appengine-python-1.3.4/appcfg.py vacuum_indexes D:\devGwt\pyx4j\examples\examples-gae-server
 
 rollback from pyx2 server
 
@@ -111,5 +103,5 @@ rollback from pyx2 server
     cd /data/build/work/pyx/examples/examples-gae-server/war
     mvn gae:rollback
 
-    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.1/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/incubator/tester/tester-gae-server/war
-    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.1/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/examples/examples-gae-server/war
+    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.4/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/incubator/tester/tester-gae-server/war
+    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.4/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/examples/examples-gae-server/war
