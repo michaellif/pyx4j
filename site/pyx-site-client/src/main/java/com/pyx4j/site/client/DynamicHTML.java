@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
@@ -46,6 +47,7 @@ public class DynamicHTML extends HTMLPanel {
         this.bundle = bundle;
         attachLocalAnchors();
         substituteBundleImages();
+
         setWordWrap(wordWrap);
     }
 
@@ -73,16 +75,24 @@ public class DynamicHTML extends HTMLPanel {
     private void substituteBundleImages() {
         NodeList<Element> imageElements = this.getElement().getElementsByTagName("img");
         if (imageElements != null) {
-            String baseUrl = Window.Location.getProtocol() + "//" + Window.Location.getHost() + "/";
             for (int i = 0; i < imageElements.getLength(); i++) {
                 ImageElement el = ImageElement.as(imageElements.getItem(i));
-                if (el.getSrc().startsWith(baseUrl)) {
-                    ImageResource imageResource = (ImageResource) bundle.getResource(el.getSrc().substring(baseUrl.length()));
+                if (el.getSrc().startsWith("data:")) {
+                    Element parent = el.getParentElement();
+                    String imageId = el.getSrc().substring("data:".length());
+                    ImageResource imageResource = (ImageResource) bundle.getResource(imageId);
                     if (imageResource != null) {
-                        log.debug("replace img {} with {}", el.getSrc(), imageResource.getURL());
-                        Image image = Image.wrap(el);
-                        image.setResource(imageResource);
+                        log.debug("replace img {} with {}", imageId, imageResource.getURL());
+                        Image image = new Image(imageResource);
+                        ImageElement newImageElement = (ImageElement) Element.as(image.getElement());
+                        newImageElement.setHeight(el.getHeight());
+                        newImageElement.setWidth(el.getWidth());
+                        newImageElement.setAlt(el.getAlt());
+                        parent.insertAfter(image.getElement(), el);
                         adoptChild(image);
+                        parent.removeChild(el);
+                    } else {
+                        log.error("failed to find image {} in bundle", imageId);
                     }
                 }
             }
@@ -92,5 +102,11 @@ public class DynamicHTML extends HTMLPanel {
     public void adoptChild(Widget widget) {
         getChildren().add(widget);
         adopt(widget);
+    }
+
+    class BundleImage extends Image {
+        BundleImage(Element element) {
+            super(element);
+        }
     }
 }
