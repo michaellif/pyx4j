@@ -72,6 +72,8 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 2.  To Server web applications start add "Program argumets:"
    --disable_update_check
+ or run
+   pyx\src\make.appcfg_no_nag.cmd
 
  For mvn -P deploy-gae (mvn gae:deploy) to work add appengine.google.com-pyx to ./m2/settings.xml
     <settings>

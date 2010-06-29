@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="com.google.gdt.eclipse.suite.webapp">
 <booleanAttribute key="com.google.gdt.eclipse.core.RUN_SERVER" value="false"/>
+<stringAttribute key="com.google.gdt.eclipse.suiteMainTypeProcessor.PREVIOUSLY_SET_MAIN_TYPE_NAME" value="com.google.gwt.dev.GWTShell"/>
 <stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://localhost:8888/ria.html"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/examples-ria"/>
@@ -12,6 +13,8 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gwt.eclipse.core.moduleClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-out ${workspace_loc:examples-ria}/target/hosted-out&#13;&#10;-gen ${workspace_loc:examples-ria}/target/hosted-gen"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.GWTShell"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-logLevel INFO -noserver -port 8888 -out &quot;${workspace_loc:examples-ria}/target/hosted-out&quot; -gen &quot;${workspace_loc:examples-ria}/target/hosted-gen&quot; http://localhost:8888/ria.html"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="examples-ria"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
 </launchConfiguration>
