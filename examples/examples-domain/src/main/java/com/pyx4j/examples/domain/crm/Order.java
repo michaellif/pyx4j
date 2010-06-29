@@ -72,7 +72,7 @@ public interface Order extends IEntity {
     IPrimitive<Double> cost();
 
     @Owner
-    @Detached
+    //@Detached
     @ReportColumn(ignore = true)
     Customer customer();
 

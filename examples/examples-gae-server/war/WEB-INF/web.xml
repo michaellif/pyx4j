@@ -82,6 +82,16 @@
         <url-pattern>/internal/worker/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.download.DownloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+    
     <!-- Default page -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

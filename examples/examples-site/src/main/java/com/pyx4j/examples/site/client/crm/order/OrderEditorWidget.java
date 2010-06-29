@@ -52,6 +52,7 @@ import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.examples.domain.crm.Resource.RepStatus;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -91,10 +92,18 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
                 };
             }
+            
+            @Override
+            protected CEditableComponent<?> createComponent(IObject<?> member) {
+                if (member == meta().customer()) {
+                    return new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id=");
+                } else {
+                    return super.createComponent(member);
+                }
+            }
 
             @Override
             protected void enhanceComponents(CEntityForm<Order> form) {
-                form.bind(new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id="), meta().customer().getPath());
                 
                 ((CComboBox<Order.OrderStatus>) form.get(meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
                 form.get(meta().notes()).setWidth("100%");
