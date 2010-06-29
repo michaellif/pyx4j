@@ -75,9 +75,6 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             @Override
             protected IObject<?>[][] getFormMembers() {
 
-                getForm().bind(new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id="),
-                        meta().customer().getPath());
-
                 return new IObject[][] {
 
                 { meta().customer(), null },
@@ -97,10 +94,12 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
             @Override
             protected void enhanceComponents(CEntityForm<Order> form) {
-                ((CComboBox<Order.OrderStatus>) get(meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
-                get(meta().notes()).setWidth("100%");
+                form.bind(new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id="), meta().customer().getPath());
+                
+                ((CComboBox<Order.OrderStatus>) form.get(meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
+                form.get(meta().notes()).setWidth("100%");
 
-                ((CEntityComboBox<Resource>) get(meta().resource())).setOptionsFilter(new OptionsFilter<Resource>() {
+                ((CEntityComboBox<Resource>) form.get(meta().resource())).setOptionsFilter(new OptionsFilter<Resource>() {
 
                     @Override
                     public boolean acceptOption(Resource entity) {

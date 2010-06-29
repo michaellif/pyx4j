@@ -80,8 +80,8 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
 
             @Override
             protected void enhanceComponents(CEntityForm<Customer> form) {
-                get(meta().note()).setWidth("100%");
-                ((CComboBox<Province>) get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
+                form.get(meta().note()).setWidth("100%");
+                ((CComboBox<Province>) form.get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
             }
 
         });
