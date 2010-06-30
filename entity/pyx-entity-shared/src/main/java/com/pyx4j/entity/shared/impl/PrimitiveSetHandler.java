@@ -29,8 +29,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.pyx4j.commons.ConverterUtils;
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -217,6 +217,16 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
         return EqualsHelper.equals(thisValue, ((IPrimitiveSet<?>) other).getValue());
     }
 
+    @Override
+    public int hashCode() {
+        Set<TYPE> thisValue = this.getValue();
+        if (thisValue == null) {
+            return super.hashCode();
+        } else {
+            return thisValue.hashCode();
+        }
+    }
+
     private class StringConverter implements ToStringConverter<TYPE> {
 
         private final MemberMeta memberMeta;
@@ -225,6 +235,7 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
             this.memberMeta = memberMeta;
         }
 
+        @Override
         public String toString(TYPE value) {
             if (value == null) {
                 return memberMeta.getNullString();

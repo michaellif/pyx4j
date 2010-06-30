@@ -130,9 +130,7 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         if (mm.useMessageFormat()) {
             return MessageFormat.format(format, thisValue);
         } else {
-            if (thisValue == null) {
-                return null;
-            } else if (thisValue instanceof Date) {
+            if (thisValue instanceof Date) {
                 return MessageFormat.format("{0,date," + format + "}", thisValue);
             } else if (thisValue instanceof Number) {
                 return MessageFormat.format("{0,number," + format + "}", thisValue);

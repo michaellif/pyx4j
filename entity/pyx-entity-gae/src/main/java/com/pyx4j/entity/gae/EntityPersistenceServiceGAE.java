@@ -561,6 +561,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return keyCreated;
     }
 
+    @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
         List<Entity> entityList = new Vector<Entity>();
         for (IEntity iEntity : entityIterable) {
@@ -714,7 +715,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private static class KeyComparator implements Comparator<Key> {
+    @SuppressWarnings("serial")
+    private static class KeyComparator implements Comparator<Key>, Serializable {
 
         private final List<Long> keyIdOrdered;
 
@@ -1137,6 +1139,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return removedCount;
     }
 
+    @Override
     public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
@@ -1155,6 +1158,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastore.delete(keys);
     }
 
+    @Override
     public int getDatastoreCallCount() {
         return datastoreCallStats.get().count;
     }

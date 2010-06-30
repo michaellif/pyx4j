@@ -31,9 +31,9 @@ public class Path implements Serializable {
 
     private static final long serialVersionUID = -1723967141846287126L;
 
-    public static char PATH_SEPARATOR = '/';
+    public static final char PATH_SEPARATOR = '/';
 
-    public static String COLLECTION_SEPARATOR = "[]";
+    public static final String COLLECTION_SEPARATOR = "[]";
 
     private String path;
 
