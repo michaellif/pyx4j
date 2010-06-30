@@ -13,11 +13,11 @@
 
         <menu name="Ver #build#" inherit="top"/>
 
-        <menu ref="parent" />
+        <menu ref="parent" inherit="bottom"/>
 
         <menu ref="modules" />
 
-        <menu ref="reports" />
+        <menu ref="reports" inherit="bottom" />
 
     </body>
 

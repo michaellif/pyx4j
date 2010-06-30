@@ -185,7 +185,7 @@
 
         <repository>
             <id>maven-gae-plugin-googlecode-repository</id>
-            <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+            <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -196,7 +196,7 @@
 
         <repository>
             <id>gettext-commons-site</id>
-            <url>http://gettext-commons.googlecode.com/svn/maven-repository/</url>
+            <url>http://gettext-commons.googlecode.com/svn/maven-repository</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -221,14 +221,8 @@
         </pluginRepository>
 
         <pluginRepository>
-            <id>codehaus.org</id>
-            <name>Codehaus Central Repository</name>
-            <url>http://repository.codehaus.org</url>
-        </pluginRepository>
-
-        <pluginRepository>
             <id>maven-gae-plugin-googlecode-repository</id>
-            <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+            <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -457,6 +451,31 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>2.1.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <quiet>true</quiet>
+                    <!-- For Linux 64-bit -->
+                    <!--maxmemory>256m</maxmemory-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -614,6 +633,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.1.2</version>
                 <reportSets>
                    <reportSet>
                       <reports>
@@ -641,15 +661,39 @@
             </plugin>
             -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <inherited>false</inherited>
                 <configuration>
                     <quiet>true</quiet>
                     <!-- For Linux 64-bit -->
                     <!--maxmemory>256m</maxmemory-->
                 </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>non-aggregate</id>
+                        <configuration>
+                        </configuration>
+                        <reports>
+                            <!--report>javadoc</report-->
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <configuration>
+                        </configuration>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
+
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
                     <linkXref>true</linkXref>
                     <minimumTokens>100</minimumTokens>
@@ -659,19 +703,23 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0-beta-2</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.3.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.2</version>
                 <!-- http://maven.apache.org/plugins/maven-jxr-plugin/jxr-mojo.html -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.5</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -683,6 +731,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
                 <!-- TODO list -->
             </plugin>
             <!--
@@ -694,9 +743,10 @@
             -->
 
             <plugin>
-                <inherited>false</inherited>
                 <groupId>net.sf</groupId>
                 <artifactId>stat-scm</artifactId>
+                <version>1.2.0</version>
+                <inherited>false</inherited>
                 <configuration>
                     <excludes>
                         <exclude>**/*.cvs</exclude>
@@ -714,8 +764,10 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>changelog-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <version>2.2</version>
+                <inherited>false</inherited>
                 <configuration>
                     <basedir>${basedir}</basedir>
                 </configuration>
