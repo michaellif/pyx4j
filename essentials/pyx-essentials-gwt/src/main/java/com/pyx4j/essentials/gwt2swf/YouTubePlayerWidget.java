@@ -38,6 +38,8 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
 
     private String videoId;
 
+    private boolean paramAutoPlay;
+
     static {
         registerCallbacks();
     }
@@ -88,7 +90,7 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
         if (chromeless) {
             return "http://www.youtube.com/apiplayer?enablejsapi=1&version=3&playerapiid=" + getSwfId();
         } else {
-            return "http://www.youtube.com/v/" + videoId + "?enablejsapi=1&version=3&cc_load_policy=0&playerapiid=" + getSwfId();
+            return "http://www.youtube.com/v/" + videoId + "?enablejsapi=1&version=3&autoplay=" + (paramAutoPlay?"1":"0") + "&cc_load_policy=0&playerapiid=" + getSwfId();
         }
     }
 
@@ -98,6 +100,10 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
             getControl().loadVideoById(videoId);
             log.debug("loadVideoById {}", videoId);
         }
+    }
+    
+    public void setParamAutoPlay(boolean autoPlay) {
+        paramAutoPlay = autoPlay;
     }
 
     @SuppressWarnings("unused")
