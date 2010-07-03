@@ -37,6 +37,6 @@ public class AppengineHelper {
         } catch (com.google.appengine.api.memcache.MemcacheServiceException e) {
             return true;
         }
-        return true;
+        return false;
     }
 }
