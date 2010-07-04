@@ -73,7 +73,10 @@ public abstract class AbstractSiteDispatcher {
 
     private boolean initialization = true;
 
+    private static AbstractSiteDispatcher instance;
+
     public AbstractSiteDispatcher() {
+        instance = this;
         pathShown = new NavigationUri(History.getToken());
         historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
@@ -140,6 +143,10 @@ public abstract class AbstractSiteDispatcher {
             }
         });
 
+    }
+
+    public static AbstractSiteDispatcher instance() {
+        return instance;
     }
 
     /**
@@ -305,7 +312,36 @@ public abstract class AbstractSiteDispatcher {
         for (SitePanel panel : sitePanels.values()) {
             panel.onAfterLogIn();
         }
+    }
 
+    //TODO find a better name for this function
+    public void pageLeavingOnLogout(final Runnable callbackOkToLogout) {
+        PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChageType.LOGOUT);
+        if (currentSitePanel != null) {
+            currentSitePanel.onPageLeaving(ple);
+        }
+        if (ple.hasMessage()) {
+            DialogOptions options = new OkCancelOption() {
+                @Override
+                public boolean onClickOk() {
+                    callbackOkToLogout.run();
+                    return true;
+                }
+
+                @Override
+                public boolean onClickCancel() {
+                    return true;
+                }
+            };
+
+            Dialog d = new Dialog(i18n.tr("Confirm"), i18n.tr("Are you sure you want to logout?\n\n" + "{0}\n\n"
+                    + "Press OK to continue, or Cancel to stay on the current page.", ple.getMessage()), Dialog.Type.Confirm, options);
+
+            d.show();
+            return;
+        } else {
+            callbackOkToLogout.run();
+        }
     }
 
     public String getWelcomeUri() {

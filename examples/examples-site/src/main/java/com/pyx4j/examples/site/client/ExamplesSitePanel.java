@@ -81,7 +81,12 @@ public abstract class ExamplesSitePanel extends SitePanel {
         logOutLink = new CommandLink("Sign Out", new Command() {
             @Override
             public void execute() {
-                ClientContext.logout(null);
+                AbstractSiteDispatcher.instance().pageLeavingOnLogout(new Runnable() {
+                    @Override
+                    public void run() {
+                        ClientContext.logout(null);
+                    }
+                });
             }
         });
 

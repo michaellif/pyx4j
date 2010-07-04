@@ -41,19 +41,13 @@ public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implemen
 
     private static final Logger log = LoggerFactory.getLogger(BaseSiteDispatcher.class);
 
-    private static BaseSiteDispatcher instance;
-
+    @Override
     public void onModuleLoad() {
-        instance = this;
         ClientEntityFactory.ensureIEntityImplementations();
         ClientLogger.addAppender(new RPCAppender(Level.WARN));
         ClientLogger.setDebugOn(true);
         UnrecoverableErrorHandlerDialog.register();
         log.debug("{}", BrowserType.getCompiledType());
-    }
-
-    public static BaseSiteDispatcher instance() {
-        return instance;
     }
 
     @Override

@@ -267,9 +267,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     //TODO move to EntityEditorWidget
+    @Override
     public void onPageLeaving(PageLeavingEvent event) {
         if (isChanged()) {
-            event.addMessage(i18n.tr("Changes to {0} {1} wasn't saved", meta().getEntityMeta().getCaption(), getEntity().getStringView()));
+            event.addMessage(i18n.tr("Changes to {0} {1} wasn''t saved", meta().getEntityMeta().getCaption(), getEntity().getStringView()));
         }
     }
 

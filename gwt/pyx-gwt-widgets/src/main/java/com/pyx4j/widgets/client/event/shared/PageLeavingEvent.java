@@ -42,7 +42,9 @@ public class PageLeavingEvent extends GwtEvent<PageLeavingHandler> {
 
         PAGE_CHANGING,
 
-        WINDOW_CLOSING;
+        WINDOW_CLOSING,
+
+        LOGOUT;
     }
 
     private final ChageType type;
