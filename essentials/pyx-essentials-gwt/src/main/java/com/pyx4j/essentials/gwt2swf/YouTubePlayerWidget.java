@@ -102,6 +102,10 @@ public class YouTubePlayerWidget extends ExtSWFWidget {
         }
     }
     
+    public String getVideoId() {
+        return videoId;
+    }
+
     public void setParamAutoPlay(boolean autoPlay) {
         paramAutoPlay = autoPlay;
     }
