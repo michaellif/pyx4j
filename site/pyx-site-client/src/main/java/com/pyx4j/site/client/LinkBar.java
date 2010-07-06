@@ -82,7 +82,7 @@ public class LinkBar extends ComplexPanel {
             item = new LinkItem(new LinkItemAnchor(commandLink.html, commandLink.command), separator);
         } else if (link instanceof ExternalLink) {
             ExternalLink externalLink = (ExternalLink) link;
-            item = new LinkItem(new LinkItemAnchor(externalLink.html, externalLink.href), separator);
+            item = new LinkItem(new LinkItemAnchor(externalLink.html, externalLink.href, true), separator);
         } else if (link instanceof LinkBarMessage) {
             LinkBarMessage message = (LinkBarMessage) link;
             item = new LinkItem(new LinkItemAnchor(message.html), separator);
@@ -126,6 +126,11 @@ public class LinkBar extends ComplexPanel {
             init();
         }
 
+        LinkItemAnchor(String html, final String href, boolean external) {
+            super(html, true, href);
+            init();
+        }
+
         LinkItemAnchor(String html, final Command command) {
             super(html, true, "javascript:void(0)");
             setWordWrap(false);
@@ -162,9 +167,9 @@ public class LinkBar extends ComplexPanel {
 
     class LinkItem extends Panel {
 
-        private final LinkItemAnchor anchor;
+        private final Widget widget;
 
-        LinkItem(LinkItemAnchor linkItemAnchor, boolean hasSeparator) {
+        LinkItem(Widget widget, boolean hasSeparator) {
             setElement(Document.get().createLIElement());
             switch (type) {
             case Header:
@@ -191,17 +196,17 @@ public class LinkBar extends ComplexPanel {
                 DOM.appendChild(getElement(), separator);
             }
 
-            anchor = linkItemAnchor;
+            this.widget = widget;
 
-            anchor.getElement().getStyle().setProperty("display", "inline");
+            widget.getElement().getStyle().setProperty("display", "inline");
 
-            DOM.appendChild(getElement(), anchor.getElement());
-            adopt(anchor);
+            DOM.appendChild(getElement(), widget.getElement());
+            adopt(widget);
 
         }
 
-        Anchor getAnchor() {
-            return anchor;
+        Widget getWidget() {
+            return widget;
         }
 
         @Override
@@ -212,20 +217,23 @@ public class LinkBar extends ComplexPanel {
         @Override
         public Iterator<Widget> iterator() {
             return new Iterator<Widget>() {
-                boolean hasElement = anchor != null;
+                boolean hasElement = widget != null;
 
+                @Override
                 public boolean hasNext() {
                     return hasElement;
                 }
 
+                @Override
                 public Widget next() {
-                    if (!hasElement || (anchor == null)) {
+                    if (!hasElement || (widget == null)) {
                         throw new NoSuchElementException();
                     }
                     hasElement = false;
-                    return anchor;
+                    return widget;
                 }
 
+                @Override
                 public void remove() {
                 }
             };
