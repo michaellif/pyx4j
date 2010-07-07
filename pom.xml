@@ -130,6 +130,7 @@
         <module>entity/pyx-entity-server</module>
         <module>entity/pyx-entity-tests</module>
         <module>entity/pyx-entity-gae</module>
+        <module>entity/pyx-entity-rdb</module>
 <!--
         <module>entity/entity-hibernate</module>
 -->
