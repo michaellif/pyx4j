@@ -31,7 +31,7 @@ public class PersistenceServicesFactory {
 
     public final static String GAE_IMPL_CLASS = "com.pyx4j.entity.gae.EntityPersistenceServiceGAE";
 
-    public final static String RDBMS_IMPL_CLASS = "com.pyx4j.entity.hibernate.EntityPersistenceServiceHibernate";
+    public final static String RDBMS_IMPL_CLASS = "com.pyx4j.entity.rdb.EntityPersistenceServiceRDB";
 
     @SuppressWarnings("unchecked")
     public static synchronized IEntityPersistenceService getPersistenceService() {
