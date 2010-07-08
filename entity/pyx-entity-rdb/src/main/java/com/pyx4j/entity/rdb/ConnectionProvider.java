@@ -33,16 +33,21 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.ConfigurationMySQL;
+import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.rdb.dialect.HSQLDialect;
+import com.pyx4j.entity.rdb.dialect.MySQLDialect;
 
 public class ConnectionProvider {
 
     private DataSource dataSource;
 
-    private synchronized void setupDataSource() throws SQLException {
-        if (dataSource != null) {
-            return;
-        }
+    private Dialect dialect;
 
+    public ConnectionProvider() throws SQLException {
+        setupDataSource();
+    }
+
+    private synchronized void setupDataSource() throws SQLException {
         Configuration cfg = new ConfigurationMySQL();
         try {
             Class.forName(cfg.driverClass());
@@ -57,12 +62,21 @@ public class ConnectionProvider {
         new PoolableConnectionFactory(connectionFactory, connectionPool, null, null, false, true);
 
         dataSource = new PoolingDataSource(connectionPool);
+
+        if (cfg.driverClass().contains("mysql")) {
+            dialect = new MySQLDialect();
+        } else if (cfg.driverClass().contains("hsqldb")) {
+            dialect = new HSQLDialect();
+        } else {
+            throw new Error("Unsupported driver Dialect " + cfg.driverClass());
+        }
+    }
+
+    public Dialect getDialect() throws SQLException {
+        return dialect;
     }
 
     public Connection getConnection() throws SQLException {
-        if (dataSource == null) {
-            setupDataSource();
-        }
         return dataSource.getConnection();
     }
 

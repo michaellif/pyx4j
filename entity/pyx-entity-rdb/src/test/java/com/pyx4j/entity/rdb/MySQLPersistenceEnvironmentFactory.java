@@ -14,27 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-07-07
+ * Created on 2010-07-08
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.rdb;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.shared.domain.Task;
 
-public class DDLTest extends DatastoreTestBase {
+public class MySQLPersistenceEnvironmentFactory {
 
-    @Override
-    protected PersistenceEnvironment getPersistenceEnvironment() {
-        return MySQLPersistenceEnvironmentFactory.getPersistenceEnvironment();
-    }
-
-    public void testCreateTable() {
-        Task task = EntityFactory.create(Task.class);
-        //srv.persist(task);
+    public static PersistenceEnvironment getPersistenceEnvironment() {
+        return new RDBDatastorePersistenceEnvironment();
     }
 
 }
