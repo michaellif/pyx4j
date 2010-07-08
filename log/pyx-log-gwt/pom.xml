@@ -37,14 +37,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-gwt-server</artifactId>
-            <version>${project.version}</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
 	</dependencies>
 
     <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
