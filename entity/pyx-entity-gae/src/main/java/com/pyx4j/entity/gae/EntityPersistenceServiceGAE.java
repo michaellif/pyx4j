@@ -38,6 +38,7 @@ import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Cursor;
@@ -76,6 +77,8 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 /**
  * 
@@ -85,6 +88,8 @@ import com.pyx4j.gwt.server.IOUtils;
 public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceGAE.class);
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     private final int ORDINARY_STRING_LENGHT_MAX = 500;
 
@@ -111,6 +116,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     public EntityPersistenceServiceGAE() {
         datastore = DatastoreServiceFactory.getDatastoreService();
+    }
+
+    private String degradeGracefullyMessage() {
+        return i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour");
     }
 
     private Blob createBlob(Serializable o) {
@@ -556,24 +565,33 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     private Key persistImpl(IEntity iEntity, boolean merge) {
         Entity entity = createEntity(iEntity, merge);
         datastoreCallStats.get().count++;
-        Key keyCreated = datastore.put(entity);
-        iEntity.setPrimaryKey(keyCreated.getId());
-        return keyCreated;
+        try {
+            Key keyCreated = datastore.put(entity);
+            iEntity.setPrimaryKey(keyCreated.getId());
+
+            return keyCreated;
+        } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
+            throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
+        }
     }
 
     @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
-        List<Entity> entityList = new Vector<Entity>();
-        for (IEntity iEntity : entityIterable) {
-            if (entityList.size() >= 500) {
-                datastoreCallStats.get().count++;
-                datastore.put(entityList);
-                entityList.clear();
+        try {
+            List<Entity> entityList = new Vector<Entity>();
+            for (IEntity iEntity : entityIterable) {
+                if (entityList.size() >= 500) {
+                    datastoreCallStats.get().count++;
+                    datastore.put(entityList);
+                    entityList.clear();
+                }
+                entityList.add(createEntity(iEntity, false));
             }
-            entityList.add(createEntity(iEntity, false));
+            datastoreCallStats.get().count++;
+            datastore.put(entityList);
+        } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
+            throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
         }
-        datastoreCallStats.get().count++;
-        datastore.put(entityList);
     }
 
     private Object deserializeValue(IEntity iEntity, String keyName, Object value, Map<Key, IEntity> retrievedMap) {
@@ -1107,7 +1125,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             throw new Error("Can't retrieve Transient Entity");
         }
         datastoreCallStats.get().count++;
-        datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
+        try {
+            datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
+        } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
+            throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
+        }
     }
 
     @Override
@@ -1122,21 +1144,25 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastoreCallStats.get().count++;
         PreparedQuery pq = datastore.prepare(query);
 
-        int removedCount = 0;
-        List<Key> keys = new Vector<Key>();
-        for (Entity entity : pq.asIterable()) {
-            if (keys.size() >= 500) {
-                datastoreCallStats.get().count++;
-                datastore.delete(keys);
-                removedCount += keys.size();
-                keys.clear();
+        try {
+            int removedCount = 0;
+            List<Key> keys = new Vector<Key>();
+            for (Entity entity : pq.asIterable()) {
+                if (keys.size() >= 500) {
+                    datastoreCallStats.get().count++;
+                    datastore.delete(keys);
+                    removedCount += keys.size();
+                    keys.clear();
+                }
+                keys.add(entity.getKey());
             }
-            keys.add(entity.getKey());
+            datastoreCallStats.get().count++;
+            datastore.delete(keys);
+            removedCount += keys.size();
+            return removedCount;
+        } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
+            throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
         }
-        datastoreCallStats.get().count++;
-        datastore.delete(keys);
-        removedCount += keys.size();
-        return removedCount;
     }
 
     @Override
@@ -1146,16 +1172,20 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             throw new Error("Can't delete Transient Entity");
         }
         List<Key> keys = new Vector<Key>();
-        for (Long primaryKey : primaryKeys) {
-            if (keys.size() >= 500) {
-                datastoreCallStats.get().count++;
-                datastore.delete(keys);
-                keys.clear();
+        try {
+            for (Long primaryKey : primaryKeys) {
+                if (keys.size() >= 500) {
+                    datastoreCallStats.get().count++;
+                    datastore.delete(keys);
+                    keys.clear();
+                }
+                keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
             }
-            keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
+            datastoreCallStats.get().count++;
+            datastore.delete(keys);
+        } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
+            throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
         }
-        datastoreCallStats.get().count++;
-        datastore.delete(keys);
     }
 
     @Override
