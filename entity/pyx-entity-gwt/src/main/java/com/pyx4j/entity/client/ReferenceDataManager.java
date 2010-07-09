@@ -73,6 +73,7 @@ public class ReferenceDataManager {
 
             AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
 
+                @Override
                 public void onSuccess(Vector<? extends IEntity> result) {
                     try {
                         cache.put(criteria, result);
@@ -82,6 +83,7 @@ public class ReferenceDataManager {
                                 cb.onSuccess(result);
                             } catch (Throwable e) {
                                 log.error("Internal error [UIR]", e);
+                                UncaughtHandler.onUnrecoverableError(e, "UIRonS");
                             }
                         }
                     } catch (Throwable e) {
@@ -89,6 +91,7 @@ public class ReferenceDataManager {
                     }
                 }
 
+                @Override
                 public void onFailure(Throwable caught) {
                     List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(criteria);
                     for (AsyncCallback<List<?>> cb : callbacks) {
@@ -96,6 +99,7 @@ public class ReferenceDataManager {
                             cb.onFailure(caught);
                         } catch (Throwable e) {
                             log.error("Internal error [UIRF]", e);
+                            UncaughtHandler.onUnrecoverableError(e, "UIRonF");
                         }
                     }
                 }

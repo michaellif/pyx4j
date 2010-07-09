@@ -24,6 +24,8 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
@@ -57,30 +59,39 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
     }
 
     @Override
-    public void onUnrecoverableError(Throwable caught, String errorCode) {
+    public void onUnrecoverableError(final Throwable caught, final String errorCode) {
         if (unrecoverableErrorDialogShown) {
             return;
         }
-        if (caught instanceof IncompatibleRemoteServiceException) {
-            showReloadApplicationDialog();
-        } else if ((caught instanceof StatusCodeException) && (((StatusCodeException) caught).getStatusCode()) == Response.SC_NOT_FOUND) {
-            showReloadApplicationDialog();
-        } else if ((caught instanceof RuntimeException) && ("HTTP download failed with status 404".equals(caught.getMessage()))) {
-            // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
-            showReloadApplicationDialog();
-        } else {
-            showDefaultErrorDialog(caught, errorCode);
-        }
+        // Handle the case when 'stack size exceeded', show dialog later.
+        DeferredCommand.addCommand(new Command() {
+            @Override
+            public void execute() {
+                if (caught instanceof IncompatibleRemoteServiceException) {
+                    showReloadApplicationDialog();
+                } else if ((caught instanceof StatusCodeException) && (((StatusCodeException) caught).getStatusCode()) == Response.SC_NOT_FOUND) {
+                    showReloadApplicationDialog();
+                } else if ((caught instanceof RuntimeException) && ("HTTP download failed with status 404".equals(caught.getMessage()))) {
+                    // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
+                    showReloadApplicationDialog();
+                } else {
+                    showDefaultErrorDialog(caught, errorCode);
+                }
+            }
+        });
+
     }
 
     protected void showReloadApplicationDialog() {
         final YesNoOption optYesNo = new YesNoOption() {
 
+            @Override
             public boolean onClickYes() {
                 Window.Location.reload();
                 return false;
             }
 
+            @Override
             public boolean onClickNo() {
                 return true;
             }

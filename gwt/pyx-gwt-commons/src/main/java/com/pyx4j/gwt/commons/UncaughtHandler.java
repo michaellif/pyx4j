@@ -82,7 +82,9 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
                 } else {
                     Window.alert("An Unexpected Error Has Occurred");
                 }
-            } catch (Throwable ignore) {
+            } catch (Throwable e) {
+                log.error("Internal error [UH]", e);
+                Window.alert("An Unexpected Error Has Occurred");
             }
         }
     }
