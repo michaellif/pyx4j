@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,10 +56,39 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return EntityFactory.create(getValueClass(), this, getFieldName());
     }
 
+    @Override
+    public Object[] toArray() {
+        Object[] array = new Object[this.size()];
+        int i = 0;
+        for (TYPE el : this) {
+            array[i] = el;
+            i++;
+        }
+        return array;
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        int size = size();
+        if (a.length < size) {
+            a = new ArrayList<T>(size).toArray(a);
+        }
+        int i = 0;
+        for (TYPE el : this) {
+            a[i] = (T) el;
+            i++;
+        }
+        if (a.length > size) {
+            a[size] = null;
+        }
+        return a;
+    }
+
     //TODO move common function from  ISet or IList to this class 
 
     private static class StringConverter implements ToStringConverter<IEntity> {
 
+        @Override
         public String toString(IEntity value) {
             return value.getStringView();
         }

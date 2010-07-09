@@ -114,8 +114,14 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
     @Override
     public boolean addAll(Collection<? extends TYPE> c) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        boolean rc = false;
+        Set<Map<String, Object>> value = ensureValue();
+        for (TYPE el : c) {
+            if (value.add(((SharedEntityHandler) el).ensureValue())) {
+                rc = true;
+            }
+        }
+        return rc;
     }
 
     @Override
@@ -236,18 +242,6 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         } else {
             return 0;
         }
-    }
-
-    @Override
-    public Object[] toArray() {
-        // TODO implement this
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public <TT> TT[] toArray(TT[] a) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
     }
 
     @Override

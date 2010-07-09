@@ -91,8 +91,14 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public boolean addAll(Collection<? extends TYPE> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        boolean rc = false;
+        List<Map<String, Object>> value = ensureValue();
+        for (TYPE el : c) {
+            if (value.add(((SharedEntityHandler) el).ensureValue())) {
+                rc = true;
+            }
+        }
+        return rc;
     }
 
     @Override
@@ -281,24 +287,6 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public List<TYPE> subList(int fromIndex, int toIndex) {
-        // TODO implement this
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Object[] toArray() {
-        List<?> value = getValue();
-        Object[] array = new Object[value.size()];
-        int i = 0;
-        for (TYPE el : this) {
-            array[i] = el;
-            i++;
-        }
-        return array;
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
         // TODO implement this
         throw new UnsupportedOperationException();
     }
