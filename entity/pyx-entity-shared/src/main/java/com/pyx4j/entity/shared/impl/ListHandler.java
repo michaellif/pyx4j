@@ -287,8 +287,14 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public Object[] toArray() {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        List<?> value = getValue();
+        Object[] array = new Object[value.size()];
+        int i = 0;
+        for (TYPE el : this) {
+            array[i] = el;
+            i++;
+        }
+        return array;
     }
 
     @Override
