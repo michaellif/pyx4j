@@ -14,26 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-07-07
+ * Created on Jul 12, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.cfg;
+package com.pyx4j.entity.rdb.mysql;
 
-public abstract class ConfigurationMySQL implements Configuration {
+public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
     @Override
-    public String driverClass() {
-        return "com.mysql.jdbc.Driver";
-    }
-
-    public int dbPort() {
-        return 3306;
+    public String dbHost() {
+        return "localhost";
     }
 
     @Override
-    public String connectionUrl() {
-        return "jdbc:mysql://" + dbHost() + ":" + dbPort() + "/" + dbName();
+    public String dbName() {
+        return "tst_entity";
+    }
+
+    @Override
+    public String userName() {
+        return "tst_entity";
+    }
+
+    @Override
+    public String password() {
+        return "tst_entity";
     }
 
 }

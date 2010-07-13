@@ -105,6 +105,10 @@ public class ServerSideConfiguration {
         return System.getProperty("com.pyx4j.appUrl");
     }
 
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        return null;
+    }
+
     public EnvironmentType getEnvironmentType() {
         SecurityManager sm = System.getSecurityManager();
         if (sm == null) {

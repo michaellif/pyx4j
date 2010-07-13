@@ -14,26 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-07-07
+ * Created on Jul 12, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.cfg;
+package com.pyx4j.entity.rdb.hsql;
 
-public abstract class ConfigurationMySQL implements Configuration {
+import com.pyx4j.entity.rdb.DDLTestCase;
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-    @Override
-    public String driverClass() {
-        return "com.mysql.jdbc.Driver";
-    }
-
-    public int dbPort() {
-        return 3306;
-    }
+public class DDLTest extends DDLTestCase {
 
     @Override
-    public String connectionUrl() {
-        return "jdbc:mysql://" + dbHost() + ":" + dbPort() + "/" + dbName();
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
 }

@@ -55,4 +55,28 @@ public class PersistenceServicesFactory {
         }
         return instance;
     }
+
+    public static void dispose() {
+        if (instance != null) {
+            try {
+                if (instance instanceof IEntityPersistenceServiceExt) {
+                    ((IEntityPersistenceServiceExt) instance).dispose();
+                }
+            } finally {
+                instance = null;
+            }
+        }
+    }
+
+    public static void deregister() {
+        if (instance != null) {
+            try {
+                if (instance instanceof IEntityPersistenceServiceExt) {
+                    ((IEntityPersistenceServiceExt) instance).deregister();
+                }
+            } finally {
+                instance = null;
+            }
+        }
+    }
 }

@@ -38,4 +38,8 @@ public class RuntimeExceptionSerializable extends RuntimeException {
         super(message);
     }
 
+    public RuntimeExceptionSerializable(Throwable error) {
+        super(error.getMessage());
+    }
+
 }

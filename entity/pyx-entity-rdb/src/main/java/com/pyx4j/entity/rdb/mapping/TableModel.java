@@ -21,8 +21,13 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Locale;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +35,15 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class TableModel {
 
     public final int ORDINARY_STRING_LENGHT_MAX = 500;
+
+    public final int ENUM_STRING_LENGHT_MAX = 50;
 
     private static final Logger log = LoggerFactory.getLogger(TableModel.class);
 
@@ -46,13 +54,66 @@ public class TableModel {
     }
 
     public void ensureExists(ConnectionProvider connectionProvider) throws SQLException {
-        execute(connectionProvider, sqlCreate(connectionProvider.getDialect()));
+        if (!exists(connectionProvider)) {
+            execute(connectionProvider, sqlCreate(connectionProvider.getDialect()));
+        }
     }
 
-    String sqlCreate(Dialect dialect) {
+    public static String sqlName(String name) {
+        return name.toUpperCase(Locale.ENGLISH);
+    }
+
+    public boolean exists(ConnectionProvider connectionProvider) throws SQLException {
+        Connection connection = connectionProvider.getConnection();
+        ResultSet rs = null;
+        try {
+            DatabaseMetaData dbMeta = connection.getMetaData();
+            rs = dbMeta.getTables(null, null, sqlName(entityMeta.getPersistenceName()), null);
+            if (rs.next()) {
+                validateAndAlter(connectionProvider, new TableMetadata(rs, dbMeta));
+                return true;
+            }
+            return false;
+        } finally {
+            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    private void validateAndAlter(ConnectionProvider connectionProvider, TableMetadata tableMetadata) throws SQLException {
+        List<String> alterSqls = new Vector<String>();
+        for (String memberName : entityMeta.getMemberNames()) {
+            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
+            if (memberMeta.isTransient()) {
+                continue;
+            }
+            ColumnMetadata columnMeta = tableMetadata.getColumn(memberName);
+            if (columnMeta == null) {
+                StringBuilder sql = new StringBuilder("alter table ");
+                sql.append(sqlName(entityMeta.getPersistenceName()));
+                sql.append(" add column ");
+                sql.append(sqlName(memberName)).append(' ');
+                sql.append(sqlType(connectionProvider.getDialect(), memberMeta));
+                alterSqls.add(sql.toString());
+            } else {
+                String mappingSqlType = connectionProvider.getDialect().getSqlType(memberMeta.getValueClass());
+                if (!mappingSqlType.equalsIgnoreCase(columnMeta.getTypeName())) {
+                    throw new RuntimeException(entityMeta.getPersistenceName() + "." + memberName + " incompatible SQL type " + columnMeta.getTypeName());
+                }
+            }
+
+        }
+
+        if (alterSqls.size() > 0) {
+            execute(connectionProvider, alterSqls);
+        }
+    }
+
+    List<String> sqlCreate(Dialect dialect) {
+        List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("create table ");
-        sql.append(entityMeta.getPersistenceName());
+        sql.append(sqlName(entityMeta.getPersistenceName()));
         sql.append(" (");
         boolean first = true;
         for (String memberName : entityMeta.getMemberNames()) {
@@ -66,42 +127,53 @@ public class TableModel {
                 sql.append(',');
             }
 
-            sql.append(' ').append(memberName).append(' ');
-            appendSqlType(sql, dialect, memberMeta);
+            sql.append(' ').append(sqlName(memberName)).append(' ');
+            sql.append(sqlType(dialect, memberMeta));
         }
         sql.append(')');
+        sqls.add(sql.toString());
+
+        return sqls;
+    }
+
+    String sqlType(Dialect dialect, MemberMeta memberMeta) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(dialect.getSqlType(memberMeta.getValueClass()));
+        if (Enum.class.isAssignableFrom(memberMeta.getValueClass())) {
+            sql.append("(" + ENUM_STRING_LENGHT_MAX + ")");
+        } else if (String.class == memberMeta.getValueClass()) {
+            sql.append('(').append((memberMeta.getStringLength() == 0) ? ORDINARY_STRING_LENGHT_MAX : memberMeta.getStringLength()).append(')');
+        }
         return sql.toString();
     }
 
-    void appendSqlType(StringBuilder sql, Dialect dialect, MemberMeta memberMeta) {
-        if (Enum.class.isAssignableFrom(memberMeta.getValueClass())) {
-            sql.append(dialect.getSqlType(String.class)).append("(50)");
-        } else {
-            sql.append(dialect.getSqlType(memberMeta.getValueClass()));
-            if (String.class == memberMeta.getValueClass()) {
-                sql.append('(').append((memberMeta.getStringLength() == 0) ? ORDINARY_STRING_LENGHT_MAX : memberMeta.getStringLength()).append(')');
-            }
-        }
-    }
-
     public void dropTable(ConnectionProvider connectionProvider) throws SQLException {
-        execute(connectionProvider, "drop table " + entityMeta.getPersistenceName());
+        List<String> sqls = new Vector<String>();
+        sqls.add("drop table " + sqlName(entityMeta.getPersistenceName()));
+        execute(connectionProvider, sqls);
     }
 
-    public void execute(ConnectionProvider connectionProvider, String sql) throws SQLException {
+    public void execute(ConnectionProvider connectionProvider, List<String> sqls) throws SQLException {
         Connection connection = connectionProvider.getConnection();
         Statement stmt = null;
-        boolean success = false;
         try {
             stmt = connection.createStatement();
-            stmt.executeUpdate(sql);
-            success = true;
-        } finally {
-            if (!success) {
-                log.error("Error executing SQL {}", sql);
+            for (String sql : sqls) {
+                boolean success = false;
+                log.debug("exec: {}", sql);
+                try {
+                    stmt.executeUpdate(sql);
+                    success = true;
+                } finally {
+                    if (!success) {
+                        log.error("Error executing SQL {}", sql);
+                    }
+                }
             }
+        } finally {
             SQLUtils.closeQuietly(stmt);
             SQLUtils.closeQuietly(connection);
         }
     }
+
 }

@@ -20,25 +20,15 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
-public abstract class Configuration {
+import com.pyx4j.config.server.IPersistenceConfiguration;
 
-    public enum RDBMS {
+public interface Configuration extends IPersistenceConfiguration {
 
-        MySQL,
+    public String driverClass();
 
-        HSQL
+    public String dbHost();
 
-    }
-
-    public abstract String driverClass();
-
-    public String dbHost() {
-        return "localhost";
-    }
-
-    public String dbName() {
-        return "tst_entity";
-    }
+    public abstract String dbName();
 
     public abstract String connectionUrl();
 

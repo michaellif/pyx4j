@@ -26,14 +26,21 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.mapping.Mappings;
+import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.IEntityPersistenceService;
+import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
-public class EntityPersistenceServiceRDB implements IEntityPersistenceService {
+public class EntityPersistenceServiceRDB implements IEntityPersistenceService, IEntityPersistenceServiceExt {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceRDB.class);
 
@@ -43,12 +50,36 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService {
 
     public EntityPersistenceServiceRDB() {
         try {
-            connectionProvider = new ConnectionProvider();
+            IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
+            if (!(cfg instanceof Configuration)) {
+                throw new RuntimeException("Invalid RDB configuration class " + cfg);
+            }
+            connectionProvider = new ConnectionProvider((Configuration) cfg);
         } catch (SQLException e) {
             log.error("RDB initialization error", e);
             throw new RuntimeException(e.getMessage());
         }
         mappings = new Mappings(connectionProvider);
+    }
+
+    @Override
+    public void dispose() {
+        connectionProvider.dispose();
+    }
+
+    @Override
+    public void deregister() {
+        connectionProvider.deregister();
+    }
+
+    public void dropTable(Class<? extends IEntity> entityClass) {
+        TableModel tm = new TableModel(EntityFactory.getEntityMeta(entityClass));
+        try {
+            tm.dropTable(connectionProvider);
+        } catch (SQLException e) {
+            log.error("drop table error", e);
+            throw new RuntimeExceptionSerializable(e);
+        }
     }
 
     @Override

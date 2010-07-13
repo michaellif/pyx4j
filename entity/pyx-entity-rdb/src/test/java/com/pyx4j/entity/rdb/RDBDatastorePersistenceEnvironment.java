@@ -23,11 +23,30 @@ package com.pyx4j.entity.rdb;
 import org.junit.After;
 import org.junit.Before;
 
+import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
+
+    private static Configuration configuration;
+
+    static {
+        ServerSideConfiguration.setInstance(new ServerSideConfiguration() {
+            @Override
+            public IPersistenceConfiguration getPersistenceConfiguration() {
+                return configuration;
+            }
+        });
+    }
+
+    public RDBDatastorePersistenceEnvironment(Configuration cfg) {
+        configuration = cfg;
+    }
 
     @Override
     @Before
@@ -38,6 +57,7 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
     @Override
     @After
     public void teardownDatastore() {
+        PersistenceServicesFactory.dispose();
     }
 
 }

@@ -14,18 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-07-08
+ * Created on Jul 13, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb;
+package com.pyx4j.entity.server;
 
-import com.pyx4j.entity.test.server.PersistenceEnvironment;
+public interface IEntityPersistenceServiceExt {
 
-public class MySQLPersistenceEnvironmentFactory {
+    public void dispose();
 
-    public static PersistenceEnvironment getPersistenceEnvironment() {
-        return new RDBDatastorePersistenceEnvironment();
-    }
+    public void deregister();
 
 }

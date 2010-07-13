@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
-public class ConfigurationHSQL extends Configuration {
+public abstract class ConfigurationHSQL implements Configuration {
 
     @Override
     public String driverClass() {

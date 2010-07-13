@@ -53,7 +53,7 @@ public class Mappings {
             TableModel model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
                 model = new TableModel(entityMeta);
-                String tableName = entityMeta.getPersistenceName().toLowerCase(Locale.ENGLISH);
+                String tableName = entityMeta.getPersistenceName().toUpperCase(Locale.ENGLISH);
                 if (usedTableNames.contains(tableName)) {
                     log.warn("redefining/extending table {} for class {}", tableName, entityMeta.getEntityClass());
                 }

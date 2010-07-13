@@ -39,6 +39,9 @@ public abstract class Dialect {
     }
 
     public String getSqlType(Class<?> klass) {
+        if (Enum.class.isAssignableFrom(klass)) {
+            klass = String.class;
+        }
         String name = typeNames.get(klass);
         if (name == null) {
             throw new RuntimeException("Undefined SQL type for class " + klass.getName());
