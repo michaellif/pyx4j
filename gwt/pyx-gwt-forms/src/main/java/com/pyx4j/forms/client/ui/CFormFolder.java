@@ -37,6 +37,8 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     private ImageResource image;
 
+    private String itemCaption;
+
     public CFormFolder(FormFactory factory) {
         super();
         this.factory = factory;
@@ -51,6 +53,14 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     public LinkedHashMap<E, CForm> getFormsMap() {
         return formsMap;
+    }
+
+    public void setItemCaption(String itemCaption) {
+        this.itemCaption = itemCaption;
+    }
+
+    public String getItemCaption() {
+        return itemCaption;
     }
 
     public void setTitleImage(ImageResource image) {

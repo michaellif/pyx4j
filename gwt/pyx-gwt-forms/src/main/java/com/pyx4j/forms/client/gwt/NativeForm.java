@@ -30,6 +30,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -592,6 +593,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             setWidth("100%");
             label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
+            label.getElement().getStyle().setFontSize(0.8, Unit.EM);
+            label.getElement().getStyle().setColor("#888888");
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
         }
 

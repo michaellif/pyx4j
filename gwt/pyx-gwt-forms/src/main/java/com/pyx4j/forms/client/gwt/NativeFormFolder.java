@@ -26,18 +26,16 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeForm.ToolbarMode;
@@ -53,7 +51,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
     private final CFormFolder<?> folder;
 
-    private final Image addCommand;
+    private final Anchor addCommand;
 
     private final Label label;
 
@@ -70,11 +68,13 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         label = new Label(folder.getTitle() == null ? "" : folder.getTitle());
         label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         label.getElement().getStyle().setPaddingLeft(10, Unit.PX);
-        label.getElement().getStyle().setPaddingRight(25, Unit.PX);
 
-        addCommand = new Image();
-        addCommand.setResource(ImageFactory.getImages().addItem());
-        addCommand.getElement().getStyle().setCursor(Cursor.POINTER);
+        addCommand = new Anchor(i18n.tr("Add New") + " " + (folder.getTitle() == null ? i18n.tr("Item") : folder.getItemCaption()));
+        addCommand.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        addCommand.getElement().getStyle().setColor("blue");
+        addCommand.getElement().getStyle().setFontSize(0.8, Unit.EM);
+        addCommand.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
+
         addCommand.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -98,19 +98,14 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
         add(container, CENTER);
 
-        HorizontalPanel labelHolder = new HorizontalPanel();
+        add(label, NORTH);
 
-        labelHolder.add(label);
-
-        labelHolder.add(addCommand);
-
-        add(labelHolder, NORTH);
+        add(addCommand, SOUTH);
 
         label.setWordWrap(false);
 
         addCommand.getElement().getStyle().setProperty("left", (NativeForm.LEFT_LABEL_WIDTH + 25) + "px");
         addCommand.getElement().getStyle().setProperty("top", "5px");
-        addCommand.setTitle(i18n.tr("Add Item"));
 
         if (BrowserType.isIE7()) {
             getElement().getStyle().setMarginLeft(5, Unit.PX);
@@ -133,6 +128,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         if (value != null) {
             LinkedHashMap map = folder.getFormsMap();
             container.getElement().getStyle().setPadding(10, Unit.PX);
+            container.getElement().getStyle().setPaddingBottom(4, Unit.PX);
             for (int i = 0; i < value.size(); i++) {
                 E item = value.get(i);
                 NativeForm nativeForm = (NativeForm) ((CForm) map.get(item)).initNativeComponent();

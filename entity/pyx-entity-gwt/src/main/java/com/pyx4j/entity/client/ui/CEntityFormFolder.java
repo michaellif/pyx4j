@@ -54,6 +54,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
     public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory, boolean expended, ImageResource image) {
         super(factory);
         this.setTitleImage(image);
+        this.setItemCaption(EntityFactory.getEntityMeta(entityClass).getCaption());
         this.setTitle(title);
         this.entityClass = entityClass;
         this.expended = expended;
