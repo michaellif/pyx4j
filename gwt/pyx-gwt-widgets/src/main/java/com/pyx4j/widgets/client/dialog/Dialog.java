@@ -83,7 +83,7 @@ public class Dialog extends DialogPanel {
 
     private Button defaultButton;
 
-    boolean allowEnterKeyForDefaultButton;
+    private boolean allowEnterKeyForDefaultButton;
 
     protected final HorizontalPanel buttonsPanel;
 
@@ -543,6 +543,14 @@ public class Dialog extends DialogPanel {
                 attachFocusHandler(((HasWidgets) w).iterator());
             }
         }
+    }
+
+    public boolean isAllowEnterKeyForDefaultButton() {
+        return allowEnterKeyForDefaultButton;
+    }
+
+    public void setAllowEnterKeyForDefaultButton(boolean allowEnterKeyForDefaultButton) {
+        this.allowEnterKeyForDefaultButton = allowEnterKeyForDefaultButton;
     }
 
     public Button getYesButton() {
