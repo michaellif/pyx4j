@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 
 import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 
@@ -29,7 +29,7 @@ public class CSuggestBox extends CEditableComponent<Object> {
 
     private NativeSuggestBox nativeSuggestBox;
 
-    private final ArrayList<Object> options = new ArrayList<Object>();
+    private ArrayList<Object> options = new ArrayList<Object>();
 
     public CSuggestBox() {
         this(null);
@@ -49,19 +49,20 @@ public class CSuggestBox extends CEditableComponent<Object> {
         if (nativeSuggestBox == null) {
             nativeSuggestBox = new NativeSuggestBox(this);
             applyAccessibilityRules();
-            setOptions(options.toArray());
+            setOptions(options);
             setNativeComponentValue(getValue());
         }
         return nativeSuggestBox;
     }
 
-    public void setOptions(Object[] options) {
+    public void setOptions(Collection options) {
+        this.options = new ArrayList<Object>();
         this.options.clear();
         if (options == null) {
             return;
         }
         Object currentSelection = getValue();
-        this.options.addAll(Arrays.asList(options));
+        this.options.addAll(options);
         if (nativeSuggestBox != null) {
             nativeSuggestBox.removeAllItems();
             for (Object option : options) {
@@ -71,11 +72,11 @@ public class CSuggestBox extends CEditableComponent<Object> {
         }
     }
 
-    public Object[] getOptions() {
-        return options.toArray();
+    public Collection getOptions() {
+        return options;
     }
 
-    protected String getOptionName(Object o) {
+    public String getOptionName(Object o) {
         if (o == null) {
             return "-- NULL --";
         } else {

@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.gwt;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 
+import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -70,9 +72,19 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
         return suggestTextBox.isEnabled();
     }
 
+    private class StringConverter implements ToStringConverter<Object> {
+
+        @Override
+        public String toString(Object value) {
+            return "\n" + csuggestBox.getOptionName(value);
+        }
+    }
+
     @Override
     protected void onTrigger(boolean show) {
-        MessageDialog.info("Under Construction", "Under Construction");
+        MessageDialog.info("Under Construction",
+                "Under Construction\n TODO select from:\n" + ConverterUtils.convertCollection(csuggestBox.getOptions(), new StringConverter()));
+
     }
 
     public void addItem(String optionName) {
@@ -83,11 +95,13 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
         oracle.clear();
     }
 
+    @Override
     public void setNativeValue(Object value) {
         // TODO Auto-generated method stub
 
     }
 
+    @Override
     public CSuggestBox getCComponent() {
         return csuggestBox;
     }
