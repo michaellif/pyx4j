@@ -71,7 +71,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
         addCommand = new Anchor(i18n.tr("Add New") + " " + (folder.getTitle() == null ? i18n.tr("Item") : folder.getItemCaption()));
         addCommand.getElement().getStyle().setPaddingLeft(10, Unit.PX);
-        addCommand.getElement().getStyle().setColor("blue");
+        addCommand.getElement().getStyle().setColor("#6A97C4");
         addCommand.getElement().getStyle().setFontSize(0.8, Unit.EM);
         addCommand.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
 
