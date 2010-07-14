@@ -145,6 +145,7 @@ public class SessionMonitor implements RPCStatusChangeHandler {
             timer.cancel();
         }
         timer = null;
+        log.debug("session monitoring stoped ");
     }
 
     protected void onSessionInactive(boolean timeout) {
