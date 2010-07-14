@@ -62,8 +62,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.ResizibleScrollPanel;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
+import com.pyx4j.widgets.client.ResizibleScrollPanel;
 import com.pyx4j.widgets.client.style.CSSClass;
 
 /**
@@ -194,7 +194,7 @@ public class Dialog extends DialogPanel {
         buttonsPanel.setWidth("100%");
         DOM.setStyleAttribute(buttonsPanel.getElement(), "padding", "3px");
 
-        ClickHandler buttonListener = new ButtonListener();
+        ClickHandler buttonsHandler = new ButtonClickHandler();
 
         boolean hasDefaultButtons = (options instanceof YesOption) || (options instanceof NoOption) || (options instanceof OkOption)
                 || (options instanceof CancelOption) || (options instanceof CloseOption);
@@ -207,19 +207,19 @@ public class Dialog extends DialogPanel {
         }
 
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonListener, !hasDefaultButtons);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonsHandler, !hasDefaultButtons);
             buttonsPanel.add(custom1Button);
         }
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonListener, !hasDefaultButtons);
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonsHandler, !hasDefaultButtons);
             buttonsPanel.add(custom2Button);
         }
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonListener, !hasDefaultButtons);
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonsHandler, !hasDefaultButtons);
             buttonsPanel.add(custom3Button);
         }
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonListener, !hasDefaultButtons);
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonsHandler, !hasDefaultButtons);
             buttonsPanel.add(custom4Button);
         }
 
@@ -238,23 +238,23 @@ public class Dialog extends DialogPanel {
         }
 
         if (options instanceof YesOption) {
-            yesButton = createButton(i18n.tr("Yes"), buttonListener, true);
+            yesButton = createButton(i18n.tr("Yes"), buttonsHandler, true);
             buttonsPanel.add(yesButton);
         }
         if (options instanceof NoOption) {
-            noButton = createButton(i18n.tr("No"), buttonListener, true);
+            noButton = createButton(i18n.tr("No"), buttonsHandler, true);
             buttonsPanel.add(noButton);
         }
         if (options instanceof OkOption) {
-            okButton = createButton(optionTextOk(), buttonListener, true);
+            okButton = createButton(optionTextOk(), buttonsHandler, true);
             buttonsPanel.add(okButton);
         }
         if (options instanceof CancelOption) {
-            cancelButton = createButton(optionTextCancel(), buttonListener, true);
+            cancelButton = createButton(optionTextCancel(), buttonsHandler, true);
             buttonsPanel.add(cancelButton);
         }
         if (options instanceof CloseOption) {
-            closeButton = createButton(optionTextClose(), buttonListener, true);
+            closeButton = createButton(optionTextClose(), buttonsHandler, true);
             buttonsPanel.add(closeButton);
         }
 
@@ -312,7 +312,9 @@ public class Dialog extends DialogPanel {
         return button;
     }
 
-    private class ButtonListener implements ClickHandler {
+    private class ButtonClickHandler implements ClickHandler {
+
+        @Override
         public void onClick(ClickEvent event) {
             Object sender = event.getSource();
             if (triggerOption(sender)) {
@@ -428,6 +430,7 @@ public class Dialog extends DialogPanel {
         setVisible(true);
         // The insides of Dialog may be CForm that is only initialized on show.
         DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+            @Override
             public void execute() {
                 setupFocusManager();
                 if (firstFocusWidget != null) {
@@ -452,6 +455,7 @@ public class Dialog extends DialogPanel {
             final Dialog d = openDialogs.get(openDialogs.size() - 1);
             if (d.currentFocusWidget != null) {
                 DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+                    @Override
                     public void execute() {
                         if (d.currentFocusWidget != null) {
                             d.currentFocusWidget.setFocus(true);
