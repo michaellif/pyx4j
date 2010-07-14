@@ -83,6 +83,8 @@ public class Dialog extends DialogPanel {
 
     private Button defaultButton;
 
+    private boolean enabledEnterKeyForDefaultButton;
+
     private boolean allowEnterKeyForDefaultButton;
 
     protected final HorizontalPanel buttonsPanel;
@@ -166,7 +168,7 @@ public class Dialog extends DialogPanel {
 
             @Override
             public void onKeyDown(KeyDownEvent event) {
-                if ((allowEnterKeyForDefaultButton) && event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                if ((allowEnterKeyForDefaultButton) && enabledEnterKeyForDefaultButton && event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     // This does help for in Safari on Windows, 
                     // or else other dialog shown after this would catch the keyCode be automatically closed.
                     event.preventDefault();
@@ -545,12 +547,12 @@ public class Dialog extends DialogPanel {
         }
     }
 
-    public boolean isAllowEnterKeyForDefaultButton() {
-        return allowEnterKeyForDefaultButton;
+    public boolean isEnterKeyForDefaultButton() {
+        return enabledEnterKeyForDefaultButton;
     }
 
-    public void setAllowEnterKeyForDefaultButton(boolean allowEnterKeyForDefaultButton) {
-        this.allowEnterKeyForDefaultButton = allowEnterKeyForDefaultButton;
+    public void setEnterKeyForDefaultButton(boolean allowEnterKeyForDefaultButton) {
+        this.enabledEnterKeyForDefaultButton = allowEnterKeyForDefaultButton;
     }
 
     public Button getYesButton() {
