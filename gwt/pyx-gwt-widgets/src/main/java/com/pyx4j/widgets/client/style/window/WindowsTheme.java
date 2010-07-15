@@ -383,6 +383,8 @@ public class WindowsTheme extends Theme {
     protected void initTextBoxStyle() {
         Style style = new Style("." + CSSClass.pyx4j_TextBox.name());
         style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
         addStyle(style);
     }
 

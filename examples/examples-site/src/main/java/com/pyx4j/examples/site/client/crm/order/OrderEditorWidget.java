@@ -92,7 +92,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
                 };
             }
-            
+
             @Override
             protected CEditableComponent<?> createComponent(IObject<?> member) {
                 if (member == meta().customer()) {
@@ -104,7 +104,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
             @Override
             protected void enhanceComponents(CEntityForm<Order> form) {
-                
+
                 ((CComboBox<Order.OrderStatus>) form.get(meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
                 form.get(meta().notes()).setWidth("100%");
 
@@ -126,7 +126,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
         });
 
-        PhotoAlbum photoAlbum = new PhotoAlbum("") {
+        PhotoAlbum photoAlbum = new PhotoAlbum("example_SlideshowButton") {
 
             @Override
             public void addPhotoCommand() {

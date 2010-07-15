@@ -29,7 +29,6 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -44,6 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
+import com.pyx4j.widgets.client.ComboBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
@@ -72,6 +72,7 @@ public class WidgetsDemo implements EntryPoint {
     public void onModuleLoad() {
 
         StyleManger.installTheme(new WindowsTheme());
+
         ClientLogger.setDebugOn(true);
         ClientLogger.setTraceOn(true);
         UnrecoverableErrorHandlerDialog.register();
@@ -94,7 +95,15 @@ public class WidgetsDemo implements EntryPoint {
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
 
         {
-            PhotoAlbum photoAlbum = new PhotoAlbum("") {
+            ComboBox comboBox1 = new ComboBox();
+            contentPanel.add(comboBox1);
+
+            com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(bundle.groupBoxClose()), "Test");
+            contentPanel.add(buttonTest2);
+        }
+
+        {
+            PhotoAlbum photoAlbum = new PhotoAlbum("example_SlideshowButton") {
 
                 @Override
                 public void addPhotoCommand() {

@@ -14,18 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
+ * Created on Jul 15, 2010
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.TextBoxBase;
+
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class TextArea extends com.google.gwt.user.client.ui.TextArea {
+public class ComboBox extends HorizontalPanel {
 
-    public TextArea() {
+    private final TextBoxBase box;
+
+    public ComboBox() {
+        this(new com.google.gwt.user.client.ui.TextBox());
+    }
+
+    protected ComboBox(TextBoxBase box) {
         setStyleName(CSSClass.pyx4j_TextBox.name());
+
+        this.box = box;
+        add(box);
+
     }
 
 }
