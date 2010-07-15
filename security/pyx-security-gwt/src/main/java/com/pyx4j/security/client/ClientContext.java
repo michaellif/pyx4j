@@ -133,6 +133,7 @@ public class ClientContext {
             @Override
             public void onFailure(Throwable caught) {
                 if (callback == null) {
+                    ClientContext.terminateSession();
                     log.error("Logout failure", caught);
                 } else {
                     callback.onFailure(caught);
