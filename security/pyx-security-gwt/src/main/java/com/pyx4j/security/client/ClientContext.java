@@ -23,6 +23,7 @@ package com.pyx4j.security.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -103,6 +104,19 @@ public class ClientContext {
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
             RPCManager.enableAppEngineUsageStats();
         }
+    }
+
+    /**
+     * Generally called when logout call to server failed e.g. Server is down or GAE read
+     * only Maintenance
+     */
+    public static void terminateSession() {
+        userVisit = null;
+        if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
+            Cookies.removeCookie(serverSession.getSessionCookieName());
+        }
+        serverSession = null;
+        ClientSecurityController.instance().authenticate(null);
     }
 
     /**
