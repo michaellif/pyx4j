@@ -75,6 +75,8 @@ public abstract class AbstractSiteDispatcher {
 
     private static AbstractSiteDispatcher instance;
 
+    private boolean signingOutDirtyPage;
+
     public AbstractSiteDispatcher() {
         instance = this;
         pathShown = new NavigationUri(History.getToken());
@@ -82,7 +84,7 @@ public abstract class AbstractSiteDispatcher {
             @Override
             public void onValueChange(final ValueChangeEvent<String> event) {
                 final NavigationUri navigationUri = new NavigationUri(event.getValue());
-                if (currentSitePanel != null) {
+                if ((currentSitePanel != null) && (!signingOutDirtyPage)) {
                     log.debug("page change [{}] -> [{}]", pathShown.getPath(), event.getValue());
                     PageLeavingEvent ple;
                     if (navigationUri.getPageUri().equals(pathShown.getPageUri())) {
@@ -132,7 +134,7 @@ public abstract class AbstractSiteDispatcher {
         Window.addWindowClosingHandler(new ClosingHandler() {
             @Override
             public void onWindowClosing(ClosingEvent event) {
-                if (currentSitePanel != null) {
+                if ((currentSitePanel != null) && (!signingOutDirtyPage)) {
                     log.debug("page leaving on window closing");
                     PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChageType.WINDOW_CLOSING);
                     currentSitePanel.onPageLeaving(ple);
@@ -324,7 +326,12 @@ public abstract class AbstractSiteDispatcher {
             DialogOptions options = new OkCancelOption() {
                 @Override
                 public boolean onClickOk() {
-                    callbackOkToLogout.run();
+                    signingOutDirtyPage = true;
+                    try {
+                        callbackOkToLogout.run();
+                    } finally {
+                        signingOutDirtyPage = false;
+                    }
                     return true;
                 }
 
