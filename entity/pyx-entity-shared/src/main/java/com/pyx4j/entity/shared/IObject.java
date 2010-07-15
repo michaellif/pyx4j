@@ -50,6 +50,8 @@ public interface IObject<VALUE_TYPE> {
 
     public MemberMeta getMeta();
 
+    public boolean metaEquals(IObject<?> other);
+        
     /**
      * Business toString() presentation.
      * 

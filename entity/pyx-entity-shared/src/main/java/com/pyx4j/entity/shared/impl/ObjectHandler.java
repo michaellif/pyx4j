@@ -78,6 +78,11 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
     }
 
     @Override
+    public boolean metaEquals(IObject<?> other) {
+        return getFieldName().equals(other.getFieldName()) && getMeta().equals(other.getMeta());
+    }
+
+    @Override
     public Class<? extends IObject<VALUE_TYPE>> getObjectClass() {
         assert (clazz != null) : this.getClass() + " objectClass is null";
         return clazz;
