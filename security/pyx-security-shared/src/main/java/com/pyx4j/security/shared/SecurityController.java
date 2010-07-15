@@ -52,6 +52,15 @@ public abstract class SecurityController {
         return controller.getAcl().checkBehavior(behavior);
     }
 
+    public static boolean checkAnyBehavior(Behavior... behaviors) {
+        for (Behavior behavior : behaviors) {
+            if (controller.getAcl().checkBehavior(behavior)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Set<Behavior> getBehaviors() {
         return controller.getAcl().getBehaviours();
     }
