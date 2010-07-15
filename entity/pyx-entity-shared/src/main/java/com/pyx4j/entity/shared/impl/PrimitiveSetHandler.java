@@ -194,8 +194,12 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
 
     @Override
     public Object[] toArray() {
-        // TODO implement this
-        throw new UnsupportedOperationException();
+        Set<TYPE> set = getValue();
+        if (set != null) {
+            return set.toArray();
+        } else {
+            return new Object[0];
+        }
     }
 
     @Override
