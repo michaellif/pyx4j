@@ -839,6 +839,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     return value;
                 }
             }
+        } else if (value instanceof Collection<?>) {
+            Collection rc;
+            if (value instanceof Collection<?>) {
+                rc = new Vector();
+            } else {
+                rc = new HashSet();
+            }
+            for (Object item : (Collection<?>) value) {
+                rc.add(datastoreValue(entityMeta, propertyName, (Serializable) item));
+            }
+            return rc;
         } else {
             return value;
         }
@@ -882,7 +893,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         StringBuilder b = new StringBuilder();
         for (Query.FilterPredicate f : query.getFilterPredicates()) {
-            b.append(" ").append(f.getPropertyName()).append(f.getOperator()).append(f.getValue());
+            b.append(f.getPropertyName()).append(f.getOperator()).append(f.getValue()).append(" ");
         }
         log.debug("{} search by {}", entityMeta.getPersistenceName(), b);
 

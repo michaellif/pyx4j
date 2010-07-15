@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server.search;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -37,10 +38,10 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.server.IEntityPersistenceService;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -146,8 +147,7 @@ public class IndexedEntitySearch {
                         } else {
                             if (index.global() != 0) {
                                 queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index
-                                        .global())
-                                        + key));
+                                        .global()) + key));
                             } else {
                                 queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, key));
                             }
@@ -213,13 +213,23 @@ public class IndexedEntitySearch {
             } else if (Enum.class.isAssignableFrom(mm.getValueClass())) {
                 Indexed index = mm.getAnnotation(Indexed.class);
                 if ((index != null) && (index.global() != 0)) {
-                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
-                            + ((Enum<?>) me.getValue()).name()));
-                    // Add in case index criteria is dropped by search 
-                    if (IPrimitiveSet.class.isAssignableFrom(mm.getObjectClass())) {
-                        inMemoryFilters.add(new PrimitiveSetInMemoryFilter(path, me.getValue()));
+                    Serializable value = me.getValue();
+                    if (value instanceof Collection<?>) {
+                        Vector<String> values = new Vector<String>();
+                        for (Object item : (Collection<?>) value) {
+                            values.add(String.valueOf(index.global()) + ((Enum<?>) item).name());
+                        }
+                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.IN, values));
+                        inMemoryFilters.add(new PrimitiveInCollectionInMemoryFilter(path, (Collection<?>) value));
                     } else {
-                        inMemoryFilters.add(new PrimitiveInMemoryFilter(path, me.getValue()));
+                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global())
+                                + ((Enum<?>) value).name()));
+                        // Add in case index criteria is dropped by search 
+                        if (IPrimitiveSet.class.isAssignableFrom(mm.getObjectClass())) {
+                            inMemoryFilters.add(new PrimitiveSetInMemoryFilter(path, value));
+                        } else {
+                            inMemoryFilters.add(new PrimitiveInMemoryFilter(path, value));
+                        }
                     }
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
