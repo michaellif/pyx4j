@@ -83,7 +83,7 @@ public class Dialog extends DialogPanel {
 
     private Button defaultButton;
 
-    private boolean enabledEnterKeyForDefaultButton;
+    private boolean enabledEnterKeyForDefaultButton = true;
 
     private boolean allowEnterKeyForDefaultButton;
 
@@ -479,8 +479,8 @@ public class Dialog extends DialogPanel {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-        return $doc.activeElement;
-    }-*/;
+                                                           return $doc.activeElement;
+                                                           }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {
