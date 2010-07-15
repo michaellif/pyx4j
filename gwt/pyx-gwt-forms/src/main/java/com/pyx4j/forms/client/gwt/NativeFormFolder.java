@@ -65,11 +65,13 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         container = new VerticalPanel();
         container.setWidth("100%");
 
+        getElement().getStyle().setPaddingBottom(10, Unit.PX);
+
         label = new Label(folder.getTitle() == null ? "" : folder.getTitle());
         label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         label.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
-        addCommand = new Anchor(i18n.tr("Add New") + " " + (folder.getTitle() == null ? i18n.tr("Item") : folder.getItemCaption()));
+        addCommand = new Anchor(i18n.tr("Add Another") + " " + (folder.getTitle() == null ? i18n.tr("Item") : folder.getItemCaption()));
         addCommand.getElement().getStyle().setPaddingLeft(10, Unit.PX);
         addCommand.getElement().getStyle().setColor("#6A97C4");
         addCommand.getElement().getStyle().setFontSize(0.8, Unit.EM);
@@ -103,9 +105,6 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         add(addCommand, SOUTH);
 
         label.setWordWrap(false);
-
-        addCommand.getElement().getStyle().setProperty("left", (NativeForm.LEFT_LABEL_WIDTH + 25) + "px");
-        addCommand.getElement().getStyle().setProperty("top", "5px");
 
         if (BrowserType.isIE7()) {
             getElement().getStyle().setMarginLeft(5, Unit.PX);

@@ -82,7 +82,10 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 comp = new CCaptcha();
                 break;
             case monthyearpicker:
-                comp = new CMonthYearPicker();
+                comp = new CMonthYearPicker(false);
+                break;
+            case yearpicker:
+                comp = new CMonthYearPicker(true);
                 break;
             default:
                 throw new Error("Unknown ");

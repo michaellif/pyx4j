@@ -25,12 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Editor {
 
     public static enum EditorType {
-        text, password, textarea, richtextarea, combo, suggest, captcha, monthyearpicker
+        text, password, textarea, richtextarea, combo, suggest, captcha, monthyearpicker, yearpicker
     }
 
     /**

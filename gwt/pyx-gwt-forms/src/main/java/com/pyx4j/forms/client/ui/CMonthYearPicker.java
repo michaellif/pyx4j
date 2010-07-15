@@ -28,6 +28,12 @@ public class CMonthYearPicker extends CEditableComponent<Date> {
 
     private NativeMonthYearPicker nativePanel;
 
+    private final boolean yearOnly;
+
+    public CMonthYearPicker(boolean yearOnly) {
+        this.yearOnly = yearOnly;
+    }
+
     @Override
     public INativeEditableComponent<Date> getNativeComponent() {
         return nativePanel;
@@ -39,6 +45,10 @@ public class CMonthYearPicker extends CEditableComponent<Date> {
             nativePanel = new NativeMonthYearPicker(this);
         }
         return nativePanel;
+    }
+
+    public boolean isYearOnly() {
+        return yearOnly;
     }
 
 }

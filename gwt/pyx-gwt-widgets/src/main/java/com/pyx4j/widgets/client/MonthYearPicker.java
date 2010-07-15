@@ -32,14 +32,20 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers {
 
-    private final ListBox monthSelector;
+    private ListBox monthSelector;
 
     private final ListBox yearSelector;
 
     private final int lastYear = new Date().getYear() + 7;
 
-    public MonthYearPicker() {
+    private final boolean showYearOnly;
 
+    public MonthYearPicker() {
+        this(true);
+    }
+
+    public MonthYearPicker(boolean showYearOnly) {
+        this.showYearOnly = showYearOnly;
         ChangeHandler changeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -47,34 +53,42 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             }
         };
 
-        monthSelector = new ListBox();
-        add(monthSelector);
-        String[] months = LocaleInfo.getCurrentLocale().getDateTimeConstants().months();
-        monthSelector.addItem(null);
-        for (String string : months) {
-            monthSelector.addItem(string);
+        if (!showYearOnly) {
+            monthSelector = new ListBox();
+            add(monthSelector);
+            String[] months = LocaleInfo.getCurrentLocale().getDateTimeConstants().months();
+            monthSelector.addItem(null);
+            for (String string : months) {
+                monthSelector.addItem(string);
+            }
+            setCellWidth(monthSelector, "50%");
+            monthSelector.addChangeHandler(changeHandler);
         }
-        setCellWidth(monthSelector, "50%");
-        monthSelector.addChangeHandler(changeHandler);
 
         yearSelector = new ListBox();
         add(yearSelector);
-        yearSelector.getElement().getStyle().setMarginLeft(5, Unit.PX);
         yearSelector.addItem(null);
         for (int i = lastYear; i >= 0; i--) {
             yearSelector.addItem(String.valueOf(i + 1900));
         }
-        setCellWidth(yearSelector, "50%");
+        if (!showYearOnly) {
+            setCellWidth(yearSelector, "50%");
+            yearSelector.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        }
         yearSelector.addChangeHandler(changeHandler);
 
     }
 
     public void setDate(Date date) {
         if (date == null) {
-            monthSelector.setSelectedIndex(0);
+            if (!showYearOnly) {
+                monthSelector.setSelectedIndex(0);
+            }
             yearSelector.setSelectedIndex(0);
         } else {
-            monthSelector.setSelectedIndex(date.getMonth() + 1);
+            if (!showYearOnly) {
+                monthSelector.setSelectedIndex(date.getMonth() + 1);
+            }
             yearSelector.setSelectedIndex(lastYear - date.getYear() + 1);
         }
     }
@@ -84,7 +98,10 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             return null;
         }
         int year = lastYear - yearSelector.getSelectedIndex() + 1;
-        int month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
+        int month = 0;
+        if (!showYearOnly) {
+            month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
+        }
         return new Date(year, month, 1);
     }
 
@@ -93,14 +110,20 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
     }
 
     public void setEnabled(boolean enabled) {
-        monthSelector.setEnabled(enabled);
+        if (!showYearOnly) {
+            monthSelector.setEnabled(enabled);
+        }
         yearSelector.setEnabled(enabled);
     }
 
     public void setFocus(boolean focused) {
-        monthSelector.setFocus(focused);
-        if (!focused) {
-            yearSelector.setFocus(false);
+        if (showYearOnly) {
+            yearSelector.setFocus(focused);
+        } else {
+            monthSelector.setFocus(focused);
+            if (!focused) {
+                yearSelector.setFocus(false);
+            }
         }
     }
 
