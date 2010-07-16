@@ -330,7 +330,14 @@ public class HtmlToPDFParser extends DefaultHandler {
             String styleString = matcher.group(2);
             Style style = new Style(styleString);
             for (String tag : tags.split(",")) {
-                styles.put(tag.trim(), style);
+                tag = tag.trim();
+                if(!styles.containsKey(tag)) {
+                    styles.put(tag, style);
+                } else {
+                    Style newStyle = new Style(styles.get(tag));
+                    newStyle.putAll(style);
+                    styles.put(tag, newStyle);
+                }
             }
         }
 
