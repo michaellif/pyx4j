@@ -52,7 +52,14 @@ public class ReportTableCSVFormater implements ReportTableFormater {
 
     @Override
     public byte[] getBinaryData() {
-        return dataBuilder.getBinaryData();
+        byte[] b = dataBuilder.getBinaryData();
+        byte[] utf = new byte[b.length + 3];
+        // Add UTF-8 BOM for MS Excel
+        utf[0] = (byte) 0xEF;
+        utf[1] = (byte) 0xBB;
+        utf[2] = (byte) 0xBF;
+        System.arraycopy(b, 0, utf, 3, b.length);
+        return utf;
     }
 
     @Override
