@@ -108,7 +108,7 @@ public class Downloadable implements Serializable {
                 cleanOld(map);
             }
             map.put(fileName, this);
-            log.debug("download prepared [{}]", fileName);
+            log.debug("download prepared [{}]; {} bytes", fileName, this.data.length);
         }
     }
 

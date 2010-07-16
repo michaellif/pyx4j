@@ -24,11 +24,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public class DataBuilder implements Externalizable {
 
     protected transient StringBuilder data;
+
+    private static Charset utf8_charset = Charset.forName("UTF-8");
 
     public DataBuilder() {
         data = new StringBuilder();
@@ -45,27 +47,23 @@ public class DataBuilder implements Externalizable {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         data = new StringBuilder();
         int length = in.readInt();
         byte[] b = new byte[length];
-        in.read(b);
-        data.append(new String(b, "utf-8"));
+        in.readFully(b);
+        data.append(new String(b, utf8_charset));
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        byte[] b = data.toString().getBytes("utf-8");
+        byte[] b = data.toString().getBytes(utf8_charset);
         out.writeInt(b.length);
         out.write(b);
     }
 
     public byte[] getBinaryData() {
-        try {
-            return data.toString().getBytes("utf-8");
-        } catch (UnsupportedEncodingException ignore) {
-            return data.toString().getBytes();
-        }
+        return data.toString().getBytes(utf8_charset);
     }
 
     public int getBinaryDataSize() {

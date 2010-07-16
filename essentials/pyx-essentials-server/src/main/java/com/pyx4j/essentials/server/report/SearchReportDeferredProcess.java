@@ -100,13 +100,15 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                 IndexedEntitySearch search = new IndexedEntitySearch(request.getCriteria());
                 search.buildQueryCriteria();
                 SearchResultIterator<IEntity> it = search.getResult(encodedCursorRefference);
+                int currentFetchCount = 0;
                 while (it.hasNext()) {
                     IEntity ent = it.next();
                     SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
                     reportEntity(ent);
                     fetchCount++;
-                    if (System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) {
-                        log.warn("Executions time quota exceeded {}", System.currentTimeMillis() - start);
+                    currentFetchCount++;
+                    if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
+                        log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
                         log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
                         encodedCursorRefference = it.encodedCursorRefference();
                         return;
