@@ -61,4 +61,8 @@ public class DataBuilder implements Externalizable {
         return data.toString().getBytes();
     }
 
+    public int getBinaryDataSize() {
+        return data.length();
+    }
+
 }

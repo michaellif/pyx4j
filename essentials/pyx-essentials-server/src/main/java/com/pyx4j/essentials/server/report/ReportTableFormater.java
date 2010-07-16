@@ -44,5 +44,7 @@ public interface ReportTableFormater extends Serializable {
      */
     public byte[] getBinaryData();
 
+    public int getBinaryDataSize();
+
     public String getContentType();
 }

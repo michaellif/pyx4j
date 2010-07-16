@@ -56,6 +56,11 @@ public class ReportTableCSVFormater implements ReportTableFormater {
     }
 
     @Override
+    public int getBinaryDataSize() {
+        return dataBuilder.getBinaryDataSize();
+    }
+
+    @Override
     public String getContentType() {
         return "text/csv";
     }
