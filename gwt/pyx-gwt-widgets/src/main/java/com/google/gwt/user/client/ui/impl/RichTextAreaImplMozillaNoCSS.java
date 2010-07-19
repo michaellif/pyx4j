@@ -25,6 +25,12 @@ public class RichTextAreaImplMozillaNoCSS extends RichTextAreaImplMozilla {
     private boolean initNoCss = true;
 
     @Override
+    public void uninitElement() {
+        super.uninitElement();
+        initNoCss = true;
+    }
+
+    @Override
     void execCommand(String cmd, String param) {
         if (initNoCss) {
             super.execCommand("useCSS", "false");
