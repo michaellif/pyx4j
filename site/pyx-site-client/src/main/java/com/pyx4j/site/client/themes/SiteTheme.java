@@ -28,7 +28,6 @@ public abstract class SiteTheme extends WindowsTheme {
     @Override
     protected void initStyles() {
         super.initStyles();
-        initGeneralStyles();
         initSitePanelStyles();
         initContentPanelStyles();
         initHeaderStyles();
@@ -48,7 +47,10 @@ public abstract class SiteTheme extends WindowsTheme {
         initSlideshowButtonStyles();
     }
 
+    @Override
     protected void initGeneralStyles() {
+        super.initGeneralStyles();
+
         Style style = new Style("html");
         style.addProperty("overflow-y", "scroll");
         addStyle(style);
@@ -85,12 +87,6 @@ public abstract class SiteTheme extends WindowsTheme {
         style = new Style("blockquote");
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
-        addStyle(style);
-        style = new Style("table");
-        style.addProperty("border-spacing", "0px");
-        addStyle(style);
-        style = new Style("td");
-        style.addProperty("padding", "0px");
         addStyle(style);
     }
 

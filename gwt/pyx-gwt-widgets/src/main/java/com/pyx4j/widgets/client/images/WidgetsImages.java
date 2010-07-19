@@ -22,6 +22,8 @@ package com.pyx4j.widgets.client.images;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 public interface WidgetsImages extends ClientBundle {
 
@@ -31,10 +33,13 @@ public interface WidgetsImages extends ClientBundle {
 
     public ImageResource viewMenu();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPicker();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPickerHover();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPickerPushed();
 
 }

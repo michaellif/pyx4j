@@ -34,6 +34,7 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initStyles() {
+        initGeneralStyles();
         initBodyStyles();
         initSectionStyles();
         initToolbarStyle();
@@ -56,6 +57,18 @@ public class WindowsTheme extends Theme {
         initDatePickerStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
+    }
+
+    protected void initGeneralStyles() {
+        Style style = new Style("table");
+        style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+        style = new Style("td");
+        style.addProperty("padding", "0px");
+        addStyle(style);
+        style = new Style("select");
+        style.addProperty("border-style", "none");
+        addStyle(style);
     }
 
     protected void initThemeColors() {
