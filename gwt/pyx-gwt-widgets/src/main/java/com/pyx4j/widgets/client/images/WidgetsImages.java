@@ -31,4 +31,10 @@ public interface WidgetsImages extends ClientBundle {
 
     public ImageResource viewMenu();
 
+    public ImageResource comboBoxPicker();
+
+    public ImageResource comboBoxPickerHover();
+
+    public ImageResource comboBoxPickerPushed();
+
 }

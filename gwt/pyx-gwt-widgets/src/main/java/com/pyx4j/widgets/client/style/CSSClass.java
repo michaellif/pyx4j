@@ -33,6 +33,9 @@ public enum CSSClass {
     //Folder Panel
     pyx4j_Folder,
 
+    //Picker
+    pyx4j_Picker,
+
     //Button
     pyx4j_Button, pyx4j_ButtonContent, pyx4j_ButtonText, pyx4j_ButtonImage,
 

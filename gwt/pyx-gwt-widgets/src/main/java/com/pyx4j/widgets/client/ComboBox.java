@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
@@ -34,10 +35,18 @@ public class ComboBox extends HorizontalPanel {
     }
 
     protected ComboBox(TextBoxBase box) {
+        box.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+
         setStyleName(CSSClass.pyx4j_TextBox.name());
 
         this.box = box;
         add(box);
+        setCellVerticalAlignment(box, ALIGN_MIDDLE);
+
+        Button picker = new Button("", CSSClass.pyx4j_Picker.name());
+
+        add(picker);
+        setCellVerticalAlignment(picker, ALIGN_MIDDLE);
 
     }
 

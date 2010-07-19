@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.style.window;
 
+import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
@@ -44,6 +45,7 @@ public class WindowsTheme extends Theme {
         initDialogBoxStyles();
         initDialogPanelStyles();
         initGwtButtonStyles();
+        initPickerStyles();
         initButtonStyles();
         initTooltipStyle();
         initTreeStyle();
@@ -263,6 +265,27 @@ public class WindowsTheme extends Theme {
 
     }
 
+    protected void initPickerStyles() {
+        Style style = new Style("." + CSSClass.pyx4j_Picker.name());
+        style.addProperty("border", "1px solid transparent");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("outline", "none");
+        style.addProperty("width", "18px");
+        style.addProperty("height", "22px");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getURL() + "') no-repeat 100%");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.pyx4j_Picker.name() + "-hover");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getURL() + "') no-repeat 100%");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.pyx4j_Picker.name() + "-pushed");
+        style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getURL() + "') no-repeat 100%");
+        addStyle(style);
+
+    }
+
     protected void initButtonStyles() {
         Style style = new Style("." + CSSClass.pyx4j_ButtonContent.name());
         style.addProperty("padding", "3px");
@@ -385,6 +408,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
+        style.addProperty("background-color", "#fff");
         addStyle(style);
     }
 
