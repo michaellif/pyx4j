@@ -53,8 +53,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.Tooltip;
-import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class PhotoAlbum extends DockPanel {
 
@@ -97,8 +96,6 @@ public abstract class PhotoAlbum extends DockPanel {
 
         private final MenuBar menuButtonBar;
 
-        private final Tooltip tooltip;
-
         private final HTML caption;
 
         public PhotoHolder(final Photo photo) {
@@ -129,7 +126,7 @@ public abstract class PhotoAlbum extends DockPanel {
             caption.setWidth("195px");
             caption.getElement().getStyle().setProperty("textAlign", "center");
             caption.getElement().getStyle().setProperty("overflow", "hidden");
-            tooltip = Tooltip.tooltip(caption, photo.getCaption());
+            caption.setTitle(photo.getCaption());
             frame.add(caption, SOUTH);
             frame.setCellHeight(caption, "1.6em");
             add(frame, 10, 0);
@@ -158,7 +155,7 @@ public abstract class PhotoAlbum extends DockPanel {
         }
 
         void setCaption(String captionText) {
-            tooltip.setTooltipText(captionText);
+            caption.setTitle(captionText);
             caption.setHTML(captionText);
         }
 
@@ -257,29 +254,32 @@ public abstract class PhotoAlbum extends DockPanel {
     }
 
     protected void slideshow(int startFrom, boolean run) {
-        Slideshow slideshow = new Slideshow(640, 510, buttonStyle, startFrom, run);
         List<Photo> photoList = model.getPhotoList();
-        for (Photo photo : photoList) {
-            HorizontalPanel holder = new HorizontalPanel();
-            PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
-            photoImage.getElement().getStyle().setPadding(20, Unit.PX);
-            photoImage.getElement().getStyle().setPaddingBottom(40, Unit.PX);
-            holder.add(photoImage);
-            holder.setCellHorizontalAlignment(photoImage, ALIGN_CENTER);
-            holder.setCellVerticalAlignment(photoImage, ALIGN_MIDDLE);
-            slideshow.addItem(holder);
+        if (photoList.size() == 0) {
+            MessageDialog.warn("Photoalbom is empty", "Photoalbom is empty. Add photo first.");
+        } else {
+            Slideshow slideshow = new Slideshow(640, 510, buttonStyle, startFrom, run);
+            for (Photo photo : photoList) {
+                HorizontalPanel holder = new HorizontalPanel();
+                PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
+                photoImage.getElement().getStyle().setPadding(20, Unit.PX);
+                photoImage.getElement().getStyle().setPaddingBottom(40, Unit.PX);
+                holder.add(photoImage);
+                holder.setCellHorizontalAlignment(photoImage, ALIGN_CENTER);
+                holder.setCellVerticalAlignment(photoImage, ALIGN_MIDDLE);
+                slideshow.addItem(holder);
+            }
+            PopupPanel popup = new PopupPanel(true);
+            popup.getElement().getStyle().setBackgroundColor("#F6F9FF");
+            popup.getElement().getStyle().setBorderColor("#E5ECF9");
+            popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");
+            popup.getElement().getStyle().setProperty("MozBoxShadow", "10px 10px 5px #aaa");
+            popup.add(slideshow);
+
+            popup.center();
         }
-        PopupPanel popup = new PopupPanel(true);
-        popup.getElement().getStyle().setBackgroundColor("#F6F9FF");
-        popup.getElement().getStyle().setBorderColor("#E5ECF9");
-        popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");
-        popup.getElement().getStyle().setProperty("MozBoxShadow", "10px 10px 5px #aaa");
-        popup.add(slideshow);
-
-        popup.center();
-
     }
 
     public abstract void addPhotoCommand();
