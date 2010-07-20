@@ -28,13 +28,9 @@ public class ListPickerPanel<E> extends PickerPanel<E> {
 
     private final OptionsGrabber<E> optionsGrabber;
 
-    private final ListBox<E> listBox;
-
     private final com.google.gwt.user.client.ui.ListBox list;
 
     public ListPickerPanel(ListBox<E> listBox, boolean multipleSelect) {
-
-        this.listBox = listBox;
 
         list = new com.google.gwt.user.client.ui.ListBox(multipleSelect);
         setWidget(list);
