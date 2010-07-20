@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.demo.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -43,9 +47,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
-import com.pyx4j.widgets.client.ComboBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
+import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -81,6 +85,7 @@ public class WidgetsDemo implements EntryPoint {
 
         RootPanel.get().add(GlassPanel.instance());
         RootPanel.get().add(contentPanel);
+        contentPanel.setWidth("100%");
 
         final Button sendButton = new Button("Send");
         final TextBox pageNameTextBox = new TextBox();
@@ -95,8 +100,63 @@ public class WidgetsDemo implements EntryPoint {
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
 
         {
-            ComboBox comboBox1 = new ComboBox();
-            contentPanel.add(comboBox1);
+            ListBox<String> comboBox = new ListBox<String>(false);
+            List<String> options = new ArrayList<String>();
+
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+
+            comboBox.setOptions(options);
+
+            contentPanel.add(comboBox);
+
+            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
+        }
+
+        {
+            ListBox<String> comboBox = new ListBox<String>(false);
+            List<String> options = new ArrayList<String>();
+
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item ItemItemItemItemItemItemItemItem 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item ItemItemItemItemItemItemItemItemItemItemItemItem 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+
+            comboBox.setOptions(options);
+
+            contentPanel.add(comboBox);
+
+            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
+
+        }
+
+        {
 
             com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(bundle.groupBoxClose()), "Test");
             contentPanel.add(buttonTest2);
@@ -237,6 +297,65 @@ public class WidgetsDemo implements EntryPoint {
 
             com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(bundle.groupBoxClose()), "Test");
             contentPanel.add(buttonTest2);
+        }
+
+        {
+            ListBox<String> comboBox = new ListBox<String>(false);
+            List<String> options = new ArrayList<String>();
+
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item ItemItemItemItemItemItemItemItem 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item ItemItemItemItemItemItemItemItemItemItemItemItem 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+
+            comboBox.setOptions(options);
+
+            contentPanel.add(comboBox);
+
+            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
+
+        }
+
+        {
+            ListBox<String> comboBox = new ListBox<String>(false);
+            List<String> options = new ArrayList<String>();
+
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item ItemItemItemItemItemItemItemItem 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+            options.add("Item ItemItemItemItemItemItemItemItemItemItemItemItem 1");
+            options.add("Item 2");
+            options.add("Item 3");
+            options.add("Item 4");
+
+            comboBox.setOptions(options);
+
+            contentPanel.add(comboBox);
+            contentPanel.setCellHorizontalAlignment(comboBox, HasHorizontalAlignment.ALIGN_RIGHT);
+
+            comboBox.getElement().getStyle().setMargin(5, Unit.PX);
+
         }
 
     }
