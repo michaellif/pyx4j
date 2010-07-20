@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -31,7 +30,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.DockPanel;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.RichTextArea;
@@ -140,12 +138,23 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;
         try {
-            textArea.setValue(richTextArea.getHTML());
+            textArea.setValue(trimHtml(richTextArea.getHTML()));
         } finally {
             nativeValueUpdate = false;
         }
     }
 
+    protected String trimHtml(String html) {
+        while (html.startsWith("<br>")) {
+            html = html.substring(4).trim();
+        }
+        while (html.endsWith("<br>")) {
+            html = html.substring(0, html.length() - 4).trim();
+        }
+        return html;
+    }
+
+    @Override
     public void setNativeValue(String value) {
         if (nativeValueUpdate) {
             return;
@@ -156,6 +165,7 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
         }
     }
 
+    @Override
     public CRichTextArea getCComponent() {
         return textArea;
     }
