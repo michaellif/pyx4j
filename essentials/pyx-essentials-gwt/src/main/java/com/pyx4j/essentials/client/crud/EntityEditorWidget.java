@@ -24,6 +24,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -51,6 +53,8 @@ import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
 public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel implements InlineWidget, PageLeavingHandler {
+
+    private static I18n i18n = I18nFactory.getI18n(EntityEditorWidget.class);
 
     private static Logger log = LoggerFactory.getLogger(EntityEditorWidget.class);
 
@@ -111,13 +115,14 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
         for (EditorAction action : actions) {
             switch (action) {
             case BACK:
-                actionsPanel.addItem("Back", new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Back"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         AbstractSiteDispatcher.back();
                         //Handle entity new Case
                         if (backFromNewItem == 2) {
                             DeferredCommand.addCommand(new Command() {
+                                @Override
                                 public void execute() {
                                     AbstractSiteDispatcher.back();
                                 }
@@ -128,7 +133,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
                 });
                 break;
             case PRINT:
-                actionsPanel.addItem("Print", new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Print"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         Print.it(getEditorPanel().toStringForPrint());
@@ -163,6 +168,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
 
             AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
 
+                @Override
                 @SuppressWarnings("unchecked")
                 public void onSuccess(IEntity result) {
                     if (result != null) {
@@ -173,6 +179,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
                     }
                 }
 
+                @Override
                 public void onFailure(Throwable caught) {
                     throw new UnrecoverableClientError(caught);
                 }
