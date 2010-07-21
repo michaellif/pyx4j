@@ -33,6 +33,10 @@ import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
 
+/**
+ * System property "com.pyx4j.appConfig" defines Config suffix class to use
+ * 
+ */
 public class InitializationServletContextListener implements ServletContextListener {
 
     @Override
@@ -43,6 +47,7 @@ public class InitializationServletContextListener implements ServletContextListe
             String configClass = sce.getServletContext().getInitParameter(ServerSideConfiguration.class.getName());
             if (CommonsStringUtils.isStringSet(configClass)) {
                 try {
+                    configClass += System.getProperty("com.pyx4j.appConfig", "");
                     ServerSideConfiguration.setInstance((ServerSideConfiguration) Class.forName(configClass).newInstance());
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
