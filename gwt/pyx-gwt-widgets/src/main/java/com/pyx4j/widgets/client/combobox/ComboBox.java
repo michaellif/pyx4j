@@ -51,6 +51,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
         assert textBox != null;
         assert pickerPanel != null;
+        assert optionsGrabber != null;
 
         textBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
@@ -67,7 +68,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
             @Override
             public void onClick(ClickEvent event) {
 
-                getOptionsGrabber().obtainOptions(new Request(), new Callback<E>() {
+                optionsGrabber.obtainOptions(new Request(), new Callback<E>() {
 
                     @Override
                     public void onOptionsReady(Request request, Response<E> response) {
