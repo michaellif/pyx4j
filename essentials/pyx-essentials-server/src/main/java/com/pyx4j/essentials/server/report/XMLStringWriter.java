@@ -93,6 +93,24 @@ public class XMLStringWriter {
         //TODO use getStringView()
         write(name, value.getValue());
     }
+    
+    public void writeRaw(String name, Object value) {
+        if (value == null) {
+            return;
+        }
+        idented();
+        start(name);
+        append(value.toString());
+        end(name);
+    }
+
+    public void writeRaw(String name, IPrimitive<?> value) {
+        if (value.isNull()) {
+            return;
+        }
+        //TODO use getStringView()
+        writeRaw(name, value.getValue());
+    }
 
     @Override
     public String toString() {
