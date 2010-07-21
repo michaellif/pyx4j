@@ -26,8 +26,6 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 
 public class ListPickerPanel<E> extends PickerPanel<E> {
 
-    private final OptionsGrabber<E> optionsGrabber;
-
     private final com.google.gwt.user.client.ui.ListBox list;
 
     public ListPickerPanel(ListBox<E> listBox, boolean multipleSelect) {
@@ -36,8 +34,6 @@ public class ListPickerPanel<E> extends PickerPanel<E> {
         setWidget(list);
         list.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
         list.setVisibleItemCount(6);
-        optionsGrabber = new ListOptionsGrabber<E>(listBox);
-        setOptionsGrabber(optionsGrabber);
     }
 
     @Override

@@ -42,6 +42,8 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
     private TextBoxBase textBox;
 
+    private OptionsGrabber<E> optionsGrabber;
+
     protected ComboBox() {
     }
 
@@ -65,7 +67,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
             @Override
             public void onClick(ClickEvent event) {
 
-                pickerPanel.getOptionsGrabber().obtainOptions(new Request(), new Callback<E>() {
+                getOptionsGrabber().obtainOptions(new Request(), new Callback<E>() {
 
                     @Override
                     public void onOptionsReady(Request request, Response<E> response) {
@@ -104,6 +106,14 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
     protected void setTextBox(TextBoxBase textBox) {
         this.textBox = textBox;
+    }
+
+    protected void setOptionsGrabber(OptionsGrabber<E> optionsGrabber) {
+        this.optionsGrabber = optionsGrabber;
+    }
+
+    public OptionsGrabber<E> getOptionsGrabber() {
+        return optionsGrabber;
     }
 
 }

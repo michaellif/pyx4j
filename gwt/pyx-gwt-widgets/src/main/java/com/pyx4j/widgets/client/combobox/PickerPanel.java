@@ -28,22 +28,12 @@ public abstract class PickerPanel<E> {
 
     private Widget widget;
 
-    private OptionsGrabber<E> optionsGrabber;
-
     protected Widget getWidget() {
         return widget;
     }
 
     protected void setWidget(Widget widget) {
         this.widget = widget;
-    }
-
-    protected void setOptionsGrabber(OptionsGrabber<E> optionsGrabber) {
-        this.optionsGrabber = optionsGrabber;
-    }
-
-    public OptionsGrabber<E> getOptionsGrabber() {
-        return optionsGrabber;
     }
 
     protected abstract void setOptions(List<E> options);
