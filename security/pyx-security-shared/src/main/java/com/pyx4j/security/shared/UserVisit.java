@@ -23,7 +23,7 @@ package com.pyx4j.security.shared;
 import java.io.Serializable;
 
 /**
- * Expendable by application user Information
+ * Extendable by application user Information
  */
 public class UserVisit implements Serializable {
 
