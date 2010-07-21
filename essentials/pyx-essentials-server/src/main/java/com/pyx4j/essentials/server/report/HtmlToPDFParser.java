@@ -284,10 +284,10 @@ public class HtmlToPDFParser extends DefaultHandler {
         tags.put(HtmlTags.UNORDEREDLIST, Element.LIST);
         tags.put(HtmlTags.LISTITEM, Element.LISTITEM);
 
-        tags.put(HtmlTags.CHUNK, Element.CHUNK);
-        tags.put(HtmlTags.B, Element.CHUNK);
-        tags.put(HtmlTags.I, Element.CHUNK);
-        tags.put(HtmlTags.S, Element.CHUNK);
+        tags.put(HtmlTags.CHUNK, Element.PHRASE);
+        tags.put(HtmlTags.B, Element.PHRASE);
+        tags.put(HtmlTags.I, Element.PHRASE);
+        tags.put(HtmlTags.S, Element.PHRASE);
         tags.put(HtmlTags.NEWLINE, Element.CHUNK);
 
         // remove script and style content from output
