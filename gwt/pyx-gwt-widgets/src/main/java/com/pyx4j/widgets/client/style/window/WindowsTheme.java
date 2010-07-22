@@ -59,18 +59,6 @@ public class WindowsTheme extends Theme {
         initGroupBoxStyle();
     }
 
-    protected void initGeneralStyles() {
-        Style style = new Style("table");
-        style.addProperty("border-collapse", "collapse");
-        addStyle(style);
-        style = new Style("td");
-        style.addProperty("padding", "0px");
-        addStyle(style);
-        style = new Style("select");
-        style.addProperty("border-style", "none");
-        addStyle(style);
-    }
-
     protected void initThemeColors() {
         putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
         putThemeColor(ThemeColor.OBJECT_TONE2, "#fdfae9");
@@ -85,6 +73,13 @@ public class WindowsTheme extends Theme {
         putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
         putThemeColor(ThemeColor.SEPARATOR, "#eeeeee");
+    }
+
+    protected void initGeneralStyles() {
+        Style style = new Style("td");
+        style.addProperty("padding", "0px");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {
@@ -297,6 +292,10 @@ public class WindowsTheme extends Theme {
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getURL() + "') no-repeat 100%");
         addStyle(style);
 
+        style = new Style("." + CSSClass.pyx4j_Picker.name() + " table");
+        style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+
     }
 
     protected void initButtonStyles() {
@@ -423,6 +422,11 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
         addStyle(style);
+
+        addStyle(style);
+        style = new Style("." + CSSClass.pyx4j_TextBox.name() + " td");
+        style.addProperty("padding", "0px");
+
     }
 
     protected void initListBoxStyle() {
