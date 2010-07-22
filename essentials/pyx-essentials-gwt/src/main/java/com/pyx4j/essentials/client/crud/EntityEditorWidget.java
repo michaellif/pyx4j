@@ -118,9 +118,10 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
                 actionsPanel.addItem(i18n.tr("Back"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
+                        boolean doubleBack = (backFromNewItem == 2);
                         AbstractSiteDispatcher.back();
                         //Handle entity new Case
-                        if (backFromNewItem == 2) {
+                        if (doubleBack) {
                             DeferredCommand.addCommand(new Command() {
                                 @Override
                                 public void execute() {
@@ -197,10 +198,6 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
         if (entity == null) {
             getEditorPanel().populateForm(createNewEntity());
         } else {
-            if (backFromNewItem == 1) {
-                // New Entity saved.
-                backFromNewItem = 2;
-            }
             getEditorPanel().populateForm(entity);
             updateHistoryToken(entity);
         }
@@ -218,8 +215,14 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
     protected void updateHistoryToken(E entity) {
         String entityIdStr = args.get("entity_id");
         if (entity != null && entity.getPrimaryKey() != null && "new".equals(entityIdStr)) {
+            if (backFromNewItem == 1) {
+                // New Entity saved.
+                backFromNewItem = 2;
+            }
+            int saveFlag = backFromNewItem;
             AbstractSiteDispatcher.show(new NavigationUri(editorPage, "entity_id", entity.getPrimaryKey().toString()));
             args.put("entity_id", entity.getPrimaryKey().toString());
+            backFromNewItem = saveFlag;
         }
     }
 

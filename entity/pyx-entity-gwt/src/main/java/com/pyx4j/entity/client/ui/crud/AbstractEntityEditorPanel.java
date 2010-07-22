@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
@@ -280,11 +281,13 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     protected void onBeforeSave() {
-        // TODO validations goes here.
     }
 
     protected void onAfterSave() {
-        // TODO validations goes here.
+    }
+
+    protected void populateSaved(E entity) {
+        populateForm(entity);
     }
 
     protected void onSaveFailure(Throwable caught) {
@@ -305,11 +308,13 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
             @Override
             public void onSuccess(E result) {
-                populateForm(result);
+                DomainManager.entityUpdated(result);
+                populateSaved(result);
                 onAfterSave();
             }
 
         };
         RPCManager.execute(getSaveService(), entityForSave, handlingCallback);
     }
+
 }

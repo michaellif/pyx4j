@@ -26,19 +26,13 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
-import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.rpc.client.BlockingAsyncCallback;
-import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntityEditorPanel<E> {
@@ -91,30 +85,12 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
     }
 
     @Override
-    protected Class<? extends EntityServices.Save> getSaveService() {
-        return EntityServices.Save.class;
+    protected void populateSaved(E entity) {
+        parentWidget.populateForm(entity);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void doSave() {
-        onBeforeSave();
-        final AsyncCallback handlingCallback = new BlockingAsyncCallback<E>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-
-            @Override
-            public void onSuccess(E result) {
-                DomainManager.entityUpdated(result);
-                parentWidget.populateForm(result);
-                parentWidget.setMessage(i18n.tr("{0} is saved.", result.getEntityMeta().getCaption()));
-            }
-
-        };
-        RPCManager.execute(getSaveService(), getEntity(), handlingCallback);
+    protected void onAfterSave() {
+        parentWidget.setMessage(i18n.tr("{0} is saved.", meta().getEntityMeta().getCaption()));
     }
-
 }
