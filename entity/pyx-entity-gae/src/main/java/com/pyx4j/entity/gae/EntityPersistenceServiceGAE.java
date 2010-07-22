@@ -363,7 +363,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             if (isUpdate && merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
-                throw new Error("Changing readonly property " + meta.getCaption());
+                throw new Error("Changing readonly property " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
             }
 
             if (meta.isIndexed()) {
