@@ -47,8 +47,7 @@ public class CrmTheme extends SiteTheme {
     }
 
     @Override
-    protected void initGeneralStyles() {
-        super.initGeneralStyles();
+    protected void initBodyStyles() {
         Style style = new Style("body");
         style.addProperty("font-family", "'Lucida Grande', 'Segoe UI', 'Bitstream Vera Sans', Tahoma, Verdana, Arial, sans-serif");
         style.addProperty("font-size", "0.81em");

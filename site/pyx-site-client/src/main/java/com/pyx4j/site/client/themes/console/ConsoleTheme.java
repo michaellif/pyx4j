@@ -46,8 +46,7 @@ public class ConsoleTheme extends SiteTheme {
     }
 
     @Override
-    protected void initGeneralStyles() {
-        super.initGeneralStyles();
+    protected void initBodyStyles() {
         Style style = new Style("body");
         style.addProperty("background", "#FFFFFF");
         addStyle(style);
