@@ -57,6 +57,20 @@ public class EntityServicesImpl {
         }
     }
 
+    public static class MergeSaveImpl implements EntityServices.MergeSave {
+
+        @Override
+        public IEntity execute(IEntity request) {
+            if (request.getPrimaryKey() == null) {
+                SecurityController.assertPermission(EntityPermission.permissionCreate(request.getObjectClass()));
+            } else {
+                SecurityController.assertPermission(EntityPermission.permissionUpdate(request.getObjectClass()));
+            }
+            PersistenceServicesFactory.getPersistenceService().merge(request);
+            return request;
+        }
+    }
+
     public static class QueryImpl implements EntityServices.Query {
 
         @SuppressWarnings("unchecked")

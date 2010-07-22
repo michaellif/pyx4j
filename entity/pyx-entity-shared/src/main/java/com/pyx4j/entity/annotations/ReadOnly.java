@@ -14,29 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on 2010-07-22
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface Department extends IEntity {
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ReadOnly {
 
-    IPrimitive<String> name();
-
-    ISet<Employee> employees();
-
-    @Owner
-    @ReadOnly
-    Organization organization();
-
-    @Transient
-    IPrimitive<String> transientStuff();
 }

@@ -59,4 +59,36 @@ public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase
         assertNotNull("IFullDebug No StackOverflowError", ((IFullDebug) department2).debugString());
     }
 
+    public void testReadOnly() {
+        Organization org = EntityFactory.create(Organization.class);
+        org.name().setValue("org" + uniqueString());
+
+        Department department = EntityFactory.create(Department.class);
+        department.name().setValue("dept1" + uniqueString());
+
+        org.departments().add(department);
+        srv.persist(org);
+
+        // Test if it can be saved at all
+        department.name().setValue("deptX" + uniqueString());
+        srv.merge(department);
+
+        Organization org2 = EntityFactory.create(Organization.class);
+        org2.name().setValue("org" + uniqueString());
+        srv.persist(org2);
+
+        department.organization().set(org2);
+
+        boolean saved = false;
+        try {
+            srv.merge(department);
+            saved = true;
+        } catch (Throwable pass) {
+        }
+
+        if (saved) {
+            fail("Managed to save readonly property");
+        }
+
+    }
 }

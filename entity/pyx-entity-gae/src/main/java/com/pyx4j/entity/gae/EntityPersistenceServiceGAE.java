@@ -57,8 +57,10 @@ import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -358,6 +360,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = childKeys;
             } else {
                 value = convertToGAEValue(value, entity, propertyName, meta, meta.isIndexed());
+            }
+
+            if (merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
+                throw new Error("Changing readonly property " + meta.getCaption());
             }
 
             if (meta.isIndexed()) {

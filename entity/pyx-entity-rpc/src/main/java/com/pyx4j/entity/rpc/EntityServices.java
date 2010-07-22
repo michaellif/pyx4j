@@ -31,34 +31,29 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 public interface EntityServices {
 
     public interface Save extends Service<IEntity, IEntity> {
+    };
 
+    public interface MergeSave extends Save {
     };
 
     public interface Query extends Service<EntityQueryCriteria<?>, Vector<? extends IEntity>> {
-
     };
 
     public interface Search extends Service<EntitySearchCriteria<?>, EntitySearchResult<? extends IEntity>> {
-
     };
 
     public interface Retrieve extends Service<EntityQueryCriteria<?>, IEntity> {
-
     };
 
     public interface RetrieveByPK extends Service<EntityCriteriaByPK<?>, IEntity> {
-
     };
 
     public interface Count extends Service<EntityQueryCriteria<?>, Long> {
-
     };
 
     public interface Delete extends Service<IEntity, VoidSerializable> {
-
     };
 
     public interface DeleteQuery extends Service<EntityQueryCriteria<?>, VoidSerializable> {
-
     };
 }
