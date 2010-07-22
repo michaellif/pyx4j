@@ -266,7 +266,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void updateEntityProperties(Entity entity, IEntity iEntity, boolean merge) {
+    private void updateEntityProperties(Entity entity, IEntity iEntity, boolean merge, boolean isUpdate) {
         if (iEntity.isNull()) {
             return;
         }
@@ -362,7 +362,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = convertToGAEValue(value, entity, propertyName, meta, meta.isIndexed());
             }
 
-            if (merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
+            if (isUpdate && merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
                 throw new Error("Changing readonly property " + meta.getCaption());
             }
 
@@ -535,7 +535,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             throw new Error("Can't persist Transient Entity");
         }
         Entity entity;
+        boolean isUpdate = true;
         if (iEntity.getPrimaryKey() == null) {
+            isUpdate = false;
             if (isBidirectionalReferenceRequired(iEntity)) {
                 datastoreCallStats.get().count++;
                 entity = new Entity(datastore.allocateIds(getIEntityKind(iEntity), 1).getStart());
@@ -564,7 +566,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (updatedTs != null) {
             iEntity.setMemberValue(updatedTs, new Date());
         }
-        updateEntityProperties(entity, iEntity, merge);
+        updateEntityProperties(entity, iEntity, merge, isUpdate);
         return entity;
     }
 
