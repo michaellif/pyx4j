@@ -47,6 +47,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
@@ -286,6 +287,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         // TODO validations goes here.
     }
 
+    protected void onSaveFailure(Throwable caught) {
+        throw new UnrecoverableClientError(caught);
+    }
+
     @SuppressWarnings("unchecked")
     protected void doSave() {
         onBeforeSave();
@@ -295,7 +300,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
             @Override
             public void onFailure(Throwable caught) {
-                throw new RuntimeException(caught);
+                onSaveFailure(caught);
             }
 
             @Override
