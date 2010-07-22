@@ -46,7 +46,7 @@ public class EntityReflectionTest extends InitializerTestCase {
         //Test declared order
         List<String> namesDeclared = Arrays.asList(Employee.MEMEBERS_ORDER);
         if (!EqualsHelper.equals(names, namesDeclared)) {
-            fail("Memeber Order is not preserved " + names);
+            fail("Memeber Order is not preserved " + names + " != " + namesDeclared);
         }
     }
 

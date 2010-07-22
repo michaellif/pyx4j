@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import junit.framework.Assert;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -32,7 +34,7 @@ public class EntityEqualsTest extends InitializerTestCase {
         if (expected != actual) {
             return;
         } else {
-            failNotEquals(message, expected, actual);
+            Assert.failNotEquals(message, expected, actual);
         }
     }
 

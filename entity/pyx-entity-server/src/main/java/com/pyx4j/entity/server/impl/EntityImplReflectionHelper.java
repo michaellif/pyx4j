@@ -86,7 +86,7 @@ public class EntityImplReflectionHelper {
             Type paramType = ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             return implHandler.lazyCreateMemberIPrimitiveSet(method.getName(), (Class<IEntity>) paramType);
         } else {
-            throw new RuntimeException("Unknown member type" + memberClass);
+            throw new RuntimeException("Unknown member " + memberName + " type " + memberClass);
         }
     }
 

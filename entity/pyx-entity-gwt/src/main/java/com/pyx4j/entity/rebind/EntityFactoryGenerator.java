@@ -25,7 +25,9 @@ import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.ext.Generator;
@@ -92,6 +94,8 @@ public class EntityFactoryGenerator extends Generator {
 
     private JClassType iEnentityInterfaceType;
 
+    private JClassType iObjectInterfaceType;
+
     private JClassType iPrimitiveSetInterfaceType;
 
     private JClassType numberType;
@@ -123,6 +127,7 @@ public class EntityFactoryGenerator extends Generator {
 
             RpcBlacklistCheck rpcFilter = new RpcBlacklistCheck(logger, context.getPropertyOracle());
 
+            iObjectInterfaceType = oracle.getType(IObject.class.getName());
             iEnentityInterfaceType = oracle.getType(IEntity.class.getName());
             iPrimitiveInterfaceType = oracle.getType(IPrimitive.class.getName());
             iSetInterfaceType = oracle.getType(ISet.class.getName());
@@ -271,13 +276,13 @@ public class EntityFactoryGenerator extends Generator {
         List<String> toStringMemberNames = new Vector<String>();
         final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
 
-        for (JMethod method : interfaceType.getMethods()) {
-            if (isEntityMemeber(method)) {
-                ToString ts = method.getAnnotation(ToString.class);
-                if (ts != null) {
-                    toStringMemberNames.add(method.getName());
-                    sortKeys.put(method.getName(), ts);
-                }
+        List<JMethod> allMethods = getAllEntityMethods(interfaceType);
+
+        for (JMethod method : allMethods) {
+            ToString ts = method.getAnnotation(ToString.class);
+            if (ts != null) {
+                toStringMemberNames.add(method.getName());
+                sortKeys.put(method.getName(), ts);
             }
         }
 
@@ -342,7 +347,8 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("@Override");
         writer.println("protected MemberMeta createMemberMeta(String memberName) {");
         writer.indent();
-        for (JMethod method : interfaceType.getMethods()) {
+
+        for (JMethod method : allMethods) {
             if (!isEntityMemeber(method)) {
                 continue;
             }
@@ -536,6 +542,29 @@ public class EntityFactoryGenerator extends Generator {
         writer.commit(logger);
     }
 
+    private List<JMethod> getAllEntityMethods(JClassType interfaceType) {
+        Set<String> uniqueNames = new HashSet<String>();
+        List<JMethod> allMethods = new Vector<JMethod>();
+        for (JMethod method : interfaceType.getMethods()) {
+            if (isEntityMemeber(method)) {
+                allMethods.add(method);
+                uniqueNames.add(method.getName());
+            }
+        }
+        for (JClassType impls : interfaceType.getImplementedInterfaces()) {
+            if ((impls == iEnentityInterfaceType) || (impls == iObjectInterfaceType)) {
+                continue;
+            }
+            for (JMethod method : impls.getMethods()) {
+                if (isEntityMemeber(method) && !uniqueNames.contains(method.getName())) {
+                    allMethods.add(method);
+                    uniqueNames.add(method.getName());
+                }
+            }
+        }
+        return allMethods;
+    }
+
     private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
         //Static for optimisation
         writer.println();
@@ -569,10 +598,10 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("@Override");
         writer.println("protected IObject<?> lazyCreateMember(String name) {");
         writer.indent();
-        for (JMethod method : interfaceType.getMethods()) {
-            if (!isEntityMemeber(method)) {
-                continue;
-            }
+
+        List<JMethod> allMethods = getAllEntityMethods(interfaceType);
+
+        for (JMethod method : allMethods) {
             JClassType type = (JClassType) method.getReturnType();
             writer.println("if (\"" + method.getName() + "\".equals(name)) {");
             writer.indent();
@@ -620,10 +649,7 @@ public class EntityFactoryGenerator extends Generator {
 
         StringBuilder membersNamesStringArray = new StringBuilder();
         // Members access
-        for (JMethod method : interfaceType.getMethods()) {
-            if (!isEntityMemeber(method)) {
-                continue;
-            }
+        for (JMethod method : allMethods) {
             writer.println();
             writer.println("@Override");
             writer.println("@SuppressWarnings(\"unchecked\")");

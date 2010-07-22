@@ -27,6 +27,8 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
@@ -35,6 +37,7 @@ import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
 
 public class EntityMetaTest extends InitializerTestCase {
 
@@ -91,5 +94,14 @@ public class EntityMetaTest extends InitializerTestCase {
         assertFalse("@Owner is Detached", EntityFactory.create(Department.class).organization().getMeta().isDetached());
         assertFalse("@Detached", EntityFactory.create(Employee.class).homeAddress().getMeta().isDetached());
         assertFalse("@Unindexed", EntityFactory.create(Employee.class).holidays().getMeta().isIndexed());
+    }
+
+    public void testInherited() {
+        AddressExt addressExt = EntityFactory.create(AddressExt.class);
+        EntityMeta meta = EntityFactory.getEntityMeta(AddressExt.class);
+
+        assertTrue("has filed city", meta.getMemberNames().contains(addressExt.city().getFieldName()));
+
+        assertEquals("caption", "inherited city", meta.getMemberMeta(new Path(addressExt.city())).getCaption());
     }
 }

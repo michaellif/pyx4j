@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -60,14 +61,23 @@ public class EntityImplGenerator {
 
     private final boolean webapp;
 
+    private CtClass ctClassObject;
+
+    private CtClass ctClassIEntity;
+
+    private CtClass ctClassIObject;
+
     private EntityImplGenerator(boolean webapp) {
         this.webapp = webapp;
     }
 
-    private synchronized void initClassPool() {
+    private synchronized void initClassPool() throws NotFoundException {
         if (pool == null) {
             pool = ClassPool.getDefault();
             appendClassPath(webapp);
+            ctClassIEntity = pool.get(IEntity.class.getName());
+            ctClassIObject = pool.get(IObject.class.getName());
+            ctClassObject = pool.get(Object.class.getName());
         }
     }
 
@@ -251,16 +261,32 @@ public class EntityImplGenerator {
             lazyCreateMember.setBody("return " + EntityImplReflectionHelper.class.getName() + ".lazyCreateMember(" + interfaceName + ".class, this, $1);");
             implClass.addMethod(lazyCreateMember);
 
+            List<CtMethod> allMethodsSortedByDeclaration = new Vector<CtMethod>();
+            for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
+                if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
+                        || (method.getDeclaringClass().equals(ctClassIObject))) {
+                    continue;
+                }
+                allMethodsSortedByDeclaration.add(method);
+            }
+            for (CtMethod method : interfaceCtClass.getMethods()) {
+                if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
+                        || (method.getDeclaringClass().equals(ctClassIObject))) {
+                    continue;
+                }
+                if (!allMethodsSortedByDeclaration.contains(method)) {
+                    allMethodsSortedByDeclaration.add(method);
+                }
+            }
+
             StringBuilder membersNamesStringArray = new StringBuilder();
             // Members access, Use CtClass to get the list of Methods ordered by declaration order.
-            for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
-                if (method.getDeclaringClass().equals(Object.class) || (!method.getDeclaringClass().equals(interfaceCtClass))) {
-                    continue;
-                }
+            for (CtMethod method : allMethodsSortedByDeclaration) {
                 CtClass type = method.getReturnType();
                 if (type == CtClass.voidType) {
-                    continue;
+                    throw new Error("Can't create void memeber " + method.getName() + " for class " + name);
                 }
+                //System.out.println("Creating " + method.getName() + " of " + method.getDeclaringClass().getName());
                 CtMethod member = new CtMethod(type, method.getName(), null, implClass);
                 member.setBody("return (" + type.getName() + ")getMember(\"" + method.getName() + "\");");
                 implClass.addMethod(member);

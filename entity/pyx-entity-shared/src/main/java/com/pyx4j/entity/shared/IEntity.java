@@ -69,6 +69,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public Object removeMemberValue(String memberName);
 
+    @Override
     public Class<? extends IEntity> getValueClass();
 
     /**
@@ -80,4 +81,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public List<Validator> getValidators(Path memberPath);
 
     public IEntity cloneEntity();
+
+    @Override
+    public String getStringView();
 }
