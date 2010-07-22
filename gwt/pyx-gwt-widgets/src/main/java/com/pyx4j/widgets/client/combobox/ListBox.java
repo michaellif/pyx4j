@@ -30,7 +30,7 @@ public class ListBox<E> extends ComboBox<E> {
     public ListBox(boolean multipleSelect) {
 
         setTextBox(new com.google.gwt.user.client.ui.TextBox());
-        setPickerPanel(new ListPickerPanel<E>(this, multipleSelect));
+        setPickerPanel(new TreePickerPanel<E>(this, multipleSelect));
         setOptionsGrabber(new ListOptionsGrabber<E>(this));
 
         init();

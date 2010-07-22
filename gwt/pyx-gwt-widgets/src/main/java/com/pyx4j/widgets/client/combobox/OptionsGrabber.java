@@ -22,18 +22,16 @@ package com.pyx4j.widgets.client.combobox;
 
 import java.util.Collection;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-
 public abstract class OptionsGrabber<E> {
 
     public interface Callback<E> {
         void onOptionsReady(Request request, Response<E> response);
     }
 
-    public static class Request implements IsSerializable {
+    public static class Request {
 
         //-1 unlimited
-        private int limit = -1;
+        private int pageSize = -1;
 
         private String query;
 
@@ -42,12 +40,12 @@ public abstract class OptionsGrabber<E> {
         public Request() {
         }
 
-        public int getLimit() {
-            return limit;
+        public int getPageSize() {
+            return pageSize;
         }
 
-        public void setLimit(int limit) {
-            this.limit = limit;
+        public void setPageSize(int pageSize) {
+            this.pageSize = pageSize;
         }
 
         public String getQuery() {
@@ -68,7 +66,7 @@ public abstract class OptionsGrabber<E> {
 
     }
 
-    public static class Response<E> implements IsSerializable {
+    public static class Response<E> {
         private Collection<E> options;
 
         public Response() {

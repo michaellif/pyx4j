@@ -49,7 +49,6 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
-import com.pyx4j.widgets.client.combobox.GridBox;
 import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -101,51 +100,11 @@ public class WidgetsDemo implements EntryPoint {
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
 
         {
-            GridBox gridBox = new GridBox("200px") {
-
-                @Override
-                public void onChange(String selectedValue) {
-                    // TODO Auto-generated method stub
-
-                }
-
-                @Override
-                public void onChecked(String checkedValue, boolean isChecked) {
-                    // TODO Auto-generated method stub
-
-                }
-
-            };
-
-            gridBox.init(5);
-
-            gridBox.addItem("Name1", "Value1");
-            gridBox.addItem("Name2", "Value2");
-
-            contentPanel.add(gridBox);
-
-        }
-
-        {
-            ListBox<String> comboBox = new ListBox<String>(false);
+            ListBox<String> comboBox = new ListBox<String>(true);
             List<String> options = new ArrayList<String>();
 
             options.add("Item 1");
             options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
 
             comboBox.setOptions(options);
 
@@ -356,7 +315,7 @@ public class WidgetsDemo implements EntryPoint {
         }
 
         {
-            ListBox<String> comboBox = new ListBox<String>(false);
+            ListBox<String> comboBox = new ListBox<String>(true);
             List<String> options = new ArrayList<String>();
 
             options.add("Item 1");

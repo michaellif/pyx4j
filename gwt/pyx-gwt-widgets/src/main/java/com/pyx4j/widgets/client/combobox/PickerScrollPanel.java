@@ -14,33 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 20, 2010
+ * Created on Jul 22, 2010
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client.combobox;
 
-import java.util.List;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
+public class PickerScrollPanel extends ScrollPanel {
 
-public class ListPickerPanel<E> extends PickerPanel<E> {
-
-    private final com.google.gwt.user.client.ui.ListBox list;
-
-    public ListPickerPanel(ListBox<E> listBox, boolean multipleSelect) {
-
-        list = new com.google.gwt.user.client.ui.ListBox(multipleSelect);
-        setWidget(list);
-        list.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
-        list.setVisibleItemCount(6);
+    public PickerScrollPanel(Widget widget) {
+        setWidget(widget);
     }
 
     @Override
-    protected void setOptions(List<E> options) {
-        for (E option : options) {
-            list.addItem(option.toString());
+    protected void onLoad() {
+        super.onLoad();
+        if (getWidget().getOffsetHeight() > 200) {
+            setHeight("200px");
         }
     }
-
 }

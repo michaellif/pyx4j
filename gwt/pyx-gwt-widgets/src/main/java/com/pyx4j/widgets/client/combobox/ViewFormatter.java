@@ -26,12 +26,10 @@ import com.google.gwt.user.client.ui.Image;
 
 public interface ViewFormatter {
 
-    int getViewSize();
-
-    List<String> getView();
-
-    boolean hasIcon();
+    List<String> getData();
 
     Image getIcon();
+
+    String getDescription();
 
 }

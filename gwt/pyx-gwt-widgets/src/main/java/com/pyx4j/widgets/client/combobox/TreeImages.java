@@ -14,12 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 20, 2010
- * @author michaellif
+ * Created on Dec 26, 2009
+ * @author Michael
  * @version $Id$
  */
 package com.pyx4j.widgets.client.combobox;
 
-public interface DescriptionFormatter {
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Tree.Resources;
+
+public interface TreeImages extends Resources {
+
+    /**
+     * An image indicating a closed branch.
+     */
+    ImageResource treeClosed();
+
+    /**
+     * An image indicating a leaf.
+     */
+    ImageResource treeLeaf();
+
+    /**
+     * An image indicating an open branch.
+     */
+    ImageResource treeOpen();
 
 }

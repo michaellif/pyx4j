@@ -46,7 +46,7 @@ public class WindowsTheme extends Theme {
         initDialogBoxStyles();
         initDialogPanelStyles();
         initGwtButtonStyles();
-        initPickerStyles();
+        initComboBoxStyles();
         initButtonStyles();
         initTooltipStyle();
         initTreeStyle();
@@ -273,7 +273,7 @@ public class WindowsTheme extends Theme {
 
     }
 
-    protected void initPickerStyles() {
+    protected void initComboBoxStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Picker.name());
         style.addProperty("border", "1px solid transparent");
         style.addProperty("cursor", "pointer");
@@ -292,8 +292,25 @@ public class WindowsTheme extends Theme {
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getURL() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Picker.name() + " table");
+        style = new Style("." + CSSClass.pyx4j_PickerPanel.name());
+        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("background-color", "#fff");
+        addStyle(style);
+
+        addStyle(style);
+        style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " td");
+        style.addProperty("padding", "0px");
+
+        style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " table");
         style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " .gwt-TreeItem");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + "-hover");
         addStyle(style);
 
     }

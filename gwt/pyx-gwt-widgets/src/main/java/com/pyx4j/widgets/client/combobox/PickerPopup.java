@@ -34,7 +34,7 @@ public class PickerPopup<E> extends PopupPanel {
         this.parent = parent;
         addAutoHidePartner(parent.getElement());
         setPreviewingAllNativeEvents(true);
-        setStyleName(CSSClass.pyx4j_TextBox.name());
+        setStyleName(CSSClass.pyx4j_PickerPanel.name());
 
     }
 
