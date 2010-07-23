@@ -85,7 +85,7 @@ public class LifecycleFilter implements Filter {
 
                 if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
                     if (response instanceof HttpServletResponse) {
-                        ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PAYMENT_REQUIRED);
+                        ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
                     }
                     return;
                 }

@@ -76,7 +76,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
                     showReloadApplicationDialog();
                 } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
                     showReloadApplicationDialog();
-                } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PAYMENT_REQUIRED) {
+                } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PRECONDITION_FAILED) {
                     showThrottleDialog();
                 } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
                     // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
