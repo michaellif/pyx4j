@@ -151,7 +151,7 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
         while (html.endsWith("<br>")) {
             html = html.substring(0, html.length() - 4).trim();
         }
-        return html;
+        return html.replaceAll("<br>", "<br />").replaceAll("\r", "").replaceAll("\n", "");
     }
 
     @Override
