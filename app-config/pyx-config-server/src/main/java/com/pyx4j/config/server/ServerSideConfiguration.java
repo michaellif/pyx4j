@@ -23,6 +23,7 @@ package com.pyx4j.config.server;
 import java.util.List;
 
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
 
 /**
@@ -95,6 +96,10 @@ public class ServerSideConfiguration {
      */
     public AclCreator getAclCreator() {
         return null;
+    }
+
+    public ThrottleConfig getThrottleConfig() {
+        return new ThrottleConfig();
     }
 
     public boolean useAppengineGoogleAccounts() {

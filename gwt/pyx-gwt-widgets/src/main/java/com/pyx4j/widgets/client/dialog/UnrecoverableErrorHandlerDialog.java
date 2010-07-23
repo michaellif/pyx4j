@@ -67,11 +67,18 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         DeferredCommand.addCommand(new Command() {
             @Override
             public void execute() {
-                if (caught instanceof IncompatibleRemoteServiceException) {
+                Throwable cause = caught;
+                if ((caught instanceof UnrecoverableClientError) && (caught.getCause() != null)) {
+                    cause = caught.getCause();
+                }
+
+                if (cause instanceof IncompatibleRemoteServiceException) {
                     showReloadApplicationDialog();
-                } else if ((caught instanceof StatusCodeException) && (((StatusCodeException) caught).getStatusCode()) == Response.SC_NOT_FOUND) {
+                } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
                     showReloadApplicationDialog();
-                } else if ((caught instanceof RuntimeException) && ("HTTP download failed with status 404".equals(caught.getMessage()))) {
+                } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PAYMENT_REQUIRED) {
+                    showThrottleDialog();
+                } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
                     // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
                     showReloadApplicationDialog();
                 } else {
@@ -102,6 +109,12 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         d.show();
     }
 
+    protected void showThrottleDialog() {
+        MessageDialog
+                .error(i18n.tr("We're sorry"),
+                        i18n.tr("We're sorry but your requests looks similar to automated requests from a computer virus or spyware application. To protect our users, we can't process your request right now."));
+    }
+
     protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
 
         String detailsMessage = null;
@@ -123,7 +136,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             }
             detailsMessage += "\n" + caught.getClass();
             if (caught instanceof StatusCodeException) {
-                detailsMessage += " " + (((StatusCodeException) caught).getStatusCode());
+                detailsMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
             }
         }
 

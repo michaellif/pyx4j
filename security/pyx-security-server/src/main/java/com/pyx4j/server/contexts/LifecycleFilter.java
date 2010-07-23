@@ -21,6 +21,8 @@
 package com.pyx4j.server.contexts;
 
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -29,11 +31,36 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.security.server.ThrottleConfig;
+
+/**
+ * Setup Context thread locals.
+ * 
+ * Also rejects requests from IPs that are sending too many requests and spend too much
+ * application time.
+ */
 public class LifecycleFilter implements Filter {
+
+    private ThrottleConfig throttleConfig;
+
+    private static long nextIntervalResetTime;
+
+    private static Map<String, AccessCounter> accessByIP = new Hashtable<String, AccessCounter>();
+
+    private static class AccessCounter {
+
+        int requests = 1;
+
+        long duration = 0;
+
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        throttleConfig = ServerSideConfiguration.instance().getThrottleConfig();
     }
 
     @Override
@@ -42,19 +69,43 @@ public class LifecycleFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!(request instanceof HttpServletRequest)) {
-            chain.doFilter(request, response);
-        } else {
-            HttpServletRequest httprequest = (HttpServletRequest) request;
-            // TODO MDC
-            Lifecycle.beginRequest(httprequest);
-            try {
-                chain.doFilter(request, response);
-            } finally {
-                Lifecycle.endRequest();
+        long start = System.currentTimeMillis();
+        AccessCounter counter = null;
+        try {
+            if (start > nextIntervalResetTime) {
+                accessByIP.clear();
+                nextIntervalResetTime = start + throttleConfig.getInterval();
             }
+            counter = accessByIP.get(request.getRemoteAddr());
+            if (counter == null) {
+                counter = new AccessCounter();
+                accessByIP.put(request.getRemoteAddr(), counter);
+            } else {
+                counter.requests++;
+
+                if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
+                    if (response instanceof HttpServletResponse) {
+                        ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PAYMENT_REQUIRED);
+                    }
+                    return;
+                }
+            }
+
+            if (!(request instanceof HttpServletRequest)) {
+                chain.doFilter(request, response);
+            } else {
+                HttpServletRequest httprequest = (HttpServletRequest) request;
+                // TODO MDC
+                Lifecycle.beginRequest(httprequest);
+                try {
+                    chain.doFilter(request, response);
+                } finally {
+                    Lifecycle.endRequest();
+                }
+            }
+        } finally {
+            counter.duration += System.currentTimeMillis() - start;
         }
 
     }
-
 }
