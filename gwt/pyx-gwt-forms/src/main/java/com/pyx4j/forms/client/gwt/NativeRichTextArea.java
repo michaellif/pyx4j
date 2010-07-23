@@ -151,7 +151,25 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
         while (html.endsWith("<br>")) {
             html = html.substring(0, html.length() - 4).trim();
         }
-        return html.replaceAll("<br>", "<br />").replaceAll("\r", "").replaceAll("\n", "");
+        // make all tags lower case as in JTidy
+        StringBuilder b = new StringBuilder();
+        boolean tag = false;
+        for (char part : html.toCharArray()) {
+            if (part == '<') {
+                tag = true;
+            } else if (tag) {
+                if (((part >= 'A') && (part <= 'Z')) || (part == '/')) {
+                    part = Character.toLowerCase(part);
+                } else {
+                    tag = false;
+                }
+            } else if ((part == '\r') || (part == '\n')) {
+                continue;
+            }
+            b.append(part);
+        }
+        html = b.toString();
+        return html.replaceAll("<br>", "<br />");
     }
 
     @Override
