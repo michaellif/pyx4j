@@ -112,7 +112,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
     protected void showThrottleDialog() {
         MessageDialog
                 .error(i18n.tr("We're sorry"),
-                        i18n.tr("We're sorry but your requests looks similar to automated requests from a computer virus or spyware application. To protect our users, we can't process your request right now."));
+                        i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware application. To protect our users, we can't process your request at this moment."));
     }
 
     protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
