@@ -33,6 +33,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 
@@ -43,6 +46,8 @@ import com.pyx4j.security.server.ThrottleConfig;
  * application time.
  */
 public class LifecycleFilter implements Filter {
+
+    private static Logger log = LoggerFactory.getLogger(LifecycleFilter.class);
 
     private ThrottleConfig throttleConfig;
 
@@ -87,6 +92,7 @@ public class LifecycleFilter implements Filter {
                     if (response instanceof HttpServletResponse) {
                         ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
                     }
+                    log.error("possible denial-of-service attack from {}", request.getRemoteAddr());
                     return;
                 }
             }
