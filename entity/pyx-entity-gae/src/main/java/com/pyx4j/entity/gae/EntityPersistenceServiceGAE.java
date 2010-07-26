@@ -322,6 +322,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                         value = childKeys;
                     }
+
+                    // Cascade delete
+                    if (isUpdate && merge) {
+                        Object origValue = entity.getProperty(propertyName);
+                        if (origValue != null) {
+                            Vector<Key> removedChildKeys = new Vector<Key>();
+                            for (Key childKey : (List<Key>) origValue) {
+                                if (!childKeys.contains(childKey)) {
+                                    removedChildKeys.add(childKey);
+                                }
+                            }
+                            if (removedChildKeys.size() > 0) {
+                                datastoreCallStats.get().count++;
+                                datastore.delete(removedChildKeys);
+                            }
+                        }
+                    }
+
                 } else {
                     for (Object el : (Set<?>) value) {
                         Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
@@ -344,6 +362,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         childKeys.add(key);
                         childKeysOrder.add(key.getId());
                     }
+
+                    // Cascade delete
+                    if (isUpdate && merge) {
+                        Object origValue = entity.getProperty(propertyName);
+                        if (origValue != null) {
+                            Vector<Key> removedChildKeys = new Vector<Key>();
+                            for (Key childKey : (List<Key>) origValue) {
+                                if (!childKeys.contains(childKey)) {
+                                    removedChildKeys.add(childKey);
+                                }
+                            }
+                            if (removedChildKeys.size() > 0) {
+                                datastoreCallStats.get().count++;
+                                datastore.delete(removedChildKeys);
+                            }
+                        }
+                    }
+
                 } else {
                     for (Object el : (List<?>) value) {
                         Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
