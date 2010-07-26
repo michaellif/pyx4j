@@ -357,7 +357,7 @@ public class HtmlToPDFParser extends DefaultHandler {
         if (qName.equals(HtmlTags.BODY)) {
             document.open();
         }
-
+        
         if (!tagMap.containsKey(qName)) {
             return;
         }
@@ -366,8 +366,10 @@ public class HtmlToPDFParser extends DefaultHandler {
         if (characterBuffer.length() != 0) {
             String content = characterBuffer.toString();
             characterBuffer = new StringBuilder();
+            
+            content = content.replaceAll("\\s+", " ");
 
-            if (!content.trim().isEmpty()) {
+            if (!content.isEmpty() && document.isOpen()) {
                 Chunk chunk = new Chunk(content);
                 if (nodes.empty()) {
                     try {
@@ -420,7 +422,7 @@ public class HtmlToPDFParser extends DefaultHandler {
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         String content = new String(ch, start, length).replaceAll("\\s+", " ");
-        if (!content.trim().isEmpty()) {
+        if (!content.isEmpty()) {
             characterBuffer.append(content);
         }
     }
@@ -445,6 +447,7 @@ public class HtmlToPDFParser extends DefaultHandler {
 
         String content = characterBuffer.toString();
         characterBuffer = new StringBuilder();
+        content = content.replaceAll("\\s+", " ");
 
         switch (tagMap.get(node.getTag())) {
         case Element.TITLE:
