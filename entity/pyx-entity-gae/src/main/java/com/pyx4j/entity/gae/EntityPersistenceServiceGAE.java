@@ -291,6 +291,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         continue nextValue;
                     } else {
                         value = persistImpl(childIEntity, merge);
+                        // Cascade delete
+                        if (isUpdate && merge) {
+                            Object origValue = entity.getProperty(propertyName);
+                            if ((origValue != null) && (origValue.equals(value))) {
+                                datastoreCallStats.get().count++;
+                                datastore.delete((Key) origValue);
+                            }
+                        }
                     }
                 } else {
                     Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
