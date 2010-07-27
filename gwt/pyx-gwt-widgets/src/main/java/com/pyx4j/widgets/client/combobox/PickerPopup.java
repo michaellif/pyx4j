@@ -43,15 +43,19 @@ public class PickerPopup<E> extends PopupPanel {
             hide();
         }
 
+        panel.setPickerPopup(this);
         setWidget(panel.getWidget());
         showRelativeTo(relativeTo);
-
+        panel.setFocus(true);
+        panel.ensureSelectedIsVisible();
     }
 
     @Override
     protected void onLoad() {
         if (getOffsetWidth() < parent.getOffsetWidth()) {
             setWidth((parent.getOffsetWidth() - 2) + "px");
+        } else {
+            setWidth((getOffsetWidth() + 50) + "px");
         }
     };
 

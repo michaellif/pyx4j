@@ -27,6 +27,9 @@ public class PickerScrollPanel extends ScrollPanel {
 
     public PickerScrollPanel(Widget widget) {
         setWidget(widget);
+        getElement().getStyle().setProperty("overflowY", "auto");
+        getElement().getStyle().setProperty("overflowX", "hidden");
+
     }
 
     @Override

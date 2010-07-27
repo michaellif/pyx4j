@@ -21,6 +21,9 @@
 package com.pyx4j.widgets.client.combobox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -36,6 +39,8 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public abstract class ComboBox<E> extends HorizontalPanel {
 
+    private final Set<E> selection = new HashSet<E>();
+
     private PickerPopup<E> pickerPopup;
 
     private PickerPanel<E> pickerPanel;
@@ -44,7 +49,10 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
     private OptionsGrabber<E> optionsGrabber;
 
-    protected ComboBox() {
+    private final boolean multipleSelect;
+
+    protected ComboBox(boolean multipleSelect) {
+        this.multipleSelect = multipleSelect;
     }
 
     protected void init() {
@@ -68,14 +76,23 @@ public abstract class ComboBox<E> extends HorizontalPanel {
             @Override
             public void onClick(ClickEvent event) {
 
-                optionsGrabber.obtainOptions(new Request(), new Callback<E>() {
-
-                    @Override
-                    public void onOptionsReady(Request request, Response<E> response) {
-                        pickerPanel.setOptions(new ArrayList<E>(response.getOptions()));
+                if (!pickerPopup.isShowing()) {
+                    if (pickerPanel.requiresOptionsRefresh()) {
+                        optionsGrabber.obtainOptions(new Request(), new Callback<E>() {
+                            @Override
+                            public void onOptionsReady(Request request, Response<E> response) {
+                                pickerPanel.setOptions(new ArrayList<E>(response.getOptions()));
+                                pickerPanel.setSelection(getSelection());
+                                pickerPopup.show(pickerPanel, ComboBox.this);
+                            }
+                        });
+                    } else {
+                        pickerPanel.setSelection(getSelection());
                         pickerPopup.show(pickerPanel, ComboBox.this);
                     }
-                });
+                } else {
+                    pickerPopup.hide();
+                }
 
             }
         });
@@ -115,6 +132,14 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
     public OptionsGrabber<E> getOptionsGrabber() {
         return optionsGrabber;
+    }
+
+    public void setSelection(E... items) {
+        selection.addAll(Arrays.asList(items));
+    }
+
+    public Set<E> getSelection() {
+        return selection;
     }
 
 }

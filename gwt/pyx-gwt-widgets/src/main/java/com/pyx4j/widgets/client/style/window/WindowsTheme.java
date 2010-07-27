@@ -310,8 +310,13 @@ public class WindowsTheme extends Theme {
         style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " .gwt-TreeItem");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + "-hover");
+        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + " table");
+        style.addProperty("width", "100%");
         addStyle(style);
+
+        //        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + " td");
+        //        style.addProperty("width", "100%");
+        //        addStyle(style);
 
     }
 

@@ -106,6 +106,8 @@ public class WidgetsDemo implements EntryPoint {
             options.add("Item 1");
             options.add("Item 2");
 
+            comboBox.setSelection("Item 1");
+
             comboBox.setOptions(options);
 
             contentPanel.add(comboBox);
@@ -120,21 +122,22 @@ public class WidgetsDemo implements EntryPoint {
             options.add("Item 1");
             options.add("Item 2");
             options.add("Item 3");
-            options.add("Item ItemItemItemItemItemItemItemItem 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
-            options.add("Item ItemItemItemItemItemItemItemItemItemItemItemItem 1");
-            options.add("Item 2");
-            options.add("Item 3");
-            options.add("Item 4");
+            options.add("Item 444444444444444444");
+            options.add("Item 5");
+            options.add("Item 6");
+            options.add("Item 7");
+            options.add("Item 8");
+            options.add("Item 9");
+            options.add("Item 10");
+            options.add("Item 11");
+            options.add("Item 12");
+            options.add("Item 131313131313131313131313131313");
+            options.add("Item 14");
+            options.add("Item 15");
 
             comboBox.setOptions(options);
+
+            comboBox.setSelection("Item 14");
 
             contentPanel.add(comboBox);
 

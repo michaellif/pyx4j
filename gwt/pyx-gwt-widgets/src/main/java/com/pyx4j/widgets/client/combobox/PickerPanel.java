@@ -21,12 +21,15 @@
 package com.pyx4j.widgets.client.combobox;
 
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class PickerPanel<E> {
 
     private Widget widget;
+
+    private PickerPopup<E> pickerPopup;
 
     protected Widget getWidget() {
         return widget;
@@ -37,4 +40,22 @@ public abstract class PickerPanel<E> {
     }
 
     protected abstract void setOptions(List<E> options);
+
+    protected abstract void setOptions(List<E> options, E parent);
+
+    protected abstract void setSelection(Set<E> items);
+
+    protected void setPickerPopup(PickerPopup<E> pickerPopup) {
+        this.pickerPopup = pickerPopup;
+    }
+
+    protected void hide() {
+        pickerPopup.hide();
+    }
+
+    public abstract boolean requiresOptionsRefresh();
+
+    public abstract void setFocus(boolean focus);
+
+    public abstract void ensureSelectedIsVisible();
 }

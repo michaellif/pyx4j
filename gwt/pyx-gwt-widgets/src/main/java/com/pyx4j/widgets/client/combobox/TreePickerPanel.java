@@ -20,11 +20,18 @@
  */
 package com.pyx4j.widgets.client.combobox;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
@@ -38,6 +45,10 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
     private static TreeImages images = GWT.create(TreeImages.class);
 
+    private boolean requiresOptionsRefresh = true;
+
+    private final PickerScrollPanel scroll;
+
     public TreePickerPanel(ListBox<E> listBox, boolean multipleSelect) {
         this.multipleSelect = multipleSelect;
         if (multipleSelect) {
@@ -46,27 +57,89 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         } else {
             tree = new Tree(images, true);
         }
-        PickerScrollPanel scroll = new PickerScrollPanel(tree);
+        scroll = new PickerScrollPanel(tree);
         setWidget(scroll);
     }
 
     @Override
     protected void setOptions(List<E> options) {
+        requiresOptionsRefresh = (options == null);
         tree.clear();
         for (E option : options) {
             TreeItem treeItem = null;
             if (multipleSelect) {
                 CheckBox itemWidget = new CheckBox(option.toString());
-                itemWidget.setWidth("100%");
                 treeItem = tree.addItem(itemWidget);
                 treeItem.addItem("Leaf");
             } else {
-                treeItem = tree.addItem(option.toString());
+                HTML itemWidget = new HTML(option.toString());
+                itemWidget.getElement().getStyle().setDisplay(Display.INLINE);
+                treeItem = tree.addItem(itemWidget);
             }
+            treeItem.setWidth("100%");
+            treeItem.getWidget().setWidth("100%");
+
+            treeItem.setUserObject(option);
+
             treeItem.getElement().getStyle().setPadding(1, Unit.PX);
             treeItem.setStyleName(CSSClass.pyx4j_PickerLine.name());
-
         }
+        tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+            @Override
+            public void onSelection(SelectionEvent<TreeItem> event) {
+                //hide();
+            }
+        });
+        //        tree.addMouseOverHandler(new MouseOverHandler() {
+        //
+        //            @Override
+        //            public void onMouseOver(MouseOverEvent event) {
+        //                event.getRelativeElement().getStyle().setBackgroundColor("green");
+        //            }
+        //        });
+        //        tree.addMouseOutHandler(new MouseOutHandler() {
+        //
+        //            @Override
+        //            public void onMouseOut(MouseOutEvent event) {
+        //                event.getRelativeElement().getStyle().setBackgroundColor("red");
+        //            }
+        //        });
+
+    }
+
+    @Override
+    public boolean requiresOptionsRefresh() {
+        return requiresOptionsRefresh;
+    }
+
+    @Override
+    protected void setOptions(List<E> options, E parent) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void setSelection(Set<E> items) {
+        final Iterator<TreeItem> itr = tree.treeItemIterator();
+        while (itr.hasNext()) {
+            TreeItem treeItem = itr.next();
+            E item = (E) treeItem.getUserObject();
+            treeItem.setSelected(items.contains(item));
+            if (items.contains(item)) {
+                tree.setSelectedItem(treeItem);
+            }
+        }
+    }
+
+    @Override
+    public void setFocus(boolean focus) {
+        tree.setFocus(focus);
+    }
+
+    @Override
+    public void ensureSelectedIsVisible() {
+        scroll.ensureVisible(tree.getSelectedItem().getWidget());
+
     }
 
 }
