@@ -22,10 +22,16 @@ package com.pyx4j.entity.shared;
 
 public interface IPrimitive<TYPE> extends IObject<TYPE> {
 
+    @Override
     public Class<TYPE> getValueClass();
 
     public void set(IPrimitive<TYPE> primitiveValue);
 
     public TYPE pars(String value);
+
+    /**
+     * Here until Elvis operator in java 7
+     */
+    public boolean isBooleanTrue();
 
 }

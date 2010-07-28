@@ -118,6 +118,24 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     }
 
     @Override
+    public boolean isBooleanTrue() {
+        if (isNull()) {
+            return false;
+        } else {
+            if (valueClass.equals(Boolean.class)) {
+                return (Boolean) getValue();
+            } else {
+                TYPE thisValue = this.getValue();
+                if (thisValue instanceof Number) {
+                    return 0 != ((Number) thisValue).intValue();
+                } else {
+                    return Boolean.valueOf(thisValue.toString());
+                }
+            }
+        }
+    }
+
+    @Override
     public String getStringView() {
         MemberMeta mm = getMeta();
         String format = mm.getFormat();
