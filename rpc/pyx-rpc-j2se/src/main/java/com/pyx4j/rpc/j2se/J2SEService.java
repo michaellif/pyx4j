@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,20 +46,30 @@ public class J2SEService {
 
     public static final String SERVER_SYSTEM_PROPERTY = "pyx-server-url";
 
-    private static String userAgent = "pyx-j2se/1.0";
+    protected static final String POST = "POST";
 
-    private static final String SESSION_HEADER = "JSESSIONID";
+    protected static final String GET = "GET";
 
-    private static String sessionID;
+    protected String serverUrl;
 
-    public static void googleLogin(String userName, String password) throws RuntimeException {
+    protected String userAgent = "pyx-j2se/1.0";
+
+    protected Map<String, String> cookies = new HashMap<String, String>();
+
+    public J2SEService() {
+        this(System.getProperty(SERVER_SYSTEM_PROPERTY));
+    }
+
+    public J2SEService(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    public void googleLogin(String userName, String password) throws RuntimeException {
         HttpURLConnection conn = null;
         try {
-
-            String url = System.getProperty(SERVER_SYSTEM_PROPERTY);
-            URL u = new URL(url);
+            URL u = new URL(serverUrl);
             conn = (HttpURLConnection) u.openConnection();
-            conn.setRequestMethod("GET");
+            conn.setRequestMethod(GET);
             conn.setRequestProperty("User-agent", userAgent);
             conn.setInstanceFollowRedirects(false);
             conn.setUseCaches(false);
@@ -73,9 +84,9 @@ public class J2SEService {
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     throw new RuntimeException("Failed to authenticate " + conn.getResponseMessage());
                 }
-                getSessionCookie(conn.getHeaderFields());
+                getCookie(conn.getHeaderFields());
                 conn.disconnect();
-                gaeDevLoginPost(redirect, url, userName);
+                gaeDevLoginPost(redirect, serverUrl, userName);
             } else {
                 log.debug("{} no redirect ", conn.getResponseCode());
             }
@@ -88,64 +99,64 @@ public class J2SEService {
         }
     }
 
-    static void gaeDevLoginPost(String loginUrl, String url, String userName) {
+    protected void gaeDevLoginPost(String loginUrl, String url, String userName) {
         HttpURLConnection conn = null;
         OutputStream out = null;
         try {
             conn = (HttpURLConnection) new URL(loginUrl).openConnection();
-            conn.setRequestMethod("POST");
-            //conn.setRequestProperty("User-agent", userAgent);
+            conn.setRequestMethod(POST);
+            conn.setInstanceFollowRedirects(false);
+            conn.setRequestProperty("User-agent", userAgent);
+            //conn.setRequestProperty("Host", "localhost:8888");
             conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setUseCaches(false);
 
-            if (sessionID != null) {
-                conn.setRequestProperty("Cookie", SESSION_HEADER + "=" + sessionID);
-            }
-            conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            conn.setRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-            conn.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8");
-            conn.setRequestProperty("Referer", loginUrl);
+            //            conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            //            conn.setRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+            //            conn.setRequestProperty("Accept-Language", "en-us,en;q=0.7,ru;q=0.3");
+            //            conn.setRequestProperty("Accept-Encoding", "gzip,deflate");
+            //            conn.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8");
+            //            conn.setRequestProperty("Referer", loginUrl);
 
             String charsetName = "iso-8859-1";
-
             StringBuffer form = new StringBuffer();
 
-            form.append("action=");
-            form.append(URLEncoder.encode("Log In", charsetName));
+            form.append("email=");
+            form.append(URLEncoder.encode(userName, charsetName));
             form.append("&");
 
             form.append("continue=");
             form.append(URLEncoder.encode(url, charsetName));
             form.append("&");
 
-            form.append("email=");
-            form.append(URLEncoder.encode(userName, charsetName));
-            form.append("\r\n");
+            form.append("action=");
+            form.append(URLEncoder.encode("Log In", charsetName));
+
+            //form.append("\r\n");
+
+            System.out.println(form.toString());
 
             byte[] data = form.toString().getBytes(charsetName);
             conn.setRequestProperty("Content-Length", Integer.toString(data.length));
+            printHeaders(conn.getRequestProperties());
             out = conn.getOutputStream();
             out.write(data);
+            //out.write('\r');
+            //out.write('\n');
             out.flush();
             out.close();
             out = null;
 
-            //            PrintWriter writer = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), charsetName));
-            //            writer.write(form.toString());
-            //            writer.write("\r\n");
-            //            writer.flush();
-            //writer.close();
-
             log.debug("login post responce {}", conn.getResponseCode());
             printHeaders(conn.getHeaderFields());
+            getCookie(conn.getHeaderFields());
             DataInputStream dis = new DataInputStream(conn.getInputStream());
             int ch;
             while ((ch = dis.read()) != -1) {
                 System.out.print((char) ch);
             }
-
         } catch (IOException e) {
             throw new RuntimeException("Failed to login", e);
         } finally {
@@ -161,24 +172,27 @@ public class J2SEService {
         }
     }
 
-    public static <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request)
-            throws RuntimeException {
-
+    public <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request) throws RuntimeException {
         HttpURLConnection conn = null;
         OutputStream out = null;
         InputStream in = null;
         try {
-
-            String url = System.getProperty(SERVER_SYSTEM_PROPERTY);
-            URL u = new URL(url + serviceInterface.getSimpleName().replace('$', '.'));
+            URL u = new URL(serverUrl + serviceInterface.getSimpleName().replace('$', '.'));
             conn = (HttpURLConnection) u.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setUseCaches(false);
 
-            if (sessionID != null) {
-                conn.setRequestProperty("Cookie", SESSION_HEADER + "=" + sessionID);
+            StringBuilder cookieBuilder = new StringBuilder();
+            for (Map.Entry<String, String> me : cookies.entrySet()) {
+                if (cookieBuilder.length() > 0) {
+                    cookieBuilder.append(';');
+                }
+                cookieBuilder.append(me.getKey()).append('=').append(me.getValue());
+            }
+            if (cookieBuilder.length() > 0) {
+                conn.setRequestProperty("Cookie", cookieBuilder.toString());
             }
             conn.setRequestProperty("Cache-Control", "no-cache, no-transform");
             conn.setRequestProperty("Content-Type", "application/binary");
@@ -209,7 +223,7 @@ public class J2SEService {
                     throw new RuntimeExceptionSerializable(conn.getResponseMessage());
                 }
             }
-            getSessionCookie(conn.getHeaderFields());
+            getCookie(conn.getHeaderFields());
             return (O) reply;
         } catch (IOException e) {
             throw new RuntimeException("Failed to execute " + serviceInterface.getName(), e);
@@ -234,31 +248,27 @@ public class J2SEService {
         }
     }
 
-    private static void getSessionCookie(Map<String, List<String>> headers) {
+    protected void getCookie(Map<String, List<String>> headers) {
         List<String> values = headers.get("Set-Cookie");
         if (values == null) {
             return;
         }
         for (String v : values) {
-            int i = v.indexOf(SESSION_HEADER);
-            if (i == -1) {
-                continue;
-            }
-            int eq = v.indexOf('=', i);
+            int eq = v.indexOf('=');
             if (eq == -1) {
                 continue;
             }
             int t = v.indexOf(';', eq);
             if (t != -1) {
-                String session = v.substring(eq + 1, t);
-                if ((session != null) && (!session.equals(sessionID))) {
-                    log.debug("Set sessionID {}", sessionID);
-                }
+                String name = v.substring(0, eq);
+                String value = v.substring(eq + 1, t);
+                cookies.put(name, value);
+                log.debug("cookie {} = {}", name, value);
             }
         }
     }
 
-    static void printHeaders(Map<String, List<String>> headers) {
+    protected static void printHeaders(Map<String, List<String>> headers) {
         StringBuilder b = new StringBuilder();
         for (Map.Entry<String, List<String>> me : headers.entrySet()) {
             b.append(me.getKey()).append(" = ").append(me.getValue()).append("\n");
