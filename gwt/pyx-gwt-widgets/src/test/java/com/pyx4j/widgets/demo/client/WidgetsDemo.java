@@ -100,7 +100,7 @@ public class WidgetsDemo implements EntryPoint {
         sendButton.addClickHandler(new MyHandler(htmlViewer, pageEditor));
 
         {
-            ListBox<String> comboBox = new ListBox<String>(true);
+            ListBox<String> comboBox = new ListBox<String>(true, true);
             List<String> options = new ArrayList<String>();
 
             options.add("Item 1");
@@ -116,7 +116,7 @@ public class WidgetsDemo implements EntryPoint {
         }
 
         {
-            ListBox<String> comboBox = new ListBox<String>(false);
+            ListBox<String> comboBox = new ListBox<String>(false, false);
             List<String> options = new ArrayList<String>();
 
             options.add("Item 1");
@@ -289,7 +289,7 @@ public class WidgetsDemo implements EntryPoint {
         }
 
         {
-            ListBox<String> comboBox = new ListBox<String>(false);
+            ListBox<String> comboBox = new ListBox<String>(false, true);
             List<String> options = new ArrayList<String>();
 
             options.add("Item 1");
@@ -318,7 +318,7 @@ public class WidgetsDemo implements EntryPoint {
         }
 
         {
-            ListBox<String> comboBox = new ListBox<String>(true);
+            ListBox<String> comboBox = new ListBox<String>(true, true);
             List<String> options = new ArrayList<String>();
 
             options.add("Item 1");

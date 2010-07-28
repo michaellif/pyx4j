@@ -52,7 +52,7 @@ public class PickerPopup<E> extends PopupPanel {
 
     @Override
     protected void onLoad() {
-        if (getOffsetWidth() < parent.getOffsetWidth()) {
+        if (getOffsetWidth() <= parent.getOffsetWidth()) {
             setWidth((parent.getOffsetWidth() - 2) + "px");
         } else {
             setWidth((getOffsetWidth() + 50) + "px");

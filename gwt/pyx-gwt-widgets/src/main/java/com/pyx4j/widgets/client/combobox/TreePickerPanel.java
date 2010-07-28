@@ -31,9 +31,9 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
@@ -43,19 +43,21 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
     private final boolean multipleSelect;
 
+    private final boolean plainList;
+
     private static TreeImages images = GWT.create(TreeImages.class);
 
     private boolean requiresOptionsRefresh = true;
 
     private final PickerScrollPanel scroll;
 
-    public TreePickerPanel(ListBox<E> listBox, boolean multipleSelect) {
+    public TreePickerPanel(ListBox<E> listBox, boolean multipleSelect, boolean plainList) {
         this.multipleSelect = multipleSelect;
-        if (multipleSelect) {
-            tree = new Tree();
-
-        } else {
+        this.plainList = plainList;
+        if (plainList) {
             tree = new Tree(images, true);
+        } else {
+            tree = new Tree();
         }
         scroll = new PickerScrollPanel(tree);
         setWidget(scroll);
@@ -66,18 +68,21 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         requiresOptionsRefresh = (options == null);
         tree.clear();
         for (E option : options) {
-            TreeItem treeItem = null;
+            PickerTreeItem treeItem = null;
             if (multipleSelect) {
                 CheckBox itemWidget = new CheckBox(option.toString());
-                treeItem = tree.addItem(itemWidget);
-                treeItem.addItem("Leaf");
+                treeItem = new PickerTreeItem(itemWidget);
+                tree.addItem(treeItem);
             } else {
                 HTML itemWidget = new HTML(option.toString());
-                itemWidget.getElement().getStyle().setDisplay(Display.INLINE);
-                treeItem = tree.addItem(itemWidget);
+                //itemWidget.getElement().getStyle().setDisplay(Display.INLINE);
+                treeItem = new PickerTreeItem(itemWidget);
+                tree.addItem(treeItem);
             }
-            treeItem.setWidth("100%");
-            treeItem.getWidget().setWidth("100%");
+
+            if (!plainList) {
+                treeItem.addItem("Loading...");
+            }
 
             treeItem.setUserObject(option);
 
@@ -138,8 +143,25 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
 
     @Override
     public void ensureSelectedIsVisible() {
-        scroll.ensureVisible(tree.getSelectedItem().getWidget());
+        if (tree.getSelectedItem() != null) {
+            scroll.ensureVisible(tree.getSelectedItem().getWidget());
+        }
 
     }
 
+    class PickerTreeItem extends TreeItem {
+
+        public PickerTreeItem(Widget widget) {
+            super(widget);
+        }
+
+        @Override
+        public void setSelected(boolean selected) {
+            super.setSelected(selected);
+            if (!multipleSelect) {
+                setStyleName(getElement(), CSSClass.pyx4j_PickerLine_Selected.name(), selected);
+            }
+        }
+
+    }
 }

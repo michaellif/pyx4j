@@ -49,10 +49,7 @@ public abstract class ComboBox<E> extends HorizontalPanel {
 
     private OptionsGrabber<E> optionsGrabber;
 
-    private final boolean multipleSelect;
-
-    protected ComboBox(boolean multipleSelect) {
-        this.multipleSelect = multipleSelect;
+    protected ComboBox() {
     }
 
     protected void init() {

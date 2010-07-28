@@ -36,7 +36,7 @@ public class PageLeavingEvent extends GwtEvent<PageLeavingHandler> {
      */
     private StringBuilder messageBuilder = null;
 
-    public static enum ChageType {
+    public static enum ChangeType {
 
         ARGUMETS_CHANGING,
 
@@ -47,9 +47,9 @@ public class PageLeavingEvent extends GwtEvent<PageLeavingHandler> {
         LOGOUT;
     }
 
-    private final ChageType type;
+    private final ChangeType type;
 
-    public PageLeavingEvent(ChageType type) {
+    public PageLeavingEvent(ChangeType type) {
         this.type = type;
     }
 
@@ -67,7 +67,7 @@ public class PageLeavingEvent extends GwtEvent<PageLeavingHandler> {
      * 
      * @return true when browser window closes or navigates to a different site.
      */
-    public ChageType getChageType() {
+    public ChangeType getChageType() {
         return type;
     }
 

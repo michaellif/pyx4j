@@ -88,9 +88,9 @@ public abstract class AbstractSiteDispatcher {
                     log.debug("page change [{}] -> [{}]", pathShown.getPath(), event.getValue());
                     PageLeavingEvent ple;
                     if (navigationUri.getPageUri().equals(pathShown.getPageUri())) {
-                        ple = new PageLeavingEvent(PageLeavingEvent.ChageType.ARGUMETS_CHANGING);
+                        ple = new PageLeavingEvent(PageLeavingEvent.ChangeType.ARGUMETS_CHANGING);
                     } else {
-                        ple = new PageLeavingEvent(PageLeavingEvent.ChageType.PAGE_CHANGING);
+                        ple = new PageLeavingEvent(PageLeavingEvent.ChangeType.PAGE_CHANGING);
                     }
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {
@@ -136,7 +136,7 @@ public abstract class AbstractSiteDispatcher {
             public void onWindowClosing(ClosingEvent event) {
                 if ((currentSitePanel != null) && (!signingOutDirtyPage)) {
                     log.debug("page leaving on window closing");
-                    PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChageType.WINDOW_CLOSING);
+                    PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChangeType.WINDOW_CLOSING);
                     currentSitePanel.onPageLeaving(ple);
                     if (ple.hasMessage()) {
                         event.setMessage(ple.getMessage());
@@ -318,7 +318,7 @@ public abstract class AbstractSiteDispatcher {
 
     //TODO find a better name for this function
     public void pageLeavingOnLogout(final Runnable callbackOkToLogout) {
-        PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChageType.LOGOUT);
+        PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChangeType.LOGOUT);
         if (currentSitePanel != null) {
             currentSitePanel.onPageLeaving(ple);
         }

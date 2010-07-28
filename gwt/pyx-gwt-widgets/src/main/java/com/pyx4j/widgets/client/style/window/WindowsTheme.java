@@ -307,16 +307,13 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-collapse", "collapse");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " .gwt-TreeItem");
+        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + " .gwt-TreeItem-selected");
+        style.addProperty("background", "transparent");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + " table");
-        style.addProperty("width", "100%");
+        style = new Style("." + CSSClass.pyx4j_PickerLine_Selected.name());
+        style.addProperty("background", "lightGray");
         addStyle(style);
-
-        //        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + " td");
-        //        style.addProperty("width", "100%");
-        //        addStyle(style);
 
     }
 
@@ -408,14 +405,14 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initTreeStyle() {
-        Style style = new Style(".gwt-Tree .gwt-TreeItem");
+        Style style = new Style(".gwt-TreeItem");
         style.addProperty("padding", "1px 0px");
         style.addProperty("margin", "0px");
         style.addProperty("white-space", "nowrap");
         style.addProperty("cursor", "hand");
         style.addProperty("cursor", "pointer");
         addStyle(style);
-        style = new Style(".gwt-Tree .gwt-TreeItem-selected");
+        style = new Style(".gwt-TreeItem-selected");
         style.addProperty("background", ThemeColor.SELECTION);
         addStyle(style);
     }
