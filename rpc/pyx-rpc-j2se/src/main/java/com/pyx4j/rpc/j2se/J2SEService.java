@@ -20,7 +20,6 @@
  */
 package com.pyx4j.rpc.j2se;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -29,7 +28,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +44,8 @@ public class J2SEService {
 
     public static final String SERVER_SYSTEM_PROPERTY = "pyx-server-url";
 
+    private static final String URL_GOOGLE_LOGIN = "https://www.google.com/accounts/ClientLogin";
+
     protected static final String POST = "POST";
 
     protected static final String GET = "GET";
@@ -56,6 +56,21 @@ public class J2SEService {
 
     protected Map<String, String> cookies = new HashMap<String, String>();
 
+    protected String authorization;
+
+    protected String applicationId;
+
+    protected String postCharsetName = "iso-8859-1";
+
+    public enum GoogleAccountType {
+
+        GOOGLE,
+
+        HOSTED,
+
+        HOSTED_OR_GOOGLE
+    }
+
     public J2SEService() {
         this(System.getProperty(SERVER_SYSTEM_PROPERTY));
     }
@@ -64,7 +79,35 @@ public class J2SEService {
         this.serverUrl = serverUrl;
     }
 
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    /**
+     * Short string identifying your application, for logging purposes. This string should
+     * take the form: "companyName-applicationName-versionID".
+     */
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
     public void googleLogin(String userName, String password) throws RuntimeException {
+        googleLogin(userName, password, GoogleAccountType.HOSTED_OR_GOOGLE);
+    }
+
+    public void googleLogin(String userName, String password, GoogleAccountType googleAccountType) throws RuntimeException {
         HttpURLConnection conn = null;
         try {
             URL u = new URL(serverUrl);
@@ -74,6 +117,7 @@ public class J2SEService {
             conn.setInstanceFollowRedirects(false);
             conn.setUseCaches(false);
             if (conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP) {
+                printHeaders(conn.getHeaderFields());
                 String redirect = conn.getHeaderField("Location");
                 log.debug("redirect {}", redirect);
                 conn.disconnect();
@@ -84,9 +128,12 @@ public class J2SEService {
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                     throw new RuntimeException("Failed to authenticate " + conn.getResponseMessage());
                 }
-                getCookie(conn.getHeaderFields());
                 conn.disconnect();
-                gaeDevLoginPost(redirect, serverUrl, userName);
+                if (redirect.contains("http://localhost")) {
+                    gaeDevLoginPost(redirect, serverUrl, userName);
+                } else {
+                    googleLoginPost(userName, password, googleAccountType);
+                }
             } else {
                 log.debug("{} no redirect ", conn.getResponseCode());
             }
@@ -100,74 +147,64 @@ public class J2SEService {
     }
 
     protected void gaeDevLoginPost(String loginUrl, String url, String userName) {
-        HttpURLConnection conn = null;
-        OutputStream out = null;
+        URLPoster post = null;
         try {
-            conn = (HttpURLConnection) new URL(loginUrl).openConnection();
-            conn.setRequestMethod(POST);
-            conn.setInstanceFollowRedirects(false);
-            conn.setRequestProperty("User-agent", userAgent);
-            //conn.setRequestProperty("Host", "localhost:8888");
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setUseCaches(false);
+            post = new URLPoster(loginUrl);
+            post.setUserAgent(userAgent);
 
-            //            conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            //            conn.setRequestProperty("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-            //            conn.setRequestProperty("Accept-Language", "en-us,en;q=0.7,ru;q=0.3");
-            //            conn.setRequestProperty("Accept-Encoding", "gzip,deflate");
-            //            conn.setRequestProperty("User-agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8");
-            //            conn.setRequestProperty("Referer", loginUrl);
+            post.param("email", userName);
+            post.param("continue", url);
+            post.param("action", "Log In");
 
-            String charsetName = "iso-8859-1";
-            StringBuffer form = new StringBuffer();
+            post.post();
+            log.debug("login post responce {}", post.getResponseCode());
 
-            form.append("email=");
-            form.append(URLEncoder.encode(userName, charsetName));
-            form.append("&");
-
-            form.append("continue=");
-            form.append(URLEncoder.encode(url, charsetName));
-            form.append("&");
-
-            form.append("action=");
-            form.append(URLEncoder.encode("Log In", charsetName));
-
-            //form.append("\r\n");
-
-            System.out.println(form.toString());
-
-            byte[] data = form.toString().getBytes(charsetName);
-            conn.setRequestProperty("Content-Length", Integer.toString(data.length));
-            printHeaders(conn.getRequestProperties());
-            out = conn.getOutputStream();
-            out.write(data);
-            //out.write('\r');
-            //out.write('\n');
-            out.flush();
-            out.close();
-            out = null;
-
-            log.debug("login post responce {}", conn.getResponseCode());
-            printHeaders(conn.getHeaderFields());
-            getCookie(conn.getHeaderFields());
-            DataInputStream dis = new DataInputStream(conn.getInputStream());
-            int ch;
-            while ((ch = dis.read()) != -1) {
-                System.out.print((char) ch);
-            }
+            getCookie(post.getHeaderFields());
         } catch (IOException e) {
             throw new RuntimeException("Failed to login", e);
         } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException ignore) {
-                }
+            if (post != null) {
+                post.disconnect();
             }
-            if (conn != null) {
-                conn.disconnect();
+        }
+    }
+
+    /**
+     * See http://code.google.com/apis/accounts/docs/AuthForInstalledApps.html
+     */
+    protected void googleLoginPost(String userName, String password, GoogleAccountType googleAccountType) {
+        URLPoster post = null;
+        try {
+            post = new URLPoster(URL_GOOGLE_LOGIN);
+            post.setUserAgent(userAgent);
+            post.param("accountType", googleAccountType.name());
+            post.param("Email", userName);
+            post.param("Passwd", password);
+            post.param("service", "ah");
+            if (getApplicationId() != null) {
+                post.param("source", getApplicationId());
+            }
+
+            post.post();
+            log.debug("login post responce {}", post.getResponseCode());
+            if (post.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new RuntimeException("Failed to authenticate " + post.getResponseMessage());
+            }
+            String body = post.getInputStreamAsString();
+            log.debug("login response[{}]", body);
+            String token = "Auth=";
+            int p = body.indexOf(token);
+            if (p == -1) {
+                throw new RuntimeException("Failed to authenticate " + body);
+            }
+            String auth = body.substring(p + token.length(), body.indexOf('\n', p));
+            authorization = "GoogleLogin auth=" + auth;
+            log.debug("login authorization[{}]", authorization);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to login", e);
+        } finally {
+            if (post != null) {
+                post.disconnect();
             }
         }
     }
@@ -184,19 +221,18 @@ public class J2SEService {
             conn.setDoOutput(true);
             conn.setUseCaches(false);
 
-            StringBuilder cookieBuilder = new StringBuilder();
-            for (Map.Entry<String, String> me : cookies.entrySet()) {
-                if (cookieBuilder.length() > 0) {
-                    cookieBuilder.append(';');
-                }
-                cookieBuilder.append(me.getKey()).append('=').append(me.getValue());
+            if (authorization != null) {
+                conn.setRequestProperty("Authorization", authorization);
+                System.out.println(authorization);
             }
-            if (cookieBuilder.length() > 0) {
-                conn.setRequestProperty("Cookie", cookieBuilder.toString());
-            }
+            printHeaders(conn.getRequestProperties());
+            setCookie(conn);
+
             conn.setRequestProperty("Cache-Control", "no-cache, no-transform");
             conn.setRequestProperty("Content-Type", "application/binary");
             conn.setRequestProperty("User-agent", userAgent);
+
+            //printHeaders(conn.getRequestProperties());
 
             out = conn.getOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(out);
@@ -265,6 +301,19 @@ public class J2SEService {
                 cookies.put(name, value);
                 log.debug("cookie {} = {}", name, value);
             }
+        }
+    }
+
+    protected void setCookie(HttpURLConnection conn) {
+        StringBuilder cookieBuilder = new StringBuilder();
+        for (Map.Entry<String, String> me : cookies.entrySet()) {
+            if (cookieBuilder.length() > 0) {
+                cookieBuilder.append(';');
+            }
+            cookieBuilder.append(me.getKey()).append('=').append(me.getValue());
+        }
+        if (cookieBuilder.length() > 0) {
+            conn.setRequestProperty("Cookie", cookieBuilder.toString());
         }
     }
 
