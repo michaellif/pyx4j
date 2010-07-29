@@ -319,6 +319,20 @@ public class J2SEService {
         }
     }
 
+    public void setCookie(String cookieName, String value) {
+        cookies.put(cookieName, value);
+    }
+
+    public String getCookie(String cookieName) {
+        return cookies.get(cookieName);
+    }
+
+    public void removeCookie(String cookieName) {
+        if (cookieName != null) {
+            cookies.remove(cookieName);
+        }
+    }
+
     protected void setCookie(HttpURLConnection conn) {
         StringBuilder cookieBuilder = new StringBuilder();
         for (Map.Entry<String, String> me : cookies.entrySet()) {
@@ -339,4 +353,5 @@ public class J2SEService {
         }
         log.debug("{}", b.toString());
     }
+
 }
