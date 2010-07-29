@@ -21,6 +21,10 @@
 package com.pyx4j.essentials.server.preloader;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
@@ -88,5 +92,24 @@ public class DataGenerator {
         DecimalFormat nf = new DecimalFormat("0000000");
         String unformatedPhone = areaCode + nf.format((random.nextInt(10000000)));
         return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
+    }
+
+    public static <E extends Enum<E>> E randomEnum(Class<E> elementType) {
+        EnumSet<E> all = EnumSet.allOf(elementType);
+        int r = random.nextInt(all.size());
+        int n = 0;
+        for (E en : all) {
+            if (n == r) {
+                return en;
+            }
+            n++;
+        }
+        return null;
+    }
+
+    public static Date randomDate(int month) {
+        Calendar c = new GregorianCalendar();
+        c.add(Calendar.MONTH, (month > 0) ? random.nextInt(month) : -random.nextInt(-month));
+        return c.getTime();
     }
 }
