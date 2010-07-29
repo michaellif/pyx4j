@@ -35,8 +35,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.security.server.ThrottleConfig;
 
 public class J2SEService {
 
@@ -59,6 +61,10 @@ public class J2SEService {
     protected String applicationId;
 
     protected String postCharsetName = "iso-8859-1";
+
+    private long serviceCallsCount = 0;
+
+    private ThrottleConfig throttleConfig;
 
     public enum GoogleAccountType {
 
@@ -91,6 +97,18 @@ public class J2SEService {
 
     public String getApplicationId() {
         return applicationId;
+    }
+
+    public long getServiceCallsCount() {
+        return serviceCallsCount;
+    }
+
+    public ThrottleConfig getThrottleConfig() {
+        return throttleConfig;
+    }
+
+    public void setThrottleConfig(ThrottleConfig throttleConfig) {
+        this.throttleConfig = throttleConfig;
     }
 
     /**
@@ -229,11 +247,37 @@ public class J2SEService {
         }
     }
 
+    private long throttleNextIntervalResetTime = 0;
+
+    private int throttleRequestsCount = 0;
+
+    protected void throttleObedience() {
+        throttleRequestsCount++;
+        long now = System.currentTimeMillis();
+        if (now >= throttleNextIntervalResetTime) {
+            throttleRequestsCount = 1;
+            throttleNextIntervalResetTime = now + throttleConfig.getInterval() + (30 * Consts.SEC2MSEC);
+        }
+        if (throttleRequestsCount >= throttleConfig.getMaxRequests() - 5) {
+            try {
+                long sleep = throttleNextIntervalResetTime - now;
+                log.debug("sleep for {} sec", sleep / 1000);
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                throw new RuntimeException();
+            }
+        }
+    }
+
     public <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request) throws RuntimeException {
         HttpURLConnection conn = null;
         OutputStream out = null;
         InputStream in = null;
         try {
+            serviceCallsCount++;
+            if (throttleConfig != null) {
+                throttleObedience();
+            }
             URL u = new URL(serverUrl + serviceInterface.getSimpleName().replace('$', '.'));
             conn = (HttpURLConnection) u.openConnection();
             conn.setRequestMethod("POST");
