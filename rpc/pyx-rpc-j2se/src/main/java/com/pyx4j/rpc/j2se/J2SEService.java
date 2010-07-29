@@ -56,8 +56,6 @@ public class J2SEService {
 
     protected Map<String, String> cookies = new HashMap<String, String>();
 
-    protected String authorization;
-
     protected String applicationId;
 
     protected String postCharsetName = "iso-8859-1";
@@ -132,7 +130,7 @@ public class J2SEService {
                 if (redirect.contains("http://localhost")) {
                     gaeDevLoginPost(redirect, serverUrl, userName);
                 } else {
-                    googleLoginPost(userName, password, googleAccountType);
+                    googleLoginPost(u.getHost(), userName, password, googleAccountType);
                 }
             } else {
                 log.debug("{} no redirect ", conn.getResponseCode());
@@ -171,9 +169,11 @@ public class J2SEService {
 
     /**
      * See http://code.google.com/apis/accounts/docs/AuthForInstalledApps.html
+     * http://krasserm.blogspot.com/2010/01/accessing-security-enabled-google-app.html
      */
-    protected void googleLoginPost(String userName, String password, GoogleAccountType googleAccountType) {
+    protected void googleLoginPost(String appHost, String userName, String password, GoogleAccountType googleAccountType) {
         URLPoster post = null;
+        String authToken;
         try {
             post = new URLPoster(URL_GOOGLE_LOGIN);
             post.setUserAgent(userAgent);
@@ -188,23 +188,43 @@ public class J2SEService {
             post.post();
             log.debug("login post responce {}", post.getResponseCode());
             if (post.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new RuntimeException("Failed to authenticate " + post.getResponseMessage());
+                throw new RuntimeException("Failed to authenticate at Google " + post.getResponseMessage());
             }
             String body = post.getInputStreamAsString();
             log.debug("login response[{}]", body);
             String token = "Auth=";
             int p = body.indexOf(token);
             if (p == -1) {
-                throw new RuntimeException("Failed to authenticate " + body);
+                throw new RuntimeException("Failed to authenticate at Google " + body);
             }
-            String auth = body.substring(p + token.length(), body.indexOf('\n', p));
-            authorization = "GoogleLogin auth=" + auth;
-            log.debug("login authorization[{}]", authorization);
+            authToken = body.substring(p + token.length(), body.indexOf('\n', p));
         } catch (IOException e) {
-            throw new RuntimeException("Failed to login", e);
+            throw new RuntimeException("Google login failed ", e);
         } finally {
             if (post != null) {
                 post.disconnect();
+            }
+        }
+
+        // Login to GAE
+        HttpURLConnection conn = null;
+        try {
+            URL u = new URL("http://" + appHost + "/_ah/login?auth=" + authToken);
+            conn = (HttpURLConnection) u.openConnection();
+            conn.setRequestMethod(GET);
+            conn.setRequestProperty("User-agent", userAgent);
+            conn.setInstanceFollowRedirects(false);
+            int code = conn.getResponseCode();
+            if ((code == HttpURLConnection.HTTP_OK) || (code == HttpURLConnection.HTTP_MOVED_TEMP)) {
+                getCookie(conn.getHeaderFields());
+            } else {
+                throw new RuntimeException("Failed to authenticate in GAE " + code + " " + conn.getResponseMessage());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("GAE login failed", e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
             }
         }
     }
@@ -221,11 +241,6 @@ public class J2SEService {
             conn.setDoOutput(true);
             conn.setUseCaches(false);
 
-            if (authorization != null) {
-                conn.setRequestProperty("Authorization", authorization);
-                System.out.println(authorization);
-            }
-            printHeaders(conn.getRequestProperties());
             setCookie(conn);
 
             conn.setRequestProperty("Cache-Control", "no-cache, no-transform");
