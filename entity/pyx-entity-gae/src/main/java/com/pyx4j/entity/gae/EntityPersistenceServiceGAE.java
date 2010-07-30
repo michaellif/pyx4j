@@ -156,7 +156,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity childIEntity, boolean indexed) {
+    private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity childIEntity, boolean parentIndexed) {
         if (childIEntity.isNull()) {
             // remove all properties
             EntityMeta em = childIEntity.getEntityMeta();
@@ -164,7 +164,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 MemberMeta memberMeta = em.getMemberMeta(memberName);
                 if ((memberMeta.isEntity()) && (memberMeta.isEmbedded())) {
                     embedEntityProperties(entity, prefix + "_" + memberName, sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity.getMember(memberName),
-                            indexed && memberMeta.isIndexed());
+                            parentIndexed && memberMeta.isIndexed());
                 } else {
                     entity.removeProperty(prefix + "_" + memberName + sufix + EMBEDDED_PRROPERTY_SUFIX);
                 }
@@ -184,17 +184,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
                 if (meta.isEmbedded()) {
                     embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity.getMember(me.getKey()),
-                            indexed && meta.isIndexed());
+                            parentIndexed);
                     continue nextValue;
                 } else {
                     String kind = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName();
                     value = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
                 }
             } else {
-                value = convertToGAEValue(value, entity, propertyName, meta, indexed && meta.isIndexed());
+                value = convertToGAEValue(value, entity, propertyName, meta, parentIndexed);
             }
             //TODO Allow to embed other types
-            if (indexed && meta.isIndexed()) {
+            if (parentIndexed && meta.isIndexed()) {
                 entity.setProperty(propertyName, value);
             } else {
                 entity.setUnindexedProperty(propertyName, value);
@@ -202,9 +202,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta, boolean indexed) {
+    private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta, boolean parentIndexed) {
         Indexed index = null;
-        if (indexed) {
+        if (parentIndexed) {
             index = meta.getAnnotation(Indexed.class);
         }
         if (value instanceof String) {
@@ -403,7 +403,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
                 value = childKeys;
             } else {
-                value = convertToGAEValue(value, entity, propertyName, meta, meta.isIndexed());
+                value = convertToGAEValue(value, entity, propertyName, meta, true);
             }
 
             if (isUpdate && merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
@@ -907,11 +907,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
+    private Query.FilterOperator addFilter(Query query, int filterCount, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
         String propertyName = propertyCriterion.getPropertyName();
         Object value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
             propertyName = Entity.KEY_RESERVED_PROPERTY;
+        } else if ((filterCount == 0) && (!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) && !entityMeta.getMemberMeta(propertyName).isIndexed()) {
+            throw new Error("Query by Unindexed property " + propertyName + " of " + entityMeta.getCaption());
         }
         Query.FilterOperator oprator = operator(propertyCriterion.getRestriction());
         query.addFilter(propertyName, oprator, value);
@@ -922,6 +924,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         Query query = new Query(entityMeta.getPersistenceName());
         boolean allowSort = true;
         int keyFilter = 0;
+        int filterCount = 0;
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
@@ -931,9 +934,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                         keyFilter++;
                     }
-                    if (addFilter(query, entityMeta, (PropertyCriterion) cr) == Query.FilterOperator.IN) {
+                    if (addFilter(query, filterCount, entityMeta, (PropertyCriterion) cr) == Query.FilterOperator.IN) {
                         allowSort = false;
                     }
+                    filterCount++;
                 }
             }
         }

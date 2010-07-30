@@ -24,10 +24,10 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -47,13 +47,13 @@ public interface Employee extends IEntity {
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT
     }
 
+    @Indexed
     IPrimitive<String> firstName();
 
     IPrimitive<Date> hiredate();
 
     IPrimitive<Boolean> reliable();
 
-    @Unindexed
     IPrimitive<Long> holidays();
 
     IPrimitive<Integer> rating();

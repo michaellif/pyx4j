@@ -240,6 +240,7 @@ public class IndexedEntitySearch {
                 log.warn("Search by class {} not implemented", mm.getValueClass());
             }
         }
+        log.debug("will used {} inMemoryFilters", inMemoryFilters.size());
     }
 
     public SearchResultIterator<IEntity> getResult(String encodedCursorRefference) {

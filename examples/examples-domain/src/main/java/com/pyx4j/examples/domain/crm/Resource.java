@@ -28,7 +28,6 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
@@ -55,16 +54,13 @@ public interface Resource extends IEntity {
     @NotNull
     IPrimitive<RepStatus> status();
 
-    @Unindexed
     @Phone
     IPrimitive<String> phone();
 
     @Caption(name = "Address")
     @Owned
-    @Unindexed
     Address address();
 
     @Timestamp
-    @Unindexed
     IPrimitive<Date> updated();
 }

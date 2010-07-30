@@ -21,10 +21,10 @@
 package com.pyx4j.examples.domain.crm;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -32,17 +32,16 @@ public interface OrderPhoto extends IEntity {
 
     @Owner
     @Detached
+    @Indexed
     Order order();
 
     @RpcTransient
-    @Unindexed
     IPrimitive<byte[]> thumbnail();
 
     @Transient
     IPrimitive<String> thumbnailBase64();
 
     @RpcTransient
-    @Unindexed
     IPrimitive<byte[]> image();
 
     IPrimitive<String> description();

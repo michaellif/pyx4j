@@ -21,11 +21,11 @@
 package com.pyx4j.entity.test.shared;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -85,7 +85,7 @@ public class EntityMetaTest extends InitializerTestCase {
     @Owned
     @Owner
     @Detached
-    @Unindexed
+    @Indexed
     public void testAnnotations() {
         assertTrue("@Transient", EntityFactory.create(Department.class).transientStuff().getMeta().isTransient());
         assertTrue("@RpcTransient", EntityFactory.create(Employee.class).accessStatus().getMeta().isRpcTransient());
@@ -93,7 +93,8 @@ public class EntityMetaTest extends InitializerTestCase {
         assertTrue("@Owner", EntityFactory.create(Department.class).organization().getMeta().isOwner());
         assertFalse("@Owner is Detached", EntityFactory.create(Department.class).organization().getMeta().isDetached());
         assertFalse("@Detached", EntityFactory.create(Employee.class).homeAddress().getMeta().isDetached());
-        assertFalse("@Unindexed", EntityFactory.create(Employee.class).holidays().getMeta().isIndexed());
+        assertTrue("@Indexed", EntityFactory.create(Employee.class).firstName().getMeta().isIndexed());
+        assertFalse("not @Indexed", EntityFactory.create(Employee.class).holidays().getMeta().isIndexed());
     }
 
     public void testInherited() {

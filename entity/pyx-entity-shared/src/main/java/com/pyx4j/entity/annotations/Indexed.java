@@ -26,10 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Define a index in RDBMS or indexed property (optional) in App Engine persistent
- * storage.
- * 
- * @see Unindexed for GAE persistance.
+ * Define a index in RDBMS or indexed property in App Engine persistent storage.
  */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
