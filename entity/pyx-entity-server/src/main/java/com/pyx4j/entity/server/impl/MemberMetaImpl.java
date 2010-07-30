@@ -30,15 +30,15 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.Unindexed;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -142,7 +142,8 @@ public class MemberMetaImpl implements MemberMeta {
         ownedRelationships = embedded || (method.getAnnotation(Owned.class) != null);
         owner = (method.getAnnotation(Owner.class) != null);
         detached = (method.getAnnotation(Detached.class) != null);
-        indexed = (method.getAnnotation(Unindexed.class) == null);
+        Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
+        indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
     }
 
     @Override

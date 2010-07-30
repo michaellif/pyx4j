@@ -31,11 +31,13 @@ import java.lang.annotation.Target;
  * 
  * @see Unindexed for GAE persistance.
  */
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Indexed {
 
     String name() default "";
+
+    boolean indexPrimaryValue() default true;
 
     int keywordLenght() default 0;
 

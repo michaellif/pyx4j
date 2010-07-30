@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
@@ -29,12 +30,15 @@ import com.pyx4j.entity.shared.ISet;
 
 public interface Department extends IEntity {
 
+    @Indexed
     IPrimitive<String> name();
 
+    @Indexed
     ISet<Employee> employees();
 
     @Owner
     @ReadOnly
+    @Indexed
     Organization organization();
 
     @Transient

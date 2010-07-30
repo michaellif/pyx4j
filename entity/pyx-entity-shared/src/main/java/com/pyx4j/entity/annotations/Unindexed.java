@@ -31,8 +31,9 @@ import java.lang.annotation.Target;
  * Member will be stored with Entity.setUnindexedProperty() instead of
  * Entity.setProperty().
  */
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Unindexed {
 
 }

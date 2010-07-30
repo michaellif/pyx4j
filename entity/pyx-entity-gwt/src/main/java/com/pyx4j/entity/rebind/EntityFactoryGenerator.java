@@ -52,6 +52,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
@@ -60,7 +61,6 @@ import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.Unindexed;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Password;
@@ -455,7 +455,8 @@ public class EntityFactoryGenerator extends Generator {
             writer.print(", ");
             writer.print(Boolean.valueOf(embedded).toString());
             writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(Unindexed.class) == null)).toString());
+            Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
+            writer.print(Boolean.valueOf((indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue())).toString());
             writer.print(", ");
 
             StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);

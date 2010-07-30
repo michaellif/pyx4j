@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -28,5 +29,6 @@ public interface Province extends IEntity {
 
     IPrimitive<String> name();
 
+    @Indexed
     ISet<City> cities();
 }
