@@ -25,12 +25,12 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
@@ -48,15 +48,16 @@ public interface Customer extends IEntity {
     @ToString
     IPrimitive<String> name();
 
-    @Indexed(global = 'p', keywordLenght = 3)
+    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false)
     @Phone
     IPrimitive<String> phone();
 
     @Caption(name = "Address")
     @Owned
+    @Indexed
     Address address();
 
-    @Indexed
+    @Indexed(indexPrimaryValue = false)
     IPrimitive<GeoPoint> location();
 
     @ReportColumn(ignore = true)
@@ -80,7 +81,7 @@ public interface Customer extends IEntity {
 
     @ReportColumn(ignore = true)
     @Caption(name = "Order Status")
-    @Indexed(global = 'o')
+    @Indexed(global = 'o', indexPrimaryValue = false)
     IPrimitiveSet<OrderStatus> orderStatus();
 
 }

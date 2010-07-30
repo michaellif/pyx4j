@@ -23,7 +23,6 @@ package com.pyx4j.examples.domain.crm;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
@@ -74,25 +73,26 @@ public interface Order extends IEntity {
     @Owner
     //@Detached
     @ReportColumn(ignore = true)
+    @Indexed
     Customer customer();
 
     /**
      * Copy of data from customer
      */
-    @Indexed(global = 'n', keywordLenght = 2)
+    @Indexed(global = 'n', keywordLenght = 2, indexPrimaryValue = false)
     IPrimitive<String> customerName();
 
     /**
      * Copy of data from customer
      */
-    @Indexed(global = 'p', keywordLenght = 3)
+    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false)
     @Phone
     IPrimitive<String> customerPhone();
 
     Resource resource();
 
     @ToString
-    @Indexed(global = 'd', keywordLenght = 3)
+    @Indexed(global = 'd', keywordLenght = 3, indexPrimaryValue = false)
     IPrimitive<String> description();
 
     IPrimitive<java.sql.Date> completedDate();

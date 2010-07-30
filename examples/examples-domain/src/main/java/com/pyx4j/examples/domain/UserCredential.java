@@ -20,6 +20,7 @@
  */
 package com.pyx4j.examples.domain;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,6 +38,7 @@ public interface UserCredential extends IEntity {
     @RpcTransient
     IPrimitive<String> accessKey();
 
+    @Indexed
     User user();
 
     IPrimitive<ExamplesBehavior> behavior();

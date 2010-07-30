@@ -22,12 +22,14 @@ package com.pyx4j.examples.domain;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface User extends IEntity {
 
+    @Indexed
     IPrimitive<String> email();
 
     IPrimitive<String> name();
