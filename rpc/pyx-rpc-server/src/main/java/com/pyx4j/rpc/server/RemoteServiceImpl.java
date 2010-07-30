@@ -88,13 +88,14 @@ public class RemoteServiceImpl implements RemoteService {
                 }
             }
             return returnValue;
-        } catch (RuntimeException e) {
+        } catch (Throwable e) {
             log.error("Service call error", e);
             if (e instanceof RuntimeExceptionSerializable) {
-                throw e;
+                throw (RuntimeExceptionSerializable) e;
             } else if (e.getMessage() == null) {
                 throw new UnRecoverableRuntimeException("System error, contact support");
             } else {
+                // TODO may be don't need to show the actual error to customers.
                 throw new UnRecoverableRuntimeException(e.getMessage());
             }
         }
