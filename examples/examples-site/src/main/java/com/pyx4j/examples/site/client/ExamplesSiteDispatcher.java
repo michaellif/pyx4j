@@ -23,6 +23,7 @@ package com.pyx4j.examples.site.client;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.essentials.client.BaseSiteDispatcher;
 import com.pyx4j.examples.site.client.crm.ExamplesCrmSitePanel;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSitePanel;
@@ -53,6 +54,7 @@ public class ExamplesSiteDispatcher extends BaseSiteDispatcher {
         GoogleAnalytics.setGoogleAnalyticsTracker("UA-12949578-1", ".pyx4j.com");
         CaptchaComposite.setPublicKey("6LdBxgoAAAAAAP7RdZ3kbHwVA99j1qKB97pdo6Mq");
 
+        ApplicationCommon.initRpcGlassPanel();
         setWelcomeUri(ExamplesSiteMap.Pub.Home.class);
 
         show();
