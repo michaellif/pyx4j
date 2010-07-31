@@ -943,6 +943,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
                 query.addSort(sort.getPropertyName(), sort.isDescending() ? Query.SortDirection.DESCENDING : Query.SortDirection.ASCENDING);
             }
+            log.debug("sort by {}", query.getSortPredicates());
         }
 
         StringBuilder b = new StringBuilder();
