@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+<datastore-indexes autoGenerate="false">
+
+    <datastore-index kind="Customer" ancestor="false" source="auto">
+        <property name="keys-s" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Customer" ancestor="false" source="auto">
+        <property name="keys-s" direction="asc"/>
+        <property name="keys-s" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>
