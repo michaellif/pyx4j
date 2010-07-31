@@ -89,6 +89,7 @@ public interface Order extends IEntity {
     @Phone
     IPrimitive<String> customerPhone();
 
+    @Indexed
     Resource resource();
 
     @ToString
