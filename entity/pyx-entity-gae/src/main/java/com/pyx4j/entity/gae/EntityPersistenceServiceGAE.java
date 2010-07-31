@@ -907,12 +907,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private Query.FilterOperator addFilter(Query query, int filterCount, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
+    private Query.FilterOperator addFilter(Query query, EntityMeta entityMeta, PropertyCriterion propertyCriterion) {
         String propertyName = propertyCriterion.getPropertyName();
         Object value = datastoreValue(entityMeta, propertyName, propertyCriterion.getValue());
         if (propertyName.equals(IEntity.PRIMARY_KEY)) {
             propertyName = Entity.KEY_RESERVED_PROPERTY;
-        } else if ((filterCount == 0) && (!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) && !entityMeta.getMemberMeta(propertyName).isIndexed()) {
+        } else if ((!propertyName.endsWith(SECONDARY_PRROPERTY_SUFIX)) && !entityMeta.getMemberMeta(propertyName).isIndexed()) {
             throw new Error("Query by Unindexed property " + propertyName + " of " + entityMeta.getCaption());
         }
         Query.FilterOperator oprator = operator(propertyCriterion.getRestriction());
@@ -924,7 +924,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         Query query = new Query(entityMeta.getPersistenceName());
         boolean allowSort = true;
         int keyFilter = 0;
-        int filterCount = 0;
         if (criteria.getFilters() != null) {
             for (Criterion cr : criteria.getFilters()) {
                 if (cr instanceof PropertyCriterion) {
@@ -934,10 +933,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                         keyFilter++;
                     }
-                    if (addFilter(query, filterCount, entityMeta, (PropertyCriterion) cr) == Query.FilterOperator.IN) {
+                    if (addFilter(query, entityMeta, (PropertyCriterion) cr) == Query.FilterOperator.IN) {
                         allowSort = false;
                     }
-                    filterCount++;
                 }
             }
         }
