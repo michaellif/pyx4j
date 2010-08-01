@@ -23,9 +23,8 @@ package com.pyx4j.widgets.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -35,21 +34,18 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHandler {
+public class Tooltip implements MouseOverHandler, MouseOutHandler {
 
     private static final Logger log = LoggerFactory.getLogger(Tooltip.class);
 
     private static final int DELAY_TO_SHOW = 300;
 
     private static final int DELAY_TO_HIDE = 7000;
-
-    private static final int OFFSET_X = 0;
-
-    private static final int OFFSET_Y = 22;
 
     private static TooltipPanel tooltipPanel;
 
@@ -69,8 +65,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
         private final HTML textPane;
 
-        private final HTML shaddowPane;
-
         private Timer delayShowTimer;
 
         private Timer delayHideTimer;
@@ -79,23 +73,19 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
 
         public TooltipPanel() {
             super(true);
-            AbsolutePanel content = new AbsolutePanel();
-            content.getElement().getStyle().setProperty("overflow", "visible");
+            SimplePanel content = new SimplePanel();
+            content.getElement().getStyle().setProperty("boxShadow", "5px 2px 2px #888");
+            content.getElement().getStyle().setProperty("MozBoxShadow", "5px 2px 2px #888");
+            content.getElement().getStyle().setProperty("WebkitBoxShadow", "5px 2px 2px #888");
+            content.getElement().getStyle().setMargin(20, Unit.PX);
             add(content);
 
-            shaddowPane = new HTML();
-            shaddowPane.setStyleName(CSSClass.pyx4j_Tooltip_Shadow.name());
-
             textPane = new HTML();
-            textPane.setWordWrap(true);
             textPane.setStyleName(CSSClass.pyx4j_Tooltip.name());
-            textPane.setWidth("200px");
 
-            content.add(shaddowPane, 5, 5);
-            content.add(textPane, 0, 0);
+            content.setWidget(textPane);
 
             textPane.getElement().getStyle().setZIndex(30);
-            shaddowPane.getElement().getStyle().setZIndex(29);
         }
 
         private void scheduleShow(final Widget target, final String text) {
@@ -107,36 +97,13 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
                 public void run() {
                     delayShowTimer = null;
                     if (target.isAttached() && target.isVisible()) {
-
-                        //TODO removed to fix site tooltip - what does it do?
-                        // Fix position for the border of the window
-                        //
-                        //                        int width = 10 + 6 * text.length();
-                        //                        int height = 30;
-                        //                        if (top >= Window.getClientHeight() - height) {
-                        //                            top = Window.getClientHeight() - height - 5;
-                        //                        }
-                        //                        if (left >= Window.getClientWidth() - width) {
-                        //                            left = Window.getClientWidth() - width - 5;
-                        //                        }
-
                         textPane.setHTML(text);
-                        TooltipPanel.this.show();
-                        shaddowPane.setPixelSize(textPane.getOffsetWidth(), textPane.getOffsetHeight());
+                        TooltipPanel.this.showRelativeTo(target);
                         scheduleHide();
                     }
                 }
             };
             delayShowTimer.schedule((System.currentTimeMillis() - hideTimeStamp > 200) ? DELAY_TO_SHOW : 200);
-        }
-
-        @Override
-        public void setPopupPosition(int pointerLeft, int pointerTop) {
-            int popupLeft = pointerLeft + OFFSET_X;
-            int popupTop = pointerTop + OFFSET_Y + Window.getScrollTop();
-            //log.debug("popupTop=" + popupTop + " pointerTop=" + pointerTop);
-
-            super.setPopupPosition(popupLeft, popupTop);
         }
 
         private void scheduleHide() {
@@ -173,7 +140,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
         this.target = (Widget) target;
         target.addMouseOverHandler(this);
         target.addMouseOutHandler(this);
-        target.addMouseMoveHandler(this);
     }
 
     protected Tooltip(HasAllMouseHandlers target, String text) {
@@ -181,7 +147,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
         this.target = (Widget) target;
         target.addMouseOverHandler(this);
         target.addMouseOutHandler(this);
-        target.addMouseMoveHandler(this);
     }
 
     public void setTooltipText(String text) {
@@ -197,13 +162,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler, MouseMoveHand
             }
             tooltipPanel.setPopupPosition(event.getClientX(), event.getClientY());
             tooltipPanel.scheduleShow(target, this.text);
-        }
-    }
-
-    @Override
-    public void onMouseMove(MouseMoveEvent event) {
-        if (tooltipPanel != null) {
-            tooltipPanel.setPopupPosition(event.getClientX(), event.getClientY());
         }
     }
 

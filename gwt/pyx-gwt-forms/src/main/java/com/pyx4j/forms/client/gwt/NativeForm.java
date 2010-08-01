@@ -63,6 +63,7 @@ import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeForm extends FlowPanel implements INativeComponent {
@@ -507,6 +508,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         private Image imageMandatory;
 
+        private Tooltip tooltip;
+
         WidgetContainer(final CComponent<?> component) {
 
             getElement().getStyle().setPadding(2, Unit.PX);
@@ -606,6 +609,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 } else {
                     if (imageInfoWarn == null) {
                         imageInfoWarn = new Image();
+                        tooltip = Tooltip.tooltip(imageInfoWarn, "");
                     }
                     if (component instanceof CEditableComponent<?> && ((CEditableComponent<?>) component).isMandatoryConditionMet()
                             && !((CEditableComponent<?>) component).isValid()) {
@@ -614,7 +618,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
                     }
                     imageInfoWarnHolder.setWidget(imageInfoWarn);
-                    imageInfoWarn.setTitle(component.getToolTip());
+                    tooltip.setTooltipText(component.getToolTip());
+
                 }
             }
         }

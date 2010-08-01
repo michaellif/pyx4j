@@ -119,7 +119,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         if (isValid() || !isMandatoryConditionMet()) {
             return tooltip;
         } else {
-            return getValidationMessageWithoutMandatoyCondition() + ((tooltip == null) || tooltip.trim().equals("") ? "" : "<p>" + tooltip);
+            return getValidationMessageWithoutMandatoyCondition() + ((tooltip == null) || tooltip.trim().equals("") ? "" : "<br>" + tooltip);
         }
     }
 
