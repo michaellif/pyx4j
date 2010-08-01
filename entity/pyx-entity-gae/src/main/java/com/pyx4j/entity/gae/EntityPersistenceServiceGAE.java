@@ -407,6 +407,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             if (isUpdate && merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
+                log.error("Changing readonly property [{}] -> [{}]", entity.getProperty(propertyName), value);
                 throw new Error("Changing readonly property " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
             }
 
