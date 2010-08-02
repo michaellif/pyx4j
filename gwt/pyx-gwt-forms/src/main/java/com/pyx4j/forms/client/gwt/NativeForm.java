@@ -546,8 +546,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             }
 
             imageInfoWarnHolder = new ImageHolder("18px");
-            imageInfoWarnHolder.getElement().getStyle().setPaddingTop(3, Unit.PX);
-            imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(7, Unit.PX);
+            imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
+            imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
             imageMandatoryHolder = new ImageHolder("7px");
 
