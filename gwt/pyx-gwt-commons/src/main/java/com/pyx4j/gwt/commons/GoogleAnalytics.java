@@ -41,6 +41,8 @@ public class GoogleAnalytics {
 
     private static String domainName = null;
 
+    private static boolean isLoaded;
+
     public static void setGoogleAnalyticsTracker(String googleAnalyticsTracker) {
         setGoogleAnalyticsTracker(googleAnalyticsTracker, null);
     }
@@ -68,32 +70,48 @@ public class GoogleAnalytics {
         if (googleAnalyticsTracker == null) {
             return;
         }
-        AjaxJSLoader.load("(ssl|www).google-analytics.com/ga.js", new AjaxJSLoader.IsJSLoaded() {
+        if (isLoaded) {
+            trackDeferred(actionName);
+        } else {
+            DeferredCommand.addCommand(new Command() {
+                @Override
+                public void execute() {
 
-            @Override
-            public native boolean isLoaded()
-            /*-{ return typeof $wnd._gat != "undefined"; }-*/;
+                    AjaxJSLoader.load("(ssl|www).google-analytics.com/ga.js", new AjaxJSLoader.IsJSLoaded() {
 
-        }, new Runnable() {
+                        @Override
+                        public native boolean isLoaded()
+                        /*-{ return typeof $wnd._gat != "undefined"; }-*/;
 
-            @Override
-            public void run() {
-                DeferredCommand.addCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        try {
-                            if (domainName != null) {
-                                setDomainName(googleAnalyticsTracker, domainName);
-                                domainName = null;
-                            }
+                    }, new Runnable() {
 
-                            log.debug("googleAnalyticsTrack {}", actionName);
-                            trackPageView(googleAnalyticsTracker, actionName);
-                        } catch (Throwable e) {
-                            log.error("GoogleAnalytics error", e);
+                        @Override
+                        public void run() {
+                            isLoaded = true;
+                            trackDeferred(actionName);
                         }
+                    });
+
+                }
+            });
+        }
+    }
+
+    private static void trackDeferred(final String actionName) {
+        DeferredCommand.addCommand(new Command() {
+            @Override
+            public void execute() {
+                try {
+                    if (domainName != null) {
+                        setDomainName(googleAnalyticsTracker, domainName);
+                        domainName = null;
                     }
-                });
+
+                    log.debug("googleAnalyticsTrack {}", actionName);
+                    trackPageView(googleAnalyticsTracker, actionName);
+                } catch (Throwable e) {
+                    log.error("GoogleAnalytics error", e);
+                }
             }
         });
     }
