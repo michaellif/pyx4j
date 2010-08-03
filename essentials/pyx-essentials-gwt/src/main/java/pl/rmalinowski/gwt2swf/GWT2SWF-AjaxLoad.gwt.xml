@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
-<module rename-to='site'>
-    <inherits name='com.google.gwt.user.User'/>
-    <inherits name="pl.rmalinowski.gwt2swf.GWT2SWF-AjaxLoad"/>
-    <source path="gwt2swf"/>
-    <public path="gwt2swf/public"/>
+<module>
+
+	<!-- Copy of GWT2SWF.gwt.xml  except the swfobject-2.0.js is not linked by default -->            
+	<inherits name='com.google.gwt.user.User'/>
+  
+   <source path="client"/>
+   <public path="public"/>
+    
 </module>
