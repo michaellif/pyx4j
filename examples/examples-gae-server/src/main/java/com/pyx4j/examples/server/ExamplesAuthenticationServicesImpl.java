@@ -97,6 +97,9 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
                 throw new RuntimeException("Invalid user account, contact support");
             }
             UserCredential cr = crs.get(0);
+            if (cr.enabled().isNull() || (!cr.enabled().getValue())) {
+                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
             if (!request.password().getValue().equals(cr.credential().getValue())) {
                 log.info("Invalid password for user {}", request.email().getValue());
                 if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {

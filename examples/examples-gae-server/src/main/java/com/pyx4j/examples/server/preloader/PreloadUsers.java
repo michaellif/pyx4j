@@ -43,6 +43,7 @@ public class PreloadUsers extends AbstractDataPreloader {
         credential.user().set(user);
         credential.credential().setValue(email);
 
+        credential.enabled().setValue(Boolean.TRUE);
         credential.behavior().setValue(behavior);
 
         PersistenceServicesFactory.getPersistenceService().persist(user);

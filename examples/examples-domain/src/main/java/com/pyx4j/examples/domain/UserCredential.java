@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @RpcBlacklist
 public interface UserCredential extends IEntity {
 
+    IPrimitive<Boolean> enabled();
+
     @RpcTransient
     IPrimitive<String> credential();
 

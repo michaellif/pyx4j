@@ -55,8 +55,8 @@ public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
 
             @Override
             protected void enhanceComponents(CEntityForm<Resource> form) {
-                ((CComboBox<RepStatus>) get(meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
-                ((CComboBox<Province>) get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
+                ((CComboBox<RepStatus>) form.get(meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
+                ((CComboBox<Province>) form.get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
             }
 
         });
