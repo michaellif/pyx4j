@@ -179,20 +179,24 @@ public abstract class SitePanel extends SimplePanel {
         leftSectionPanel.clear();
         if (page.data().leftPortlets().size() > 0) {
             for (Portlet portlet : page.data().leftPortlets()) {
-                PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
-                leftSectionPanel.add(portletPanel);
-                portletPanel.createInlineWidgets();
-                portletPanel.populateInlineWidgets(args);
+                if (isPortletVisible(portlet)) {
+                    PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
+                    leftSectionPanel.add(portletPanel);
+                    portletPanel.createInlineWidgets();
+                    portletPanel.populateInlineWidgets(args);
+                }
             }
         }
 
         rightSectionPanel.clear();
         if (page.data().rightPortlets().size() > 0) {
             for (Portlet portlet : page.data().rightPortlets()) {
-                PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
-                rightSectionPanel.add(portletPanel);
-                portletPanel.createInlineWidgets();
-                portletPanel.populateInlineWidgets(args);
+                if (isPortletVisible(portlet)) {
+                    PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
+                    rightSectionPanel.add(portletPanel);
+                    portletPanel.createInlineWidgets();
+                    portletPanel.populateInlineWidgets(args);
+                }
             }
         }
 
@@ -437,6 +441,10 @@ public abstract class SitePanel extends SimplePanel {
 
     protected Page selectPageForGivenUri(List<Page> sameUriPages) {
         return sameUriPages.get(0);
+    }
+
+    protected boolean isPortletVisible(Portlet portlet) {
+        return true;
     }
 
     public Page getHomePage() {
