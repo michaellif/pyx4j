@@ -91,4 +91,24 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     public abstract void moveItem(CForm cForm, boolean up);
 
+    @Override
+    public boolean isValid() {
+        for (CForm form : formsMap.values()) {
+            if (!form.isValid()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ValidationResults getValidationResults() {
+        ValidationResults results = new ValidationResults();
+        for (CForm form : formsMap.values()) {
+            if (!form.isValid()) {
+                results.appendValidationErrors(form.getValidationResults());
+            }
+        }
+        return results;
+    }
+
 }

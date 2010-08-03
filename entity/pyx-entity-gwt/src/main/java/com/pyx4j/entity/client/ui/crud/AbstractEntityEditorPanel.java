@@ -47,10 +47,12 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
@@ -296,6 +298,11 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     @SuppressWarnings("unchecked")
     protected void doSave() {
+        ValidationResults validationResults = form.getValidationResults();
+        if (!validationResults.isValid()) {
+            MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText());
+            return;
+        }
         onBeforeSave();
         E entityForSave = getEntityForSave();
         log.debug("saving {}", entityForSave);

@@ -148,6 +148,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         if (form.getFolder() != null) {
             toolbar = new Toolbar();
             toolbarHolder.setWidget(toolbar);
+            getElement().getStyle().setBorderWidth(1, Unit.PX);
+            getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+            getElement().getStyle().setBorderColor("#5B7575");
         }
 
         setWidth(form.getWidth());
@@ -156,11 +159,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
 
-        if (form.getFolder() != null) {
-            getElement().getStyle().setBorderWidth(1, Unit.PX);
-            getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-            getElement().getStyle().setBorderColor("#5B7575");
-        }
     }
 
     private void addAllComponents() {
@@ -706,7 +704,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         grid.setVisible(expanded);
         if (toolbar != null) {
-            toolbar.caption.setHTML(form.getTitle());
+            toolbar.caption.setHTML(form.getTitle() + ":" + form.isValid());
             toolbar.caption.setVisible(!expanded);
             toolbar.collapseImage.setResource(expanded ? ImageFactory.getImages().groupBoxOpen() : ImageFactory.getImages().groupBoxClose());
             installMouseOverStyles();

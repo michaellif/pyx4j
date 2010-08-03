@@ -58,10 +58,6 @@ public class CForm extends CContainer {
         this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
     }
 
-    public CForm(CFormFolder folder) {
-        this(null, LabelAlignment.LEFT, InfoImageAlignment.AFTER);
-    }
-
     public CForm(LabelAlignment allignment) {
         this(null, allignment, InfoImageAlignment.AFTER);
     }
