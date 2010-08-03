@@ -61,7 +61,7 @@ public class AjaxJSLoader {
                         loaded = true;
                         loadTimer.cancel();
                         loadTimer = null;
-                        log.error("loaded {}", apiUrl);
+                        log.debug("loaded {}", apiUrl);
                         fireQueuedActions();
                     } else {
                         timeout--;
