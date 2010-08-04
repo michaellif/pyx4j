@@ -63,7 +63,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
                     if (validationResults.isValid()) {
                         doSave();
                     } else {
-                        MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText());
+                        MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
                     }
                 }
             });

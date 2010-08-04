@@ -46,7 +46,7 @@ public class ValidationResults {
         return messages;
     }
 
-    public String getMessagesText() {
+    public String getMessagesText(boolean html) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(messages);
         for (String m : messages) {
@@ -56,7 +56,7 @@ public class ValidationResults {
                 break;
             case FIRST:
             case ITEM:
-                messagesBuffer.append("- ").append(m).append(";\n");
+                messagesBuffer.append("- ").append(m).append(html ? "<br/>" : ";\n");
                 break;
             case LAST:
                 messagesBuffer.append("- ").append(m);

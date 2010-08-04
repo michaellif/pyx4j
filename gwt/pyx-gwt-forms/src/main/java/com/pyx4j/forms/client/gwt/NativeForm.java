@@ -395,6 +395,10 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         HTML caption;
 
+        Image imageWarn;
+
+        Tooltip tooltipWarn;
+
         Toolbar() {
             setWidth("100%");
 
@@ -435,6 +439,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             setCellWidth(captionHolder, "100%");
 
             HorizontalPanel actionsPanel = new HorizontalPanel();
+
+            imageWarn = new Image(ImageFactory.getImages().formTooltipWarn());
+            imageWarn.setVisible(false);
+            imageWarn.getElement().getStyle().setMargin(2, Unit.PX);
+            actionsPanel.add(imageWarn);
 
             upCommand = new Image();
             upCommand.setResource(ImageFactory.getImages().moveUp());
@@ -704,7 +713,14 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         grid.setVisible(expanded);
         if (toolbar != null) {
-            toolbar.caption.setHTML(form.getTitle() + ":" + form.isValid());
+            toolbar.caption.setHTML(form.getTitle());
+            toolbar.imageWarn.setVisible(!form.isValid() && !expanded);
+            if (!form.isValid() && !expanded) {
+                if (toolbar.tooltipWarn == null) {
+                    toolbar.tooltipWarn = Tooltip.tooltip(toolbar.imageWarn, "");
+                }
+                toolbar.tooltipWarn.setTooltipText(form.getValidationResults().getMessagesText(true));
+            }
             toolbar.caption.setVisible(!expanded);
             toolbar.collapseImage.setResource(expanded ? ImageFactory.getImages().groupBoxOpen() : ImageFactory.getImages().groupBoxClose());
             installMouseOverStyles();

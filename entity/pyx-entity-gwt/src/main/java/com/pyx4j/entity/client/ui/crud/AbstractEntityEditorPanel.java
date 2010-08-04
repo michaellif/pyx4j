@@ -300,7 +300,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     protected void doSave() {
         ValidationResults validationResults = form.getValidationResults();
         if (!validationResults.isValid()) {
-            MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText());
+            MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
             return;
         }
         onBeforeSave();

@@ -149,7 +149,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         ValidationResults validationResults = form.get(form.meta().email()).getParent().getValidationResults();
         if (!validationResults.isValid()) {
-            MessageDialog.warn("Validation failed.", validationResults.getMessagesText());
+            MessageDialog.warn("Validation failed.", validationResults.getMessagesText(false));
             return false;
         }
 
