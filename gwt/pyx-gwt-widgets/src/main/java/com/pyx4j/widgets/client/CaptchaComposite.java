@@ -78,7 +78,7 @@ public class CaptchaComposite extends Composite {
     }-*/;
 
     private void createChallenge() {
-        AjaxJSLoader.load("(api-secure|api).recaptcha.net/js/recaptcha_ajax.js", new AjaxJSLoader.IsJSLoaded() {
+        AjaxJSLoader.load("www.google.com/recaptcha/api/js/recaptcha_ajax.js", new AjaxJSLoader.IsJSLoaded() {
 
             @Override
             public native boolean isLoaded() /*-{
