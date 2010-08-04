@@ -47,8 +47,8 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
@@ -274,7 +274,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     @Override
     public void onPageLeaving(PageLeavingEvent event) {
         if (isChanged()) {
-            event.addMessage(i18n.tr("Changes to {0} {1} wasn''t saved", meta().getEntityMeta().getCaption(), getEntity().getStringView()));
+            event.addMessage(i18n.tr("Changes to {0} ''{1}'' were not saved", meta().getEntityMeta().getCaption(), getEntity().getStringView()));
         }
     }
 
