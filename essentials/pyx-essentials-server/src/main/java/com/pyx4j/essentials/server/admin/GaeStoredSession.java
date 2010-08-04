@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.admin;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,6 +31,7 @@ interface GaeStoredSession extends IEntity {
     /**
      * milliseconds; the same as in System.currentTimeMillis();
      */
+    @Indexed
     IPrimitive<String> _expires();
 
     IPrimitive<byte[]> _values();
