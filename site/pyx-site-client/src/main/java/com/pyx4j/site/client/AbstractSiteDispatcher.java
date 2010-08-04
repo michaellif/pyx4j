@@ -316,7 +316,6 @@ public abstract class AbstractSiteDispatcher {
         }
     }
 
-    //TODO find a better name for this function
     public void pageLeavingOnLogout(final Runnable callbackOkToLogout) {
         PageLeavingEvent ple = new PageLeavingEvent(PageLeavingEvent.ChangeType.LOGOUT);
         if (currentSitePanel != null) {
