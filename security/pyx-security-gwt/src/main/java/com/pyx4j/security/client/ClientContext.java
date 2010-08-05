@@ -20,6 +20,10 @@
  */
 package com.pyx4j.security.client;
 
+import java.io.Serializable;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +72,8 @@ public class ClientContext {
 
     private static String logoutURL;
 
+    private static final Hashtable<String, Object> attributes = new Hashtable<String, Object>();
+    
     private ClientContext() {
 
     }
@@ -87,6 +93,22 @@ public class ClientContext {
     public static ServerSession getServerSession() {
         return serverSession;
     }
+    
+    public static Object getAttribute(String name) {
+        return attributes.get(name);
+    }
+
+    public static Enumeration<String> getAttributeNames() {
+        return attributes.keys();
+    }
+
+    public static Object removeAttribute(String name) {
+        return attributes.remove(name);
+    }
+
+    public static void setAttribute(String name, Object value) {
+        attributes.put(name, value);
+    }
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
         authenticationObtained = true;
@@ -100,6 +122,7 @@ public class ClientContext {
             serverSession = null;
         }
         log.info("Authenticated {}", userVisit);
+        attributes.clear();
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
             RPCManager.enableAppEngineUsageStats();
