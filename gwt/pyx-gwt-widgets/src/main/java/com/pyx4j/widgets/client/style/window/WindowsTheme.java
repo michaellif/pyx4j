@@ -442,9 +442,13 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", "#fff");
         addStyle(style);
 
-        addStyle(style);
         style = new Style("." + CSSClass.pyx4j_TextBox.name() + " td");
         style.addProperty("padding", "0px");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.pyx4j_TextBox.name() + "-watermark");
+        style.addProperty("color", "gray");
+        addStyle(style);
 
     }
 
