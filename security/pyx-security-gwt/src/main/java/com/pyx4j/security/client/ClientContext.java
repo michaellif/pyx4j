@@ -22,7 +22,10 @@ package com.pyx4j.security.client;
 
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +75,7 @@ public class ClientContext {
 
     private static String logoutURL;
 
-    private static final Hashtable<String, Object> attributes = new Hashtable<String, Object>();
+    private static final Map<String, Object> attributes = new HashMap<String, Object>();
     
     private ClientContext() {
 
@@ -98,8 +101,8 @@ public class ClientContext {
         return attributes.get(name);
     }
 
-    public static Enumeration<String> getAttributeNames() {
-        return attributes.keys();
+    public static Set<String> getAttributeNames() {
+        return attributes.keySet();
     }
 
     public static Object removeAttribute(String name) {
