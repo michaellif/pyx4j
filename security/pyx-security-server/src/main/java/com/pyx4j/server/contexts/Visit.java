@@ -92,6 +92,7 @@ public class Visit implements Serializable {
     }
 
     public Serializable removeAttribute(String name) {
+    	this.changed = true;
         return this.attributes.remove(name);
     }
 
