@@ -42,7 +42,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
 
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (!watermark.isEmpty()) {
+        if (watermark != null && !watermark.isEmpty()) {
             if (focusHandlerRegistration == null) {
                 focusHandlerRegistration = addFocusHandler(new FocusHandler() {
                     @Override
@@ -57,7 +57,6 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
                     @Override
                     public void onBlur(BlurEvent event) {
                         showWatermark(true);
-
                     }
 
                 });
@@ -69,16 +68,24 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox {
         }
     }
 
+    @Override
+    public void setText(String text) {
+        super.setText(text);
+        if (watermark != null && !watermark.isEmpty()) {
+            showWatermark(text == null || text.isEmpty());
+        }
+    }
+
     private void showWatermark(boolean show) {
         if (!isReadOnly() && isEnabled()) {
             if (show) {
                 if (getText().isEmpty() || getText().equals(watermark)) {
-                    setText(watermark);
+                    super.setText(watermark);
                     addStyleDependentName("watermark");
                 }
             } else {
                 if (!getText().isEmpty() && getText().equals(watermark)) {
-                    setText("");
+                    super.setText(null);
                     removeStyleDependentName("watermark");
                 }
             }
