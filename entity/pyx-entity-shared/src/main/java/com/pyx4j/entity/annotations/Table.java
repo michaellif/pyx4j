@@ -29,6 +29,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Table {
 
+	public static enum PrimaryKeyStrategy {
+		
+		ASSIGNED,
+		
+		AUTO
+	}
+	
     /**
      * The name of the table or Entity kind for GAE.
      * 
@@ -45,4 +52,6 @@ public @interface Table {
      * Disable the use of ServerSideConfiguration.persistenceNamePrefix()
      */
     boolean disableGlobalPrefix() default false;
+    
+    PrimaryKeyStrategy  primaryKeyStrategy() default PrimaryKeyStrategy.AUTO; 
 }

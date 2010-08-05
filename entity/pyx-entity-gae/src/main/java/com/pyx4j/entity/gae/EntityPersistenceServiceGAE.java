@@ -61,6 +61,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -582,6 +583,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         Entity entity;
         boolean isUpdate = true;
         if (iEntity.getPrimaryKey() == null) {
+        	 Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
+             if ((tableAnnotation != null) && (tableAnnotation.primaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED)) {
+            	 throw new Error("Can't persist Entity without assigned PK");
+             }
             isUpdate = false;
             if (isBidirectionalReferenceRequired(iEntity)) {
                 datastoreCallStats.get().count++;
