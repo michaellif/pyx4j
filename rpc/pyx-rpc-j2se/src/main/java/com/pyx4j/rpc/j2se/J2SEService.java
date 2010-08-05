@@ -35,6 +35,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.rpc.shared.Service;
@@ -357,8 +358,10 @@ public class J2SEService {
             if (t != -1) {
                 String name = v.substring(0, eq);
                 String value = v.substring(eq + 1, t);
-                cookies.put(name, value);
-                log.debug("cookie {} = {}", name, value);
+                String pValue = cookies.put(name, value);
+                if (!CommonsStringUtils.equals(pValue, value)) {
+                    log.debug("cookie {} = {}", name, value);
+                }
             }
         }
     }
