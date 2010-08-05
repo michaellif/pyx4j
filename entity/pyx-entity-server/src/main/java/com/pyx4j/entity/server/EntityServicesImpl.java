@@ -128,14 +128,13 @@ public class EntityServicesImpl {
 
     public static class RetrieveImpl implements EntityServices.Retrieve {
 
-        @SuppressWarnings("unchecked")
         @Override
-        public IEntity execute(EntityQueryCriteria request) {
+        public IEntity execute(EntityQueryCriteria<?> request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
             IEntity ent;
             if (request instanceof EntityCriteriaByPK) {
                 ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
-                        ((EntityCriteriaByPK) request).getPrimaryKey());
+                        ((EntityCriteriaByPK<?>) request).getPrimaryKey());
             } else {
                 ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
             }
@@ -148,9 +147,8 @@ public class EntityServicesImpl {
 
     public static class RetrieveByPKImpl implements EntityServices.RetrieveByPK {
 
-        @SuppressWarnings("unchecked")
         @Override
-        public IEntity execute(EntityCriteriaByPK request) {
+        public IEntity execute(EntityCriteriaByPK<?> request) {
             SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
             IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
                     request.getPrimaryKey());
