@@ -44,11 +44,14 @@ public class EntityGraph {
     }
 
     public static void applyRecursively(IEntity entity, ApplyMethod method, Set<IEntity> processed) {
-        if (entity.isNull() || processed.contains(entity)) {
+        if (processed.contains(entity)) {
             return;
         }
-        processed.add(entity);
         method.apply(entity);
+        processed.add(entity);
+        if (entity.isNull()) {
+            return;
+        }
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
