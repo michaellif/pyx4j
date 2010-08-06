@@ -67,6 +67,7 @@ import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -583,10 +584,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         Entity entity;
         boolean isUpdate = true;
         if (iEntity.getPrimaryKey() == null) {
-        	 Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
-             if ((tableAnnotation != null) && (tableAnnotation.primaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED)) {
-            	 throw new Error("Can't persist Entity without assigned PK");
-             }
+            Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
+            if ((tableAnnotation != null) && (tableAnnotation.primaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED)) {
+                throw new Error("Can't persist Entity without assigned PK");
+            }
             isUpdate = false;
             if (isBidirectionalReferenceRequired(iEntity)) {
                 datastoreCallStats.get().count++;
@@ -1186,13 +1187,42 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return rc;
     }
 
+    private void getAllKeysForDelete(List<Key> keys, IEntity iEntity) {
+        nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
+            if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
+                continue nextValue;
+            }
+            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(me.getKey());
+            if (!meta.isOwnedRelationships()) {
+                continue nextValue;
+            }
+            Object value = me.getValue();
+            if (value instanceof Map<?, ?>) {
+                IEntity childIEntity = (IEntity) iEntity.getMember(me.getKey());
+                if (!meta.isEmbedded()) {
+                    keys.add(KeyFactory.createKey(getIEntityKind(childIEntity), childIEntity.getPrimaryKey()));
+                }
+                getAllKeysForDelete(keys, childIEntity);
+            } else if ((ICollection.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof Collection<?>)) {
+                ICollection<IEntity, ?> memberList = (ICollection<IEntity, ?>) iEntity.getMember(me.getKey());
+                for (IEntity childIEntity : memberList) {
+                    keys.add(KeyFactory.createKey(getIEntityKind(childIEntity), childIEntity.getPrimaryKey()));
+                    getAllKeysForDelete(keys, childIEntity);
+                }
+            }
+        }
+    }
+
     @Override
     public void delete(IEntity iEntity) {
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't delete Transient Entity");
         }
+        List<Key> keys = new Vector<Key>();
+        keys.add(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey()));
+        getAllKeysForDelete(keys, iEntity);
         datastoreCallStats.get().count++;
-        datastore.delete(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey()));
+        datastore.delete(keys);
     }
 
     @Override

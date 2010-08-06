@@ -67,11 +67,20 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria);
 
+    /**
+     * Cascade delete entity and Owned entities
+     */
     public void delete(IEntity entity);
 
-    public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey);
-
+    /**
+     * TODO: Cascade delete entity and Owned entities
+     */
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria);
+
+    /**
+     * Only delete one row, does not affect Owned entities
+     */
+    public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey);
 
     public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys);
 
