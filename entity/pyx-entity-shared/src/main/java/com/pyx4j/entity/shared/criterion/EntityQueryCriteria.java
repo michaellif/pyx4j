@@ -33,8 +33,9 @@ import com.pyx4j.entity.shared.IEntity;
  * 
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
-@SuppressWarnings("serial")
 public class EntityQueryCriteria<E extends IEntity> implements Serializable {
+
+    private static final long serialVersionUID = -6101566214650608853L;
 
     private String domainName;
 
@@ -47,6 +48,8 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable {
     private transient E metaEntity;
 
     public static class Sort implements Serializable {
+
+        private static final long serialVersionUID = -9007568149350718889L;
 
         private String propertyName;
 

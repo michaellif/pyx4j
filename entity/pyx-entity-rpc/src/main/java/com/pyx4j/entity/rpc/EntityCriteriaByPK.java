@@ -27,8 +27,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 /**
  * Special case criteria for EntityServices.RetrieveByPK service.
  */
-@SuppressWarnings("serial")
 public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E> {
+
+    private static final long serialVersionUID = -3985273227849938461L;
 
     private long primaryKey;
 
