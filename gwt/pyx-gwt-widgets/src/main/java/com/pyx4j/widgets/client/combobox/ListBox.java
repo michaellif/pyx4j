@@ -23,13 +23,20 @@ package com.pyx4j.widgets.client.combobox;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.widgets.client.TextBox;
+
 public class ListBox<E> extends ComboBox<E> {
 
     private final List<E> options = new ArrayList<E>();
 
+    private final TextBox textBox;
+
     public ListBox(boolean multipleSelect, boolean plainList) {
         super();
-        setTextBox(new com.google.gwt.user.client.ui.TextBox());
+        textBox = new TextBox();
+        textBox.setWatermark("Test");
+        textBox.setReadOnly(true);
+        setTextBox(textBox);
         setPickerPanel(new TreePickerPanel<E>(this, multipleSelect, plainList));
         setOptionsGrabber(new ListOptionsGrabber<E>(this));
 

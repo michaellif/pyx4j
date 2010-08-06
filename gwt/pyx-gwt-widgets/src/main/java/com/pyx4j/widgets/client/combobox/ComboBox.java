@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client.combobox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -132,7 +133,24 @@ public abstract class ComboBox<E> extends HorizontalPanel {
     }
 
     public void setSelection(E... items) {
-        selection.addAll(Arrays.asList(items));
+        setSelection(new HashSet<E>(Arrays.asList(items)));
+    }
+
+    public void setSelection(Set<E> items) {
+        selection.clear();
+        selection.addAll(items);
+        String value = formatSelection(items);
+        textBox.setText(value);
+        textBox.setTitle(value);
+    }
+
+    protected String formatSelection(Set<E> items) {
+        StringBuilder builder = new StringBuilder();
+        for (E item : items) {
+            builder.append(item).append(", ");
+        }
+        String buffer = builder.toString();
+        return buffer.substring(0, buffer.length() > 1 ? buffer.length() - 2 : 0);
     }
 
     public Set<E> getSelection() {

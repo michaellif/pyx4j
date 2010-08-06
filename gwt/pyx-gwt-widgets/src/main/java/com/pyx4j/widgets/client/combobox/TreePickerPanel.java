@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.combobox;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -27,19 +29,27 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Tree.Resources;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class TreePickerPanel<E> extends PickerPanel<E> {
 
-    private final Tree tree;
+    private final ListBox<E> listBox;
+
+    private final PickerTree tree;
 
     private final boolean multipleSelect;
 
@@ -52,12 +62,13 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
     private final PickerScrollPanel scroll;
 
     public TreePickerPanel(ListBox<E> listBox, boolean multipleSelect, boolean plainList) {
+        this.listBox = listBox;
         this.multipleSelect = multipleSelect;
         this.plainList = plainList;
         if (plainList) {
-            tree = new Tree(images, true);
+            tree = new PickerTree(images, true);
         } else {
-            tree = new Tree();
+            tree = new PickerTree();
         }
         scroll = new PickerScrollPanel(tree);
         setWidget(scroll);
@@ -92,23 +103,9 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
         tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
             @Override
             public void onSelection(SelectionEvent<TreeItem> event) {
-                //hide();
+                listBox.setSelection(getSelection());
             }
         });
-        //        tree.addMouseOverHandler(new MouseOverHandler() {
-        //
-        //            @Override
-        //            public void onMouseOver(MouseOverEvent event) {
-        //                event.getRelativeElement().getStyle().setBackgroundColor("green");
-        //            }
-        //        });
-        //        tree.addMouseOutHandler(new MouseOutHandler() {
-        //
-        //            @Override
-        //            public void onMouseOut(MouseOutEvent event) {
-        //                event.getRelativeElement().getStyle().setBackgroundColor("red");
-        //            }
-        //        });
 
     }
 
@@ -134,6 +131,19 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
                 tree.setSelectedItem(treeItem);
             }
         }
+    }
+
+    protected Set<E> getSelection() {
+        Set<E> items = new HashSet<E>();
+        final Iterator<TreeItem> itr = tree.treeItemIterator();
+        while (itr.hasNext()) {
+            TreeItem treeItem = itr.next();
+            E item = (E) treeItem.getUserObject();
+            if (treeItem.isSelected()) {
+                items.add(item);
+            }
+        }
+        return items;
     }
 
     @Override
@@ -163,5 +173,33 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
             }
         }
 
+    }
+
+    class PickerTree extends Tree {
+
+        public PickerTree(Resources resources, boolean useLeafImages) {
+            super(resources, useLeafImages);
+        }
+
+        public PickerTree() {
+            super();
+        }
+
+        @Override
+        public void onBrowserEvent(Event event) {
+            super.onBrowserEvent(event);
+            int eventType = DOM.eventGetType(event);
+            switch (eventType) {
+            case Event.ONCLICK:
+                hide();
+                break;
+            case Event.ONKEYPRESS: {
+                if (KeyboardListener.KEY_ENTER == event.getKeyCode()) {
+                    hide();
+                }
+            }
+                break;
+            }
+        }
     }
 }
