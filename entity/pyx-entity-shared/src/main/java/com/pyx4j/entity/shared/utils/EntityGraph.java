@@ -71,19 +71,30 @@ public class EntityGraph {
 
     public static boolean fullyEqual(IEntity ent1, IEntity ent2) {
         if (!EqualsHelper.equals(ent1, ent2)) {
+            //            System.out.println("--changes\n" + ent1 + "\n!=\n" + ent2);
             return false;
         }
+        return fullyEqualValues(ent1, ent2);
+    }
+
+    public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
         Map<String, Object> otherValue = ent2.getValue();
         for (Map.Entry<String, Object> me : ent1.getValue().entrySet()) {
-            //TODO test and fix this
             if (me.getValue() instanceof Map) {
-                continue;
-            }
-            if (!EqualsHelper.equals(me.getValue(), otherValue.get(me.getKey()))) {
+                IEntity ent1Memeber = (IEntity) ent1.getMember(me.getKey());
+                if (ent1Memeber.getMeta().isEmbedded()) {
+                    if (!fullyEqualValues(ent1Memeber, (IEntity) ent2.getMember(me.getKey()))) {
+                        return false;
+                    }
+                } else if (!fullyEqual(ent1Memeber, (IEntity) ent2.getMember(me.getKey()))) {
+                    return false;
+                }
+            } else if (!EqualsHelper.equals(me.getValue(), otherValue.get(me.getKey()))) {
+                //                System.out.println("--changes " + ent1.getEntityMeta().getCaption() + "." + me.getKey() + " " + me.getValue() + "!="
+                //                        + otherValue.get(me.getKey()));
                 return false;
             }
         }
         return true;
     }
-
 }
