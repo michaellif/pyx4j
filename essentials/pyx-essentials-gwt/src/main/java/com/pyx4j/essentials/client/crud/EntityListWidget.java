@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
@@ -89,7 +90,10 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         messagePanel = new MessagePanel();
 
         add(messagePanel, DockPanel.NORTH);
-        leftPanel.add(createActionsPanel());
+        Widget actionsPanel = createActionsPanel();
+        if (actionsPanel != null) {
+            leftPanel.add(actionsPanel);
+        }
         leftPanel.add(searchCriteriaPanel);
         add(leftPanel, DockPanel.WEST);
 
@@ -159,6 +163,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
         AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
 
+            @Override
             @SuppressWarnings("unchecked")
             public void onSuccess(EntitySearchResult<? extends IEntity> result) {
                 log.debug("Loaded " + result.getData().size() + " " + entityName + "('s) in {} msec ", System.currentTimeMillis() - start);
@@ -171,6 +176,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
                 log.debug("Populated table in {} msec ", System.currentTimeMillis() - startPopulate);
             }
 
+            @Override
             public void onFailure(Throwable caught) {
                 throw new UnrecoverableClientError(caught);
             }
