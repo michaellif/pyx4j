@@ -53,4 +53,9 @@ public class CompareHelper {
         }
         return o1.compareTo(o2);
     }
+
+    public static boolean isTrue(Boolean value) {
+        return value != null && value;
+    }
+
 }
