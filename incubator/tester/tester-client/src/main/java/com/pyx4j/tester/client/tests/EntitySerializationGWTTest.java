@@ -30,10 +30,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
-import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.rpc.ComplexPrimitive;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.test.client.TestServices;
@@ -60,10 +63,12 @@ public class EntitySerializationGWTTest extends TestCase {
 
         final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(Serializable result) {
                 Assert.assertTrue("Employee class expected", (result instanceof Employee));
                 Employee emp2 = (Employee) result;
@@ -109,10 +114,12 @@ public class EntitySerializationGWTTest extends TestCase {
 
         final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(Serializable result) {
                 Assert.assertTrue("ComplexPrimitive class expected", (result instanceof ComplexPrimitive));
                 ComplexPrimitive cp2 = (ComplexPrimitive) result;
@@ -124,6 +131,68 @@ public class EntitySerializationGWTTest extends TestCase {
 
         RPCManager.execute(TestServices.EchoSerializable.class, cp, callback);
 
+    }
+
+    public void testISetSerialization() {
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+        final Organization org = EntityFactory.create(Organization.class);
+        org.name().setValue("org1");
+        org.setPrimaryKey(Long.valueOf(11));
+        final Department department1 = EntityFactory.create(Department.class);
+        department1.name().setValue("dept1");
+        department1.setPrimaryKey(Long.valueOf(1));
+        final Department department2 = EntityFactory.create(Department.class);
+        department2.name().setValue("dept2");
+        department2.setPrimaryKey(Long.valueOf(2));
+        org.departments().add(department2);
+
+        final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
+
+            @Override
+            public void onFailure(Throwable t) {
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
+            }
+
+            @Override
+            public void onSuccess(Serializable result) {
+                Assert.assertTrue("Organization class expected", (result instanceof Organization));
+                Organization org2 = (Organization) result;
+                assertTrue("Not Same data\n" + org2.toString() + "\n" + org.toString(), EntityGraph.fullyEqual(org, org2));
+                GUnitTester.finishTest(EntitySerializationGWTTest.this);
+            }
+
+        };
+
+        RPCManager.execute(TestServices.EchoSerializable.class, org, callback);
+    }
+
+    public void testIPrimitiveSetSerialization() {
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+        final Task orig = EntityFactory.create(Task.class);
+        orig.setPrimaryKey(Long.valueOf(22));
+        orig.description().setValue("Task1");
+        orig.notes().add("Note 1");
+        orig.notes().add("Note 2");
+        orig.oldStatus().add(Status.SUSPENDED);
+
+        final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
+
+            @Override
+            public void onFailure(Throwable t) {
+                fail(t.getClass().getName() + "[" + t.getMessage() + "]");
+            }
+
+            @Override
+            public void onSuccess(Serializable result) {
+                Assert.assertTrue("Task class expected", (result instanceof Task));
+                Task returned = (Task) result;
+                assertTrue("Not Same data\n" + returned.toString() + "\n!=\n" + orig.toString(), EntityGraph.fullyEqual(orig, returned));
+                GUnitTester.finishTest(EntitySerializationGWTTest.this);
+            }
+
+        };
+
+        RPCManager.execute(TestServices.EchoSerializable.class, orig, callback);
     }
 
     public void testRpcTransient() {
@@ -138,10 +207,12 @@ public class EntitySerializationGWTTest extends TestCase {
 
         final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(Serializable result) {
                 Assert.assertTrue("Department class expected", (result instanceof Department));
                 Department dept2 = (Department) result;

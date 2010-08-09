@@ -40,4 +40,6 @@ public interface Task extends IEntity {
     IPrimitive<Date> deadLine();
 
     IPrimitiveSet<String> notes();
+
+    IPrimitiveSet<Status> oldStatus();
 }

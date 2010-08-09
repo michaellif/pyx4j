@@ -23,6 +23,7 @@ package com.pyx4j.entity.test.shared;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
@@ -83,5 +84,32 @@ public class EntityEqualsTest extends InitializerTestCase {
 
         assertEquals("same key", department1, department2);
         assertEquals("same key same hashCode", department1.hashCode(), department2.hashCode());
+    }
+
+    public void testFullyEqual() {
+        Task t1 = EntityFactory.create(Task.class);
+        t1.setPrimaryKey(Long.valueOf(22));
+        t1.description().setValue("Task1");
+        t1.notes().add("Note 1");
+        t1.notes().add("Note 2");
+        t1.oldStatus().add(Status.SUSPENDED);
+
+        Task t2 = EntityFactory.create(Task.class);
+        t2.setPrimaryKey(Long.valueOf(22));
+        t2.description().setValue("Task1");
+        t2.notes().add("Note 1");
+        t2.notes().add("Note 2");
+        t2.oldStatus().add(Status.SUSPENDED);
+
+        assertTrue("Not Same data\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
+
+        t2.notes().clear();
+        t2.notes().add("Note 2");
+        t2.notes().add("Note 1");
+        assertTrue("Not Same data Set Order\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
+
+        t2.notes().clear();
+        t2.notes().add("Note X");
+        assertFalse("Data should be different\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
     }
 }
