@@ -53,7 +53,7 @@ public class PrimitiveSetHandler<TYPE> extends ObjectHandler<Set<TYPE>> implemen
 
     @Override
     public void set(IPrimitiveSet<TYPE> typedSet) {
-        getOwner().setMemberValue(getFieldName(), typedSet);
+        getOwner().setMemberValue(getFieldName(), typedSet.getValue());
     }
 
     @Override
