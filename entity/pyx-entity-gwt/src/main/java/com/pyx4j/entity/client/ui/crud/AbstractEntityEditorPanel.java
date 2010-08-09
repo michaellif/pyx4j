@@ -33,6 +33,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.EntityCSSClass;
@@ -274,7 +275,12 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     @Override
     public void onPageLeaving(PageLeavingEvent event) {
         if (isChanged()) {
-            event.addMessage(i18n.tr("Changes to {0} ''{1}'' were not saved", meta().getEntityMeta().getCaption(), getEntity().getStringView()));
+            String entityName = getEntity().getStringView();
+            if (CommonsStringUtils.isEmpty(entityName)) {
+                event.addMessage(i18n.tr("Changes to {0} were not saved", meta().getEntityMeta().getCaption()));
+            } else {
+                event.addMessage(i18n.tr("Changes to {0} ''{1}'' were not saved", meta().getEntityMeta().getCaption(), entityName));
+            }
         }
     }
 
