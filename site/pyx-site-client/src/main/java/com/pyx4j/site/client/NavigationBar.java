@@ -35,7 +35,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.UIObject;
@@ -43,6 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.meta.NavigUtils;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NavigationBar extends ComplexPanel {
@@ -132,8 +132,6 @@ public class NavigationBar extends ComplexPanel {
                 public void onClick(ClickEvent event) {
                     AbstractSiteDispatcher.show(uri);
                     getParent().removeStyleDependentName("hover");
-                    // Prevent IE from triggering Window.ClosingEvent
-                    event.preventDefault();
                 }
             });
 
