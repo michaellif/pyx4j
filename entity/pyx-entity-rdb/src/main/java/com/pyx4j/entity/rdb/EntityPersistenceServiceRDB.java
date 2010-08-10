@@ -186,4 +186,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         // TODO Auto-generated method stub
         return 0;
     }
+
+    @Override
+    public int getDatastoreWriteCallCount() {
+        return 0;
+    }
 }

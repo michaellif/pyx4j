@@ -86,4 +86,5 @@ public interface IEntityPersistenceService {
 
     public int getDatastoreCallCount();
 
+    public int getDatastoreWriteCallCount();
 }

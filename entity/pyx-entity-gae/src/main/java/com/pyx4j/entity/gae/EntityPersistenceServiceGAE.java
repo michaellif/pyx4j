@@ -115,7 +115,85 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     };
 
     private static class CallStats {
-        int count;
+
+        int readCount;
+
+        int writeCount;
+    }
+
+    private static class EntityUpdateWrapper {
+
+        boolean isUpdate;
+
+        Entity entity;
+
+        boolean updated;
+
+        Object lastValue;
+
+        EntityUpdateWrapper(Entity entity, boolean isUpdate) {
+            this.entity = entity;
+            this.isUpdate = isUpdate;
+            if (!isUpdate) {
+                updated = true;
+            }
+        }
+
+        public Object getProperty(String propertyName) {
+            return entity.getProperty(propertyName);
+        }
+
+        private static boolean equals(Object value1, Object value2) {
+            if ((value1 instanceof Integer) || (value2 instanceof Integer)) {
+                if (value1 == null || value2 == null) {
+                    return false;
+                }
+                return ((Number) value1).longValue() == ((Number) value2).longValue();
+            } else {
+                return EqualsHelper.equals(value1, value2);
+            }
+        }
+
+        public boolean setProperty(String propertyName, boolean indexed, Object value) {
+            if (isUpdate) {
+                if (!equals(value, lastValue = entity.getProperty(propertyName))) {
+                    if (indexed) {
+                        entity.setProperty(propertyName, value);
+                    } else {
+                        entity.setUnindexedProperty(propertyName, value);
+                    }
+                    //                    log.debug("data change " + propertyName + " [{}] -> [{}]", lastValue, value);
+                    //                    log.debug("data type change " + propertyName + " [{}] -> [{}]", (lastValue == null) ? "null" : lastValue.getClass(),
+                    //                            (value == null) ? "null" : value.getClass());
+                    updated = true;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (indexed) {
+                    entity.setProperty(propertyName, value);
+                } else {
+                    entity.setUnindexedProperty(propertyName, value);
+                }
+                return true;
+            }
+        }
+
+        public boolean removeProperty(String propertyName) {
+            if (isUpdate) {
+                if ((lastValue = entity.getProperty(propertyName)) != null) {
+                    entity.removeProperty(propertyName);
+                    updated = true;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                entity.removeProperty(propertyName);
+                return true;
+            }
+        }
     }
 
     public EntityPersistenceServiceGAE() {
@@ -158,7 +236,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void embedEntityProperties(Entity entity, String prefix, String sufix, IEntity childIEntity, boolean parentIndexed) {
+    //TODO support readonly values
+    private void embedEntityProperties(EntityUpdateWrapper entity, String prefix, String sufix, IEntity childIEntity, boolean parentIndexed) {
         if (childIEntity.isNull()) {
             // remove all properties
             EntityMeta em = childIEntity.getEntityMeta();
@@ -196,15 +275,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = convertToGAEValue(value, entity, propertyName, meta, parentIndexed);
             }
             //TODO Allow to embed other types
-            if (parentIndexed && meta.isIndexed()) {
-                entity.setProperty(propertyName, value);
-            } else {
-                entity.setUnindexedProperty(propertyName, value);
-            }
+
+            entity.setProperty(propertyName, parentIndexed && meta.isIndexed(), value);
         }
     }
 
-    private Object convertToGAEValue(Object value, Entity entity, String propertyName, MemberMeta meta, boolean parentIndexed) {
+    private Object convertToGAEValue(Object value, EntityUpdateWrapper entity, String propertyName, MemberMeta meta, boolean parentIndexed) {
         Indexed index = null;
         if (parentIndexed) {
             index = meta.getAnnotation(Indexed.class);
@@ -217,7 +293,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     if (index.global() != 0) {
                         addGloablIndex(entity, index.global(), createStringKeywordIndex(index.keywordLenght(), (String) value));
                     } else {
-                        entity.setProperty(getIndexedPropertyName(propertyName), createStringKeywordIndex(index.keywordLenght(), (String) value));
+                        entity.setProperty(getIndexedPropertyName(propertyName), true, createStringKeywordIndex(index.keywordLenght(), (String) value));
                     }
                 }
                 return value;
@@ -247,13 +323,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (index != null) {
                 // TODO move values like month and week
                 Date v = TimeUtils.dayStart((Date) value);
-                entity.setProperty(getIndexedPropertyName(propertyName), v);
+                entity.setProperty(getIndexedPropertyName(propertyName), true, v);
             }
             return value;
         } else if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
             if (index != null) {
-                entity.setProperty(getIndexedPropertyName(propertyName), geoPoint.getCells());
+                entity.setProperty(getIndexedPropertyName(propertyName), true, geoPoint.getCells());
             }
             return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
         } else if (value != null) {
@@ -268,7 +344,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
-    private void updateEntityProperties(Entity entity, IEntity iEntity, boolean merge, boolean isUpdate) {
+    private void updateEntityProperties(EntityUpdateWrapper entity, IEntity iEntity, boolean merge, boolean isUpdate) {
         if (iEntity.isNull()) {
             return;
         }
@@ -297,7 +373,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         if (isUpdate && merge) {
                             Object origValue = entity.getProperty(propertyName);
                             if ((origValue != null) && (origValue.equals(value))) {
-                                datastoreCallStats.get().count++;
+                                datastoreCallStats.get().writeCount++;
                                 datastore.delete((Key) origValue);
                             }
                         }
@@ -344,7 +420,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                                 }
                             }
                             if (removedChildKeys.size() > 0) {
-                                datastoreCallStats.get().count++;
+                                datastoreCallStats.get().writeCount++;
                                 datastore.delete(removedChildKeys);
                             }
                         }
@@ -384,7 +460,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                                 }
                             }
                             if (removedChildKeys.size() > 0) {
-                                datastoreCallStats.get().count++;
+                                datastoreCallStats.get().writeCount++;
                                 datastore.delete(removedChildKeys);
                             }
                         }
@@ -402,21 +478,15 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         childKeysOrder.add(childKey);
                     }
                 }
-                entity.setUnindexedProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, createBlob(childKeysOrder));
+                entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, false, createBlob(childKeysOrder));
                 value = childKeys;
             } else {
                 value = convertToGAEValue(value, entity, propertyName, meta, true);
             }
 
-            if (isUpdate && merge && (meta.getAnnotation(ReadOnly.class) != null) && !EqualsHelper.equals(value, entity.getProperty(propertyName))) {
-                log.error("Changing readonly property [{}] -> [{}]", entity.getProperty(propertyName), value);
+            if (entity.setProperty(propertyName, meta.isIndexed(), value) && entity.isUpdate && (meta.getAnnotation(ReadOnly.class) != null)) {
+                log.error("Changing readonly property [{}] -> [{}]", entity.lastValue, value);
                 throw new Error("Changing readonly property " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
-            }
-
-            if (meta.isIndexed()) {
-                entity.setProperty(propertyName, value);
-            } else {
-                entity.setUnindexedProperty(propertyName, value);
             }
         }
 
@@ -432,15 +502,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 throw new Error("Saving non persisted reference " + ownerEntity.getEntityMeta().getCaption());
             }
             Key ownerKey = KeyFactory.createKey(EntityFactory.getEntityMeta(ownerEntity.getValueClass()).getPersistenceName(), (Long) ownerId);
-            if (meta.isIndexed()) {
-                entity.setProperty(memberName, ownerKey);
-            } else {
-                entity.setUnindexedProperty(memberName, ownerKey);
-            }
+            entity.setProperty(memberName, meta.isIndexed(), ownerKey);
         }
     }
 
-    private void addGloablIndex(Entity entity, char prefix, Set<String> newKeys) {
+    private void addGloablIndex(EntityUpdateWrapper entity, char prefix, Set<String> newKeys) {
         Set<String> keys = (Set<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
         if (keys == null) {
             keys = new HashSet<String>();
@@ -448,16 +514,16 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         for (String key : newKeys) {
             keys.add(prefix + key);
         }
-        entity.setProperty(GLOBAL_KEYWORD_PRROPERTY, keys);
+        entity.setProperty(GLOBAL_KEYWORD_PRROPERTY, true, keys);
     }
 
-    private void addGloablIndex(Entity entity, char prefix, String newKey) {
+    private void addGloablIndex(EntityUpdateWrapper entity, char prefix, String newKey) {
         Set<String> keys = (Set<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
         if (keys == null) {
             keys = new HashSet<String>();
         }
         keys.add(prefix + newKey);
-        entity.setProperty(GLOBAL_KEYWORD_PRROPERTY, keys);
+        entity.setProperty(GLOBAL_KEYWORD_PRROPERTY, true, keys);
     }
 
     private String getIndexedPropertyName(String propertyName) {
@@ -576,7 +642,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return false;
     }
 
-    private Entity createEntity(IEntity iEntity, boolean merge) {
+    private EntityUpdateWrapper createEntity(IEntity iEntity, boolean merge) {
         EntityMeta entityMeta = iEntity.getEntityMeta();
         if (entityMeta.isTransient()) {
             throw new Error("Can't persist Transient Entity");
@@ -590,7 +656,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             isUpdate = false;
             if (isBidirectionalReferenceRequired(iEntity)) {
-                datastoreCallStats.get().count++;
+                datastoreCallStats.get().readCount++;
                 entity = new Entity(datastore.allocateIds(getIEntityKind(iEntity), 1).getStart());
                 iEntity.setPrimaryKey(entity.getKey().getId());
             } else {
@@ -604,7 +670,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             Key key = KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey());
             if (merge) {
                 try {
-                    datastoreCallStats.get().count++;
+                    datastoreCallStats.get().readCount++;
                     entity = datastore.get(key);
                 } catch (EntityNotFoundException e) {
                     throw new RuntimeException("EntityNotFound");
@@ -613,24 +679,31 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity = new Entity(key);
             }
         }
+        EntityUpdateWrapper entityUpdateWrapper = new EntityUpdateWrapper(entity, merge && isUpdate);
         String updatedTs = entityMeta.getUpdatedTimestampMember();
         if (updatedTs != null) {
             iEntity.setMemberValue(updatedTs, new Date());
         }
-        updateEntityProperties(entity, iEntity, merge, isUpdate);
-        return entity;
+        updateEntityProperties(entityUpdateWrapper, iEntity, merge, isUpdate);
+
+        return entityUpdateWrapper;
     }
 
     private Key persistImpl(IEntity iEntity, boolean merge) {
-        Entity entity = createEntity(iEntity, merge);
-        datastoreCallStats.get().count++;
-        try {
-            Key keyCreated = datastore.put(entity);
-            iEntity.setPrimaryKey(keyCreated.getId());
+        EntityUpdateWrapper entity = createEntity(iEntity, merge);
+        if (!entity.updated) {
+            // no update required
+            return entity.entity.getKey();
+        } else {
+            datastoreCallStats.get().writeCount++;
+            try {
+                Key keyCreated = datastore.put(entity.entity);
+                iEntity.setPrimaryKey(keyCreated.getId());
 
-            return keyCreated;
-        } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
-            throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
+                return keyCreated;
+            } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
+                throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
+            }
         }
     }
 
@@ -640,13 +713,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             List<Entity> entityList = new Vector<Entity>();
             for (IEntity iEntity : entityIterable) {
                 if (entityList.size() >= 500) {
-                    datastoreCallStats.get().count++;
+                    datastoreCallStats.get().writeCount++;
                     datastore.put(entityList);
                     entityList.clear();
                 }
-                entityList.add(createEntity(iEntity, false));
+                EntityUpdateWrapper entity = createEntity(iEntity, false);
+                entityList.add(entity.entity);
             }
-            datastoreCallStats.get().count++;
+            datastoreCallStats.get().writeCount++;
             datastore.put(entityList);
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
@@ -819,7 +893,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else {
             Entity entity;
             try {
-                datastoreCallStats.get().count++;
+                datastoreCallStats.get().readCount++;
                 entity = datastore.get(key);
             } catch (EntityNotFoundException e) {
                 throw new RuntimeException("Entity " + key.getKind() + " " + key.getId() + " NotFound");
@@ -839,7 +913,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), primaryKey);
         Entity entity;
         try {
-            datastoreCallStats.get().count++;
+            datastoreCallStats.get().readCount++;
             entity = datastore.get(key);
         } catch (EntityNotFoundException e) {
             log.debug("Entity " + entityClass.getSimpleName() + " " + primaryKey + " " + " NotFound");
@@ -970,14 +1044,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        int initCount = datastoreCallStats.get().count;
+        int initCount = datastoreCallStats.get().readCount;
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
         Query query = buildQuery(entityMeta, criteria);
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
         pq.asIterable(FetchOptions.Builder.withLimit(1));
 
@@ -989,7 +1063,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             updateIEntity(iEntity, entity, retrievedMap);
         }
         long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().count - initCount;
+        int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
             log.warn("Long running retrieve query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         } else {
@@ -1001,14 +1075,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        int initCount = datastoreCallStats.get().count;
+        int initCount = datastoreCallStats.get().readCount;
         Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
         Query query = buildQuery(entityMeta, criteria);
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
 
         Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
@@ -1019,7 +1093,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             rc.add(iEntity);
         }
         long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().count - initCount;
+        int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
             log.warn("Long running query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         } else {
@@ -1031,14 +1105,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        int initCount = datastoreCallStats.get().count;
+        int initCount = datastoreCallStats.get().readCount;
         final Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
         Query query = buildQuery(entityMeta, criteria);
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
 
         final Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
@@ -1051,7 +1125,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         final QueryResultIterator<Entity> iterator = iterable.iterator();
         long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().count - initCount;
+        int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
             log.warn("Long running query iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         } else {
@@ -1095,7 +1169,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
 
         List<Long> rc = new Vector<Long>();
@@ -1114,7 +1188,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> ICursorIterator<Long> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        int initCount = datastoreCallStats.get().count;
+        int initCount = datastoreCallStats.get().readCount;
         final Class<T> entityClass = entityClass(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
@@ -1122,7 +1196,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
 
         final QueryResultIterable<Entity> iterable;
@@ -1133,7 +1207,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         final QueryResultIterator<Entity> iterator = iterable.iterator();
         long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().count - initCount;
+        int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
             log.warn("Long running queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
         } else {
@@ -1175,7 +1249,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
         int rc = pq.countEntities();
         long duration = System.nanoTime() - start;
@@ -1221,7 +1295,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         List<Key> keys = new Vector<Key>();
         keys.add(KeyFactory.createKey(getIEntityKind(iEntity), iEntity.getPrimaryKey()));
         getAllKeysForDelete(keys, iEntity);
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().writeCount++;
         datastore.delete(keys);
     }
 
@@ -1231,7 +1305,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().writeCount++;
         try {
             datastore.delete(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
@@ -1248,7 +1322,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         Query query = buildQuery(entityMeta, criteria);
         query.setKeysOnly();
-        datastoreCallStats.get().count++;
+        datastoreCallStats.get().readCount++;
         PreparedQuery pq = datastore.prepare(query);
 
         try {
@@ -1256,14 +1330,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             List<Key> keys = new Vector<Key>();
             for (Entity entity : pq.asIterable()) {
                 if (keys.size() >= 500) {
-                    datastoreCallStats.get().count++;
+                    datastoreCallStats.get().writeCount++;
                     datastore.delete(keys);
                     removedCount += keys.size();
                     keys.clear();
                 }
                 keys.add(entity.getKey());
             }
-            datastoreCallStats.get().count++;
+            datastoreCallStats.get().writeCount++;
             datastore.delete(keys);
             removedCount += keys.size();
             return removedCount;
@@ -1282,13 +1356,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         try {
             for (Long primaryKey : primaryKeys) {
                 if (keys.size() >= 500) {
-                    datastoreCallStats.get().count++;
+                    datastoreCallStats.get().writeCount++;
                     datastore.delete(keys);
                     keys.clear();
                 }
                 keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
             }
-            datastoreCallStats.get().count++;
+            datastoreCallStats.get().writeCount++;
             datastore.delete(keys);
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
@@ -1297,6 +1371,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public int getDatastoreCallCount() {
-        return datastoreCallStats.get().count;
+        return datastoreCallStats.get().readCount + datastoreCallStats.get().writeCount;
+    }
+
+    @Override
+    public int getDatastoreWriteCallCount() {
+        return datastoreCallStats.get().writeCount;
     }
 }
