@@ -73,7 +73,6 @@ public class RichTextAreaImplIE6Fixed extends RichTextAreaImplIE6 {
 
     @Override
     protected void hookEvents() {
-        log.info("+++++++++++++++++++++ hookEvents entered");
         super.hookEvents();
         hookEventsExtra();
         setFocus(true);
@@ -102,7 +101,6 @@ public class RichTextAreaImplIE6Fixed extends RichTextAreaImplIE6 {
 
     @Override
     protected void unhookEvents() {
-        log.info("+++++++++++++++++++++ unhookEvents entered");
         super.unhookEvents();
         unhookEventsExtra();
     }
