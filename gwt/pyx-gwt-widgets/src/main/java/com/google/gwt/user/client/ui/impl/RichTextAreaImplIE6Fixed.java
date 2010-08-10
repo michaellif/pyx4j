@@ -76,7 +76,6 @@ public class RichTextAreaImplIE6Fixed extends RichTextAreaImplIE6 {
         super.hookEvents();
         hookEventsExtra();
         setFocus(true);
-        setFocus(false);
     }
 
     private native void hookEventsExtra() /*-{

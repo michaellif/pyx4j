@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.crud;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -29,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,7 +50,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CFocusComponent;
+import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -124,6 +130,22 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     public void populateForm(E entity) {
         form.populate(entity);
+        setFocusOnFirstComponent();
+    }
+
+    private void setFocusOnFirstComponent() {
+        DeferredCommand.addCommand(new Command() {
+            @Override
+            public void execute() {
+                Collection<CComponent<?>> components = form.getComponents();
+                for (CComponent<?> cComponent : components) {
+                    if (cComponent instanceof CEditableComponent && cComponent.isVisible() && cComponent.isEnabled()) {
+                        ((CEditableComponent) cComponent).setFocus(true);
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     public void clearForm() {
