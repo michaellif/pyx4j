@@ -121,10 +121,10 @@ public class J2SEService {
     }
 
     public void googleLogin(String userName, String password) throws RuntimeException {
-        googleLogin(userName, password, GoogleAccountType.HOSTED_OR_GOOGLE);
+        googleLogin(userName, password, GoogleAccountType.HOSTED_OR_GOOGLE, false);
     }
 
-    public void googleLogin(String userName, String password, GoogleAccountType googleAccountType) throws RuntimeException {
+    public void googleLogin(String userName, String password, GoogleAccountType googleAccountType, boolean developerAdmin) throws RuntimeException {
         HttpURLConnection conn = null;
         try {
             URL u = new URL(serverUrl);
@@ -147,7 +147,7 @@ public class J2SEService {
                 }
                 conn.disconnect();
                 if (redirect.contains("http://localhost")) {
-                    gaeDevLoginPost(redirect, serverUrl, userName);
+                    gaeDevLoginPost(redirect, serverUrl, userName, developerAdmin);
                 } else {
                     googleLoginPost(u.getHost(), userName, password, googleAccountType);
                 }
@@ -163,7 +163,7 @@ public class J2SEService {
         }
     }
 
-    protected void gaeDevLoginPost(String loginUrl, String url, String userName) {
+    protected void gaeDevLoginPost(String loginUrl, String url, String userName, boolean developerAdmin) {
         URLPoster post = null;
         try {
             post = new URLPoster(loginUrl);
@@ -171,6 +171,9 @@ public class J2SEService {
 
             post.param("email", userName);
             post.param("continue", url);
+            if (developerAdmin) {
+                post.param("isAdmin", "on");
+            }
             post.param("action", "Log In");
 
             post.post();
