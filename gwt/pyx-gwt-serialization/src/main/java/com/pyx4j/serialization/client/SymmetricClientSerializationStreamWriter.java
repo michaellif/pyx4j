@@ -65,7 +65,7 @@ public class SymmetricClientSerializationStreamWriter extends AbstractSerializat
     }-*/;
 
     @Override
-    public void writeLong(long fieldValue) throws SerializationException {
+    public void writeLong(long fieldValue) {
         double[] parts;
         if (GWT.isScript()) {
             parts = makeLongComponents0(fieldValue);
