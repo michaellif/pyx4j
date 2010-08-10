@@ -28,15 +28,15 @@ public class BackupRecordsResponse implements Serializable {
 
     private static final long serialVersionUID = -7348465784755927584L;
 
-    private final Vector<HashMap<String, Object>> records;
+    private final Vector<HashMap<String, BackupEntityProperty>> records;
 
     private String encodedCursorRefference;
 
     public BackupRecordsResponse() {
-        records = new Vector<HashMap<String, Object>>();
+        records = new Vector<HashMap<String, BackupEntityProperty>>();
     }
 
-    public Vector<HashMap<String, Object>> getRecords() {
+    public Vector<HashMap<String, BackupEntityProperty>> getRecords() {
         return records;
     }
 
@@ -44,7 +44,7 @@ public class BackupRecordsResponse implements Serializable {
         return records.size();
     }
 
-    public void addRecord(HashMap<String, Object> record) {
+    public void addRecord(HashMap<String, BackupEntityProperty> record) {
         this.records.add(record);
     }
 

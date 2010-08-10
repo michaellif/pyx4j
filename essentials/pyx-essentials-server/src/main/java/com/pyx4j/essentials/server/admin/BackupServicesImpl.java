@@ -20,31 +20,77 @@
  */
 package com.pyx4j.essentials.server.admin;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.GeoPt;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.essentials.rpc.admin.BackupEntityProperty;
+import com.pyx4j.essentials.rpc.admin.BackupKey;
 import com.pyx4j.essentials.rpc.admin.BackupRecordsResponse;
 import com.pyx4j.essentials.rpc.admin.BackupRequest;
 import com.pyx4j.essentials.rpc.admin.BackupServices;
+import com.pyx4j.geo.GeoPoint;
 
 public class BackupServicesImpl implements BackupServices {
 
     private final static Logger log = LoggerFactory.getLogger(BackupServicesImpl.class);
 
     private final static int TIME_QUOTA_SEC = 15;
+
+    public static BackupKey key(Key key) {
+        BackupKey bk = new BackupKey();
+        bk.setKind(key.getKind());
+        if (key.getId() != 0L) {
+            bk.setId(key.getId());
+        } else {
+            bk.setName(key.getName());
+        }
+        return bk;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Serializable serializeValue(Object value) {
+        if ((value instanceof String) || (value instanceof Long) || (value instanceof Date)) {
+            return (Serializable) value;
+        } else if (value instanceof Text) {
+            return ((Text) value).getValue();
+        } else if (value instanceof Key) {
+            return key((Key) value);
+        } else if (value instanceof Blob) {
+            //TODO support more types.
+            return ((Blob) value).getBytes();
+        } else if (value instanceof Collection) {
+            Vector<Serializable> r = new Vector<Serializable>();
+            for (Object item : (Collection) value) {
+                r.add(serializeValue(item));
+            }
+            return r;
+        } else if (value instanceof GeoPt) {
+            return new GeoPoint(((GeoPt) value).getLatitude(), ((GeoPt) value).getLongitude());
+        }
+        return (Serializable) value;
+    }
 
     public static class GetImpl implements BackupServices.Get {
 
@@ -68,9 +114,12 @@ public class BackupServicesImpl implements BackupServices {
 
             while (iterator.hasNext()) {
                 Entity entity = iterator.next();
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.putAll(entity.getProperties());
-                record.put(Entity.KEY_RESERVED_PROPERTY, entity.getKey().getId());
+                HashMap<String, BackupEntityProperty> record = new HashMap<String, BackupEntityProperty>();
+                for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
+                    String propertyName = me.getKey();
+                    record.put(propertyName, new BackupEntityProperty(serializeValue(me.getValue()), entity.isUnindexedProperty(propertyName)));
+                }
+                record.put(Entity.KEY_RESERVED_PROPERTY, new BackupEntityProperty(key(entity.getKey()), false));
                 response.addRecord(record);
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * TIME_QUOTA_SEC;
                 if ((response.size() > request.getResponceSize()) || (quotaExceeded)) {
@@ -81,6 +130,5 @@ public class BackupServicesImpl implements BackupServices {
             }
             return response;
         }
-
     }
 }
