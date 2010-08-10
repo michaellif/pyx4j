@@ -381,6 +381,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 } else {
                     Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKeyId == null) {
+                        log.error("Saving non persisted reference {}", iEntity.getMember(me.getKey()));
                         throw new Error("Saving non persisted reference " + meta.getCaption());
                     }
                     value = KeyFactory
