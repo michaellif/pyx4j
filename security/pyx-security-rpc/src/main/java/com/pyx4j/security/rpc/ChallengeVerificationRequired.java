@@ -20,8 +20,10 @@
  */
 package com.pyx4j.security.rpc;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+
 @SuppressWarnings("serial")
-public class ChallengeVerificationRequired extends RuntimeException {
+public class ChallengeVerificationRequired extends RuntimeExceptionSerializable {
 
     public ChallengeVerificationRequired() {
         super();
