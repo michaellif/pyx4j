@@ -49,6 +49,7 @@ public interface AuthenticationRequest extends IEntity {
     /**
      * Text from image for human verification.
      */
+    @Caption(name = "Enter the code")
     @Editor(type = Editor.EditorType.captcha)
     IPrimitive<Pair<String, String>> captcha();
 }
