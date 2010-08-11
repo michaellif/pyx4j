@@ -60,4 +60,10 @@ public class CCaptcha extends CEditableComponent<Pair<String, String>> {
         return nativeCaptcha;
     }
 
+    public void createNewChallenge() {
+        if (nativeCaptcha != null) {
+            nativeCaptcha.createNewChallenge();
+        }
+    }
+
 }

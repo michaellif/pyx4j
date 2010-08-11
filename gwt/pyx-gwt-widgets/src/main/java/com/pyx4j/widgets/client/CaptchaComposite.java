@@ -22,40 +22,150 @@ package com.pyx4j.widgets.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 
 /**
  * This class Injects reCAPTCHA Client API code.
  * 
- * @see http://recaptcha.net/apidocs/captcha/ for more information.
- * 
- * @author Victora Corda
+ * @see http://code.google.com/apis/recaptcha/intro.html for more information.
+ * @see http://code.google.com/apis/recaptcha/docs/customization.html
  * 
  */
-public class CaptchaComposite extends Composite {
+public class CaptchaComposite extends SimplePanel {
 
     private static Logger log = LoggerFactory.getLogger(CaptchaComposite.class);
 
-    private final Grid grid = new Grid(1, 1);
+    private static I18n i18n = I18nFactory.getI18n(CaptchaComposite.class);
 
-    private static final String DIV_NAME = "recaptcha_div";
+    private static int instanceId = 0;
+
+    private final String divName;
 
     private static String publicKey;
 
     private boolean created = false;
 
+    private final VerticalPanel divHolder;
+
+    private final SimplePanel recaptchaImage;
+
+    private final TextBox response;
+
+    private final Image toText;
+
+    private final Image toAudio;
+
     public CaptchaComposite() {
-        this.initWidget(grid);
-        Label dummyLable = new Label();
-        grid.setWidget(0, 0, dummyLable);
-        Element divElement = dummyLable.getElement();
-        divElement.setAttribute("id", DIV_NAME);
+        // Image 300x57 pixels
+        this.getElement().getStyle().setHeight(57 + 30, Unit.PX);
+        instanceId++;
+        divName = "recaptcha_div" + String.valueOf(instanceId);
+
+        divHolder = new VerticalPanel();
+        divHolder.getElement().getStyle().setWidth(100, Unit.PCT);
+        divHolder.getElement().setId(divName);
+        //divHolder.getElement().getStyle().setDisplay(Display.NONE);
+        recaptchaImage = new SimplePanel();
+        recaptchaImage.getElement().getStyle().setWidth(300, Unit.PX);
+        recaptchaImage.getElement().getStyle().setHeight(57, Unit.PX);
+        recaptchaImage.getElement().getStyle().setMarginRight(5, Unit.PX);
+
+        HorizontalPanel images = new HorizontalPanel();
+        images.add(recaptchaImage);
+
+        VerticalPanel buttons = new VerticalPanel();
+        images.add(buttons);
+        Image refresh = new Image(ImageFactory.getImages().recaptchaRefresh());
+        buttons.add(refresh);
+        toAudio = new Image(ImageFactory.getImages().recaptchaAudio());
+        buttons.add(toAudio);
+        toText = new Image(ImageFactory.getImages().recaptchaText());
+        buttons.add(toText);
+        toText.setVisible(false);
+        Image help = new Image(ImageFactory.getImages().recaptchaHelp());
+        buttons.add(help);
+
+        refresh.setTitle(i18n.tr("Get a new challenge"));
+        toAudio.setTitle(i18n.tr("Get an audio challenge"));
+        toText.setTitle(i18n.tr("Get a visual challenge"));
+        help.setTitle(i18n.tr("Help"));
+
+        toText.setStyleName("recaptcha_only_if_audio");
+        toAudio.setStyleName("recaptcha_only_if_image");
+
+        refresh.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!created) {
+                    return;
+                }
+                createNewChallengeImpl();
+            }
+        });
+
+        help.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!created) {
+                    return;
+                }
+                showhelp();
+            }
+        });
+
+        toAudio.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!created) {
+                    return;
+                }
+                switchToAudio();
+                toAudio.setVisible(false);
+                toText.setVisible(true);
+            }
+        });
+
+        toText.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!created) {
+                    return;
+                }
+                switchToImage();
+                toAudio.setVisible(true);
+                toText.setVisible(false);
+            }
+        });
+
+        divHolder.add(images);
+        response = new TextBox();
+        response.setName("recaptcha_response_field");
+        response.getElement().getStyle().setMarginTop(5, Unit.PX);
+        response.getElement().getStyle().setWidth(100, Unit.PCT);
+        divHolder.add(response);
+
+        this.add(divHolder);
+    }
+
+    private void assigneRecaptchaId() {
+        recaptchaImage.getElement().setId("recaptcha_image");
+        response.getElement().setId("recaptcha_response_field");
+    }
+
+    private void assigneNutralId() {
+        recaptchaImage.getElement().setId(divName + "_image");
+        response.getElement().setId(divName + "_response_field");
     }
 
     public static void setPublicKey(String publicKey) {
@@ -64,17 +174,31 @@ public class CaptchaComposite extends Composite {
 
     public native void setFocus()
     /*-{
-        return $wnd.Recaptcha.focus_response_field();
+        $wnd.Recaptcha.focus_response_field();
     }-*/;
 
-    public native String getValueResponse()
-    /*-{
-        return $wnd.Recaptcha.get_response();
-    }-*/;
+    public String getValueResponse() {
+        return response.getValue();
+    }
 
     public native String getValueChallenge()
     /*-{
         return $wnd.Recaptcha.get_challenge();
+    }-*/;
+
+    private native void switchToImage()
+    /*-{
+        $wnd.Recaptcha.switch_type('image');
+    }-*/;
+
+    private native void switchToAudio()
+    /*-{
+        $wnd.Recaptcha.switch_type('audio');
+    }-*/;
+
+    private native void showhelp()
+    /*-{
+        $wnd.Recaptcha.showhelp();
     }-*/;
 
     private void createChallenge() {
@@ -89,6 +213,9 @@ public class CaptchaComposite extends Composite {
 
             @Override
             public void run() {
+                assigneRecaptchaId();
+                toAudio.setVisible(true);
+                toText.setVisible(false);
                 createChallengeImpl();
                 created = true;
             }
@@ -98,10 +225,8 @@ public class CaptchaComposite extends Composite {
 
     private native void createChallengeImpl()
     /*-{
-        $wnd.Recaptcha.create(
-        @com.pyx4j.widgets.client.CaptchaComposite::publicKey,
-        @com.pyx4j.widgets.client.CaptchaComposite::DIV_NAME, 
-        { theme: "white", callback: $wnd.Recaptcha.focus_response_field} );
+        $wnd.Recaptcha.create(@com.pyx4j.widgets.client.CaptchaComposite::publicKey,this.@com.pyx4j.widgets.client.CaptchaComposite::divName,
+        {theme:"custom", custom_theme_widget:this.@com.pyx4j.widgets.client.CaptchaComposite::divName});
     }-*/;
 
     private native void destroyCaptcha()
@@ -130,7 +255,6 @@ public class CaptchaComposite extends Composite {
 
     @Override
     protected void onLoad() {
-        super.onLoad();
         if (isVisible()) {
             createChallenge();
         }
@@ -138,9 +262,10 @@ public class CaptchaComposite extends Composite {
 
     @Override
     protected void onUnload() {
-        super.onLoad();
         if (created) {
             destroyCaptcha();
+            assigneNutralId();
+            created = false;
         }
     }
 

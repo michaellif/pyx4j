@@ -35,9 +35,9 @@ import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.ValidationResults;
-import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
@@ -163,8 +163,9 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 MessageDialog.error("Login Failed", caught.getMessage());
                 if (caught instanceof ChallengeVerificationRequired) {
                     form.get(form.meta().captcha()).setVisible(true);
+                } else if (form.get(form.meta().captcha()).isVisible()) {
+                    ((CCaptcha) form.get(form.meta().captcha())).createNewChallenge();
                 }
-                form.get(form.meta().captcha()).setValue(null);
             }
 
             @Override

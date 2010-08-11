@@ -42,4 +42,12 @@ public interface WidgetsImages extends ClientBundle {
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource comboBoxPickerPushed();
 
+    public ImageResource recaptchaRefresh();
+
+    public ImageResource recaptchaAudio();
+
+    public ImageResource recaptchaText();
+
+    public ImageResource recaptchaHelp();
+
 }
