@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -38,6 +39,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.QueryResultIterable;
@@ -51,6 +53,7 @@ import com.pyx4j.essentials.rpc.admin.BackupRecordsResponse;
 import com.pyx4j.essentials.rpc.admin.BackupRequest;
 import com.pyx4j.essentials.rpc.admin.BackupServices;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class BackupServicesImpl implements BackupServices {
 
@@ -58,7 +61,7 @@ public class BackupServicesImpl implements BackupServices {
 
     private final static int TIME_QUOTA_SEC = 15;
 
-    public static BackupKey key(Key key) {
+    public static BackupKey backupKey(Key key) {
         BackupKey bk = new BackupKey();
         bk.setKind(key.getKind());
         if (key.getId() != 0L) {
@@ -76,7 +79,7 @@ public class BackupServicesImpl implements BackupServices {
         } else if (value instanceof Text) {
             return ((Text) value).getValue();
         } else if (value instanceof Key) {
-            return key((Key) value);
+            return backupKey((Key) value);
         } else if (value instanceof Blob) {
             //TODO support more types.
             return ((Blob) value).getBytes();
@@ -117,9 +120,9 @@ public class BackupServicesImpl implements BackupServices {
                 HashMap<String, BackupEntityProperty> record = new HashMap<String, BackupEntityProperty>();
                 for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
                     String propertyName = me.getKey();
-                    record.put(propertyName, new BackupEntityProperty(serializeValue(me.getValue()), entity.isUnindexedProperty(propertyName)));
+                    record.put(propertyName, new BackupEntityProperty(serializeValue(me.getValue()), !entity.isUnindexedProperty(propertyName)));
                 }
-                record.put(Entity.KEY_RESERVED_PROPERTY, new BackupEntityProperty(key(entity.getKey()), false));
+                record.put(Entity.KEY_RESERVED_PROPERTY, new BackupEntityProperty(backupKey(entity.getKey()), false));
                 response.addRecord(record);
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * TIME_QUOTA_SEC;
                 if ((response.size() > request.getResponceSize()) || (quotaExceeded)) {
@@ -130,5 +133,71 @@ public class BackupServicesImpl implements BackupServices {
             }
             return response;
         }
+    }
+
+    public static Key gaeKey(BackupKey key) {
+        if (key.getId() != 0L) {
+            return KeyFactory.createKey(key.getKind(), key.getId());
+        } else {
+            return KeyFactory.createKey(key.getKind(), key.getName());
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Object gaeValue(Serializable value) {
+        if (value instanceof String) {
+            if (((String) value).length() > 500) {
+                return new Text((String) value);
+            } else {
+                return value;
+            }
+        } else if (value instanceof BackupKey) {
+            return gaeKey((BackupKey) value);
+        } else if (value instanceof GeoPoint) {
+            GeoPoint geoPoint = (GeoPoint) value;
+            return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
+        } else if (value instanceof Collection) {
+            Vector<Object> r = new Vector<Object>();
+            for (Object item : (Collection) value) {
+                r.add(gaeValue((Serializable) item));
+            }
+            return r;
+        } else if (value != null) {
+            if (value.getClass().isArray()) {
+                //TODO support more arrays
+                return new Blob((byte[]) value);
+            } else {
+                return value;
+            }
+        }
+        return value;
+    }
+
+    public static class PutImpl implements BackupServices.Put {
+
+        @Override
+        public VoidSerializable execute(Vector<HashMap<String, BackupEntityProperty>> request) {
+            List<Entity> entityList = new Vector<Entity>();
+            for (HashMap<String, BackupEntityProperty> record : request) {
+                BackupEntityProperty key = record.get(Entity.KEY_RESERVED_PROPERTY);
+                Entity entity = new Entity(gaeKey((BackupKey) key.getValue()));
+                for (Map.Entry<String, BackupEntityProperty> me : record.entrySet()) {
+                    String propertyName = me.getKey();
+                    if (propertyName.equals(Entity.KEY_RESERVED_PROPERTY)) {
+                        continue;
+                    }
+                    BackupEntityProperty property = me.getValue();
+                    if (property.isIndexed()) {
+                        entity.setProperty(propertyName, gaeValue(property.getValue()));
+                    } else {
+                        entity.setUnindexedProperty(propertyName, gaeValue(property.getValue()));
+                    }
+                }
+                entityList.add(entity);
+            }
+            DatastoreServiceFactory.getDatastoreService().put(entityList);
+            return null;
+        }
+
     }
 }
