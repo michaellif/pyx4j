@@ -22,32 +22,46 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.gwt.NativeRichTextArea;
+import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;
 
 public class CRichTextArea extends CEditableComponent<String> {
 
-    private NativeRichTextArea nativeTextArea;
+    private INativeEditableComponent nativeTextArea;
 
     private final int columns = 40;
 
     private final int rows = 4;
 
+    private final boolean popup;
+
     public CRichTextArea() {
         super();
+        this.popup = false;
     }
 
-    public CRichTextArea(String title) {
+    public CRichTextArea(boolean popup) {
+        super();
+        this.popup = popup;
+    }
+
+    public CRichTextArea(String title, boolean popup) {
         super(title);
+        this.popup = popup;
     }
 
     @Override
-    public NativeRichTextArea getNativeComponent() {
+    public INativeEditableComponent getNativeComponent() {
         return nativeTextArea;
     }
 
     @Override
-    public NativeRichTextArea initNativeComponent() {
+    public INativeEditableComponent initNativeComponent() {
         if (nativeTextArea == null) {
-            nativeTextArea = new NativeRichTextArea(this);
+            if (popup) {
+                nativeTextArea = new NativeRichTextAreaPopup(this);
+            } else {
+                nativeTextArea = new NativeRichTextArea(this);
+            }
             applyAccessibilityRules();
             setNativeComponentValue(getValue());
         }
@@ -60,8 +74,8 @@ public class CRichTextArea extends CEditableComponent<String> {
     }
 
     public void scrollToBottom() {
-        if (nativeTextArea != null) {
-            nativeTextArea.scrollToBottom();
+        if (nativeTextArea != null && nativeTextArea instanceof NativeRichTextArea) {
+            ((NativeRichTextArea) nativeTextArea).scrollToBottom();
         }
     }
 

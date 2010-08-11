@@ -144,7 +144,7 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
         }
     }
 
-    protected String trimHtml(String html) {
+    static String trimHtml(String html) {
         while (html.startsWith("<br>")) {
             html = html.substring(4).trim();
         }
