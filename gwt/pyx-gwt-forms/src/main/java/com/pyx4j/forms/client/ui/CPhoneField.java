@@ -36,7 +36,7 @@ public class CPhoneField extends CTextBox<String> {
 
     public static class PhoneFormat implements IFormat<String> {
 
-        private final static String regex = "^(\\(?\\d{3}\\)?\\s?[\\s-]?){1,2}(\\d{4})$";
+        private final static String regex = "^\\s*(\\+?1\\s?)?(\\(?\\d{3}\\)?\\s?[\\s-]?){1,2}(\\d{4})$";
 
         public PhoneFormat() {
 
@@ -46,16 +46,20 @@ public class CPhoneField extends CTextBox<String> {
             if (value == null) {
                 return null;
             } else {
-                return value.replaceAll("[\\s\\(\\)-]+", "");
+                return value.replaceAll("[\\+\\s\\(\\)-]+", "");
             }
         }
 
+        @Override
         public String format(String value) {
             if (value == null) {
                 return null;
             }
             String unformatedPhone = normalize(value);
-            if (unformatedPhone.length() == 10) {
+            if (unformatedPhone.length() == 11) {
+                return "+" + unformatedPhone.subSequence(0, 1) + " " + unformatedPhone.subSequence(1, 4) + "-" + unformatedPhone.subSequence(4, 7) + "-"
+                        + unformatedPhone.subSequence(7, 11);
+            } else if (unformatedPhone.length() == 10) {
                 return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 6) + "-" + unformatedPhone.subSequence(6, 10);
             } else if (unformatedPhone.length() == 7) {
                 return unformatedPhone.subSequence(0, 3) + "-" + unformatedPhone.subSequence(3, 7);
@@ -64,6 +68,7 @@ public class CPhoneField extends CTextBox<String> {
             }
         }
 
+        @Override
         public String parse(String string) {
             if (string == null || !string.matches(regex)) {
                 return null;
