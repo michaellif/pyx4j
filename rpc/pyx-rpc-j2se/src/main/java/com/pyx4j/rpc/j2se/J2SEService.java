@@ -157,7 +157,7 @@ public class J2SEService {
                 conn.setRequestProperty("User-agent", userAgent);
                 conn.setUseCaches(false);
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    throw new RuntimeException("Failed to authenticate " + conn.getResponseMessage());
+                    throw new RuntimeException("Failed to authenticate " + conn.getResponseCode() + ":" + conn.getResponseMessage());
                 }
                 conn.disconnect();
                 if (redirect.contains("http://localhost")) {
@@ -224,7 +224,7 @@ public class J2SEService {
             post.post();
             log.debug("login post responce {}", post.getResponseCode());
             if (post.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new RuntimeException("Failed to authenticate at Google " + post.getResponseMessage());
+                throw new RuntimeException("Failed to authenticate at Google " + post.getResponseCode() + ":" + post.getResponseMessage());
             }
             String body = post.getInputStreamAsString();
             log.debug("login response[{}]", body);
@@ -255,7 +255,7 @@ public class J2SEService {
             if ((code == HttpURLConnection.HTTP_OK) || (code == HttpURLConnection.HTTP_MOVED_TEMP)) {
                 getCookie(conn.getHeaderFields());
             } else {
-                throw new RuntimeException("Failed to authenticate in GAE " + code + " " + conn.getResponseMessage());
+                throw new RuntimeException("Failed to authenticate in GAE " + code + ":" + conn.getResponseMessage());
             }
         } catch (IOException e) {
             throw new RuntimeException("GAE login failed", e);
@@ -334,7 +334,7 @@ public class J2SEService {
                 if (msg != null) {
                     throw new RuntimeExceptionSerializable(msg);
                 } else {
-                    throw new RuntimeExceptionSerializable(conn.getResponseMessage());
+                    throw new RuntimeExceptionSerializable(conn.getResponseCode() + ":" + conn.getResponseMessage());
                 }
             }
             getCookie(conn.getHeaderFields());
