@@ -59,4 +59,9 @@ public class BackupKey implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getKind()) + ":" + ((getId() == 0) ? getName() : String.valueOf(getId()));
+    }
 }

@@ -54,4 +54,9 @@ public class BackupEntityProperty implements Serializable {
     public void setValue(Serializable value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getValue());
+    }
 }

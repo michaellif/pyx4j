@@ -55,6 +55,8 @@ public class J2SEService {
 
     protected String serverUrl;
 
+    protected String forceDeveloperLoginPath;
+
     protected String userAgent = "pyx-j2se/1.0";
 
     protected Map<String, String> cookies = new HashMap<String, String>();
@@ -86,6 +88,14 @@ public class J2SEService {
 
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    public String getForceDeveloperLoginPath() {
+        return forceDeveloperLoginPath;
+    }
+
+    public void setForceDeveloperLoginPath(String forceDeveloperLoginPath) {
+        this.forceDeveloperLoginPath = forceDeveloperLoginPath;
     }
 
     public String getUserAgent() {
@@ -128,6 +138,10 @@ public class J2SEService {
         HttpURLConnection conn = null;
         try {
             URL u = new URL(serverUrl);
+            if (developerAdmin && getForceDeveloperLoginPath() != null) {
+                u = new URL(u.getProtocol(), u.getHost(), u.getPort(), getForceDeveloperLoginPath());
+                log.debug("login to {} as {}", u, userName);
+            }
             conn = (HttpURLConnection) u.openConnection();
             conn.setRequestMethod(GET);
             conn.setRequestProperty("User-agent", userAgent);
@@ -232,6 +246,7 @@ public class J2SEService {
         HttpURLConnection conn = null;
         try {
             URL u = new URL("http://" + appHost + "/_ah/login?auth=" + authToken);
+            log.debug("GAE app login [{}]", u);
             conn = (HttpURLConnection) u.openConnection();
             conn.setRequestMethod(GET);
             conn.setRequestProperty("User-agent", userAgent);
