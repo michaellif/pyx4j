@@ -60,8 +60,10 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.security.MemberModificationAdapter;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -485,9 +487,26 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 value = convertToGAEValue(value, entity, propertyName, meta, true);
             }
 
-            if (entity.setProperty(propertyName, meta.isIndexed(), value) && entity.isUpdate && (meta.getAnnotation(ReadOnly.class) != null)) {
-                log.error("Changing readonly property [{}] -> [{}]", entity.lastValue, value);
-                throw new Error("Changing readonly property " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+            if (entity.setProperty(propertyName, meta.isIndexed(), value) && entity.isUpdate) {
+                if (meta.getAnnotation(ReadOnly.class) != null) {
+                    log.error("Changing readonly property [{}] -> [{}]", entity.lastValue, value);
+                    throw new Error("Changing readonly property " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                }
+                MemberColumn memberColumn = meta.getAnnotation(MemberColumn.class);
+                if (memberColumn != null && memberColumn.modificationAdapter() != null) {
+                    MemberModificationAdapter adapter;
+                    try {
+                        adapter = memberColumn.modificationAdapter().newInstance();
+                    } catch (InstantiationException e) {
+                        throw new Error(e);
+                    } catch (IllegalAccessException e) {
+                        throw new Error(e);
+                    }
+                    if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
+                        log.error("Forbiden change [{}] -> [{}]", entity.lastValue, value);
+                        throw new Error("Forbiden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                    }
+                }
             }
         }
 
