@@ -57,6 +57,8 @@ public class EntityImplGenerator {
 
     private static EntityImplGenerator instance;
 
+    private static boolean implementationsCreated;
+
     private ClassPool pool;
 
     private final boolean webapp;
@@ -191,6 +193,13 @@ public class EntityImplGenerator {
         }
         log.info("Created {} IEntity implementations in {} msec", classes.size(), System.currentTimeMillis() - start);
 
+    }
+
+    public static synchronized void generateOnce() {
+        if (implementationsCreated) {
+            generate();
+            implementationsCreated = true;
+        }
     }
 
     @SuppressWarnings("unchecked")

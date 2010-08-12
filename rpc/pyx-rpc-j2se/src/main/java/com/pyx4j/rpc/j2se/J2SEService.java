@@ -266,6 +266,10 @@ public class J2SEService {
         }
     }
 
+    public void logout() {
+
+    }
+
     private long throttleNextIntervalResetTime = 0;
 
     private int throttleRequestsCount = 0;
