@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(name = "_ah_SESSION", disableGlobalPrefix = true)
-interface GaeStoredSession extends IEntity {
+public interface GaeStoredSession extends IEntity {
 
     /**
      * milliseconds; the same as in System.currentTimeMillis();

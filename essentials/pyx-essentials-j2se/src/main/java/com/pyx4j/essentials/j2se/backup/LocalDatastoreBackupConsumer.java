@@ -55,7 +55,7 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
 
         helper = new LocalServiceTestHelper(dsConfig);
         helper.setUp();
-        LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
+        //LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
     }
 
     @Override

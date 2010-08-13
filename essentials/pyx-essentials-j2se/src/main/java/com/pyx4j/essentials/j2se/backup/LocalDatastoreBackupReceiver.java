@@ -38,13 +38,16 @@ public class LocalDatastoreBackupReceiver extends AbstractBackupReceiver {
 
     public LocalDatastoreBackupReceiver(String fileName) {
         file = new File(fileName);
+        if (!file.exists()) {
+            throw new Error("File not found " + file.getAbsolutePath());
+        }
         LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
         dsConfig.setNoStorage(false);
         dsConfig.setBackingStoreLocation(fileName);
 
         helper = new LocalServiceTestHelper(dsConfig);
         helper.setUp();
-        LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
+        //LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
     }
 
     @Override
