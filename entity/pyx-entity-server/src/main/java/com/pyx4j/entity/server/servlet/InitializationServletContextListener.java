@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration.EnvironmentType;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -58,7 +59,7 @@ public class InitializationServletContextListener implements ServletContextListe
                 ServerSideConfiguration.setInstance(new ServerSideConfiguration());
             }
 
-            EntityImplGenerator.generate();
+            EntityImplGenerator.generate(ServerSideConfiguration.instance().getEnvironmentType() == EnvironmentType.GAESandbox);
         } catch (Throwable e) {
             Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
             log.error("initialization error", e);

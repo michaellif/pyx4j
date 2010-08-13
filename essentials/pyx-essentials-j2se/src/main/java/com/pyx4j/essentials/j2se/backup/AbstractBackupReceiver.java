@@ -39,7 +39,7 @@ public abstract class AbstractBackupReceiver implements BackupReceiver {
 
     protected AbstractBackupReceiver() {
         EntityFactory.setImplementation(new ServerEntityFactory());
-        EntityImplGenerator.generateOnce();
+        EntityImplGenerator.generateOnce(false);
     }
 
     protected abstract BackupRecordsResponse get(BackupRequest request);

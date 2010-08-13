@@ -57,7 +57,7 @@ public class EntityImplGenerator {
 
     private static EntityImplGenerator instance;
 
-    private static boolean implementationsCreated;
+    private static boolean implementationsCreated = false;
 
     private ClassPool pool;
 
@@ -85,7 +85,17 @@ public class EntityImplGenerator {
 
     public static synchronized EntityImplGenerator instance() {
         if (instance == null) {
-            instance = new EntityImplGenerator(true);
+            return createInstance(true);
+        } else {
+            return instance;
+        }
+    }
+
+    public static EntityImplGenerator createInstance(boolean webapp) {
+        if (instance == null) {
+            instance = new EntityImplGenerator(webapp);
+        } else if (instance.webapp != webapp) {
+            log.error("chaning weapp classpath configuration at runtime");
         }
         return instance;
     }
@@ -175,7 +185,7 @@ public class EntityImplGenerator {
         }
     }
 
-    public static void generate() {
+    public static void generate(boolean webapp) {
         if (Thread.currentThread().getContextClassLoader().getResource(ALREADY_GENERATED_MARKER_RESOURCE_NAME) != null) {
             log.debug("IEntity implementations already present");
             return;
@@ -188,16 +198,17 @@ public class EntityImplGenerator {
             return;
         }
         log.debug("found IEntity {} ", classes);
+        EntityImplGenerator gen = createInstance(webapp);
         for (String c : classes) {
-            EntityImplGenerator.instance().generateImplementation(c);
+            gen.generateImplementation(c);
         }
         log.info("Created {} IEntity implementations in {} msec", classes.size(), System.currentTimeMillis() - start);
 
     }
 
-    public static synchronized void generateOnce() {
-        if (implementationsCreated) {
-            generate();
+    public static synchronized void generateOnce(boolean webapp) {
+        if (!implementationsCreated) {
+            generate(webapp);
             implementationsCreated = true;
         }
     }
