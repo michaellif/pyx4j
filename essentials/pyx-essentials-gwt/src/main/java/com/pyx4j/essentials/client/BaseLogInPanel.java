@@ -157,6 +157,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
             @Override
             public void onFailure(Throwable caught) {
+                form.get(form.meta().password()).setValue(null);
                 log.debug("Login Failed", caught);
                 // TODO handle all types of error including problems with Internet connection and site reload.
                 // also caught.getMessage() can be null
@@ -170,6 +171,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
+                form.get(form.meta().password()).setValue(null);
                 ClientContext.authenticated(result);
                 if (HTML5LocalStorage.isSupported()) {
                     if (rememberID.getValue()) {
