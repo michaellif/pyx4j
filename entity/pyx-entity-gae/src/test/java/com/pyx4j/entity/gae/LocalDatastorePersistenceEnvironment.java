@@ -36,13 +36,25 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
     /** true to store saved changes, default to false */
     protected boolean storeChanges = false;
 
-    private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+    private LocalServiceTestHelper helper;
 
     private static int uniqueCount = 0;
+
+    protected String storageFileName() {
+        return null;
+    }
 
     @Override
     @Before
     public void setupDatastore() {
+        LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
+
+        if (storageFileName() != null) {
+            dsConfig.setNoStorage(false);
+            dsConfig.setBackingStoreLocation(storageFileName());
+        }
+
+        helper = new LocalServiceTestHelper(dsConfig);
         helper.setUp();
         EntityFactory.setImplementation(new ServerEntityFactory());
     }
@@ -50,6 +62,9 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
     @Override
     @After
     public void teardownDatastore() {
+        if (storageFileName() != null) {
+            LocalDatastoreServiceTestConfig.getLocalDatastoreService().stop();
+        }
         helper.tearDown();
         ApiProxy.setEnvironmentForCurrentThread(null);
     }

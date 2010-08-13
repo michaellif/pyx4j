@@ -127,7 +127,7 @@ public class BackupServicesImpl implements BackupServices {
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * TIME_QUOTA_SEC;
                 if ((response.size() > request.getResponceSize()) || (quotaExceeded)) {
                     response.setEncodedCursorRefference(iterator.getCursor().toWebSafeString());
-                    log.warn("Executions time quota exceeded {}", System.currentTimeMillis() - start);
+                    log.debug("Executions time quota exceeded {}", System.currentTimeMillis() - start);
                     break;
                 }
             }

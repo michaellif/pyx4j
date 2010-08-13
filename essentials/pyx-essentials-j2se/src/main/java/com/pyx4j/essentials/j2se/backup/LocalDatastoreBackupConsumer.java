@@ -44,14 +44,18 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
 
     public long totalRecords;
 
-    public LocalDatastoreBackupConsumer(String fileName) {
+    public LocalDatastoreBackupConsumer(String fileName, boolean overrride) {
         file = new File(fileName);
+        if (overrride && file.exists()) {
+            file.delete();
+        }
         LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
         dsConfig.setNoStorage(false);
-        //dsConfig.setBackingStoreLocation(fileName);
+        dsConfig.setBackingStoreLocation(fileName);
 
         helper = new LocalServiceTestHelper(dsConfig);
         helper.setUp();
+        LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
     }
 
     @Override
@@ -76,6 +80,7 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
 
     @Override
     public void end() {
+        LocalDatastoreServiceTestConfig.getLocalDatastoreService().stop();
         helper.tearDown();
         log.info("Saved {} records to {}", totalRecords, file.getAbsolutePath());
     }

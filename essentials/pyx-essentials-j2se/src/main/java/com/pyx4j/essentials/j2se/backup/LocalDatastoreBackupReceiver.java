@@ -20,13 +20,31 @@
  */
 package com.pyx4j.essentials.j2se.backup;
 
+import java.io.File;
+
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+
 import com.pyx4j.essentials.rpc.admin.BackupRecordsResponse;
 import com.pyx4j.essentials.rpc.admin.BackupRequest;
+import com.pyx4j.essentials.rpc.admin.BackupServices;
+import com.pyx4j.essentials.server.admin.BackupServicesImpl;
 
 public class LocalDatastoreBackupReceiver extends AbstractBackupReceiver {
 
-    public LocalDatastoreBackupReceiver(String fileName) {
+    private final File file;
 
+    private final LocalServiceTestHelper helper;
+
+    public LocalDatastoreBackupReceiver(String fileName) {
+        file = new File(fileName);
+        LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
+        dsConfig.setNoStorage(false);
+        dsConfig.setBackingStoreLocation(fileName);
+
+        helper = new LocalServiceTestHelper(dsConfig);
+        helper.setUp();
+        LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
     }
 
     @Override
@@ -36,12 +54,14 @@ public class LocalDatastoreBackupReceiver extends AbstractBackupReceiver {
 
     @Override
     public void end() {
-        // TODO Auto-generated method stub
+        LocalDatastoreServiceTestConfig.getLocalDatastoreService().stop();
+        helper.tearDown();
     }
 
     @Override
     protected BackupRecordsResponse get(BackupRequest request) {
-        return null;
+        BackupServices.Get get = new BackupServicesImpl.GetImpl();
+        return get.execute(request);
     }
 
 }
