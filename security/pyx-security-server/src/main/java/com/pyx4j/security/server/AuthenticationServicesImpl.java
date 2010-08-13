@@ -30,6 +30,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -79,7 +80,19 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
             AppengineUserService.updateAuthenticationResponse(ar);
         }
 
+        if (ServerSideConfiguration.instance().datastoreReadOnly()) {
+            ar.setDatastoreReadOnly(true);
+        }
         return ar;
+    }
+
+    public static class GetReadOnlyImpl implements AuthenticationServices.GetReadOnly {
+
+        @Override
+        public Boolean execute(VoidSerializable request) {
+            return ServerSideConfiguration.instance().datastoreReadOnly() || AppengineHelper.isMemcacheReadOnly();
+        }
+
     }
 
     public static class GetStatusImpl implements AuthenticationServices.GetStatus {

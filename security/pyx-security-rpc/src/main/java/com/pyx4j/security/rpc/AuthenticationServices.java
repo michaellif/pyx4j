@@ -21,8 +21,13 @@
 package com.pyx4j.security.rpc;
 
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AuthenticationServices {
+
+    public interface GetReadOnly extends Service<VoidSerializable, Boolean> {
+
+    };
 
     public interface GetStatus extends Service<String, AuthenticationResponse> {
 

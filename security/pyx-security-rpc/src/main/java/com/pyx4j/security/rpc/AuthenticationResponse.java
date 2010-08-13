@@ -39,6 +39,8 @@ public class AuthenticationResponse implements Serializable {
 
     private String logoutURL;
 
+    private boolean datastoreReadOnly;
+
     public AuthenticationResponse() {
 
     }
@@ -89,6 +91,14 @@ public class AuthenticationResponse implements Serializable {
 
     public String getLogoutURL() {
         return logoutURL;
+    }
+
+    public boolean isDatastoreReadOnly() {
+        return datastoreReadOnly;
+    }
+
+    public void setDatastoreReadOnly(boolean datastoreReadOnly) {
+        this.datastoreReadOnly = datastoreReadOnly;
     }
 
 }
