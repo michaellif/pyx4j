@@ -106,12 +106,19 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    /**
+     * May use appengine-web.xml to define system-properties or override this method
+     */
     public String getMainApplicationURL() {
         return System.getProperty("com.pyx4j.appUrl");
     }
 
     public IPersistenceConfiguration getPersistenceConfiguration() {
         return null;
+    }
+
+    public boolean datastoreReadOnly() {
+        return false;
     }
 
     public EnvironmentType getEnvironmentType() {

@@ -20,6 +20,9 @@
  */
 package com.pyx4j.security.server;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import com.pyx4j.commons.Consts;
 
 /**
@@ -40,5 +43,14 @@ public class ThrottleConfig {
 
     public long getMaxRequests() {
         return 60;
+    }
+
+    /**
+     * First two levels of RequestURI that are not counted for DoS.
+     * 
+     * Example: "/_ah/admin"
+     */
+    public Collection<String> whiteRequestURIs() {
+        return Collections.emptyList();
     }
 }

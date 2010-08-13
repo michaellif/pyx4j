@@ -86,14 +86,26 @@ public class LifecycleFilter implements Filter {
                 counter = new AccessCounter();
                 accessByIP.put(request.getRemoteAddr(), counter);
             } else {
-                counter.requests++;
-
-                if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
-                    if (response instanceof HttpServletResponse) {
-                        ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
+                if (request instanceof HttpServletRequest) {
+                    String uri = ((HttpServletRequest) request).getRequestURI();
+                    String[] split = uri.split("/", 4);
+                    if (split.length >= 2) {
+                        String uriPart = "/" + split[1] + "/" + split[2];
+                        if (throttleConfig.whiteRequestURIs().contains(uriPart)) {
+                            counter = null;
+                        }
                     }
-                    log.error("possible denial-of-service attack from {}", request.getRemoteAddr());
-                    return;
+                }
+
+                if (counter != null) {
+                    counter.requests++;
+                    if ((counter.requests > throttleConfig.getMaxRequests()) || (counter.duration > throttleConfig.getMaxTimeUsage())) {
+                        if (response instanceof HttpServletResponse) {
+                            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
+                        }
+                        log.error("possible denial-of-service attack from {}", request.getRemoteAddr());
+                        return;
+                    }
                 }
             }
 
@@ -110,7 +122,9 @@ public class LifecycleFilter implements Filter {
                 }
             }
         } finally {
-            counter.duration += System.currentTimeMillis() - start;
+            if (counter != null) {
+                counter.duration += System.currentTimeMillis() - start;
+            }
         }
 
     }
