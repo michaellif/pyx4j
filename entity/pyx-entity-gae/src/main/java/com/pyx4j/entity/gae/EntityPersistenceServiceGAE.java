@@ -812,6 +812,44 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    // Make only one call to DB to get the list
+    private void retrieveChildEntityCollection(ICollection member, List<Key> value, Map<Key, IEntity> retrievedMap) {
+        if (member.getMeta().isDetached()) {
+            for (Key childKey : value) {
+                IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMeta().getValueClass());
+                childIEntity.setPrimaryKey(childKey.getId());
+                member.add(childIEntity);
+            }
+        } else {
+            List<Key> needToGet = new Vector<Key>();
+            EntityMeta entityMeta = EntityFactory.getEntityMeta((Class<IEntity>) member.getMeta().getValueClass());
+            for (Key childKey : value) {
+                if (!entityMeta.getPersistenceName().equals(childKey.getKind())) {
+                    throw new RuntimeException("Unexpected IEntity " + entityMeta.getPersistenceName() + " Kind " + childKey.getKind());
+                }
+                if (!retrievedMap.containsKey(childKey)) {
+                    needToGet.add(childKey);
+                }
+            }
+
+            datastoreCallStats.get().readCount++;
+            Map<Key, Entity> gotData = datastore.get(needToGet);
+            for (Map.Entry<Key, Entity> me : gotData.entrySet()) {
+                IEntity childIEntity = EntityFactory.create(entityMeta.getEntityClass());
+                retrievedMap.put(me.getKey(), childIEntity);
+                updateIEntity(childIEntity, me.getValue(), retrievedMap);
+            }
+
+            for (Key childKey : value) {
+                IEntity childIEntity = retrievedMap.get(childKey);
+                if (childIEntity == null) {
+                    throw new RuntimeException("Entity " + childKey.getKind() + " " + childKey.getId() + " NotFound");
+                }
+                member.add(childIEntity);
+            }
+        }
+    }
+
     private void updateIEntity(IEntity iEntity, Entity entity, Map<Key, IEntity> retrievedMap) {
         iEntity.setPrimaryKey(entity.getKey().getId());
         for (Map.Entry<String, Object> me : entity.getProperties().entrySet()) {
@@ -839,15 +877,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                     continue;
                 } else if (member instanceof ISet<?>) {
-                    for (Key childKey : (List<Key>) value) {
-                        IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMeta().getValueClass());
-                        if (member.getMeta().isDetached()) {
-                            childIEntity.setPrimaryKey(childKey.getId());
-                        } else {
-                            retrieveEntity(childIEntity, childKey, retrievedMap);
-                        }
-                        ((ISet) member).add(childIEntity);
-                    }
+                    retrieveChildEntityCollection(((ISet) member), (List<Key>) value, retrievedMap);
                     continue;
                 } else if (member instanceof IList<?>) {
                     // retrieve order  and sort by this order
@@ -856,16 +886,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     if (childKeysOrder != null) {
                         Collections.sort(((List<Key>) value), new KeyComparator(childKeysOrder));
                     }
-
-                    for (Key childKey : (List<Key>) value) {
-                        IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMeta().getValueClass());
-                        if (member.getMeta().isDetached()) {
-                            childIEntity.setPrimaryKey(childKey.getId());
-                        } else {
-                            retrieveEntity(childIEntity, childKey, retrievedMap);
-                        }
-                        ((IList) member).add(childIEntity);
-                    }
+                    retrieveChildEntityCollection(((IList) member), (List<Key>) value, retrievedMap);
                     continue;
                 } else if (member instanceof IPrimitiveSet<?>) {
                     if (Enum.class.isAssignableFrom(member.getMeta().getValueClass())) {
@@ -926,6 +947,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
         long start = System.nanoTime();
+        int initCount = datastoreCallStats.get().readCount;
+
         T iEntity = EntityFactory.create(entityClass);
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -947,10 +970,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
 
         long duration = System.nanoTime() - start;
+        int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running retrieve {} took {}ms", entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("retrieve {} took {}ms", entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
         }
         return iEntity;
     }
