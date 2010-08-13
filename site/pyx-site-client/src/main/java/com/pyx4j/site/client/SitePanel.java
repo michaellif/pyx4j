@@ -159,6 +159,10 @@ public abstract class SitePanel extends SimplePanel {
 
     protected void show(Page page, Map<String, String> args) {
 
+        log.info("Show page " + page.uri().getStringView());
+
+        StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
+
         String key = page.uri().getValue() + "$" + page.discriminator();
         if (cachedPanels.containsKey(key)) {
             currentPagePanel = cachedPanels.get(key);
@@ -170,7 +174,6 @@ public abstract class SitePanel extends SimplePanel {
             currentPagePanel.createInlineWidgets();
         }
 
-        StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
         Window.setTitle(page.caption().getValue() + " | " + site.siteCaption().getValue());
         Window.scrollTo(0, 0);
 

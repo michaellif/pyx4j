@@ -73,4 +73,16 @@ public class Theme {
         return new Theme(this);
     }
 
+    public String getThemeId() {
+        return this.getClass().getName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Theme) {
+            return getThemeId() != null && getThemeId().equals(((Theme) obj).getThemeId());
+        }
+        return false;
+    }
+
 }
