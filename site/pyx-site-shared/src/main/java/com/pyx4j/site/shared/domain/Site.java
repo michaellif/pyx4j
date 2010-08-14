@@ -53,8 +53,8 @@ public interface Site extends IEntity {
     @Owned
     IList<Link> footerLinks();
 
-    @Caption(name = "Footer Copiright")
-    IPrimitive<String> footerCopiright();
+    @Caption(name = "Footer Copyright")
+    IPrimitive<String> footerCopyright();
 
     @Owned
     IList<Page> pages();

@@ -53,11 +53,11 @@ public class SiteFactory {
         site.siteCaption().setValue(caption);
         site.logoUrl().setValue("images/logo.png");
         site.skinType().setValue(DefaultSkins.light.name());
-        site.footerCopiright().setValue(footerCopiright());
+        site.footerCopyright().setValue(footerCopyright());
         return site;
     }
 
-    protected String footerCopiright() {
+    protected String footerCopyright() {
         return "&copy; 2008-2010 pyx4j.com All rights reserved.";
     }
 

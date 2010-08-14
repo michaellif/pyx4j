@@ -247,7 +247,7 @@ public class DarkTheme extends LightTheme {
 
     @Override
     protected void initFooterCopyrightStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopiright.name());
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_FooterCopyright.name());
         style.addProperty("margin-left", "20px");
         style.addProperty("margin-top", "5px");
         style.addProperty("color", "lightGrey");

@@ -54,7 +54,7 @@ public class SiteEditor extends AbstractView {
 
                 { meta().siteCaption(), meta().logoUrl() },
 
-                { meta().skinType(), meta().footerCopiright() },
+                { meta().skinType(), meta().footerCopyright() },
 
                 };
             }

@@ -86,7 +86,7 @@ public abstract class SitePanel extends SimplePanel {
 
     private String logoImageLink;
 
-    private HTML copitightHtml;
+    private HTML copyrightHtml;
 
     private NavigationBar primaryNavigationBar;
 
@@ -120,10 +120,10 @@ public abstract class SitePanel extends SimplePanel {
 
         createFooterLinksPanel();
 
-        createFooterCopirightPanel();
+        createFooterCopyrightPanel();
 
         setLogoImage(site.logoUrl().getValue());
-        setFooterCopiright(site.footerCopiright().getValue());
+        setFooterCopyright(site.footerCopyright().getValue());
 
         {
             for (Page page : site.pages()) {
@@ -380,14 +380,14 @@ public abstract class SitePanel extends SimplePanel {
 
     }
 
-    protected void createFooterCopirightPanel() {
-        copitightHtml = new HTML("", false);
-        copitightHtml.setStyleName(SiteCSSClass.pyx4j_Site_FooterCopiright.name());
-        addToFooterPanel(copitightHtml);
+    protected void createFooterCopyrightPanel() {
+        copyrightHtml = new HTML("", false);
+        copyrightHtml.setStyleName(SiteCSSClass.pyx4j_Site_FooterCopyright.name());
+        addToFooterPanel(copyrightHtml);
     }
 
-    public void setFooterCopiright(String html) {
-        copitightHtml.setHTML(html);
+    public void setFooterCopyright(String html) {
+        copyrightHtml.setHTML(html);
     }
 
     protected void createHeaderLinksPanel() {

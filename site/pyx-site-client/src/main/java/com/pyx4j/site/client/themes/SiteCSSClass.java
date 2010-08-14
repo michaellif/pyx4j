@@ -62,8 +62,8 @@ public enum SiteCSSClass {
 
     pyx4j_Site_WelcomeMessage,
 
-    //Footer Copiright
-    pyx4j_Site_FooterCopiright,
+    //Footer Copyright
+    pyx4j_Site_FooterCopyright,
 
     //Html Portlet
     pyx4j_Site_HtmlPortlet,
