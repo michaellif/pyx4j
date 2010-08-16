@@ -168,6 +168,11 @@ public class CaptchaComposite extends SimplePanel {
         response.getElement().setId(divName + "_response_field");
     }
 
+    /**
+     * Use https://www.google.com/recaptcha/admin/create to create your key
+     * 
+     * @param publicKey
+     */
     public static void setPublicKey(String publicKey) {
         CaptchaComposite.publicKey = publicKey;
     }
