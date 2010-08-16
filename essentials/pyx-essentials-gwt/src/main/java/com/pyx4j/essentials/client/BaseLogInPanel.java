@@ -22,6 +22,8 @@ package com.pyx4j.essentials.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
@@ -55,6 +57,8 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
     private static String HTML5_KEY = BaseSiteDispatcher.instance().getAppId() + ".userid";
 
     private static final Logger log = LoggerFactory.getLogger(BaseLogInPanel.class);
+
+    private static I18n i18n = I18nFactory.getI18n(BaseLogInPanel.class);
 
     private final CEntityForm<AuthenticationRequest> form;
 
@@ -101,7 +105,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 onForgotPasswordRequest();
             }
         });
-        forgotPassword.setValue("Did you forget your password?");
+        forgotPassword.setValue(i18n.tr("Did you forget your password?"));
 
         rememberID = (CCheckBox) form.get(form.meta().rememberID());
 
@@ -133,7 +137,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     @Override
     public String optionTextOk() {
-        return "Log In";
+        return i18n.tr("Log In");
     }
 
     @Override
@@ -141,7 +145,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         CCaptcha captcha = ((CCaptcha) form.get(form.meta().captcha()));
         if (captcha.isVisible()) {
             if (captcha.isValueEmpty()) {
-                MessageDialog.warn("Validation failed.", "Captcha is required");
+                MessageDialog.warn(i18n.tr("Validation failed."), i18n.tr("Captcha code is required"));
                 return false;
             }
             captcha.retrieveValue();
@@ -149,7 +153,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         ValidationResults validationResults = form.get(form.meta().email()).getParent().getValidationResults();
         if (!validationResults.isValid()) {
-            MessageDialog.warn("Validation failed.", validationResults.getMessagesText(false));
+            MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
             return false;
         }
 
@@ -161,7 +165,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 log.debug("Login Failed", caught);
                 // TODO handle all types of error including problems with Internet connection and site reload.
                 // also caught.getMessage() can be null
-                MessageDialog.error("Login Failed", caught.getMessage());
+                MessageDialog.error(i18n.tr("Login Failed"), caught.getMessage());
                 if (caught instanceof ChallengeVerificationRequired) {
                     form.get(form.meta().captcha()).setVisible(true);
                 } else if (form.get(form.meta().captcha()).isVisible()) {
