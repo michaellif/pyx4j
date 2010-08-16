@@ -86,6 +86,7 @@ public class LinkBar extends ComplexPanel {
         } else if (link instanceof LinkBarMessage) {
             LinkBarMessage message = (LinkBarMessage) link;
             item = new LinkItem(new LinkItemAnchor(message.html), separator);
+            item.getWidget().getElement().getStyle().setProperty("textDecoration", "none");
         }
         ul.appendChild(item.getElement());
         add(item, ul);
