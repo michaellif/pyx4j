@@ -234,7 +234,7 @@ public class TabBanner extends AbsolutePanel {
     }
 
     private void setOpacity(Widget widget, double opacity) {
-        if (BrowserType.isIE()) {
+        if (BrowserType.isIE7()) {
             widget.getElement().getStyle().setProperty("filter", "alpha(opacity=" + (opacity * 100) + ")");
         } else {
             widget.getElement().getStyle().setOpacity(opacity);
