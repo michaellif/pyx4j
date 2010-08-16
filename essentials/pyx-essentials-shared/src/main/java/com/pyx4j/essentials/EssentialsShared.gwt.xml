@@ -6,4 +6,9 @@
     <inherits name='com.pyx4j.rpc.RPCShared'/>
     <source path="rpc"/>
     <source path="shared"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupEntityProperty" />
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupKey" />
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupRecordsResponse" />
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupRequest" />
 </module>
