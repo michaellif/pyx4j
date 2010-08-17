@@ -130,8 +130,8 @@ public class VerticalRichTextToolbar extends Composite {
         initWidget(toolbar);
         setStyleName("gwt-RichTextToolbar");
 
-        toolbar.add(bold = createToggleButton(images.bold(), "bold"));
-        toolbar.add(italic = createToggleButton(images.italic(), "italic"));
+        toolbar.add(bold = createToggleButton(images.bold(), images.boldToggled(), "bold"));
+        toolbar.add(italic = createToggleButton(images.italic(), images.italicToggled(), "italic"));
 
         toolbar.add(indent = createPushButton(images.indent(), "indent"));
         toolbar.add(outdent = createPushButton(images.outdent(), "outdent"));
@@ -152,8 +152,8 @@ public class VerticalRichTextToolbar extends Composite {
         return pb;
     }
 
-    private ToggleButton createToggleButton(ImageResource img, String tip) {
-        ToggleButton tb = new ToggleButton(new Image(img));
+    private ToggleButton createToggleButton(ImageResource upImg, ImageResource downImg, String tip) {
+        ToggleButton tb = new ToggleButton(new Image(upImg), new Image(downImg));
         tb.addClickHandler(handler);
         tb.setTitle(tip);
         return tb;

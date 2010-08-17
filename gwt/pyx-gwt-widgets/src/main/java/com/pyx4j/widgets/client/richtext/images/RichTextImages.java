@@ -28,6 +28,9 @@ public interface RichTextImages extends ClientBundle {
     @Source("text_bold.png")
     ImageResource bold();
 
+    @Source("text_bold_down.png")
+    ImageResource boldToggled();
+
     @Source("drive_link.png")
     ImageResource createLink();
 
@@ -42,6 +45,9 @@ public interface RichTextImages extends ClientBundle {
 
     @Source("text_italic.png")
     ImageResource italic();
+
+    @Source("text_italic_down.png")
+    ImageResource italicToggled();
 
     @Source("text_align_center.png")
     ImageResource justifyCenter();
