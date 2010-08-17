@@ -479,8 +479,8 @@ public class Dialog extends DialogPanel {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-                                                           return $doc.activeElement;
-                                                           }-*/;
+        return $doc.activeElement;
+    }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {
@@ -494,7 +494,7 @@ public class Dialog extends DialogPanel {
         firstFocusWidget = focusWidget;
     }
 
-    private void setupFocusManager() {
+    protected void setupFocusManager() {
         if (focusHandler == null) {
             focusHandler = new FocusHandler() {
                 @Override
