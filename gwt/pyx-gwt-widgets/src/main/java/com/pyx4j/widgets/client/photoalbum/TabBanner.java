@@ -42,7 +42,7 @@ public class TabBanner extends AbsolutePanel {
 
     private static final Logger log = LoggerFactory.getLogger(TabBanner.class);
 
-    private static final int ANIMATION_ITTERATIONS = 50;
+    private static final int ANIMATION_ITTERATIONS = BrowserType.isIE() ? 10 : 50;
 
     private final List<BannerItem> items;
 
