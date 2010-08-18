@@ -29,6 +29,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CRichTextArea;
@@ -62,7 +63,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
             @Override
             public void onClick(ClickEvent event) {
 
-                final RichTextAreaPopupDialog editor = new RichTextAreaPopupDialog();
+                final RichTextAreaPopupPanel editor = new RichTextAreaPopupPanel();
                 editor.setSize("600px", "200px");
                 dialog = new Dialog("Editor", editor) {
                     @Override
@@ -175,18 +176,19 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
         // TODO Auto-generated method stub
     }
 
-    class RichTextAreaPopupDialog extends DockPanel implements OkOption, CancelOption {
+    class RichTextAreaPopupPanel extends DockPanel implements OkOption, CancelOption, RequiresResize {
 
         private final RichTextArea richTextArea;
 
         private final VerticalRichTextToolbar toolbar;
 
-        public RichTextAreaPopupDialog() {
+        public RichTextAreaPopupPanel() {
             getElement().getStyle().setPadding(30, Unit.PX);
             getElement().getStyle().setPaddingRight(10, Unit.PX);
 
             richTextArea = new RichTextArea();
             richTextArea.setWidth("100%");
+            richTextArea.setHeight("100%");
 
             toolbar = new VerticalRichTextToolbar(richTextArea);
             toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
@@ -194,6 +196,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
             add(toolbar, EAST);
             add(richTextArea, CENTER);
             setCellWidth(richTextArea, "100%");
+            setCellHeight(richTextArea, "100%");
 
             getElement().getStyle().setProperty("resize", "none");
 
@@ -226,6 +229,16 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
         public boolean onClickCancel() {
             richTextArea.removeFromParent();
             return true;
+        }
+
+        @Override
+        public void onResize() {
+            setWidth("100%");
+            setHeight("100%");
+            richTextArea.setWidth("100%");
+            richTextArea.setHeight("100%");
+            setCellWidth(richTextArea, "100%");
+            setCellHeight(richTextArea, "100%");
         }
 
     }

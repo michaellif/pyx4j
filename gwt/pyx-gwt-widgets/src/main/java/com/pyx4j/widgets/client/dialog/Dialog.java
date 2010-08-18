@@ -56,6 +56,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -109,7 +111,7 @@ public class Dialog extends DialogPanel {
 
     private final DialogOptions options;
 
-    private final DockPanel content;
+    private final ContentPanel content;
 
     private FocusHandler focusHandler;
 
@@ -153,9 +155,7 @@ public class Dialog extends DialogPanel {
 
         this.options = options;
 
-        content = new DockPanel();
-        content.setHeight("100%");
-        content.setWidth("100%");
+        content = new ContentPanel();
 
         buttonsPanel = createButtonsPanel();
         content.add(buttonsPanel, DockPanel.SOUTH);
@@ -589,5 +589,23 @@ public class Dialog extends DialogPanel {
 
     public Button getCustom4Button() {
         return custom4Button;
+    }
+
+    class ContentPanel extends DockPanel implements RequiresResize, ProvidesResize {
+
+        public ContentPanel() {
+        }
+
+        @Override
+        public void onResize() {
+            setHeight("100%");
+            setWidth("100%");
+            for (Widget child : getChildren()) {
+                if (child instanceof RequiresResize) {
+                    ((RequiresResize) child).onResize();
+                }
+            }
+        }
+
     }
 }

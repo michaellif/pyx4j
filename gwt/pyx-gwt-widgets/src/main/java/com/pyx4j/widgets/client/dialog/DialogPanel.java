@@ -53,6 +53,8 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
@@ -61,7 +63,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConst
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
-public class DialogPanel extends PopupPanel {
+public class DialogPanel extends PopupPanel implements ProvidesResize {
 
     private final static int BORDER_WIDTH = 1;
 
@@ -211,6 +213,9 @@ public class DialogPanel extends PopupPanel {
 
             default:
                 break;
+            }
+            if (contentPanel.getWidget() instanceof RequiresResize) {
+                ((RequiresResize) contentPanel.getWidget()).onResize();
             }
         }
     }
