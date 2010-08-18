@@ -27,6 +27,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.RpcRequestBuilder;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 
 public class PyxRpcRequestBuilder extends RpcRequestBuilder {
@@ -34,6 +35,8 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
     private boolean collectAppEngineUsageStats;
 
     private String serviceInterfaceMarker;
+
+    private String sessionToken;
 
     public PyxRpcRequestBuilder() {
     }
@@ -62,9 +65,17 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
         serviceInterfaceMarker = GWTJava5Helper.getSimpleName(serviceInterface).replace('$', '.');
     }
 
+    void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+
     @Override
     protected RequestBuilder doCreate(String serviceEntryPoint) {
-        return super.doCreate(serviceEntryPoint + "/" + serviceInterfaceMarker);
+        RequestBuilder rb = super.doCreate(serviceEntryPoint + "/" + serviceInterfaceMarker);
+        if (sessionToken != null) {
+            rb.setHeader(RemoteService.SESSION_TOKEN_HEADER, sessionToken);
+        }
+        return rb;
     }
 
     void enableAppEngineUsageStats() {

@@ -32,7 +32,7 @@ import com.pyx4j.security.shared.UserVisit;
  */
 public class Visit implements Serializable {
 
-    private static final long serialVersionUID = -8328593691009613691L;
+    private static final long serialVersionUID = 1390138592827996655L;
 
     private UserVisit userVisit;
 
@@ -46,8 +46,11 @@ public class Visit implements Serializable {
 
     private transient boolean changed;
 
-    public Visit() {
+    private final String sessionToken;
+
+    public Visit(String sessionToken) {
         this.userVisit = null;
+        this.sessionToken = sessionToken;
         this.attributes = new Hashtable<String, Serializable>();
         this.transientAttributes = new Hashtable<String, Object>();
     }
@@ -83,6 +86,10 @@ public class Visit implements Serializable {
         return changed || ((this.userVisit != null) && (this.userVisit.isChanged()));
     }
 
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
     public Serializable getAttribute(String name) {
         return this.attributes.get(name);
     }
@@ -92,7 +99,7 @@ public class Visit implements Serializable {
     }
 
     public Serializable removeAttribute(String name) {
-    	this.changed = true;
+        this.changed = true;
         return this.attributes.remove(name);
     }
 

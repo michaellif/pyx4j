@@ -20,6 +20,7 @@
  */
 package com.pyx4j.server.contexts;
 
+import java.security.SecureRandom;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,16 +44,14 @@ public class Lifecycle {
     public static void beginRequest(HttpServletRequest httprequest) {
         //long start = System.nanoTime();
         Context.setRequest(httprequest);
-        beginRequest(httprequest.getSession(false));
-        //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
-    }
-
-    public static void beginRequest(HttpSession session) {
+        HttpSession session = httprequest.getSession(false);
         Context.setSession(session);
         if (session != null) {
             Context.setVisit((Visit) session.getAttribute(Context.SESSION_VISIT));
         }
-        //        PersistenceServicesFactory.getPersistenceService().startRequest();
+
+        //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
+        // PersistenceServicesFactory.getPersistenceService().startRequest();
     }
 
     public static void endRequest() {
@@ -111,7 +110,12 @@ public class Lifecycle {
 
     public static void beginSession(HttpSession session) {
         Context.setSession(session);
-        Visit visit = new Visit();
+
+        String sessionToken;
+        SecureRandom random = new SecureRandom();
+        sessionToken = Long.toHexString(random.nextLong());
+
+        Visit visit = new Visit(sessionToken);
         session.setAttribute(Context.SESSION_VISIT, visit);
         Context.setVisit(visit);
     }

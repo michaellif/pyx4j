@@ -27,14 +27,19 @@ import java.util.ListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
+import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.security.shared.SecurityViolationException;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Visit;
 
 public class RemoteServiceImpl implements RemoteService {
 
@@ -71,6 +76,12 @@ public class RemoteServiceImpl implements RemoteService {
                 log.error("Fatal system error cause", e.getCause());
             }
             throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
+        }
+        if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
+            Visit visit = Context.getVisit();
+            if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
+                throw new SecurityViolationException("Request requires authentication.");
+            }
         }
         try {
             List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);

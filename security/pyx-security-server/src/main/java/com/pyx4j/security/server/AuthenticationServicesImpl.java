@@ -30,6 +30,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -38,6 +39,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.Visit;
 
 /**
  * This implementation does not use DB to load and verify users.
@@ -72,8 +74,12 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
         behaviors.addAll(SecurityController.getBehaviors());
         ar.setBehaviors(behaviors);
 
-        if (Context.getVisit() != null) {
-            ar.setUserVisit(Context.getVisit().getUserVisit());
+        Visit visit = Context.getVisit();
+        if (visit != null) {
+            ar.setUserVisit(visit.getUserVisit());
+
+            // TODO This is BAD but no much, we will fix this in next version. We still protected from XSRF
+            ar.setSessionToken(visit.getSessionToken());
         }
 
         if (ServerSideConfiguration.instance().useAppengineGoogleAccounts()) {
@@ -95,7 +101,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
     }
 
-    public static class GetStatusImpl implements AuthenticationServices.GetStatus {
+    public static class GetStatusImpl implements AuthenticationServices.GetStatus, IsIgnoreSessionTokenService {
 
         @Override
         public AuthenticationResponse execute(String request) {

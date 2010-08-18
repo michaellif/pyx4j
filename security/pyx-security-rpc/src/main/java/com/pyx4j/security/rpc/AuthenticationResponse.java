@@ -37,6 +37,8 @@ public class AuthenticationResponse implements Serializable {
 
     private String sessionCookieName;
 
+    private String sessionToken;
+
     private String logoutURL;
 
     private boolean datastoreReadOnly;
@@ -99,6 +101,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setDatastoreReadOnly(boolean datastoreReadOnly) {
         this.datastoreReadOnly = datastoreReadOnly;
+    }
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
     }
 
 }

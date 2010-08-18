@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.log4gwt.shared.LogEvent;
+import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public abstract class LogServicesImpl {
@@ -35,7 +36,7 @@ public abstract class LogServicesImpl {
 
     private static final Logger log = LoggerFactory.getLogger(CLIENT_LOGGER_NAME);
 
-    public static class LogImpl implements LogServices.Log {
+    public static class LogImpl implements LogServices.Log, IsIgnoreSessionTokenService {
 
         @Override
         public VoidSerializable execute(Vector<LogEvent> request) {

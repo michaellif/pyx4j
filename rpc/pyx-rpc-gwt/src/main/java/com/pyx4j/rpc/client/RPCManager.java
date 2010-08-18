@@ -77,6 +77,10 @@ public class RPCManager {
         requestBuilder.enableAppEngineUsageStats();
     }
 
+    public static void setSessionToken(String sessionToken) {
+        requestBuilder.setSessionToken(sessionToken);
+    }
+
     public static Serializer getSerializer() {
         return serializer.getSerializer();
     }

@@ -20,10 +20,7 @@
  */
 package com.pyx4j.security.client;
 
-import java.io.Serializable;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,8 +72,10 @@ public class ClientContext {
 
     private static String logoutURL;
 
+    private static String sessionToken;
+
     private static final Map<String, Object> attributes = new HashMap<String, Object>();
-    
+
     private ClientContext() {
 
     }
@@ -96,7 +95,11 @@ public class ClientContext {
     public static ServerSession getServerSession() {
         return serverSession;
     }
-    
+
+    public static String getSessionToken() {
+        return sessionToken;
+    }
+
     public static Object getAttribute(String name) {
         return attributes.get(name);
     }
@@ -124,6 +127,15 @@ public class ClientContext {
         } else {
             serverSession = null;
         }
+        String sessionToken = authenticationResponse.getSessionToken();
+        if (sessionToken != null) {
+            if (sessionToken.equals("")) {
+                ClientContext.sessionToken = null;
+            } else {
+                ClientContext.sessionToken = sessionToken;
+            }
+            RPCManager.setSessionToken(ClientContext.sessionToken);
+        }
         log.info("Authenticated {}", userVisit);
         attributes.clear();
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
@@ -138,6 +150,7 @@ public class ClientContext {
      */
     public static void terminateSession() {
         userVisit = null;
+        RPCManager.setSessionToken(null);
         if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
             Cookies.removeCookie(serverSession.getSessionCookieName());
         }
