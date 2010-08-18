@@ -59,10 +59,10 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
     You may install SDKs bundle for GAE and GWT from google site for faster download.
 
 -- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
-2. Download and unzip appengine-java-sdk-1.3.4.zip
-		from http://code.google.com/p/googleappengine/downloads/detail?name=appengine-java-sdk-1.3.4.zip&can=2&q=
+2. Download and unzip appengine-java-sdk-1.3.6.zip
+		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.3.6.zip
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
-   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.4-patch.zip
+   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.6-patch.zip
 4. Copy/Add results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
 
 ========= Eclipse Configuration for a new Workspace =========
@@ -94,8 +94,8 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 Cleaning up Indexes in Google App Engine/Java
   Use Python  SDK
-    D:\etc\3p-libs\gae\appengine-python-1.3.4/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
-    D:\etc\3p-libs\gae\appengine-python-1.3.4/appcfg.py vacuum_indexes D:\devGwt\pyx4j\examples\examples-gae-server
+    D:\etc\3p-libs\gae\appengine-python-1.3.6/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
+    D:\etc\3p-libs\gae\appengine-python-1.3.6/appcfg.py vacuum_indexes D:\devGwt\pyx4j\examples\examples-gae-server
 
 rollback from pyx2 server
 
@@ -105,5 +105,5 @@ rollback from pyx2 server
     cd /data/build/work/pyx/examples/examples-gae-server/war
     mvn gae:rollback
 
-    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.4/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/incubator/tester/tester-gae-server/war
-    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.4/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/examples/examples-gae-server/war
+    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.6/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/incubator/tester/tester-gae-server/war
+    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.6/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/examples/examples-gae-server/war
