@@ -24,17 +24,16 @@ import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -174,7 +173,6 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
     @Override
     public void setTabIndex(int tabIndex) {
         // TODO Auto-generated method stub
-
     }
 
     class RichTextAreaPopupDialog extends DockPanel implements OkOption, CancelOption {
@@ -205,7 +203,21 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
 
         @Override
         public boolean onClickOk() {
-            textArea.setValue(NativeRichTextArea.trimHtml(richTextArea.getHTML()));
+            if (textArea.getTidy() != null) {
+                textArea.getTidy().tidy(NativeRichTextArea.trimHtml(richTextArea.getHTML()), new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnrecoverableClientError(caught);
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        textArea.setValue(result);
+                    }
+                });
+            } else {
+                textArea.setValue(NativeRichTextArea.trimHtml(richTextArea.getHTML()));
+            }
             richTextArea.removeFromParent();
             return true;
         }

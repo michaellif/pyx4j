@@ -26,13 +26,15 @@ import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;
 
 public class CRichTextArea extends CEditableComponent<String> {
 
-    private INativeEditableComponent nativeTextArea;
+    private INativeEditableComponent<String> nativeTextArea;
 
     private final int columns = 40;
 
     private final int rows = 4;
 
     private final boolean popup;
+
+    private IRichTextTidy tidy;
 
     public CRichTextArea() {
         super();
@@ -50,12 +52,20 @@ public class CRichTextArea extends CEditableComponent<String> {
     }
 
     @Override
-    public INativeEditableComponent getNativeComponent() {
+    public INativeEditableComponent<String> getNativeComponent() {
         return nativeTextArea;
     }
 
+    public void setTidy(IRichTextTidy tidy) {
+        this.tidy = tidy;
+    }
+
+    public IRichTextTidy getTidy() {
+        return tidy;
+    }
+
     @Override
-    public INativeEditableComponent initNativeComponent() {
+    public INativeEditableComponent<String> initNativeComponent() {
         if (nativeTextArea == null) {
             if (popup) {
                 nativeTextArea = new NativeRichTextAreaPopup(this);

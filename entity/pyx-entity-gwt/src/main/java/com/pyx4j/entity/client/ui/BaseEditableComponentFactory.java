@@ -22,8 +22,6 @@ package com.pyx4j.entity.client.ui;
 
 import java.util.Date;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -47,7 +45,6 @@ import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class BaseEditableComponentFactory implements EditableComponentFactory {
 
