@@ -32,6 +32,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("srv")
 public interface RemoteService extends com.google.gwt.user.client.rpc.RemoteService {
 
+    public static final String SESSION_TOKEN_HEADER = "X-XSRF-SessionToken";
+
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException;
 
 }

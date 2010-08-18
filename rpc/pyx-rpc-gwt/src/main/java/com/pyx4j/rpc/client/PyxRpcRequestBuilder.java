@@ -58,8 +58,7 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
      * Mark service entry point with service name to be able to view statistic in GAE
      * console.
      */
-    @SuppressWarnings("unchecked")
-    void executing(final Class<? extends Service> serviceInterface) {
+    void executing(@SuppressWarnings("rawtypes") final Class<? extends Service> serviceInterface) {
         serviceInterfaceMarker = GWTJava5Helper.getSimpleName(serviceInterface).replace('$', '.');
     }
 
