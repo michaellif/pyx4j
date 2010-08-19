@@ -168,6 +168,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 MessageDialog.error(i18n.tr("Login Failed"), caught.getMessage());
                 if (caught instanceof ChallengeVerificationRequired) {
                     form.get(form.meta().captcha()).setVisible(true);
+                    form.get(form.meta().captcha()).setMandatory(true);
                 } else if (form.get(form.meta().captcha()).isVisible()) {
                     ((CCaptcha) form.get(form.meta().captcha())).createNewChallenge();
                 }
@@ -176,6 +177,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 form.get(form.meta().password()).setValue(null);
+                form.get(form.meta().captcha()).setMandatory(false);
                 ClientContext.authenticated(result);
                 if (HTML5LocalStorage.isSupported()) {
                     if (rememberID.getValue()) {
