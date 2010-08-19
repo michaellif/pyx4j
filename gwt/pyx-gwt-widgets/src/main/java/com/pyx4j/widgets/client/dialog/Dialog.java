@@ -71,7 +71,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
 /**
  * Shared implementation for Modal Dialogs
  */
-public class Dialog extends DialogPanel {
+public class Dialog extends DialogPanelNew {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
@@ -162,7 +162,6 @@ public class Dialog extends DialogPanel {
         content.setCellWidth(buttonsPanel, "100%");
 
         setWidget(content);
-        setPixelSize(1, 1);
 
         this.addKeyDownHandler(new KeyDownHandler() {
 

@@ -207,7 +207,7 @@ public class WindowsTheme extends Theme {
 
     protected void initDialogPanelStyles() {
         Style style = new Style("." + CSSClass.pyx4j_Dialog.name());
-        style.addProperty("border-color", ThemeColor.SELECTION);
+        style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Dialog_Caption.name());

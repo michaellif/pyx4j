@@ -126,9 +126,9 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
 
         setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
         //Don't move it to styles because width of border is used in calculation of resizing
-        if (BrowserType.isIE()) {
+        if (BrowserType.isIE6()) {
             getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            getElement().getStyle().setProperty("borderWidth", 2 * BORDER_WIDTH + "px");
+            getElement().getStyle().setProperty("borderWidth", BORDER_WIDTH + "px");
         } else {
             getElement().getStyle().setProperty("borderStyle", "ridge");
             getElement().getStyle().setProperty("borderWidth", BORDER_WIDTH + "px");
@@ -141,7 +141,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
         contentPanel = new SimplePanel();
         contentPanel.setStylePrimaryName(CSSClass.pyx4j_Dialog_Content.name());
 
-        if (BrowserType.isIE()) {
+        if (BrowserType.isIE6()) {
             contentPanel.setWidth("100%");
         } else {
             contentPanel.setSize("100%", "100%");
@@ -176,44 +176,58 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
                 return;
             }
 
-            int doubleWidth = 2 * BORDER_WIDTH;
+            int offsetWidth = 0;
+            int offsetHeight = 0;
+
             switch (dragZone.getDragZoneType()) {
             case MOVE:
                 setPopupPosition(absX - dragStartX, absY - dragStartY);
+                offsetWidth = getOffsetWidth();
+                offsetHeight = getOffsetHeight();
                 break;
             case RESIZE_E:
-                setPixelSize(getOffsetWidth() + event.getX() - dragStartX - doubleWidth, getOffsetHeight() - doubleWidth);
+                offsetWidth = getOffsetWidth() + event.getX() - dragStartX;
+                offsetHeight = getOffsetHeight();
                 break;
             case RESIZE_W:
-                setPixelSize(getOffsetWidth() - event.getX() + dragStartX - doubleWidth, getOffsetHeight() - doubleWidth);
+                offsetWidth = getOffsetWidth() - event.getX() + dragStartX;
+                offsetHeight = getOffsetHeight();
                 setPopupPosition(absX - dragStartX, getAbsoluteTop());
                 break;
             case RESIZE_S:
-                setPixelSize(getOffsetWidth() - doubleWidth, getOffsetHeight() + event.getY() - dragStartY - doubleWidth);
+                offsetWidth = getOffsetWidth();
+                offsetHeight = getOffsetHeight() + event.getY() - dragStartY;
                 break;
             case RESIZE_N:
-                setPixelSize(getOffsetWidth() - doubleWidth, getOffsetHeight() - event.getY() + dragStartY - doubleWidth);
+                offsetWidth = getOffsetWidth();
+                offsetHeight = getOffsetHeight() - event.getY() + dragStartY;
                 setPopupPosition(getAbsoluteLeft(), absY - dragStartY);
                 break;
             case RESIZE_SE:
-                setPixelSize(getOffsetWidth() + event.getX() - dragStartX - doubleWidth, getOffsetHeight() + event.getY() - dragStartY - doubleWidth);
+                offsetWidth = getOffsetWidth() + event.getX() - dragStartX;
+                offsetHeight = getOffsetHeight() + event.getY() - dragStartY;
                 break;
             case RESIZE_SW:
-                setPixelSize(getOffsetWidth() - event.getX() + dragStartX - doubleWidth, getOffsetHeight() + event.getY() - dragStartY - doubleWidth);
+                offsetWidth = getOffsetWidth() - event.getX() + dragStartX;
+                offsetHeight = getOffsetHeight() + event.getY() - dragStartY;
                 setPopupPosition(absX - dragStartX, getAbsoluteTop());
                 break;
             case RESIZE_NE:
-                setPixelSize(getOffsetWidth() + event.getX() - dragStartX - doubleWidth, getOffsetHeight() - event.getY() + dragStartY - doubleWidth);
+                offsetWidth = getOffsetWidth() + event.getX() - dragStartX;
+                offsetHeight = getOffsetHeight() - event.getY() + dragStartY;
                 setPopupPosition(getAbsoluteLeft(), absY - dragStartY);
                 break;
             case RESIZE_NW:
-                setPixelSize(getOffsetWidth() - event.getX() + dragStartX - doubleWidth, getOffsetHeight() - event.getY() + dragStartY - doubleWidth);
+                offsetWidth = getOffsetWidth() - event.getX() + dragStartX;
+                offsetHeight = getOffsetHeight() - event.getY() + dragStartY;
                 setPopupPosition(absX - dragStartX, absY - dragStartY);
                 break;
 
             default:
                 break;
             }
+            setPixelSize(offsetWidth - 2 * BORDER_WIDTH, offsetHeight - 2 * BORDER_WIDTH);
+
             if (contentPanel.getWidget() instanceof RequiresResize) {
                 ((RequiresResize) contentPanel.getWidget()).onResize();
             }
@@ -345,7 +359,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
 
                 DOM.setStyleAttribute(getElement(), "fontSize", "0");
 
-                if (!BrowserType.isIE()) {
+                if (!BrowserType.isIE6()) {
                     DOM.setStyleAttribute(getElement(), "cursor", dragZoneType.getCursor());
 
                     MouseHandler mouseHandler = new MouseHandler(this);
@@ -408,7 +422,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
             Element row = DOM.createTR();
             DOM.appendChild(getBody(), row);
 
-            if (!BrowserType.isIE()) {
+            if (!BrowserType.isIE6()) {
                 appendTd(new Resizer(DragZoneType.RESIZE_NW, "5px", "5px"), row);
                 appendTd(new Resizer(DragZoneType.RESIZE_N, "100%", "5px"), row);
                 appendTd(new Resizer(DragZoneType.RESIZE_NE, "5px", "5px"), row);
@@ -420,13 +434,13 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
 
             captionPanel = new Caption();
 
-            if (!BrowserType.isIE()) {
+            if (!BrowserType.isIE6()) {
                 appendTd(new Resizer(DragZoneType.RESIZE_W, "5px", "100%"), row, 2, 1);
             }
 
             appendTd(captionPanel, row, "100%", "5px");
 
-            if (!BrowserType.isIE()) {
+            if (!BrowserType.isIE6()) {
                 appendTd(new Resizer(DragZoneType.RESIZE_E, "5px", "100%"), row, 2, 1);
             }
 
@@ -440,7 +454,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize {
             row = DOM.createTR();
             DOM.appendChild(getBody(), row);
 
-            if (!BrowserType.isIE()) {
+            if (!BrowserType.isIE6()) {
                 appendTd(new Resizer(DragZoneType.RESIZE_SW, "5px", "5px"), row);
                 appendTd(new Resizer(DragZoneType.RESIZE_S, "100%", "5px"), row);
                 appendTd(new Resizer(DragZoneType.RESIZE_SE, "5px", "5px"), row);
