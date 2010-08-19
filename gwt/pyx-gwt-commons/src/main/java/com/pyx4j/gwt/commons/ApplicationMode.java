@@ -30,18 +30,18 @@ public class ApplicationMode {
         boolean isDevelopment();
     }
 
-    static class DevelopmentMode implements Mode {
+    static final class DevelopmentMode implements Mode {
 
         @Override
-        public boolean isDevelopment() {
+        public final boolean isDevelopment() {
             return true;
         }
     }
 
-    static class ProductionMode implements Mode {
+    static final class ProductionMode implements Mode {
 
         @Override
-        public boolean isDevelopment() {
+        public final boolean isDevelopment() {
             return false;
         }
     }
@@ -50,7 +50,7 @@ public class ApplicationMode {
      * Used as dev/prod switch. For production build include GWT module
      * com.pyx4j.gwt.ApplicationProductionMode
      */
-    public static boolean isDevelopment() {
+    public final static boolean isDevelopment() {
         return impl.isDevelopment();
     }
 }
