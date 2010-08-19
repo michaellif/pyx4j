@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.security.server.ThrottleConfig;
 
@@ -68,6 +69,8 @@ public class J2SEService {
     private long serviceCallsCount = 0;
 
     private ThrottleConfig throttleConfig;
+
+    protected String sessionToken;
 
     public enum GoogleAccountType {
 
@@ -314,7 +317,9 @@ public class J2SEService {
             conn.setUseCaches(false);
 
             setCookie(conn);
-
+            if (sessionToken != null) {
+                conn.setRequestProperty(RemoteService.SESSION_TOKEN_HEADER, sessionToken);
+            }
             conn.setRequestProperty("Cache-Control", "no-cache, no-transform");
             conn.setRequestProperty("Content-Type", "application/binary");
             conn.setRequestProperty("User-agent", userAgent);
