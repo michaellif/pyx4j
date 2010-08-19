@@ -199,19 +199,21 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             if (!comp.isVisible()) {
                 continue;
             }
-            Object value = history == null ? null : history.get(me.getValue().getHistoryKey());
+            String value = history == null ? null : history.get(me.getValue().getHistoryKey());
             if (value == null) {
                 comp.setValue(null);
             } else if (comp instanceof CTextField) {
                 comp.setValue(value);
             } else if (comp instanceof CNumberField) {
-                comp.setValue(((CNumberField) comp).valueOf((String) value));
+                comp.setValue(((CNumberField) comp).valueOf(value));
             } else if (comp instanceof CEntityComboBox) {
-                ((CEntityComboBox) comp).setValueByItemName((String) value);
+                ((CEntityComboBox) comp).setValueByItemName(value);
             } else if (comp instanceof CComboBox) {
-                ((CComboBox) comp).setValueByItemName((String) value);
+                ((CComboBox) comp).setValueByItemName(value);
             } else if (comp instanceof CDatePicker) {
-                //TODO
+                if (value != null) {
+                    comp.setValue(((CDatePicker) comp).getFormat().parse(value.replace('-', '/')));
+                }
             } else {
 
             }
@@ -240,7 +242,9 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                     historyValue = (String) value;
                 }
             } else if (comp instanceof CDatePicker) {
-                //TODO
+                if (value != null) {
+                    historyValue = ((CDatePicker) comp).getFormat().format((Date) value).replace('/', '-');
+                }
             } else if (comp instanceof CTextBox) {
                 historyValue = value.toString();
             } else {
