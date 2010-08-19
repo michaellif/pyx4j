@@ -55,7 +55,7 @@ public class CCaptcha extends CEditableComponent<Pair<String, String>> {
     @Override
     public INativeEditableComponent<Pair<String, String>> initNativeComponent() {
         if (nativeCaptcha == null) {
-            nativeCaptcha = new NativeCaptcha();
+            nativeCaptcha = new NativeCaptcha(this);
         }
         return nativeCaptcha;
     }

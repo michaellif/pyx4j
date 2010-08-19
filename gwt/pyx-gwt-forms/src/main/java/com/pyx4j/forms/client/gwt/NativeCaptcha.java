@@ -20,14 +20,24 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.commons.Pair;
+import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
 public class NativeCaptcha extends CaptchaComposite implements INativeEditableComponent<Pair<String, String>> {
 
-    public NativeCaptcha() {
+    public NativeCaptcha(final CCaptcha component) {
+        addResponseValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                component.setValue(getValue());
+            }
+        });
     }
 
     public Pair<String, String> getValue() {
@@ -48,10 +58,6 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
         if (value == null) {
             super.createNewChallenge();
         }
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
     }
 
     @Override

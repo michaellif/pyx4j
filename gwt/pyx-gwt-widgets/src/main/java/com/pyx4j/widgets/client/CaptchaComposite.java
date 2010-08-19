@@ -28,6 +28,8 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -177,6 +179,10 @@ public class CaptchaComposite extends SimplePanel {
         CaptchaComposite.publicKey = publicKey;
     }
 
+    public void setFocus(boolean focused) {
+        response.setFocus(focused);
+    }
+
     public native void setFocus()
     /*-{
         $wnd.Recaptcha.focus_response_field();
@@ -184,6 +190,10 @@ public class CaptchaComposite extends SimplePanel {
 
     public String getValueResponse() {
         return response.getValue();
+    }
+
+    public HandlerRegistration addResponseValueChangeHandler(ValueChangeHandler<String> handler) {
+        return response.addValueChangeHandler(handler);
     }
 
     public native String getValueChallenge()
@@ -240,6 +250,7 @@ public class CaptchaComposite extends SimplePanel {
     }-*/;
 
     public void createNewChallenge() {
+        response.setValue("");
         if (isVisible() && created) {
             createNewChallengeImpl();
         }
