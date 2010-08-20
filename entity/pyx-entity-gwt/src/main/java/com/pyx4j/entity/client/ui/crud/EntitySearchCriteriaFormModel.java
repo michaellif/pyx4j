@@ -119,7 +119,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
-        } else if (mm.getValueClass().equals(Date.class)) {
+        } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
             comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Integer.class)) {
             comp = new CIntegerField();
