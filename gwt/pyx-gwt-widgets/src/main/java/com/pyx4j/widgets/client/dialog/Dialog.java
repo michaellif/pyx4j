@@ -43,11 +43,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -63,7 +61,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -140,7 +137,7 @@ public class Dialog extends DialogPanelNew {
         this(caption, options);
         MessagePanel messagePanel = new MessagePanel(message, type);
         setBody(messagePanel);
-        setPixelSize(400, 300);
+        setPixelSize(400, 200);
     }
 
     public Dialog(String caption, DialogOptions options) {
@@ -156,7 +153,7 @@ public class Dialog extends DialogPanelNew {
         content.add(buttonsPanel, DockPanel.SOUTH);
         content.setCellHeight(buttonsPanel, "1px");
 
-        setWidget(content);
+        setContentWidget(content);
 
         this.addKeyDownHandler(new KeyDownHandler() {
 
@@ -591,7 +588,6 @@ public class Dialog extends DialogPanelNew {
     class ContentPanel extends DockPanel implements RequiresResize, ProvidesResize {
 
         public ContentPanel() {
-            getElement().getStyle().setBackgroundColor("white");
             setSize("100%", "100%");
         }
 

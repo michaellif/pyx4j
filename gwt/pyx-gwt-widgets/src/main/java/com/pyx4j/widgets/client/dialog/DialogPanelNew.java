@@ -138,7 +138,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         DOM.setStyleAttribute(captionPanel.getElement(), "cursor", "move");
 
         container.add(captionPanel, DockPanel.NORTH);
-        super.setWidget(container);
+        setWidget(container);
 
         addDomHandler(this, MouseMoveEvent.getType());
         addDomHandler(this, MouseUpEvent.getType());
@@ -146,8 +146,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     }
 
-    @Override
-    public void setWidget(Widget widget) {
+    public void setContentWidget(Widget widget) {
 
         if (contentWidget != null) {
             container.remove(contentWidget);
@@ -226,7 +225,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
                 return;
             }
 
-            int width = 0;
+            int width = dragStartWidth;
             int height = dragStartHeight;
             int left = dragStartLeft;
             int top = dragStartTop;
