@@ -35,7 +35,7 @@ public class NavigUtils {
 
         StringBuilder builder = new StringBuilder();
         for (int i = 1; i < parts.length; i++) {
-            builder.append(parts[i]);
+            builder.append(parts[i].toLowerCase());
             if (i < parts.length - 1) {
                 builder.append(PAGE_SEPARATOR);
             }
@@ -53,7 +53,7 @@ public class NavigUtils {
         if (parts.length != 2) {
             throw new IllegalArgumentException("Node is not a site node");
         }
-        return parts[1];
+        return parts[1].toLowerCase();
     }
 
     /**

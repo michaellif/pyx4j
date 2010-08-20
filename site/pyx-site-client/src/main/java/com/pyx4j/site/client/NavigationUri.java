@@ -114,9 +114,9 @@ public class NavigationUri {
         this.path = path;
         int splitIndex = path.indexOf(ARGS_GROUP_SEPARATOR);
         if (splitIndex == -1) {
-            pageUri = path;
+            pageUri = path.toLowerCase();
         } else {
-            pageUri = path.substring(0, splitIndex);
+            pageUri = path.substring(0, splitIndex).toLowerCase();
             if (path.length() > splitIndex) {
                 args = parsArgs(path.substring(splitIndex + 1));
             }
