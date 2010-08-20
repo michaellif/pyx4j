@@ -47,6 +47,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -158,8 +159,7 @@ public class Dialog extends DialogPanelNew {
         content = new ContentPanel();
 
         buttonsPanel = createButtonsPanel();
-        content.add(buttonsPanel, DockPanel.SOUTH);
-        content.setCellWidth(buttonsPanel, "100%");
+        content.add(buttonsPanel);
 
         setWidget(content);
 
@@ -186,8 +186,7 @@ public class Dialog extends DialogPanelNew {
     }
 
     public void setBody(Widget message) {
-        content.add(message, DockPanel.CENTER);
-        content.setCellHeight(message, "100%");
+        content.insert(message, 0);
     }
 
     private HorizontalPanel createButtonsPanel() {
@@ -590,15 +589,16 @@ public class Dialog extends DialogPanelNew {
         return custom4Button;
     }
 
-    class ContentPanel extends DockPanel implements RequiresResize, ProvidesResize {
+    class ContentPanel extends FlowPanel implements RequiresResize, ProvidesResize {
 
         public ContentPanel() {
+            getElement().getStyle().setBackgroundColor("red");
+            setHeight("100%");
+            setWidth("100%");
         }
 
         @Override
         public void onResize() {
-            setHeight("100%");
-            setWidth("100%");
             for (Widget child : getChildren()) {
                 if (child instanceof RequiresResize) {
                     ((RequiresResize) child).onResize();

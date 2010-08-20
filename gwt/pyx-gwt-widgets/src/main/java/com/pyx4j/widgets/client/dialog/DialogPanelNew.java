@@ -110,6 +110,14 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     private int dragStartY;
 
+    private int dragStartLeft;
+
+    private int dragStartTop;
+
+    private int dragStartWidth;
+
+    private int dragStartHeight;
+
     public DialogPanelNew(boolean autoHide, boolean modal) {
         super(autoHide, modal);
         setStylePrimaryName(CSSClass.pyx4j_Dialog.name());
@@ -193,75 +201,75 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         dragging = true;
         resizeZoneType = getResizeZoneType(event);
         DOM.setCapture(getElement());
-        dragStartX = event.getX();
-        dragStartY = event.getY();
+        dragStartX = event.getX() + getAbsoluteLeft();
+        dragStartY = event.getY() + getAbsoluteTop();
+        dragStartLeft = getAbsoluteLeft();
+        dragStartTop = getAbsoluteTop();
+        dragStartWidth = getOffsetWidth();
+        dragStartHeight = getOffsetHeight();
     }
 
     protected void continueDragging(MouseMoveEvent event) {
         if (dragging) {
             int absX = event.getX() + getAbsoluteLeft();
             int absY = event.getY() + getAbsoluteTop();
+
             // if the mouse is off the screen to the left, right, or top, don't
             // move or resize the dialog box.
-
             if (absX < clientWindowLeft || absX >= clientWindowRight || absY < clientWindowTop || absY >= clientWindowBottom) {
                 return;
             }
 
-            int offsetWidth = 0;
-            int offsetHeight = 0;
+            int width = 0;
+            int height = dragStartHeight;
+            int left = dragStartLeft;
+            int top = dragStartTop;
 
             switch (resizeZoneType) {
             case RESIZE_E:
-                offsetWidth = getOffsetWidth() + event.getX() - dragStartX;
-                offsetHeight = getOffsetHeight();
+                width = dragStartWidth - dragStartX + absX;
                 break;
             case RESIZE_W:
-                offsetWidth = getOffsetWidth() - event.getX() + dragStartX;
-                offsetHeight = getOffsetHeight();
-                setPopupPosition(absX - dragStartX, getAbsoluteTop());
+                width = dragStartWidth + dragStartX - absX;
+                left = dragStartLeft - dragStartX + absX;
                 break;
             case RESIZE_S:
-                offsetWidth = getOffsetWidth();
-                offsetHeight = getOffsetHeight() + event.getY() - dragStartY;
+                height = dragStartHeight - dragStartY + absY;
                 break;
             case RESIZE_N:
-                offsetWidth = getOffsetWidth();
-                offsetHeight = getOffsetHeight() - event.getY() + dragStartY;
-                setPopupPosition(getAbsoluteLeft(), absY - dragStartY);
+                height = dragStartHeight + dragStartY - absY;
+                top = dragStartTop - dragStartY + absY;
                 break;
             case RESIZE_SE:
-                offsetWidth = getOffsetWidth() + event.getX() - dragStartX;
-                offsetHeight = getOffsetHeight() + event.getY() - dragStartY;
+                width = dragStartWidth - dragStartX + absX;
+                height = dragStartHeight - dragStartY + absY;
                 break;
             case RESIZE_SW:
-                offsetWidth = getOffsetWidth() - event.getX() + dragStartX;
-                offsetHeight = getOffsetHeight() + event.getY() - dragStartY;
-                setPopupPosition(absX - dragStartX, getAbsoluteTop());
+                width = dragStartWidth + dragStartX - absX;
+                height = dragStartHeight - dragStartY + absY;
+                left = dragStartLeft - dragStartX + absX;
                 break;
             case RESIZE_NE:
-                offsetWidth = getOffsetWidth() + event.getX() - dragStartX;
-                offsetHeight = getOffsetHeight() - event.getY() + dragStartY;
-                setPopupPosition(getAbsoluteLeft(), absY - dragStartY);
+                width = dragStartWidth - dragStartX + absX;
+                height = dragStartHeight + dragStartY - absY;
+                top = dragStartTop - dragStartY + absY;
                 break;
             case RESIZE_NW:
-                offsetWidth = getOffsetWidth() - event.getX() + dragStartX;
-                offsetHeight = getOffsetHeight() - event.getY() + dragStartY;
-                setPopupPosition(absX - dragStartX, absY - dragStartY);
+                width = dragStartWidth + dragStartX - absX;
+                height = dragStartHeight + dragStartY - absY;
+                left = dragStartLeft - dragStartX + absX;
+                top = dragStartTop - dragStartY + absY;
                 break;
-
             default:
                 break;
             }
 
-            setPixelSize(offsetWidth - 2 * DRAG_ZONE_WIDTH, offsetHeight - 2 * DRAG_ZONE_WIDTH);
+            setPixelSize(width - 2 * DRAG_ZONE_WIDTH, height - 2 * DRAG_ZONE_WIDTH);
+            setPopupPosition(left, top);
 
             if (contentPanel.getWidget() instanceof RequiresResize) {
                 ((RequiresResize) contentPanel.getWidget()).onResize();
             }
-
-            dragStartX = event.getX();
-            dragStartY = event.getY();
 
         }
     }
