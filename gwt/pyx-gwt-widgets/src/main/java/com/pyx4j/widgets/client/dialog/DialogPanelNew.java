@@ -309,12 +309,11 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
     }
 
     private ResizeZoneType getResizeZoneType(MouseEvent<?> mouseEvent) {
-        Event event = Event.as(mouseEvent.getNativeEvent());
-        int eventY = DOM.eventGetClientY(event);
+        int eventY = mouseEvent.getY() + getAbsoluteTop();
         int boxY = this.getAbsoluteTop();
         int height = this.getOffsetHeight();
 
-        int eventX = DOM.eventGetClientX(event);
+        int eventX = mouseEvent.getX() + getAbsoluteLeft();
         int boxX = this.getAbsoluteLeft();
         int width = this.getOffsetWidth();
 

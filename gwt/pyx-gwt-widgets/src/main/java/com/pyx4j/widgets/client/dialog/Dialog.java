@@ -139,14 +139,8 @@ public class Dialog extends DialogPanelNew {
     public Dialog(String caption, String message, Type type, DialogOptions options) {
         this(caption, options);
         MessagePanel messagePanel = new MessagePanel(message, type);
-        int width = 400;
-        //Resize dialog for mobile.
-        if (width > Window.getClientWidth() - 16) {
-            width = Window.getClientWidth() - 16;
-        }
-        messagePanel.setPixelSize(width, 200);
-
         setBody(messagePanel);
+        setPixelSize(400, 300);
     }
 
     public Dialog(String caption, DialogOptions options) {
@@ -159,7 +153,8 @@ public class Dialog extends DialogPanelNew {
         content = new ContentPanel();
 
         buttonsPanel = createButtonsPanel();
-        content.add(buttonsPanel);
+        content.add(buttonsPanel, DockPanel.SOUTH);
+        content.setCellHeight(buttonsPanel, "1px");
 
         setWidget(content);
 
@@ -186,7 +181,7 @@ public class Dialog extends DialogPanelNew {
     }
 
     public void setBody(Widget message) {
-        content.insert(message, 0);
+        content.add(message, DockPanel.CENTER);
     }
 
     private HorizontalPanel createButtonsPanel() {
@@ -348,11 +343,11 @@ public class Dialog extends DialogPanelNew {
         }
     }
 
-    static class MessagePanel extends DecoratorPanel {
+    static class MessagePanel extends DockPanel implements RequiresResize {
 
         MessagePanel(final String message, Type type) {
 
-            super(false, false, true, false, 1, CSSClass.pyx4j_Section_Border.name());
+            super();
             setSize("100%", "100%");
 
             DOM.setStyleAttribute(getElement(), "padding", "10px");
@@ -361,7 +356,7 @@ public class Dialog extends DialogPanelNew {
             contentPanel.setSize("100%", "100%");
             DOM.setStyleAttribute(contentPanel.getElement(), "paddingBottom", "10px");
 
-            setWidget(contentPanel);
+            add(contentPanel, DockPanel.CENTER);
 
             WidgetsImageBundle images = ImageFactory.getImages();
             ImageResource imageResource = null;
@@ -387,12 +382,12 @@ public class Dialog extends DialogPanelNew {
             DOM.setStyleAttribute(image.getElement(), "margin", "10px");
 
             contentPanel.add(image, DockPanel.WEST);
-            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
+            contentPanel.setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
 
             ResizibleScrollPanel scrollPanel = new ResizibleScrollPanel();
             contentPanel.add(scrollPanel, DockPanel.CENTER);
-            setCellHeight(scrollPanel, "100%");
-            setCellWidth(scrollPanel, "100%");
+            contentPanel.setCellHeight(scrollPanel, "100%");
+            contentPanel.setCellWidth(scrollPanel, "100%");
 
             HTML htmlMessage = new HTML(message.replace("\n", "<br/>"));
 
@@ -403,6 +398,12 @@ public class Dialog extends DialogPanelNew {
             htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
 
             scrollPanel.setContentWidget(htmlHolder);
+
+        }
+
+        @Override
+        public void onResize() {
+            // TODO Auto-generated method stub
 
         }
     }
@@ -589,12 +590,11 @@ public class Dialog extends DialogPanelNew {
         return custom4Button;
     }
 
-    class ContentPanel extends FlowPanel implements RequiresResize, ProvidesResize {
+    class ContentPanel extends DockPanel implements RequiresResize, ProvidesResize {
 
         public ContentPanel() {
-            getElement().getStyle().setBackgroundColor("red");
-            setHeight("100%");
-            setWidth("100%");
+            getElement().getStyle().setBackgroundColor("white");
+            setSize("100%", "100%");
         }
 
         @Override
