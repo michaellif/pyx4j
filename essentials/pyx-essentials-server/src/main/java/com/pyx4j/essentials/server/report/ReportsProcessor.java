@@ -30,6 +30,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -53,7 +54,8 @@ public class ReportsProcessor {
     public static void transform(InputStream input, InputStream xslTransformation, OutputStream transformationOut) {
         try {
             Transformer transformer = newTransformerFactoryInstance().newTransformer(new StreamSource(xslTransformation));
-            transformer.transform(new StreamSource(input), new StreamResult(new OutputStreamWriter(transformationOut)));
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.transform(new StreamSource(input), new StreamResult(new OutputStreamWriter(transformationOut, "UTF-8")));
         } catch (Throwable e) {
             log.error("Unable to perform transformation", e);
             throw new RuntimeException("Transformation error", e);

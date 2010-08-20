@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:x="anything"
  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
 
-  <xsl:output method="xml" indent="yes"/>
+  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
   <xsl:namespace-alias stylesheet-prefix="x" result-prefix="xsl"/>
 
   <xsl:template match="/">
