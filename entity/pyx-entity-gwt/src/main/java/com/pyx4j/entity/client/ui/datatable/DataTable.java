@@ -74,6 +74,9 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             @Override
             public void onClick(ClickEvent event) {
                 Cell cell = getCellForEvent(event);
+                if (cell == null) {
+                    return;
+                }
                 if (selectedRow >= 0) {
                     Element previous = getRowFormatter().getElement(selectedRow);
                     UIObject.setStyleName(previous, EntityCSSClass.pyx4j_Entity_DataTableRow.name() + "-selected", false);
