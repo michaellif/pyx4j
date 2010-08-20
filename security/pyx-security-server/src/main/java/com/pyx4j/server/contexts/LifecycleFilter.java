@@ -89,7 +89,7 @@ public class LifecycleFilter implements Filter {
                 if (request instanceof HttpServletRequest) {
                     String uri = ((HttpServletRequest) request).getRequestURI();
                     String[] split = uri.split("/", 4);
-                    if (split.length >= 2) {
+                    if (split.length >= 3) {
                         String uriPart = "/" + split[1] + "/" + split[2];
                         if (throttleConfig.whiteRequestURIs().contains(uriPart)) {
                             counter = null;
