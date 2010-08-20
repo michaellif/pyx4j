@@ -34,7 +34,6 @@ public class ResizibleScrollPanel extends SimplePanel implements ProvidesResize,
     public ResizibleScrollPanel() {
 
         DOM.setStyleAttribute(getElement(), "position", "relative");
-        setSize("100%", "100%");
 
         contentPanel = new SimplePanel();
 

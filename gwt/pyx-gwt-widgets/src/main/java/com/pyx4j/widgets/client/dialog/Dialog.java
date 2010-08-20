@@ -182,6 +182,8 @@ public class Dialog extends DialogPanelNew {
 
     public void setBody(Widget message) {
         content.add(message, DockPanel.CENTER);
+        content.setCellHeight(message, "100%");
+        content.setCellWidth(message, "100%");
     }
 
     private HorizontalPanel createButtonsPanel() {
@@ -345,18 +347,14 @@ public class Dialog extends DialogPanelNew {
 
     static class MessagePanel extends DockPanel implements RequiresResize {
 
+        private final ResizibleScrollPanel scrollPanel;
+
         MessagePanel(final String message, Type type) {
 
             super();
             setSize("100%", "100%");
-
             DOM.setStyleAttribute(getElement(), "padding", "10px");
-
-            DockPanel contentPanel = new DockPanel();
-            contentPanel.setSize("100%", "100%");
-            DOM.setStyleAttribute(contentPanel.getElement(), "paddingBottom", "10px");
-
-            add(contentPanel, DockPanel.CENTER);
+            DOM.setStyleAttribute(getElement(), "paddingBottom", "20px");
 
             WidgetsImageBundle images = ImageFactory.getImages();
             ImageResource imageResource = null;
@@ -381,13 +379,14 @@ public class Dialog extends DialogPanelNew {
             Image image = new Image(imageResource);
             DOM.setStyleAttribute(image.getElement(), "margin", "10px");
 
-            contentPanel.add(image, DockPanel.WEST);
-            contentPanel.setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
+            add(image, DockPanel.WEST);
+            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
 
-            ResizibleScrollPanel scrollPanel = new ResizibleScrollPanel();
-            contentPanel.add(scrollPanel, DockPanel.CENTER);
-            contentPanel.setCellHeight(scrollPanel, "100%");
-            contentPanel.setCellWidth(scrollPanel, "100%");
+            scrollPanel = new ResizibleScrollPanel();
+            scrollPanel.setSize("100%", "100%");
+            add(scrollPanel, DockPanel.CENTER);
+            setCellHeight(scrollPanel, "100%");
+            setCellWidth(scrollPanel, "100%");
 
             HTML htmlMessage = new HTML(message.replace("\n", "<br/>"));
 
@@ -403,8 +402,7 @@ public class Dialog extends DialogPanelNew {
 
         @Override
         public void onResize() {
-            // TODO Auto-generated method stub
-
+            scrollPanel.onResize();
         }
     }
 

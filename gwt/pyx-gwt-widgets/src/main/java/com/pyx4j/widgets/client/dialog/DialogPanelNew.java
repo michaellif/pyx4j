@@ -37,16 +37,14 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -88,7 +86,9 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         }
     }
 
-    private final SimplePanel contentPanel;
+    private final DockPanel container;
+
+    private Widget contentWidget;
 
     private int clientWindowLeft;
 
@@ -128,22 +128,16 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
         updateClientWindowPosition();
 
-        VerticalPanel container = new VerticalPanel();
+        container = new DockPanel();
         DOM.setStyleAttribute(container.getElement(), "cursor", "default");
 
         captionPanel = new HTML();
+        captionPanel.setWordWrap(false);
         captionPanel.setStylePrimaryName(CSSClass.pyx4j_Dialog_Caption.name());
+        captionPanel.setHeight("22px");
         DOM.setStyleAttribute(captionPanel.getElement(), "cursor", "move");
-        captionPanel.setSize("100%", "22px");
 
-        contentPanel = new SimplePanel();
-        contentPanel.setStylePrimaryName(CSSClass.pyx4j_Dialog_Content.name());
-        contentPanel.setSize("100%", "100%");
-
-        container.add(captionPanel);
-        container.add(contentPanel);
-        container.setCellHeight(contentPanel, "100%");
-
+        container.add(captionPanel, DockPanel.NORTH);
         super.setWidget(container);
 
         addDomHandler(this, MouseMoveEvent.getType());
@@ -154,7 +148,19 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     @Override
     public void setWidget(Widget widget) {
-        contentPanel.setWidget(widget);
+
+        if (contentWidget != null) {
+            container.remove(contentWidget);
+        }
+
+        contentWidget = widget;
+
+        container.add(contentWidget, DockPanel.CENTER);
+        contentWidget.setSize("100%", "100%");
+
+        contentWidget.setStylePrimaryName(CSSClass.pyx4j_Dialog_Content.name());
+        container.setCellHeight(contentWidget, "100%");
+
     }
 
     public void setCaption(String caption) {
@@ -267,8 +273,8 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
             setPixelSize(width - 2 * DRAG_ZONE_WIDTH, height - 2 * DRAG_ZONE_WIDTH);
             setPopupPosition(left, top);
 
-            if (contentPanel.getWidget() instanceof RequiresResize) {
-                ((RequiresResize) contentPanel.getWidget()).onResize();
+            if (contentWidget instanceof RequiresResize) {
+                ((RequiresResize) contentWidget).onResize();
             }
 
         }
