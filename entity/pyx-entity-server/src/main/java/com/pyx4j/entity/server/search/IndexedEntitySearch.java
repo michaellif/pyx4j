@@ -190,6 +190,18 @@ public class IndexedEntitySearch {
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, TimeUtils.dayStart(day)));
                     // Add in case index criteria is dropped by search 
                     inMemoryFilters.add(new DayInMemoryFilter(path, day));
+                } else {
+                    Date from = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "from"));
+                    if (from != null) {
+                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.GREATER_THAN_OR_EQUAL, TimeUtils
+                                .dayStart(from)));
+                        hasInequalityFilter = true;
+                    }
+                    Date to = (Date) searchCriteria.getValue(new PathSearch(mm, path.getPathString(), "to"));
+                    if (to != null) {
+                        queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.LESS_THAN, TimeUtils.dayEnd(to)));
+                        hasInequalityFilter = true;
+                    }
                 }
             } else if (Integer.class.isAssignableFrom(mm.getValueClass())) {
                 Serializable value = me.getValue();
