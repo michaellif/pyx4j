@@ -99,6 +99,14 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
         return wordWrap;
     }
 
+    public String getItemName(IEntity value) {
+        return ((value == null) ? "" : value.getStringView());
+    }
+
+    protected String getEntityHistoryToken(IEntity value) {
+        return uriPrefix + value.getPrimaryKey();
+    }
+
     class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<IEntity> {
 
         private final Command comand;
@@ -114,11 +122,12 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
 
                 @Override
                 public void execute() {
-                    History.newItem(uriPrefix + cHyperlink.getValue().getPrimaryKey());
+                    History.newItem(getEntityHistoryToken(cHyperlink.getValue()));
                 }
             };
 
             addClickHandler(new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     if (isEnabled() && NativeEntityHyperlink.this.comand != null) {
                         NativeEntityHyperlink.this.comand.execute();
@@ -128,6 +137,7 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
             });
 
             addKeyUpHandler(new KeyUpHandler() {
+                @Override
                 public void onKeyUp(KeyUpEvent event) {
                     if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && NativeEntityHyperlink.this.comand != null) {
                         NativeEntityHyperlink.this.comand.execute();
@@ -157,7 +167,7 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
 
         @Override
         public void setNativeValue(IEntity value) {
-            setHTML("&nbsp;" + ((value == null) ? "" : value.getStringView()) + "&nbsp;");
+            setHTML("&nbsp;" + cHyperlink.getItemName(value) + "&nbsp;");
         }
 
     }
