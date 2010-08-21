@@ -54,6 +54,8 @@ public class J2SEService {
 
     protected static final String GET = "GET";
 
+    protected String name;
+
     protected String serverUrl;
 
     protected String forceDeveloperLoginPath;
@@ -71,6 +73,8 @@ public class J2SEService {
     private ThrottleConfig throttleConfig;
 
     protected String sessionToken;
+
+    protected boolean connectedLoged;
 
     public enum GoogleAccountType {
 
@@ -133,12 +137,24 @@ public class J2SEService {
         this.applicationId = applicationId;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    protected void logConnectingOnce() {
+        if (!connectedLoged) {
+            log.info("{} connecting to {} ...", name, getServerUrl());
+            connectedLoged = true;
+        }
+    }
+
     public void googleLogin(String userName, String password) throws RuntimeException {
         googleLogin(userName, password, GoogleAccountType.HOSTED_OR_GOOGLE, false);
     }
 
     public void googleLogin(String userName, String password, GoogleAccountType googleAccountType, boolean developerAdmin) throws RuntimeException {
         HttpURLConnection conn = null;
+        logConnectingOnce();
         try {
             URL u = new URL(serverUrl);
             if (developerAdmin && getForceDeveloperLoginPath() != null) {
@@ -309,6 +325,7 @@ public class J2SEService {
     }
 
     public <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request) throws RuntimeException {
+        logConnectingOnce();
         HttpURLConnection conn = null;
         OutputStream out = null;
         InputStream in = null;
