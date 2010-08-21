@@ -26,11 +26,13 @@ public class BackupRequest implements Serializable {
 
     private static final long serialVersionUID = 2094335560058692423L;
 
+    public static final int DEFAULT_BATCH_SIZE = 25;
+
     private String entityKind;
 
     private String encodedCursorRefference;
 
-    private int responceSize = 20;
+    private int responceSize = DEFAULT_BATCH_SIZE;
 
     public BackupRequest() {
 

@@ -47,15 +47,20 @@ public abstract class AbstractBackupReceiver implements BackupReceiver {
     public void copy(BackupConsumer consumer, Class<? extends IEntity>... entityClass) {
         for (Class<? extends IEntity> clazz : entityClass) {
             EntityMeta entityMeta = EntityFactory.getEntityMeta(clazz);
-            copy(consumer, entityMeta.getPersistenceName());
+            copy(consumer, entityMeta.getPersistenceName(), getMaxResponceSize(clazz));
         }
     }
 
+    protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
+        return BackupRequest.DEFAULT_BATCH_SIZE;
+    }
+
     @Override
-    public void copy(BackupConsumer consumer, String persistenceName) {
+    public void copy(BackupConsumer consumer, String persistenceName, int maxResponceSize) {
         int thisCount = 0;
         BackupRequest request = new BackupRequest();
         request.setEntityKind(persistenceName);
+        request.setResponceSize(maxResponceSize);
         BackupRecordsResponse responce;
         do {
             responce = get(request);

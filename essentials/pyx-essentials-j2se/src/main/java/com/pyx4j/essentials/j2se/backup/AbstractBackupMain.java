@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.admin.BackupRequest;
 import com.pyx4j.rpc.j2se.J2SEService;
 
 public abstract class AbstractBackupMain {
@@ -39,7 +40,12 @@ public abstract class AbstractBackupMain {
         if (isFile(argFrom)) {
             receiver = new LocalDatastoreBackupReceiver(argFrom);
         } else {
-            receiver = new ServerBackupReceiver(createConnection("Backup Source", argFrom));
+            receiver = new ServerBackupReceiver(createConnection("Backup Source", argFrom)) {
+                @Override
+                protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
+                    return AbstractBackupMain.this.getMaxResponceSize(clazz);
+                }
+            };
         }
 
         BackupConsumer consumer;
@@ -64,6 +70,10 @@ public abstract class AbstractBackupMain {
     protected abstract J2SEService createConnection(String name, String arg);
 
     public abstract Class<? extends IEntity>[] allClasses();
+
+    protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
+        return BackupRequest.DEFAULT_BATCH_SIZE;
+    }
 
     public static void addAll(List<Class<? extends IEntity>> list, Class<? extends IEntity>... entityClasses) {
         for (Class<? extends IEntity> entityClass : entityClasses) {

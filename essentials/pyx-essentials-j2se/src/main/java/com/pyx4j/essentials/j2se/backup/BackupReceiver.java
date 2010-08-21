@@ -24,7 +24,7 @@ public interface BackupReceiver {
 
     public void start();
 
-    public void copy(BackupConsumer consumer, String persistenceName);
+    public void copy(BackupConsumer consumer, String persistenceName, int maxResponceSize);
 
     public void end();
 
