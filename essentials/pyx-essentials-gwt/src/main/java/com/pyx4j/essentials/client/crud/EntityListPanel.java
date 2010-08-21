@@ -87,7 +87,7 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
                     return;
                 }
                 Cell cell = dataTable.getCellForEvent(event);
-                if (cell.getRowIndex() > 0) {
+                if (cell != null && cell.getRowIndex() > 0) {
                     E entity = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
                     AbstractSiteDispatcher.show(new NavigationUri(editorPage, "entity_id", entity.getPrimaryKey().toString()));
                 }
