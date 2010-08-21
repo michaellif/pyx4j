@@ -224,6 +224,7 @@ public class IndexedEntitySearch {
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.IN, (Serializable) keys));
                     inMemoryFilters.add(new GeoDistanceInMemoryFilter(new Path(pathWithGeoPointData), geoPointFrom, areaRadius.doubleValue()));
+                    hasInequalityFilter = true;
                 }
                 processed.add(mm);
             } else if (Enum.class.isAssignableFrom(mm.getValueClass())) {
