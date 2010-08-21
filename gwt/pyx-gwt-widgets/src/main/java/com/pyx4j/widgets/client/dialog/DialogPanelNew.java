@@ -55,9 +55,11 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     private static final int DRAG_ZONE_WIDTH = 5;
 
-    enum ResizeZoneType {
+    enum DragZoneType {
 
         NONE("default"),
+
+        MOVE("move"),
 
         RESIZE_E("e-resize"),
 
@@ -77,7 +79,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
         private String cursor;
 
-        ResizeZoneType(String cursor) {
+        DragZoneType(String cursor) {
             this.cursor = cursor;
         }
 
@@ -100,11 +102,11 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     private HandlerRegistration resizeHandlerRegistration;
 
-    private final HTML captionPanel;
+    private final CaptionPanel captionPanel;
 
     private boolean dragging = false;
 
-    private ResizeZoneType resizeZoneType;
+    private DragZoneType dragZoneType;
 
     private int dragStartX;
 
@@ -131,13 +133,9 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         container = new DockPanel();
         DOM.setStyleAttribute(container.getElement(), "cursor", "default");
 
-        captionPanel = new HTML();
-        captionPanel.setWordWrap(false);
-        captionPanel.setStylePrimaryName(CSSClass.pyx4j_Dialog_Caption.name());
-        captionPanel.setHeight("22px");
-        DOM.setStyleAttribute(captionPanel.getElement(), "cursor", "move");
-
+        captionPanel = new CaptionPanel();
         container.add(captionPanel, DockPanel.NORTH);
+
         setWidget(container);
 
         addDomHandler(this, MouseMoveEvent.getType());
@@ -204,7 +202,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     protected void beginDragging(MouseDownEvent event) {
         dragging = true;
-        resizeZoneType = getResizeZoneType(event);
+        dragZoneType = getDragZoneType(event);
         DOM.setCapture(getElement());
         dragStartX = event.getX() + getAbsoluteLeft();
         dragStartY = event.getY() + getAbsoluteTop();
@@ -230,7 +228,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
             int left = dragStartLeft;
             int top = dragStartTop;
 
-            switch (resizeZoneType) {
+            switch (dragZoneType) {
             case RESIZE_E:
                 width = dragStartWidth - dragStartX + absX;
                 break;
@@ -265,6 +263,10 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
                 left = dragStartLeft - dragStartX + absX;
                 top = dragStartTop - dragStartY + absY;
                 break;
+            case MOVE:
+                left = dragStartLeft - dragStartX + absX;
+                top = dragStartTop - dragStartY + absY;
+                break;
             default:
                 break;
             }
@@ -281,7 +283,7 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
 
     protected void endDragging(MouseUpEvent event) {
         dragging = false;
-        resizeZoneType = ResizeZoneType.NONE;
+        dragZoneType = DragZoneType.NONE;
         DOM.releaseCapture(getElement());
     }
 
@@ -290,14 +292,14 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         if (dragging) {
             continueDragging(event);
         } else {
-            ResizeZoneType dragZoneType = getResizeZoneType(event);
+            DragZoneType dragZoneType = getDragZoneType(event);
             setCursor(dragZoneType);
         }
     }
 
     @Override
     public void onMouseDown(MouseDownEvent event) {
-        if (!ResizeZoneType.NONE.equals(getResizeZoneType(event))) {
+        if (!DragZoneType.NONE.equals(getDragZoneType(event))) {
             beginDragging(event);
         }
     }
@@ -309,45 +311,65 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         }
     }
 
-    private void setCursor(ResizeZoneType dragZoneType) {
+    private void setCursor(DragZoneType dragZoneType) {
         DOM.setStyleAttribute(this.getElement(), "cursor", dragZoneType.getCursor());
     }
 
-    private ResizeZoneType getResizeZoneType(MouseEvent<?> mouseEvent) {
-        int eventY = mouseEvent.getY() + getAbsoluteTop();
-        int boxY = this.getAbsoluteTop();
-        int height = this.getOffsetHeight();
-
-        int eventX = mouseEvent.getX() + getAbsoluteLeft();
-        int boxX = this.getAbsoluteLeft();
-        int width = this.getOffsetWidth();
-
-        int y = eventY - boxY;
-        int x = eventX - boxX;
-        if (y <= DRAG_ZONE_WIDTH) {
-            if (x <= DRAG_ZONE_WIDTH) {
-                return ResizeZoneType.RESIZE_NW;
-            } else if (x >= width - DRAG_ZONE_WIDTH) {
-                return ResizeZoneType.RESIZE_NE;
-            } else {
-                return ResizeZoneType.RESIZE_N;
-            }
-        } else if (y >= height - DRAG_ZONE_WIDTH) {
-            if (x <= DRAG_ZONE_WIDTH) {
-                return ResizeZoneType.RESIZE_SW;
-            } else if (x >= width - DRAG_ZONE_WIDTH) {
-                return ResizeZoneType.RESIZE_SE;
-            } else {
-                return ResizeZoneType.RESIZE_S;
-            }
+    private DragZoneType getDragZoneType(MouseEvent<?> mouseEvent) {
+        if (captionPanel.equals(mouseEvent.getSource())) {
+            return DragZoneType.MOVE;
         } else {
-            if (x <= DRAG_ZONE_WIDTH) {
-                return ResizeZoneType.RESIZE_W;
-            } else if (x >= width - DRAG_ZONE_WIDTH) {
-                return ResizeZoneType.RESIZE_E;
+            int eventY = mouseEvent.getY() + getAbsoluteTop();
+            int boxY = this.getAbsoluteTop();
+            int height = this.getOffsetHeight();
+
+            int eventX = mouseEvent.getX() + getAbsoluteLeft();
+            int boxX = this.getAbsoluteLeft();
+            int width = this.getOffsetWidth();
+
+            int y = eventY - boxY;
+            int x = eventX - boxX;
+            if (y <= DRAG_ZONE_WIDTH) {
+                if (x <= DRAG_ZONE_WIDTH) {
+                    return DragZoneType.RESIZE_NW;
+                } else if (x >= width - DRAG_ZONE_WIDTH) {
+                    return DragZoneType.RESIZE_NE;
+                } else {
+                    return DragZoneType.RESIZE_N;
+                }
+            } else if (y >= height - DRAG_ZONE_WIDTH) {
+                if (x <= DRAG_ZONE_WIDTH) {
+                    return DragZoneType.RESIZE_SW;
+                } else if (x >= width - DRAG_ZONE_WIDTH) {
+                    return DragZoneType.RESIZE_SE;
+                } else {
+                    return DragZoneType.RESIZE_S;
+                }
             } else {
-                return ResizeZoneType.NONE;
+                if (x <= DRAG_ZONE_WIDTH) {
+                    return DragZoneType.RESIZE_W;
+                } else if (x >= width - DRAG_ZONE_WIDTH) {
+                    return DragZoneType.RESIZE_E;
+                } else {
+                    return DragZoneType.NONE;
+                }
             }
+        }
+
+    }
+
+    class CaptionPanel extends HTML {
+
+        public CaptionPanel() {
+            setWordWrap(false);
+            setStylePrimaryName(CSSClass.pyx4j_Dialog_Caption.name());
+            setHeight("22px");
+            DOM.setStyleAttribute(this.getElement(), "cursor", "move");
+
+            addDomHandler(DialogPanelNew.this, MouseMoveEvent.getType());
+            addDomHandler(DialogPanelNew.this, MouseUpEvent.getType());
+            addDomHandler(DialogPanelNew.this, MouseDownEvent.getType());
+
         }
 
     }
