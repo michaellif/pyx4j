@@ -137,7 +137,7 @@ public class Dialog extends DialogPanelNew {
         this(caption, options);
         MessagePanel messagePanel = new MessagePanel(message, type);
         setBody(messagePanel);
-        setPixelSize(400, 200);
+        setPixelSize(500, 200);
     }
 
     public Dialog(String caption, DialogOptions options) {
