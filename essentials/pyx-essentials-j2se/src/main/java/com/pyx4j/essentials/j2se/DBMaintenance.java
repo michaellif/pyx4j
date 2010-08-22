@@ -43,7 +43,7 @@ public class DBMaintenance {
             log.info("Processed {}", response.getProgress());
         } while (!response.isCompleted());
 
-        log.info("Mainteneace completed");
+        log.info("Mainteneace {} of {} rows completed", request.getProcessor().getSimpleName(), response.getProgress());
 
     }
 }
