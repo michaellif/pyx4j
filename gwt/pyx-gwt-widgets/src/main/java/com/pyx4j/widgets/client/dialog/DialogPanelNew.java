@@ -192,10 +192,8 @@ public class DialogPanelNew extends PopupPanel implements ProvidesResize, MouseM
         NativeEvent nativeEvent = event.getNativeEvent();
 
         EventTarget target = nativeEvent.getEventTarget();
-        if (target != null) {
-            if (!event.isCanceled() && (event.getTypeInt() == Event.ONMOUSEDOWN)) {
-                nativeEvent.preventDefault();
-            }
+        if (target != null && target.equals(this) && !event.isCanceled() && (event.getTypeInt() == Event.ONMOUSEDOWN)) {
+            nativeEvent.preventDefault();
         }
         super.onPreviewNativeEvent(event);
     }
