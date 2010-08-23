@@ -64,7 +64,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
 
             @Override
             public void onClick(ClickEvent event) {
-                listWidget.view(0, true);
+                listWidget.show(0);
             }
 
         });
@@ -90,7 +90,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    listWidget.view(0, true);
+                    listWidget.show(0);
                 }
             }
         });

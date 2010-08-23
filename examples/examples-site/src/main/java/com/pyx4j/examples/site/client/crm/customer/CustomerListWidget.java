@@ -43,7 +43,7 @@ public class CustomerListWidget extends EntityListWidget<Customer> {
     }
 
     @Override
-    protected void view(final int pageNumber, final boolean createHistoryToken) {
+    protected void populate(final int pageNumber) {
         final CustomerSearchCriteriaPanel searchCriteriaPanel = (CustomerSearchCriteriaPanel) getSearchCriteriaPanel();
         final CustomerSearchResultsPanel searchResultsPanel = (CustomerSearchResultsPanel) getSearchResultsPanel();
         if (searchCriteriaPanel.hasDistanceCriteria()) {
@@ -55,7 +55,7 @@ public class CustomerListWidget extends EntityListWidget<Customer> {
                     GeoPoint geoPoint = MapUtils.newGeoPointInstance(fromCoordinates);
 
                     searchCriteriaPanel.getForm().setPropertyValue(new PathSearch(searchCriteriaPanel.getForm().meta().location(), "from"), geoPoint);
-                    CustomerListWidget.super.view(pageNumber, createHistoryToken);
+                    CustomerListWidget.super.populate(pageNumber);
 
                     //call Distance Overlay
                     Integer areaRadius = searchCriteriaPanel.getAreaRadius();
@@ -74,7 +74,7 @@ public class CustomerListWidget extends EntityListWidget<Customer> {
         } else {
             searchResultsPanel.setDistanceOverlay(null, 0);
             searchCriteriaPanel.getForm().removePropertyValue(new PathSearch(searchCriteriaPanel.getForm().meta().location(), "from"));
-            super.view(pageNumber, createHistoryToken);
+            super.populate(pageNumber);
         }
 
     }

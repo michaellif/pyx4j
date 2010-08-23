@@ -44,7 +44,7 @@ public abstract class EntitySearchResultsPanel<E extends IEntity> extends Horizo
 
             @Override
             public void onClick(ClickEvent event) {
-                listWidget.view(listPanel.getDataTable().getDataTableModel().getPageNumber() - 1, true);
+                listWidget.show(listPanel.getDataTable().getDataTableModel().getPageNumber() - 1);
             }
 
         };
@@ -52,7 +52,7 @@ public abstract class EntitySearchResultsPanel<E extends IEntity> extends Horizo
 
             @Override
             public void onClick(ClickEvent event) {
-                listWidget.view(listPanel.getDataTable().getDataTableModel().getPageNumber() + 1, true);
+                listWidget.show(listPanel.getDataTable().getDataTableModel().getPageNumber() + 1);
             }
 
         };

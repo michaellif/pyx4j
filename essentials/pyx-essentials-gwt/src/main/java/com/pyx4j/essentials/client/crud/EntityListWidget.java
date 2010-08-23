@@ -135,6 +135,13 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         return editorPage;
     }
 
+    protected void show(int pageNumber) {
+        NavigationUri uri = new NavigationUri(serachPage);
+        uri.setArgs(searchCriteriaPanel.getHistory());
+        uri.addArg("pageNumber", String.valueOf(pageNumber));
+        AbstractSiteDispatcher.show(uri);
+    }
+
     @Override
     public void populate(Map<String, String> args) {
         searchCriteriaPanel.populateHistory(args);
@@ -149,14 +156,12 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
                 }
             }
         }
-        view(pageNumber, false);
+        populate(pageNumber);
     }
 
-    protected void view(int pageNumber, boolean createHistoryToken) {
+    protected void populate(int pageNumber) {
         final long start = System.currentTimeMillis();
-
         log.debug("Show page " + pageNumber);
-
         final EntitySearchCriteria<E> criteria = searchCriteriaPanel.getEntityCriteria();
         criteria.setPageSize(searchResultsPanel.getPageSize());
         criteria.setPageNumber(pageNumber);
@@ -182,16 +187,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
             }
         };
 
-        if (createHistoryToken) {
-            NavigationUri uri = new NavigationUri(serachPage);
-            uri.setArgs(searchCriteriaPanel.getHistory());
-            uri.addArg("pageNumber", String.valueOf(pageNumber));
-            AbstractSiteDispatcher.show(uri);
-        }
-
         log.debug("criteria:" + criteria.toString());
         RPCManager.execute(getSearchService(), criteria, callback);
-
     }
 
     protected Class<? extends EntityServices.Search> getSearchService() {
