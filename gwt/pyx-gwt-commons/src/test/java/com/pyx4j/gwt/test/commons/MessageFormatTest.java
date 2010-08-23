@@ -51,8 +51,20 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("A's B'z X", "A''s B''z {0}", "X");
     }
 
+    public void testQuotedStrings() {
+        assertMessageFormat("As", "A's");
+        assertMessageFormat("A{}e", "A'{}'e");
+    }
+
     public void testErrorParents() {
-        assertMessageFormat("As '{0}'", "A's ''{0}''", "B");
+        try {
+            assertMessageFormat("n/a", "A{}B");
+            fail("Error expected");
+        } catch (Throwable ok) {
+        }
+        assertMessageFormat("As Be", "A's' {0}e", "B");
+        assertMessageFormat("As {0}e", "A's {0}e", "B");
+        assertMessageFormat("As '{0}'e", "A's ''{0}''e", "B");
     }
 
     public void testNumberFormat() {

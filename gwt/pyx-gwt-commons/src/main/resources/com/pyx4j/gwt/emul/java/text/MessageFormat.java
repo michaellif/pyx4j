@@ -39,31 +39,58 @@ public class MessageFormat {
     private MessageFormat() {
     }
 
+    private static enum QuotedString {
+
+        Start,
+
+        Continue,
+
+        Ending
+    }
+
     public static String format(final String pattern, Object... arguments) {
         StringBuilder result = new StringBuilder();
 
-        boolean quotedString = false;
+        QuotedString quotedString = null;
         boolean formatElement = false;
 
         StringBuilder formatPattern = null;
 
         int formatRecursion = 0;
-        char c = '\0';
-        char pc;
-        for (int index = 0; index < pattern.length(); index++) {
-            pc = c;
+        char c;
+        nextChar: for (int index = 0; index < pattern.length(); index++) {
             c = pattern.charAt(index);
-            if (quotedString) {
-                if (c == '\'') {
-                    if (pc == '\'') {
+            if (quotedString != null) {
+                switch (quotedString) {
+                case Start:
+                    if (c == '\'') {
+                        result.append(c);
+                        quotedString = null;
+                    } else {
+                        result.append(c);
+                        quotedString = QuotedString.Continue;
+                    }
+                    continue nextChar;
+                case Continue:
+                    if (c == '\'') {
+                        quotedString = QuotedString.Ending;
+                    } else {
                         result.append(c);
                     }
-                    quotedString = false;
-                } else {
-                    result.append(c);
+                    continue nextChar;
+                case Ending:
+                    if (c == '\'') {
+                        // Double quote inside the string
+                        result.append(c);
+                        quotedString = QuotedString.Continue;
+                        continue nextChar;
+                    } else {
+                        quotedString = null;
+                    }
+                    break;
                 }
-                continue;
-            } else if (formatElement) {
+            }
+            if (formatElement) {
                 if (c == DELIM_STOP) {
                     if (formatRecursion > 0) {
                         formatRecursion--;
@@ -84,7 +111,7 @@ public class MessageFormat {
 
             switch (c) {
             case '\'':
-                quotedString = true;
+                quotedString = QuotedString.Start;
                 break;
             case DELIM_START:
                 formatPattern = new StringBuilder();
