@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +117,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
+    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public String getIndexedPropertyName(EntityMeta meta, Path path) {
         // TODO Auto-generated method stub
         return null;
@@ -176,7 +183,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys) {
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys) {
         // TODO Auto-generated method stub
 
     }

@@ -22,6 +22,7 @@ package com.pyx4j.entity.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
@@ -49,6 +50,8 @@ public interface IEntityPersistenceService {
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey);
 
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
+
+    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys);
 
     /**
      * This may be a join with secondary table in RDBMS
@@ -82,7 +85,7 @@ public interface IEntityPersistenceService {
      */
     public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey);
 
-    public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys);
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys);
 
     public int getDatastoreCallCount();
 

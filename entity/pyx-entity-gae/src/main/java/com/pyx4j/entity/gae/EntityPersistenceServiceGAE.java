@@ -983,6 +983,44 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return iEntity;
     }
 
+    @Override
+    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys) {
+        long start = System.nanoTime();
+        int initCount = datastoreCallStats.get().readCount;
+
+        Map<Long, T> ret = new HashMap<Long, T>();
+
+        EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+        if (meta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+
+        List<Key> getKeys = new Vector<Key>();
+        for (Long primaryKey : primaryKeys) {
+            getKeys.add(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
+        }
+        datastoreCallStats.get().readCount++;
+        Map<Key, Entity> entities = datastore.get(getKeys);
+        Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
+        for (Long primaryKey : primaryKeys) {
+            Entity entity = entities.get(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
+            if (entity != null) {
+                T iEntity = EntityFactory.create(entityClass);
+                updateIEntity(iEntity, entity, retrievedMap);
+                ret.put(primaryKey, iEntity);
+            }
+        }
+
+        long duration = System.nanoTime() - start;
+        int callsCount = datastoreCallStats.get().readCount - initCount;
+        if (duration > Consts.SEC2NANO) {
+            log.warn("Long running retrieve {}s took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+        } else {
+            log.debug("retrieve {}s took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+        }
+        return ret;
+    }
+
     private <T extends IEntity> Class<T> entityClass(EntityQueryCriteria<T> criteria) {
         return ServerEntityFactory.entityClass(criteria.getDomainName());
     }
@@ -1395,7 +1433,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public <T extends IEntity> void delete(Class<T> entityClass, List<Long> primaryKeys) {
+    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't delete Transient Entity");
