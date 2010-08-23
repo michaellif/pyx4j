@@ -389,6 +389,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     value = KeyFactory
                             .createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKeyId);
                 }
+                Indexed index = meta.getAnnotation(Indexed.class);
+                if ((index != null) && (index.global() != 0)) {
+                    addGloablIndex(entity, index.global(), Long.toString(((Key) value).getId()));
+                }
             } else if ((ISet.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof Set<?>)) {
                 Set<Key> childKeys = new HashSet<Key>();
                 if (meta.isOwnedRelationships()) {

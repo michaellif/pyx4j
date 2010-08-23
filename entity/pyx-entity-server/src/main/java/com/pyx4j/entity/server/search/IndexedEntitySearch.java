@@ -208,6 +208,7 @@ public class IndexedEntitySearch {
                         }
                     }
                 }
+                processed.add(mm);
             } else if (Integer.class.isAssignableFrom(mm.getValueClass())) {
                 Serializable value = me.getValue();
                 if (value instanceof String) {
@@ -253,7 +254,14 @@ public class IndexedEntitySearch {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, me.getValue()));
                 }
             } else if (mm.isEntity()) {
-                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, ((IEntity) me.getValue()).getPrimaryKey()));
+                Indexed index = mm.getAnnotation(Indexed.class);
+                Long pk = ((IEntity) me.getValue()).getPrimaryKey();
+                if ((index != null) && (index.global() != 0)) {
+                    inMemoryFilters.add(new EntityInMemoryFilter(path, pk));
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global()) + pk));
+                } else {
+                    queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, pk));
+                }
             } else {
                 log.warn("Search by class {} not implemented", mm.getValueClass());
             }
