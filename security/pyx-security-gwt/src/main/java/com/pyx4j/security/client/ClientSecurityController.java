@@ -21,7 +21,6 @@
 package com.pyx4j.security.client;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -46,7 +45,7 @@ public class ClientSecurityController extends SecurityController implements HasV
     // Allow everything from Permission point of view
     private static class AclImpl implements Acl {
 
-        private Set<Behavior> behaviours = new HashSet<Behavior>();
+        private Set<Behavior> behaviours = Collections.emptySet();
 
         @Override
         public boolean checkBehavior(Behavior behavior) {
@@ -75,7 +74,11 @@ public class ClientSecurityController extends SecurityController implements HasV
 
     @Override
     public Acl authenticate(Set<Behavior> behaviours) {
-        acl.behaviours = Collections.unmodifiableSet(behaviours);
+        if (behaviours == null) {
+            acl.behaviours = Collections.emptySet();
+        } else {
+            acl.behaviours = Collections.unmodifiableSet(behaviours);
+        }
         ValueChangeEvent.fire(instance(), instance().acl.getBehaviours());
         return acl;
     }
