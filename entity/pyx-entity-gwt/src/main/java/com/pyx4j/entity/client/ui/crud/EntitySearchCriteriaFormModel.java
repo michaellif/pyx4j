@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.crud;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,6 +120,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
+            ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
         } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
             comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Integer.class)) {
