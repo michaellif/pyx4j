@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -32,6 +33,10 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor {
 
     public Anchor(String text, boolean asHTML, String href) {
         super(text, asHTML, href);
+    }
+
+    public Anchor(Element element) {
+        super(element);
     }
 
     @Override
