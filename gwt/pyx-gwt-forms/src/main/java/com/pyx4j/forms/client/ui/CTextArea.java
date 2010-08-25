@@ -27,12 +27,11 @@ public class CTextArea extends CEditableComponent<String> {
 
     private NativeTextArea nativeTextArea;
 
-    private int columns = 40;
-
     private int rows = 4;
 
     public CTextArea() {
         super();
+        setWidth("100%");
     }
 
     public CTextArea(String title) {
@@ -49,7 +48,6 @@ public class CTextArea extends CEditableComponent<String> {
         if (nativeTextArea == null) {
             nativeTextArea = new NativeTextArea(this);
             applyAccessibilityRules();
-            setColumns(columns);
             setRows(rows);
             setNativeComponentValue(getValue());
         }
@@ -65,17 +63,6 @@ public class CTextArea extends CEditableComponent<String> {
         if (nativeTextArea != null) {
             nativeTextArea.scrollToBottom();
         }
-    }
-
-    public void setColumns(int columns) {
-        this.columns = columns;
-        if (nativeTextArea != null) {
-            nativeTextArea.setCharacterWidth(columns);
-        }
-    }
-
-    public int getColumns() {
-        return columns;
     }
 
     public void setRows(int rows) {
