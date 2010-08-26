@@ -52,7 +52,7 @@ public class PagePanel extends DynamicHTML {
         super(page.data().html().getValue(), bundle, true);
         this.parent = parent;
         this.page = page;
-        setStyleName(SiteCSSClass.pyx4j_Site_PageWidget.name());
+        setStyleName(SiteCSSClass.pyx4j_Site_PagePanel.name());
     }
 
     public Page getPage() {

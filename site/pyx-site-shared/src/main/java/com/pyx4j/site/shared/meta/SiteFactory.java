@@ -34,15 +34,25 @@ public class SiteFactory {
     private static final List<String> uriRegistry = new ArrayList<String>();
 
     protected Portlet createPortlet(String portletId, String caption, String html) {
-        return createPortlet(portletId, caption, html, null);
+        return createPortlet(portletId, caption, html, null, null, null);
     }
 
     protected Portlet createPortlet(String portletId, String caption, String html, String styleName) {
+        return createPortlet(portletId, caption, html, styleName, null, null);
+    }
+
+    protected Portlet createPortlet(String portletId, String caption, String html, String actionLabel, Class<? extends NavigNode> navigNode) {
+        return createPortlet(portletId, caption, html, null, actionLabel, navigNode);
+    }
+
+    protected Portlet createPortlet(String portletId, String caption, String html, String styleName, String actionLabel, Class<? extends NavigNode> navigNode) {
         Portlet portlet = EntityFactory.create(Portlet.class);
         portlet.portletId().setValue(portletId);
         portlet.caption().setValue(caption);
         portlet.styleName().setValue(styleName);
         portlet.html().setValue(html);
+        portlet.actionLabel().setValue(actionLabel);
+        portlet.navigNode().setValue(navigNode);
         return portlet;
     }
 
@@ -95,8 +105,8 @@ public class SiteFactory {
 
     public static Page createSingleWidgetPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
             String helpHtml, Portlet[] leftPortlets, Portlet[] rightPortlets) {
-        Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), helpHtml, leftPortlets, rightPortlets, new String[] { inlineWidget
-                .name() });
+        Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), helpHtml, leftPortlets, rightPortlets,
+                new String[] { inlineWidget.name() });
         if (tabName != null) {
             page.tabName().setValue(tabName);
         }

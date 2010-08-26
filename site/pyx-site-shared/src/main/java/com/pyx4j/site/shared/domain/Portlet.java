@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.site.shared.meta.NavigNode;
 
 public interface Portlet extends IEntity {
 
@@ -33,6 +34,10 @@ public interface Portlet extends IEntity {
     IPrimitive<String> caption();
 
     IPrimitive<String> styleName();
+
+    IPrimitive<String> actionLabel();
+
+    IPrimitive<Class<? extends NavigNode>> navigNode();
 
     @StringLength(4096)
     IPrimitive<String> html();

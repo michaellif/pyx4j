@@ -15,6 +15,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -22,6 +24,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Portlet;
+import com.pyx4j.site.shared.meta.NavigUtils;
+import com.pyx4j.widgets.client.Button;
 
 public class PortletPanel extends VerticalPanel {
 
@@ -33,7 +37,7 @@ public class PortletPanel extends VerticalPanel {
 
     private final Portlet portlet;
 
-    public PortletPanel(SitePanel parent, Portlet portlet, ClientBundleWithLookup bundle) {
+    public PortletPanel(SitePanel parent, final Portlet portlet, ClientBundleWithLookup bundle) {
         super();
         this.parent = parent;
         this.portlet = portlet;
@@ -46,20 +50,31 @@ public class PortletPanel extends VerticalPanel {
         setStyleName(styleName);
 
         if (portlet.caption().getValue() != null) {
-            HTML capturePanel = new HTML(portlet.caption().getValue());
-            capturePanel.setWordWrap(false);
-            add(capturePanel);
-            capturePanel.setStyleName(styleName + "Header");
+            HTML captionPanel = new HTML(portlet.caption().getValue());
+            captionPanel.setWordWrap(false);
+            add(captionPanel);
+            captionPanel.setStyleName(styleName + "Header");
         } else {
             HTML headerPanel = new HTML();
             add(headerPanel);
             headerPanel.setStyleName(styleName + "EmptyHeader");
         }
 
-        DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), bundle, false);
+        DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), bundle, true);
         add(bodyPanel);
         bodyPanel.setStyleName(styleName + "Body");
 
+        if (!portlet.navigNode().isNull()) {
+            Button button = new Button(portlet.actionLabel().getStringView());
+            button.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AbstractSiteDispatcher.show(NavigUtils.getPageUri(portlet.navigNode().getValue()));
+                }
+            });
+            add(button);
+            setCellHorizontalAlignment(button, ALIGN_CENTER);
+        }
     }
 
     public void createInlineWidgets() {

@@ -86,42 +86,42 @@ public class CrmTheme extends SiteTheme {
     }
 
     @Override
-    protected void initPageWidgetStyles() {
-        Style style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name());
+    protected void initPagePanelStyles() {
+        Style style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name());
         style.addProperty("padding", "2px");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " h1, h2, h3, h4 ,h5");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " h1, h2, h3, h4 ,h5");
         style.addProperty("margin", "0 0 .5em 0");
         style.addProperty("font-weight", "bold");
         style.addProperty("color", "#306");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " a");
         style.addProperty("color", "gray");
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " a:hover");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " a:hover");
         style.addProperty("text-decoration", "underline");
         style.addProperty("color", "black");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " p, li");
         style.addProperty("margin-bottom", "0.5em");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " p, li, dl, span");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " p, li, dl, span");
         style.addProperty("font-size", "0.81em");
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul, ol");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " ul, ol");
         style.addProperty(" margin-left", "1em");
         style.addProperty(" margin-bottom", "1em");
         addStyle(style);
 
-        style = new Style("." + SiteCSSClass.pyx4j_Site_PageWidget.name() + " ul li");
+        style = new Style("." + SiteCSSClass.pyx4j_Site_PagePanel.name() + " ul li");
         style.addProperty(" list-style-type", "square");
         style.addProperty(" list-style-image", "url(images/light_bullet.gif)");
         addStyle(style);
