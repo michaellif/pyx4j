@@ -439,7 +439,7 @@
                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.5.9</version>
+                    <version>0.7.0</version>
                     <configuration>
                         <serverId>appengine.google.com-pyx</serverId>
                         <sdkDir>${appengine.sdk.root}</sdkDir>
