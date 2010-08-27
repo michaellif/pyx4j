@@ -15,6 +15,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
@@ -72,6 +73,9 @@ public class PortletPanel extends VerticalPanel {
                     AbstractSiteDispatcher.show(NavigUtils.getPageUri(portlet.navigNode().getValue()));
                 }
             });
+
+            button.getElement().getStyle().setMarginTop(10, Unit.PX);
+
             add(button);
             setCellHorizontalAlignment(button, ALIGN_CENTER);
         }

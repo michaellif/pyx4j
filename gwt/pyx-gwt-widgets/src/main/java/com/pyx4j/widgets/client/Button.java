@@ -74,17 +74,19 @@ public class Button extends ButtonBase {
     }
 
     protected Button(Image image, final String text, ButtonFacesHandler facesHandler, String stylePrefix) {
-        super(DOM.createSpan());
+        super(DOM.createDiv());
 
         if (stylePrefix == null) {
             stylePrefix = CSSClass.pyx4j_Button.name();
         }
 
+        Element container = DOM.createSpan();
+
         buttonFacesHandler = facesHandler;
 
-        getElement().getStyle().setProperty("display", "inline-block");
-        getElement().getStyle().setProperty("verticalAlign", "top");
-        setStylePrimaryName(getElement(), stylePrefix);
+        container.getStyle().setProperty("display", "inline-block");
+        container.getStyle().setProperty("verticalAlign", "top");
+        setStylePrimaryName(container, stylePrefix);
 
         // for IE6
         // getElement().getStyle().setProperty("borderColor", "pink");
@@ -115,7 +117,9 @@ public class Button extends ButtonBase {
             content.appendChild(textElem);
             setStylePrimaryName(textElem, stylePrefix + "Text");
         }
-        getElement().appendChild(content);
+
+        getElement().appendChild(container);
+        container.appendChild(content);
 
     }
 
