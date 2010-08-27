@@ -55,14 +55,11 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
         ar.setLogoutURL(logoutApplicationUrl);
         if (Context.getSession() != null) {
             ar.setMaxInactiveInterval(Context.getSession().getMaxInactiveInterval());
+            ar.setSessionCookieName(ServerSideConfiguration.instance().getSessionCookieName());
             log.debug("session maxInactiveInterval {} sec", ar.getMaxInactiveInterval());
             switch (ServerSideConfiguration.instance().getEnvironmentType()) {
-            case LocalJVM:
-                ar.setSessionCookieName(System.getProperty("org.apache.catalina.SESSION_COOKIE_NAME", "JSESSIONID"));
-                break;
             case GAEDevelopment:
             case GAESandbox:
-                ar.setSessionCookieName("JSESSIONID");
                 if (ar.getMaxInactiveInterval() <= 0) {
                     ar.setMaxInactiveInterval(24 * Consts.HOURS2SEC);
                     log.debug("session maxInactiveInterval {} sec", ar.getMaxInactiveInterval());

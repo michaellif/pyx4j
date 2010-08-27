@@ -26,13 +26,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
@@ -41,9 +44,9 @@ public class Lifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(Lifecycle.class);
 
-    public static void beginRequest(HttpServletRequest httprequest) {
+    public static void beginRequest(HttpServletRequest httprequest, HttpServletResponse response) {
         //long start = System.nanoTime();
-        Context.setRequest(httprequest);
+        Context.beginRequest(httprequest, response);
         HttpSession session = httprequest.getSession(false);
         Context.setSession(session);
         if (session != null) {
@@ -55,15 +58,18 @@ public class Lifecycle {
     }
 
     public static void endRequest() {
-        //        PersistenceServicesFactory.getPersistenceService().endRequest();
-        HttpSession session = Context.getSession();
-        if (session != null) {
-            Visit visit = Context.getVisit();
-            if ((visit != null) && (visit.isChanged())) {
-                session.setAttribute(Context.SESSION_VISIT, visit);
+        try {
+            //        PersistenceServicesFactory.getPersistenceService().endRequest();
+            HttpSession session = Context.getSession();
+            if (session != null) {
+                Visit visit = Context.getVisit();
+                if ((visit != null) && (visit.isChanged())) {
+                    session.setAttribute(Context.SESSION_VISIT, visit);
+                }
             }
+        } finally {
+            Context.remove();
         }
-        Context.remove();
     }
 
     public static void beginAnonymousSession() {
@@ -129,13 +135,18 @@ public class Lifecycle {
             Context.getVisit().endSession();
         }
         if (session != null) {
-            Context.remove();
+            Context.endSession();
             try {
                 log.info("Session {} ends", session.getId());
                 session.invalidate();
             } catch (IllegalStateException e) {
                 // this method is called already
             }
+            // Remove Session Cookie 
+            Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
+            c.setPath("/");
+            c.setMaxAge(0);
+            Context.getResponse().addCookie(c);
         }
     }
 }

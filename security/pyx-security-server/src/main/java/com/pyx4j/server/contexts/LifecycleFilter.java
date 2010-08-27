@@ -114,7 +114,7 @@ public class LifecycleFilter implements Filter {
             } else {
                 HttpServletRequest httprequest = (HttpServletRequest) request;
                 // TODO MDC
-                Lifecycle.beginRequest(httprequest);
+                Lifecycle.beginRequest(httprequest, (HttpServletResponse) response);
                 try {
                     chain.doFilter(request, response);
                 } finally {

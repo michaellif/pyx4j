@@ -21,6 +21,7 @@
 package com.pyx4j.server.contexts;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,18 +31,33 @@ public class Context {
 
     static final String SESSION_VISIT = "visit";
 
-    private static final ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
+    private static class RequestContext {
 
-    private static final ThreadLocal<Visit> abstractVisit = new ThreadLocal<Visit>();
+        HttpServletRequest request;
 
-    private static final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>();
+        HttpServletResponse response;
+
+        HttpSession session;
+
+        Visit abstractVisit;
+
+        boolean sessionEnd;
+
+    }
+
+    private static final ThreadLocal<RequestContext> requestLocal = new ThreadLocal<RequestContext>() {
+        @Override
+        protected RequestContext initialValue() {
+            return new RequestContext();
+        }
+    };
 
     public static Visit getVisit() {
-        return abstractVisit.get();
+        return requestLocal.get().abstractVisit;
     }
 
     static void setVisit(Visit v) {
-        abstractVisit.set(v);
+        requestLocal.get().abstractVisit = v;
     }
 
     /**
@@ -50,11 +66,18 @@ public class Context {
      * @return
      */
     public static HttpSession getSession() {
-        return session.get();
+        return requestLocal.get().session;
     }
 
     static void setSession(HttpSession s) {
-        session.set(s);
+        requestLocal.get().session = s;
+        if (s != null) {
+            requestLocal.get().sessionEnd = false;
+        }
+    }
+
+    public static boolean isSessionEnd() {
+        return requestLocal.get().sessionEnd;
     }
 
     public static String getSessionId() {
@@ -66,12 +89,17 @@ public class Context {
         }
     }
 
-    public static HttpServletRequest getRequest() {
-        return request.get();
+    static void beginRequest(HttpServletRequest request, HttpServletResponse response) {
+        requestLocal.get().request = request;
+        requestLocal.get().response = response;
     }
 
-    static void setRequest(HttpServletRequest r) {
-        request.set(r);
+    public static HttpServletRequest getRequest() {
+        return requestLocal.get().request;
+    }
+
+    public static HttpServletResponse getResponse() {
+        return requestLocal.get().response;
     }
 
     public static String getRequestHeader(String name) {
@@ -91,8 +119,13 @@ public class Context {
     }
 
     static void remove() {
-        request.remove();
-        abstractVisit.remove();
-        session.remove();
+        requestLocal.remove();
+    }
+
+    static void endSession() {
+        RequestContext rc = requestLocal.get();
+        rc.session = null;
+        rc.abstractVisit = null;
+        rc.sessionEnd = true;
     }
 }

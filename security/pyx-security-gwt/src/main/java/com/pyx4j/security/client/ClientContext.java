@@ -125,6 +125,11 @@ public class ClientContext {
         if (authenticationResponse.getSessionCookieName() != null) {
             serverSession = new ServerSession(authenticationResponse.getSessionCookieName(), authenticationResponse.getMaxInactiveInterval());
         } else {
+            // Session ends.
+            if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
+                RPCManager.setSessionToken(null);
+                Cookies.removeCookie(serverSession.getSessionCookieName());
+            }
             serverSession = null;
         }
         String sessionToken = authenticationResponse.getSessionToken();

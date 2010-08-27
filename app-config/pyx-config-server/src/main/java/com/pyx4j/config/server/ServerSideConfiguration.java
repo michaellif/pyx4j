@@ -134,4 +134,15 @@ public class ServerSideConfiguration {
         }
     }
 
+    public String getSessionCookieName() {
+        switch (getEnvironmentType()) {
+        default:
+        case LocalJVM:
+            return System.getProperty("org.apache.catalina.SESSION_COOKIE_NAME", "JSESSIONID");
+        case GAEDevelopment:
+        case GAESandbox:
+            return "JSESSIONID";
+        }
+    }
+
 }
