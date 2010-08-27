@@ -27,6 +27,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.logical.shared.InitializeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -243,6 +245,14 @@ public class ClientContext {
         );
     }
 
+    public static HandlerRegistration addAuthenticationObtainedHandler(InitializeHandler handler) {
+        return ClientSecurityController.instance().addInitializeHandler(handler);
+    }
+
+    public static boolean isAuthenticationObtained() {
+        return authenticationObtained;
+    }
+
     public static void obtainAuthenticationData() {
         obtainAuthenticationData(null);
     }
@@ -262,10 +272,7 @@ public class ClientContext {
                 @Override
                 public void onFailure(Throwable caught) {
                     log.error("obtain authentication failure", caught);
-                    authenticationObtained = true;
-                    if (onAuthenticationAvalable != null) {
-                        onAuthenticationAvalable.run();
-                    }
+                    onSuccess(new AuthenticationResponse());
                 }
 
                 @Override

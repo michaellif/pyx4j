@@ -23,7 +23,13 @@ package com.pyx4j.security.client;
 import java.util.Collections;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.event.logical.shared.HasInitializeHandlers;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.InitializeEvent;
+import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventHandler;
@@ -31,16 +37,21 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.Permission;
 import com.pyx4j.security.shared.SecurityController;
 
-public class ClientSecurityController extends SecurityController implements HasValueChangeHandlers<Set<Behavior>> {
+public class ClientSecurityController extends SecurityController implements HasValueChangeHandlers<Set<Behavior>>, HasInitializeHandlers {
+
+    private static Logger log = LoggerFactory.getLogger(ClientSecurityController.class);
 
     private HandlerManager handlerManager;
 
     private final AclImpl acl = new AclImpl();
+
+    private boolean initialized;
 
     // Allow everything from Permission point of view
     private static class AclImpl implements Acl {
@@ -75,11 +86,20 @@ public class ClientSecurityController extends SecurityController implements HasV
     @Override
     public Acl authenticate(Set<Behavior> behaviours) {
         if (behaviours == null) {
-            acl.behaviours = Collections.emptySet();
+            behaviours = Collections.emptySet();
         } else {
-            acl.behaviours = Collections.unmodifiableSet(behaviours);
+            behaviours = Collections.unmodifiableSet(behaviours);
         }
-        ValueChangeEvent.fire(instance(), instance().acl.getBehaviours());
+        if (!EqualsHelper.equals(acl.behaviours, behaviours)) {
+            log.debug("Client behaviours changed {} -> {}", acl.behaviours, behaviours);
+            acl.behaviours = behaviours;
+            ValueChangeEvent.fire(this, acl.behaviours);
+        }
+        if (!initialized) {
+            initialized = true;
+            log.debug("Client security initialized");
+            InitializeEvent.fire(this);
+        }
         return acl;
     }
 
@@ -97,15 +117,20 @@ public class ClientSecurityController extends SecurityController implements HasV
     }
 
     @Override
+    public void fireEvent(GwtEvent<?> event) {
+        if (handlerManager != null) {
+            handlerManager.fireEvent(event);
+        }
+    }
+
+    @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Set<Behavior>> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
     @Override
-    public void fireEvent(GwtEvent<?> event) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(event);
-        }
+    public HandlerRegistration addInitializeHandler(InitializeHandler handler) {
+        return addHandler(handler, InitializeEvent.getType());
     }
 
 }

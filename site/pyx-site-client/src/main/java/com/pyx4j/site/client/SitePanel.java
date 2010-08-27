@@ -33,6 +33,9 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.InitializeEvent;
+import com.google.gwt.event.logical.shared.InitializeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -45,6 +48,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
@@ -102,6 +107,8 @@ public abstract class SitePanel extends SimplePanel {
 
     private final ClientBundleWithLookup bundle;
 
+    private HandlerRegistration authenticationObtainedHandlerRegistration;
+
     public SitePanel(Site site, ClientBundleWithLookup bundle) {
         this.site = site;
         this.bundle = bundle;
@@ -157,7 +164,7 @@ public abstract class SitePanel extends SimplePanel {
         }
     }
 
-    protected void show(Page page, Map<String, String> args) {
+    protected void show(Page page, final Map<String, String> args) {
 
         log.info("Show page " + page.uri().getStringView());
 
@@ -179,34 +186,40 @@ public abstract class SitePanel extends SimplePanel {
 
         setHeaderCaption(page.caption().getValue());
 
-        leftSectionPanel.clear();
-        if (page.data().leftPortlets().size() > 0) {
-            for (Portlet portlet : page.data().leftPortlets()) {
-                if (isPortletVisible(portlet)) {
-                    PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
-                    leftSectionPanel.add(portletPanel);
-                    portletPanel.createInlineWidgets();
-                    portletPanel.populateInlineWidgets(args);
-                }
-            }
-        }
-
-        rightSectionPanel.clear();
-        if (page.data().rightPortlets().size() > 0) {
-            for (Portlet portlet : page.data().rightPortlets()) {
-                if (isPortletVisible(portlet)) {
-                    PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
-                    rightSectionPanel.add(portletPanel);
-                    portletPanel.createInlineWidgets();
-                    portletPanel.populateInlineWidgets(args);
-                }
-            }
-        }
+        initPortlets(args, leftSectionPanel, page.data().leftPortlets());
+        initPortlets(args, rightSectionPanel, page.data().rightPortlets());
 
         primaryNavigationBar.setSelected(page.uri().getValue());
 
-        currentPagePanel.populateInlineWidgets(args);
+        if (ClientContext.isAuthenticationObtained()) {
+            currentPagePanel.populateInlineWidgets(args);
+        } else {
+            authenticationObtainedHandlerRegistration = ClientContext.addAuthenticationObtainedHandler(new InitializeHandler() {
 
+                @Override
+                public void onInitialize(InitializeEvent event) {
+                    authenticationObtainedHandlerRegistration.removeHandler();
+                    if (!ClientContext.isAuthenticated()) {
+                        currentPagePanel.populateInlineWidgets(args);
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, IList<Portlet> portlets) {
+        sectionPanel.clear();
+        for (Portlet portlet : portlets) {
+            if (isPortletVisible(portlet)) {
+                PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
+                sectionPanel.add(portletPanel);
+                portletPanel.createInlineWidgets();
+                if (ClientContext.isAuthenticationObtained()) {
+                    portletPanel.populateInlineWidgets(args);
+                }
+            }
+        }
     }
 
     public PagePanel getCurrentPagePanel() {
