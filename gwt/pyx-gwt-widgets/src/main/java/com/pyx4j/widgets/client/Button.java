@@ -38,6 +38,8 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class Button extends ButtonBase {
 
+    private final Element container;
+
     private final Element content;
 
     private Element textElem;
@@ -80,13 +82,15 @@ public class Button extends ButtonBase {
             stylePrefix = CSSClass.pyx4j_Button.name();
         }
 
-        Element container = DOM.createSpan();
+        setStylePrimaryName(getElement(), stylePrefix);
+
+        container = DOM.createSpan();
+        setStylePrimaryName(container, stylePrefix + "Container");
 
         buttonFacesHandler = facesHandler;
 
         container.getStyle().setProperty("display", "inline-block");
         container.getStyle().setProperty("verticalAlign", "top");
-        setStylePrimaryName(container, stylePrefix);
 
         // for IE6
         // getElement().getStyle().setProperty("borderColor", "pink");
