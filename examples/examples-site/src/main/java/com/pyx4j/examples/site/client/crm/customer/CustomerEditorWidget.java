@@ -103,7 +103,10 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
 
         };
 
-        ordersPanel = new EntityListPanel<Order>(Order.class, prevHandler, nextHandler);
+        ordersPanel = new EntityListPanel<Order>(Order.class);
+        ordersPanel.setPrevActionHandler(prevHandler);
+        ordersPanel.setNextActionHandler(nextHandler);
+
         List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(ordersPanel.getMetaEntity(), ordersPanel.getMetaEntity().description(), "140px"));
         columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(ordersPanel.getMetaEntity(), ordersPanel.getMetaEntity().status(), "80px"));

@@ -53,22 +53,32 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     private final DataTableActionsBar lowerActionsBar;
 
-    public EntityListPanel(Class<E> clazz, ClickHandler prevHandler, ClickHandler nextHandler) {
+    public EntityListPanel(Class<E> clazz) {
         setWidth("700px");
 
         metaEntity = EntityFactory.create(clazz);
         dataTable = new DataTable<E>(false);
         dataTable.setWidth("100%");
 
-        upperActionsBar = new DataTableActionsBar(prevHandler, nextHandler);
+        upperActionsBar = new DataTableActionsBar();
 
-        lowerActionsBar = new DataTableActionsBar(prevHandler, nextHandler);
+        lowerActionsBar = new DataTableActionsBar();
 
         add(upperActionsBar);
         add(dataTable);
         add(lowerActionsBar);
 
         setCellWidth(dataTable, "100%");
+    }
+
+    public void setPrevActionHandler(ClickHandler prevActionHandler) {
+        upperActionsBar.setPrevActionHandler(prevActionHandler);
+        lowerActionsBar.setPrevActionHandler(prevActionHandler);
+    }
+
+    public void setNextActionHandler(ClickHandler nextActionHandler) {
+        upperActionsBar.setNextActionHandler(nextActionHandler);
+        lowerActionsBar.setNextActionHandler(nextActionHandler);
     }
 
     public DataTable<E> getDataTable() {

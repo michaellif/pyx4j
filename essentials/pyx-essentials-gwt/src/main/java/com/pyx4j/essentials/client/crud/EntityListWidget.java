@@ -72,7 +72,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
     }
 
     public EntityListWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
-            EntitySearchCriteriaPanel<E> searchCriteriaPanel, EntitySearchResultsPanel<E> searchResultsPanel) {
+            EntitySearchCriteriaPanel<E> searchCriteriaPanel, final EntitySearchResultsPanel<E> searchResultsPanel) {
         this.serachPage = serachPage;
         this.editorPage = editorPage;
         String[] path = clazz.getName().split("\\.");
@@ -81,7 +81,26 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         searchCriteriaPanel.setListWidget(this);
         this.searchResultsPanel = searchResultsPanel;
         searchResultsPanel.setEditorPageType(editorPage);
-        searchResultsPanel.setListWidget(this);
+
+        ClickHandler prevHandler = new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                show(searchResultsPanel.getPageNumber() - 1);
+            }
+
+        };
+        searchResultsPanel.setPrevActionHandler(prevHandler);
+
+        ClickHandler nextHandler = new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                show(searchResultsPanel.getPageNumber() + 1);
+            }
+
+        };
+        searchResultsPanel.setNextActionHandler(nextHandler);
 
         VerticalPanel leftPanel = new VerticalPanel();
         leftPanel.setWidth("220px");

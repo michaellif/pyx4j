@@ -34,6 +34,8 @@ public interface Page extends IEntity {
 
     IPrimitive<String> discriminator();
 
+    IPrimitive<Boolean> navigHidden();
+
     @Owned
     PageData data();
 

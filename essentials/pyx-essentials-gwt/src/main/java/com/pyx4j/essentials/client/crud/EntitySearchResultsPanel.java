@@ -22,7 +22,6 @@ package com.pyx4j.essentials.client.crud;
 
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
@@ -35,29 +34,10 @@ public abstract class EntitySearchResultsPanel<E extends IEntity> extends Horizo
 
     private final EntityListPanel<E> listPanel;
 
-    public EntityListWidget<E> listWidget;
-
     public EntitySearchResultsPanel(Class<E> clazz) {
         super();
         setWidth("100%");
-        ClickHandler prevHandler = new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                listWidget.show(listPanel.getDataTable().getDataTableModel().getPageNumber() - 1);
-            }
-
-        };
-        ClickHandler nextHandler = new ClickHandler() {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                listWidget.show(listPanel.getDataTable().getDataTableModel().getPageNumber() + 1);
-            }
-
-        };
-
-        this.listPanel = new EntityListPanel<E>(clazz, prevHandler, nextHandler);
+        this.listPanel = new EntityListPanel<E>(clazz);
         listPanel.setColumnDescriptors(getColumnDescriptors());
         add(listPanel);
 
@@ -93,8 +73,12 @@ public abstract class EntitySearchResultsPanel<E extends IEntity> extends Horizo
         return listPanel.getPageNumber();
     }
 
-    public void setListWidget(EntityListWidget<E> listWidget) {
-        this.listWidget = listWidget;
+    public void setPrevActionHandler(ClickHandler prevActionHandler) {
+        listPanel.setPrevActionHandler(prevActionHandler);
+    }
+
+    public void setNextActionHandler(ClickHandler nextActionHandler) {
+        listPanel.setNextActionHandler(nextActionHandler);
     }
 
 }

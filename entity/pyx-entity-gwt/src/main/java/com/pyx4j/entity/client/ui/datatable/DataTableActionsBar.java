@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui.datatable;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -40,7 +41,11 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
 
     private final Label countLabel;
 
-    public DataTableActionsBar(ClickHandler prevHandler, ClickHandler nextHandler) {
+    private HandlerRegistration prevActionHandlerRegistration;
+
+    private HandlerRegistration nextActionHandlerRegistration;
+
+    public DataTableActionsBar() {
         setStyleName(EntityCSSClass.pyx4j_Entity_DataTableActionsBar.name());
         setWidth("100%");
         HorizontalPanel contentPanel = new HorizontalPanel();
@@ -49,7 +54,6 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
 
         prevAnchor = new Anchor("&lt;&nbsp;Prev", true);
         prevAnchor.setVisible(false);
-        prevAnchor.addClickHandler(prevHandler);
         prevAnchor.getElement().getStyle().setMarginRight(10, Unit.PX);
         contentPanel.add(prevAnchor);
 
@@ -59,12 +63,35 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
         contentPanel.add(countLabel);
 
         nextAnchor = new Anchor("Next&nbsp;&gt;", true);
-        nextAnchor.addClickHandler(nextHandler);
+        nextAnchor.setVisible(false);
         contentPanel.add(nextAnchor);
 
         getElement().getStyle().setProperty("textAlign", "right");
         getElement().getStyle().setProperty("padding", "6px");
 
+    }
+
+    public void setPrevActionHandler(ClickHandler prevActionHandler) {
+        if (prevActionHandlerRegistration != null) {
+            prevActionHandlerRegistration.removeHandler();
+        }
+        if (prevActionHandler != null) {
+            prevActionHandlerRegistration = prevAnchor.addClickHandler(prevActionHandler);
+        } else {
+            prevActionHandlerRegistration = null;
+        }
+
+    }
+
+    public void setNextActionHandler(ClickHandler nextActionHandler) {
+        if (nextActionHandlerRegistration != null) {
+            nextActionHandlerRegistration.removeHandler();
+        }
+        if (nextActionHandler != null) {
+            nextActionHandlerRegistration = nextAnchor.addClickHandler(nextActionHandler);
+        } else {
+            nextActionHandlerRegistration = null;
+        }
     }
 
     public void setDataTableModel(DataTableModel<?> model) {
@@ -77,7 +104,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
 
     @Override
     public void onTableModelChanged(DataTableModelEvent e) {
-        prevAnchor.setVisible(model.getPageNumber() > 0);
+        prevAnchor.setVisible(prevActionHandlerRegistration != null && model.getPageNumber() > 0);
         int from = model.getPageNumber() * model.getPageSize() + 1;
         int to = from + model.getData().size() - 1;
         if (from > to) {
@@ -88,7 +115,7 @@ public class DataTableActionsBar extends HorizontalPanel implements DataTableMod
             countLabel.setText(from + "-" + to);
         }
 
-        nextAnchor.setVisible(model.hasMoreData());
+        nextAnchor.setVisible(nextActionHandlerRegistration != null && model.hasMoreData());
 
     }
 
