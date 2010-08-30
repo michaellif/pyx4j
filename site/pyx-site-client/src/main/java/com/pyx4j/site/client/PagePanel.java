@@ -20,10 +20,6 @@
  */
 package com.pyx4j.site.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,26 +29,26 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
-public class PagePanel extends DynamicHTML {
+public class PagePanel extends ContentPanel {
 
     private static final Logger log = LoggerFactory.getLogger(PagePanel.class);
 
-    private final List<InlineWidget> inlineWidgets = new ArrayList<InlineWidget>();
-
-    private final SitePanel parent;
+    private final PageContainer container;
 
     private final Page page;
 
     public PagePanel(SitePanel parent, Page page, ClientBundleWithLookup bundle) {
-        super(page.data().html().getValue(), bundle, true);
-        this.parent = parent;
+        super(parent);
+        container = new PageContainer(page.data().html().getValue(), bundle, true);
         this.page = page;
-        setStyleName(SiteCSSClass.pyx4j_Site_PagePanel.name());
+        container.setStyleName(SiteCSSClass.pyx4j_Site_PagePanel.name());
+        setWidget(container);
     }
 
     public Page getPage() {
@@ -65,8 +61,8 @@ public class PagePanel extends DynamicHTML {
                 //check in local (page) factory
                 InlineWidget inlineWidget = null;
                 //check in local (page) factory
-                if (parent.getLocalWidgetFactory() != null) {
-                    inlineWidget = parent.getLocalWidgetFactory().createWidget(widgetId);
+                if (getSitePanel().getLocalWidgetFactory() != null) {
+                    inlineWidget = getSitePanel().getLocalWidgetFactory().createWidget(widgetId);
                 }
                 //check in global factory
                 if (inlineWidget == null) {
@@ -78,57 +74,35 @@ public class PagePanel extends DynamicHTML {
                     continue;
                 }
 
-                boolean vladsVersion = true;
+                NodeList<Element> htmlElements = container.getElement().getElementsByTagName("div");
+                boolean replaced = false;
+                if (htmlElements != null) {
+                    for (int i = 0; i < htmlElements.getLength(); i++) {
+                        if (widgetId.endsWith(htmlElements.getItem(i).getId())) {
 
-                if (vladsVersion) {
-
-                    NodeList<Element> htmlElements = this.getElement().getElementsByTagName("div");
-                    boolean replaced = false;
-                    if (htmlElements != null) {
-                        for (int i = 0; i < htmlElements.getLength(); i++) {
-                            if (widgetId.endsWith(htmlElements.getItem(i).getId())) {
-
-                                DivElement el = DivElement.as(htmlElements.getItem(i));
-                                InlineWidgetRootPanel root = new InlineWidgetRootPanel(el, true);
-                                root.add((Widget) inlineWidget);
-                                inlineWidgets.add(inlineWidget);
-                                if (inlineWidget instanceof PageLeavingHandler) {
-                                    addPageLeavingHandler((PageLeavingHandler) inlineWidget);
-                                }
-                                getChildren().add(root);
-                                adopt(root);
-                                replaced = true;
-                                break;
+                            DivElement el = DivElement.as(htmlElements.getItem(i));
+                            InlineWidgetRootPanel root = new InlineWidgetRootPanel(el, true);
+                            root.add((Widget) inlineWidget);
+                            addInlineWidget(inlineWidget);
+                            if (inlineWidget instanceof PageLeavingHandler) {
+                                container.addPageLeavingHandler((PageLeavingHandler) inlineWidget);
                             }
+                            container.addInlineWidget(root);
+                            replaced = true;
+                            break;
                         }
-                    }
-                    if (!replaced) {
-                        log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption().getValue());
-                    }
-
-                } else {
-
-                    InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
-                    if (root != null && inlineWidget != null) {
-                        root.add((Widget) inlineWidget);
-                        inlineWidgets.add(inlineWidget);
-                        if (inlineWidget instanceof PageLeavingHandler) {
-                            addPageLeavingHandler((PageLeavingHandler) inlineWidget);
-                        }
-                    } else {
-                        log.warn("Failed to add inline widget " + widgetId + " to panel.");
                     }
                 }
+                if (!replaced) {
+                    log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption().getValue());
+                }
+
             }
         }
     }
 
-    public HandlerRegistration addPageLeavingHandler(PageLeavingHandler handler) {
-        return addHandler(handler, PageLeavingEvent.TYPE);
-    }
-
     public void onPageLeaving(PageLeavingEvent event) {
-        this.fireEvent(event);
+        container.fireEvent(event);
     }
 
     @Override
@@ -143,10 +117,22 @@ public class PagePanel extends DynamicHTML {
         super.onUnload();
     }
 
-    public void populateInlineWidgets(Map<String, String> args) {
-        for (InlineWidget inlineWidget : inlineWidgets) {
-            inlineWidget.populate(args);
+    class PageContainer extends DynamicHTML {
+
+        public PageContainer(String html, ClientBundleWithLookup bundle, boolean wordWrap) {
+            super(html, bundle, wordWrap);
         }
+
+        void addInlineWidget(InlineWidgetRootPanel widget) {
+            getChildren().add(widget);
+            adopt(widget);
+
+        }
+
+        public HandlerRegistration addPageLeavingHandler(PageLeavingHandler handler) {
+            return container.addHandler(handler, PageLeavingEvent.TYPE);
+        }
+
     }
 
 }
