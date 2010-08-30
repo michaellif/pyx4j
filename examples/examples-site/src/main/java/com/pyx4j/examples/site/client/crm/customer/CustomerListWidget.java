@@ -27,13 +27,13 @@ import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 
 import com.pyx4j.entity.shared.criterion.PathSearch;
-import com.pyx4j.essentials.client.crud.EntityListWidget;
+import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 
-public class CustomerListWidget extends EntityListWidget<Customer> {
+public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
 
     private static Logger log = LoggerFactory.getLogger(CustomerListWidget.class);
 

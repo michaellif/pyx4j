@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
 public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends AbstractEntitySearchCriteriaPanel<E> {
 
-    public EntityListWidget<E> listWidget;
+    public EntityListWithCriteriaWidget<E> listWidget;
 
     public EntitySearchCriteriaPanel(Class<E> clazz) {
         super(clazz);
@@ -97,7 +97,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
 
     }
 
-    public void setListWidget(EntityListWidget<E> listWidget) {
+    public void setListWidget(EntityListWithCriteriaWidget<E> listWidget) {
         this.listWidget = listWidget;
     }
 

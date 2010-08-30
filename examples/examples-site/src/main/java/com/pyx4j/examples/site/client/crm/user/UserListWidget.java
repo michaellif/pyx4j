@@ -25,14 +25,14 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.essentials.client.crud.EntityListWidget;
+import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
 import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class UserListWidget extends EntityListWidget<User> {
+public class UserListWidget extends EntityListWithCriteriaWidget<User> {
 
     public UserListWidget() {
         super(User.class, ExamplesSiteMap.Crm.Users.class, ExamplesSiteMap.Crm.Users.Edit.class, new EntitySearchCriteriaPanel<User>(User.class) {

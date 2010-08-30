@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.essentials.client.crud.EntityListWidget;
+import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
 import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
 import com.pyx4j.examples.domain.crm.Resource;
@@ -35,7 +35,7 @@ import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class ResourceListWidget extends EntityListWidget<Resource> {
+public class ResourceListWidget extends EntityListWithCriteriaWidget<Resource> {
 
     public ResourceListWidget() {
         super(Resource.class, ExamplesSiteMap.Crm.Resource.class, ExamplesSiteMap.Crm.Resource.Edit.class, new EntitySearchCriteriaPanel<Resource>(Resource.class) {

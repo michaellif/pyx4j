@@ -48,9 +48,9 @@ import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
 
-public class EntityListWidget<E extends IEntity> extends DockPanel implements InlineWidget {
+public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel implements InlineWidget {
 
-    private static Logger log = LoggerFactory.getLogger(EntityListWidget.class);
+    private static Logger log = LoggerFactory.getLogger(EntityListWithCriteriaWidget.class);
 
     private final EntitySearchCriteriaPanel<E> searchCriteriaPanel;
 
@@ -71,7 +71,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         REPORT
     }
 
-    public EntityListWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
+    public EntityListWithCriteriaWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
             EntitySearchCriteriaPanel<E> searchCriteriaPanel, final EntitySearchResultsPanel<E> searchResultsPanel) {
         this.serachPage = serachPage;
         this.editorPage = editorPage;
