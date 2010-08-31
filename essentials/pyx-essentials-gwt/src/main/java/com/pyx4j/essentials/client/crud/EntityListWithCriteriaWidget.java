@@ -54,7 +54,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
     private final EntitySearchCriteriaPanel<E> searchCriteriaPanel;
 
-    private final EntitySearchResultsPanel<E> searchResultsPanel;
+    private final EntityListPanel<E> searchResultsPanel;
 
     private final String entityName;
 
@@ -72,7 +72,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
     }
 
     public EntityListWithCriteriaWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
-            EntitySearchCriteriaPanel<E> searchCriteriaPanel, final EntitySearchResultsPanel<E> searchResultsPanel) {
+            EntitySearchCriteriaPanel<E> searchCriteriaPanel, final EntityListPanel<E> searchResultsPanel) {
         this.serachPage = serachPage;
         this.editorPage = editorPage;
         String[] path = clazz.getName().split("\\.");
@@ -82,25 +82,19 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         this.searchResultsPanel = searchResultsPanel;
         searchResultsPanel.setEditorPageType(editorPage);
 
-        ClickHandler prevHandler = new ClickHandler() {
-
+        searchResultsPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 show(searchResultsPanel.getPageNumber() - 1);
             }
+        });
 
-        };
-        searchResultsPanel.setPrevActionHandler(prevHandler);
-
-        ClickHandler nextHandler = new ClickHandler() {
-
+        searchResultsPanel.setNextActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 show(searchResultsPanel.getPageNumber() + 1);
             }
-
-        };
-        searchResultsPanel.setNextActionHandler(nextHandler);
+        });
 
         VerticalPanel leftPanel = new VerticalPanel();
         leftPanel.setWidth("220px");
@@ -222,7 +216,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         return searchCriteriaPanel;
     }
 
-    public EntitySearchResultsPanel<E> getSearchResultsPanel() {
+    public EntityListPanel<E> getSearchResultsPanel() {
         return searchResultsPanel;
     }
 

@@ -39,7 +39,7 @@ import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
 
-public class EntityListPanel<E extends IEntity> extends VerticalPanel {
+public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
     private DataTableModel<E> dataTableModel;
 
@@ -54,7 +54,7 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
     private final DataTableActionsBar lowerActionsBar;
 
     public EntityListPanel(Class<E> clazz) {
-        setWidth("700px");
+        setWidth("100%");
 
         metaEntity = EntityFactory.create(clazz);
         dataTable = new DataTable<E>(false);
@@ -69,24 +69,8 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
         add(lowerActionsBar);
 
         setCellWidth(dataTable, "100%");
-    }
 
-    public void setPrevActionHandler(ClickHandler prevActionHandler) {
-        upperActionsBar.setPrevActionHandler(prevActionHandler);
-        lowerActionsBar.setPrevActionHandler(prevActionHandler);
-    }
-
-    public void setNextActionHandler(ClickHandler nextActionHandler) {
-        upperActionsBar.setNextActionHandler(nextActionHandler);
-        lowerActionsBar.setNextActionHandler(nextActionHandler);
-    }
-
-    public DataTable<E> getDataTable() {
-        return dataTable;
-    }
-
-    public void setColumnDescriptors(List<ColumnDescriptor<E>> columnDescriptors) {
-        dataTableModel = new DataTableModel<E>(metaEntity.getEntityMeta(), columnDescriptors);
+        dataTableModel = new DataTableModel<E>(metaEntity.getEntityMeta(), getColumnDescriptors());
 
         dataTable.setDataTableModel(dataTableModel);
         dataTable.addClickHandler(new ClickHandler() {
@@ -107,6 +91,22 @@ public class EntityListPanel<E extends IEntity> extends VerticalPanel {
         upperActionsBar.setDataTableModel(dataTableModel);
         lowerActionsBar.setDataTableModel(dataTableModel);
 
+    }
+
+    public abstract List<ColumnDescriptor<E>> getColumnDescriptors();
+
+    public void setPrevActionHandler(ClickHandler prevActionHandler) {
+        upperActionsBar.setPrevActionHandler(prevActionHandler);
+        lowerActionsBar.setPrevActionHandler(prevActionHandler);
+    }
+
+    public void setNextActionHandler(ClickHandler nextActionHandler) {
+        upperActionsBar.setNextActionHandler(nextActionHandler);
+        lowerActionsBar.setNextActionHandler(nextActionHandler);
+    }
+
+    public DataTable<E> getDataTable() {
+        return dataTable;
     }
 
     public void populateData(List<E> entityes, int pageNumber, boolean hasMoreData) {

@@ -25,9 +25,9 @@ import java.util.List;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
-import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -49,7 +49,7 @@ public class UserListWidget extends EntityListWithCriteriaWidget<User> {
 
                 return components;
             }
-        }, new EntitySearchResultsPanel<User>(User.class) {
+        }, new EntityListPanel<User>(User.class) {
 
             @Override
             public List<ColumnDescriptor<User>> getColumnDescriptors() {

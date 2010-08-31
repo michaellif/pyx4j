@@ -51,7 +51,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     private static Logger log = LoggerFactory.getLogger(EntityListWidget.class);
 
-    private final EntitySearchResultsPanel<E> searchResultsPanel;
+    private final EntityListPanel<E> searchResultsPanel;
 
     private final EntitySearchCriteria<E> criteria;
 
@@ -64,7 +64,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
     private final MessagePanel messagePanel;
 
     public EntityListWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
-            EntitySearchCriteria<E> criteria, final EntitySearchResultsPanel<E> searchResultsPanel) {
+            EntitySearchCriteria<E> criteria, final EntityListPanel<E> searchResultsPanel) {
         this.serachPage = serachPage;
         this.editorPage = editorPage;
         this.criteria = criteria;
@@ -73,25 +73,19 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         this.searchResultsPanel = searchResultsPanel;
         searchResultsPanel.setEditorPageType(editorPage);
 
-        ClickHandler prevHandler = new ClickHandler() {
-
+        searchResultsPanel.setPrevActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 show(searchResultsPanel.getPageNumber() - 1);
             }
+        });
 
-        };
-        searchResultsPanel.setPrevActionHandler(prevHandler);
-
-        ClickHandler nextHandler = new ClickHandler() {
-
+        searchResultsPanel.setNextActionHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 show(searchResultsPanel.getPageNumber() + 1);
             }
-
-        };
-        searchResultsPanel.setNextActionHandler(nextHandler);
+        });
 
         VerticalPanel leftPanel = new VerticalPanel();
         leftPanel.setWidth("220px");
@@ -178,7 +172,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         searchResultsPanel.populateData(entities, pageNumber, hasMoreData);
     }
 
-    public EntitySearchResultsPanel<E> getSearchResultsPanel() {
+    public EntityListPanel<E> getSearchResultsPanel() {
         return searchResultsPanel;
     }
 

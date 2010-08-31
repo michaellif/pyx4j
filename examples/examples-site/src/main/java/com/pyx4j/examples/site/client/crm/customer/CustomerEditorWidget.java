@@ -103,15 +103,17 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
 
         };
 
-        ordersPanel = new EntityListPanel<Order>(Order.class);
+        ordersPanel = new EntityListPanel<Order>(Order.class) {
+            @Override
+            public List<ColumnDescriptor<Order>> getColumnDescriptors() {
+                List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().description(), "140px"));
+                columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().status(), "80px"));
+                return columnDescriptors;
+            }
+        };
         ordersPanel.setPrevActionHandler(prevHandler);
         ordersPanel.setNextActionHandler(nextHandler);
-
-        List<ColumnDescriptor<Order>> columnDescriptors = new ArrayList<ColumnDescriptor<Order>>();
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(ordersPanel.getMetaEntity(), ordersPanel.getMetaEntity().description(), "140px"));
-        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(ordersPanel.getMetaEntity(), ordersPanel.getMetaEntity().status(), "80px"));
-
-        ordersPanel.setColumnDescriptors(columnDescriptors);
 
         ordersPanel.setEditorPageType(ExamplesSiteMap.Crm.Orders.Edit.class);
 

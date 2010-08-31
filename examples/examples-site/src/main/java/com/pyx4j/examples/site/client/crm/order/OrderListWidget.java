@@ -28,9 +28,9 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.essentials.client.crud.ActionsPanel;
+import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
-import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
 import com.pyx4j.examples.domain.crm.Order;
 import com.pyx4j.examples.domain.crm.Resource;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
@@ -73,7 +73,7 @@ public class OrderListWidget extends EntityListWithCriteriaWidget<Order> {
                 super.onDetach();
             }
 
-        }, new EntitySearchResultsPanel<Order>(Order.class) {
+        }, new EntityListPanel<Order>(Order.class) {
 
             @Override
             public List<ColumnDescriptor<Order>> getColumnDescriptors() {

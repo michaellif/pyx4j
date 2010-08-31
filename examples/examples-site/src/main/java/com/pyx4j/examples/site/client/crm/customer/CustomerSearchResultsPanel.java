@@ -29,16 +29,16 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
-import com.pyx4j.essentials.client.crud.EntitySearchResultsPanel;
+import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.examples.domain.crm.Customer;
 
-public class CustomerSearchResultsPanel extends EntitySearchResultsPanel<Customer> {
+public class CustomerSearchResultsPanel extends EntityListPanel<Customer> {
 
     private final CustomerListMapPanel customerListMapPanel;
 
     public CustomerSearchResultsPanel() {
         super(Customer.class);
-        getListPanel().setWidth("450px");
+        setWidth("450px");
 
         customerListMapPanel = new CustomerListMapPanel();
         customerListMapPanel.getElement().getStyle().setMarginLeft(5, Unit.PX);
