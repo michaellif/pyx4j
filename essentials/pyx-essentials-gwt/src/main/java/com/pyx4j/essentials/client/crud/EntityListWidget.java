@@ -107,8 +107,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         add(searchResultsPanel, DockPanel.CENTER);
     }
 
-    protected ActionsPanel createActionsPanel() {
-        ActionsPanel actionsPanel = new ActionsPanel();
+    protected ActionsBoxPanel createActionsPanel() {
+        ActionsBoxPanel actionsPanel = new ActionsBoxPanel();
         actionsPanel.addItem("New " + entityName, new ClickHandler() {
 
             @Override

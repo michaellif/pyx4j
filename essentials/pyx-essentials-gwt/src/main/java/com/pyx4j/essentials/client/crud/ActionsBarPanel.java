@@ -33,11 +33,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ActionsPanel extends SimplePanel {
+public class ActionsBarPanel extends SimplePanel {
 
     private final VerticalPanel contentPanel;
 
-    public ActionsPanel() {
+    public ActionsBarPanel() {
         setWidth("100%");
         getElement().getStyle().setPadding(2, Unit.PX);
         getElement().getStyle().setMarginBottom(10, Unit.PX);

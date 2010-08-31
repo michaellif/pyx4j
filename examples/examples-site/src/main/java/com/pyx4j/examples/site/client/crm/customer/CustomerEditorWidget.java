@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
-import com.pyx4j.essentials.client.crud.ActionsPanel;
+import com.pyx4j.essentials.client.crud.ActionsBoxPanel;
 import com.pyx4j.essentials.client.crud.EntityEditorPanel;
 import com.pyx4j.essentials.client.crud.EntityEditorWidget;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
@@ -125,8 +125,8 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
     }
 
     @Override
-    protected ActionsPanel createActionsPanel() {
-        ActionsPanel actionsPanel = createActionsPanel(EditorAction.BACK);
+    protected ActionsBoxPanel createActionsPanel() {
+        ActionsBoxPanel actionsPanel = createActionsPanel(EditorAction.BACK);
         actionsPanel.addItem("New Order", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

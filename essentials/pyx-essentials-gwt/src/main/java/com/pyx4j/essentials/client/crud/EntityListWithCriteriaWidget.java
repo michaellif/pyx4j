@@ -113,12 +113,12 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         add(searchResultsPanel, DockPanel.CENTER);
     }
 
-    protected ActionsPanel createActionsPanel() {
+    protected ActionsBoxPanel createActionsPanel() {
         return createActionsPanel(Action.NEW, Action.REPORT);
     }
 
-    protected ActionsPanel createActionsPanel(Action... actions) {
-        ActionsPanel actionsPanel = new ActionsPanel();
+    protected ActionsBoxPanel createActionsPanel(Action... actions) {
+        ActionsBoxPanel actionsPanel = new ActionsBoxPanel();
         for (Action action : actions) {
             switch (action) {
             case NEW:

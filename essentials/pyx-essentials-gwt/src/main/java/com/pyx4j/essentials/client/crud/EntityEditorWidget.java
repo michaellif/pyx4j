@@ -106,12 +106,12 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
 
     }
 
-    protected ActionsPanel createActionsPanel() {
+    protected ActionsBoxPanel createActionsPanel() {
         return createActionsPanel(EditorAction.BACK, EditorAction.PRINT);
     }
 
-    protected ActionsPanel createActionsPanel(EditorAction... actions) {
-        ActionsPanel actionsPanel = new ActionsPanel();
+    protected ActionsBoxPanel createActionsPanel(EditorAction... actions) {
+        ActionsBoxPanel actionsPanel = new ActionsBoxPanel();
         for (EditorAction action : actions) {
             switch (action) {
             case BACK:
