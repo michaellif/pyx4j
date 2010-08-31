@@ -20,13 +20,17 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.shared.criterion.PathSearch;
+import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
@@ -39,7 +43,12 @@ public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
 
     public CustomerListWidget() {
         super(Customer.class, ExamplesSiteMap.Crm.Customers.class, ExamplesSiteMap.Crm.Customers.Edit.class, new CustomerSearchCriteriaPanel(),
-                new CustomerSearchResultsPanel());
+                new EntityListPanel<Customer>(Customer.class) {
+                    @Override
+                    public List<ColumnDescriptor<Customer>> getColumnDescriptors() {
+                        return null;
+                    }
+                });
     }
 
     @Override
