@@ -63,13 +63,6 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     private final MessagePanel messagePanel;
 
-    public static enum Action {
-
-        NEW,
-
-        REPORT
-    }
-
     public EntityListWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
             EntitySearchCriteria<E> criteria, final EntitySearchResultsPanel<E> searchResultsPanel) {
         this.serachPage = serachPage;
