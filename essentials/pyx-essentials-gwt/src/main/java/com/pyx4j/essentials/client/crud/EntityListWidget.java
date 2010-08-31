@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,6 +40,8 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.essentials.client.ReportDialog;
+import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget.Action;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -87,24 +90,33 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
             }
         });
 
-        VerticalPanel leftPanel = new VerticalPanel();
-        leftPanel.setWidth("220px");
-        leftPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
+        SimplePanel actionsHolderPanel = new SimplePanel();
+        actionsHolderPanel.setWidth("220px");
+        actionsHolderPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
 
         messagePanel = new MessagePanel();
-
         add(messagePanel, DockPanel.NORTH);
+
+        add(actionsHolderPanel, DockPanel.NORTH);
+
         Widget actionsPanel = createActionsPanel();
         if (actionsPanel != null) {
-            leftPanel.add(actionsPanel);
+            actionsHolderPanel.add(actionsPanel);
         }
 
         add(searchResultsPanel, DockPanel.CENTER);
     }
 
     protected ActionsPanel createActionsPanel() {
-        return null;
-        //return createActionsPanel(Action.NEW, Action.REPORT);
+        ActionsPanel actionsPanel = new ActionsPanel();
+        actionsPanel.addItem("New " + entityName, new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                AbstractSiteDispatcher.show(new NavigationUri(getEditorPage(), "entity_id", "new"));
+            }
+        });
+        return actionsPanel;
     }
 
     protected Class<? extends NavigNode> getEditorPage() {
