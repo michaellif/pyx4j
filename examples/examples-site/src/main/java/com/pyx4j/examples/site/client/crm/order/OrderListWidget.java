@@ -28,6 +28,7 @@ import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.essentials.client.crud.ActionsBoxPanel;
+import com.pyx4j.essentials.client.crud.ActionsPanel;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
@@ -90,7 +91,7 @@ public class OrderListWidget extends EntityListWithCriteriaWidget<Order> {
     }
 
     @Override
-    protected ActionsBoxPanel createActionsPanel() {
+    protected ActionsPanel createActionsPanel() {
         return createActionsPanel(Action.REPORT);
     }
 
