@@ -111,6 +111,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         add(leftPanel, DockPanel.WEST);
 
         add(searchResultsPanel, DockPanel.CENTER);
+        setCellWidth(searchResultsPanel, "100%");
     }
 
     protected ActionsPanel createActionsPanel() {
