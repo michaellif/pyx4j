@@ -61,9 +61,9 @@ public class EntityServicesImpl {
                 throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
             }
             if (request.getPrimaryKey() == null) {
-                SecurityController.assertPermission(EntityPermission.permissionCreate(request.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionCreate(request));
             } else {
-                SecurityController.assertPermission(EntityPermission.permissionUpdate(request.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionUpdate(request));
             }
             PersistenceServicesFactory.getPersistenceService().persist(request);
             return request;
@@ -78,9 +78,9 @@ public class EntityServicesImpl {
                 throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
             }
             if (request.getPrimaryKey() == null) {
-                SecurityController.assertPermission(EntityPermission.permissionCreate(request.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionCreate(request));
             } else {
-                SecurityController.assertPermission(EntityPermission.permissionUpdate(request.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionUpdate(request));
             }
             PersistenceServicesFactory.getPersistenceService().merge(request);
             return request;
@@ -96,7 +96,7 @@ public class EntityServicesImpl {
             List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(request);
             Vector<IEntity> v = new Vector<IEntity>();
             for (IEntity ent : rc) {
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
                 v.add(ent);
             }
             return v;
@@ -122,7 +122,7 @@ public class EntityServicesImpl {
             SearchResultIterator<IEntity> it = search.getResult(null);
             while (it.hasNext()) {
                 IEntity ent = it.next();
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
                 r.add(ent);
                 if (System.nanoTime() > start + 20L * Consts.SEC2NANO) {
                     r.setQuotaExceeded(true);
@@ -155,7 +155,7 @@ public class EntityServicesImpl {
                 ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
             }
             if (ent != null) {
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
             }
             return ent;
         }
@@ -169,7 +169,7 @@ public class EntityServicesImpl {
             IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
                     request.getPrimaryKey());
             if (ent != null) {
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
+                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
             }
             return ent;
         }
