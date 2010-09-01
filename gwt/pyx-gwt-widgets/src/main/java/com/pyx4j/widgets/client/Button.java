@@ -82,6 +82,9 @@ public class Button extends ButtonBase {
             stylePrefix = CSSClass.pyx4j_Button.name();
         }
 
+        getElement().getStyle().setProperty("outline", "none");
+        getElement().getStyle().setProperty("display", "inline-block");
+
         setStylePrimaryName(getElement(), stylePrefix);
 
         container = DOM.createSpan();

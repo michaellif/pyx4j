@@ -28,8 +28,6 @@ public class CRichTextArea extends CEditableComponent<String> {
 
     private INativeEditableComponent<String> nativeTextArea;
 
-    private final int columns = 40;
-
     private final int rows = 4;
 
     private final boolean popup;
@@ -37,18 +35,19 @@ public class CRichTextArea extends CEditableComponent<String> {
     private IRichTextTidy tidy;
 
     public CRichTextArea() {
-        super();
-        this.popup = false;
+        this(false);
     }
 
     public CRichTextArea(boolean popup) {
         super();
         this.popup = popup;
+        setWidth("100%");
     }
 
     public CRichTextArea(String title, boolean popup) {
         super(title);
         this.popup = popup;
+        setWidth("100%");
     }
 
     @Override
