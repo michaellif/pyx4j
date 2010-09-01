@@ -546,8 +546,13 @@ public class EntityFactoryGenerator extends Generator {
     private List<JMethod> getAllEntityMethods(JClassType interfaceType) {
         Set<String> uniqueNames = new HashSet<String>();
         List<JMethod> allMethods = new Vector<JMethod>();
+        getAllEntityMethods(interfaceType, uniqueNames, allMethods);
+        return allMethods;
+    }
+
+    private void getAllEntityMethods(JClassType interfaceType, Set<String> uniqueNames, List<JMethod> allMethods) {
         for (JMethod method : interfaceType.getMethods()) {
-            if (isEntityMemeber(method)) {
+            if (isEntityMemeber(method) && !uniqueNames.contains(method.getName())) {
                 allMethods.add(method);
                 uniqueNames.add(method.getName());
             }
@@ -555,15 +560,10 @@ public class EntityFactoryGenerator extends Generator {
         for (JClassType impls : interfaceType.getImplementedInterfaces()) {
             if ((impls == iEnentityInterfaceType) || (impls == iObjectInterfaceType)) {
                 continue;
-            }
-            for (JMethod method : impls.getMethods()) {
-                if (isEntityMemeber(method) && !uniqueNames.contains(method.getName())) {
-                    allMethods.add(method);
-                    uniqueNames.add(method.getName());
-                }
+            } else {
+                getAllEntityMethods(impls, uniqueNames, allMethods);
             }
         }
-        return allMethods;
     }
 
     private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
