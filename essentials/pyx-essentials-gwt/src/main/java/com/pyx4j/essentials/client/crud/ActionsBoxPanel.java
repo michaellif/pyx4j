@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -38,16 +39,20 @@ public class ActionsBoxPanel extends ActionsPanel {
 
     public ActionsBoxPanel() {
         setWidth("100%");
-        getElement().getStyle().setPadding(2, Unit.PX);
-        getElement().getStyle().setMarginBottom(10, Unit.PX);
-        getElement().getStyle().setBackgroundColor("#FFFBD3");
-        getElement().getStyle().setBorderColor("#fbf18f");
-        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        getElement().getStyle().setBorderWidth(1, Unit.PX);
 
         FieldSetPanel fieldSetPanel = new FieldSetPanel();
 
-        add(fieldSetPanel);
+        SimplePanel fieldSetHolderPanel = new SimplePanel();
+
+        fieldSetHolderPanel.getElement().getStyle().setPadding(2, Unit.PX);
+        fieldSetHolderPanel.getElement().getStyle().setMarginBottom(10, Unit.PX);
+        fieldSetHolderPanel.getElement().getStyle().setBackgroundColor("#FFFBD3");
+        fieldSetHolderPanel.getElement().getStyle().setBorderColor("#fbf18f");
+        fieldSetHolderPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        fieldSetHolderPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+
+        fieldSetHolderPanel.setWidget(fieldSetPanel);
+        add(fieldSetHolderPanel);
 
         LegendPanel legend = new LegendPanel();
         fieldSetPanel.add(legend);
