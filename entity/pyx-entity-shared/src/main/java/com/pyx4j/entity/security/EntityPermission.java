@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.security;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.security.shared.Permission;
 
@@ -118,7 +119,7 @@ public class EntityPermission extends AbstractCRUDPermission {
 
     @Override
     public String toString() {
-        return getPath() + ((instanceAccess != null) ? " " + instanceAccess.getClass().getSimpleName() : "") + " " + getActions();
+        return getPath() + ((instanceAccess != null) ? " " + GWTJava5Helper.getSimpleName(instanceAccess.getClass()) : "") + " " + getActions();
     }
 
 }
