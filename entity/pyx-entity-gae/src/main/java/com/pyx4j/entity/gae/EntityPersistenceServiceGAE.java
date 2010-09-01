@@ -735,17 +735,26 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
         try {
             List<Entity> entityList = new Vector<Entity>();
+            List<IEntity> iEntityList = new Vector<IEntity>();
             for (IEntity iEntity : entityIterable) {
                 if (entityList.size() >= 500) {
                     datastoreCallStats.get().writeCount++;
-                    datastore.put(entityList);
+                    List<Key> keys = datastore.put(entityList);
+                    for (int i = 0; i < iEntityList.size(); i++) {
+                        iEntityList.get(i).setPrimaryKey(keys.get(i).getId());
+                    }
                     entityList.clear();
+                    iEntityList.clear();
                 }
                 EntityUpdateWrapper entity = createEntity(iEntity, false);
                 entityList.add(entity.entity);
+                iEntityList.add(iEntity);
             }
             datastoreCallStats.get().writeCount++;
-            datastore.put(entityList);
+            List<Key> keys = datastore.put(entityList);
+            for (int i = 0; i < iEntityList.size(); i++) {
+                iEntityList.get(i).setPrimaryKey(keys.get(i).getId());
+            }
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
         }
