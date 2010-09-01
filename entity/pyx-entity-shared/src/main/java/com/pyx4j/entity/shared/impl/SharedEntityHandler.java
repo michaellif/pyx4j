@@ -330,6 +330,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             IPrimitive<?> member = ((IPrimitive<?>) getMember(memberName));
             if (forMessageFormatFormat && (mm.isNumberValueClass())) {
                 return member.getValue();
+            } else if (forMessageFormatFormat && mm.getValueClass().equals(Boolean.class)) {
+                if (member.isBooleanTrue()) {
+                    return Integer.valueOf(1);
+                } else {
+                    return Integer.valueOf(0);
+                }
             } else {
                 return member.getStringView();
             }
@@ -385,6 +391,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return null;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public IEntity cloneEntity() {
         IEntity entity = EntityFactory.create((Class<IEntity>) getObjectClass());
