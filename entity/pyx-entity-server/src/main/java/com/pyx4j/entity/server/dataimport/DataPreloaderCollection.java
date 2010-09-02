@@ -60,7 +60,10 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             findPreloader: for (DataPreloader preloader : childPreloaders) {
                 if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
                     preloader.setParametersValues(info.getParameters());
-                    b.append(preloader.create()).append('\n');
+                    String txt = preloader.create();
+                    if (txt != null) {
+                        b.append(txt).append('\n');
+                    }
                     break findPreloader;
                 }
             }
@@ -74,7 +77,10 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             findPreloader: for (DataPreloader preloader : childPreloaders) {
                 if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
                     preloader.setParametersValues(info.getParameters());
-                    b.append(preloader.delete()).append('\n');
+                    String txt = preloader.delete();
+                    if (txt != null) {
+                        b.append(txt).append('\n');
+                    }
                     break findPreloader;
                 }
             }
@@ -93,6 +99,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         return b.toString();
     }
 
+    @Override
     public String create() {
         StringBuilder b = new StringBuilder();
         for (DataPreloader preloader : childPreloaders) {
@@ -102,6 +109,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         return b.toString();
     }
 
+    @Override
     public String delete() {
         StringBuilder b = new StringBuilder();
         ListIterator<DataPreloader> rit = childPreloaders.listIterator(childPreloaders.size());
