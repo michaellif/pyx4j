@@ -104,7 +104,10 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         StringBuilder b = new StringBuilder();
         for (DataPreloader preloader : childPreloaders) {
             preloader.setParametersValues(parameters);
-            b.append(preloader.create()).append('\n');
+            String txt = preloader.create();
+            if (txt != null) {
+                b.append(txt).append('\n');
+            }
         }
         return b.toString();
     }
@@ -116,7 +119,10 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
         while (rit.hasPrevious()) {
             DataPreloader preloader = rit.previous();
             preloader.setParametersValues(parameters);
-            b.append(preloader.delete()).append('\n');
+            String txt = preloader.delete();
+            if (txt != null) {
+                b.append(txt).append('\n');
+            }
         }
         return b.toString();
     }
