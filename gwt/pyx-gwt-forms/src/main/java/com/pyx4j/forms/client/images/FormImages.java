@@ -20,10 +20,10 @@
  */
 package com.pyx4j.forms.client.images;
 
-import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface FormImages extends ClientBundle {
+public interface FormImages extends ClientBundleWithLookup {
 
     ImageResource triggerUp();
 
