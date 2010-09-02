@@ -38,31 +38,13 @@ public class CronServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(CronServlet.class);
 
-    public static enum AdminJobs {
-
-        PurgeSessions
-
+    protected CronJobsFactory getCronJobsFactory() {
+        return new AdminCronJobsFactory();
     }
 
     protected IDeferredProcess createProcess(HttpServletRequest request) {
-        AdminJobs job;
-        try {
-            job = AdminJobs.valueOf(request.getParameter("job"));
-        } catch (Throwable e) {
-            log.error("unknown cron job {}", request.getParameter("job"));
-            return null;
-        }
-
-        IDeferredProcess process;
-        switch (job) {
-        case PurgeSessions:
-            process = new SessionsPurgeDeferredProcess(false);
-            break;
-        default:
-            log.error("unknown cron job {}", job);
-            return null;
-        }
-        return process;
+        CronJobsFactory factory = getCronJobsFactory();
+        return factory.createProcess(request);
     }
 
     @Override
@@ -74,7 +56,6 @@ public class CronServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
                 return;
             }
-
             DeferredProcessTaskWorkerServlet.defer(process);
         } catch (Throwable e) {
             log.error("cron error", e);
