@@ -64,6 +64,8 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
     private final MessagePanel messagePanel;
 
+    private final VerticalPanel leftPanel;
+
     public static enum Action {
 
         NEW,
@@ -96,7 +98,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
             }
         });
 
-        VerticalPanel leftPanel = new VerticalPanel();
+        leftPanel = new VerticalPanel();
         leftPanel.setWidth("220px");
         leftPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
 
@@ -112,6 +114,10 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
         add(searchResultsPanel, DockPanel.CENTER);
         setCellWidth(searchResultsPanel, "100%");
+    }
+
+    protected void hideLeftPanel() {
+        leftPanel.setVisible(false);
     }
 
     protected ActionsPanel createActionsPanel() {
