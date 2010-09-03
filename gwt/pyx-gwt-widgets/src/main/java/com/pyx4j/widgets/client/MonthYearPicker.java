@@ -57,7 +57,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             monthSelector = new ListBox();
             add(monthSelector);
             String[] months = LocaleInfo.getCurrentLocale().getDateTimeConstants().months();
-            monthSelector.addItem(null);
+            monthSelector.addItem("");
             for (String string : months) {
                 monthSelector.addItem(string);
             }
@@ -67,7 +67,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
         yearSelector = new ListBox();
         add(yearSelector);
-        yearSelector.addItem(null);
+        yearSelector.addItem("");
         for (int i = lastYear; i >= 0; i--) {
             yearSelector.addItem(String.valueOf(i + 1900));
         }
