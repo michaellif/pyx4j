@@ -73,6 +73,8 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private final Class<E> entityClass;
 
+    private boolean requresFocus;
+
     private class DelegatingEntityFormFactory<T extends IEntity> extends EntityFormFactory<T> {
 
         public DelegatingEntityFormFactory(Class<T> entityClass) {
@@ -106,6 +108,8 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         formFactory = new DelegatingEntityFormFactory<E>(entityClass);
         form = formFactory.createForm();
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
+        requresFocus = true;
+
     }
 
     protected abstract IObject<?>[][] getFormMembers();
@@ -131,7 +135,17 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         setFocusOnFirstComponent();
     }
 
+    @Override
+    protected void onUnload() {
+        super.onUnload();
+        requresFocus = true;
+    }
+
     private void setFocusOnFirstComponent() {
+        if (!requresFocus) {
+            return;
+        }
+        requresFocus = false;
         DeferredCommand.addCommand(new Command() {
             @Override
             public void execute() {
