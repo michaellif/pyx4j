@@ -81,6 +81,11 @@ public class MessageFormatTest extends TestCase {
         assertMessageFormat("2st", "{0,choice,1#{1}st|2#{1}nd}", 1, 2);
         assertMessageFormat("2nd", "{0,choice,1#{1}st|2#{1}nd}", 2, 2);
 
+        String pattern10x = "{0,choice,9#{0}|9<10 or more}";
+        assertMessageFormat("7", pattern10x, 7);
+        assertMessageFormat("9", pattern10x, 9);
+        assertMessageFormat("10 or more", pattern10x, 10);
+
         String pattern = "{0,choice,-1#is negative|0#is zero or fraction|1#is one|1.0<is 1+|2#is two|3<is more than 3}";
         assertMessageFormat("is negative", pattern, -2);
         assertMessageFormat("is negative", pattern, -1);
