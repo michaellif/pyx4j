@@ -182,7 +182,11 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return !equalRecursive(form.getOrigValue(), getEntityForSave(), new HashSet<IEntity>());
     }
 
-    public static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
+    public static boolean equalRecursive(IEntity entity1, IEntity entity2) {
+        return equalRecursive(entity1, entity2, new HashSet<IEntity>());
+    }
+
+    private static boolean equalRecursive(IEntity entity1, IEntity entity2, Set<IEntity> processed) {
         if (((entity2 == null) || entity2.isNull())) {
             return isEmptyEntity(entity1);
         } else if ((entity1 == null) || entity1.isNull()) {
@@ -240,7 +244,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return true;
     }
 
-    public static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
+    private static boolean listValuesEquals(IList<?> value1, IList<?> value2, Set<IEntity> processed) {
         if (value1.size() != value2.size()) {
             return false;
         }
