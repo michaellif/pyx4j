@@ -20,16 +20,17 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.forms.client.ui.CAbstractLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeLabel<E> extends Label implements INativeEditableComponent<E> {
+public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> {
 
-    private final CComponent cComponent;
+    private final CAbstractLabel<E> cComponent;
 
-    public NativeLabel(CComponent cComponent) {
+    public NativeLabel(CAbstractLabel<E> cComponent) {
         this.cComponent = cComponent;
     }
 
@@ -53,10 +54,14 @@ public class NativeLabel<E> extends Label implements INativeEditableComponent<E>
     }
 
     public void setNativeValue(E value) {
-        if (value == null) {
-            setText("");
+        String text = "";
+        if (value != null) {
+            text = value.toString();
+        }
+        if (cComponent.isAllowHtml()) {
+            setHTML(text);
         } else {
-            setText(value.toString());
+            setText(text);
         }
     }
 

@@ -39,10 +39,14 @@ public class CEntityLabel extends CAbstractLabel<IEntity> {
         return new NativeLabel<IEntity>(this) {
             @Override
             public void setNativeValue(IEntity value) {
-                if (value == null) {
-                    setText("");
+                String text = "";
+                if (value != null) {
+                    text = value.getStringView();
+                }
+                if (isAllowHtml()) {
+                    setHTML(text);
                 } else {
-                    setText(value.getStringView());
+                    setText(text);
                 }
             }
         };

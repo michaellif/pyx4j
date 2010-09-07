@@ -28,6 +28,8 @@ public class CAbstractLabel<E> extends CEditableComponent<E> {
 
     private boolean wordWrap = false;
 
+    private boolean allowHtml = false;
+
     public CAbstractLabel() {
         this(null);
     }
@@ -67,6 +69,14 @@ public class CAbstractLabel<E> extends CEditableComponent<E> {
             applyAccessibilityRules();
         }
         return nativeLabel;
+    }
+
+    public boolean isAllowHtml() {
+        return allowHtml;
+    }
+
+    public void setAllowHtml(boolean allowHtml) {
+        this.allowHtml = allowHtml;
     }
 
 }
