@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -41,8 +40,6 @@ import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
-import com.pyx4j.essentials.client.ReportDialog;
-import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget.Action;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -69,11 +66,13 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     public EntityListWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
             EntitySearchCriteria<E> criteria, final EntityListPanel<E> searchResultsPanel) {
+
+        setWidth("100%");
+
         this.serachPage = serachPage;
         this.editorPage = editorPage;
         this.criteria = criteria;
-        String[] path = clazz.getName().split("\\.");
-        metaEntity = EntityFactory.create(clazz);
+        this.metaEntity = EntityFactory.create(clazz);
 
         this.searchResultsPanel = searchResultsPanel;
         searchResultsPanel.setEditorPageType(editorPage);
