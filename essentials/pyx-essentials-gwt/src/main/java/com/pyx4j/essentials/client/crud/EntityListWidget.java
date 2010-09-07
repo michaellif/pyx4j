@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.essentials.client.ReportDialog;
@@ -58,13 +59,13 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     private final EntitySearchCriteria<E> criteria;
 
-    private final String entityName;
-
     private final Class<? extends NavigNode> serachPage;
 
     private final Class<? extends NavigNode> editorPage;
 
     private final MessagePanel messagePanel;
+
+    protected final E metaEntity;
 
     public EntityListWidget(Class<E> clazz, final Class<? extends NavigNode> serachPage, final Class<? extends NavigNode> editorPage,
             EntitySearchCriteria<E> criteria, final EntityListPanel<E> searchResultsPanel) {
@@ -72,7 +73,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         this.editorPage = editorPage;
         this.criteria = criteria;
         String[] path = clazz.getName().split("\\.");
-        entityName = path[path.length - 1];
+        metaEntity = EntityFactory.create(clazz);
+
         this.searchResultsPanel = searchResultsPanel;
         searchResultsPanel.setEditorPageType(editorPage);
 
@@ -109,7 +111,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     protected ActionsPanel createActionsPanel() {
         ActionsBarPanel actionsPanel = new ActionsBarPanel();
-        actionsPanel.addItem("New " + entityName, new ClickHandler() {
+        actionsPanel.addItem("New " + metaEntity.getEntityMeta().getCaption(), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -156,7 +158,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
             @Override
             @SuppressWarnings("unchecked")
             public void onSuccess(EntitySearchResult<? extends IEntity> result) {
-                log.debug("Loaded " + result.getData().size() + " " + entityName + "('s) in {} msec ", System.currentTimeMillis() - start);
+                log.debug("Loaded " + result.getData().size() + " " + metaEntity.getEntityMeta().getCaption() + "('s) in {} msec ", System.currentTimeMillis()
+                        - start);
                 List<E> entities = new ArrayList<E>();
                 for (IEntity entity : result.getData()) {
                     entities.add((E) entity);
