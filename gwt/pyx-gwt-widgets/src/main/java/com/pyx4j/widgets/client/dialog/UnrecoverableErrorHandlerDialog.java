@@ -31,6 +31,7 @@ import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.gwt.commons.ApplicationMode;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
@@ -127,7 +128,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         } else if (errorCode != null) {
             detailsMessage = "\n\nErrorCode [" + errorCode + "]";
         }
-        if (caught != null) {
+        if (ApplicationMode.isDevelopment() && (caught != null)) {
             if (detailsMessage == null) {
                 detailsMessage = "";
             }
