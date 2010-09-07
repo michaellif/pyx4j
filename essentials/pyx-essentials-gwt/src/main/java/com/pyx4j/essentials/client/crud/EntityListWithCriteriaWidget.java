@@ -26,6 +26,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -51,6 +53,8 @@ import com.pyx4j.site.shared.meta.NavigNode;
 public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel implements InlineWidget {
 
     private static Logger log = LoggerFactory.getLogger(EntityListWithCriteriaWidget.class);
+
+    private static I18n i18n = I18nFactory.getI18n(EntityListWithCriteriaWidget.class);
 
     private final EntitySearchCriteriaPanel<E> searchCriteriaPanel;
 
@@ -129,7 +133,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         for (Action action : actions) {
             switch (action) {
             case NEW:
-                actionsPanel.addItem("New " + entityName, new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("New") + " " + entityName, new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {
@@ -138,7 +142,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 });
                 break;
             case REPORT:
-                actionsPanel.addItem("Generate Report", new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Generate Report"), new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {
