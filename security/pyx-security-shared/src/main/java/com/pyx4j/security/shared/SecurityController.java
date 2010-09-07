@@ -71,7 +71,7 @@ public abstract class SecurityController {
 
     public static void assertPermission(Permission permission) throws SecurityViolationException {
         if (!checkPermission(permission)) {
-            throw new SecurityViolationException("Permission \'" + permission + "\' denied");
+            throw new SecurityViolationException("Permission denied");
         }
     }
 }
