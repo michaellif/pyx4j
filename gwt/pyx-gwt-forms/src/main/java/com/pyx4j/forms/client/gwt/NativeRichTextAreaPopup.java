@@ -82,7 +82,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
                 }
                 final RichTextAreaPopupPanel editor = new RichTextAreaPopupPanel();
                 editor.setSize("600px", "200px");
-                Dialog dialog = new Dialog("Editor", editor) {
+                Dialog dialog = new Dialog(NativeRichTextAreaPopup.this.textArea.getTitle() + " Editor", editor) {
                     @Override
                     protected void setupFocusManager() {
                         //no impl
