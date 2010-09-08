@@ -42,7 +42,7 @@ import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
-import com.pyx4j.widgets.client.richtext.VerticalRichTextToolbar;
+import com.pyx4j.widgets.client.richtext.BasikRichTextToolbar;
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeRichTextAreaPopup extends DockPanel implements INativeEditableComponent<String> {
@@ -205,7 +205,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
 
         private final RichTextArea richTextArea;
 
-        private final VerticalRichTextToolbar toolbar;
+        private final BasikRichTextToolbar toolbar;
 
         public RichTextAreaPopupPanel() {
             getElement().getStyle().setPadding(30, Unit.PX);
@@ -215,10 +215,10 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
             richTextArea.setWidth("100%");
             richTextArea.setHeight("100%");
 
-            toolbar = new VerticalRichTextToolbar(richTextArea);
+            toolbar = new BasikRichTextToolbar(richTextArea, true);
             toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
 
-            add(toolbar, EAST);
+            add(toolbar, NORTH);
             add(richTextArea, CENTER);
             setCellWidth(richTextArea, "100%");
             setCellHeight(richTextArea, "100%");

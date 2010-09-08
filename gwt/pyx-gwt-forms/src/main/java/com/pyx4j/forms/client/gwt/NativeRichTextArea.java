@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.RichTextArea;
-import com.pyx4j.widgets.client.richtext.VerticalRichTextToolbar;
+import com.pyx4j.widgets.client.richtext.BasikRichTextToolbar;
 
 public class NativeRichTextArea extends DockPanel implements INativeEditableComponent<String> {
 
@@ -43,7 +43,7 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
 
     private boolean nativeValueUpdate = false;
 
-    private final VerticalRichTextToolbar toolbar;
+    private final BasikRichTextToolbar toolbar;
 
     private final Timer keyTimer = new Timer() {
         @Override
@@ -61,7 +61,7 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
 
         textArea.setWidth("100%");
 
-        toolbar = new VerticalRichTextToolbar(richTextArea);
+        toolbar = new BasikRichTextToolbar(richTextArea, false);
         toolbar.getElement().getStyle().setMarginLeft(2, Unit.PX);
         toolbar.setHeight("100%");
 
