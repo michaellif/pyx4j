@@ -30,6 +30,10 @@ import java.util.List;
 
 public class NavigUtils {
 
+    public static final String ENTITY_ID = "id";
+
+    public static final String PARENT_ID = "pid";
+
     public static String getPageUri(Class<? extends NavigNode> node) {
         String[] parts = node.getName().split("\\$");
 

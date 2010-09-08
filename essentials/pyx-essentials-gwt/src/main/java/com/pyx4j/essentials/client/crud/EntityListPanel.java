@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.NavigUtils;
 
 public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
 
@@ -83,7 +84,7 @@ public abstract class EntityListPanel<E extends IEntity> extends VerticalPanel {
                 Cell cell = dataTable.getCellForEvent(event);
                 if (cell != null && cell.getRowIndex() > 0) {
                     E entity = dataTableModel.getData().get(cell.getRowIndex() - 1).getEntity();
-                    AbstractSiteDispatcher.show(new NavigationUri(editorPage, "entity_id", entity.getPrimaryKey().toString()));
+                    AbstractSiteDispatcher.show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
                 }
             }
         });

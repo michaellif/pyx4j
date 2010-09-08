@@ -52,6 +52,7 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.NavigationUri;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
@@ -134,8 +135,8 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
                 if (customer.getPrimaryKey() == null) {
                     MessageDialog.warn("New Order is not allowed", "Customer should be saved first.");
                 } else {
-                    AbstractSiteDispatcher.show(new NavigationUri(ExamplesSiteMap.Crm.Orders.Edit.class, "entity_id", "new", "parent_id", String
-                            .valueOf(customer.getPrimaryKey())));
+                    AbstractSiteDispatcher.show(new NavigationUri(ExamplesSiteMap.Crm.Orders.Edit.class, NavigUtils.ENTITY_ID, "new", NavigUtils.PARENT_ID,
+                            String.valueOf(customer.getPrimaryKey())));
                 }
             }
         });

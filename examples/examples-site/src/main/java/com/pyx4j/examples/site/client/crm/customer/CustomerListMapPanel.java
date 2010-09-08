@@ -172,8 +172,8 @@ public class CustomerListMapPanel extends SimplePanel {
                     map.getInfoWindow().open(
                             marker,
                             new InfoWindowContent("<div style='text-align:center; font-size:14px;background-color:white; padding:2px;'><a href='#"
-                                    + NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id=" + customer.getPrimaryKey() + "'><b>"
-                                    + customer.name().getValue() + "</b></a><br>"
+                                    + NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?" + NavigUtils.ENTITY_ID + "="
+                                    + customer.getPrimaryKey() + "'><b>" + customer.name().getValue() + "</b></a><br>"
 
                                     + customer.address().street().getValue() + ", " + customer.address().city().getValue() + "<br/>"
                                     + customer.address().province().getValue() + ", " + customer.address().zip().getValue()

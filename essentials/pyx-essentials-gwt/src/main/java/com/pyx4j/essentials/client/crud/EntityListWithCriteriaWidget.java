@@ -49,6 +49,7 @@ import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.NavigUtils;
 
 public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel implements InlineWidget {
 
@@ -137,7 +138,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        AbstractSiteDispatcher.show(new NavigationUri(getEditorPage(), "entity_id", "new"));
+                        AbstractSiteDispatcher.show(new NavigationUri(getEditorPage(), NavigUtils.ENTITY_ID, "new"));
                     }
                 });
                 break;

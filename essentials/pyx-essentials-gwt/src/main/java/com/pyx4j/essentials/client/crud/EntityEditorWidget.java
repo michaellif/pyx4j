@@ -49,6 +49,7 @@ import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
+import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
@@ -158,7 +159,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
             throw new RuntimeException("Missing args in URL");
         }
 
-        String entityIdStr = args.get("entity_id");
+        String entityIdStr = args.get(NavigUtils.ENTITY_ID);
 
         if ("new".equals(entityIdStr)) {
             backFromNewItem = 1;
@@ -213,15 +214,15 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
     }
 
     protected void updateHistoryToken(E entity) {
-        String entityIdStr = args.get("entity_id");
+        String entityIdStr = args.get(NavigUtils.ENTITY_ID);
         if (entity != null && entity.getPrimaryKey() != null && "new".equals(entityIdStr)) {
             if (backFromNewItem == 1) {
                 // New Entity saved.
                 backFromNewItem = 2;
             }
             int saveFlag = backFromNewItem;
-            AbstractSiteDispatcher.show(new NavigationUri(editorPage, "entity_id", entity.getPrimaryKey().toString()));
-            args.put("entity_id", entity.getPrimaryKey().toString());
+            AbstractSiteDispatcher.show(new NavigationUri(editorPage, NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString()));
+            args.put(NavigUtils.ENTITY_ID, entity.getPrimaryKey().toString());
             backFromNewItem = saveFlag;
         }
     }

@@ -57,6 +57,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
@@ -96,7 +97,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             @Override
             protected CEditableComponent<?> createComponent(IObject<?> member) {
                 if (member == meta().customer()) {
-                    return new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?entity_id=");
+                    return new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?" + NavigUtils.ENTITY_ID + "=");
                 } else {
                     return super.createComponent(member);
                 }
@@ -170,7 +171,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
                 throw new RuntimeException("Missing args in URL");
             }
 
-            String entityIdStr = args.get("parent_id");
+            String entityIdStr = args.get(NavigUtils.PARENT_ID);
 
             AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
 
