@@ -22,8 +22,9 @@ package com.pyx4j.rpc.shared;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 
-@SuppressWarnings("serial")
 public class UnRecoverableRuntimeException extends RuntimeExceptionSerializable {
+
+    private static final long serialVersionUID = 1L;
 
     public UnRecoverableRuntimeException() {
         super();

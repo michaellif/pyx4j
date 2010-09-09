@@ -22,8 +22,9 @@ package com.pyx4j.security.shared;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 
-@SuppressWarnings("serial")
 public class SecurityViolationException extends RuntimeExceptionSerializable {
+
+    private static final long serialVersionUID = 1L;
 
     protected SecurityViolationException() {
 

@@ -34,7 +34,6 @@ import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
@@ -46,7 +45,7 @@ public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implemen
         ClientEntityFactory.ensureIEntityImplementations();
         ClientLogger.addAppender(new RPCAppender(Level.WARN));
         ClientLogger.setDebugOn(true);
-        UnrecoverableErrorHandlerDialog.register();
+        DefaultErrorHandlerDialog.register();
         log.debug("{}", BrowserType.getCompiledType());
     }
 

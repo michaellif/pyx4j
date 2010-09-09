@@ -44,10 +44,28 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
     /**
      * Only one instance of Dialog is shown.
      */
-    private static boolean unrecoverableErrorDialogShown = false;
+    protected static boolean unrecoverableErrorDialogShown = false;
 
     public static void register() {
         UncaughtHandler.setUnrecoverableErrorHandler(new UnrecoverableErrorHandlerDialog());
+    }
+
+    protected static class SingleInstanceErrorDialog extends Dialog {
+
+        public SingleInstanceErrorDialog(String caption, String message) {
+            super(caption, message, Type.Error, new OkOption() {
+                @Override
+                public boolean onClickOk() {
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public void hide() {
+            unrecoverableErrorDialogShown = false;
+            super.hide();
+        }
     }
 
     /**
@@ -69,8 +87,8 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             @Override
             public void execute() {
                 Throwable cause = caught;
-                if ((caught instanceof UnrecoverableClientError) && (caught.getCause() != null)) {
-                    cause = caught.getCause();
+                while ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause)) {
+                    cause = cause.getCause();
                 }
 
                 if (cause instanceof IncompatibleRemoteServiceException) {
@@ -83,7 +101,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
                     // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
                     showReloadApplicationDialog();
                 } else {
-                    showDefaultErrorDialog(caught, errorCode);
+                    showDefaultErrorDialog(cause, errorCode);
                 }
             }
         });
@@ -111,30 +129,22 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
     }
 
     protected void showThrottleDialog() {
-        MessageDialog.error(i18n.tr("We're sorry"), i18n
-                .tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                        + "To protect our users, we can't process your request at this time."));
+        new SingleInstanceErrorDialog(i18n.tr("We're sorry"),
+                i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
+                        + "To protect our users, we can't process your request at this time.")).show();
     }
 
     protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
 
-        String detailsMessage = null;
+        String detailsMessage = "";
         if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
-            detailsMessage = "\n\nErrorCode ";
-            if (errorCode != null) {
-                detailsMessage += "[" + errorCode + "]\n";
-            }
             detailsMessage += caught.getMessage();
-        } else if (errorCode != null) {
+        }
+        if (ApplicationMode.isDevelopment() && (errorCode != null)) {
             detailsMessage = "\n\nErrorCode [" + errorCode + "]";
         }
+
         if (ApplicationMode.isDevelopment() && (caught != null)) {
-            if (detailsMessage == null) {
-                detailsMessage = "";
-            }
-            if ((caught instanceof UnrecoverableClientError) && (caught.getCause() != null)) {
-                caught = caught.getCause();
-            }
             detailsMessage += "\n" + caught.getClass();
             if (caught instanceof StatusCodeException) {
                 detailsMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
@@ -143,7 +153,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         boolean sessionClosed = closeSessionOnUnrecoverableError();
 
-        Dialog d = new Dialog(i18n.tr("An Unexpected Error Has Occurred"),
+        new SingleInstanceErrorDialog(i18n.tr("An Unexpected Error Has Occurred"),
 
         i18n.tr("Please report the incident to technical support,\n"
 
@@ -151,14 +161,6 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
 
-        + ((detailsMessage != null) ? detailsMessage : ""), Type.Error, new OkOption() {
-            @Override
-            public boolean onClickOk() {
-                unrecoverableErrorDialogShown = false;
-                return true;
-            }
-        });
-        unrecoverableErrorDialogShown = true;
-        d.show();
+        + detailsMessage).show();
     }
 }

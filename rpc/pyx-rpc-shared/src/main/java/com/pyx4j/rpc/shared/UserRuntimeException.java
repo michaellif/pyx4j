@@ -14,29 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 6, 2010
+ * Created on 2010-09-09
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.security.shared;
+package com.pyx4j.rpc.shared;
 
-public class AuthenticationRequiredException extends SecurityViolationException {
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+
+/**
+ * Exception that are safe to shown to user.
+ */
+public class UserRuntimeException extends RuntimeExceptionSerializable {
 
     private static final long serialVersionUID = 1L;
 
-    private boolean developerAccessRequired;
+    protected UserRuntimeException() {
+        super();
+    }
 
-    public AuthenticationRequiredException(String message) {
+    public UserRuntimeException(String message) {
         super(message);
     }
-
-    public AuthenticationRequiredException(String message, boolean developerAccessRequired) {
-        super(message);
-        this.developerAccessRequired = developerAccessRequired;
-    }
-
-    public boolean isDeveloperAccessRequired() {
-        return developerAccessRequired;
-    }
-
 }
