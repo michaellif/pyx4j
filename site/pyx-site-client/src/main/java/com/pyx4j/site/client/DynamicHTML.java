@@ -86,6 +86,7 @@ public class DynamicHTML extends HTMLPanel {
                         newImageElement.setHeight(el.getHeight());
                         newImageElement.setWidth(el.getWidth());
                         newImageElement.setAlt(el.getAlt());
+                        newImageElement.setAttribute("align", el.getAttribute("align"));
                         parent.insertAfter(image.getElement(), el);
                         adoptChild(image);
                         parent.removeChild(el);
