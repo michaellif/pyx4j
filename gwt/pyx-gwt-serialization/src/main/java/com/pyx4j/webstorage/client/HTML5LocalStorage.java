@@ -41,7 +41,7 @@ public class HTML5LocalStorage extends JavaScriptObject {
         return $wnd.localStorage;
     }-*/;
 
-    public final native HTML5LocalStorage getSessionStorage()
+    public static final native HTML5LocalStorage getSessionStorage()
     /*-{
         return $wnd.sessionStorage;
     }-*/;
