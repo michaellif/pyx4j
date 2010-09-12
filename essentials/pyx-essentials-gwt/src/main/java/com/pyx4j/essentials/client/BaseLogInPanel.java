@@ -47,7 +47,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.webstorage.client.HTML5LocalStorage;
+import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
@@ -109,8 +109,8 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         rememberID = (CCheckBox) form.get(form.meta().rememberID());
 
-        if (HTML5LocalStorage.isSupported()) {
-            String userId = HTML5LocalStorage.getLocalStorage().getItem(BaseLogInPanel.HTML5_KEY);
+        if (HTML5Storage.isSupported()) {
+            String userId = HTML5Storage.getLocalStorage().getItem(BaseLogInPanel.HTML5_KEY);
             if (CommonsStringUtils.isStringSet(userId)) {
                 form.get(form.meta().email()).setValue(userId);
                 rememberID.setValue(true);
@@ -179,11 +179,11 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 form.get(form.meta().password()).setValue(null);
                 form.get(form.meta().captcha()).setMandatory(false);
                 ClientContext.authenticated(result);
-                if (HTML5LocalStorage.isSupported()) {
+                if (HTML5Storage.isSupported()) {
                     if (rememberID.getValue()) {
-                        HTML5LocalStorage.getLocalStorage().setItem(BaseLogInPanel.HTML5_KEY, form.get(form.meta().email()).getValue());
+                        HTML5Storage.getLocalStorage().setItem(BaseLogInPanel.HTML5_KEY, form.get(form.meta().email()).getValue());
                     } else {
-                        HTML5LocalStorage.getLocalStorage().removeItem(BaseLogInPanel.HTML5_KEY);
+                        HTML5Storage.getLocalStorage().removeItem(BaseLogInPanel.HTML5_KEY);
                     }
                 }
                 onLogInComplete();

@@ -21,14 +21,22 @@
 package com.pyx4j.webstorage.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
+
+import com.pyx4j.webstorage.client.StorageEvent.NativeStorageEvent;
 
 /**
  * 
  * @see <a href="http://www.w3.org/TR/webstorage/#storage-0">W3C Web Storage - Storage</a>
  */
-public class HTML5LocalStorage extends JavaScriptObject {
+public final class HTML5Storage extends JavaScriptObject {
 
-    protected HTML5LocalStorage() {
+    private static HandlerManager handlerManager;
+
+    private static JavaScriptObject dispatchStorageEvent;
+
+    protected HTML5Storage() {
     }
 
     public static final native boolean isSupported()
@@ -36,12 +44,12 @@ public class HTML5LocalStorage extends JavaScriptObject {
         return typeof $wnd.localStorage != "undefined";
     }-*/;
 
-    public static final native HTML5LocalStorage getLocalStorage()
+    public static final native HTML5Storage getLocalStorage()
     /*-{
         return $wnd.localStorage;
     }-*/;
 
-    public static final native HTML5LocalStorage getSessionStorage()
+    public static final native HTML5Storage getSessionStorage()
     /*-{
         return $wnd.sessionStorage;
     }-*/;
@@ -93,4 +101,41 @@ public class HTML5LocalStorage extends JavaScriptObject {
     /*-{
         this.clear();
     }-*/;
+
+    protected HandlerManager ensureHandlers() {
+        if (dispatchStorageEvent == null) {
+            initEventDispatcher();
+        }
+        if (handlerManager == null) {
+            handlerManager = new HandlerManager(this);
+        }
+        return handlerManager;
+    }
+
+    private native void initEventDispatcher() /*-{
+        @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent = $entry(function(e) {
+        if (!e) { e = $wnd.event; }
+        @com.pyx4j.webstorage.client.HTML5Storage::fireEvent(Lcom/pyx4j/webstorage/client/StorageEvent$NativeStorageEvent;) (e);
+        });
+        if ($wnd.addEventListener) {
+        $wnd.addEventListener("storage", @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent, false);
+        } else {
+        $doc.attachEvent("onstorage", @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent);
+        }
+    }-*/;
+
+    private final static void fireEvent(NativeStorageEvent nativeEvent) {
+        if (handlerManager != null) {
+            handlerManager.fireEvent(new StorageEvent(nativeEvent));
+        }
+    }
+
+    /**
+     * There are no difference now, where you attach Handler LocalStorage or
+     * SessionStorage! We can't distinguish events.
+     */
+    public HandlerRegistration addStorageEventHandler(StorageEventHandler handler) {
+        return ensureHandlers().addHandler(StorageEvent.TYPE, handler);
+    }
+
 }

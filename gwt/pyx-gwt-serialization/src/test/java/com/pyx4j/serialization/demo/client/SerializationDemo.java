@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
@@ -38,14 +39,19 @@ public class SerializationDemo implements EntryPoint {
         StyleManger.installTheme(new WindowsTheme());
         ClientLogger.setDebugOn(true);
 
+        VerticalPanel panel = new VerticalPanel();
+        RootPanel.get().add(panel, 0, 0);
+
         final Button startButton = new Button("Start Tests");
-        RootPanel.get().add(startButton, 0, 0);
+        panel.add(startButton);
         startButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 TestRunnerDialog.createAsync();
             }
         });
+
+        panel.add(new HTML5StorageDemoPanel());
     }
 
 }

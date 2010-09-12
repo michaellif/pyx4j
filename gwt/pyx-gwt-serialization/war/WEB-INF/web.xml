@@ -4,16 +4,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 
-	<filter>
-		<filter-name>GWTCacheFilter</filter-name>
-		<filter-class>com.pyx4j.gwt.server.GWTCacheFilter</filter-class>
-	</filter>
-  
-    <filter-mapping>
-        <filter-name>GWTCacheFilter</filter-name>
-	    <url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>test.html</welcome-file>

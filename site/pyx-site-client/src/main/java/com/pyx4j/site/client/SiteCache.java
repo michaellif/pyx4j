@@ -34,7 +34,7 @@ import com.pyx4j.serialization.client.SymmetricClientSerializationStreamWriter;
 import com.pyx4j.site.rpc.SiteRequest;
 import com.pyx4j.site.rpc.SiteServices;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.webstorage.client.HTML5LocalStorage;
+import com.pyx4j.webstorage.client.HTML5Storage;
 
 /**
  * Use HTML 5 local storage as Cache for site information.
@@ -53,9 +53,9 @@ public class SiteCache {
         final String dataKey = "pyx4j.site." + siteId;
         final Site siteLocal;
         // Read the local site data then check for site update.
-        if (HTML5LocalStorage.isSupported()) {
+        if (HTML5Storage.isSupported()) {
             siteLocal = EntityFactory.create(Site.class);
-            HTML5LocalStorage storage = HTML5LocalStorage.getLocalStorage();
+            HTML5Storage storage = HTML5Storage.getLocalStorage();
             String siteDataSerial = storage.getItem(dataKey);
             if (siteDataSerial != null) {
                 try {
@@ -106,7 +106,7 @@ public class SiteCache {
 
     private static void storeSiteLocaly(String dataKey, Site site) {
         try {
-            HTML5LocalStorage storage = HTML5LocalStorage.getLocalStorage();
+            HTML5Storage storage = HTML5Storage.getLocalStorage();
             SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(RPCManager.getSerializer());
             w.prepareToWrite();
             w.writeObject(site);
