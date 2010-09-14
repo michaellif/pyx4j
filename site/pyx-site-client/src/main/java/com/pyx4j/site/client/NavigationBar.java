@@ -47,12 +47,6 @@ import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NavigationBar extends ComplexPanel {
 
-    public static enum NavigationBarType {
-        Primary, Secondary
-    }
-
-    private final NavigationBarType type;
-
     private final Element ul;
 
     private final List<NavigationTab> tabs = new ArrayList<NavigationTab>();
@@ -61,9 +55,8 @@ public class NavigationBar extends ComplexPanel {
 
     private NavigationTab lastTab;
 
-    public NavigationBar(NavigationBarType type) {
+    public NavigationBar() {
         super();
-        this.type = type;
 
         Element div = Document.get().createDivElement().cast();
         ul = Document.get().createULElement().cast();
@@ -86,7 +79,7 @@ public class NavigationBar extends ComplexPanel {
     }
 
     public void add(String text, String uri) {
-        NavigationTab tab = new NavigationTab(text, uri);
+        NavigationTab tab = new NavigationTab(text, uri, tabs.size());
         if (firstTab == null) {
             firstTab = tab;
             firstTab.addStyleDependentName("first");
@@ -108,70 +101,34 @@ public class NavigationBar extends ComplexPanel {
         }
     }
 
-    class NavigationTabAnchor extends Anchor {
-        NavigationTabAnchor(String text, final String uri) {
-            super("<span>" + text + "</span>", true, "#" + uri);
-            getElement().getStyle().setProperty("outline", "0px");
-            getElement().getStyle().setCursor(Cursor.POINTER);
-
-            addMouseOverHandler(new MouseOverHandler() {
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    getParent().addStyleDependentName("hover");
-                }
-            });
-            addMouseOutHandler(new MouseOutHandler() {
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    getParent().removeStyleDependentName("hover");
-                }
-            });
-
-            addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    AbstractSiteDispatcher.show(uri);
-                    getParent().removeStyleDependentName("hover");
-                }
-            });
-
-        }
-    }
-
     class NavigationTab extends Panel {
 
         private final NavigationTabAnchor anchor;
 
         private final String uri;
 
-        NavigationTab(String text, final String uri) {
+        private final int index;
+
+        NavigationTab(String text, final String uri, int index) {
             this.uri = uri;
+            this.index = index;
 
             setElement(Document.get().createLIElement());
             UIObject.setStyleName(getElement(), SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name());
+            addStyleDependentName(String.valueOf(index));
 
             anchor = new NavigationTabAnchor(text, uri);
 
-            switch (type) {
-            case Primary:
-                if (BrowserType.isIE8()) {
-                    getElement().getStyle().setProperty("display", "inline-block");
-                } else {
-                    getElement().getStyle().setProperty("display", "inline");
-                }
-                anchor.getElement().getStyle().setProperty("display", "inline-block");
-                if (BrowserType.isFirefox()) {
-                    getElement().getStyle().setProperty("cssFloat", "left");
-                } else {
-                    getElement().getStyle().setProperty("float", "left");
-                }
-                break;
-            case Secondary:
-                getElement().getStyle().setProperty("display", "block");
-                break;
-            default:
-                getElement().getStyle().setProperty("display", "block");
-                break;
+            if (BrowserType.isIE8()) {
+                getElement().getStyle().setProperty("display", "inline-block");
+            } else {
+                getElement().getStyle().setProperty("display", "inline");
+            }
+            anchor.getElement().getStyle().setProperty("display", "inline-block");
+            if (BrowserType.isFirefox()) {
+                getElement().getStyle().setProperty("cssFloat", "left");
+            } else {
+                getElement().getStyle().setProperty("float", "left");
             }
 
             DOM.appendChild(getElement(), anchor.getElement());
@@ -182,18 +139,10 @@ public class NavigationBar extends ComplexPanel {
         void setSelected(boolean flag) {
             if (flag) {
                 addStyleDependentName("selected");
+                addStyleDependentName("selected" + index);
             } else {
                 removeStyleDependentName("selected");
-
-            }
-        }
-
-        void setFirst(boolean flag) {
-            if (flag) {
-                addStyleDependentName("first");
-            } else {
-                removeStyleDependentName("first");
-
+                removeStyleDependentName("selected" + index);
             }
         }
 
@@ -226,6 +175,39 @@ public class NavigationBar extends ComplexPanel {
                 public void remove() {
                 }
             };
+        }
+
+        class NavigationTabAnchor extends Anchor {
+            NavigationTabAnchor(String text, final String uri) {
+                super("<span>" + text + "</span>", true, "#" + uri);
+                getElement().getStyle().setProperty("outline", "0px");
+                getElement().getStyle().setCursor(Cursor.POINTER);
+
+                addMouseOverHandler(new MouseOverHandler() {
+                    @Override
+                    public void onMouseOver(MouseOverEvent event) {
+                        getParent().addStyleDependentName("hover");
+                        getParent().addStyleDependentName("hover" + index);
+                    }
+                });
+                addMouseOutHandler(new MouseOutHandler() {
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        getParent().removeStyleDependentName("hover");
+                        getParent().removeStyleDependentName("hover" + index);
+                    }
+                });
+
+                addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        AbstractSiteDispatcher.show(uri);
+                        getParent().removeStyleDependentName("hover");
+                        getParent().removeStyleDependentName("hover" + index);
+                    }
+                });
+
+            }
         }
 
     }

@@ -47,7 +47,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
-import com.pyx4j.site.client.NavigationBar.NavigationBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
@@ -367,7 +366,7 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     protected void createPrimaryNavigationPanel() {
-        primaryNavigationBar = new NavigationBar(NavigationBarType.Primary);
+        primaryNavigationBar = new NavigationBar();
         addToHeaderPanel(primaryNavigationBar);
 
     }
