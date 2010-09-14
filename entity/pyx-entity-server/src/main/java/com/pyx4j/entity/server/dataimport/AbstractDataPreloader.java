@@ -23,8 +23,10 @@ package com.pyx4j.entity.server.dataimport;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -68,6 +70,16 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         ent.setMemberValue("name", name);
         PersistenceServicesFactory.getPersistenceService().persist(ent);
         return ent;
+    }
+
+    public static <T extends IEntity> void createNamed(Class<T> clazz, String... names) {
+        List<T> entToSave = new Vector<T>();
+        for (String name : names) {
+            T ent = EntityFactory.create(clazz);
+            ent.setMemberValue("name", name);
+            entToSave.add(ent);
+        }
+        PersistenceServicesFactory.getPersistenceService().persist(entToSave);
     }
 
     @SuppressWarnings("unchecked")
