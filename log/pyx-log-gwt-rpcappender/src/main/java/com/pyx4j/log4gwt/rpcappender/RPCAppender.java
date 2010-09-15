@@ -56,7 +56,7 @@ public class RPCAppender implements Appender {
 
     private long lastDeliveryAttemptTime;
 
-    private static final long deliveryErrorDelayMillis = 4 * Consts.MIN2MSEC;
+    private static final long deliveryErrorDelayMillis = 2 * Consts.MIN2MSEC;
 
     public RPCAppender() {
         this(Level.DEBUG);
@@ -111,9 +111,10 @@ public class RPCAppender implements Appender {
     private void flush() {
         try {
             // Do not change timer rate, simply wait more when errors are happening  
-            if ((deliveryErrorCount > 3) && ((lastDeliveryAttemptTime + deliveryErrorDelayMillis) < System.currentTimeMillis())) {
+            if ((deliveryErrorCount > 3) && ((lastDeliveryAttemptTime + deliveryErrorDelayMillis) > System.currentTimeMillis())) {
                 return;
             }
+
             if (buffer.size() > 0) {
                 //log.debug("send log events to server");
                 Vector<LogEvent> sendBuffer = buffer;
@@ -127,11 +128,13 @@ public class RPCAppender implements Appender {
                 }
 
                 final AsyncCallback<VoidSerializable> callback = new AsyncCallback<VoidSerializable>() {
+                    @Override
                     public void onSuccess(VoidSerializable result) {
                         suspendErrorMessages = false;
                         deliveryErrorCount = 0;
                     }
 
+                    @Override
                     public void onFailure(Throwable caught) {
                         GWT.log("Execution of LogServices failed", caught);
                         deliveryErrorCount++;
