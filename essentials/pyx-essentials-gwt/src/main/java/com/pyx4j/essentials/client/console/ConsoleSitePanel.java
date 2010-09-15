@@ -49,6 +49,8 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
             return new DBPreloadWidget();
         case console$sessionsAdminWidget:
             return new SessionsAdminWidget();
+        case console$simulation:
+            return new SimulationWidget();
         default:
             return null;
         }

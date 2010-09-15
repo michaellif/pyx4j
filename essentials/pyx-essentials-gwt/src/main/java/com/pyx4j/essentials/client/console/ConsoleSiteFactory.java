@@ -39,6 +39,8 @@ public class ConsoleSiteFactory extends SiteFactory {
 
         site.pages().add(createSingleWidgetPage("Sessions", ConsoleSiteMap.console.Sessions.class, ConsoleSiteMap.Widgets.console$sessionsAdminWidget));
 
+        site.pages().add(createSingleWidgetPage("Simulation", ConsoleSiteMap.console.Simulation.class, ConsoleSiteMap.Widgets.console$simulation));
+
         site.pages().add(createPage("More...", ConsoleSiteMap.console.More.class, "<div>Anything else we may need?</div>"));
 
         return site;

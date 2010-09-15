@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.rpc.admin;
 
+import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -36,5 +37,12 @@ public interface AdminServices {
 
     public interface PurgeAllSessions extends DeferredProcessServices.AbstractStartDeferredProcessService {
 
+    };
+
+    public interface NetworkSimulationSet extends EntityServices.Save, IsIgnoreNetworkSimulationService {
+
+    };
+
+    public interface NetworkSimulationRetrieve extends Service<VoidSerializable, NetworkSimulation>, IsIgnoreNetworkSimulationService {
     };
 }

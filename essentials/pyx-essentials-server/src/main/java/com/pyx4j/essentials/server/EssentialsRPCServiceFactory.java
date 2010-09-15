@@ -20,7 +20,12 @@
  */
 package com.pyx4j.essentials.server;
 
+import java.util.List;
+import java.util.Vector;
+
+import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.server.ReflectionServiceFactory;
 import com.pyx4j.rpc.shared.Service;
 
@@ -42,4 +47,16 @@ public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
         return super.getServiceClass(serviceInterfaceClassName);
     }
 
+    @Override
+    public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {
+        if ((NetworkSimulationServiceFilter.getNetworkSimulationConfig() != null)
+                && (NetworkSimulationServiceFilter.getNetworkSimulationConfig().enabled().isBooleanTrue())) {
+            List<IServiceFilter> filters = new Vector<IServiceFilter>();
+            filters.addAll(super.getServiceFilterChain(serviceClass));
+            filters.add(new NetworkSimulationServiceFilter());
+            return filters;
+        } else {
+            return super.getServiceFilterChain(serviceClass);
+        }
+    }
 }

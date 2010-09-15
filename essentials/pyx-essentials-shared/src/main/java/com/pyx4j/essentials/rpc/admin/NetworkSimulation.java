@@ -14,41 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 4, 2010
+ * Created on 2010-09-15
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client.console;
+package com.pyx4j.essentials.rpc.admin;
 
-import com.pyx4j.site.shared.meta.NavigNode;
-import com.pyx4j.site.shared.meta.SiteMap;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public class ConsoleSiteMap implements SiteMap {
+@Transient
+public interface NetworkSimulation extends IEntity {
 
-    public interface console extends NavigNode {
+    IPrimitive<Boolean> enabled();
 
-        public interface Preload extends NavigNode {
-        }
-
-        public interface Sessions extends NavigNode {
-        }
-
-        public interface Simulation extends NavigNode {
-        }
-
-        public interface More extends NavigNode {
-        }
-
-    }
-
-    public enum Widgets {
-
-        console$preloadWidget,
-
-        console$sessionsAdminWidget,
-
-        console$simulation,
-
-    }
-
+    @Caption(name = "Delay", description = "milliseconds")
+    IPrimitive<Integer> delay();
 }

@@ -24,11 +24,14 @@ import java.text.MessageFormat;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
+import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
+import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
@@ -71,6 +74,25 @@ public class AdminServicesImpl implements AdminServices {
         @Override
         public String execute(VoidSerializable request) {
             return DeferredProcessServicesImpl.register(new SessionsPurgeDeferredProcess(true));
+        }
+
+    }
+
+    public static class NetworkSimulationSetImpl implements AdminServices.NetworkSimulationSet {
+
+        @Override
+        public IEntity execute(IEntity request) {
+            NetworkSimulationServiceFilter.setNetworkSimulationConfig((NetworkSimulation) request);
+            return NetworkSimulationServiceFilter.getNetworkSimulationConfig();
+        }
+
+    }
+
+    public static class NetworkSimulationRetrieveImpl implements AdminServices.NetworkSimulationRetrieve {
+
+        @Override
+        public NetworkSimulation execute(VoidSerializable request) {
+            return NetworkSimulationServiceFilter.getNetworkSimulationConfig();
         }
 
     }

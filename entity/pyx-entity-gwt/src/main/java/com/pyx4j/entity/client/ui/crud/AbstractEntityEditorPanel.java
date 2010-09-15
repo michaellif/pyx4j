@@ -341,7 +341,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     @SuppressWarnings("unchecked")
-    protected void doSave() {
+    public void doSave() {
         ValidationResults validationResults = form.getValidationResults();
         if (!validationResults.isValid()) {
             MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
