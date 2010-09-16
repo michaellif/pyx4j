@@ -5,6 +5,7 @@
     <inherits name='com.google.gwt.user.User'/>
 
     <!-- inherits name='com.google.gwt.http.HTTP'/ -->
+	<inherits name='com.pyx4j.security.Security'/>
 
     <inherits name='com.pyx4j.unit.test.UnitTests'/>
 	<inherits name='com.pyx4j.test.CommonsTests'/>

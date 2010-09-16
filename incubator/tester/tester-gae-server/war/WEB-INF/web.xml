@@ -4,10 +4,25 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
 
+    <context-param>
+        <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
+        <param-value>com.pyx4j.tester.server.TesterServerSideConfiguration</param-value>
+    </context-param>
+    
     <listener>
         <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
     </listener>
 
+    <filter>
+        <filter-name>LifecycleFilter</filter-name>
+        <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LifecycleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>RemoteServiceServlet</servlet-name>

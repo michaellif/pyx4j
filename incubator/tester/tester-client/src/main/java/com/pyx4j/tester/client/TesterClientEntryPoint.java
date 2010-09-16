@@ -75,6 +75,8 @@ public class TesterClientEntryPoint implements EntryPoint {
         });
 
         menu.add(new Image("http://code.google.com/appengine/images/appengine-noborder-120x30.gif"));
+
+        menu.add(new SessionControlPanel());
     }
 
 }
