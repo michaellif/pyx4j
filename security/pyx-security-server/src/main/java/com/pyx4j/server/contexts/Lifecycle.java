@@ -105,7 +105,7 @@ public class Lifecycle {
                 }
             }
             HttpSession newSession = Context.getRequest().getSession(true);
-            log.info("Session {} starts for {}", newSession.getId(), userVisit.getName());
+            log.info("Session {} starts for {}", newSession.getId(), userVisit);
             for (Map.Entry<String, Object> me : keepAttributes.entrySet()) {
                 newSession.setAttribute(me.getKey(), me.getValue());
             }
@@ -120,6 +120,7 @@ public class Lifecycle {
         String sessionToken;
         SecureRandom random = new SecureRandom();
         sessionToken = Long.toHexString(random.nextLong());
+        log.info("Session {} X-XSRF token {}", session.getId(), sessionToken);
 
         Visit visit = new Visit(sessionToken);
         session.setAttribute(Context.SESSION_VISIT, visit);

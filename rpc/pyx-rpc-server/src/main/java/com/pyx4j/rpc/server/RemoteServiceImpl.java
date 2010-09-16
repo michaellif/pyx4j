@@ -81,6 +81,7 @@ public class RemoteServiceImpl implements RemoteService {
             Visit visit = Context.getVisit();
             if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
                 log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
+                log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
                 throw new SecurityViolationException("Request requires authentication.");
             }
         }
