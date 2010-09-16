@@ -68,7 +68,7 @@ public class UserVisit implements Serializable {
 
     @Override
     public String toString() {
-        return getName();
+        return getPrincipalPrimaryKey() + " " + getName();
     }
 
 }

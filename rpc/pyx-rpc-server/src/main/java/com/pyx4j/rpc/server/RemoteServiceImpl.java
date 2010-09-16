@@ -80,6 +80,7 @@ public class RemoteServiceImpl implements RemoteService {
         if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
             Visit visit = Context.getVisit();
             if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
+                log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
                 throw new SecurityViolationException("Request requires authentication.");
             }
         }
@@ -100,7 +101,7 @@ public class RemoteServiceImpl implements RemoteService {
             }
             return returnValue;
         } catch (Throwable e) {
-            log.error("Service call error", e);
+            log.error("Service call error for " + Context.getVisit(), e);
             if (e instanceof RuntimeExceptionSerializable) {
                 throw (RuntimeExceptionSerializable) e;
             } else if (e.getMessage() == null) {

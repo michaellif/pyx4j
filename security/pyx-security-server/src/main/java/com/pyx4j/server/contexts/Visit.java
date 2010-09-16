@@ -134,7 +134,7 @@ public class Visit implements Serializable {
         if (this.userVisit == null) {
             return "anonymous";
         } else {
-            return this.userVisit.getName();
+            return this.userVisit.toString();
         }
     }
 
