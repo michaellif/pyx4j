@@ -25,6 +25,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -40,6 +41,7 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
@@ -68,6 +70,8 @@ public abstract class PhotoAlbum extends DockPanel {
     private final String buttonStyle;
 
     private final boolean editable;
+
+    private final HashMap<Photo, PhotoImage> slidesCache = new HashMap<Photo, PhotoImage>();
 
     public PhotoAlbum(String buttonStyle) {
         this(buttonStyle, true);
@@ -274,7 +278,11 @@ public abstract class PhotoAlbum extends DockPanel {
             Slideshow slideshow = new Slideshow(640, 510, buttonStyle, startFrom, run);
             for (Photo photo : photoList) {
                 HorizontalPanel holder = new HorizontalPanel();
-                PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
+                PhotoImage photoImage = slidesCache.get(photo);
+                if (photoImage == null) {
+                    photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
+                    slidesCache.put(photo, photoImage);
+                }
                 photoImage.getElement().getStyle().setPadding(20, Unit.PX);
                 photoImage.getElement().getStyle().setPaddingBottom(40, Unit.PX);
                 holder.add(photoImage);
@@ -299,9 +307,18 @@ public abstract class PhotoAlbum extends DockPanel {
 
     public abstract void updateCaptionCommand(int index);
 
-    public void onPhotoAdded(Photo photo, int index) {
+    public void onPhotoAdded(final Photo photo, int index) {
         PhotoHolder holder = new PhotoHolder(photo);
         photoPanel.add(holder);
+
+        DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+            @Override
+            public void execute() {
+                PhotoImage photoImage = new PhotoImage(photo.getPhotoUrl(), 600, 450);
+                slidesCache.put(photo, photoImage);
+            }
+        });
+
     }
 
     public void onPhotoRemoved(int index) {
@@ -315,6 +332,7 @@ public abstract class PhotoAlbum extends DockPanel {
 
     public void onClear() {
         photoPanel.clear();
+        slidesCache.clear();
     }
 
 }

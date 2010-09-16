@@ -42,7 +42,7 @@ public class Slideshow extends AbsolutePanel {
 
     private static final Logger log = LoggerFactory.getLogger(Slideshow.class);
 
-    private static final int ANIMATION_ITTERATIONS = 50;
+    private static final int ANIMATION_ITTERATIONS = 20;
 
     private final List<Widget> items;
 
@@ -96,7 +96,7 @@ public class Slideshow extends AbsolutePanel {
             }
         };
         slideChangeTimer.run();
-        slideChangeTimer.scheduleRepeating(10000);
+        slideChangeTimer.scheduleRepeating(6000);
         controlPanel.getStartStopAction().setCaption("&#x25A0;");
     }
 

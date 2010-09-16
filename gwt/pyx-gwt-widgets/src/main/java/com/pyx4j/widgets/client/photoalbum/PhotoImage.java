@@ -20,11 +20,16 @@
  */
 package com.pyx4j.widgets.client.photoalbum;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
 
 public class PhotoImage extends Image {
+
+    private static final Logger log = LoggerFactory.getLogger(PhotoImage.class);
 
     private final int maxWidth;
 
@@ -35,12 +40,12 @@ public class PhotoImage extends Image {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
         setUrl(url);
-        addHandler(new LoadHandler() {
+        addLoadHandler(new LoadHandler() {
             @Override
             public void onLoad(LoadEvent event) {
                 resize();
             }
-        }, LoadEvent.getType());
+        });
     }
 
     private void resize() {
