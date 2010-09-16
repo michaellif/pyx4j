@@ -67,9 +67,16 @@ public abstract class PhotoAlbum extends DockPanel {
 
     private final String buttonStyle;
 
+    private final boolean editable;
+
     public PhotoAlbum(String buttonStyle) {
+        this(buttonStyle, true);
+    }
+
+    public PhotoAlbum(String buttonStyle, boolean editable) {
 
         this.buttonStyle = buttonStyle;
+        this.editable = editable;
 
         actionPanel = new ActionPanel();
         add(actionPanel, DockPanel.NORTH);
@@ -94,7 +101,7 @@ public abstract class PhotoAlbum extends DockPanel {
 
         private boolean showMenuHandler = false;
 
-        private final MenuBar menuButtonBar;
+        private MenuBar menuButtonBar;
 
         private final HTML caption;
 
@@ -131,27 +138,37 @@ public abstract class PhotoAlbum extends DockPanel {
             frame.setCellHeight(caption, "1.6em");
             add(frame, 10, 0);
 
-            ImageResource viewMenu = ImageFactory.getImages().viewMenu();
-            ActionsMenu actionsMenu = new ActionsMenu();
-            MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
-            menuButtonItem.removeStyleName("gwt-MenuItem");
-            menuButtonItem.getElement().getStyle().setCursor(Cursor.POINTER);
-
-            menuButtonBar = new MenuBar() {
+            PhotoHolder.this.addDomHandler(new ClickHandler() {
                 @Override
-                public void onBrowserEvent(Event event) {
-                    if (event.getTypeInt() == Event.ONCLICK) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    super.onBrowserEvent(event);
+                public void onClick(ClickEvent event) {
+                    slideshow(photoPanel.getWidgetIndex(PhotoHolder.this), false);
                 }
-            };
-            menuButtonBar.setVisible(false);
-            menuButtonBar.addItem(menuButtonItem);
+            }, ClickEvent.getType());
 
-            add(menuButtonBar, 187, 5);
+            PhotoHolder.this.getElement().getStyle().setCursor(Cursor.POINTER);
 
+            if (editable) {
+                ImageResource viewMenu = ImageFactory.getImages().viewMenu();
+                ActionsMenu actionsMenu = new ActionsMenu();
+                MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
+                menuButtonItem.removeStyleName("gwt-MenuItem");
+                menuButtonItem.getElement().getStyle().setCursor(Cursor.POINTER);
+
+                menuButtonBar = new MenuBar() {
+                    @Override
+                    public void onBrowserEvent(Event event) {
+                        if (event.getTypeInt() == Event.ONCLICK) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        super.onBrowserEvent(event);
+                    }
+                };
+                menuButtonBar.setVisible(false);
+                menuButtonBar.addItem(menuButtonItem);
+
+                add(menuButtonBar, 187, 5);
+            }
         }
 
         void setCaption(String captionText) {
@@ -169,6 +186,8 @@ public abstract class PhotoAlbum extends DockPanel {
                         updateCaptionCommand(photoPanel.getWidgetIndex(PhotoHolder.this));
                     }
                 });
+                addItem(editCaptionMenu);
+
                 MenuItem deletePhotoMenu = new MenuItem("Delete Photo", true, new Command() {
 
                     @Override
@@ -176,7 +195,6 @@ public abstract class PhotoAlbum extends DockPanel {
                         model.removePhoto(photoPanel.getWidgetIndex(PhotoHolder.this));
                     }
                 });
-                addItem(editCaptionMenu);
                 addItem(deletePhotoMenu);
 
                 addCloseHandler(new CloseHandler<PopupPanel>() {
@@ -205,13 +223,6 @@ public abstract class PhotoAlbum extends DockPanel {
                     }
                 }, MouseOutEvent.getType());
 
-                PhotoHolder.this.addDomHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        slideshow(photoPanel.getWidgetIndex(PhotoHolder.this), false);
-                    }
-                }, ClickEvent.getType());
-
             }
 
             @Override
@@ -228,7 +239,7 @@ public abstract class PhotoAlbum extends DockPanel {
 
         private final Button slideshowButton;
 
-        private final Button addPhotoButton;
+        private Button addPhotoButton;
 
         public ActionPanel() {
             slideshowButton = new Button("Slideshow");
@@ -241,15 +252,17 @@ public abstract class PhotoAlbum extends DockPanel {
             });
             add(slideshowButton);
 
-            addPhotoButton = new Button("Add photo");
-            addPhotoButton.getElement().getStyle().setMargin(12, Unit.PX);
-            addPhotoButton.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    addPhotoCommand();
-                }
-            });
-            add(addPhotoButton);
+            if (editable) {
+                addPhotoButton = new Button("Add photo");
+                addPhotoButton.getElement().getStyle().setMargin(12, Unit.PX);
+                addPhotoButton.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        addPhotoCommand();
+                    }
+                });
+                add(addPhotoButton);
+            }
         }
     }
 
