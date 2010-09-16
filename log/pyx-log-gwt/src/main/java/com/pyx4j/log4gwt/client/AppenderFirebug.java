@@ -39,20 +39,27 @@ public class AppenderFirebug implements Appender {
 
     @Override
     public void doAppend(LogEvent event) {
-        switch (event.getLevel()) {
-        case ERROR:
-            error(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
-            break;
-        case WARN:
-            warn(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
-            break;
-        case INFO:
-            info(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
-            break;
-        case TRACE:
-        case DEBUG:
-            debug(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
-            break;
+        try {
+            switch (event.getLevel()) {
+            case ERROR:
+                error(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
+                break;
+            case WARN:
+                warn(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
+                break;
+            case INFO:
+                info(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
+                break;
+            case TRACE:
+            case DEBUG:
+                debug(LogFormatter.format(event, LogFormatter.FormatStyle.LINE));
+                break;
+            }
+        } catch (Throwable e) {
+            // Happens when navigating away to different module.
+            if (supported()) {
+                throw new Error(e);
+            }
         }
     }
 

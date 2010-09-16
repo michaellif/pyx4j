@@ -72,18 +72,21 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
         } else {
             try {
                 if (!(caught instanceof IncompatibleRemoteServiceException)) {
-                    log.error("An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ")
-                    /* + Logger. retriveTraceInfo ( ) */
-                    + ";\n UserAgent " + userAgent(), caught);
-                    GoogleAnalytics.track("unrecoverableError");
+                    try {
+                        log.error("An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ")
+                        /* + Logger. retriveTraceInfo ( ) */
+                        + ";\n UserAgent " + userAgent(), caught);
+                        GoogleAnalytics.track("unrecoverableError");
+                    } catch (Throwable ignore) {
+                    }
                 }
                 if (UncaughtHandler.delegate != null) {
                     UncaughtHandler.delegate.onUnrecoverableError(caught, errorCode);
                 } else {
-                    Window.alert("An Unexpected Error Has Occurred");
+                    Window.alert("An Unexpected Error Has Occurred." + (ApplicationMode.isDevelopment() ? "\n" + caught : ""));
                 }
             } catch (Throwable e) {
-                Window.alert("An Unexpected Error Has Occurred");
+                Window.alert("An Unexpected Error Has Occurred!" + (ApplicationMode.isDevelopment() ? "\n" + caught : ""));
                 log.error("Internal error [UH]", e);
             }
         }
