@@ -66,8 +66,11 @@ public class NavigUtils {
     public static String absoluteUrl(String appUrl, Class<? extends NavigNode> node, String... encodedComponentsNameValue) {
         StringBuilder b = new StringBuilder();
         b.append(appUrl);
-        b.append("#");
-        b.append(NavigUtils.getPageUri(node));
+
+        if (node != null) {
+            b.append("#");
+            b.append(NavigUtils.getPageUri(node));
+        }
 
         if (encodedComponentsNameValue != null) {
             boolean first = true;
