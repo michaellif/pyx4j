@@ -72,9 +72,12 @@ public class NavigationUri {
         addArg(name2, value2);
     }
 
-    public static Map<String, String> parsArgs(String substring) {
+    public static Map<String, String> parsArgs(String queryString) {
+        if (queryString.startsWith(ARGS_GROUP_SEPARATOR)) {
+            queryString = queryString.substring(1);
+        }
         Map<String, String> args = new HashMap<String, String>();
-        String[] nameValues = substring.split(ARGS_SEPARATOR);
+        String[] nameValues = queryString.split(ARGS_SEPARATOR);
         if (nameValues.length > 0) {
             for (int i = 0; i < nameValues.length; i++) {
                 String[] nameAndValue = nameValues[i].split(NAME_VALUE_SEPARATOR);
