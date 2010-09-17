@@ -31,6 +31,7 @@ public interface WidgetsImages extends ClientBundle {
 
     public ImageResource groupBoxClose();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     public ImageResource viewMenu();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
