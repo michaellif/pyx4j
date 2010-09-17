@@ -124,7 +124,7 @@ public class HTML5StorageDemoPanel extends GroupBoxPanel {
     private void addListeners() {
         HTML5Storage.getLocalStorage().addStorageEventHandler(new StorageEventHandler() {
             @Override
-            public void onOptionsChange(StorageEvent event) {
+            public void onStorageChange(StorageEvent event) {
                 log.debug("Storage Event {} at {} ", event.getKey(), event.getUrl());
                 log.debug("Storage Event {} -> {} ", event.getOldValue(), event.getNewValue());
                 eventCount++;

@@ -30,6 +30,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
@@ -37,8 +38,11 @@ import com.pyx4j.rpc.client.RPCStatusChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.webstorage.client.HTML5Storage;
+import com.pyx4j.webstorage.client.StorageEvent;
+import com.pyx4j.webstorage.client.StorageEventHandler;
 
-public class SessionMonitor implements RPCStatusChangeHandler {
+public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SessionMonitor.class);
 
@@ -52,6 +56,8 @@ public class SessionMonitor implements RPCStatusChangeHandler {
 
     private String sessionCookieValue;
 
+    private String sessionCookieValueHashCode;
+
     private Timer timer;
 
     private long sessionStart;
@@ -59,6 +65,8 @@ public class SessionMonitor implements RPCStatusChangeHandler {
     private long lastActivity = 0;
 
     private boolean logChangeSessionCookieOnce = true;
+
+    private static final String SESSION_ID_KEY = "pyx.session-key";
 
     public static void startMonitoring() {
         if (instance == null) {
@@ -90,6 +98,9 @@ public class SessionMonitor implements RPCStatusChangeHandler {
 
     protected SessionMonitor() {
         RPCManager.addRPCStatusChangeHandler(this);
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.getLocalStorage().addStorageEventHandler(this);
+        }
     }
 
     private void onAuthenticationChange() {
@@ -100,9 +111,13 @@ public class SessionMonitor implements RPCStatusChangeHandler {
                 update();
             }
         } else {
+            update();
             if (monitoring) {
                 stop();
             }
+        }
+        if (HTML5Storage.isSupported()) {
+            HTML5Storage.getLocalStorage().setItem(SESSION_ID_KEY, sessionCookieValueHashCode);
         }
     }
 
@@ -135,8 +150,21 @@ public class SessionMonitor implements RPCStatusChangeHandler {
     }
 
     private void update() {
-        sessionCookieName = ClientContext.getServerSession().getSessionCookieName();
-        sessionCookieValue = Cookies.getCookie(sessionCookieName);
+        if (ClientContext.hasServerSession()) {
+            sessionCookieName = ClientContext.getServerSession().getSessionCookieName();
+        } else {
+            sessionCookieName = null;
+        }
+        if (sessionCookieName == null) {
+            sessionCookieValue = null;
+        } else {
+            sessionCookieValue = Cookies.getCookie(sessionCookieName);
+        }
+        if (sessionCookieValue == null) {
+            sessionCookieValueHashCode = "";
+        } else {
+            sessionCookieValueHashCode = String.valueOf(sessionCookieValue.hashCode());
+        }
     }
 
     private void stop() {
@@ -171,6 +199,16 @@ public class SessionMonitor implements RPCStatusChangeHandler {
                 onSessionInactive(false);
             }
         }
+    }
+
+    @Override
+    public void onStorageChange(StorageEvent event) {
+        String newHashCode = HTML5Storage.getLocalStorage().getItem(SESSION_ID_KEY);
+        if (!CommonsStringUtils.equals(sessionCookieValueHashCode, newHashCode)) {
+            log.debug("Session change {} -> {}", newHashCode, sessionCookieValueHashCode);
+            ClientContext.obtainAuthenticationData(null, true, false);
+        }
+
     }
 
 }

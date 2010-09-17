@@ -33,5 +33,5 @@ public interface StorageEventHandler extends EventHandler {
      * @param event
      *            the {@link StorageEvent} that was fired
      */
-    void onOptionsChange(StorageEvent event);
+    void onStorageChange(StorageEvent event);
 }

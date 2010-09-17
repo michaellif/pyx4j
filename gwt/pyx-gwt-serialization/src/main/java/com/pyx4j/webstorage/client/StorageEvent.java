@@ -146,7 +146,7 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
 
     @Override
     protected void dispatch(StorageEventHandler handler) {
-        handler.onOptionsChange(this);
+        handler.onStorageChange(this);
     }
 
 }
