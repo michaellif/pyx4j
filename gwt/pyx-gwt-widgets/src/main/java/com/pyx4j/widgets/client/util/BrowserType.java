@@ -48,6 +48,14 @@ public class BrowserType {
         return (impl.getType() == Browser.IE);
     }
 
+    public static final boolean isOpera() {
+        return (impl.getType() == Browser.OPERA);
+    }
+
+    public static final boolean isSafari() {
+        return (impl.getType() == Browser.SAFARI);
+    }
+
     public static final Browser getType() {
         return impl.getType();
     }
