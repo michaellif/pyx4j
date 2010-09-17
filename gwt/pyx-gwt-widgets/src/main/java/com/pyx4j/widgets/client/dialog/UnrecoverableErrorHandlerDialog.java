@@ -138,7 +138,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         String detailsMessage = "";
         if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
-            detailsMessage += caught.getMessage();
+            detailsMessage += "\n" + caught.getMessage();
         }
         if (ApplicationMode.isDevelopment() && (errorCode != null)) {
             detailsMessage += "\n\nErrorCode [" + errorCode + "]";

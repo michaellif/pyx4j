@@ -68,6 +68,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -703,12 +704,23 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity = new Entity(key);
             }
         }
-        EntityUpdateWrapper entityUpdateWrapper = new EntityUpdateWrapper(entity, merge && isUpdate);
         String updatedTs = entityMeta.getUpdatedTimestampMember();
-        if (updatedTs != null) {
-            iEntity.setMemberValue(updatedTs, new Date());
+        if (merge && isUpdate && (updatedTs != null)) {
+            if (!EqualsHelper.equals(iEntity.getMemberValue(updatedTs), entity.getProperty(updatedTs))) {
+                throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", entityMeta.getCaption()));
+            }
         }
+
+        EntityUpdateWrapper entityUpdateWrapper = new EntityUpdateWrapper(entity, merge && isUpdate);
         updateEntityProperties(entityUpdateWrapper, iEntity, merge, isUpdate);
+
+        if (updatedTs != null) {
+            if (entityUpdateWrapper.updated) {
+                Date now = new Date();
+                iEntity.setMemberValue(updatedTs, now);
+                entityUpdateWrapper.setProperty(updatedTs, iEntity.getEntityMeta().getMemberMeta(updatedTs).isIndexed(), now);
+            }
+        }
 
         return entityUpdateWrapper;
     }
