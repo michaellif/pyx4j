@@ -107,6 +107,13 @@ public class AjaxJSLoader {
 
     static Map<String, ApiInstance> apis = new HashMap<String, ApiInstance>();
 
+    /**
+     * 
+     * @param apiUrl
+     *            example "(ssl|www).google-analytics.com/ga.js"
+     * @param isJSLoaded
+     * @param onLoad
+     */
     public static synchronized void load(final String apiUrl, IsJSLoaded isJSLoaded, Runnable onLoad) {
         ApiInstance instance = apis.get(apiUrl);
         if (instance == null) {

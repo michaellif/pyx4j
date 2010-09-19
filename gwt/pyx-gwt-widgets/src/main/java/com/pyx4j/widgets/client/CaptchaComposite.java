@@ -68,6 +68,8 @@ public class CaptchaComposite extends SimplePanel {
 
     private final Image toAudio;
 
+    private static String javaScriptURL = "www.google.com/recaptcha/api/js/recaptcha_ajax.js";
+
     public CaptchaComposite() {
         // Image 300x57 pixels
         this.getElement().getStyle().setHeight(57 + 30, Unit.PX);
@@ -216,8 +218,15 @@ public class CaptchaComposite extends SimplePanel {
         $wnd.Recaptcha.showhelp();
     }-*/;
 
+    /**
+     * Old url looks different. "(api-secure|api).recaptcha.net/js/recaptcha_ajax.js"
+     */
+    public static void setJavaScriptURL(String url) {
+        javaScriptURL = url;
+    }
+
     private void createChallenge() {
-        AjaxJSLoader.load("www.google.com/recaptcha/api/js/recaptcha_ajax.js", new AjaxJSLoader.IsJSLoaded() {
+        AjaxJSLoader.load(javaScriptURL, new AjaxJSLoader.IsJSLoaded() {
 
             @Override
             public native boolean isLoaded() /*-{
