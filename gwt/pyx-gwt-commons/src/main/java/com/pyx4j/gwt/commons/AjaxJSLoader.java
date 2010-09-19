@@ -110,7 +110,7 @@ public class AjaxJSLoader {
     /**
      * 
      * @param apiUrl
-     *            example "(ssl|www).google-analytics.com/ga.js"
+     *            Example "(ssl|www).google-analytics.com/ga.js"
      * @param isJSLoaded
      * @param onLoad
      */
