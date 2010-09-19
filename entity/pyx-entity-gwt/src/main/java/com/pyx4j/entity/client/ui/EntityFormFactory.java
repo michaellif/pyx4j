@@ -23,9 +23,11 @@ package com.pyx4j.entity.client.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.FormFactory;
@@ -77,6 +79,15 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
                     components[i][j] = form.get(member);
                 } else {
                     components[i][j] = createComponent(member);
+                    MemberMeta mm = member.getMeta();
+                    if (components[i][j] instanceof CEditableComponent && mm.isValidatorAnnotationPresent(NotNull.class)) {
+                        ((CEditableComponent) components[i][j]).setMandatory(true);
+                    }
+
+                    if (mm.getDescription() != null) {
+                        components[i][j].setToolTip(mm.getDescription());
+                    }
+                    components[i][j].setTitle(mm.getCaption());
                     form.bind((CEditableComponent<?>) components[i][j], member.getPath());
                 }
             }

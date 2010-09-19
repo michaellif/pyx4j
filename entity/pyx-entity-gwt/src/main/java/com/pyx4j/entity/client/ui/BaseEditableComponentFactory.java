@@ -120,14 +120,6 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
         } else {
             comp = new CTextField();
         }
-        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
-            comp.setMandatory(true);
-        }
-
-        if (mm.getDescription() != null) {
-            comp.setToolTip(mm.getDescription());
-        }
-        comp.setTitle(mm.getCaption());
         return comp;
     }
 }
