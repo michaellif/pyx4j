@@ -32,6 +32,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -61,7 +62,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     private final Class<? extends NavigNode> editorPage;
 
-    private final MessagePanel messagePanel;
+    private final HTML descriptionPanel;
 
     protected final E metaEntity;
 
@@ -96,8 +97,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         actionsHolderPanel.setWidth("220px");
         actionsHolderPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
 
-        messagePanel = new MessagePanel();
-        add(messagePanel, DockPanel.NORTH);
+        descriptionPanel = new HTML();
+        add(descriptionPanel, DockPanel.NORTH);
 
         add(actionsHolderPanel, DockPanel.NORTH);
 
@@ -107,6 +108,10 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         }
 
         add(searchResultsPanel, DockPanel.CENTER);
+    }
+
+    public void setDescription(String description) {
+        descriptionPanel.setHTML(description);
     }
 
     protected ActionsPanel createActionsPanel() {
