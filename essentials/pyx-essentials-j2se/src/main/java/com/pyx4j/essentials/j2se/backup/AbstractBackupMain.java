@@ -50,13 +50,15 @@ public abstract class AbstractBackupMain {
 
         BackupConsumer consumer;
         if (isFile(argTo)) {
-            consumer = new LocalDatastoreBackupConsumer(argTo, true);
+            consumer = createBackupConsumer(argTo);
         } else {
             consumer = new ServerBackupConsumer(createConnection("Backup Consumer", argTo));
         }
 
         long start = System.currentTimeMillis();
         try {
+            receiver.start();
+            consumer.start();
             receiver.copy(consumer, allClasses());
         } finally {
             receiver.end();
@@ -68,6 +70,14 @@ public abstract class AbstractBackupMain {
     protected abstract boolean isFile(String arg);
 
     protected abstract J2SEService createConnection(String name, String arg);
+
+    protected BackupConsumer createBackupConsumer(String name) {
+        if (name.endsWith(".xml")) {
+            return new LocalXMLBackupConsumer(name, true);
+        } else {
+            return new LocalDatastoreBackupConsumer(name, true);
+        }
+    }
 
     public abstract Class<? extends IEntity>[] allClasses();
 
