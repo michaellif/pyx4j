@@ -38,7 +38,7 @@ public class GoogleAccountsLoginPopup {
     }
 
     public static void open() {
-        PopupWindow.open("/login", "Login", 514, 468);
+        PopupWindow.open("/login", "Login", 660, 580);
     }
 
     private static void registerCallbacks() {
