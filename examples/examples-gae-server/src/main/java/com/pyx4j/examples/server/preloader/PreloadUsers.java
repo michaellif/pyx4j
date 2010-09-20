@@ -65,6 +65,13 @@ public class PreloadUsers extends AbstractDataPreloader {
 
         createUser("CRM Admin", DemoData.CRM_ADMIN_USER_PREFIX + "001" + DemoData.USERS_DOMAIN, ExamplesBehavior.CRM_ADMIN);
 
+        createUser("Misha", "michael.lifschitz@gmail.com", ExamplesBehavior.CRM_ADMIN);
+        createUser("Vlad", "skarzhevskyy@gmail.com", ExamplesBehavior.CRM_ADMIN);
+        createUser("Tester", "test1@pyx4j.com", ExamplesBehavior.CRM_ADMIN);
+        if (isGAEDevelopment()) {
+            createUser("Developer", "test@example.com", ExamplesBehavior.CRM_ADMIN);
+        }
+
         for (int i = 1; i < DemoData.maxCustomers; i++) {
             createUser("Customer No" + CommonsStringUtils.d000(i), DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN,
                     ExamplesBehavior.CRM_CUSTOMER);

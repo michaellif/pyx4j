@@ -63,6 +63,21 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <servlet-class>com.pyx4j.security.server.GoogleAccountsLoginHttpServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/loginCompleted</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>CronServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.admin.CronServlet</servlet-class>
     </servlet>
@@ -91,6 +106,17 @@
         <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/download/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>DebugServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/debug/*</url-pattern>
+    </servlet-mapping>
+    
     
     <!-- Default page -->
     <welcome-file-list>

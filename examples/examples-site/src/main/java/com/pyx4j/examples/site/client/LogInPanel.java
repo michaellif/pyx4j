@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.essentials.client.BaseLogInPanel;
+import com.pyx4j.essentials.client.GoogleAccountsLoginPopup;
 import com.pyx4j.examples.domain.DemoData;
 import com.pyx4j.examples.domain.ExamplesBehavior;
 import com.pyx4j.security.client.ClientContext;
@@ -35,6 +36,8 @@ public abstract class LogInPanel extends BaseLogInPanel {
     private int devCount = 1;
 
     private int devKey = 0;
+
+    public static final boolean useLoginPopup = true;
 
     public LogInPanel() {
 
@@ -92,7 +95,11 @@ public abstract class LogInPanel extends BaseLogInPanel {
 
     @Override
     public void onForgotPasswordRequest() {
-        ClientContext.googleAccountsLogin(ExamplesSiteDispatcher.getLogedInURL());
+        if (useLoginPopup) {
+            GoogleAccountsLoginPopup.open();
+        } else {
+            ClientContext.googleAccountsLogin(ExamplesSiteDispatcher.getLogedInURL());
+        }
     }
 
 }

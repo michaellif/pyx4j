@@ -67,7 +67,9 @@ public abstract class ExamplesSitePanel extends SitePanel {
                     @Override
                     public void onLogInComplete() {
                         dialog.hide();
-                        AbstractSiteDispatcher.show(ExamplesSiteMap.Crm.Customers.class);
+                        if (ClientContext.isAuthenticated()) {
+                            AbstractSiteDispatcher.show(ExamplesSiteMap.Crm.Customers.class);
+                        }
                     }
 
                 };
