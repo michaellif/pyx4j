@@ -30,8 +30,6 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -44,8 +42,6 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler {
     private static final Logger log = LoggerFactory.getLogger(Tooltip.class);
 
     private static final int DELAY_TO_SHOW = 300;
-
-    private static final int DELAY_TO_HIDE = 7000;
 
     private static TooltipPanel tooltipPanel;
 
@@ -99,24 +95,10 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler {
                     if (target.isAttached() && target.isVisible()) {
                         textPane.setHTML(text);
                         TooltipPanel.this.showRelativeTo(target);
-                        scheduleHide();
                     }
                 }
             };
             delayShowTimer.schedule((System.currentTimeMillis() - hideTimeStamp > 200) ? DELAY_TO_SHOW : 200);
-        }
-
-        private void scheduleHide() {
-            if (delayHideTimer != null) {
-                delayHideTimer.cancel();
-            }
-            delayHideTimer = new Timer() {
-                @Override
-                public void run() {
-                    TooltipPanel.this.hide();
-                }
-            };
-            delayHideTimer.schedule(DELAY_TO_HIDE);
         }
 
         @Override
