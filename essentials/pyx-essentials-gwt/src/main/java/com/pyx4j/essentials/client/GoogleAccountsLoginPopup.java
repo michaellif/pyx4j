@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.PopupWindow;
@@ -41,6 +42,11 @@ public class GoogleAccountsLoginPopup {
         PopupWindow.open("/login", "Login", 660, 580);
     }
 
+    public static void logout() {
+        PopupWindow.open("/logout", "Logout", PopupWindow.windowScreenLeft() + Window.getClientWidth() - 100,
+                PopupWindow.windowScreenTop() + Window.getClientHeight() - 40, 100, 40);
+    }
+
     private static void registerCallbacks() {
         PopupWindow.addSelectionHandler(new SelectionHandler<String>() {
 
@@ -49,6 +55,10 @@ public class GoogleAccountsLoginPopup {
                 if ("loginCompleated".equals(event.getSelectedItem())) {
                     log.debug("Login Compleated");
                     ClientContext.obtainAuthenticationData(null, true, false);
+                } else if ("logoutCompleated".equals(event.getSelectedItem())) {
+                    log.debug("logout compleated");
+                    ClientContext.terminateSession();
+                    ClientContext.logout(null);
                 }
             }
         });

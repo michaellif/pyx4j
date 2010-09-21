@@ -76,7 +76,17 @@
         <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
         <url-pattern>/loginCompleted</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
     
+    <servlet-mapping>
+        <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
+        <url-pattern>/logoutCompleted</url-pattern>
+    </servlet-mapping>
+        
     <servlet>
         <servlet-name>CronServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.admin.CronServlet</servlet-class>

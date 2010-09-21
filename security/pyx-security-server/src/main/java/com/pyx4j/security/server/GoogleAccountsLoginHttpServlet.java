@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import com.pyx4j.server.contexts.Lifecycle;
+
 @SuppressWarnings("serial")
 public class GoogleAccountsLoginHttpServlet extends HttpServlet {
 
@@ -40,6 +42,10 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
             response.sendRedirect(createLoginURL(request));
         } else if (request.getRequestURI().endsWith(getLoginCompletedPath())) {
             doLoginCompleted(request, response);
+        } else if (request.getRequestURI().endsWith(getLogoutPath())) {
+            response.sendRedirect(createLogoutURL(request));
+        } else if (request.getRequestURI().endsWith(getLogoutCompletedPath())) {
+            doLogoutCompleted(request, response);
         }
     }
 
@@ -50,6 +56,13 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
         return UserServiceFactory.getUserService().createLoginURL(returnURL.toString());
     }
 
+    protected String createLogoutURL(HttpServletRequest request) {
+        StringBuilder returnURL = new StringBuilder();
+        returnURL.append('/');
+        returnURL.append(getLogoutCompletedPath());
+        return UserServiceFactory.getUserService().createLogoutURL(returnURL.toString());
+    }
+
     protected String getLoginPath() {
         return "login";
     }
@@ -58,6 +71,17 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
         return "loginCompleted";
     }
 
+    protected String getLogoutPath() {
+        return "logout";
+    }
+
+    protected String getLogoutCompletedPath() {
+        return "logoutCompleted";
+    }
+
+    /**
+     * Apps should actually identify user in their DB and create session.
+     */
     protected void onLoginCompleted() {
 
     }
@@ -83,6 +107,37 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
             out.print("<p>User Id: " + userService.getCurrentUser().getUserId() + "</p>");
             out.print("<p>Name: " + userService.getCurrentUser().getNickname() + "</p>");
             out.print("<p>Email: " + userService.getCurrentUser().getEmail() + "</p>");
+        }
+        out.print("</body></html>");
+        out.flush();
+    }
+
+    protected void onLogoutCompleted() {
+        Lifecycle.endSession();
+    }
+
+    protected void doLogoutCompleted(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        onLogoutCompleted();
+        response.setContentType("text/html");
+        response.setDateHeader("Expires", System.currentTimeMillis());
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
+        PrintWriter out = response.getWriter();
+        out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+        out.println("<meta http-equiv=\"PRAGMA\" content=\"NO-CACHE\">");
+        out.println("<meta http-equiv=\"CACHE-CONTROL\" content=\"NO-CACHE\">");
+        out.println("<title>Logout Completed</title></head><body>");
+        out.println("<script type=\"text/javascript\">");
+        out.println("window.opener.popupWindowSelectionMade('logoutCompleated');window.close();");
+        out.println("</script>");
+        UserService userService = UserServiceFactory.getUserService();
+        if (userService.isUserLoggedIn()) {
+            out.print("<h1>You are still signed in!</h1>");
+            out.print("<p>User Id: " + userService.getCurrentUser().getUserId() + "</p>");
+            out.print("<p>Name: " + userService.getCurrentUser().getNickname() + "</p>");
+            out.print("<p>Email: " + userService.getCurrentUser().getEmail() + "</p>");
+        } else {
+            out.print("<h1>You have successfully signed out!</h1>");
         }
         out.print("</body></html>");
         out.flush();

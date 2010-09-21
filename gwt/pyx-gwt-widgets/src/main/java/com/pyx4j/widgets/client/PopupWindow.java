@@ -70,10 +70,13 @@ public class PopupWindow {
      * Opens Popup in the centre of parent browser
      */
     public static PopupWindowHandle open(String url, String name, int width, int height) {
-        StringBuilder features = new StringBuilder();
-
         int left = windowScreenLeft() + (int) Math.max(0, Math.floor((Window.getClientWidth() - width) / 2));
         int top = windowScreenTop() + (int) Math.max(0, Math.floor((Window.getClientHeight() - height) / 2));
+        return open(url, name, left, top, width, height);
+    }
+
+    public static PopupWindowHandle open(String url, String name, int left, int top, int width, int height) {
+        StringBuilder features = new StringBuilder();
 
         features.append("width=").append(width).append(",height=").append(height);
         features.append(",status=1,location=1,resizable=yes");
