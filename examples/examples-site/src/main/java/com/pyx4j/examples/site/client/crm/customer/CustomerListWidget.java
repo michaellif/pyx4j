@@ -45,19 +45,7 @@ public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
 
     public CustomerListWidget() {
         super(Customer.class, ExamplesSiteMap.Crm.Customers.class, ExamplesSiteMap.Crm.Customers.Edit.class, new CustomerSearchCriteriaPanel(),
-                new EntityListPanel<Customer>(Customer.class) {
-                    @Override
-                    public List<ColumnDescriptor<Customer>> getColumnDescriptors() {
-                        List<ColumnDescriptor<Customer>> columnDescriptors = new ArrayList<ColumnDescriptor<Customer>>();
-                        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name(), "120px"));
-                        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().phone(), "90px"));
-                        ColumnDescriptor<Customer> addrCol = ColumnDescriptorFactory
-                                .createColumnDescriptor(getMetaEntity(), getMetaEntity().address(), "180px");
-                        addrCol.setWordWrap(true);
-                        columnDescriptors.add(addrCol);
-                        return columnDescriptors;
-                    }
-                });
+                new CustomerSearchResultsPanel());
     }
 
     @Override
