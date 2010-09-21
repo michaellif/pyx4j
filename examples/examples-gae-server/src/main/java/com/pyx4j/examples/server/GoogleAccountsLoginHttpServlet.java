@@ -20,8 +20,12 @@
  */
 package com.pyx4j.examples.server;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -35,6 +39,22 @@ import com.pyx4j.examples.domain.UserCredential;
 
 @SuppressWarnings("serial")
 public class GoogleAccountsLoginHttpServlet extends com.pyx4j.security.server.GoogleAccountsLoginHttpServlet {
+
+    @Override
+    protected String createLoginURL(HttpServletRequest request) {
+        StringBuilder returnURL = new StringBuilder();
+        returnURL.append('/');
+        returnURL.append(getLoginCompletedPath());
+
+        Set<String> attributes = new HashSet<String>();
+        attributes.add("openid.mode=checkid_immediate");
+        attributes.add("openid.ns=http://specs.openid.net/auth/2.0");
+        attributes.add("xoauth_displayname=Pyx4j.com Examples");
+
+        String federatedIdentity = "https://www.google.com/accounts/o8/id";
+
+        return UserServiceFactory.getUserService().createLoginURL(returnURL.toString(), null, federatedIdentity, attributes);
+    }
 
     @Override
     protected void onLoginCompleted() {
@@ -61,4 +81,5 @@ public class GoogleAccountsLoginHttpServlet extends com.pyx4j.security.server.Go
 
         ExamplesAuthenticationServicesImpl.beginSession(user, userCredential);
     }
+
 }
