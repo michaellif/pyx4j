@@ -20,6 +20,7 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
@@ -46,7 +48,14 @@ public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
                 new EntityListPanel<Customer>(Customer.class) {
                     @Override
                     public List<ColumnDescriptor<Customer>> getColumnDescriptors() {
-                        return null;
+                        List<ColumnDescriptor<Customer>> columnDescriptors = new ArrayList<ColumnDescriptor<Customer>>();
+                        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().name(), "120px"));
+                        columnDescriptors.add(ColumnDescriptorFactory.createColumnDescriptor(getMetaEntity(), getMetaEntity().phone(), "90px"));
+                        ColumnDescriptor<Customer> addrCol = ColumnDescriptorFactory
+                                .createColumnDescriptor(getMetaEntity(), getMetaEntity().address(), "180px");
+                        addrCol.setWordWrap(true);
+                        columnDescriptors.add(addrCol);
+                        return columnDescriptors;
                     }
                 });
     }
