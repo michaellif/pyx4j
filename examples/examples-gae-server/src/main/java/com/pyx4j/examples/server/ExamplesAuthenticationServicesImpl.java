@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.domain.UserCredential;
+import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -61,7 +62,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
         }
     }
 
-    public static class AuthenticateImpl implements AuthenticationServices.Authenticate {
+    public static class AuthenticateImpl implements AuthenticationServices.Authenticate, IsIgnoreSessionTokenService {
 
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
