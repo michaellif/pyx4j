@@ -37,13 +37,17 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getRequestURI().endsWith(getLoginPath())) {
-            StringBuilder returnURL = new StringBuilder();
-            returnURL.append('/');
-            returnURL.append(getLoginCompletedPath());
-            response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(returnURL.toString()));
+            response.sendRedirect(createLoginURL(request));
         } else if (request.getRequestURI().endsWith(getLoginCompletedPath())) {
             doLoginCompleted(request, response);
         }
+    }
+
+    protected String createLoginURL(HttpServletRequest request) {
+        StringBuilder returnURL = new StringBuilder();
+        returnURL.append('/');
+        returnURL.append(getLoginCompletedPath());
+        return UserServiceFactory.getUserService().createLoginURL(returnURL.toString());
     }
 
     protected String getLoginPath() {
