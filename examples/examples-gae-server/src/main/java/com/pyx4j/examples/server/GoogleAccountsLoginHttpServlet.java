@@ -49,9 +49,12 @@ public class GoogleAccountsLoginHttpServlet extends com.pyx4j.security.server.Go
         Set<String> attributes = new HashSet<String>();
         attributes.add("openid.mode=checkid_immediate");
         attributes.add("openid.ns=http://specs.openid.net/auth/2.0");
-        attributes.add("xoauth_displayname=Pyx4j.com Examples");
+        attributes.add("xoauth_displayname=Pyx4j.comExamples");
 
         String federatedIdentity = "https://www.google.com/accounts/o8/id";
+
+        // for apps accounts
+        // federatedIdentity = "https://www.google.com/accounts/o8/site-xrds?hd=user_google_apps_domain.com"
 
         return UserServiceFactory.getUserService().createLoginURL(returnURL.toString(), null, federatedIdentity, attributes);
     }
