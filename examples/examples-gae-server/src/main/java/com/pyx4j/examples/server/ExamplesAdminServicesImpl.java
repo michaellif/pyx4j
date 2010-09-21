@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.domain.UserCredential;
 import com.pyx4j.examples.rpc.EditableUser;
@@ -46,25 +45,24 @@ public class ExamplesAdminServicesImpl implements ExamplesAdminServices {
             user.email().setValue(user.email().getValue().toLowerCase(Locale.ENGLISH));
             user = (User) super.execute(user);
 
-            EntityQueryCriteria<UserCredential> crCriteria = EntityQueryCriteria.create(UserCredential.class);
-            crCriteria.add(PropertyCriterion.eq(crCriteria.meta().user(), user));
-            UserCredential crs = PersistenceServicesFactory.getPersistenceService().retrieve(crCriteria);
-            if (crs == null) {
-                crs = EntityFactory.create(UserCredential.class);
-                crs.user().set(user);
-                crs.credential().set(user.email());
+            UserCredential userCredential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+            if (userCredential == null) {
+                userCredential = EntityFactory.create(UserCredential.class);
+                userCredential.setPrimaryKey(user.getPrimaryKey());
+                userCredential.user().set(user);
+                userCredential.credential().set(user.email());
             }
-            crs.enabled().set(requestEditableUser.enabled());
-            crs.behavior().set(requestEditableUser.behavior());
+            userCredential.enabled().set(requestEditableUser.enabled());
+            userCredential.behavior().set(requestEditableUser.behavior());
 
-            PersistenceServicesFactory.getPersistenceService().persist(crs);
+            PersistenceServicesFactory.getPersistenceService().persist(userCredential);
 
             EditableUser editableUser = EntityFactory.create(EditableUser.class);
             editableUser.setPrimaryKey(user.getPrimaryKey());
             editableUser.user().set(user);
 
-            editableUser.enabled().set(crs.enabled());
-            editableUser.behavior().set(crs.behavior());
+            editableUser.enabled().set(userCredential.enabled());
+            editableUser.behavior().set(userCredential.behavior());
 
             return editableUser;
         }
@@ -91,11 +89,9 @@ public class ExamplesAdminServicesImpl implements ExamplesAdminServices {
             editableUser.user().set(user);
 
             // -- copy Authentication data but not credentials.
-            EntityQueryCriteria<UserCredential> crCriteria = EntityQueryCriteria.create(UserCredential.class);
-            crCriteria.add(PropertyCriterion.eq(crCriteria.meta().user(), user));
-            UserCredential crs = PersistenceServicesFactory.getPersistenceService().retrieve(crCriteria);
-            editableUser.enabled().set(crs.enabled());
-            editableUser.behavior().set(crs.behavior());
+            UserCredential userCredential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+            editableUser.enabled().set(userCredential.enabled());
+            editableUser.behavior().set(userCredential.behavior());
 
             return editableUser;
         }

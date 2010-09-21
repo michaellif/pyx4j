@@ -47,6 +47,7 @@ public class PreloadUsers extends AbstractDataPreloader {
         credential.behavior().setValue(behavior);
 
         PersistenceServicesFactory.getPersistenceService().persist(user);
+        credential.setPrimaryKey(user.getPrimaryKey());
         PersistenceServicesFactory.getPersistenceService().persist(credential);
 
         userCount++;

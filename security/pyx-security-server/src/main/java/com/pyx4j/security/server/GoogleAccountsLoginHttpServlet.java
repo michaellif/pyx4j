@@ -41,25 +41,8 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
             returnURL.append('/');
             returnURL.append(getLoginCompletedPath());
             response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(returnURL.toString()));
-        } else {
-            // assume loginCompleted
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-            out.println("<title>Login Completed</title></head><body>");
-            out.println("<script type=\"text/javascript\">");
-            out.println("window.opener.popupWindowSelectionMade('loginCompleated');window.close();");
-            out.println("</script>");
-            UserService userService = UserServiceFactory.getUserService();
-            if (userService.isUserLoggedIn()) {
-                out.print("<h1>You have successfully signed in!</h1>");
-                out.print("<p>User Id: " + userService.getCurrentUser().getUserId() + "</p>");
-                out.print("<p>Name: " + userService.getCurrentUser().getNickname() + "</p>");
-                out.print("<p>Email: " + userService.getCurrentUser().getEmail() + "</p>");
-            }
-            out.print("</body></html>");
-            out.flush();
-            onLoginCompleted();
+        } else if (request.getRequestURI().endsWith(getLoginCompletedPath())) {
+            doLoginCompleted(request, response);
         }
     }
 
@@ -73,5 +56,31 @@ public class GoogleAccountsLoginHttpServlet extends HttpServlet {
 
     protected void onLoginCompleted() {
 
+    }
+
+    protected void doLoginCompleted(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // assume loginCompleted
+        onLoginCompleted();
+        response.setContentType("text/html");
+        response.setDateHeader("Expires", System.currentTimeMillis());
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
+        PrintWriter out = response.getWriter();
+        out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+        out.println("<meta http-equiv=\"PRAGMA\" content=\"NO-CACHE\">");
+        out.println("<meta http-equiv=\"CACHE-CONTROL\" content=\"NO-CACHE\">");
+        out.println("<title>Login Completed</title></head><body>");
+        out.println("<script type=\"text/javascript\">");
+        out.println("window.opener.popupWindowSelectionMade('loginCompleated');window.close();");
+        out.println("</script>");
+        UserService userService = UserServiceFactory.getUserService();
+        if (userService.isUserLoggedIn()) {
+            out.print("<h1>You have successfully signed in!</h1>");
+            out.print("<p>User Id: " + userService.getCurrentUser().getUserId() + "</p>");
+            out.print("<p>Name: " + userService.getCurrentUser().getNickname() + "</p>");
+            out.print("<p>Email: " + userService.getCurrentUser().getEmail() + "</p>");
+        }
+        out.print("</body></html>");
+        out.flush();
     }
 }

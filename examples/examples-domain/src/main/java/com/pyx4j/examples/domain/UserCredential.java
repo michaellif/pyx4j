@@ -23,10 +23,12 @@ package com.pyx4j.examples.domain;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @RpcBlacklist
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED)
 public interface UserCredential extends IEntity {
 
     IPrimitive<Boolean> enabled();

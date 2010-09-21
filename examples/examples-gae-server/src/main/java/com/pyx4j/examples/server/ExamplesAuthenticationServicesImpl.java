@@ -34,7 +34,6 @@ import com.google.apphosting.api.ApiProxy.CapabilityDisabledException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -75,10 +74,8 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
 
             AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
 
-            final User userMeta = EntityFactory.create(User.class);
-            EntityQueryCriteria<User> criteria = new EntityQueryCriteria<User>(User.class);
-
-            criteria.add(PropertyCriterion.eq(userMeta.email(), request.email().getValue()));
+            EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+            criteria.add(PropertyCriterion.eq(criteria.meta().email(), request.email().getValue()));
             List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
             if (users.size() != 1) {
                 if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
@@ -88,19 +85,14 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
                 }
             }
             User user = users.get(0);
-
-            final UserCredential userCredentialMeta = EntityFactory.create(UserCredential.class);
-            EntityQueryCriteria<UserCredential> crCriteria = new EntityQueryCriteria<UserCredential>(UserCredential.class);
-            crCriteria.add(PropertyCriterion.eq(userCredentialMeta.user(), user));
-            List<UserCredential> crs = PersistenceServicesFactory.getPersistenceService().query(crCriteria);
-            if (crs.size() != 1) {
+            UserCredential userCredential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+            if (userCredential == null) {
                 throw new RuntimeException("Invalid user account, contact support");
             }
-            UserCredential cr = crs.get(0);
-            if (cr.enabled().isNull() || (!cr.enabled().getValue())) {
+            if (userCredential.enabled().isNull() || (!userCredential.enabled().getValue())) {
                 throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
-            if (!request.password().getValue().equals(cr.credential().getValue())) {
+            if (!request.password().getValue().equals(userCredential.credential().getValue())) {
                 log.info("Invalid password for user {}", request.email().getValue());
                 if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
                     throw new ChallengeVerificationRequired("Too many failed log-in attempts");
@@ -108,22 +100,26 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
                     throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
             }
-            if (!cr.accessKey().isNull()) {
-                cr.accessKey().setValue(null);
+            if (!userCredential.accessKey().isNull()) {
+                userCredential.accessKey().setValue(null);
                 try {
-                    PersistenceServicesFactory.getPersistenceService().persist(cr);
+                    PersistenceServicesFactory.getPersistenceService().persist(userCredential);
                 } catch (CapabilityDisabledException e) {
                     // Datastore is read-only, degrade gracefully
                 }
             }
 
             // Begin Session
+            beginSession(user, userCredential);
 
-            Set<Behavior> behaviors = new HashSet<Behavior>();
-            behaviors.add(cr.behavior().getValue());
-            Lifecycle.beginSession(new UserVisit(user.getPrimaryKey(), user.name().getValue()), behaviors);
             return AuthenticationServicesImpl.createAuthenticationResponse(request.logoutApplicationUrl().getValue());
         }
+    }
+
+    static void beginSession(User user, UserCredential userCredential) {
+        Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.add(userCredential.behavior().getValue());
+        Lifecycle.beginSession(new UserVisit(user.getPrimaryKey(), user.name().getValue()), behaviors);
     }
 
 }

@@ -64,7 +64,7 @@
 
     <servlet>
         <servlet-name>GoogleAccountsLoginHttpServlet</servlet-name>
-        <servlet-class>com.pyx4j.security.server.GoogleAccountsLoginHttpServlet</servlet-class>
+        <servlet-class>com.pyx4j.examples.server.GoogleAccountsLoginHttpServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
