@@ -77,6 +77,9 @@ public class NavigationUri {
             queryString = queryString.substring(1);
         }
         Map<String, String> args = new HashMap<String, String>();
+        if (queryString.length() == 0) {
+            return args;
+        }
         String[] nameValues = queryString.split(ARGS_SEPARATOR);
         if (nameValues.length > 0) {
             for (int i = 0; i < nameValues.length; i++) {
