@@ -51,4 +51,16 @@ public interface WidgetsImages extends ClientBundle {
 
     public ImageResource recaptchaHelp();
 
+    public ImageResource slideshowItem();
+
+    public ImageResource slideshowSelectedItem();
+
+    public ImageResource slideshowLeft();
+
+    public ImageResource slideshowRight();
+
+    public ImageResource slideshowPlay();
+
+    public ImageResource slideshowPause();
+
 }
