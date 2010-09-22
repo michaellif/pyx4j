@@ -52,8 +52,6 @@ public class Slideshow extends AbsolutePanel {
 
     private final int height;
 
-    private final String buttonStyle;
-
     private int currentIndex = -1;
 
     private ControlPanel controlPanel;
@@ -66,14 +64,13 @@ public class Slideshow extends AbsolutePanel {
 
     private final boolean runOnInit;
 
-    public Slideshow(int width, int height, String buttonStyle) {
-        this(width, height, buttonStyle, 0, true);
+    public Slideshow(int width, int height) {
+        this(width, height, 0, true);
     }
 
-    public Slideshow(int width, int height, String buttonStyle, int initPosition, boolean runOnInit) {
+    public Slideshow(int width, int height, int initPosition, boolean runOnInit) {
         this.width = width;
         this.height = height;
-        this.buttonStyle = buttonStyle;
         this.initPosition = initPosition;
         this.runOnInit = runOnInit;
         items = new ArrayList<Widget>();
@@ -99,7 +96,7 @@ public class Slideshow extends AbsolutePanel {
         };
         slideChangeTimer.run();
         slideChangeTimer.scheduleRepeating(6000);
-        controlPanel.start();
+        controlPanel.play(true);
     }
 
     public void stop() {
@@ -107,7 +104,7 @@ public class Slideshow extends AbsolutePanel {
             slideChangeTimer.cancel();
             slideChangeTimer = null;
         }
-        controlPanel.stop();
+        controlPanel.play(false);
     }
 
     protected void init() {
@@ -121,9 +118,9 @@ public class Slideshow extends AbsolutePanel {
         setWidgetPosition(controlPanel, x, height - 30);
         show(initPosition);
         if (runOnInit) {
-            controlPanel.getStartStopAction().setText("&#x25A0;");
+            controlPanel.play(true);
         } else {
-            controlPanel.getStartStopAction().setText("&#x25B6;");
+            controlPanel.play(false);
         }
 
     }
@@ -212,7 +209,7 @@ public class Slideshow extends AbsolutePanel {
         private final Action rightAction;
 
         ControlPanel() {
-            leftAction = new Action("&#171;");
+            leftAction = new Action();
             leftAction.addStyleDependentName("left");
             leftAction.addClickHandler(new ClickHandler() {
                 @Override
@@ -228,7 +225,7 @@ public class Slideshow extends AbsolutePanel {
             add(leftAction);
 
             for (int i = 0; i < items.size(); i++) {
-                Action itemAction = new Action((i + 1) + "");
+                Action itemAction = new Action();
                 itemActionList.add(itemAction);
                 add(itemAction);
                 final int finalI = i;
@@ -241,8 +238,7 @@ public class Slideshow extends AbsolutePanel {
                 });
             }
 
-            startStopAction = new Action("&#x25A0;");
-            startStopAction.addStyleDependentName("startStop");
+            startStopAction = new Action();
             startStopAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -254,7 +250,7 @@ public class Slideshow extends AbsolutePanel {
                 }
             });
             add(startStopAction);
-            rightAction = new Action("&#187;");
+            rightAction = new Action();
             rightAction.addStyleDependentName("right");
             rightAction.addClickHandler(new ClickHandler() {
                 @Override
@@ -269,12 +265,14 @@ public class Slideshow extends AbsolutePanel {
 
         }
 
-        public void stop() {
-            startStopAction.addStyleDependentName("start");
-        }
-
-        public void start() {
-            startStopAction.addStyleDependentName("stop");
+        public void play(boolean flag) {
+            if (flag) {
+                startStopAction.removeStyleDependentName("paused");
+                startStopAction.addStyleDependentName("playing");
+            } else {
+                startStopAction.removeStyleDependentName("playing");
+                startStopAction.addStyleDependentName("paused");
+            }
         }
 
         public void setEnabled(boolean flag) {
@@ -310,6 +308,12 @@ public class Slideshow extends AbsolutePanel {
 
             public Action(String text) {
                 super(text);
+                setStyleName(CSSClass.pyx4j_SlideshowAction.name());
+                setEnabled(true);
+            }
+
+            public Action() {
+                super("&nbsp;");
                 setStyleName(CSSClass.pyx4j_SlideshowAction.name());
                 setEnabled(true);
             }
