@@ -599,7 +599,7 @@ public class WindowsTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Photoalbom_Caption.name());
-        style.addProperty("color", "#eee");
+        style.addProperty("color", "#333");
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
