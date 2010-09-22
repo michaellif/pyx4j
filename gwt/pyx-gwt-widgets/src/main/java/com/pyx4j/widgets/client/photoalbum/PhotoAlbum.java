@@ -121,7 +121,7 @@ public abstract class PhotoAlbum extends DockPanel {
 
             DockPanel frame = new DockPanel();
             frame.setSize("200px", "210px");
-            frame.setStyleName(CSSClass.pyx4j_Thumbnail.name());
+            frame.setStyleName(CSSClass.pyx4j_Photoalbom_Thumbnail.name());
 
             frame.add(image, CENTER);
             frame.setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);

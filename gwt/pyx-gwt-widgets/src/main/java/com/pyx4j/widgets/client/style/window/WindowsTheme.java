@@ -583,7 +583,7 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initPhotoalbomStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_Thumbnail.name());
+        Style style = new Style("." + CSSClass.pyx4j_Photoalbom_Thumbnail.name());
         style.addProperty("background-color", "#F6F9FF");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");

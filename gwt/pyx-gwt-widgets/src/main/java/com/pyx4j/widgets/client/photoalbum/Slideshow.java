@@ -28,14 +28,16 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class Slideshow extends AbsolutePanel {
@@ -97,7 +99,7 @@ public class Slideshow extends AbsolutePanel {
         };
         slideChangeTimer.run();
         slideChangeTimer.scheduleRepeating(6000);
-        controlPanel.getStartStopAction().setCaption("&#x25A0;");
+        controlPanel.start();
     }
 
     public void stop() {
@@ -105,7 +107,7 @@ public class Slideshow extends AbsolutePanel {
             slideChangeTimer.cancel();
             slideChangeTimer = null;
         }
-        controlPanel.getStartStopAction().setCaption("&#x25B6;");
+        controlPanel.stop();
     }
 
     protected void init() {
@@ -119,9 +121,9 @@ public class Slideshow extends AbsolutePanel {
         setWidgetPosition(controlPanel, x, height - 30);
         show(initPosition);
         if (runOnInit) {
-            controlPanel.getStartStopAction().setCaption("&#x25A0;");
+            controlPanel.getStartStopAction().setText("&#x25A0;");
         } else {
-            controlPanel.getStartStopAction().setCaption("&#x25B6;");
+            controlPanel.getStartStopAction().setText("&#x25B6;");
         }
 
     }
@@ -201,16 +203,17 @@ public class Slideshow extends AbsolutePanel {
 
     class ControlPanel extends HorizontalPanel {
 
-        private final ArrayList<Button> itemActionList = new ArrayList<Button>();
+        private final ArrayList<Action> itemActionList = new ArrayList<Action>();
 
-        private final Button leftAction;
+        private final Action leftAction;
 
-        private final Button startStopAction;
+        private final Action startStopAction;
 
-        private final Button rightAction;
+        private final Action rightAction;
 
         ControlPanel() {
-            leftAction = new Button("&#171;", buttonStyle);
+            leftAction = new Action("&#171;");
+            leftAction.addStyleDependentName("left");
             leftAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -225,7 +228,7 @@ public class Slideshow extends AbsolutePanel {
             add(leftAction);
 
             for (int i = 0; i < items.size(); i++) {
-                Button itemAction = new Button((i + 1) + "", buttonStyle);
+                Action itemAction = new Action((i + 1) + "");
                 itemActionList.add(itemAction);
                 add(itemAction);
                 final int finalI = i;
@@ -238,7 +241,8 @@ public class Slideshow extends AbsolutePanel {
                 });
             }
 
-            startStopAction = new Button("&#x25A0;", buttonStyle);//&#x25A0;//&#x25B6;
+            startStopAction = new Action("&#x25A0;");
+            startStopAction.addStyleDependentName("startStop");
             startStopAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -250,7 +254,8 @@ public class Slideshow extends AbsolutePanel {
                 }
             });
             add(startStopAction);
-            rightAction = new Button("&#187;", buttonStyle);
+            rightAction = new Action("&#187;");
+            rightAction.addStyleDependentName("right");
             rightAction.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -262,6 +267,14 @@ public class Slideshow extends AbsolutePanel {
 
             setOpacity(this, 0.7);
 
+        }
+
+        public void stop() {
+            startStopAction.addStyleDependentName("start");
+        }
+
+        public void start() {
+            startStopAction.addStyleDependentName("stop");
         }
 
         public void setEnabled(boolean flag) {
@@ -287,8 +300,45 @@ public class Slideshow extends AbsolutePanel {
             }
         }
 
-        public Button getStartStopAction() {
+        public Action getStartStopAction() {
             return startStopAction;
+        }
+
+        class Action extends HTML {
+
+            private boolean enabled;
+
+            public Action(String text) {
+                super(text);
+                setStyleName(CSSClass.pyx4j_SlideshowAction.name());
+                setEnabled(true);
+            }
+
+            public void setEnabled(boolean flag) {
+                this.enabled = flag;
+                if (flag) {
+                    addStyleDependentName("enabled");
+                } else {
+                    removeStyleDependentName("enabled");
+                }
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            @Override
+            public HandlerRegistration addClickHandler(final ClickHandler handler) {
+                return super.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        if (enabled) {
+                            handler.onClick(event);
+                        }
+                    }
+                });
+            }
+
         }
 
     }
