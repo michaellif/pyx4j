@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.style.window;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
+
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Style;
@@ -57,6 +60,7 @@ public class WindowsTheme extends Theme {
         initDatePickerStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
+        initPhotoalbomStyle();
     }
 
     protected void initThemeColors() {
@@ -576,6 +580,27 @@ public class WindowsTheme extends Theme {
         style.addProperty("verticalAlign", "top");
         style.addProperty("color", ThemeColor.GROUP_BORDER);
         addStyle(style);
+    }
+
+    protected void initPhotoalbomStyle() {
+        Style style = new Style("." + CSSClass.pyx4j_Thumbnail.name());
+        style.addProperty("background-color", "#F6F9FF");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "#E5ECF9");
+        style.addProperty("-webkit-box-shadow", "4px 4px 2px #aaa");
+        style.addProperty("-moz-box-shadow", "4px 4px 2px #aaa");
+        addStyle(style);
+
+        style = new Style("." + CSSClass.pyx4j_SlideshowPopup.name());
+        style.addProperty("background-color", "#F6F9FF");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "#E5ECF9");
+        style.addProperty("-webkit-box-shadow", "10px 10px 5px #aaa");
+        style.addProperty("-moz-box-shadow", "10px 10px 5px #aaa");
+        addStyle(style);
+
     }
 
 }

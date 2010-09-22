@@ -56,6 +56,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public abstract class PhotoAlbum extends DockPanel {
 
@@ -120,19 +121,14 @@ public abstract class PhotoAlbum extends DockPanel {
 
             DockPanel frame = new DockPanel();
             frame.setSize("200px", "210px");
-            frame.getElement().getStyle().setBackgroundColor("#F6F9FF");
-            frame.getElement().getStyle().setBorderColor("#E5ECF9");
-            frame.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            frame.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            frame.getElement().getStyle().setProperty("WebkitBoxShadow", "4px 4px 2px #aaa");
-            frame.getElement().getStyle().setProperty("MozBoxShadow", "4px 4px 2px #aaa");
+            frame.setStyleName(CSSClass.pyx4j_Thumbnail.name());
 
             frame.add(image, CENTER);
             frame.setCellVerticalAlignment(image, HorizontalPanel.ALIGN_MIDDLE);
             frame.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
 
             caption = new HTML(photo.getCaption(), false);
-            caption.getElement().getStyle().setCursor(Cursor.DEFAULT);
+            caption.setStyleName(CSSClass.pyx4j_Photoalbom_Caption.name());
             caption.setHeight("1.2em");
             caption.setWidth("195px");
             caption.getElement().getStyle().setProperty("textAlign", "center");
@@ -291,12 +287,7 @@ public abstract class PhotoAlbum extends DockPanel {
                 slideshow.addItem(holder);
             }
             PopupPanel popup = new PopupPanel(true);
-            popup.getElement().getStyle().setBackgroundColor("#F6F9FF");
-            popup.getElement().getStyle().setBorderColor("#E5ECF9");
-            popup.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            popup.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            popup.getElement().getStyle().setProperty("WebkitBoxShadow", "10px 10px 5px #aaa");
-            popup.getElement().getStyle().setProperty("MozBoxShadow", "10px 10px 5px #aaa");
+            popup.setStyleName(CSSClass.pyx4j_SlideshowPopup.name());
             popup.add(slideshow);
 
             popup.center();
