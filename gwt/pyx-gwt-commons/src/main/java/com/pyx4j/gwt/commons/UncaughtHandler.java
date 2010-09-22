@@ -28,6 +28,8 @@ import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 public class UncaughtHandler implements UncaughtExceptionHandler {
 
     private static Logger log = LoggerFactory.getLogger(UncaughtHandler.class);

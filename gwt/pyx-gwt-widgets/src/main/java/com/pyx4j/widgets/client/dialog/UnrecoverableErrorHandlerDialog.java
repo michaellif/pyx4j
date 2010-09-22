@@ -31,7 +31,7 @@ import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.gwt.commons.ApplicationMode;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;

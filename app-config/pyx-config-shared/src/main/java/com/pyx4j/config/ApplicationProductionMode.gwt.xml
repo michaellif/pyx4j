@@ -3,7 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
 	<source path="commons"/>
-	<replace-with class="com.pyx4j.gwt.commons.ApplicationMode.ProductionMode">
-		<when-type-is class="com.pyx4j.gwt.commons.ApplicationMode.Mode"/>
+	<replace-with class="com.pyx4j.config.shared.ApplicationMode.ProductionMode">
+		<when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
 	</replace-with> 
 </module>

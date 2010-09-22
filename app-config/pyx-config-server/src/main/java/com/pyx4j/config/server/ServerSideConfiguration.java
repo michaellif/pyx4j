@@ -66,6 +66,10 @@ public class ServerSideConfiguration {
         ServerSideConfiguration.instance = instance;
     }
 
+    public boolean isDevelopmentBehavior() {
+        return true;
+    }
+
     public IServiceFactory getRPCServiceFactory() {
         return null;
     }
