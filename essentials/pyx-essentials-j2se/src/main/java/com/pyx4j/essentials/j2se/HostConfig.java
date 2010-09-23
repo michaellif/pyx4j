@@ -20,7 +20,9 @@
  */
 package com.pyx4j.essentials.j2se;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Locale;
 
@@ -37,6 +39,19 @@ public abstract class HostConfig {
             InetAddress local = InetAddress.getLocalHost();
             return local.getHostName().toLowerCase(Locale.ENGLISH);
         } catch (UnknownHostException e) {
+            throw new Error(e);
+        }
+    }
+
+    public static String getHardwareAddress() {
+        try {
+            byte[] mac = NetworkInterface.getByInetAddress(InetAddress.getLocalHost()).getHardwareAddress();
+            StringBuilder macAddress = new StringBuilder();
+            for (byte b : mac) {
+                macAddress.append(String.valueOf(b));
+            }
+            return macAddress.toString();
+        } catch (IOException e) {
             throw new Error(e);
         }
     }

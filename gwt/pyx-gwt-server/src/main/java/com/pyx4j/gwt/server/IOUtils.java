@@ -22,6 +22,7 @@ package com.pyx4j.gwt.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,6 +43,15 @@ public class IOUtils {
         try {
             if (input != null) {
                 input.close();
+            }
+        } catch (Throwable e) {
+        }
+    }
+
+    public static void closeQuietly(Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
             }
         } catch (Throwable e) {
         }

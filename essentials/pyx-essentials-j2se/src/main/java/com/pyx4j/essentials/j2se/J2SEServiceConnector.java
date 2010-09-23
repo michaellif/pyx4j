@@ -21,15 +21,20 @@
 package com.pyx4j.essentials.j2se;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Properties;
 
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.j2se.J2SEService;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -58,15 +63,35 @@ public class J2SEServiceConnector extends J2SEService {
 
     public static Credentials getCredentials(String fileName) {
         Properties p = new Properties();
+        FileReader reader = null;
         try {
-            p.load(new FileReader(fileName));
+            p.load(reader = new FileReader(fileName));
         } catch (IOException e) {
             log.error("read error", e);
             throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(reader);
         }
         Credentials c = new Credentials();
         c.email = p.getProperty("email");
         c.password = p.getProperty("password");
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(HostConfig.getHardwareAddress());
+        if (PropertyValueEncryptionUtils.isEncryptedValue(c.password)) {
+            c.password = PropertyValueEncryptionUtils.decrypt(c.password, encryptor);
+        } else {
+            p.put("password", PropertyValueEncryptionUtils.encrypt(c.password, encryptor));
+            Writer writer = null;
+            try {
+                p.store(writer = new FileWriter(fileName), null);
+                log.warn("Password file '{}' Encrypted", fileName);
+            } catch (IOException e) {
+                log.error("property write error", e);
+                throw new Error(e);
+            } finally {
+                IOUtils.closeQuietly(writer);
+            }
+        }
         return c;
     }
 

@@ -57,6 +57,11 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
