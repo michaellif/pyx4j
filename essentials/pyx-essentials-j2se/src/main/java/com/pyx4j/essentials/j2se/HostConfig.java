@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.Locale;
 
 public abstract class HostConfig {
@@ -45,10 +46,25 @@ public abstract class HostConfig {
 
     public static String getHardwareAddress() {
         try {
-            byte[] mac = NetworkInterface.getByInetAddress(InetAddress.getLocalHost()).getHardwareAddress();
+            Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
             StringBuilder macAddress = new StringBuilder();
-            for (byte b : mac) {
-                macAddress.append(String.valueOf(b));
+            while (en.hasMoreElements()) {
+                NetworkInterface itf = en.nextElement();
+                if (itf.isLoopback() || itf.isVirtual() || !itf.isUp() || itf.getName() == null) {
+                    continue;
+                }
+                if (!itf.getName().startsWith("eth")) {
+                    continue;
+                }
+                System.out.println("Use itf:" + itf.getName());
+                byte[] mac = itf.getHardwareAddress();
+                for (byte b : mac) {
+                    macAddress.append(String.valueOf(b));
+                }
+            }
+            System.out.println("MAC:" + macAddress.toString());
+            if (macAddress.length() == 0) {
+                throw new Error("NetworkInterface not found");
             }
             return macAddress.toString();
         } catch (IOException e) {
