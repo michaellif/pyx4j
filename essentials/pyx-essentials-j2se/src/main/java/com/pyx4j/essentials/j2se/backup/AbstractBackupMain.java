@@ -36,44 +36,48 @@ public abstract class AbstractBackupMain {
     private static final Logger log = LoggerFactory.getLogger(AbstractBackupMain.class);
 
     public void execute(String argFrom, String argTo) {
-
-        final Date backupDate = new Date();
-
-        AbstractBackupReceiver receiver;
-
-        if (isFile(argFrom)) {
-            receiver = new LocalDatastoreBackupReceiver(argFrom);
-        } else {
-            receiver = new ServerBackupReceiver(createConnection("Backup Source", argFrom)) {
-                @Override
-                protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
-                    return AbstractBackupMain.this.getMaxResponceSize(clazz);
-                }
-
-                @Override
-                protected String createReport() {
-                    return AbstractBackupMain.this.createReport(backupDate, this);
-                }
-            };
-        }
-
-        BackupConsumer consumer;
-        if (isFile(argTo)) {
-            consumer = createFileBackupConsumer(argTo, backupDate);
-        } else {
-            consumer = new ServerBackupConsumer(createConnection("Backup Consumer", argTo));
-        }
-
-        long start = System.currentTimeMillis();
         try {
-            receiver.start();
-            consumer.start();
-            receiver.copy(consumer, allClasses());
-            receiver.completed();
-        } finally {
-            receiver.end();
-            consumer.end();
-            log.info("Backup of {} records processing time {}", receiver.totalRecords, TimeUtils.minutesSince(start));
+            final Date backupDate = new Date();
+
+            AbstractBackupReceiver receiver;
+
+            if (isFile(argFrom)) {
+                receiver = new LocalDatastoreBackupReceiver(argFrom);
+            } else {
+                receiver = new ServerBackupReceiver(createConnection("Backup Source", argFrom)) {
+                    @Override
+                    protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
+                        return AbstractBackupMain.this.getMaxResponceSize(clazz);
+                    }
+
+                    @Override
+                    protected String createReport() {
+                        return AbstractBackupMain.this.createReport(backupDate, this);
+                    }
+                };
+            }
+
+            BackupConsumer consumer;
+            if (isFile(argTo)) {
+                consumer = createFileBackupConsumer(argTo, backupDate);
+            } else {
+                consumer = new ServerBackupConsumer(createConnection("Backup Consumer", argTo));
+            }
+
+            long start = System.currentTimeMillis();
+            try {
+                receiver.start();
+                consumer.start();
+                receiver.copy(consumer, allClasses());
+                receiver.completed();
+            } finally {
+                receiver.end();
+                consumer.end();
+                log.info("Backup of {} records processing time {}", receiver.totalRecords, TimeUtils.minutesSince(start));
+            }
+        } catch (Throwable t) {
+            log.error("Backup error", t);
+            System.exit(1);
         }
     }
 
