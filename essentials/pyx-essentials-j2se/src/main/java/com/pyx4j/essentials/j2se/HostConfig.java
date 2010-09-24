@@ -56,13 +56,11 @@ public abstract class HostConfig {
                 if (!itf.getName().startsWith("eth")) {
                     continue;
                 }
-                System.out.println("Use itf:" + itf.getName());
                 byte[] mac = itf.getHardwareAddress();
                 for (byte b : mac) {
                     macAddress.append(String.valueOf(b));
                 }
             }
-            System.out.println("MAC:" + macAddress.toString());
             if (macAddress.length() == 0) {
                 throw new Error("NetworkInterface not found");
             }
