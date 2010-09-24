@@ -117,6 +117,10 @@ public class ServerSideConfiguration {
         return System.getProperty("com.pyx4j.appUrl");
     }
 
+    public String getApplicationEmailSender() {
+        return "\"Pyx Software Services Inc\" <skarzhevskyy@gmail.com>";
+    }
+
     public IPersistenceConfiguration getPersistenceConfiguration() {
         return null;
     }
