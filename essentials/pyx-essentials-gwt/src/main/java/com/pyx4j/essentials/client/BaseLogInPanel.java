@@ -66,6 +66,8 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     protected CHyperlink forgotPassword;
 
+    protected CHyperlink googleLogin;
+
     public BaseLogInPanel() {
 
         getElement().getStyle().setPadding(30, Unit.PX);
@@ -124,11 +126,30 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
         add(forgotPassword.initNativeComponent());
 
+        googleLogin = new CHyperlink(null, new Command() {
+
+            @Override
+            public void execute() {
+                onLogInComplete();
+                onGoogleAccountsLogin();
+            }
+        });
+        googleLogin.setValue(i18n.tr("Login using Google Accounts"));
+        googleLogin.setVisible(false);
+
+        add(googleLogin.initNativeComponent());
+
     }
 
     public abstract void onLogInComplete();
 
-    public abstract void onForgotPasswordRequest();
+    protected void onForgotPasswordRequest() {
+
+    }
+
+    protected void onGoogleAccountsLogin() {
+
+    }
 
     @Override
     public boolean onClickCancel() {
