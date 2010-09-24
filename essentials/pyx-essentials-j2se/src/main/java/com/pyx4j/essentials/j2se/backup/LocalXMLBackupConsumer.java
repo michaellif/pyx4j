@@ -49,19 +49,18 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
 
     private final XMLStringWriter xml = new XMLStringWriter();
 
-    public LocalXMLBackupConsumer(String fileName, boolean overrride) {
-        fileName = makeFileName(fileName);
+    public LocalXMLBackupConsumer(String fileName, boolean overrride, Date backupDate) {
+        fileName = makeFileName(fileName, backupDate);
         file = new File(fileName);
         if (overrride && file.exists()) {
             file.delete();
         }
     }
 
-    protected String makeFileName(String fileName) {
+    protected String makeFileName(String fileName, Date backupDate) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat tf = new SimpleDateFormat("HH-mm");
-        Date now = new Date();
-        return fileName.replace("(date)", df.format(now)).replace("(time)", tf.format(now));
+        return fileName.replace("(date)", df.format(backupDate)).replace("(time)", tf.format(backupDate));
     }
 
     @Override

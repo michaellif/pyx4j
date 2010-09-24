@@ -36,6 +36,10 @@ public interface BackupServices {
 
     };
 
+    public interface BackupReport extends Service<String, VoidSerializable> {
+
+    };
+
     public interface Put extends Service<Vector<HashMap<String, BackupEntityProperty>>, VoidSerializable> {
 
     };

@@ -43,6 +43,18 @@ public class ServerBackupReceiver extends AbstractBackupReceiver {
     }
 
     @Override
+    public void completed() {
+        String report = createReport();
+        if (report != null) {
+            srv.execute(BackupServices.BackupReport.class, report);
+        }
+    }
+
+    protected String createReport() {
+        return null;
+    }
+
+    @Override
     protected BackupRecordsResponse get(BackupRequest request) {
         return srv.execute(BackupServices.Get.class, request);
     }

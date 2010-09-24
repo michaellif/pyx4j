@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.j2se.backup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,8 @@ public abstract class AbstractBackupReceiver implements BackupReceiver {
     private static final Logger log = LoggerFactory.getLogger(AbstractBackupReceiver.class);
 
     public long totalRecords;
+
+    private static Map<String, Integer> stats = new HashMap<String, Integer>();
 
     protected AbstractBackupReceiver() {
         EntityFactory.setImplementation(new ServerEntityFactory());
@@ -72,7 +77,14 @@ public abstract class AbstractBackupReceiver implements BackupReceiver {
         } while (responce.getEncodedCursorRefference() != null);
 
         log.info("Got {} of {}", thisCount, persistenceName);
+        stats.put(persistenceName, thisCount);
         totalRecords += thisCount;
     }
 
+    public int getStats(String persistenceName) {
+        return stats.get(persistenceName);
+    }
+
+    public void completed() {
+    }
 }

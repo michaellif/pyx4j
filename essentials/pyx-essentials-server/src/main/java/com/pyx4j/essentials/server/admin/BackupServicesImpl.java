@@ -200,4 +200,14 @@ public class BackupServicesImpl implements BackupServices {
         }
 
     }
+
+    public static class BackupReportImpl implements BackupServices.BackupReport {
+
+        @Override
+        public VoidSerializable execute(String report) {
+            log.info("Backup completed ", report);
+            return null;
+        }
+
+    }
 }

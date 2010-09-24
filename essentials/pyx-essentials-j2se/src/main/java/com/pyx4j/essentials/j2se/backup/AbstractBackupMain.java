@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.j2se.backup;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -35,6 +36,9 @@ public abstract class AbstractBackupMain {
     private static final Logger log = LoggerFactory.getLogger(AbstractBackupMain.class);
 
     public void execute(String argFrom, String argTo) {
+
+        final Date backupDate = new Date();
+
         AbstractBackupReceiver receiver;
 
         if (isFile(argFrom)) {
@@ -45,12 +49,17 @@ public abstract class AbstractBackupMain {
                 protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
                     return AbstractBackupMain.this.getMaxResponceSize(clazz);
                 }
+
+                @Override
+                protected String createReport() {
+                    return AbstractBackupMain.this.createReport(backupDate, this);
+                }
             };
         }
 
         BackupConsumer consumer;
         if (isFile(argTo)) {
-            consumer = createBackupConsumer(argTo);
+            consumer = createFileBackupConsumer(argTo, backupDate);
         } else {
             consumer = new ServerBackupConsumer(createConnection("Backup Consumer", argTo));
         }
@@ -60,6 +69,7 @@ public abstract class AbstractBackupMain {
             receiver.start();
             consumer.start();
             receiver.copy(consumer, allClasses());
+            receiver.completed();
         } finally {
             receiver.end();
             consumer.end();
@@ -71,11 +81,11 @@ public abstract class AbstractBackupMain {
 
     protected abstract J2SEService createConnection(String name, String arg);
 
-    protected BackupConsumer createBackupConsumer(String name) {
+    protected BackupConsumer createFileBackupConsumer(String name, Date backupDate) {
         if (name.endsWith(".xml")) {
-            return new LocalXMLBackupConsumer(name, true);
+            return new LocalXMLBackupConsumer(name, true, backupDate);
         } else {
-            return new LocalDatastoreBackupConsumer(name, true);
+            return new LocalDatastoreBackupConsumer(name, true, backupDate);
         }
     }
 
@@ -83,6 +93,10 @@ public abstract class AbstractBackupMain {
 
     protected int getMaxResponceSize(Class<? extends IEntity> clazz) {
         return BackupRequest.DEFAULT_BATCH_SIZE;
+    }
+
+    protected String createReport(Date backupDate, ServerBackupReceiver receiver) {
+        return null;
     }
 
     public static void addAll(List<Class<? extends IEntity>> list, Class<? extends IEntity>... entityClasses) {

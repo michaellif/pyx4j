@@ -47,8 +47,8 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
 
     public long totalRecords;
 
-    public LocalDatastoreBackupConsumer(String fileName, boolean overrride) {
-        fileName = makeFileName(fileName);
+    public LocalDatastoreBackupConsumer(String fileName, boolean overrride, Date backupDate) {
+        fileName = makeFileName(fileName, backupDate);
         file = new File(fileName);
         if (overrride && file.exists()) {
             file.delete();
@@ -62,11 +62,10 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
         //LocalDatastoreServiceTestConfig.getLocalDatastoreService().start();
     }
 
-    protected String makeFileName(String fileName) {
+    protected String makeFileName(String fileName, Date backupDate) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat tf = new SimpleDateFormat("HH-mm");
-        Date now = new Date();
-        return fileName.replace("(date)", df.format(now)).replace("(time)", tf.format(now));
+        return fileName.replace("(date)", df.format(backupDate)).replace("(time)", tf.format(backupDate));
     }
 
     @Override
