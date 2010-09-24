@@ -21,8 +21,10 @@
 package com.pyx4j.security.client;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,8 @@ public class ClientContext {
     private static ServerSession serverSession;
 
     private static boolean authenticationObtained = false;
+
+    private static List<Runnable> onAuthenticationAvalableQueue = null;
 
     private static String logoutURL;
 
@@ -267,10 +271,19 @@ public class ClientContext {
                 onAuthenticationAvalable.run();
             }
         } else {
+            if (onAuthenticationAvalableQueue != null) {
+                if (onAuthenticationAvalable != null) {
+                    onAuthenticationAvalableQueue.add(onAuthenticationAvalable);
+                }
+                return;
+            }
+            onAuthenticationAvalableQueue = new Vector<Runnable>();
+
             AsyncCallback<AuthenticationResponse> callback = new BlockingAsyncCallback<AuthenticationResponse>() {
 
                 @Override
                 public void onFailure(Throwable caught) {
+                    onAuthenticationAvalableQueue = null;
                     log.error("obtain authentication failure", caught);
                     onSuccess(new AuthenticationResponse());
                 }
@@ -281,6 +294,10 @@ public class ClientContext {
                     if (onAuthenticationAvalable != null) {
                         onAuthenticationAvalable.run();
                     }
+                    for (Runnable queued : onAuthenticationAvalableQueue) {
+                        queued.run();
+                    }
+                    onAuthenticationAvalableQueue = null;
                 }
             };
             if (executeBackground) {
