@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
+import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
@@ -56,6 +57,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.YesNoOption;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class AbstractSiteDispatcher {
 
@@ -156,6 +158,14 @@ public abstract class AbstractSiteDispatcher {
 
     public static AbstractSiteDispatcher instance() {
         return instance;
+    }
+
+    public abstract void onSiteLoad();
+
+    public void onModuleLoad() {
+        ClientLogger.setDebugOn(true);
+        log.debug("{}", BrowserType.getCompiledType());
+        onSiteLoad();
     }
 
     /**

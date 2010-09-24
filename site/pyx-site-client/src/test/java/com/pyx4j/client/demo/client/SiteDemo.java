@@ -23,16 +23,32 @@ package com.pyx4j.client.demo.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.client.AbstractSiteDispatcher;
+import com.pyx4j.site.client.SitePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class SiteDemo implements EntryPoint {
+public class SiteDemo extends AbstractSiteDispatcher {
 
     final Logger log = LoggerFactory.getLogger(SiteDemo.class);
 
-    public void onModuleLoad() {
+    @Override
+    protected void obtainSite(String siteName, AsyncCallback<SitePanel> callback) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public String getAppId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void onSiteLoad() {
 
     }
 }
