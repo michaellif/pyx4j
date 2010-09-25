@@ -94,6 +94,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler {
                     delayShowTimer = null;
                     if (target.isAttached() && target.isVisible()) {
                         textPane.setHTML(text);
+                        setWidth((Math.min(text.length(), 80)) / 2 + "em");
                         TooltipPanel.this.showRelativeTo(target);
                     }
                 }
@@ -144,6 +145,7 @@ public class Tooltip implements MouseOverHandler, MouseOutHandler {
             }
             tooltipPanel.setPopupPosition(event.getClientX(), event.getClientY());
             tooltipPanel.scheduleShow(target, this.text);
+
         }
     }
 
