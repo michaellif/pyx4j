@@ -21,8 +21,6 @@
 package com.pyx4j.essentials.j2se.backup;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
@@ -53,6 +51,7 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
         if (overrride && file.exists()) {
             file.delete();
         }
+        BackupUtils.ensureDirectoryExists(file);
         LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
         dsConfig.setNoStorage(false);
         dsConfig.setBackingStoreLocation(fileName);
@@ -63,9 +62,7 @@ public class LocalDatastoreBackupConsumer implements BackupConsumer {
     }
 
     protected String makeFileName(String fileName, Date backupDate) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormat tf = new SimpleDateFormat("HH-mm");
-        return fileName.replace("(date)", df.format(backupDate)).replace("(time)", tf.format(backupDate));
+        return BackupUtils.makeFileName(fileName, backupDate);
     }
 
     @Override

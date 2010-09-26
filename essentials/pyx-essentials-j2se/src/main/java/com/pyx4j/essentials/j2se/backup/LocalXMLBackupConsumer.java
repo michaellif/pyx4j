@@ -23,8 +23,6 @@ package com.pyx4j.essentials.j2se.backup;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,17 +53,11 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
         if (overrride && file.exists()) {
             file.delete();
         }
-        if ((file.getParentFile() != null) && (!file.getParentFile().exists())) {
-            if (!file.getParentFile().mkdirs()) {
-                throw new Error("Can't create backup destination directory");
-            }
-        }
+        BackupUtils.ensureDirectoryExists(file);
     }
 
     protected String makeFileName(String fileName, Date backupDate) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormat tf = new SimpleDateFormat("HH-mm");
-        return fileName.replace("(date)", df.format(backupDate)).replace("(time)", tf.format(backupDate));
+        return BackupUtils.makeFileName(fileName, backupDate);
     }
 
     @Override
