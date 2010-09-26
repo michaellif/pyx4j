@@ -55,6 +55,11 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
         if (overrride && file.exists()) {
             file.delete();
         }
+        if (!file.getParentFile().exists()) {
+            if (!file.getParentFile().mkdirs()) {
+                throw new Error("Can't create backup destination directory");
+            }
+        }
     }
 
     protected String makeFileName(String fileName, Date backupDate) {

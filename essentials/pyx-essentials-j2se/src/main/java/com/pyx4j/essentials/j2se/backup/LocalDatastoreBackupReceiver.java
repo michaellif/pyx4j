@@ -41,6 +41,11 @@ public class LocalDatastoreBackupReceiver extends AbstractBackupReceiver {
         if (!file.exists()) {
             throw new Error("File not found " + file.getAbsolutePath());
         }
+        if (!file.getParentFile().exists()) {
+            if (!file.getParentFile().mkdirs()) {
+                throw new Error("Can't create backup destination directory");
+            }
+        }
         LocalDatastoreServiceTestConfig dsConfig = new LocalDatastoreServiceTestConfig();
         dsConfig.setNoStorage(false);
         dsConfig.setBackingStoreLocation(fileName);
