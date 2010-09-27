@@ -7,4 +7,7 @@
 	<replace-with class="com.pyx4j.config.shared.ApplicationMode.DevelopmentMode">
 		<when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
 	</replace-with>
+	<replace-with class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfigGae">
+		<when-type-is class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig"/>
+	</replace-with>
 </module>

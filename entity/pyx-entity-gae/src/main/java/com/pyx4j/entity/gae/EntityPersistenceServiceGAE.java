@@ -98,7 +98,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private static I18n i18n = I18nFactory.getI18n();
 
-    private final int ORDINARY_STRING_LENGTH_MAX = 500;
+    private final int ORDINARY_STRING_LENGTH_MAX = com.pyx4j.config.shared.ApplicationBackend.GAE_ORDINARY_STRING_LENGTH_MAX;
 
     private static final String SECONDARY_PRROPERTY_SUFIX = "-s";
 

@@ -27,6 +27,7 @@ import java.util.List;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -116,7 +117,7 @@ public class MemberMetaImpl implements MemberMeta {
             if (stringLengthAnnotation != null) {
                 stringLength = stringLengthAnnotation.value();
             } else {
-                stringLength = 0;
+                stringLength = ApplicationBackend.getDefaultDataStringLength();
             }
         } else if (stringLengthAnnotation != null) {
             throw new RuntimeException("Unexpected @StringLength annotation in  memeber " + fieldName);

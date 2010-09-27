@@ -463,7 +463,7 @@ public class EntityFactoryGenerator extends Generator {
             if (stringLengthAnnotation != null) {
                 writer.print(String.valueOf(stringLengthAnnotation.value()));
             } else {
-                writer.print("0");
+                writer.print("-1");
             }
             writer.print(", ");
 

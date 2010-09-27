@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -96,7 +97,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.objectClass = objectClass;
         this.caption = caption;
         this.description = description;
-        this.stringLength = stringLength;
+        if (stringLength == -1) {
+            this.stringLength = ApplicationBackend.getDefaultDataStringLength();
+        } else {
+            this.stringLength = stringLength;
+        }
         this.format = format;
         this.useMessageFormat = useMessageFormat;
         this.nullString = nullString;
@@ -177,6 +182,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         return stringLength;
     }
 
+    @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
         throw new UnsupportedOperationException();
     }
