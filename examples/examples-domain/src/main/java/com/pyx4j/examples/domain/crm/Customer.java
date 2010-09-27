@@ -32,7 +32,6 @@ import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -49,7 +48,7 @@ public interface Customer extends IEntity {
     IPrimitive<String> name();
 
     @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false)
-    @Phone
+    @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
     @Caption(name = "Address")

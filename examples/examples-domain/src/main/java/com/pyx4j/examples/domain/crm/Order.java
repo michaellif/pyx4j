@@ -24,13 +24,13 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.report.ReportColumn;
@@ -86,7 +86,7 @@ public interface Order extends IEntity {
      * Copy of data from customer
      */
     @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false)
-    @Phone
+    @Editor(type = EditorType.phone)
     IPrimitive<String> customerPhone();
 
     @Indexed

@@ -23,10 +23,6 @@ package com.pyx4j.entity.client.ui;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.validator.Email;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Password;
-import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCaptcha;
@@ -87,19 +83,17 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             case yearpicker:
                 comp = new CMonthYearPicker(true);
                 break;
+            case email:
+                comp = new CEmailField();
+                break;
+            case phone:
+                comp = new CPhoneField();
+                break;
             default:
                 throw new Error("Unknown ");
             }
         } else if (mm.getValueClass().equals(String.class)) {
-            if (mm.isValidatorAnnotationPresent(Password.class)) {
-                comp = new CPasswordTextField();
-            } else if (mm.isValidatorAnnotationPresent(Email.class)) {
-                comp = new CEmailField();
-            } else if (mm.isValidatorAnnotationPresent(Phone.class)) {
-                comp = new CPhoneField();
-            } else {
-                comp = new CTextField();
-            }
+            comp = new CTextField();
         } else if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {

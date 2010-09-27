@@ -28,7 +28,7 @@ import java.util.Map;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.annotations.validator.Phone;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -130,7 +130,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         } else if (mm.getValueClass().equals(Double.class)) {
             comp = new CDoubleField();
         } else {
-            if (mm.isValidatorAnnotationPresent(Phone.class)) {
+            if (EditorType.phone.equals(mm.getEditorType())) {
                 comp = new CPhoneField();
                 ((CPhoneField) comp).setFormat(new CPhoneField.PhoneSearchFormat());
             } else {

@@ -21,7 +21,7 @@
 package com.pyx4j.entity.shared.criterion;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.annotations.validator.Phone;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -64,7 +64,7 @@ public class PathSearch extends Path implements Comparable<PathSearch> {
     public static int cardinalityByType(MemberMeta memberMeta) {
         if (memberMeta.getValueClass().isEnum()) {
             return 3;
-        } else if (memberMeta.isValidatorAnnotationPresent(Phone.class)) {
+        } else if (EditorType.phone.equals(memberMeta.getEditorType())) {
             return 2;
         } else {
             return 1;

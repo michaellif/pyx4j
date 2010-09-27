@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.IndexString;
@@ -159,7 +159,7 @@ public class IndexedEntitySearch {
                     if (words.size() == 1) {
                         inMemoryFilters.add(new StringInMemoryFilter(path, words.get(0)));
                     } else {
-                        if (mm.getAnnotation(Phone.class) != null) {
+                        if (EditorType.phone.equals(mm.getEditorType())) {
                             inMemoryFilters.add(new StringCompositeOrderedInMemoryFilter(path, words));
                         } else {
                             inMemoryFilters.add(new StringCompositeInMemoryFilter(path, words));

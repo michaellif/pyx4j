@@ -23,10 +23,9 @@ package com.pyx4j.security.rpc;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.Email;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Password;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -35,11 +34,11 @@ public interface AuthenticationRequest extends IEntity {
 
     IPrimitive<String> logoutApplicationUrl();
 
-    @Email
+    @Editor(type = EditorType.email)
     @NotNull
     IPrimitive<String> email();
 
-    @Password
+    @Editor(type = EditorType.password)
     @NotNull
     IPrimitive<String> password();
 

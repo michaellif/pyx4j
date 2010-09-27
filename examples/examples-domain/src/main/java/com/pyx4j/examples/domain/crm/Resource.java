@@ -24,12 +24,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Phone;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -54,7 +55,7 @@ public interface Resource extends IEntity {
     @NotNull
     IPrimitive<RepStatus> status();
 
-    @Phone
+    @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
     @Caption(name = "Address")
