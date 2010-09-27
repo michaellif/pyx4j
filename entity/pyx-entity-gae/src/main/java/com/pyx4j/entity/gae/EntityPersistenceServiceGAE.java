@@ -98,7 +98,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private static I18n i18n = I18nFactory.getI18n();
 
-    private final int ORDINARY_STRING_LENGHT_MAX = 500;
+    private final int ORDINARY_STRING_LENGTH_MAX = 500;
 
     private static final String SECONDARY_PRROPERTY_SUFIX = "-s";
 
@@ -289,7 +289,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             index = meta.getAnnotation(Indexed.class);
         }
         if (value instanceof String) {
-            if (meta.getStringLength() > ORDINARY_STRING_LENGHT_MAX) {
+            if (meta.getStringLength() > ORDINARY_STRING_LENGTH_MAX) {
                 return new Text((String) value);
             } else {
                 if ((index != null) && (index.keywordLenght() > 0)) {
