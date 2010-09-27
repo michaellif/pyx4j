@@ -108,8 +108,13 @@ public class RemoteServiceImpl implements RemoteService {
             } else if (e.getMessage() == null) {
                 throw new UnRecoverableRuntimeException("System error, contact support");
             } else {
-                // TODO may be don't need to show the actual error to customers.
-                throw new UnRecoverableRuntimeException(e.getMessage());
+                if (e.getClass().getName().endsWith("DeadlineExceededException")) {
+                    // Allow client to recover from GAE startup timeouts
+                    throw new RuntimeExceptionSerializable("Request has exceeded the 30 second request deadline. Please try again shortly.");
+                } else {
+                    // TODO may be don't need to show the actual error to customers.
+                    throw new UnRecoverableRuntimeException(e.getMessage());
+                }
             }
         }
     }
