@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.FormFactory;
 
 public abstract class EntityFormFactory<E extends IEntity> implements FormFactory {
@@ -82,6 +84,9 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
                     MemberMeta mm = member.getMeta();
                     if (components[i][j] instanceof CEditableComponent && mm.isValidatorAnnotationPresent(NotNull.class)) {
                         ((CEditableComponent) components[i][j]).setMandatory(true);
+                    }
+                    if (components[i][j] instanceof CTextComponent && String.class == mm.getValueClass()) {
+                        ((CTextComponent) components[i][j]).setMaxLength(mm.getStringLength());
                     }
 
                     if (mm.getDescription() != null) {

@@ -28,7 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.gwt.NativeTextBox;
 
-public abstract class CTextBox<E> extends CEditableComponent<E> {
+public abstract class CTextBox<E> extends CTextComponent<E> {
 
     INativeTextComponent<E> nativeTextField;
 

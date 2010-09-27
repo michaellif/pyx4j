@@ -23,7 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.gwt.NativeTextArea;
 
-public class CTextArea extends CEditableComponent<String> {
+public class CTextArea extends CTextComponent<String> {
 
     private NativeTextArea nativeTextArea;
 

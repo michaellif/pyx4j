@@ -24,7 +24,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.gwt.NativeRichTextArea;
 import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;
 
-public class CRichTextArea extends CEditableComponent<String> {
+public class CRichTextArea extends CTextComponent<String> {
 
     private INativeEditableComponent<String> nativeTextArea;
 
