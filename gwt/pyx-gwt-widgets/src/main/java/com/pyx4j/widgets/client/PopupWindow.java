@@ -48,6 +48,10 @@ public class PopupWindow {
             return this.closed;
         }-*/;
 
+        public final native String getName() /*-{
+            return this.name;
+        }-*/;
+
     }
 
     static {
@@ -60,6 +64,10 @@ public class PopupWindow {
 
     public static native int windowScreenTop() /*-{
         return  $wnd.screenTop != undefined ? $wnd.screenTop : $wnd.screenY;
+    }-*/;
+
+    public static native String windowName() /*-{
+        return  $wnd.name;
     }-*/;
 
     public static native PopupWindowHandle openPopupWindow(String url, String name, String features) /*-{
