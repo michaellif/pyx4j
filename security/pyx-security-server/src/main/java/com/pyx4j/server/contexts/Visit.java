@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.security.shared.Acl;
 import com.pyx4j.security.shared.UserVisit;
 
@@ -37,6 +38,12 @@ public class Visit implements Serializable {
     private UserVisit userVisit;
 
     private Acl acl;
+
+    private transient boolean aclChanged;
+
+    protected long aclTimeStamp;
+
+    private static final long aclRevalidationDelayMillis = 1 * Consts.MIN2MSEC;
 
     private final Hashtable<String, Serializable> attributes;
 
@@ -75,6 +82,7 @@ public class Visit implements Serializable {
         this.userVisit = userVisit;
         this.acl = acl;
         this.changed = true;
+        this.aclTimeStamp = System.currentTimeMillis();
     }
 
     protected void endSession() {
@@ -84,6 +92,27 @@ public class Visit implements Serializable {
 
     public boolean isChanged() {
         return changed || ((this.userVisit != null) && (this.userVisit.isChanged()));
+    }
+
+    public boolean isAclRevalidationRequired() {
+        return (aclTimeStamp + aclRevalidationDelayMillis) > System.currentTimeMillis();
+    }
+
+    public long getAclTimeStamp() {
+        return aclTimeStamp;
+    }
+
+    void aclRevalidated() {
+        this.aclTimeStamp = System.currentTimeMillis();
+        this.changed = true;
+    }
+
+    public boolean isAclChanged() {
+        return aclChanged;
+    }
+
+    public void setAclChanged(boolean aclChanged) {
+        this.aclChanged = aclChanged;
     }
 
     public String getSessionToken() {

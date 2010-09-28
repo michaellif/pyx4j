@@ -42,6 +42,7 @@ import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RemoteServiceAsync;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.serialization.client.RemoteServiceSerializer;
 
 public class RPCManager {
@@ -165,6 +166,15 @@ public class RPCManager {
         public void onSuccess(Object result) {
             runningServicesCount--;
             try {
+                if (result instanceof SystemNotificationsWrapper) {
+                    SystemNotificationsWrapper wrapper = (SystemNotificationsWrapper) result;
+                    if (handlerManager != null) {
+                        for (Serializable systemNotification : wrapper.getSystemNotifications()) {
+                            handlerManager.fireEvent(new SystemNotificationEvent(systemNotification));
+                        }
+                    }
+                    result = wrapper.getServiceResult();
+                }
                 if (callback != null) {
                     this.callback.onSuccess(result);
                 }
@@ -192,5 +202,12 @@ public class RPCManager {
             handlerManager = new HandlerManager(null);
         }
         return handlerManager.addHandler(RPCStatusChangeEvent.getType(), handler);
+    }
+
+    public static HandlerRegistration addSystemNotificationHandler(SystemNotificationHandler handler) {
+        if (handlerManager == null) {
+            handlerManager = new HandlerManager(null);
+        }
+        return handlerManager.addHandler(SystemNotificationEvent.TYPE, handler);
     }
 }

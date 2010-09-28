@@ -25,6 +25,7 @@ import java.util.List;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
+import com.pyx4j.security.shared.AclRevalidator;
 
 /**
  * All methods can return null to use default implementation in framework.
@@ -99,6 +100,10 @@ public class ServerSideConfiguration {
      * Default is Allow All Access Control List
      */
     public AclCreator getAclCreator() {
+        return null;
+    }
+
+    public AclRevalidator getAclRevalidator() {
         return null;
     }
 

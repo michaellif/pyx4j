@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
@@ -50,7 +51,21 @@ public class Lifecycle {
         HttpSession session = httprequest.getSession(false);
         Context.setSession(session);
         if (session != null) {
-            Context.setVisit((Visit) session.getAttribute(Context.SESSION_VISIT));
+            Visit visit = (Visit) session.getAttribute(Context.SESSION_VISIT);
+            if ((visit != null) && visit.isUserLoggedIn() && visit.isAclRevalidationRequired()) {
+                AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
+                if (acv != null) {
+                    Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
+                            visit.getAclTimeStamp());
+                    if (behaviours != null) {
+                        visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
+                        visit.setAclChanged(true);
+                    } else {
+                        visit.aclRevalidated();
+                    }
+                }
+            }
+            Context.setVisit(visit);
         }
 
         //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
@@ -64,6 +79,7 @@ public class Lifecycle {
             if (session != null) {
                 Visit visit = Context.getVisit();
                 if ((visit != null) && (visit.isChanged())) {
+                    visit.setAclChanged(false);
                     session.setAttribute(Context.SESSION_VISIT, visit);
                 }
             }

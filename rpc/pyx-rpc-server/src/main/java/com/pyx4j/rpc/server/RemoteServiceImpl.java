@@ -35,6 +35,7 @@ import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
+import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
@@ -98,6 +99,12 @@ public class RemoteServiceImpl implements RemoteService {
                 ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
                 while (li.hasPrevious()) {
                     returnValue = li.previous().filterOutgoing(clazz, returnValue);
+                }
+            }
+            Visit visit = Context.getVisit();
+            if ((visit != null) && visit.isAclChanged()) {
+                if (!(returnValue instanceof SystemNotificationsWrapper)) {
+                    returnValue = new SystemNotificationsWrapper(returnValue);
                 }
             }
             return returnValue;
