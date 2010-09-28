@@ -277,6 +277,7 @@ public class ClientContext {
                 }
                 return;
             }
+
             onAuthenticationAvalableQueue = new Vector<Runnable>();
 
             AsyncCallback<AuthenticationResponse> callback = new RecoverableBlockingAsyncCallback<AuthenticationResponse>() {
@@ -294,10 +295,12 @@ public class ClientContext {
                     if (onAuthenticationAvalable != null) {
                         onAuthenticationAvalable.run();
                     }
-                    for (Runnable queued : onAuthenticationAvalableQueue) {
-                        queued.run();
+                    if (onAuthenticationAvalableQueue != null) {
+                        for (Runnable queued : onAuthenticationAvalableQueue) {
+                            queued.run();
+                        }
+                        onAuthenticationAvalableQueue = null;
                     }
-                    onAuthenticationAvalableQueue = null;
                 }
             };
             if (executeBackground) {
