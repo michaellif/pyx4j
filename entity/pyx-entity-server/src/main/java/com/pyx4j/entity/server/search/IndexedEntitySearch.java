@@ -216,7 +216,13 @@ public class IndexedEntitySearch {
                 } else if (!(value instanceof Integer)) {
                     log.error("can't conver value to integer {}", value);
                 }
-                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
+                Indexed index = mm.getAnnotation(Indexed.class);
+                if ((index != null) && (index.global() != 0)) {
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global()) + value));
+                    inMemoryFilters.add(new PrimitiveInMemoryFilter(path, value));
+                } else {
+                    queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
+                }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();
                 Integer areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, pathWithGeoPointData, "radius"));

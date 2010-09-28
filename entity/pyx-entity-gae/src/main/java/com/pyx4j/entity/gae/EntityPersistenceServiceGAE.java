@@ -308,6 +308,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
                 return value;
             }
+        } else if (value instanceof Number) {
+            if ((index != null) && (index.global() != 0)) {
+                addGloablIndex(entity, index.global(), ((Number) value).toString());
+            }
+            return value;
         } else if (value instanceof Enum<?>) {
             if ((index != null) && (index.global() != 0)) {
                 addGloablIndex(entity, index.global(), ((Enum<?>) value).name());
