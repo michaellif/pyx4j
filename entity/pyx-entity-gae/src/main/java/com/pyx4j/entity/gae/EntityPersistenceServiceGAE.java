@@ -288,7 +288,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (parentIndexed) {
             index = meta.getAnnotation(Indexed.class);
         }
-        if (value instanceof String) {
+        if (value == null) {
+            if (index != null) {
+                if (meta.getValueClass().isAssignableFrom(java.sql.Date.class)) {
+                    entity.setProperty(getIndexedPropertyName(propertyName), true, new Date(0));
+                }
+            }
+            return null;
+        } else if (value instanceof String) {
             if (meta.getStringLength() > ORDINARY_STRING_LENGTH_MAX) {
                 return new Text((String) value);
             } else {
