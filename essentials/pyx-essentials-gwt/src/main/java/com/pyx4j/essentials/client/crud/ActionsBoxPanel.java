@@ -61,7 +61,7 @@ public class ActionsBoxPanel extends ActionsPanel {
         fieldSetPanel.add(contentPanel);
     }
 
-    public void addItem(String name, ClickHandler handler) {
+    public Anchor addItem(String name, ClickHandler handler) {
         Anchor anchor = new Anchor(name);
         anchor.getElement().getStyle().setColor("#0066CC");
         anchor.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -74,6 +74,7 @@ public class ActionsBoxPanel extends ActionsPanel {
         }
 
         contentPanel.add(anchor);
+        return anchor;
 
     }
 
