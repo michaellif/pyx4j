@@ -24,47 +24,32 @@ import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.HtmlArea;
 import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 import com.pyx4j.widgets.client.richtext.BasikRichTextToolbar;
-import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeRichTextAreaPopup extends DockPanel implements INativeEditableComponent<String> {
 
-    private final HTML viewer;
+    private final HtmlArea viewer;
 
     private final Anchor editAction;
 
     private final CRichTextArea textArea;
 
     private final boolean nativeValueUpdate = false;
-
-    private static class ClickableScrollPanel extends ScrollPanel {
-
-        public ClickableScrollPanel(Widget child) {
-            super(child);
-        }
-
-        public HandlerRegistration addClickHandler(ClickHandler handler) {
-            return addDomHandler(handler, ClickEvent.getType());
-        }
-    }
 
     public NativeRichTextAreaPopup(CRichTextArea textArea) {
         super();
@@ -101,15 +86,9 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
             }
         };
 
-        viewer = new HTML();
+        viewer = new HtmlArea();
+        viewer.setHeight("120px");
         viewer.addClickHandler(popupHandler);
-        viewer.setWidth("100%");
-
-        ClickableScrollPanel viewerScrollPanel = new ClickableScrollPanel(viewer);
-        viewerScrollPanel.setHeight("120px");
-        viewerScrollPanel.setStyleName(CSSClass.pyx4j_TextBox.name());
-        viewerScrollPanel.getElement().getStyle().setPadding(2, Unit.PX);
-        viewerScrollPanel.addClickHandler(popupHandler);
 
         editAction = new Anchor("edit");
 
@@ -121,8 +100,8 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
 
         add(editAction, SOUTH);
         setCellHeight(editAction, "100%");
-        add(viewerScrollPanel, CENTER);
-        setCellWidth(viewerScrollPanel, "100%");
+        add(viewer, CENTER);
+        setCellWidth(viewer, "100%");
 
         getElement().getStyle().setProperty("resize", "none");
 

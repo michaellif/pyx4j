@@ -14,36 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
+ * Created on Sep 28, 2010
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client;
 
-import com.pyx4j.widgets.client.style.CSSClass;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
-public class TextBox extends com.google.gwt.user.client.ui.TextBox implements WatermarkComponent {
+public interface WatermarkComponent {
 
-    private TextWatermark watermark;
+    HandlerRegistration addFocusHandler(FocusHandler focusHandler);
 
-    public TextBox() {
-        setStyleName(CSSClass.pyx4j_TextBox.name());
-        setWatermark("Watermark!");
-    }
+    HandlerRegistration addBlurHandler(BlurHandler blurHandler);
 
-    public void setWatermark(String text) {
-        if (watermark == null) {
-            watermark = new TextWatermark(this);
-        }
-        watermark.setWatermark(text);
-    }
+    boolean isEnabled();
 
-    @Override
-    public void setText(String text) {
-        super.setText(text);
-        if (watermark != null) {
-            watermark.showWatermark();
-        }
-    }
+    String getText();
+
+    void setText(String text);
+
+    void addStyleDependentName(String string);
+
+    void removeStyleDependentName(String string);
 
 }
