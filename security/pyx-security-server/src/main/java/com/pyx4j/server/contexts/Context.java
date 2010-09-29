@@ -20,6 +20,9 @@
  */
 package com.pyx4j.server.contexts;
 
+import java.io.Serializable;
+import java.util.Vector;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -42,6 +45,8 @@ public class Context {
         Visit abstractVisit;
 
         boolean sessionEnd;
+
+        Vector<Serializable> systemNotifications;
 
     }
 
@@ -100,6 +105,18 @@ public class Context {
 
     public static HttpServletResponse getResponse() {
         return requestLocal.get().response;
+    }
+
+    public static void addResponseSystemNotification(Serializable systemNotification) {
+        RequestContext ctx = requestLocal.get();
+        if (ctx.systemNotifications == null) {
+            ctx.systemNotifications = new Vector<Serializable>();
+        }
+        ctx.systemNotifications.add(systemNotification);
+    }
+
+    public static Vector<Serializable> getResponseSystemNotifications() {
+        return requestLocal.get().systemNotifications;
     }
 
     public static String getRequestHeader(String name) {

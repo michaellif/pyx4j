@@ -37,17 +37,18 @@ public class RuntimeExceptionNotificationsWrapper extends RuntimeExceptionSerial
         super();
     }
 
-    public RuntimeExceptionNotificationsWrapper(RuntimeExceptionSerializable original) {
+    public RuntimeExceptionNotificationsWrapper(RuntimeExceptionSerializable original, Vector<Serializable> systemNotifications) {
         super();
         this.original = original;
+        setSystemNotifications(systemNotifications);
     }
 
     public Vector<Serializable> getSystemNotifications() {
         return systemNotifications;
     }
 
-    public void addSystemNotification(Serializable systemNotification) {
-        this.systemNotifications.add(systemNotification);
+    public void setSystemNotifications(Vector<Serializable> systemNotifications) {
+        this.systemNotifications = systemNotifications;
     }
 
     public RuntimeExceptionSerializable getOriginal() {

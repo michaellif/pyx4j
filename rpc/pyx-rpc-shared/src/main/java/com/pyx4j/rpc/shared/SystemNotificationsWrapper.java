@@ -44,7 +44,18 @@ public class SystemNotificationsWrapper implements Serializable {
     }
 
     public void addSystemNotification(Serializable systemNotification) {
+        if (this.systemNotifications == null) {
+            this.systemNotifications = new Vector<Serializable>();
+        }
         this.systemNotifications.add(systemNotification);
+    }
+
+    public void addSystemNotifications(Vector<Serializable> systemNotifications) {
+        if (this.systemNotifications == null) {
+            this.systemNotifications = systemNotifications;
+        } else {
+            this.systemNotifications.addAll(systemNotifications);
+        }
     }
 
     public Serializable getServiceResult() {

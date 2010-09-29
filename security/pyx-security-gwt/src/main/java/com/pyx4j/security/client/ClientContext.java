@@ -133,7 +133,7 @@ public class ClientContext {
         } else {
             // Session ends.
             if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
-                RPCManager.setSessionToken(null);
+                RPCManager.setSessionToken(null, null);
                 Cookies.removeCookie(serverSession.getSessionCookieName());
             }
             serverSession = null;
@@ -145,7 +145,7 @@ public class ClientContext {
             } else {
                 ClientContext.sessionToken = sessionToken;
             }
-            RPCManager.setSessionToken(ClientContext.sessionToken);
+            RPCManager.setSessionToken(ClientContext.sessionToken, authenticationResponse.getAclTimeStamp());
         }
         log.info("Authenticated {}", userVisit);
         attributes.clear();
@@ -161,7 +161,7 @@ public class ClientContext {
      */
     public static void terminateSession() {
         userVisit = null;
-        RPCManager.setSessionToken(null);
+        RPCManager.setSessionToken(null, null);
         if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
             Cookies.removeCookie(serverSession.getSessionCookieName());
         }

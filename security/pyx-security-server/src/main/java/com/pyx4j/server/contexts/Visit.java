@@ -43,6 +43,8 @@ public class Visit implements Serializable {
 
     protected long aclTimeStamp;
 
+    protected long aclRevalidationTimeStamp;
+
     private static final long aclRevalidationDelayMillis = 1 * Consts.MIN2MSEC;
 
     private final Hashtable<String, Serializable> attributes;
@@ -83,6 +85,7 @@ public class Visit implements Serializable {
         this.acl = acl;
         this.changed = true;
         this.aclTimeStamp = System.currentTimeMillis();
+        this.aclRevalidationTimeStamp = aclTimeStamp;
     }
 
     protected void endSession() {
@@ -94,8 +97,9 @@ public class Visit implements Serializable {
         return changed || ((this.userVisit != null) && (this.userVisit.isChanged()));
     }
 
-    public boolean isAclRevalidationRequired() {
-        return (aclTimeStamp + aclRevalidationDelayMillis) > System.currentTimeMillis();
+    public boolean isAclRevalidationRequired(String clientAclTimeStamp) {
+        return (aclRevalidationTimeStamp + aclRevalidationDelayMillis) < System.currentTimeMillis()
+                || ((clientAclTimeStamp != null) && (aclTimeStamp != Long.parseLong(clientAclTimeStamp)));
     }
 
     public long getAclTimeStamp() {
@@ -103,7 +107,7 @@ public class Visit implements Serializable {
     }
 
     void aclRevalidated() {
-        this.aclTimeStamp = System.currentTimeMillis();
+        this.aclRevalidationTimeStamp = System.currentTimeMillis();
         this.changed = true;
     }
 

@@ -77,6 +77,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
             // TODO This is BAD but no much, we will fix this in next version. We still protected from XSRF
             ar.setSessionToken(visit.getSessionToken());
+            ar.setAclTimeStamp(String.valueOf(visit.getAclTimeStamp()));
         }
 
         if (ServerSideConfiguration.instance().useAppengineGoogleAccounts()) {

@@ -33,6 +33,7 @@ import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.RemoteService;
+import com.pyx4j.rpc.shared.RuntimeExceptionNotificationsWrapper;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
@@ -55,73 +56,81 @@ public class RemoteServiceImpl implements RemoteService {
     @SuppressWarnings("unchecked")
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException {
-        SecurityController.assertPermission(new ServiceExecutePermission(serviceInterfaceClassName));
-        Class<? extends Service<?, ?>> clazz = ServiceRegistry.getServiceClass(serviceInterfaceClassName);
-        if (clazz == null) {
+        try {
+            SecurityController.assertPermission(new ServiceExecutePermission(serviceInterfaceClassName));
+            Class<? extends Service<?, ?>> clazz = ServiceRegistry.getServiceClass(serviceInterfaceClassName);
+            if (clazz == null) {
+                try {
+                    clazz = serviceFactory.getServiceClass(serviceInterfaceClassName);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
+                } catch (Throwable t) {
+                    log.error("Service call error", t);
+                    throw new UnRecoverableRuntimeException("Fatal system error");
+                }
+                ServiceRegistry.register(serviceInterfaceClassName, clazz);
+            }
+            Service serviceInstance;
             try {
-                clazz = serviceFactory.getServiceClass(serviceInterfaceClassName);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
-            } catch (Throwable t) {
-                log.error("Service call error", t);
-                throw new UnRecoverableRuntimeException("Fatal system error");
+                serviceInstance = clazz.newInstance();
+            } catch (Throwable e) {
+                log.error("Fatal system error", e);
+                if ((e.getCause() != null) && (e.getCause() != e)) {
+                    log.error("Fatal system error cause", e.getCause());
+                }
+                throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
             }
-            ServiceRegistry.register(serviceInterfaceClassName, clazz);
-        }
-        Service serviceInstance;
-        try {
-            serviceInstance = clazz.newInstance();
-        } catch (Throwable e) {
-            log.error("Fatal system error", e);
-            if ((e.getCause() != null) && (e.getCause() != e)) {
-                log.error("Fatal system error cause", e.getCause());
-            }
-            throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
-        }
-        if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
-            Visit visit = Context.getVisit();
-            if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
-                log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
-                log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
-                throw new SecurityViolationException("Request requires authentication.");
-            }
-        }
-        try {
-            List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
-            if (filters != null) {
-                for (IServiceFilter filter : filters) {
-                    serviceRequest = filter.filterIncomming(clazz, serviceRequest);
+            if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
+                Visit visit = Context.getVisit();
+                if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
+                    log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
+                    log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
+                    throw new SecurityViolationException("Request requires authentication.");
                 }
             }
-            Serializable returnValue = serviceInstance.execute(serviceRequest);
-            if (filters != null) {
-                // Run filters in reverse order
-                ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
-                while (li.hasPrevious()) {
-                    returnValue = li.previous().filterOutgoing(clazz, returnValue);
+            try {
+                List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
+                if (filters != null) {
+                    for (IServiceFilter filter : filters) {
+                        serviceRequest = filter.filterIncomming(clazz, serviceRequest);
+                    }
                 }
-            }
-            Visit visit = Context.getVisit();
-            if ((visit != null) && visit.isAclChanged()) {
-                if (!(returnValue instanceof SystemNotificationsWrapper)) {
-                    returnValue = new SystemNotificationsWrapper(returnValue);
+                Serializable returnValue = serviceInstance.execute(serviceRequest);
+                if (filters != null) {
+                    // Run filters in reverse order
+                    ListIterator<IServiceFilter> li = filters.listIterator(filters.size());
+                    while (li.hasPrevious()) {
+                        returnValue = li.previous().filterOutgoing(clazz, returnValue);
+                    }
                 }
-            }
-            return returnValue;
-        } catch (Throwable e) {
-            log.error("Service call error for " + Context.getVisit(), e);
-            if (e instanceof RuntimeExceptionSerializable) {
-                throw (RuntimeExceptionSerializable) e;
-            } else if (e.getMessage() == null) {
-                throw new UnRecoverableRuntimeException("System error, contact support");
-            } else {
-                if (e.getClass().getName().endsWith("DeadlineExceededException")) {
-                    // Allow client to recover from GAE startup timeouts
-                    throw new RuntimeExceptionSerializable("Request has exceeded the 30 second request deadline. Please try again shortly.");
+                if (Context.getResponseSystemNotifications() != null) {
+                    if (!(returnValue instanceof SystemNotificationsWrapper)) {
+                        returnValue = new SystemNotificationsWrapper(returnValue);
+                    }
+                    ((SystemNotificationsWrapper) returnValue).addSystemNotifications(Context.getResponseSystemNotifications());
+                }
+                return returnValue;
+            } catch (Throwable e) {
+                if (e instanceof RuntimeExceptionSerializable) {
+                    throw (RuntimeExceptionSerializable) e;
+                } else if (e.getMessage() == null) {
+                    throw new UnRecoverableRuntimeException("System error, contact support");
                 } else {
-                    // TODO may be don't need to show the actual error to customers.
-                    throw new UnRecoverableRuntimeException(e.getMessage());
+                    if (e.getClass().getName().endsWith("DeadlineExceededException")) {
+                        // Allow client to recover from GAE startup timeouts
+                        throw new RuntimeExceptionSerializable("Request has exceeded the 30 second request deadline. Please try again shortly.");
+                    } else {
+                        // TODO may be don't need to show the actual error to customers.
+                        throw new UnRecoverableRuntimeException(e.getMessage());
+                    }
                 }
+            }
+        } catch (RuntimeExceptionSerializable oe) {
+            log.error("Service call error for " + Context.getVisit(), oe);
+            if (Context.getResponseSystemNotifications() != null) {
+                throw new RuntimeExceptionNotificationsWrapper(oe, Context.getResponseSystemNotifications());
+            } else {
+                throw oe;
             }
         }
     }

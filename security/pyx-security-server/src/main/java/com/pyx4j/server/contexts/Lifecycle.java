@@ -36,6 +36,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.rpc.shared.RemoteService;
+import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
@@ -45,27 +47,31 @@ public class Lifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(Lifecycle.class);
 
-    public static void beginRequest(HttpServletRequest httprequest, HttpServletResponse response) {
+    public static void beginRequest(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
         //long start = System.nanoTime();
-        Context.beginRequest(httprequest, response);
+        Context.beginRequest(httprequest, httpresponse);
         HttpSession session = httprequest.getSession(false);
         Context.setSession(session);
         if (session != null) {
             Visit visit = (Visit) session.getAttribute(Context.SESSION_VISIT);
-            if ((visit != null) && visit.isUserLoggedIn() && visit.isAclRevalidationRequired()) {
+            Context.setVisit(visit);
+            if ((visit != null) && visit.isUserLoggedIn() && visit.isAclRevalidationRequired(httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER))) {
                 AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
                 if (acv != null) {
                     Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
                             visit.getAclTimeStamp());
-                    if (behaviours != null) {
+                    if (behaviours == null) {
+                        endSession(session);
+                        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification(true));
+                    } else if (behaviours != visit.getAcl().getBehaviours()) {
                         visit.beginSession(visit.getUserVisit(), SecurityController.instance().authenticate(behaviours));
                         visit.setAclChanged(true);
+                        Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
                     } else {
                         visit.aclRevalidated();
                     }
                 }
             }
-            Context.setVisit(visit);
         }
 
         //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);

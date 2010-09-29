@@ -14,28 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on Sep 28, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.rpc.shared;
+package com.pyx4j.security.rpc;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+public class AuthorizationChangedSystemNotification implements Serializable {
 
-/**
- * Single service call definition.
- * 
- * Use RPCManager.execute(...) in client code;
- */
-@RemoteServiceRelativePath("srv")
-public interface RemoteService extends com.google.gwt.user.client.rpc.RemoteService {
+    private static final long serialVersionUID = 1L;
 
-    public static final String SESSION_TOKEN_HEADER = "X-XSRF-SessionToken";
+    private boolean sessionTerminated;
 
-    public static final String SESSION_ACL_TIMESTAMP_HEADER = "X-SessionTS";
+    public AuthorizationChangedSystemNotification() {
+        setSessionTerminated(false);
+    }
 
-    public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException;
+    public AuthorizationChangedSystemNotification(boolean sessionTerminated) {
+        setSessionTerminated(sessionTerminated);
+    }
+
+    public boolean isSessionTerminated() {
+        return sessionTerminated;
+    }
+
+    public void setSessionTerminated(boolean sessionTerminated) {
+        this.sessionTerminated = sessionTerminated;
+    }
 
 }

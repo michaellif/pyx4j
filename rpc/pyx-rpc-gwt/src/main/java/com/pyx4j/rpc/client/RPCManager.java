@@ -41,6 +41,7 @@ import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RemoteServiceAsync;
+import com.pyx4j.rpc.shared.RuntimeExceptionNotificationsWrapper;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.serialization.client.RemoteServiceSerializer;
@@ -77,8 +78,8 @@ public class RPCManager {
         requestBuilder.enableAppEngineUsageStats();
     }
 
-    public static void setSessionToken(String sessionToken) {
-        requestBuilder.setSessionToken(sessionToken);
+    public static void setSessionToken(String sessionToken, String sessionAclTimeStamp) {
+        requestBuilder.setSessionToken(sessionToken, sessionAclTimeStamp);
     }
 
     public static Serializer getSerializer() {
@@ -142,6 +143,15 @@ public class RPCManager {
         public void onFailure(Throwable caught) {
             runningServicesCount--;
             try {
+                if (caught instanceof RuntimeExceptionNotificationsWrapper) {
+                    RuntimeExceptionNotificationsWrapper wrapper = (RuntimeExceptionNotificationsWrapper) caught;
+                    if (handlerManager != null) {
+                        for (Serializable systemNotification : wrapper.getSystemNotifications()) {
+                            handlerManager.fireEvent(new SystemNotificationEvent(systemNotification));
+                        }
+                    }
+                    caught = wrapper.getOriginal();
+                }
                 if (caught instanceof IncompatibleRemoteServiceException) {
                     UncaughtHandler.onUnrecoverableError(caught, "RPC." + GWTJava5Helper.getSimpleName(serviceInterface));
                 } else if (!(caught instanceof RuntimeExceptionSerializable) && (callback instanceof RecoverableCall)

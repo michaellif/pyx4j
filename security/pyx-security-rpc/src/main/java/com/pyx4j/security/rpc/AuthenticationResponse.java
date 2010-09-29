@@ -39,6 +39,8 @@ public class AuthenticationResponse implements Serializable {
 
     private String sessionToken;
 
+    private String aclTimeStamp;
+
     private String logoutURL;
 
     private boolean datastoreReadOnly;
@@ -109,6 +111,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setSessionToken(String sessionToken) {
         this.sessionToken = sessionToken;
+    }
+
+    public String getAclTimeStamp() {
+        return aclTimeStamp;
+    }
+
+    public void setAclTimeStamp(String aclTimeStamp) {
+        this.aclTimeStamp = aclTimeStamp;
     }
 
 }

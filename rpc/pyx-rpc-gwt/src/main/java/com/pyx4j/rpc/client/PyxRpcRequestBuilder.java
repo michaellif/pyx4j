@@ -36,6 +36,8 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
 
     private String serviceInterfaceMarker;
 
+    private String sessionAclTimeStamp;
+
     private String sessionToken;
 
     public PyxRpcRequestBuilder() {
@@ -65,8 +67,9 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
         serviceInterfaceMarker = GWTJava5Helper.getSimpleName(serviceInterface).replace('$', '.');
     }
 
-    void setSessionToken(String sessionToken) {
+    void setSessionToken(String sessionToken, String sessionAclTimeStamp) {
         this.sessionToken = sessionToken;
+        this.sessionAclTimeStamp = sessionAclTimeStamp;
     }
 
     @Override
@@ -74,6 +77,9 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
         RequestBuilder rb = super.doCreate(serviceEntryPoint + "/" + serviceInterfaceMarker);
         if (sessionToken != null) {
             rb.setHeader(RemoteService.SESSION_TOKEN_HEADER, sessionToken);
+        }
+        if (sessionAclTimeStamp != null) {
+            rb.setHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER, sessionAclTimeStamp);
         }
         return rb;
     }
