@@ -45,6 +45,8 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final String description;
 
+    private final String watermark;
+
     private final boolean persistenceTransient;
 
     private final boolean rpcTransient;
@@ -59,11 +61,12 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final String nullString;
 
-    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, boolean persistenceTransient, boolean rpcTransient,
-            String toStringFormat, String nullString, String[] memberNamesToString) {
+    public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, String watermark, boolean persistenceTransient,
+            boolean rpcTransient, String toStringFormat, String nullString, String[] memberNamesToString) {
         this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
+        this.watermark = watermark;
         this.persistenceTransient = persistenceTransient;
         this.rpcTransient = rpcTransient;
         this.toStringFormat = toStringFormat;
@@ -89,6 +92,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getWatermark() {
+        return watermark;
     }
 
     @Override

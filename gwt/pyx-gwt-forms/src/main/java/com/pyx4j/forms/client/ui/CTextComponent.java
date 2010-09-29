@@ -21,10 +21,13 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class CTextComponent<E> extends CEditableComponent<E> {
 
     private TextComponentLengthValidator<E> validator;
+
+    private String watermark;
 
     public CTextComponent() {
         super();
@@ -66,4 +69,16 @@ public abstract class CTextComponent<E> extends CEditableComponent<E> {
             }
         }
     }
+
+    public void setWatermark(String watermark) {
+        this.watermark = watermark;
+        if (getNativeComponent() != null && getNativeComponent() instanceof WatermarkComponent) {
+            ((WatermarkComponent) getNativeComponent()).setWatermark(watermark);
+        }
+    }
+
+    public String getWatermark() {
+        return watermark;
+    }
+
 }

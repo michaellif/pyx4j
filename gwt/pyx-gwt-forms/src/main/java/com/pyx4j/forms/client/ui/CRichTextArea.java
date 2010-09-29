@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;
 
 public class CRichTextArea extends CTextComponent<String> {
 
-    private INativeEditableComponent<String> nativeTextArea;
+    private INativeRichTextComponent<String> nativeTextArea;
 
     private final int rows = 4;
 
@@ -73,6 +73,7 @@ public class CRichTextArea extends CTextComponent<String> {
             }
             applyAccessibilityRules();
             setNativeComponentValue(getValue());
+            nativeTextArea.setWatermark(getWatermark());
         }
         return nativeTextArea;
     }

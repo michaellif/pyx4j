@@ -31,11 +31,12 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.DockPanel;
 
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeRichTextComponent;
+import com.pyx4j.forms.client.ui.NotImplementedException;
 import com.pyx4j.widgets.client.RichTextArea;
 import com.pyx4j.widgets.client.richtext.BasikRichTextToolbar;
 
-public class NativeRichTextArea extends DockPanel implements INativeEditableComponent<String> {
+public class NativeRichTextArea extends DockPanel implements INativeRichTextComponent<String> {
 
     private final RichTextArea richTextArea;
 
@@ -230,6 +231,11 @@ public class NativeRichTextArea extends DockPanel implements INativeEditableComp
             toolbar.getElement().getStyle().setOpacity(1);
             break;
         }
+    }
+
+    @Override
+    public void setWatermark(String watermark) {
+        throw new NotImplementedException();
     }
 
 }

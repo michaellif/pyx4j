@@ -14,18 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Sep 29, 2010
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeEditableComponent<E> extends INativeFocusComponent {
+public interface INativeRichTextComponent<E> extends INativeEditableComponent<E> {
 
-    public void setEditable(boolean editable);
-
-    public boolean isEditable();
-
-    void setNativeValue(E value);
+    void setWatermark(String watermark);
 
 }

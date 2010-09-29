@@ -83,6 +83,11 @@ public class MemberMetaImpl implements MemberMeta {
     private final String description;
 
     /**
+     * See com.pyx4j.entity.annotations.Caption
+     */
+    private final String watermark;
+
+    /**
      * See com.pyx4j.entity.annotations.StringLength
      */
     private final int stringLength;
@@ -133,8 +138,10 @@ public class MemberMetaImpl implements MemberMeta {
         }
         if (captionAnnotation != null) {
             description = captionAnnotation.description();
+            watermark = captionAnnotation.watermark();
         } else {
             description = null;
+            watermark = null;
         }
 
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
@@ -160,6 +167,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getWatermark() {
+        return watermark;
     }
 
     @Override

@@ -56,6 +56,8 @@ public class EntityMetaImpl implements EntityMeta {
 
     private final String description;
 
+    private final String watermark;
+
     private final boolean persistenceTransient;
 
     private final boolean rpcTransient;
@@ -92,8 +94,10 @@ public class EntityMetaImpl implements EntityMeta {
         }
         if (captionAnnotation != null) {
             description = captionAnnotation.description();
+            watermark = captionAnnotation.watermark();
         } else {
             description = null;
+            watermark = null;
         }
         persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
         rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
@@ -120,6 +124,11 @@ public class EntityMetaImpl implements EntityMeta {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getWatermark() {
+        return watermark;
     }
 
     @Override

@@ -65,8 +65,12 @@ public abstract class TextWatermark {
             }
             show(true);
         } else {
-            focusHandlerRegistration.removeHandler();
-            blurHandlerRegistration.removeHandler();
+            if (focusHandlerRegistration != null) {
+                focusHandlerRegistration.removeHandler();
+            }
+            if (blurHandlerRegistration != null) {
+                blurHandlerRegistration.removeHandler();
+            }
         }
     }
 

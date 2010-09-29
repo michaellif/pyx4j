@@ -50,6 +50,7 @@ public class CTextArea extends CTextComponent<String> {
             applyAccessibilityRules();
             setRows(rows);
             setNativeComponentValue(getValue());
+            nativeTextArea.setWatermark(getWatermark());
         }
         return nativeTextArea;
     }

@@ -36,4 +36,6 @@ public interface WatermarkComponent {
 
     void removeStyleDependentName(String string);
 
+    void setWatermark(String text);
+
 }

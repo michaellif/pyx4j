@@ -22,8 +22,11 @@ package com.pyx4j.forms.client.gwt;
 
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,16 +35,18 @@ import com.google.gwt.user.client.ui.RequiresResize;
 
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.INativeRichTextComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.HtmlArea;
 import com.pyx4j.widgets.client.RichTextArea;
+import com.pyx4j.widgets.client.WatermarkComponent;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 import com.pyx4j.widgets.client.richtext.BasikRichTextToolbar;
 
-public class NativeRichTextAreaPopup extends DockPanel implements INativeEditableComponent<String> {
+public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTextComponent<String>, WatermarkComponent {
 
     private final HtmlArea viewer;
 
@@ -245,5 +250,20 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeEditabl
             setCellHeight(richTextArea, "100%");
         }
 
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        return viewer.addFocusHandler(focusHandler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        return viewer.addBlurHandler(blurHandler);
+    }
+
+    @Override
+    public void setWatermark(String text) {
+        viewer.setWatermark(text);
     }
 }

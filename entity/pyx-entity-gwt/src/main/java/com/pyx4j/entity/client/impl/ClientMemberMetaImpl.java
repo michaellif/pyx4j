@@ -65,6 +65,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     private final String description;
 
     /**
+     * See com.pyx4j.entity.annotations.Caption
+     */
+    private final String watermark;
+
+    /**
      * See com.pyx4j.entity.annotations.StringLength
      */
     private final int stringLength;
@@ -80,8 +85,9 @@ public class ClientMemberMetaImpl implements MemberMeta {
     private Set<Class<?>> annotations;
 
     public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, boolean valueClassIsNumber, String fieldName,
-            String caption, String description, boolean persistenceTransient, boolean rpcTransient, boolean detached, boolean ownedRelationships,
-            boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString) {
+            String caption, String description, String watermark, boolean persistenceTransient, boolean rpcTransient, boolean detached,
+            boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat,
+            String nullString) {
         super();
         this.valueClass = valueClass;
         this.valueClassIsNumber = valueClassIsNumber;
@@ -97,6 +103,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.objectClass = objectClass;
         this.caption = caption;
         this.description = description;
+        this.watermark = watermark;
         if (stringLength == -1) {
             this.stringLength = ApplicationBackend.getDefaultDataStringLength();
         } else {
@@ -120,6 +127,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getWatermark() {
+        return watermark;
     }
 
     @Override

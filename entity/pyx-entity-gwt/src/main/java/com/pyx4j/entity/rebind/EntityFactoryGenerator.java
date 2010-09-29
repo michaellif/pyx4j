@@ -258,6 +258,7 @@ public class EntityFactoryGenerator extends Generator {
 
         String caption;
         String description = null;
+        String watermark = null;
         Caption captionAnnotation = interfaceType.getAnnotation(Caption.class);
         if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
             caption = captionAnnotation.name();
@@ -266,6 +267,7 @@ public class EntityFactoryGenerator extends Generator {
         }
         if (captionAnnotation != null) {
             description = captionAnnotation.description();
+            watermark = captionAnnotation.watermark();
         }
         Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
         Boolean rpcTransient = (interfaceType.getAnnotation(RpcTransient.class) != null) || (interfaceType.getAnnotation(RpcBlacklist.class) != null);
@@ -312,6 +314,9 @@ public class EntityFactoryGenerator extends Generator {
         writer.print(", ");
 
         writer.print(i18nEscapeSourceString(description));
+        writer.print(", ");
+
+        writer.print(i18nEscapeSourceString(watermark));
         writer.print(", ");
 
         writer.print(persistenceTransient.toString());
@@ -423,6 +428,7 @@ public class EntityFactoryGenerator extends Generator {
 
             String memeberCaption;
             String memeberDescription = null;
+            String memeberWatermark = null;
             Caption memeberCaptionAnnotation = method.getAnnotation(Caption.class);
             if ((memeberCaptionAnnotation != null) && (CommonsStringUtils.isStringSet(memeberCaptionAnnotation.name()))) {
                 memeberCaption = memeberCaptionAnnotation.name();
@@ -431,11 +437,15 @@ public class EntityFactoryGenerator extends Generator {
             }
             if (memeberCaptionAnnotation != null) {
                 memeberDescription = memeberCaptionAnnotation.description();
+                memeberWatermark = memeberCaptionAnnotation.watermark();
             }
             writer.print(i18nEscapeSourceString(memeberCaption));
             writer.print(", ");
 
             writer.print(i18nEscapeSourceString(memeberDescription));
+            writer.println(", ");
+
+            writer.print(i18nEscapeSourceString(memeberWatermark));
             writer.println(", ");
 
             // persistenceTransient, rpcTransient, detached, ownedRelationships, owner, embedded, indexed, stringLength

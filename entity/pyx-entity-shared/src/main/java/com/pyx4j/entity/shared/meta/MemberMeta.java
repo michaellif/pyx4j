@@ -47,6 +47,11 @@ public interface MemberMeta {
     public String getDescription();
 
     /**
+     * See com.pyx4j.entity.annotations.Caption
+     */
+    public String getWatermark();
+
+    /**
      * See com.pyx4j.entity.annotations.Transient
      */
     public boolean isTransient();
