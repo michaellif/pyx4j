@@ -78,13 +78,13 @@ public abstract class TextWatermark {
         if (insideShowWatermark) {
             return;
         }
-        show((watermark != null && !watermark.isEmpty() && (getText() == null || getText().isEmpty())));
+        show(watermark != null && !watermark.isEmpty() && isEmptyText());
     }
 
     private void show(boolean show) {
         insideShowWatermark = true;
         if (show) {
-            if (getText().isEmpty() || getText().equals(watermark)) {
+            if (isEmptyText() || getText().equals(watermark)) {
                 setText(watermark);
                 component.addStyleDependentName("watermark");
             }
@@ -100,6 +100,10 @@ public abstract class TextWatermark {
     abstract String getText();
 
     abstract void setText(String text);
+
+    protected boolean isEmptyText() {
+        return getText() == null || getText().isEmpty();
+    }
 
     public boolean isShown() {
         return !getText().isEmpty() && getText().equals(watermark);

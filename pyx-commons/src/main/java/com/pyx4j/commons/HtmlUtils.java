@@ -77,6 +77,25 @@ public class HtmlUtils {
         return sb.toString();
     }
 
+    public static boolean isEmpty(String html) {
+        if (CommonsStringUtils.isEmpty(html)) {
+            return true;
+        }
+        boolean tag = false;
+        for (char part : html.toCharArray()) {
+            if (part == '<') {
+                tag = true;
+            } else if (tag) {
+                if (part == '>') {
+                    tag = false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String htmlHex(char ch) {
         return "&#" + Integer.valueOf(ch) + ";";
     }

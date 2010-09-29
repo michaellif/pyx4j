@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.gwt.NativeRichTextArea;
 import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;
 
@@ -80,7 +81,7 @@ public class CRichTextArea extends CTextComponent<String> {
 
     @Override
     public boolean isValueEmpty() {
-        return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
+        return super.isValueEmpty() || HtmlUtils.isEmpty(getValue());
     }
 
     public void scrollToBottom() {

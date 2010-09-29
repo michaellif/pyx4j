@@ -31,6 +31,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class HtmlArea extends ScrollPanel implements WatermarkComponent {
@@ -97,6 +98,12 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
                 void setText(String text) {
                     viewer.setHTML(text);
                 }
+
+                @Override
+                protected boolean isEmptyText() {
+                    return HtmlUtils.isEmpty(getText());
+                }
+
             };
         }
         watermark.setWatermark(text);
