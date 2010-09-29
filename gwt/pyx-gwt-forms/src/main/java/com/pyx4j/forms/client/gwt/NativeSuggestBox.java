@@ -27,19 +27,22 @@ import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.style.CSSClass;
 
 public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableComponent<E> {
 
-    private final CSuggestBox<E> csuggestBox;
+    private final CSuggestBox<E> cSuggestBox;
 
-    public NativeSuggestBox(CSuggestBox<E> csuggestBox) {
+    public NativeSuggestBox(CSuggestBox<E> cSuggestBox) {
         super(new MultiWordSuggestOracle(), new TextBox());
-        this.csuggestBox = csuggestBox;
+        this.cSuggestBox = cSuggestBox;
 
-        setWidth(csuggestBox.getWidth());
-        setHeight(csuggestBox.getHeight());
+        setStyleName(CSSClass.pyx4j_TextBox.name());
 
-        setTabIndex(csuggestBox.getTabIndex());
+        setWidth(cSuggestBox.getWidth());
+        setHeight(cSuggestBox.getHeight());
+
+        setTabIndex(cSuggestBox.getTabIndex());
 
     }
 
@@ -68,7 +71,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableCo
 
         @Override
         public String toString(Object value) {
-            return "\n" + csuggestBox.getOptionName(value);
+            return "\n" + cSuggestBox.getOptionName(value);
         }
     }
 
@@ -88,7 +91,7 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableCo
 
     @Override
     public CSuggestBox getCComponent() {
-        return csuggestBox;
+        return cSuggestBox;
     }
 
 }

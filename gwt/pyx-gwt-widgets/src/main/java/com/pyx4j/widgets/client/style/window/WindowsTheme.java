@@ -58,6 +58,7 @@ public class WindowsTheme extends Theme {
         initHyperlinkStyle();
         initGroupBoxStyle();
         initPhotoalbomStyle();
+        initSuggestBoxStyle();
     }
 
     protected void initThemeColors() {
@@ -636,4 +637,16 @@ public class WindowsTheme extends Theme {
         addStyle(style);
 
     }
+
+    private void initSuggestBoxStyle() {
+        Style style = new Style(".gwt-SuggestBoxPopup");
+        style.addProperty("background-color", "white");
+        style.addProperty("padding", "2px");
+        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        addStyle(style);
+
+    }
+
 }

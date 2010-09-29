@@ -37,6 +37,7 @@ public class CSuggestBox<E> extends CEditableComponent<E> {
 
     public CSuggestBox(String title) {
         super(title);
+        setWidth("100%");
     }
 
     @Override
