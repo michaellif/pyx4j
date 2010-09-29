@@ -33,6 +33,8 @@ public class UserVisit implements Serializable {
 
     private String name;
 
+    private String email;
+
     protected transient boolean changed;
 
     public UserVisit() {
@@ -51,6 +53,15 @@ public class UserVisit implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.changed = true;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
         this.changed = true;
     }
 
