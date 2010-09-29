@@ -92,7 +92,18 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
 
     public void setWatermark(String text) {
         if (watermark == null) {
-            watermark = new TextWatermark(this);
+            watermark = new TextWatermark(this) {
+
+                @Override
+                String getText() {
+                    return viewer.getHTML();
+                }
+
+                @Override
+                void setText(String text) {
+                    viewer.setHTML(text);
+                }
+            };
         }
         watermark.setWatermark(text);
     }

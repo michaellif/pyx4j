@@ -33,7 +33,18 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
 
     public void setWatermark(String text) {
         if (watermark == null) {
-            watermark = new TextWatermark(this);
+            watermark = new TextWatermark(this) {
+
+                @Override
+                String getText() {
+                    return TextBox.super.getText();
+                }
+
+                @Override
+                void setText(String text) {
+                    TextBox.super.setText(text);
+                }
+            };
         }
         watermark.setWatermark(text);
         watermark.show(getText());

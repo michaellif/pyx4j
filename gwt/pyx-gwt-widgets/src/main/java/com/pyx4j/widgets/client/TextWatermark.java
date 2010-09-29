@@ -26,7 +26,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class TextWatermark {
+public abstract class TextWatermark {
 
     private final WatermarkComponent component;
 
@@ -99,5 +99,9 @@ public class TextWatermark {
     public boolean isShown() {
         return shouldBeShown;
     }
+
+    abstract String getText();
+
+    abstract void setText(String text);
 
 }
