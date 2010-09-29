@@ -25,11 +25,11 @@ import java.util.Collection;
 
 import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 
-public class CSuggestBox extends CEditableComponent<Object> {
+public class CSuggestBox<E> extends CEditableComponent<E> {
 
-    private NativeSuggestBox nativeSuggestBox;
+    private NativeSuggestBox<E> nativeSuggestBox;
 
-    private ArrayList<Object> options = new ArrayList<Object>();
+    private ArrayList<E> options = new ArrayList<E>();
 
     public CSuggestBox() {
         this(null);
@@ -40,14 +40,14 @@ public class CSuggestBox extends CEditableComponent<Object> {
     }
 
     @Override
-    public NativeSuggestBox getNativeComponent() {
+    public NativeSuggestBox<E> getNativeComponent() {
         return nativeSuggestBox;
     }
 
     @Override
-    public NativeSuggestBox initNativeComponent() {
+    public NativeSuggestBox<E> initNativeComponent() {
         if (nativeSuggestBox == null) {
-            nativeSuggestBox = new NativeSuggestBox(this);
+            nativeSuggestBox = new NativeSuggestBox<E>(this);
             applyAccessibilityRules();
             setOptions(options);
             setNativeComponentValue(getValue());
@@ -55,24 +55,24 @@ public class CSuggestBox extends CEditableComponent<Object> {
         return nativeSuggestBox;
     }
 
-    public void setOptions(Collection options) {
-        this.options = new ArrayList<Object>();
+    public void setOptions(Collection<E> options) {
+        this.options = new ArrayList<E>();
         this.options.clear();
         if (options == null) {
             return;
         }
-        Object currentSelection = getValue();
+        E currentSelection = getValue();
         this.options.addAll(options);
         if (nativeSuggestBox != null) {
             nativeSuggestBox.removeAllItems();
-            for (Object option : options) {
+            for (E option : options) {
                 nativeSuggestBox.addItem(getOptionName(option));
             }
             setValue(currentSelection);
         }
     }
 
-    public Collection getOptions() {
+    public Collection<E> getOptions() {
         return options;
     }
 

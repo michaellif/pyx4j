@@ -72,7 +72,11 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 }
                 break;
             case suggest:
-                comp = new CSuggestBox();
+                if (mm.isEntity()) {
+                    comp = new CEntitySuggestBox(mm.getCaption(), mm.getObjectClass());
+                } else {
+                    comp = new CSuggestBox();
+                }
                 break;
             case captcha:
                 comp = new CCaptcha();

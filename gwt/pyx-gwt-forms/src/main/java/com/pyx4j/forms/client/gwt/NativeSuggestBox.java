@@ -23,30 +23,18 @@ package com.pyx4j.forms.client.gwt;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 
-import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.TextBox;
 
-public class NativeSuggestBox extends NativeTriggerComponent<Object> implements INativeEditableComponent<Object> {
+public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableComponent<E> {
 
-    private final SuggestBox suggestBox;
+    private final CSuggestBox<E> csuggestBox;
 
-    private final SuggestTextBox suggestTextBox;
-
-    private final MultiWordSuggestOracle oracle;
-
-    private final CSuggestBox csuggestBox;
-
-    public NativeSuggestBox(CSuggestBox csuggestBox) {
-        super();
+    public NativeSuggestBox(CSuggestBox<E> csuggestBox) {
+        super(new MultiWordSuggestOracle(), new TextBox());
         this.csuggestBox = csuggestBox;
-        suggestTextBox = new SuggestTextBox(csuggestBox);
-        oracle = new MultiWordSuggestOracle();
-        suggestBox = new SuggestBox(oracle, suggestTextBox);
-
-        construct(suggestBox, suggestTextBox);
 
         setWidth(csuggestBox.getWidth());
         setHeight(csuggestBox.getHeight());
@@ -56,20 +44,24 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        suggestTextBox.setEnabled(enabled);
+    public void setEditable(boolean editable) {
+        ((TextBox) getWidget()).setEnabled(editable);
+        ((TextBox) getWidget()).setReadOnly(!editable);
     }
 
     @Override
-    public void setEditable(boolean editable) {
-        super.setEnabled(editable);
-        suggestTextBox.setReadOnly(!editable);
+    public boolean isEditable() {
+        return !((TextBox) getWidget()).isReadOnly();
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        ((TextBox) getWidget()).setEnabled(enabled);
     }
 
     @Override
     public boolean isEnabled() {
-        return suggestTextBox.isEnabled();
+        return ((TextBox) getWidget()).isEnabled();
     }
 
     private class StringConverter implements ToStringConverter<Object> {
@@ -80,19 +72,12 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
         }
     }
 
-    @Override
-    protected void onTrigger(boolean show) {
-        MessageDialog.info("Under Construction",
-                "Under Construction\n TODO select from:\n" + ConverterUtils.convertCollection(csuggestBox.getOptions(), new StringConverter()));
-
-    }
-
     public void addItem(String optionName) {
-        oracle.add(optionName);
+        ((MultiWordSuggestOracle) getSuggestOracle()).add(optionName);
     }
 
     public void removeAllItems() {
-        oracle.clear();
+        ((MultiWordSuggestOracle) getSuggestOracle()).clear();
     }
 
     @Override
@@ -104,31 +89,6 @@ public class NativeSuggestBox extends NativeTriggerComponent<Object> implements 
     @Override
     public CSuggestBox getCComponent() {
         return csuggestBox;
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !suggestTextBox.isReadOnly();
-    }
-
-}
-
-class SuggestTextBox extends com.google.gwt.user.client.ui.TextBox {
-
-    private final CSuggestBox suggestBox;
-
-    public SuggestTextBox(CSuggestBox suggestBox) {
-        super();
-        this.suggestBox = suggestBox;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-    }
-
-    public void setEditable(boolean editable) {
-        super.setReadOnly(!editable);
     }
 
 }
