@@ -22,10 +22,27 @@ package com.pyx4j.widgets.client;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class TextArea extends com.google.gwt.user.client.ui.TextArea {
+public class TextArea extends com.google.gwt.user.client.ui.TextArea implements WatermarkComponent {
+
+    private TextWatermark watermark;
 
     public TextArea() {
         setStyleName(CSSClass.pyx4j_TextBox.name());
+    }
+
+    public void setWatermark(String text) {
+        if (watermark == null) {
+            watermark = new TextWatermark(this);
+        }
+        watermark.setWatermark(text);
+    }
+
+    @Override
+    public void setText(String text) {
+        super.setText(text);
+        if (watermark != null) {
+            watermark.showWatermark();
+        }
     }
 
 }

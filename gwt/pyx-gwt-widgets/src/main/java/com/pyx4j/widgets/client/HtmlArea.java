@@ -21,17 +21,23 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class HtmlArea extends ScrollPanel {
+public class HtmlArea extends ScrollPanel implements WatermarkComponent {
 
     private final HTML viewer;
+
+    private TextWatermark watermark;
 
     public HtmlArea() {
         super();
@@ -55,4 +61,40 @@ public class HtmlArea extends ScrollPanel {
     public void setHTML(String html) {
         viewer.setHTML(html);
     }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        return addDomHandler(focusHandler, FocusEvent.getType());
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        return addDomHandler(blurHandler, BlurEvent.getType());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String getText() {
+        return viewer.getHTML();
+    }
+
+    @Override
+    public void setText(String text) {
+        viewer.setHTML(text);
+        if (watermark != null) {
+            watermark.showWatermark();
+        }
+    }
+
+    public void setWatermark(String text) {
+        if (watermark == null) {
+            watermark = new TextWatermark(this);
+        }
+        watermark.setWatermark(text);
+    }
+
 }

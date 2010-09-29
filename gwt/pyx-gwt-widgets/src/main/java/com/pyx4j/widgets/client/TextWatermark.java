@@ -76,21 +76,23 @@ public class TextWatermark {
         }
         if (watermark != null && !watermark.isEmpty() && (component.getText() == null || component.getText().isEmpty())) {
             showWatermark(true);
+        } else {
+            showWatermark(false);
         }
     }
 
     private void showWatermark(boolean show) {
         insideShowWatermark = true;
         if (show) {
-            if (component.getText().isEmpty() || component.getText().equals(watermark)) {
-                component.setText(watermark);
+            if (component.getText() == null || component.getText().isEmpty() || component.getText().equals(watermark)) {
                 component.addStyleDependentName("watermark");
+                component.setText(watermark);
             }
         } else {
-            if (!component.getText().isEmpty() && component.getText().equals(watermark)) {
+            if (component.getText() != null && component.getText().equals(watermark)) {
                 component.setText(null);
-                component.removeStyleDependentName("watermark");
             }
+            component.removeStyleDependentName("watermark");
         }
         insideShowWatermark = false;
     }
