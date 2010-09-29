@@ -80,13 +80,13 @@ public abstract class TextWatermark {
     private void show(boolean show) {
         insideShowWatermark = true;
         if (show) {
-            if (component.getText().isEmpty() || component.getText().equals(watermark)) {
-                component.setText(watermark);
+            if (getText().isEmpty() || getText().equals(watermark)) {
+                setText(watermark);
                 component.addStyleDependentName("watermark");
             }
         } else {
             if (isShown()) {
-                component.setText(null);
+                setText(null);
                 component.removeStyleDependentName("watermark");
             }
         }
