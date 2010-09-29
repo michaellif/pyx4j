@@ -48,19 +48,10 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
         viewer.setWidth("100%");
 
         setWidget(viewer);
-        setWatermark("WATERMARK");
     }
 
     public HandlerRegistration addClickHandler(ClickHandler handler) {
         return addDomHandler(handler, ClickEvent.getType());
-    }
-
-    public String getHTML() {
-        return viewer.getHTML();
-    }
-
-    public void setHTML(String html) {
-        viewer.setHTML(html);
     }
 
     @Override
@@ -78,7 +69,7 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
         return true;
     }
 
-    public String getText() {
+    public String getHTML() {
         if (watermark != null && watermark.isShown()) {
             return null;
         } else {
@@ -86,7 +77,7 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
         }
     }
 
-    public void setText(String text) {
+    public void setHTML(String text) {
         viewer.setHTML(text);
         if (watermark != null) {
             watermark.show();
