@@ -52,7 +52,7 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
     public void setText(String text) {
         super.setText(text);
         if (watermark != null) {
-            watermark.show(text);
+            watermark.show();
         }
     }
 

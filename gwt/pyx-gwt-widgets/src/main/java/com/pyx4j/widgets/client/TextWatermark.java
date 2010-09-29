@@ -38,8 +38,6 @@ public abstract class TextWatermark {
 
     private boolean insideShowWatermark = false;
 
-    private boolean shouldBeShown = false;
-
     public TextWatermark(WatermarkComponent component) {
         this.component = component;
     }
@@ -72,36 +70,35 @@ public abstract class TextWatermark {
         }
     }
 
-    public void show(String text) {
+    public void show() {
         if (insideShowWatermark) {
             return;
         }
-        shouldBeShown = (watermark != null && !watermark.isEmpty() && (text == null || text.isEmpty()));
-        show(shouldBeShown);
+        show((watermark != null && !watermark.isEmpty() && (getText() == null || getText().isEmpty())));
     }
 
     private void show(boolean show) {
         insideShowWatermark = true;
         if (show) {
-            if (shouldBeShown) {
-                component.addStyleDependentName("watermark");
+            if (component.getText().isEmpty() || component.getText().equals(watermark)) {
                 component.setText(watermark);
+                component.addStyleDependentName("watermark");
             }
         } else {
-            if (shouldBeShown) {
+            if (isShown()) {
                 component.setText(null);
+                component.removeStyleDependentName("watermark");
             }
-            component.removeStyleDependentName("watermark");
         }
         insideShowWatermark = false;
-    }
-
-    public boolean isShown() {
-        return shouldBeShown;
     }
 
     abstract String getText();
 
     abstract void setText(String text);
+
+    public boolean isShown() {
+        return !component.getText().isEmpty() && component.getText().equals(watermark);
+    }
 
 }

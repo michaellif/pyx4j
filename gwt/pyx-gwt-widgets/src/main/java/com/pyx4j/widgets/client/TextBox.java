@@ -47,14 +47,13 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
             };
         }
         watermark.setWatermark(text);
-        watermark.show(getText());
     }
 
     @Override
     public void setText(String text) {
         super.setText(text);
         if (watermark != null) {
-            watermark.show(text);
+            watermark.show();
         }
     }
 
