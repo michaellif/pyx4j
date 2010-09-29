@@ -32,10 +32,6 @@ public interface WatermarkComponent {
 
     boolean isEnabled();
 
-    String getText();
-
-    void setText(String text);
-
     void addStyleDependentName(String string);
 
     void removeStyleDependentName(String string);

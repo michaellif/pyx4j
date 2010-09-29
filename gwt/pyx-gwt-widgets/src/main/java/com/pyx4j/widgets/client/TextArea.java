@@ -56,4 +56,13 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
         }
     }
 
+    @Override
+    public String getText() {
+        if (watermark != null && watermark.isShown()) {
+            return null;
+        } else {
+            return super.getText();
+        }
+    }
+
 }

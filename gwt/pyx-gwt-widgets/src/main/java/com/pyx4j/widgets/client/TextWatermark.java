@@ -87,8 +87,8 @@ public abstract class TextWatermark {
         } else {
             if (isShown()) {
                 setText(null);
-                component.removeStyleDependentName("watermark");
             }
+            component.removeStyleDependentName("watermark");
         }
         insideShowWatermark = false;
     }
@@ -98,7 +98,7 @@ public abstract class TextWatermark {
     abstract void setText(String text);
 
     public boolean isShown() {
-        return !component.getText().isEmpty() && component.getText().equals(watermark);
+        return !getText().isEmpty() && getText().equals(watermark);
     }
 
 }

@@ -28,7 +28,6 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
 
     public TextBox() {
         setStyleName(CSSClass.pyx4j_TextBox.name());
-        setWatermark("WATERMARK");
     }
 
     public void setWatermark(String text) {
