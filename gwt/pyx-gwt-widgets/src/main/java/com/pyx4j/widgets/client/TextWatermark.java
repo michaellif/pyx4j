@@ -38,6 +38,8 @@ public class TextWatermark {
 
     private boolean insideShowWatermark = false;
 
+    private boolean shouldBeShown = false;
+
     public TextWatermark(WatermarkComponent component) {
         this.component = component;
     }
@@ -49,7 +51,7 @@ public class TextWatermark {
                 focusHandlerRegistration = component.addFocusHandler(new FocusHandler() {
                     @Override
                     public void onFocus(FocusEvent event) {
-                        showWatermark(false);
+                        show(false);
                     }
                 });
             }
@@ -58,43 +60,44 @@ public class TextWatermark {
                 blurHandlerRegistration = component.addBlurHandler(new BlurHandler() {
                     @Override
                     public void onBlur(BlurEvent event) {
-                        showWatermark(true);
+                        show(true);
                     }
 
                 });
             }
-            showWatermark(true);
+            show(true);
         } else {
             focusHandlerRegistration.removeHandler();
             blurHandlerRegistration.removeHandler();
         }
     }
 
-    public void showWatermark() {
+    public void show(String text) {
         if (insideShowWatermark) {
             return;
         }
-        if (watermark != null && !watermark.isEmpty() && (component.getText() == null || component.getText().isEmpty())) {
-            showWatermark(true);
-        } else {
-            showWatermark(false);
-        }
+        shouldBeShown = (watermark != null && !watermark.isEmpty() && (text == null || text.isEmpty()));
+        show(shouldBeShown);
     }
 
-    private void showWatermark(boolean show) {
+    private void show(boolean show) {
         insideShowWatermark = true;
         if (show) {
-            if (component.getText() == null || component.getText().isEmpty() || component.getText().equals(watermark)) {
+            if (shouldBeShown) {
                 component.addStyleDependentName("watermark");
                 component.setText(watermark);
             }
         } else {
-            if (component.getText() != null && component.getText().equals(watermark)) {
+            if (shouldBeShown) {
                 component.setText(null);
             }
             component.removeStyleDependentName("watermark");
         }
         insideShowWatermark = false;
+    }
+
+    public boolean isShown() {
+        return shouldBeShown;
     }
 
 }

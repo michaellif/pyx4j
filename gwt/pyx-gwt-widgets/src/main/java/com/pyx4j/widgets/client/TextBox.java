@@ -28,6 +28,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
 
     public TextBox() {
         setStyleName(CSSClass.pyx4j_TextBox.name());
+        setWatermark("WATERMARK");
     }
 
     public void setWatermark(String text) {
@@ -35,13 +36,23 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
             watermark = new TextWatermark(this);
         }
         watermark.setWatermark(text);
+        watermark.show(getText());
     }
 
     @Override
     public void setText(String text) {
         super.setText(text);
         if (watermark != null) {
-            watermark.showWatermark();
+            watermark.show(text);
+        }
+    }
+
+    @Override
+    public String getText() {
+        if (watermark != null && watermark.isShown()) {
+            return null;
+        } else {
+            return super.getText();
         }
     }
 
