@@ -710,7 +710,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     datastoreCallStats.get().readCount++;
                     entity = datastore.get(key);
                 } catch (EntityNotFoundException e) {
-                    throw new RuntimeException("EntityNotFound");
+                    throw new RuntimeException("Entity " + key.getKind() + " " + key.getId() + " NotFound");
                 }
             } else {
                 entity = new Entity(key);

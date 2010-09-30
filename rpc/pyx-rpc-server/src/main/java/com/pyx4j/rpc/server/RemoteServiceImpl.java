@@ -56,6 +56,7 @@ public class RemoteServiceImpl implements RemoteService {
     @SuppressWarnings("unchecked")
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException {
+        boolean logOnce = true;
         try {
             SecurityController.assertPermission(new ServiceExecutePermission(serviceInterfaceClassName));
             Class<? extends Service<?, ?>> clazz = ServiceRegistry.getServiceClass(serviceInterfaceClassName);
@@ -65,6 +66,7 @@ public class RemoteServiceImpl implements RemoteService {
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("Service " + serviceInterfaceClassName + " not found");
                 } catch (Throwable t) {
+                    logOnce = false;
                     log.error("Service call error", t);
                     throw new UnRecoverableRuntimeException("Fatal system error");
                 }
@@ -74,6 +76,7 @@ public class RemoteServiceImpl implements RemoteService {
             try {
                 serviceInstance = clazz.newInstance();
             } catch (Throwable e) {
+                logOnce = false;
                 log.error("Fatal system error", e);
                 if ((e.getCause() != null) && (e.getCause() != e)) {
                     log.error("Fatal system error cause", e.getCause());
@@ -83,6 +86,7 @@ public class RemoteServiceImpl implements RemoteService {
             if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
                 Visit visit = Context.getVisit();
                 if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
+                    logOnce = false;
                     log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
                     log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
                     throw new SecurityViolationException("Request requires authentication.");
@@ -111,6 +115,8 @@ public class RemoteServiceImpl implements RemoteService {
                 }
                 return returnValue;
             } catch (Throwable e) {
+                logOnce = false;
+                log.error("Service call error for " + Context.getVisit(), e);
                 if (e instanceof RuntimeExceptionSerializable) {
                     throw (RuntimeExceptionSerializable) e;
                 } else if (e.getMessage() == null) {
@@ -126,7 +132,9 @@ public class RemoteServiceImpl implements RemoteService {
                 }
             }
         } catch (RuntimeExceptionSerializable oe) {
-            log.error("Service call error for " + Context.getVisit(), oe);
+            if (logOnce) {
+                log.error("Service call error for " + Context.getVisit(), oe);
+            }
             if (Context.getResponseSystemNotifications() != null) {
                 throw new RuntimeExceptionNotificationsWrapper(oe, Context.getResponseSystemNotifications());
             } else {
