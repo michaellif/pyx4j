@@ -26,8 +26,9 @@ import java.util.Set;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 
-@SuppressWarnings("serial")
 public class AuthenticationResponse implements Serializable {
+
+    private static final long serialVersionUID = 7628691579226211150L;
 
     private UserVisit userVisit;
 
