@@ -75,20 +75,24 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                         @Override
                         public void run() {
 
-                            final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
+                            final boolean useDeferred = true;
+                            if (useDeferred) {
+                                DeferredActionProcessDialog.start("Remove All Data", DatastoreAdminServices.RemoveAllDataDeferred.class);
+                            } else {
+                                final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
 
-                                @Override
-                                public void onFailure(Throwable caught) {
-                                    MessageDialog.error("RemoveInitialData Service failed", caught);
-                                }
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        MessageDialog.error("RemoveInitialData Service failed", caught);
+                                    }
 
-                                @Override
-                                public void onSuccess(String result) {
-                                    MessageDialog.info("DB Reset completed", result);
-                                }
-                            };
-
-                            RPCManager.execute(DatastoreAdminServices.RemoveAllData.class, null, rpcCallback);
+                                    @Override
+                                    public void onSuccess(String result) {
+                                        MessageDialog.info("DB Reset completed", result);
+                                    }
+                                };
+                                RPCManager.execute(DatastoreAdminServices.RemoveAllData.class, null, rpcCallback);
+                            }
                         }
                     });
                 }

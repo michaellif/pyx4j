@@ -21,6 +21,7 @@
 package com.pyx4j.entity.server.dataimport;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +43,8 @@ public abstract class AbstractDataPreloader implements DataPreloader {
 
     private final Map<String, IEntity> namesCache = new HashMap<String, IEntity>();
 
+    List<Class<? extends IEntity>> deleteList = null;
+
     protected AbstractDataPreloader() {
 
     }
@@ -50,14 +53,33 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         return (ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment);
     }
 
-    protected static <T extends IEntity> String deleteAll(Class<T> entityClass) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public List<Class<? extends IEntity>> getEntityToDelete() {
+        deleteList = new Vector();
+        delete();
+        try {
+            return deleteList;
+        } finally {
+            deleteList = null;
+        }
+    }
+
+    protected <T extends IEntity> String deleteAll(Class<T> entityClass) {
+        if (deleteList != null) {
+            deleteList.add(entityClass);
+            return null;
+        }
         EntityQueryCriteria<T> criteria = new EntityQueryCriteria<T>(entityClass);
         int count = PersistenceServicesFactory.getPersistenceService().delete(criteria);
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         return "Removed " + count + " " + entityMeta.getCaption() + "(s)";
     }
 
-    protected static String deleteAll(Class<? extends IEntity>... entityClass) {
+    protected String deleteAll(Class<? extends IEntity>... entityClass) {
+        if (deleteList != null) {
+            deleteList.addAll(Arrays.asList(entityClass));
+            return null;
+        }
         StringBuilder b = new StringBuilder();
         for (Class<? extends IEntity> ec : entityClass) {
             b.append(deleteAll(ec)).append('\n');

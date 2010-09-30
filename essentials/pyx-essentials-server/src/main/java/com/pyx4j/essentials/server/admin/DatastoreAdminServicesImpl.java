@@ -26,6 +26,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.essentials.server.deferred.DeferredProcessServicesImpl;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
@@ -36,6 +37,15 @@ public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
         public String execute(VoidSerializable request) {
             return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().delete();
         }
+    }
+
+    public static class RemoveAllDataDeferredImpl implements DatastoreAdminServices.RemoveAllDataDeferred {
+
+        @Override
+        public String execute(VoidSerializable request) {
+            return DeferredProcessServicesImpl.register(new DatastoreAdminRemoveAllDataDeferredProcess());
+        }
+
     }
 
     public static class ResetInitialDataImpl implements DatastoreAdminServices.ResetInitialData {

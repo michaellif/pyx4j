@@ -27,6 +27,7 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
+import com.pyx4j.entity.shared.IEntity;
 
 public class DataPreloaderCollection extends AbstractDataPreloader {
 
@@ -125,6 +126,23 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             }
         }
         return b.toString();
+    }
+
+    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public List<Class<? extends IEntity>> getEntityToDelete() {
+        List<Class<? extends IEntity>> deleteList = new Vector();
+        ListIterator<DataPreloader> rit = childPreloaders.listIterator(childPreloaders.size());
+        while (rit.hasPrevious()) {
+            DataPreloader preloader = rit.previous();
+            preloader.setParametersValues(parameters);
+            if (preloader instanceof AbstractDataPreloader) {
+                deleteList.addAll(((AbstractDataPreloader) preloader).getEntityToDelete());
+            } else {
+                preloader.delete();
+            }
+        }
+        return deleteList;
     }
 
 }
