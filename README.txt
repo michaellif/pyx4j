@@ -1,13 +1,13 @@
 ========= Install Eclipse =========
 
 1. Get: Eclipse SDK  or  Eclipse IDE for Java EE Developers
-       eclipse-SDK-3.6-win32.zip or eclipse-jee-helios-win32.zip
+       eclipse-SDK-3.6.1-win32.zip or eclipse-java-helios-SR1-win32.zip
 
-2. Unzip it to directory: eclipse-3.6.0   (Optionally)
+2. Unzip it to directory: eclipse-3.6.1   (Optionally)
 
 3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.6.0_20\bin\javaw.exe")
    Or full Target on Windows 32:
-        D:\prog\dev\eclipse\eclipse-3.6.0\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
+        D:\prog\dev\eclipse\eclipse-3.6.1\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
 
 4. Install Eclipse Plugins.
     - Subclipse                  (From Eclipse Marketplace)
@@ -59,11 +59,11 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
     You may install SDKs bundle for GAE and GWT from google site for faster download.
 
 -- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
-2. Download and unzip appengine-java-sdk-1.3.6.zip
-		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.3.6.zip
+2. Download and unzip appengine-java-sdk-1.3.7.zip
+		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.3.7.zip
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
-   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.6-patch.zip
-4. Copy/Add results of the build (in target\classes) to appengine-local-runtime.jar located in App Engine SDK.
+   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.7-patch.zip
+4. Copy/Add results of the build (in target\classes) to appengine-java-sdk-1.3.7\lib\impl\appengine-local-runtime.jar located in App Engine SDK.
 
 ========= Eclipse Configuration for a new Workspace =========
 
@@ -104,6 +104,3 @@ rollback from pyx2 server
   or
     cd /data/build/work/pyx/examples/examples-gae-server/war
     mvn gae:rollback
-
-    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.6/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/incubator/tester/tester-gae-server/war
-    /data/tools/3p-libs/gae/appengine-java-sdk-1.3.6/bin/appcfg.sh --email=vlads@myeasyforce.com rollback /data/build/work/pyx/examples/examples-gae-server/war
