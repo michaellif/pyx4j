@@ -18,16 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server;
+package com.pyx4j.essentials.server.admin;
 
 import java.util.Vector;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
-import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public class EssentialsDatastoreAdminServicesImpl implements DatastoreAdminServices {
+public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
 
     public static class RemoveAllDataImpl implements DatastoreAdminServices.RemoveAllData {
 

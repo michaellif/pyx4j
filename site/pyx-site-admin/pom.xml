@@ -78,6 +78,12 @@
 
 		<dependency>
 			<groupId>com.pyx4j</groupId>
+			<artifactId>pyx-essentials-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.pyx4j</groupId>
 			<artifactId>pyx-gwt-server</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>

@@ -29,7 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;

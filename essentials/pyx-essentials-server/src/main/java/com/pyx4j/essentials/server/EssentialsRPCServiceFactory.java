@@ -24,28 +24,11 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
-import com.pyx4j.entity.rpc.DatastoreAdminServices;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.server.ReflectionServiceFactory;
 import com.pyx4j.rpc.shared.Service;
 
 public class EssentialsRPCServiceFactory extends ReflectionServiceFactory {
-
-    @Override
-    public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
-        if (DatastoreAdminServices.ResetInitialData.class.getName().equals(serviceInterfaceClassName)) {
-            return EssentialsDatastoreAdminServicesImpl.ResetInitialDataImpl.class;
-        } else if (DatastoreAdminServices.RemoveAllData.class.getName().equals(serviceInterfaceClassName)) {
-            return EssentialsDatastoreAdminServicesImpl.RemoveAllDataImpl.class;
-        } else if (DatastoreAdminServices.GetPreloaders.class.getName().equals(serviceInterfaceClassName)) {
-            return EssentialsDatastoreAdminServicesImpl.GetPreloadersImpl.class;
-        } else if (DatastoreAdminServices.ExectutePreloadersCreate.class.getName().equals(serviceInterfaceClassName)) {
-            return EssentialsDatastoreAdminServicesImpl.ExectutePreloadersCreateImpl.class;
-        } else if (DatastoreAdminServices.ExectutePreloadersDelete.class.getName().equals(serviceInterfaceClassName)) {
-            return EssentialsDatastoreAdminServicesImpl.ExectutePreloadersDeleteImpl.class;
-        }
-        return super.getServiceClass(serviceInterfaceClassName);
-    }
 
     @Override
     public List<IServiceFilter> getServiceFilterChain(Class<? extends Service<?, ?>> serviceClass) {

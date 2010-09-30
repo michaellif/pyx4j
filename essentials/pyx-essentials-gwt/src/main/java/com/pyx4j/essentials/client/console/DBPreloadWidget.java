@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
-import com.pyx4j.entity.rpc.DatastoreAdminServices;
+import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.InlineWidget;

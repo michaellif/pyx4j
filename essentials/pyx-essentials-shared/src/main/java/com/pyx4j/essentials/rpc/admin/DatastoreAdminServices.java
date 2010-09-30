@@ -18,10 +18,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rpc;
+package com.pyx4j.essentials.rpc.admin;
 
 import java.util.Vector;
 
+import com.pyx4j.entity.rpc.DataPreloaderInfo;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -31,6 +33,10 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 public interface DatastoreAdminServices {
 
     public interface RemoveAllData extends Service<VoidSerializable, String> {
+
+    };
+
+    public interface RemoveAllDataDeferred extends DeferredProcessServices.AbstractStartDeferredProcessService {
 
     };
 
@@ -45,7 +51,7 @@ public interface DatastoreAdminServices {
     public interface ExectutePreloadersDelete extends Service<Vector<DataPreloaderInfo>, String> {
 
     };
-    
+
     public interface ExectutePreloadersCreate extends Service<Vector<DataPreloaderInfo>, String> {
 
     };
