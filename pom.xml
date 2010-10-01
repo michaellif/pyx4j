@@ -177,17 +177,6 @@
         </repository>
 
         <repository>
-            <id>jboss-repository</id>
-            <url>http://repository.jboss.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-
-        <repository>
             <id>maven-gae-plugin-googlecode-repository</id>
             <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
             <snapshots>
@@ -384,12 +373,10 @@
                 <version>0.0.7</version>
             </dependency>
 
-            <!-- fixed for hibernate / ognl combo -->
-            <!-- http://repository.jboss.org/maven2/javassist/javassist/ -->
             <dependency>
-                <groupId>javassist</groupId>
+                <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.11.0.GA</version>
+                <version>3.13.0-GA</version>
             </dependency>
 
             <dependency>
