@@ -25,7 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.adapters.EmptyIndexAdapter;
 import com.pyx4j.entity.adapters.IndexAdapter;
 
 /**
@@ -39,7 +38,7 @@ public @interface Indexed {
 
     boolean indexPrimaryValue() default true;
 
-    Class<? extends IndexAdapter<?>>[] adapter() default EmptyIndexAdapter.class;
+    Class<? extends IndexAdapter<?>>[] adapters() default {};
 
     int keywordLenght() default 0;
 
