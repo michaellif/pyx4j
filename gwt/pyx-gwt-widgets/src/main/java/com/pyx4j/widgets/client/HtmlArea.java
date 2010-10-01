@@ -74,7 +74,7 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
         if (watermark != null && watermark.isShown()) {
             return null;
         } else {
-            return viewer.getHTML();
+            return "".equals(viewer.getHTML()) ? null : viewer.getHTML();
         }
     }
 
