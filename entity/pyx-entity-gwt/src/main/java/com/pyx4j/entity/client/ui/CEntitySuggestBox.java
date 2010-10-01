@@ -42,9 +42,10 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CSuggestBox;
+import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
 public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
@@ -69,6 +70,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
     public CEntitySuggestBox(String title, Class<E> entityClass) {
         super(title);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
+        setFormat(new EntitySuggestFormat());
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
@@ -127,7 +129,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
      * Should fire when component is displayed ?
      */
     @Override
-    public NativeSuggestBox initNativeComponent() {
+    public INativeEditableComponent<E> initNativeComponent() {
         if ((getNativeComponent() == null) && (criteria != null)) {
             retriveOptions(null);
         }
@@ -225,6 +227,18 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
     public void setStringViewMember(IObject<?> member) {
         stringViewMemberName = member.getFieldName();
+    }
+
+    class EntitySuggestFormat implements IFormat<E> {
+
+        public String format(E value) {
+            return value.getMember(stringViewMemberName).getStringView();
+        }
+
+        public E parse(String string) {
+            return null;
+        }
+
     }
 
 }

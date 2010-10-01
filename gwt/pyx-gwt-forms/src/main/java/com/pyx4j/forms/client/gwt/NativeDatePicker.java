@@ -61,6 +61,10 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
 
     }
 
+    public void setNativeText(String newValue) {
+        textBox.setText(newValue);
+    }
+
     public CTextBox<Date> getCComponent() {
         return textBox.getCComponent();
     }
@@ -97,10 +101,6 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
 
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return textBox.addChangeHandler(handler);
-    }
-
-    public void setNativeText(String newValue) {
-        textBox.setText(newValue);
     }
 
 }

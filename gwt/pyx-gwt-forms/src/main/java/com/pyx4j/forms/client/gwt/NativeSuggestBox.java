@@ -20,29 +20,29 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 
-import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.forms.client.ui.CSuggestBox;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableComponent<E> {
+public class NativeSuggestBox<E> extends SuggestBox implements INativeTextComponent<E> {
 
-    private final CSuggestBox<E> cSuggestBox;
+    private final NativeTextBoxDelegate<E> delegate;
 
     public NativeSuggestBox(CSuggestBox<E> cSuggestBox) {
         super(new MultiWordSuggestOracle(), new TextBox());
-        this.cSuggestBox = cSuggestBox;
 
         setStyleName(CSSClass.pyx4j_TextBox.name());
 
-        setWidth(cSuggestBox.getWidth());
-        setHeight(cSuggestBox.getHeight());
-
-        setTabIndex(cSuggestBox.getTabIndex());
+        delegate = new NativeTextBoxDelegate<E>(this, cSuggestBox);
 
     }
 
@@ -67,14 +67,6 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableCo
         return ((TextBox) getWidget()).isEnabled();
     }
 
-    private class StringConverter implements ToStringConverter<Object> {
-
-        @Override
-        public String toString(Object value) {
-            return "\n" + cSuggestBox.getOptionName(value);
-        }
-    }
-
     public void addItem(String optionName) {
         ((MultiWordSuggestOracle) getSuggestOracle()).add(optionName);
     }
@@ -84,14 +76,35 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeEditableCo
     }
 
     @Override
-    public void setNativeValue(Object value) {
-        // TODO Auto-generated method stub
+    public CTextBox<E> getCComponent() {
+        return delegate.getCComponent();
+    }
 
+    public void setNativeValue(E value) {
+        delegate.setValue(value);
+    }
+
+    public String getNativeText() {
+        return ((TextBox) getWidget()).getText();
+    }
+
+    public void setNativeText(String newValue) {
+        ((TextBox) getWidget()).setText(newValue);
     }
 
     @Override
-    public CSuggestBox getCComponent() {
-        return cSuggestBox;
+    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
+        return ((TextBox) getWidget()).addChangeHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return ((TextBox) getWidget()).addFocusHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return ((TextBox) getWidget()).addBlurHandler(handler);
     }
 
 }

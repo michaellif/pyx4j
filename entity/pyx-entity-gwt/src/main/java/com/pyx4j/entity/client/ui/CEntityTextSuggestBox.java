@@ -44,6 +44,7 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CSuggestBox;
+import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
 /**
  * !! This just is working Prototype!! Mainly copy from CEntityComboBox
@@ -129,7 +130,7 @@ public class CEntityTextSuggestBox<E extends IEntity> extends CSuggestBox {
      * Should fire when component is displayed ?
      */
     @Override
-    public NativeSuggestBox initNativeComponent() {
+    public INativeEditableComponent<E> initNativeComponent() {
         if ((getNativeComponent() == null) && (criteria != null)) {
             retriveOptions(null);
         }

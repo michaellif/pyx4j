@@ -25,9 +25,7 @@ import java.util.Collection;
 
 import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 
-public class CSuggestBox<E> extends CEditableComponent<E> {
-
-    private NativeSuggestBox<E> nativeSuggestBox;
+public class CSuggestBox<E> extends CTextBox<E> {
 
     private ArrayList<E> options = new ArrayList<E>();
 
@@ -41,19 +39,14 @@ public class CSuggestBox<E> extends CEditableComponent<E> {
     }
 
     @Override
-    public NativeSuggestBox<E> getNativeComponent() {
-        return nativeSuggestBox;
-    }
-
-    @Override
-    public NativeSuggestBox<E> initNativeComponent() {
-        if (nativeSuggestBox == null) {
-            nativeSuggestBox = new NativeSuggestBox<E>(this);
+    public INativeEditableComponent<E> initNativeComponent() {
+        if (nativeTextField == null) {
+            nativeTextField = new NativeSuggestBox<E>(this);
             applyAccessibilityRules();
             setOptions(options);
             setNativeComponentValue(getValue());
         }
-        return nativeSuggestBox;
+        return nativeTextField;
     }
 
     public void setOptions(Collection<E> options) {
@@ -64,10 +57,10 @@ public class CSuggestBox<E> extends CEditableComponent<E> {
         }
         E currentSelection = getValue();
         this.options.addAll(options);
-        if (nativeSuggestBox != null) {
-            nativeSuggestBox.removeAllItems();
+        if (nativeTextField != null) {
+            ((NativeSuggestBox<E>) nativeTextField).removeAllItems();
             for (E option : options) {
-                nativeSuggestBox.addItem(getOptionName(option));
+                ((NativeSuggestBox<E>) nativeTextField).addItem(getOptionName(option));
             }
             setValue(currentSelection);
         }
