@@ -14,22 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
+ * Created on 2010-10-01
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.adapters;
 
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
-public interface Province extends IEntity {
+public interface ReferenceAdapter<E extends IEntity> {
 
-    @Indexed
-    IPrimitive<String> name();
+    /**
+     * Server would lockup new referenced entity by this criteria and use if one exists.
+     * 
+     * @param newEntity
+     * @return Criteria to retrieve one item, null if creation of new Entities is disabled
+     */
+    public EntitySearchCriteria<E> getMergeCriteria(E newEntity);
 
-    @Indexed
-    ISet<City> cities();
+    /**
+     * Sets additional members when new Entity is created
+     * 
+     * @param new Entity to be persisted
+     * @return the modified same newEntity
+     */
+    public E onEntityCreation(E newEntity);
 }

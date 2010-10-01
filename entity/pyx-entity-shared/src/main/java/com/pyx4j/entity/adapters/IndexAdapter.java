@@ -14,22 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
+ * Created on 2010-10-01
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.adapters;
 
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public interface Province extends IEntity {
+public interface IndexAdapter<E extends IEntity> {
 
-    @Indexed
-    IPrimitive<String> name();
+    public Object getIndexedValue(E entity, MemberMeta memberMeta);
 
-    @Indexed
-    ISet<City> cities();
+    public String getIndexedColumnName(MemberMeta memberMeta);
+
 }

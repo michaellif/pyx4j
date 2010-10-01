@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on 2010-10-01
  * @author vlads
  * @version $Id$
  */
@@ -25,24 +25,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.adapters.EmptyIndexAdapter;
-import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.adapters.ReferenceAdapter;
 
 /**
- * Define a index in RDBMS or indexed property in App Engine persistent storage.
+ * Maps to javax.persistence.OneToMany with CascadeType.PERSIST
  */
-@Target({ ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Indexed {
+public @interface Reference {
 
-    String name() default "";
-
-    boolean indexPrimaryValue() default true;
-
-    Class<? extends IndexAdapter<?>>[] adapter() default EmptyIndexAdapter.class;
-
-    int keywordLenght() default 0;
-
-    char global() default 0;
+    Class<? extends ReferenceAdapter<?>> adapter();
 
 }
