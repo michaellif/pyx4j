@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.gwt;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -93,8 +95,14 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     }
 
     @Override
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return ((TextBox) getWidget()).addChangeHandler(handler);
+    public HandlerRegistration addChangeHandler(final ChangeHandler handler) {
+        return addSelectionHandler(new SelectionHandler() {
+
+            @Override
+            public void onSelection(SelectionEvent event) {
+                handler.onChange(null);
+            }
+        });
     }
 
     @Override

@@ -49,17 +49,17 @@ public class CSuggestBox<E> extends CTextBox<E> {
         return nativeTextField;
     }
 
-    public void setOptions(Collection<E> options) {
+    public void setOptions(Collection<E> opt) {
         this.options = new ArrayList<E>();
         this.options.clear();
-        if (options == null) {
+        if (opt == null) {
             return;
         }
         E currentSelection = getValue();
-        this.options.addAll(options);
+        this.options.addAll(opt);
         if (nativeTextField != null) {
             ((NativeSuggestBox<E>) nativeTextField).removeAllItems();
-            for (E option : options) {
+            for (E option : opt) {
                 ((NativeSuggestBox<E>) nativeTextField).addItem(getOptionName(option));
             }
             setValue(currentSelection);

@@ -36,6 +36,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.entity.client.ReferenceDataManager;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -51,6 +52,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityTextSuggestBox.class);
 
+    private final Class<E> entityClass;
+
     private final EntityQueryCriteria<E> criteria;
 
     private OptionsFilter<E> optionsFilter;
@@ -65,10 +68,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
     private boolean isUnavailable = false;
 
-    private final boolean useNamesComparison = false;
-
     public CEntitySuggestBox(String title, Class<E> entityClass) {
         super(title);
+        this.entityClass = entityClass;
         this.criteria = new EntityQueryCriteria<E>(entityClass);
         setFormat(new EntitySuggestFormat());
     }
@@ -95,8 +97,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
     }
 
     @Override
-    public void setOptions(Collection options) {
-        Collection<E> opt = options;
+    public void setOptions(Collection<E> opt) {
         if (((optionsFilter == null) && (comparator == null)) || (opt == null) || (opt.size() == 0)) {
             super.setOptions(opt);
         } else {
@@ -158,7 +159,6 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
         }
     }
 
-    //@Override
     public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
         if ((optionsLoaded) || (criteria == null)) {
             // super.retriveOptions(callback);
@@ -236,7 +236,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
         }
 
         public E parse(String string) {
-            return null;
+            E entity = EntityFactory.create(entityClass);
+            entity.setMemberValue(stringViewMemberName, string);
+            return entity;
         }
 
     }

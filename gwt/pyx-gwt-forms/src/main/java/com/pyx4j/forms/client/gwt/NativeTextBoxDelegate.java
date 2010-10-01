@@ -31,6 +31,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.Timer;
 
 import com.pyx4j.forms.client.ui.CTextBox;
@@ -81,7 +82,7 @@ public class NativeTextBoxDelegate<E> {
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 keyTimer.cancel();
-                keyTimer.schedule(500);
+                keyTimer.schedule(500000);
             }
         });
 
