@@ -14,25 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-10-01
+ * Created on Oct 1, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.adapters;
+package com.pyx4j.entity.adapters.index;
 
+import java.util.Date;
+
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class EmptyIndexAdapter implements IndexAdapter<IEntity> {
+public class DayIndexAdapter<E extends Date> extends AbstractIndexAdapter<E> {
 
     @Override
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta) {
-        return null;
-    }
-
-    @Override
-    public String getIndexedColumnName(MemberMeta memberMeta) {
-        return null;
+    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value) {
+        if (value == null) {
+            return new Date(0);
+        }
+        // TODO values like month and week
+        return TimeUtils.dayStart(value);
     }
 
 }

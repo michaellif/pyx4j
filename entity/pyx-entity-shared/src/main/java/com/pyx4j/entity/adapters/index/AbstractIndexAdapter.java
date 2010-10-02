@@ -14,23 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-10-01
+ * Created on Oct 1, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.adapters;
+package com.pyx4j.entity.adapters.index;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public interface IndexAdapter<E> {
+public abstract class AbstractIndexAdapter<E> implements IndexAdapter<E> {
 
-    public static final String SECONDARY_PRROPERTY_SUFIX = "-s";
-
-    public static final String ENTITY_KEYWORD_PRROPERTY = "keys" + SECONDARY_PRROPERTY_SUFIX;
-
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value);
-
-    public String getIndexedColumnName(MemberMeta memberMeta);
+    @Override
+    public String getIndexedColumnName(MemberMeta memberMeta) {
+        Indexed index = memberMeta.getAnnotation(Indexed.class);
+        if (index.global() != 0) {
+            return ENTITY_KEYWORD_PRROPERTY;
+        } else {
+            return memberMeta.getFieldName() + SECONDARY_PRROPERTY_SUFIX;
+        }
+    }
 
 }

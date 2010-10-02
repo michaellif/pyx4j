@@ -14,23 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-10-01
+ * Created on Oct 1, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.adapters;
+package com.pyx4j.entity.adapters.index;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public interface IndexAdapter<E> {
+public class EnumSetIndexAdapter<E extends Enum<E>> extends AbstractIndexAdapter<Set<E>> {
 
-    public static final String SECONDARY_PRROPERTY_SUFIX = "-s";
-
-    public static final String ENTITY_KEYWORD_PRROPERTY = "keys" + SECONDARY_PRROPERTY_SUFIX;
-
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value);
-
-    public String getIndexedColumnName(MemberMeta memberMeta);
+    @Override
+    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, Set<E> value) {
+        if ((value == null) || (value.isEmpty())) {
+            return null;
+        }
+        Set<String> gValue = new HashSet<String>();
+        for (E v : value) {
+            gValue.add(v.name());
+        }
+        return gValue;
+    }
 
 }
