@@ -379,6 +379,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             IEntity ent = it.next();
             return KeyFactory.createKey(ent.getEntityMeta().getPersistenceName(), ent.getPrimaryKey());
         } else {
+            entity = adapter.onEntityCreation(entity);
             return persistImpl(entity, false);
         }
     }
