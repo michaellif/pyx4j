@@ -62,7 +62,6 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.PasswordCreator;
 import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
@@ -494,7 +493,6 @@ public class EntityFactoryGenerator extends Generator {
                 writer.println(");");
             }
 
-            addValidatorAnnotation(writer, method, PasswordCreator.class);
             addValidatorAnnotation(writer, method, NotNull.class);
             addValidatorAnnotation(writer, method, Pattern.class);
 

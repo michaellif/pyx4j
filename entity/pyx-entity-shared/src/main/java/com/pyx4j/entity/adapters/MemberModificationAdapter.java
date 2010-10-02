@@ -14,19 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 19, 2010
+ * Created on 2010-08-12
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations.validator;
+package com.pyx4j.entity.adapters;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
-@Target( { ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordCreator {
+public interface MemberModificationAdapter<E extends IEntity> {
+
+    public boolean allowModifications(E entity, MemberMeta meta, Object valueOrig, Object valueNew);
 
 }

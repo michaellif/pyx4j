@@ -5,6 +5,7 @@
 	<inherits name='com.pyx4j.security.SecurityShared'/>
 	<inherits name='com.pyx4j.Commons'/>
 	<inherits name='com.pyx4j.gwt.GwtCommons'/>
+    <source path="adapters"/>
     <source path="annotations"/>
 	<source path="security"/>
 	<source path="shared"/>

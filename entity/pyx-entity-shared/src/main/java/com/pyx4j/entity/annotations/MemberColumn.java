@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.entity.security.MemberModificationAdapter;
+import com.pyx4j.entity.adapters.MemberModificationAdapter;
 
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
