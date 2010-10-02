@@ -23,6 +23,13 @@ package com.pyx4j.entity.adapters;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 
+/**
+ * Use together with @Reference
+ * 
+ * @see com.pyx4j.entity.annotations.Reference
+ * 
+ * @param <E>
+ */
 public interface ReferenceAdapter<E extends IEntity> {
 
     /**

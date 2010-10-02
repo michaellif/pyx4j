@@ -60,14 +60,18 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.search.IndexedEntitySearch;
+import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -79,6 +83,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -347,15 +352,34 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setProperty(getIndexedPropertyName(propertyName), true, geoPoint.getCells());
             }
             return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
-        } else if (value != null) {
+        } else {
             if (value.getClass().isArray()) {
                 //TODO support more arrays
                 return new Blob((byte[]) value);
             } else {
                 return value;
             }
+        }
+    }
+
+    private Key mergeReference(MemberMeta meta, IEntity entity) {
+        ReferenceAdapter adapter;
+        try {
+            adapter = meta.getAnnotation(Reference.class).adapter().newInstance();
+        } catch (InstantiationException e) {
+            throw new Error(e);
+        } catch (IllegalAccessException e) {
+            throw new Error(e);
+        }
+        EntitySearchCriteria criteria = adapter.getMergeCriteria(entity);
+        IndexedEntitySearch search = new IndexedEntitySearch(criteria);
+        search.buildQueryCriteria();
+        SearchResultIterator<IEntity> it = search.getResult(null);
+        if (it.hasNext()) {
+            IEntity ent = it.next();
+            return KeyFactory.createKey(ent.getEntityMeta().getPersistenceName(), ent.getPrimaryKey());
         } else {
-            return value;
+            return persistImpl(entity, false);
         }
     }
 
@@ -392,6 +416,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                                 datastore.delete((Key) origValue);
                             }
                         }
+                    }
+                } else if (meta.getAnnotation(Reference.class) != null) {
+                    Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
+                    if (childKeyId != null) {
+                        value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(),
+                                childKeyId);
+                    } else {
+                        value = mergeReference(meta, (IEntity) iEntity.getMember(me.getKey()));
                     }
                 } else {
                     Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);

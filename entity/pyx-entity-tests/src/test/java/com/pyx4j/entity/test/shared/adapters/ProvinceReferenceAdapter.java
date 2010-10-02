@@ -30,7 +30,9 @@ public class ProvinceReferenceAdapter implements ReferenceAdapter<Province> {
     @Override
     public EntitySearchCriteria<Province> getMergeCriteria(Province newEntity) {
         EntitySearchCriteria<Province> c = EntitySearchCriteria.create(Province.class);
-        c.setValue(new PathSearch(c.meta().name(), "lowercase"), newEntity.name().getValue());
+        c.setValue(new PathSearch(c.meta().name()), newEntity.name().getValue());
+        //TODO implement
+        //c.setValue(new PathSearch(c.meta().name(), "lowercase"), newEntity.name().getValue().toLowerCase());
         return c;
     }
 
