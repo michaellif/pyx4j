@@ -32,6 +32,7 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
+import com.pyx4j.rpc.shared.IsWarningException;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.RuntimeExceptionNotificationsWrapper;
 import com.pyx4j.rpc.shared.Service;
@@ -116,7 +117,11 @@ public class RemoteServiceImpl implements RemoteService {
                 return returnValue;
             } catch (Throwable e) {
                 logOnce = false;
-                log.error("Service call error for " + Context.getVisit(), e);
+                if (e instanceof IsWarningException) {
+                    log.warn("Service call exception for " + Context.getVisit(), e);
+                } else {
+                    log.error("Service call error for " + Context.getVisit(), e);
+                }
                 if (e instanceof RuntimeExceptionSerializable) {
                     throw (RuntimeExceptionSerializable) e;
                 } else if (e.getMessage() == null) {
