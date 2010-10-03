@@ -104,6 +104,11 @@ public class ClientSecurityController extends SecurityController implements HasV
     }
 
     @Override
+    public Set<Behavior> getAllBehaviors(Set<Behavior> behaviors) {
+        return null;
+    }
+
+    @Override
     public Acl getAcl() {
         return acl;
     }

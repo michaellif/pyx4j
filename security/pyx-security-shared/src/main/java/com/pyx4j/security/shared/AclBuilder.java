@@ -83,6 +83,14 @@ public class AclBuilder implements AclCreator {
         return new AclSerializable(g.behaviors, g.permissions, g.restrictions);
     }
 
+    @Override
+    public Set<Behavior> getAllBehaviors(Set<Behavior> behaviors) {
+        PermissionsGroup g = new PermissionsGroup();
+        g.add(global);
+        addRecurcive(g, behaviors);
+        return g.behaviors;
+    }
+
     private void addRecurcive(PermissionsGroup target, Set<Behavior> behaviors) {
         target.behaviors.addAll(behaviors);
         for (Behavior behavior : behaviors) {

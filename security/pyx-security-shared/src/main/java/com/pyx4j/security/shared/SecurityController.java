@@ -48,6 +48,8 @@ public abstract class SecurityController {
 
     public abstract Acl authenticate(Set<Behavior> behaviours);
 
+    public abstract Set<Behavior> getAllBehaviors(Set<Behavior> behaviors);
+
     public static boolean checkBehavior(Behavior behavior) {
         return controller.getAcl().checkBehavior(behavior);
     }

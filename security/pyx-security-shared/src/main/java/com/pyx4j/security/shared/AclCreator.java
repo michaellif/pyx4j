@@ -26,4 +26,5 @@ public interface AclCreator {
 
     public Acl createAcl(Set<Behavior> behaviors);
 
+    public Set<Behavior> getAllBehaviors(Set<Behavior> behaviors);
 }

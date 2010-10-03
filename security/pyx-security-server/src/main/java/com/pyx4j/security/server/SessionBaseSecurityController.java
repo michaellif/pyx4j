@@ -48,6 +48,11 @@ public class SessionBaseSecurityController extends SecurityController {
     }
 
     @Override
+    public Set<Behavior> getAllBehaviors(Set<Behavior> behaviors) {
+        return aclCreator.getAllBehaviors(behaviors);
+    }
+
+    @Override
     public Acl getAcl() {
         Visit v = Context.getVisit();
         Acl userAcl = null;
