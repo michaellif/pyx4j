@@ -25,7 +25,7 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 /**
  * Exception that are safe to shown to user.
  */
-public class UserRuntimeException extends RuntimeExceptionSerializable {
+public class UserRuntimeException extends RuntimeExceptionSerializable implements IsWarningException {
 
     private static final long serialVersionUID = 1L;
 
