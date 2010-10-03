@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.rpc.admin;
 
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
 import com.pyx4j.rpc.shared.Service;
 
 public interface DBMaintenanceServices {
@@ -28,4 +29,7 @@ public interface DBMaintenanceServices {
 
     };
 
+    public interface ContinueExecution extends DeferredProcessServices.ContinueExecution {
+
+    };
 }

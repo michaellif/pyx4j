@@ -23,6 +23,7 @@ package com.pyx4j.essentials.j2se;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceRequest;
 import com.pyx4j.essentials.rpc.admin.DBMaintenanceServices;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
@@ -33,17 +34,32 @@ public class DBMaintenance {
 
     private static final Logger log = LoggerFactory.getLogger(DBMaintenance.class);
 
+    protected int executionDelaySec = 10;
+
     public void execute(J2SEService srv, DBMaintenanceRequest request) {
 
         String deferredCorrelationID = srv.execute(DBMaintenanceServices.DBMaintenance.class, request);
 
         DeferredProcessProgressResponse response;
         do {
+            continueExecutionThrottle();
+            //TODO use DBMaintenanceServices.ContinueExecution.class when systems had been updated with new code.
             response = srv.execute(DeferredProcessServices.ContinueExecution.class, deferredCorrelationID);
             log.info("Processed {}", response.getProgress());
         } while (!response.isCompleted());
 
         log.info("Mainteneace {} of {} rows completed", request.getProcessor().getSimpleName(), response.getProgress());
 
+    }
+
+    protected void continueExecutionThrottle() {
+        if (executionDelaySec <= 0) {
+            return;
+        }
+        try {
+            Thread.sleep(executionDelaySec * Consts.SEC2MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException();
+        }
     }
 }

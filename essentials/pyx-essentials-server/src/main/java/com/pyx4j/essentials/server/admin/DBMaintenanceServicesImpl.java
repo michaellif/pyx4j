@@ -34,4 +34,8 @@ public class DBMaintenanceServicesImpl implements DBMaintenanceServices {
         }
 
     }
+
+    public static class ContinueExecutionImpl extends DeferredProcessServicesImpl.ContinueExecutionImpl implements DBMaintenanceServices.ContinueExecution {
+
+    }
 }

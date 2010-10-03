@@ -40,6 +40,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.security.server.ThrottleConfig;
 
 public class J2SEService {
@@ -377,6 +378,13 @@ public class J2SEService {
                 }
             }
             getCookie(conn.getHeaderFields());
+            if (reply instanceof SystemNotificationsWrapper) {
+                SystemNotificationsWrapper wrapper = (SystemNotificationsWrapper) reply;
+                for (Serializable systemNotification : wrapper.getSystemNotifications()) {
+                    log.warn("Got systemNotification {}", systemNotification);
+                }
+                reply = wrapper.getServiceResult();
+            }
             return (O) reply;
         } catch (IOException e) {
             throw new RuntimeException("Failed to execute " + serviceInterface.getName(), e);
