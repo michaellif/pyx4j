@@ -27,12 +27,16 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 public abstract class AbstractIndexAdapter<E> implements IndexAdapter<E> {
 
     @Override
-    public String getIndexedColumnName(MemberMeta memberMeta) {
+    public String getIndexedColumnName(String embeddedPath, MemberMeta memberMeta) {
         Indexed index = memberMeta.getAnnotation(Indexed.class);
         if (index.global() != 0) {
             return ENTITY_KEYWORD_PRROPERTY;
         } else {
-            return memberMeta.getFieldName() + SECONDARY_PRROPERTY_SUFIX;
+            if ((embeddedPath != null) && (embeddedPath.length() > 0)) {
+                return embeddedPath + "_" + memberMeta.getFieldName() + EMBEDDED_PRROPERTY_SUFIX + SECONDARY_PRROPERTY_SUFIX;
+            } else {
+                return memberMeta.getFieldName() + SECONDARY_PRROPERTY_SUFIX;
+            }
         }
     }
 

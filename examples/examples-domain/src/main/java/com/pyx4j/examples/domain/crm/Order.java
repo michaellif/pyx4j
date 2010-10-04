@@ -22,6 +22,7 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -60,7 +61,7 @@ public interface Order extends IEntity {
     }
 
     @ToString
-    @Indexed(global = '#', keywordLenght = 3)
+    @Indexed(global = '#', keywordLenght = 3, adapters = KeywordsIndexAdapter.class)
     @Caption(name = "Order #")
     IPrimitive<Integer> orderNumber();
 
@@ -79,13 +80,13 @@ public interface Order extends IEntity {
     /**
      * Copy of data from customer
      */
-    @Indexed(global = 'n', keywordLenght = 2, indexPrimaryValue = false)
+    @Indexed(global = 'n', keywordLenght = 2, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> customerName();
 
     /**
      * Copy of data from customer
      */
-    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false)
+    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     @Editor(type = EditorType.phone)
     IPrimitive<String> customerPhone();
 
@@ -93,7 +94,7 @@ public interface Order extends IEntity {
     Resource resource();
 
     @ToString
-    @Indexed(global = 'd', keywordLenght = 3, indexPrimaryValue = false)
+    @Indexed(global = 'd', keywordLenght = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> description();
 
     IPrimitive<java.sql.Date> completedDate();

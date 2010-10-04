@@ -26,10 +26,10 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class DayIndexAdapter<E extends Date> extends AbstractIndexAdapter<E> {
+public class DayIndexAdapter extends AbstractIndexAdapter<Date> {
 
     @Override
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value) {
+    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, Date value) {
         if (value == null) {
             return new Date(0);
         }

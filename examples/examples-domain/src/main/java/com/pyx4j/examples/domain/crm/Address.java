@@ -20,6 +20,7 @@
  */
 package com.pyx4j.examples.domain.crm;
 
+import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
@@ -33,11 +34,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Address extends IEntity {
 
     @ToString(index = 0)
-    @Indexed(global = 's', keywordLenght = 2)
+    @Indexed(global = 's', keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> street();
 
     @ToString(index = 1)
-    @Indexed(global = 'c', keywordLenght = 2)
+    @Indexed(global = 'c', keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> city();
 
     @ToString(index = 2)

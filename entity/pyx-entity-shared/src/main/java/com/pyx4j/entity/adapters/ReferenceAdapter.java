@@ -21,7 +21,7 @@
 package com.pyx4j.entity.adapters;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 /**
  * Use together with @Reference
@@ -38,7 +38,7 @@ public interface ReferenceAdapter<E extends IEntity> {
      * @param newEntity
      * @return Criteria to retrieve one item, null if creation of new Entities is disabled
      */
-    public EntitySearchCriteria<E> getMergeCriteria(E newEntity);
+    public EntityQueryCriteria<E> getMergeCriteria(E newEntity);
 
     /**
      * Sets additional members when new Entity is created

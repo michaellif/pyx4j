@@ -23,6 +23,7 @@ package com.pyx4j.examples.domain.crm;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -48,7 +49,7 @@ public interface Resource extends IEntity {
     }
 
     @NotNull
-    @Indexed(keywordLenght = 2)
+    @Indexed(keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
     @ToString
     IPrimitive<String> name();
 

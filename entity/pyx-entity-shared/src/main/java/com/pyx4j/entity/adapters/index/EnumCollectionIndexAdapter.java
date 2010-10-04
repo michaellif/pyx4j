@@ -20,24 +20,25 @@
  */
 package com.pyx4j.entity.adapters.index;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class EnumSetIndexAdapter<E extends Enum<E>> extends AbstractIndexAdapter<Set<E>> {
+public class EnumCollectionIndexAdapter extends AbstractIndexAdapter<Collection<Enum<?>>> {
 
     @Override
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, Set<E> value) {
+    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, Collection<Enum<?>> value) {
         if ((value == null) || (value.isEmpty())) {
             return null;
         }
-        Set<String> gValue = new HashSet<String>();
-        for (E v : value) {
-            gValue.add(v.name());
+        Set<String> idxValue = new HashSet<String>();
+        for (Enum<?> v : value) {
+            idxValue.add(v.name());
         }
-        return gValue;
+        return idxValue;
     }
 
 }

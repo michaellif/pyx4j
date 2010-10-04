@@ -27,10 +27,12 @@ public interface IndexAdapter<E> {
 
     public static final String SECONDARY_PRROPERTY_SUFIX = "-s";
 
+    public static final String EMBEDDED_PRROPERTY_SUFIX = "-e";
+
     public static final String ENTITY_KEYWORD_PRROPERTY = "keys" + SECONDARY_PRROPERTY_SUFIX;
 
     public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value);
 
-    public String getIndexedColumnName(MemberMeta memberMeta);
+    public String getIndexedColumnName(String embeddedPath, MemberMeta memberMeta);
 
 }

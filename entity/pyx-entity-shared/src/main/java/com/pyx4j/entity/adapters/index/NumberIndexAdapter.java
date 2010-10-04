@@ -23,10 +23,10 @@ package com.pyx4j.entity.adapters.index;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class NumberIndexAdapter<E extends Number> extends AbstractIndexAdapter<E> {
+public class NumberIndexAdapter extends AbstractIndexAdapter<Number> {
 
     @Override
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value) {
+    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, Number value) {
         if (value == null) {
             return null;
         }

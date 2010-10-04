@@ -22,6 +22,7 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -43,11 +44,11 @@ import com.pyx4j.geo.GeoPoint;
 public interface Customer extends IEntity {
 
     @NotNull
-    @Indexed(global = 'n', keywordLenght = 2)
+    @Indexed(global = 'n', keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
     @ToString
     IPrimitive<String> name();
 
-    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false)
+    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 

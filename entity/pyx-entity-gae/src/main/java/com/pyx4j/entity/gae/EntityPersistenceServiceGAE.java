@@ -58,7 +58,7 @@ import com.google.appengine.api.datastore.Text;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.annotations.Indexed;
@@ -70,8 +70,6 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.server.search.IndexedEntitySearch;
-import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -83,7 +81,6 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -105,11 +102,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     private final int ORDINARY_STRING_LENGTH_MAX = com.pyx4j.config.shared.ApplicationBackend.GAE_ORDINARY_STRING_LENGTH_MAX;
 
-    private static final String SECONDARY_PRROPERTY_SUFIX = "-s";
+    private static final String SECONDARY_PRROPERTY_SUFIX = IndexAdapter.SECONDARY_PRROPERTY_SUFIX;
 
     private static final String EMBEDDED_PRROPERTY_SUFIX = "-e";
 
-    private static final String GLOBAL_KEYWORD_PRROPERTY = "keys" + SECONDARY_PRROPERTY_SUFIX;
+    private static final String GLOBAL_KEYWORD_PRROPERTY = IndexAdapter.ENTITY_KEYWORD_PRROPERTY;
 
     private final DatastoreService datastore;
 
@@ -245,17 +242,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     //TODO support readonly values
-    private void embedEntityProperties(EntityUpdateWrapper entity, String prefix, String sufix, IEntity childIEntity, boolean parentIndexed) {
+    private void embedEntityProperties(EntityUpdateWrapper entity, String embeddedPath, String embeddedLevel, IEntity childIEntity, boolean parentIndexed) {
         if (childIEntity.isNull()) {
             // remove all properties
             EntityMeta em = childIEntity.getEntityMeta();
             for (String memberName : em.getMemberNames()) {
                 MemberMeta memberMeta = em.getMemberMeta(memberName);
                 if ((memberMeta.isEntity()) && (memberMeta.isEmbedded())) {
-                    embedEntityProperties(entity, prefix + "_" + memberName, sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity.getMember(memberName),
-                            parentIndexed && memberMeta.isIndexed());
+                    embedEntityProperties(entity, embeddedPath + "_" + memberName, embeddedLevel + EMBEDDED_PRROPERTY_SUFIX,
+                            (IEntity) childIEntity.getMember(memberName), parentIndexed && memberMeta.isIndexed());
                 } else {
-                    entity.removeProperty(prefix + "_" + memberName + sufix + EMBEDDED_PRROPERTY_SUFIX);
+                    entity.removeProperty(embeddedPath + "_" + memberName + EMBEDDED_PRROPERTY_SUFIX);
                 }
             }
             return;
@@ -268,69 +265,76 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (meta.isTransient()) {
                 continue nextValue;
             }
-            String propertyName = prefix + "_" + meta.getFieldName() + sufix + EMBEDDED_PRROPERTY_SUFIX;
             Object value = me.getValue();
             if (IEntity.class.isAssignableFrom(meta.getObjectClass())) {
                 if (meta.isEmbedded()) {
-                    embedEntityProperties(entity, prefix + "_" + me.getKey(), sufix + EMBEDDED_PRROPERTY_SUFIX, (IEntity) childIEntity.getMember(me.getKey()),
-                            parentIndexed);
+                    embedEntityProperties(entity, embeddedPath + "_" + me.getKey(), embeddedLevel + EMBEDDED_PRROPERTY_SUFIX,
+                            (IEntity) childIEntity.getMember(me.getKey()), parentIndexed);
                     continue nextValue;
                 } else {
                     String kind = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName();
                     value = KeyFactory.createKey(kind, (Long) ((Map) value).get(IEntity.PRIMARY_KEY));
                 }
             } else {
-                value = convertToGAEValue(value, entity, propertyName, meta, parentIndexed);
+                //TODO Allow to embed other types
+                value = convertToGAEValue(value, entity, embeddedPath, childIEntity, meta, parentIndexed);
             }
-            //TODO Allow to embed other types
-
-            entity.setProperty(propertyName, parentIndexed && meta.isIndexed(), value);
+            entity.setProperty(embeddedPath + "_" + meta.getFieldName() + embeddedLevel + EMBEDDED_PRROPERTY_SUFIX, parentIndexed && meta.isIndexed(), value);
         }
     }
 
-    private Object convertToGAEValue(Object value, EntityUpdateWrapper entity, String propertyName, MemberMeta meta, boolean parentIndexed) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Object convertToGAEValue(Object value, EntityUpdateWrapper entity, String embeddedPath, IEntity iEntity, MemberMeta meta, boolean parentIndexed) {
+        // Create index
         Indexed index = null;
         if (parentIndexed) {
             index = meta.getAnnotation(Indexed.class);
-        }
-        if (value == null) {
-            if (index != null) {
-                if (meta.getValueClass().isAssignableFrom(java.sql.Date.class)) {
-                    entity.setProperty(getIndexedPropertyName(propertyName), true, new Date(0));
+            if ((index != null) && (index.adapters() != null) && (index.adapters().length > 0)) {
+                for (Class<? extends IndexAdapter<?>> adapterClass : index.adapters()) {
+                    IndexAdapter adapter;
+                    try {
+                        adapter = adapterClass.newInstance();
+                    } catch (InstantiationException e) {
+                        throw new Error(e);
+                    } catch (IllegalAccessException e) {
+                        throw new Error(e);
+                    }
+                    Object indexValue = adapter.getIndexedValue(iEntity, meta, value);
+                    if (indexValue != null) {
+                        String indexedPropertyName = adapter.getIndexedColumnName(embeddedPath, meta);
+                        if (indexedPropertyName.equals(GLOBAL_KEYWORD_PRROPERTY)) {
+                            if (indexValue instanceof Set) {
+                                addGloablIndex(entity, index.global(), (Set<String>) indexValue);
+                            } else {
+                                addGloablIndex(entity, index.global(), (String) indexValue);
+                            }
+                        } else {
+                            entity.setProperty(indexedPropertyName, true, indexValue);
+                        }
+                    }
                 }
+            } else if ((index != null) && ((index.global() != 0) || (index.keywordLenght() != 0))) {
+                throw new Error("Invalid @Index annotation for " + iEntity.getEntityMeta().getCaption() + "." + meta.getFieldName());
             }
+        }
+        // Convert value
+        if (value == null) {
             return null;
         } else if (value instanceof String) {
             if (meta.getStringLength() > ORDINARY_STRING_LENGTH_MAX) {
                 return new Text((String) value);
             } else {
-                if ((index != null) && (index.keywordLenght() > 0)) {
-                    if (index.global() != 0) {
-                        addGloablIndex(entity, index.global(), createStringKeywordIndex(index.keywordLenght(), (String) value));
-                    } else {
-                        entity.setProperty(getIndexedPropertyName(propertyName), true, createStringKeywordIndex(index.keywordLenght(), (String) value));
-                    }
-                }
                 return value;
             }
         } else if (value instanceof Number) {
-            if ((index != null) && (index.global() != 0)) {
-                addGloablIndex(entity, index.global(), ((Number) value).toString());
-            }
             return value;
         } else if (value instanceof Enum<?>) {
-            if ((index != null) && (index.global() != 0)) {
-                addGloablIndex(entity, index.global(), ((Enum<?>) value).name());
-            }
             return ((Enum<?>) value).name();
         } else if (IPrimitiveSet.class.isAssignableFrom(meta.getObjectClass())) {
             if (Enum.class.isAssignableFrom(meta.getValueClass())) {
                 Set<String> gValue = new HashSet<String>();
                 for (Enum v : (Set<Enum>) value) {
                     gValue.add(v.name());
-                }
-                if ((index != null) && (index.global() != 0)) {
-                    addGloablIndex(entity, index.global(), gValue);
                 }
                 return gValue;
             } else {
@@ -340,17 +344,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             if (value instanceof java.sql.Date) {
                 value = new Date(((Date) value).getTime());
             }
-            if (index != null) {
-                // TODO move values like month and week
-                Date v = TimeUtils.dayStart((Date) value);
-                entity.setProperty(getIndexedPropertyName(propertyName), true, v);
-            }
             return value;
         } else if (value instanceof GeoPoint) {
             GeoPoint geoPoint = (GeoPoint) value;
-            if (index != null) {
-                entity.setProperty(getIndexedPropertyName(propertyName), true, geoPoint.getCells());
-            }
             return new GeoPt((float) geoPoint.getLat(), (float) geoPoint.getLng());
         } else {
             if (value.getClass().isArray()) {
@@ -362,6 +358,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private Key mergeReference(MemberMeta meta, IEntity entity) {
         ReferenceAdapter adapter;
         try {
@@ -371,12 +368,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } catch (IllegalAccessException e) {
             throw new Error(e);
         }
-        EntitySearchCriteria criteria = adapter.getMergeCriteria(entity);
-        IndexedEntitySearch search = new IndexedEntitySearch(criteria);
-        search.buildQueryCriteria();
-        SearchResultIterator<IEntity> it = search.getResult(null);
-        if (it.hasNext()) {
-            IEntity ent = it.next();
+        IEntity ent = retrieve(adapter.getMergeCriteria(entity));
+        if (ent != null) {
             return KeyFactory.createKey(ent.getEntityMeta().getPersistenceName(), ent.getPrimaryKey());
         } else {
             entity = adapter.onEntityCreation(entity);
@@ -534,7 +527,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, false, createBlob(childKeysOrder));
                 value = childKeys;
             } else {
-                value = convertToGAEValue(value, entity, propertyName, meta, true);
+                value = convertToGAEValue(value, entity, null, iEntity, meta, true);
             }
 
             if (entity.setProperty(propertyName, meta.isIndexed(), value) && entity.isUpdate) {

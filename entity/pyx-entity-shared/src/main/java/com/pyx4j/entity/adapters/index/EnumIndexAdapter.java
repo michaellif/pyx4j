@@ -23,10 +23,10 @@ package com.pyx4j.entity.adapters.index;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public class EnumIndexAdapter<E extends Enum<E>> extends AbstractIndexAdapter<E> {
+public class EnumIndexAdapter extends AbstractIndexAdapter<Enum<?>> {
 
     @Override
-    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, E value) {
+    public Object getIndexedValue(IEntity entity, MemberMeta memberMeta, Enum<?> value) {
         if (value == null) {
             return null;
         }
