@@ -75,7 +75,7 @@ public class XMLEscape {
             ch = value.charAt(i);
             if (xmlEntityTableEncode.get(ch) != null) {
                 sb.append(xmlEntityTableEncode.get(ch));
-            } else if ((ch >= 45 && ch <= 59) || (ch >= 63 && ch <= 95) || (ch >= 97 && ch <= 122) || ch == ' ' || "!\"#$%()*+".indexOf(ch) != -1) {
+            } else if ((ch >= 45 && ch <= 59) || (ch >= 63 && ch <= 95) || (ch >= 97 && ch <= 122) || ch == ' ' || ",!\"#$%()*+-".indexOf(ch) != -1) {
                 sb.append(ch);
             } else if (ch == '\n') {
                 sb.append("\n");
