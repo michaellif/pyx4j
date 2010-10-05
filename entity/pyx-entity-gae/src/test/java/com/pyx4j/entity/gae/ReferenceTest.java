@@ -23,7 +23,7 @@ package com.pyx4j.entity.gae;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 import com.pyx4j.entity.test.server.ReferenceTestCase;
 
-public class ReferenceCase extends ReferenceTestCase {
+public class ReferenceTest extends ReferenceTestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
