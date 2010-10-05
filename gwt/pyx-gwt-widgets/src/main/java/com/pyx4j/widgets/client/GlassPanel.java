@@ -32,7 +32,10 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -40,7 +43,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
 /**
  * Block access to GUI elements while service is running.
  */
-public class GlassPanel extends SimplePanel implements ResizeHandler {
+public class GlassPanel extends AbsolutePanel implements ResizeHandler {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
@@ -50,6 +53,10 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
     private HandlerRegistration handlerRegistration;
 
+    private final HTML label;
+
+    private final SimplePanel glass;
+
     public static enum GlassStyle {
 
         Transparent,
@@ -58,20 +65,28 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
     }
 
     protected GlassPanel() {
-        super(DOM.createDiv());
-        DOM.setInnerHTML(
-                getElement(),
-                "<center><div style='background-color:#FFFfff;width:10em'><b>loading...</b></div></center><table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
-        setSize("100%", "100%");
 
+        //        DOM.setInnerHTML(
+        //                getElement(),
+        //                "<center><div style='background-color:#FFFfff;width:10em'><b>loading...</b></div></center><table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
+
+        setSize("100%", "100%");
         getElement().getStyle().setProperty("left", "0px");
         getElement().getStyle().setProperty("top", "0px");
-        getElement().getStyle().setProperty("position", "absolute");
         getElement().getStyle().setProperty("overflow", "hidden");
         getElement().getStyle().setProperty("cursor", "wait");
+        getElement().getStyle().setProperty("position", "absolute");
+
         getElement().getStyle().setProperty("zIndex", "100");
 
         getElement().getStyle().setDisplay(Display.NONE);
+
+        glass = new SimplePanel();
+        glass.setSize("100%", "100%");
+        add(glass, 0, 0);
+
+        label = new HTML();
+        add(label, 0, 0);
 
     }
 
@@ -95,10 +110,14 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
             DOM.setCapture(glassPanel.getElement());
             switch (glassStyle) {
             case Transparent:
-                glassPanel.setStyleName(CSSClass.pyx4j_GlassPanel_Transparent.name());
+                glassPanel.glass.setStyleName(CSSClass.pyx4j_GlassPanel_Transparent.name());
+                glassPanel.label.setStyleName(CSSClass.pyx4j_GlassPanel_Transparent_Label.name());
+                glassPanel.label.setHTML("loading...");
                 break;
             case SemiTransparent:
-                glassPanel.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent.name());
+                glassPanel.glass.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent.name());
+                glassPanel.label.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent_Label.name());
+                glassPanel.label.setHTML("sending...");
                 break;
             }
             glassPanel.setGlassPanelSize();
@@ -143,6 +162,8 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
         // The size is set. Show the glass again.
         style.setDisplay(Display.BLOCK);
+
+        setWidgetPosition(label, winWidth / 2, Document.get().getScrollTop());
     }
 
     public void onResize(ResizeEvent event) {
