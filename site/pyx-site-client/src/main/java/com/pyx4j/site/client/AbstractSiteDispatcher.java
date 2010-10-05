@@ -232,11 +232,11 @@ public abstract class AbstractSiteDispatcher {
                             currentSitePanel = sitePanel;
                             RootPanel.get().add(currentSitePanel);
                         }
+                        sitePanel.show(navigationUri.getPageUri(), navigationUri.getArgs());
+
                         if (!navigationUri.equals(pathShown)) {
                             GoogleAnalytics.track("#" + navigationUri.getPageUri());
                         }
-                        sitePanel.show(navigationUri.getPageUri(), navigationUri.getArgs());
-
                         pathShown = navigationUri;
                     } else {
                         throw new Error("sitePanel is not found");
