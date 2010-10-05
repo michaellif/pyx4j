@@ -59,7 +59,9 @@ public class GlassPanel extends SimplePanel implements ResizeHandler {
 
     protected GlassPanel() {
         super(DOM.createDiv());
-        DOM.setInnerHTML(getElement(), "<table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
+        DOM.setInnerHTML(
+                getElement(),
+                "<center><div style='background-color:#FFFfff;width:10em'><b>loading...</b></div></center><table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
         setSize("100%", "100%");
 
         getElement().getStyle().setProperty("left", "0px");
