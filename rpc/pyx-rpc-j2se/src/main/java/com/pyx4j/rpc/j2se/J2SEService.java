@@ -288,6 +288,32 @@ public class J2SEService {
         }
     }
 
+    public int goGet(String servletUrl) {
+        HttpURLConnection conn = null;
+        try {
+            URL j2seUrl = new URL(serverUrl);
+            URL u = new URL(j2seUrl.getProtocol(), j2seUrl.getHost(), j2seUrl.getPort(), servletUrl);
+            conn = (HttpURLConnection) u.openConnection();
+            conn.setRequestMethod(GET);
+            conn.setRequestProperty("User-agent", userAgent);
+            conn.setInstanceFollowRedirects(false);
+            setCookie(conn);
+            if (sessionToken != null) {
+                conn.setRequestProperty(RemoteService.SESSION_TOKEN_HEADER, sessionToken);
+            }
+            int code = conn.getResponseCode();
+            getCookie(conn.getHeaderFields());
+            log.debug("post {} response code {}", u, code);
+            return code;
+        } catch (IOException e) {
+            throw new RuntimeException("POST failed", e);
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
+
     public String getSessionToken() {
         return sessionToken;
     }
