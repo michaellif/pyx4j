@@ -214,6 +214,7 @@ public class J2SEService {
             log.debug("login post responce {}", post.getResponseCode());
 
             getCookie(post.getHeaderFields());
+            log.info("Authenticated as {}", userName);
         } catch (IOException e) {
             throw new RuntimeException("Failed to login", e);
         } finally {
@@ -277,6 +278,7 @@ public class J2SEService {
             } else {
                 throw new RuntimeException("Failed to authenticate in GAE " + code + ":" + conn.getResponseMessage());
             }
+            log.info("Authenticated as {} {}", googleAccountType, userName);
         } catch (IOException e) {
             throw new RuntimeException("GAE login failed", e);
         } finally {
