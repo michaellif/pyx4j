@@ -123,6 +123,8 @@
         <module>gwt/pyx-gwt-forms</module>
         <module>gwt/pyx-gwt-ria</module>
 
+        <module>gwt/pyx-gwt-dnd</module>
+
         <module>gwt/pyx-gwt-serialization</module>
 
         <module>entity/pyx-entity-shared</module>
