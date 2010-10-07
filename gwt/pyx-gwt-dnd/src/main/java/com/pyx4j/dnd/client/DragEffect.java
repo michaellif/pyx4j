@@ -20,23 +20,21 @@
  */
 package com.pyx4j.dnd.client;
 
-import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.event.dom.client.DomEvent;
-import com.google.gwt.event.shared.EventHandler;
+public enum DragEffect {
 
-abstract class DnDEvent<H extends EventHandler> extends DomEvent<H> {
+    none,
 
-    public DataTransfer getDataTransfer() {
-        return getDataTransferN(getNativeEvent());
-    };
+    copy,
 
-    private static native DataTransfer getDataTransferN(NativeEvent event) /*-{
-        return event.dataTransfer;
-    }-*/;
+    link,
 
-    @Override
-    public String toString() {
-        DataTransfer dt = getDataTransfer();
-        return toDebugString() + " " + this.getNativeEvent().getType() + ((dt != null) ? " DataTransfer: " + dt.toDebugString() : "");
-    }
+    move,
+
+    copyLink,
+
+    copyMove,
+
+    linkMove,
+
+    all;
 }

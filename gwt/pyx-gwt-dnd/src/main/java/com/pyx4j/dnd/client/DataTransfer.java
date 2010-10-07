@@ -21,8 +21,11 @@
 package com.pyx4j.dnd.client;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.ConverterUtils;
 
@@ -37,14 +40,83 @@ public class DataTransfer extends JavaScriptObject {
     protected DataTransfer() {
     }
 
+    public final DropEffect getdropEffect() {
+        return Enum.valueOf(DropEffect.class, getDropEffectN());
+    }
+
+    private native String getDropEffectN() /*-{
+        return this.dropEffect;
+    }-*/;
+
+    public final void setDropEffect(DropEffect dropEffect) {
+        setDropEffectN(dropEffect.name());
+    }
+
+    private native void setDropEffectN(String dropEffect) /*-{
+        this.dropEffect = dropEffect;
+    }-*/;
+
+    public final DragEffect getEffectAllowed() {
+        return Enum.valueOf(DragEffect.class, getEffectAllowedN());
+    }
+
+    private native String getEffectAllowedN() /*-{
+        return this.effectAllowed;
+    }-*/;
+
+    public final void setEffectAllowed(DragEffect effectAllowed) {
+        setEffectAllowedN(effectAllowed.name());
+    }
+
+    private native void setEffectAllowedN(String effectAllowed) /*-{
+        this.effectAllowed = effectAllowed;
+    }-*/;
+
     public final native String[] getTypes() /*-{
         return this.types;
+    }-*/;
+
+    public final native String getData(String format) /*-{
+        return this.getData(format);
+    }-*/;
+
+    public final native void setData(String format, String data) /*-{
+        this.setData(format, data);
+    }-*/;
+
+    public final native void clearData(String format) /*-{
+        this.clearData(format);
+    }-*/;
+
+    public final void setDragImage(Image image, int x, int y) {
+        setDragImageN(image.getElement(), x, y);
+    }
+
+    public final native void setDragImageN(Element elt, int x, int y) /*-{
+        this.setDragImage(elt, x, y);
     }-*/;
 
     public final String toDebugString() {
         StringBuilder b = new StringBuilder();
         if (getTypes() != null) {
-            b.append(" types:").append(ConverterUtils.convertStringCollection(Arrays.asList(getTypes())));
+            List<String> types = Arrays.asList(getTypes());
+            b.append("\n types: ").append(ConverterUtils.convertStringCollection(types));
+
+            if (types.contains(TYPE_URL)) {
+                try {
+                    b.append("\n URL : ").append(getData(TYPE_URL));
+                } catch (Throwable e) {
+                    b.append("n/a");
+                }
+            }
+
+            if (types.contains(TYPE_TEXT)) {
+                try {
+                    b.append("\n TEXT: ").append(getData(TYPE_TEXT));
+                } catch (Throwable e) {
+                    b.append("n/a");
+                }
+            }
         }
         return b.toString();
     }
