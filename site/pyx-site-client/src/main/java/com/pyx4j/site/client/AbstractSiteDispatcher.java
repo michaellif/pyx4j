@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientContext;
@@ -163,7 +164,9 @@ public abstract class AbstractSiteDispatcher {
     public abstract void onSiteLoad();
 
     public void onModuleLoad() {
-        ClientLogger.setDebugOn(true);
+        if (ApplicationMode.isDevelopment()) {
+            ClientLogger.setDebugOn(true);
+        }
         log.debug("{}", BrowserType.getCompiledType());
         onSiteLoad();
     }
