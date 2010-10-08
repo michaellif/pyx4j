@@ -35,8 +35,8 @@ abstract class DnDEvent<H extends EventHandler> extends DomEvent<H> {
     }-*/;
 
     @Override
-    public String toString() {
+    public String toDebugString() {
         DataTransfer dt = getDataTransfer();
-        return toDebugString() + " " + this.getNativeEvent().getType() + ((dt != null) ? " DataTransfer: " + dt.toDebugString() : "");
+        return super.toDebugString() + " " + this.getNativeEvent().getType() + ((dt != null) ? " DataTransfer: " + dt.toDebugString() : "");
     }
 }

@@ -24,9 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.dnd.client.DataTransfer;
 import com.pyx4j.dnd.client.DnDAdapter;
 import com.pyx4j.dnd.client.DragEndEvent;
 import com.pyx4j.dnd.client.DragEndHandler;
@@ -42,6 +46,7 @@ import com.pyx4j.dnd.client.DropEvent;
 import com.pyx4j.dnd.client.DropHandler;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class DnDDemo implements EntryPoint {
 
@@ -55,68 +60,96 @@ public class DnDDemo implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        Image img1 = new Image("http://code.google.com/webtoolkit/logo-185x175.png");
-        RootPanel.get().add(img1, 40, 30);
+        VerticalPanel src = new VerticalPanel();
+        RootPanel.get().add(src, 40, 30);
+
+        src.add(new Label("Drag This:"));
+        src.add(new Anchor("pyx4j.com", "http://pyx4j.com"));
+        Image img1 = new Image("http://code.google.com/webtoolkit/images/gwt-sm.png");
+        src.add(img1);
+
+        VerticalPanel target = new VerticalPanel();
+        RootPanel.get().add(target, 240, 30);
 
         final Image img = new Image("http://code.google.com/webtoolkit/logo-185x175.png");
-        RootPanel.get().add(img, 240, 30);
+        target.add(img);
+        final Label lable = new Label();
+        target.add(lable);
 
-        DnDAdapter dnd = new DnDAdapter(img);
-
-        dnd.addDragEnterHandler(new DragEnterHandler() {
+        DnDAdapter.addDragEnterHandler(img, new DragEnterHandler() {
 
             @Override
             public void onDragEnter(DragEnterEvent event) {
-                log.debug("{}", event);
+                log.debug("{}", event.toDebugString());
+                lable.setText("-- DragEnter --");
             }
         });
 
-        dnd.addDragOverHandler(new DragOverHandler() {
+        DnDAdapter.addDragOverHandler(img, new DragOverHandler() {
 
             long dragOverDebugTime;
 
             @Override
             public void onDragOver(DragOverEvent event) {
                 if (dragOverDebugTime < System.currentTimeMillis()) {
-                    log.debug("{}", event);
+                    log.debug("{}", event.toDebugString());
                     dragOverDebugTime = System.currentTimeMillis() + 3000;
                 }
+                //event.getDataTransfer().setDropEffect(DropEffect.copy);
                 event.preventDefault();
             }
         });
 
-        dnd.addDragLeaveHandler(new DragLeaveHandler() {
+        DnDAdapter.addDragLeaveHandler(img, new DragLeaveHandler() {
 
             @Override
             public void onDragLeave(DragLeaveEvent event) {
-                log.debug("{}", event);
+                log.debug("{}", event.toDebugString());
+                lable.setText(null);
             }
         });
 
-        dnd.addDropHandler(new DropHandler() {
+        DnDAdapter.addDropHandler(img, new DropHandler() {
 
             @Override
             public void onDrop(DropEvent event) {
-                log.debug("{}", event);
+                log.debug("{}", event.toDebugString());
+                try {
+                    if (event.getDataTransfer() != null) {
+                        if (BrowserType.isIE()) {
+                            String t = event.getDataTransfer().getData("Text");
+                            if (t == null) {
+                                t = event.getDataTransfer().getData("URL");
+                            }
+                            lable.setText(t);
+                        } else {
+                            lable.setText(event.getDataTransfer().getData(DataTransfer.TYPE_TEXT));
+                        }
+                    } else {
+                        lable.setText("--no data--");
+                    }
+                } catch (Throwable e) {
+                    lable.setText(e.getMessage());
+                }
                 event.preventDefault();
             }
         });
 
         // ------------
 
-        dnd.addDragStartHandler(new DragStartHandler() {
+        DnDAdapter.addDragStartHandler(img, new DragStartHandler() {
 
             @Override
             public void onDragStart(DragStartEvent event) {
-                log.debug("{}", event);
+                log.debug("{}", event.toDebugString());
             }
         });
 
-        dnd.addDragEndHandler(new DragEndHandler() {
+        DnDAdapter.addDragEndHandler(img, new DragEndHandler() {
 
             @Override
             public void onDragEnd(DragEndEvent event) {
-                log.debug("{}", event);
+                log.debug("{}", event.toDebugString());
             }
         });
 

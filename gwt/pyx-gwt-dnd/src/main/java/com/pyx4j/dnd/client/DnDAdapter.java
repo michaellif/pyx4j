@@ -21,56 +21,61 @@
 package com.pyx4j.dnd.client;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.WidgetAccess;
 
-public class DnDAdapter {
+public abstract class DnDAdapter {
 
-    private final Widget widget;
-
-    public DnDAdapter(Widget widget) {
-        this.widget = widget;
-        sinkDnDEvents(widget.getElement());
+    private DnDAdapter() {
     }
 
-    private native void sinkDnDEvents(Element elt)
-    /*-{
-        elt.addEventListener('dragstart', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        elt.addEventListener('drag', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        elt.addEventListener('dragenter', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        elt.addEventListener('dragleave', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        elt.addEventListener('dragover', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        elt.addEventListener('drop', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        elt.addEventListener('dragend', @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
+    private static native void addEventListener(String type, Element elt) /*-{
+        if ($doc.addEventListener) {
+        elt.addEventListener(type, @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
+        } else {
+        var ieDispatcher = $entry(function() { @com.google.gwt.user.client.impl.DOMImplTrident::dispatchEvent.call(elt, $wnd.event); });    
+        elt.attachEvent("on"+ type, ieDispatcher);
+        }
     }-*/;
 
-    public HandlerRegistration addDragStartHandler(DragStartHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DragStartEvent.getType(), handler);
+    private static <H extends EventHandler> HandlerRegistration addHandler(Widget widget, DomEvent.Type<H> type, final H handler) {
+        HandlerManager hm = WidgetAccess.ensureHandlers(widget);
+        if (hm.getHandlerCount(type) == 0) {
+            addEventListener(type.getName(), widget.getElement());
+        }
+        return hm.addHandler(type, handler);
     }
 
-    public HandlerRegistration addDragEndHandler(DragEndHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DragEndEvent.getType(), handler);
+    public static HandlerRegistration addDragStartHandler(Widget widget, DragStartHandler handler) {
+        return addHandler(widget, DragStartEvent.getType(), handler);
     }
 
-    public HandlerRegistration addDragEnterHandler(DragEnterHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DragEnterEvent.getType(), handler);
+    public static HandlerRegistration addDragEndHandler(Widget widget, DragEndHandler handler) {
+        return addHandler(widget, DragEndEvent.getType(), handler);
     }
 
-    public HandlerRegistration addDragLeaveHandler(DragLeaveHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DragLeaveEvent.getType(), handler);
+    public static HandlerRegistration addDragEnterHandler(Widget widget, DragEnterHandler handler) {
+        return addHandler(widget, DragEnterEvent.getType(), handler);
     }
 
-    public HandlerRegistration addDragOverHandler(DragOverHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DragOverEvent.getType(), handler);
+    public static HandlerRegistration addDragLeaveHandler(Widget widget, DragLeaveHandler handler) {
+        return addHandler(widget, DragLeaveEvent.getType(), handler);
     }
 
-    public HandlerRegistration addDragHandler(DragHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DragEvent.getType(), handler);
+    public static HandlerRegistration addDragOverHandler(Widget widget, DragOverHandler handler) {
+        return addHandler(widget, DragOverEvent.getType(), handler);
     }
 
-    public HandlerRegistration addDropHandler(DropHandler handler) {
-        return WidgetAccess.ensureHandlers(widget).addHandler(DropEvent.getType(), handler);
+    public static HandlerRegistration addDragHandler(Widget widget, DragHandler handler) {
+        return addHandler(widget, DragEvent.getType(), handler);
+    }
+
+    public static HandlerRegistration addDropHandler(Widget widget, DropHandler handler) {
+        return addHandler(widget, DropEvent.getType(), handler);
     }
 
 }

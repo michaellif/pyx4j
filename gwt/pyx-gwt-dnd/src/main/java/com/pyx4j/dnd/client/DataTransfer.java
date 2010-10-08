@@ -28,6 +28,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.ConverterUtils;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class DataTransfer extends JavaScriptObject {
 
@@ -40,7 +41,7 @@ public class DataTransfer extends JavaScriptObject {
     protected DataTransfer() {
     }
 
-    public final DropEffect getdropEffect() {
+    public final DropEffect getDropEffect() {
         return Enum.valueOf(DropEffect.class, getDropEffectN());
     }
 
@@ -57,7 +58,17 @@ public class DataTransfer extends JavaScriptObject {
     }-*/;
 
     public final DragEffect getEffectAllowed() {
-        return Enum.valueOf(DragEffect.class, getEffectAllowedN());
+        String ea;
+        try {
+            ea = getEffectAllowedN();
+        } catch (Throwable ie) {
+            return null;
+        }
+        if ("uninitialized".equals(ea)) {
+            return null;
+        } else {
+            return Enum.valueOf(DragEffect.class, ea);
+        }
     }
 
     private native String getEffectAllowedN() /*-{
@@ -72,6 +83,9 @@ public class DataTransfer extends JavaScriptObject {
         this.effectAllowed = effectAllowed;
     }-*/;
 
+    /**
+     * Warning: This method is not supported in IE!
+     */
     public final native String[] getTypes() /*-{
         return this.types;
     }-*/;
@@ -98,25 +112,44 @@ public class DataTransfer extends JavaScriptObject {
 
     public final String toDebugString() {
         StringBuilder b = new StringBuilder();
-        if (getTypes() != null) {
-            List<String> types = Arrays.asList(getTypes());
-            b.append("\n types: ").append(ConverterUtils.convertStringCollection(types));
-
-            if (types.contains(TYPE_URL)) {
+        try {
+            String[] typesArray = getTypes();
+            if (typesArray != null) {
                 try {
-                    b.append("\n URL : ").append(getData(TYPE_URL));
+                    List<String> types = Arrays.asList(typesArray);
+                    b.append("\n types: ").append(ConverterUtils.convertStringCollection(types));
+                    if (types.contains(TYPE_URL)) {
+                        try {
+                            b.append("\n URL : ").append(getData(TYPE_URL));
+                        } catch (Throwable e) {
+                            b.append("n/a");
+                        }
+                    }
+
+                    if (types.contains(TYPE_TEXT)) {
+                        try {
+                            b.append("\n TEXT: ").append(getData(TYPE_TEXT));
+                        } catch (Throwable e) {
+                            b.append("n/a");
+                        }
+                    }
                 } catch (Throwable e) {
-                    b.append("n/a");
+                    b.append("get types error").append(e);
+                }
+            } else if (BrowserType.isIE()) {
+                String t = getData("Text");
+                if (t != null) {
+                    b.append("\n Text: ").append(t);
+                }
+                t = getData("URL");
+                if (t != null) {
+                    b.append("\n URL : ").append(t);
                 }
             }
-
-            if (types.contains(TYPE_TEXT)) {
-                try {
-                    b.append("\n TEXT: ").append(getData(TYPE_TEXT));
-                } catch (Throwable e) {
-                    b.append("n/a");
-                }
-            }
+            b.append("\n effectAllowed : ").append(getEffectAllowed());
+            b.append("\n dropEffect    : ").append(getDropEffect());
+        } catch (Throwable e) {
+            b.append("; error : ").append(e);
         }
         return b.toString();
     }
