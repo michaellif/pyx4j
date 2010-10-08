@@ -28,7 +28,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.ConverterUtils;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public class DataTransfer extends JavaScriptObject {
 
@@ -136,7 +135,8 @@ public class DataTransfer extends JavaScriptObject {
                 } catch (Throwable e) {
                     b.append("get types error").append(e);
                 }
-            } else if (BrowserType.isIE()) {
+            } else {
+                // This is for IE
                 String t = getData("Text");
                 if (t != null) {
                     b.append("\n Text: ").append(t);
