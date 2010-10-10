@@ -660,6 +660,15 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        addStyle(style);
+
+        style = new Style(".gwt-SuggestBoxPopup .item");
+        addStyle(style);
+
+        style = new Style(".gwt-SuggestBoxPopup .item-selected");
+        style.addProperty("background-color", "#ffc");
         addStyle(style);
 
     }
