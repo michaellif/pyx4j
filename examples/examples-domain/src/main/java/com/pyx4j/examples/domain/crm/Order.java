@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.adapters.index.EnumIndexAdapter;
 import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
+import com.pyx4j.entity.adapters.index.NumberIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -62,7 +63,7 @@ public interface Order extends IEntity {
     }
 
     @ToString
-    @Indexed(global = '#', keywordLenght = 3, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = '#', keywordLenght = 3, adapters = NumberIndexAdapter.class)
     @Caption(name = "Order #")
     IPrimitive<Integer> orderNumber();
 
