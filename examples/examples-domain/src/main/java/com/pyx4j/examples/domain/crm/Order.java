@@ -22,6 +22,7 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.EnumIndexAdapter;
 import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -102,7 +103,7 @@ public interface Order extends IEntity {
     IPrimitive<java.sql.Date> dueDate();
 
     @NotNull
-    @Indexed(global = 'o')
+    @Indexed(global = 'o', adapters = EnumIndexAdapter.class)
     IPrimitive<OrderStatus> status();
 
     @Editor(type = Editor.EditorType.textarea)

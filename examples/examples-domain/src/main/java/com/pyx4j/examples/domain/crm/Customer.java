@@ -22,6 +22,7 @@ package com.pyx4j.examples.domain.crm;
 
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.EnumCollectionIndexAdapter;
 import com.pyx4j.entity.adapters.index.KeywordsIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -81,7 +82,7 @@ public interface Customer extends IEntity {
 
     @ReportColumn(ignore = true)
     @Caption(name = "Order Status")
-    @Indexed(global = 'o', indexPrimaryValue = false)
+    @Indexed(global = 'o', indexPrimaryValue = false, adapters = EnumCollectionIndexAdapter.class)
     IPrimitiveSet<OrderStatus> orderStatus();
 
 }
