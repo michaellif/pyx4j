@@ -29,9 +29,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.DomainUtils;
 import com.pyx4j.examples.domain.crm.Order;
+import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.examples.domain.crm.Province;
 import com.pyx4j.examples.domain.crm.Resource;
-import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.geo.GeoPoint;
 
 public class PreloadCrmDemo extends AbstractDataPreloader {
@@ -47,16 +47,18 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         customerCount = 0;
         orderCount = 0;
 
-        r.add(createNamed(Resource.class, "Heavy duty track"));
-        r.add(createNamed(Resource.class, "Bob"));
-        r.add(createNamed(Resource.class, "John"));
-        r.add(createNamed(Resource.class, "Alex"));
-        r.add(createNamed(Resource.class, "Isaac"));
-        r.add(createNamed(Resource.class, "Owen"));
-        r.add(createNamed(Resource.class, "Richard"));
-        r.add(createNamed(Resource.class, "William"));
-        r.add(createNamed(Resource.class, "Thomas"));
-        r.add(createNamed(Resource.class, "Adam"));
+        r.clear();
+        r.add(createResource("Heavy duty track"));
+        r.add(createResource("Bob"));
+        r.add(createResource("John"));
+        r.add(createResource("Alex"));
+        r.add(createResource("Isaac"));
+        r.add(createResource("Owen"));
+        r.add(createResource("Richard"));
+        r.add(createResource("William"));
+        r.add(createResource("Thomas"));
+        r.add(createResource("Adam"));
+        PersistenceServicesFactory.getPersistenceService().persist(r);
 
         createCustomer("Jordan  Desai", "280 Willow Ave", "Toronto", Province.ON, "905-762-8993", 43.678425, -79.288309, "zTjkzWpfief8_5_qRPRXNg", 0.0);
         createCustomer("Michael Smith", "336 Walmer Rd", "Toronto", Province.ON, "905-884-8935", 43.6699245, -79.4069179, "c2uz0sLNVRTt7ns8we04SQ", 0.0);
@@ -112,6 +114,13 @@ public class PreloadCrmDemo extends AbstractDataPreloader {
         b.append("Created " + customerCount + " Customers").append('\n');
         b.append("Created " + orderCount + " Orders");
         return b.toString();
+    }
+
+    private Resource createResource(String name) {
+        Resource ent = EntityFactory.create(Resource.class);
+        ent.name().setValue(name);
+        ent.status().setValue(Resource.RepStatus.ACTIVE);
+        return ent;
     }
 
     private Resource selectResource(int number) {
