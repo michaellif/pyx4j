@@ -70,7 +70,7 @@ public class CSuggestBox<E> extends CTextBox<E> {
         return options;
     }
 
-    public String getOptionName(Object o) {
+    public String getOptionName(E o) {
         if (o == null) {
             return "-- NULL --";
         } else {

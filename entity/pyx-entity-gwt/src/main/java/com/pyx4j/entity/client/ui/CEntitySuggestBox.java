@@ -208,8 +208,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
     }
 
     @Override
-    public String getOptionName(Object o) {
-        if ((o == null) || (((IEntity) o).isNull())) {
+    public String getOptionName(E o) {
+        if (o == null || o.isNull()) {
             if (isLoading) {
                 return "loading...";
             } else if (isUnavailable) {
@@ -219,9 +219,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
                 return super.getOptionName(null);
             }
         } else if (stringViewMemberName != null) {
-            return ((IEntity) o).getMember(stringViewMemberName).getStringView();
+            return o.getMember(stringViewMemberName).getStringView();
         } else {
-            return ((IEntity) o).getStringView();
+            return o.getStringView();
         }
     }
 
@@ -236,6 +236,11 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
         }
 
         public E parse(String string) {
+            for (E option : getOptions()) {
+                if (getOptionName(option).equals(string)) {
+                    return option;
+                }
+            }
             E entity = EntityFactory.create(entityClass);
             entity.setMemberValue(stringViewMemberName, string);
             return entity;
