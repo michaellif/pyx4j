@@ -213,11 +213,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             } else if (comp instanceof CComboBox) {
                 ((CComboBox) comp).setValueByItemName(value);
             } else if (comp instanceof CDatePicker) {
-                if (value != null) {
-                    comp.setValue(((CDatePicker) comp).getFormat().parse(value.replace('-', '/')));
-                }
-            } else {
-
+                comp.setValue(((CDatePicker) comp).getFormat().parse(value.replace('-', '/')));
             }
         }
     }
@@ -237,6 +233,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 historyValue = (String) value;
             } else if (comp instanceof CEntityComboBox) {
                 historyValue = ((CEntityComboBox) comp).getItemName((IEntity) value);
+            } else if (value == null) {
+                // By pass other cases
             } else if (comp instanceof CComboBox) {
                 if (value instanceof Enum) {
                     historyValue = ((Enum<?>) value).toString();
@@ -244,13 +242,9 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                     historyValue = (String) value;
                 }
             } else if (comp instanceof CDatePicker) {
-                if (value != null) {
-                    historyValue = ((CDatePicker) comp).getFormat().format((Date) value).replace('/', '-');
-                }
+                historyValue = ((CDatePicker) comp).getFormat().format((Date) value).replace('/', '-');
             } else if (comp instanceof CTextBox) {
                 historyValue = value.toString();
-            } else {
-
             }
 
             if (historyValue != null) {
