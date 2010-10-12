@@ -46,6 +46,7 @@ import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.widgets.client.GroupBoxPanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -248,9 +249,25 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                     }
                 };
 
-                Vector<DataPreloaderInfo> preloaders = new Vector<DataPreloaderInfo>();
+                final Vector<DataPreloaderInfo> preloaders = new Vector<DataPreloaderInfo>();
                 preloaders.add(info);
-                RPCManager.execute(DatastoreAdminServices.ExectutePreloadersCreate.class, preloaders, rpcCallback);
+
+                final AsyncCallback<VoidSerializable> rpcPrepareCallback = new BlockingAsyncCallback<VoidSerializable>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MessageDialog.error("Execute Service failed", caught);
+
+                    }
+
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        RPCManager.execute(DatastoreAdminServices.ExectutePreloadersCreate.class, preloaders, rpcCallback);
+
+                    }
+
+                };
+                RPCManager.execute(DatastoreAdminServices.ExectutePreloadersPrepare.class, preloaders, rpcPrepareCallback);
             }
         });
 

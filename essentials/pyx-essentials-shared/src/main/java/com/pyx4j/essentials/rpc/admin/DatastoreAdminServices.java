@@ -48,11 +48,16 @@ public interface DatastoreAdminServices {
 
     };
 
-    public interface ExectutePreloadersDelete extends Service<Vector<DataPreloaderInfo>, String> {
+    public interface ExectutePreloadersPrepare extends Service<Vector<DataPreloaderInfo>, VoidSerializable> {
 
     };
 
     public interface ExectutePreloadersCreate extends Service<Vector<DataPreloaderInfo>, String> {
 
     };
+
+    public interface ExectutePreloadersDelete extends Service<Vector<DataPreloaderInfo>, String> {
+
+    };
+
 }

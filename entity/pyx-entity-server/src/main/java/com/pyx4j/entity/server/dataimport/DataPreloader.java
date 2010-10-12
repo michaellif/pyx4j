@@ -26,15 +26,17 @@ import java.util.Set;
 
 public interface DataPreloader {
 
-    /**
-     * @return the information message
-     */
-    public String delete();
+    public void prepare();
 
     /**
      * @return the information message
      */
     public String create();
+
+    /**
+     * @return the information message
+     */
+    public String delete();
 
     public Set<String> getParameters();
 

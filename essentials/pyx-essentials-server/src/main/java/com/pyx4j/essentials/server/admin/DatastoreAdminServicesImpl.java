@@ -65,6 +65,16 @@ public class DatastoreAdminServicesImpl implements DatastoreAdminServices {
 
     }
 
+    public static class ExectutePreloadersPrepareImpl implements DatastoreAdminServices.ExectutePreloadersPrepare {
+
+        @Override
+        public VoidSerializable execute(Vector<DataPreloaderInfo> request) {
+            ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders().exectutePreloadersPrepare(request);
+            return null;
+        }
+
+    }
+
     public static class ExectutePreloadersCreateImpl implements DatastoreAdminServices.ExectutePreloadersCreate {
 
         @Override
