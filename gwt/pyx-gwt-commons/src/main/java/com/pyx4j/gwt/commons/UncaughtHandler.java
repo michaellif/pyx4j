@@ -75,9 +75,9 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
             try {
                 if (!(caught instanceof IncompatibleRemoteServiceException)) {
                     try {
-                        log.error("An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ")
-                        /* + Logger. retriveTraceInfo ( ) */
-                        + ";\n UserAgent " + userAgent(), caught);
+                        log.error(
+                                "An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href "
+                                        + Window.Location.getHref() + ";\n UserAgent " + userAgent(), caught);
                         GoogleAnalytics.track("unrecoverableError");
                     } catch (Throwable ignore) {
                     }
