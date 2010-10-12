@@ -92,6 +92,10 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
         </profiles>
     </settings>
 
+    Plase enure that your passwords are encrypted! Follow this guide http://maven.apache.org/guides/mini/guide-encryption.html
+    On linux don't worget ro run history -c or export HISTSIZE=0; mvn --encrypt-password <password>
+
+
 Cleaning up Indexes in Google App Engine/Java
   Use Python  SDK
     D:\etc\3p-libs\gae\appengine-python-1.3.6/appcfg.py vacuum_indexes D:\devGwt\pyx4j\incubator\tester\tester-gae-server
