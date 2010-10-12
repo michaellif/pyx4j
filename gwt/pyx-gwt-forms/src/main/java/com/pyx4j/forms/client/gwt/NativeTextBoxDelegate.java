@@ -82,7 +82,7 @@ public class NativeTextBoxDelegate<E> {
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 keyTimer.cancel();
-                keyTimer.schedule(500000);
+                keyTimer.schedule(500);
             }
         });
 
