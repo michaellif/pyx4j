@@ -87,6 +87,27 @@ public class EntityServicesImpl {
         }
     }
 
+    public static class SaveListImpl implements EntityServices.SaveList {
+
+        @Override
+        public Vector<? extends IEntity> execute(Vector<? extends IEntity> request) {
+            if (ServerSideConfiguration.instance().datastoreReadOnly()) {
+                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+            }
+            for (IEntity ent : request) {
+                if (ent.getPrimaryKey() == null) {
+                    SecurityController.assertPermission(EntityPermission.permissionCreate(ent));
+                } else {
+                    SecurityController.assertPermission(EntityPermission.permissionUpdate(ent));
+                }
+            }
+            PersistenceServicesFactory.getPersistenceService().persist(request);
+
+            return request;
+        }
+
+    }
+
     public static class QueryImpl implements EntityServices.Query {
 
         @SuppressWarnings("unchecked")

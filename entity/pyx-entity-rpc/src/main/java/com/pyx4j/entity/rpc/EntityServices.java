@@ -36,6 +36,9 @@ public interface EntityServices {
     public interface MergeSave extends Save {
     };
 
+    public interface SaveList extends Service<Vector<? extends IEntity>, Vector<? extends IEntity>> {
+    };
+
     public interface Query extends Service<EntityQueryCriteria<?>, Vector<? extends IEntity>> {
     };
 
