@@ -26,7 +26,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,7 +42,6 @@ public abstract class AbstractBackupReceiver implements BackupReceiver {
     private static Map<String, Integer> stats = new HashMap<String, Integer>();
 
     protected AbstractBackupReceiver() {
-        EntityFactory.setImplementation(new ServerEntityFactory());
         EntityImplGenerator.generateOnce(false);
     }
 

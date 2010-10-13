@@ -27,8 +27,6 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
@@ -51,7 +49,6 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
     @Override
     @Before
     public void setupDatastore() {
-        EntityFactory.setImplementation(new ServerEntityFactory());
     }
 
     @Override

@@ -30,9 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration.EnvironmentType;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
-import com.pyx4j.entity.shared.EntityFactory;
 
 /**
  * System property "com.pyx4j.appConfig" defines Config suffix class to use
@@ -43,8 +41,6 @@ public class InitializationServletContextListener implements ServletContextListe
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            EntityFactory.setImplementation(new ServerEntityFactory());
-
             String configClass = sce.getServletContext().getInitParameter(ServerSideConfiguration.class.getName());
             if (CommonsStringUtils.isStringSet(configClass)) {
                 try {

@@ -37,7 +37,6 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
      * ensure IEntityImplementations are serialized by RPC.
      */
     public static void ensureIEntityImplementations() {
-        EntityFactory.setImplementation(new ClientEntityFactory());
         if (!GWT.isScript()) {
             // Hosted mode initialization needs to call GWT.create(..); 
             try {
@@ -51,6 +50,7 @@ public class ClientEntityFactory implements IEntityFactoryImpl {
         }
     }
 
+    @Override
     public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
         if (singleFactory == null) {
             synchronized (ClientEntityFactory.class) {

@@ -7,5 +7,4 @@
 	<inherits name='com.pyx4j.entity.Entity'/>
 
 	<source path="shared" />
-    <super-source path="envClient"/>
 </module>

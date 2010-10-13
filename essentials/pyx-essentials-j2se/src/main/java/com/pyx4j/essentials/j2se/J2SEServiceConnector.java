@@ -31,7 +31,6 @@ import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
@@ -57,7 +56,6 @@ public class J2SEServiceConnector extends J2SEService {
     public J2SEServiceConnector(String name) {
         super(null);
         setName(name);
-        EntityFactory.setImplementation(new ServerEntityFactory());
         EntityImplGenerator.generateOnce(false);
     }
 

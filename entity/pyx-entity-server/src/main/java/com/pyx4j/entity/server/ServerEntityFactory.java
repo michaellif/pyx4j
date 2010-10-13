@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 import com.pyx4j.entity.server.impl.EntityMetaImpl;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IEntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
-public class ServerEntityFactory implements IEntityFactoryImpl {
+public class ServerEntityFactory implements IEntityFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 

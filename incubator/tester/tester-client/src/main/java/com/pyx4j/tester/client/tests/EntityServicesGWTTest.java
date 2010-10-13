@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,7 +42,6 @@ public class EntityServicesGWTTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         GUnitTester.delayTestFinish(this, TIME_OUT);
-        EntityFactory.setImplementation(new ClientEntityFactory());
     }
 
     public void testSave() {
@@ -53,10 +51,12 @@ public class EntityServicesGWTTest extends TestCase {
 
         final AsyncCallback<IEntity> callback = new AsyncCallback<IEntity>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(IEntity result) {
                 assertEquals("Result Class Value", country.getClass(), result.getClass());
                 assertEquals("Result Value", country.name().getValue(), ((Country) result).name().getValue());
@@ -76,10 +76,12 @@ public class EntityServicesGWTTest extends TestCase {
 
         final AsyncCallback callback = new AsyncCallback<Vector<Country>>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(Vector<Country> result) {
                 assertEquals("Result Class Value", 0, result.size());
                 GUnitTester.finishTest(EntityServicesGWTTest.this);
@@ -100,10 +102,12 @@ public class EntityServicesGWTTest extends TestCase {
 
         final AsyncCallback callback = new AsyncCallback<Vector<Country>>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(Vector<Country> result) {
                 assertEquals("Result Class Value", 1, result.size());
                 assertEquals("Result Value", countryName, result.get(0).name().getValue());
@@ -113,10 +117,12 @@ public class EntityServicesGWTTest extends TestCase {
 
         final AsyncCallback<IEntity> setUpCallback = new AsyncCallback<IEntity>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 fail(t.getClass().getName() + "[" + t.getMessage() + "]");
             }
 
+            @Override
             public void onSuccess(IEntity result) {
                 RPCManager.execute(EntityServices.Query.class, cc, callback);
             }

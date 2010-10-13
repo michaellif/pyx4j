@@ -20,13 +20,10 @@
  */
 package com.pyx4j.entity.test.env;
 
-import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 
 public class ConfigureTestsEnv {
 
     public static void configure() {
-        EntityFactory.setImplementation(new ServerEntityFactory());
     }
 
 }

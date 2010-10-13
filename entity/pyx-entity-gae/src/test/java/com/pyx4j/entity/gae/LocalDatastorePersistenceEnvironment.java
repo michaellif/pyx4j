@@ -27,8 +27,6 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.apphosting.api.ApiProxy;
 
-import com.pyx4j.entity.server.ServerEntityFactory;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment {
@@ -56,7 +54,6 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
 
         helper = new LocalServiceTestHelper(dsConfig);
         helper.setUp();
-        EntityFactory.setImplementation(new ServerEntityFactory());
     }
 
     @Override
