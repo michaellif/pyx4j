@@ -14,14 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on 2010-10-13
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.shared.impl;
+package com.pyx4j.entity.shared;
 
-import com.pyx4j.entity.shared.IEntityFactory;
+import com.pyx4j.entity.shared.meta.EntityMeta;
 
-public interface IEntityFactoryImpl extends IEntityFactory {
+public interface IEntityFactory {
 
+    public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName);
+
+    public EntityMeta createEntityMeta(Class<? extends IEntity> clazz);
 }

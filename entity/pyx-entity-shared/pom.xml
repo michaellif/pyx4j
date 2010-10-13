@@ -27,10 +27,22 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-config-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+ 
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-security-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
     </dependencies>
 
     <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->

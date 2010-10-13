@@ -23,17 +23,32 @@ package com.pyx4j.entity.shared;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.impl.IEntityFactoryImpl;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityFactory {
 
-    private static IEntityFactoryImpl impl;
+    private static IEntityFactory impl;
 
     private static final Map<Class<?>, EntityMeta> entityMetaCache = new HashMap<Class<?>, EntityMeta>();
 
+    static {
+        if (GWT.isClient()) {
+            impl = GWT.create(IEntityFactory.class);
+        } else {
+            impl = ServerSideFactory.create(IEntityFactory.class);
+        }
+    }
+
+    /**
+     * @deprecated This call is no longer required after all tests
+     */
+    @Deprecated
     public static void setImplementation(IEntityFactoryImpl impl) {
-        EntityFactory.impl = impl;
+        //EntityFactory.impl = impl;
     }
 
     public static <T extends IEntity> T create(Class<T> clazz) {

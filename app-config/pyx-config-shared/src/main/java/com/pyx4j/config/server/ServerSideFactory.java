@@ -28,6 +28,9 @@ public class ServerSideFactory {
         if (interfaceClassName.contains(".shared.")) {
             interfaceClassName = interfaceClassName.replace(".shared.", ".server.");
         }
+        if (interfaceCalss.getSimpleName().startsWith("I") && Character.isUpperCase(interfaceCalss.getSimpleName().charAt(1))) {
+            interfaceClassName = interfaceClassName.replace(interfaceCalss.getSimpleName(), "Server" + interfaceCalss.getSimpleName().substring(1));
+        }
         try {
             Class<T> klass = (Class<T>) Class.forName(interfaceClassName);
             return klass.newInstance();

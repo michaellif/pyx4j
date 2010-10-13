@@ -8,11 +8,15 @@
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.pyx4j.forms.Forms'/>
     <inherits name='com.pyx4j.gwt.GwtCommons'/>
-    
+
+    <replace-with class="com.pyx4j.entity.client.ClientEntityFactory">
+		<when-type-is class="com.pyx4j.entity.shared.IEntityFactory"/>
+	</replace-with>
+	    
     <generate-with class="com.pyx4j.entity.rebind.EntityFactoryGenerator">
         <when-type-assignable class="com.pyx4j.entity.shared.impl.IEntityFactoryImpl"/>
     </generate-with>
-    
+	
 	<source path="client"/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.entity.client.*" />
