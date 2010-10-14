@@ -26,11 +26,17 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IEntityCacheService {
 
-    public <T extends IEntity> T retrieve(Class<T> entityClass, Long primaryKey);
+    public <T extends IEntity> T get(Class<T> entityClass, Long primaryKey);
 
-    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys);
+    public <T extends IEntity> Map<Long, T> get(Class<T> entityClass, Iterable<Long> primaryKeys);
 
-    public <T extends IEntity> void delete(Class<T> entityClass, Long primaryKey);
+    public <T extends IEntity> void put(T entity);
 
-    public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys);
+    public <T extends IEntity> void put(Iterable<T> entityList);
+
+    public <T extends IEntity> void remove(T entity);
+
+    public <T extends IEntity> void remove(Class<T> entityClass, Long primaryKey);
+
+    public <T extends IEntity> void remove(Class<T> entityClass, Iterable<Long> primaryKeys);
 }

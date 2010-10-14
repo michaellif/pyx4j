@@ -66,6 +66,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -109,6 +110,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     private static final String GLOBAL_KEYWORD_PRROPERTY = IndexAdapter.ENTITY_KEYWORD_PRROPERTY;
 
     private final DatastoreService datastore;
+
+    private final IEntityCacheService cacheService;
 
     private final ThreadLocal<CallStats> datastoreCallStats = new ThreadLocal<CallStats>() {
 
@@ -203,6 +206,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     public EntityPersistenceServiceGAE() {
         datastore = DatastoreServiceFactory.getDatastoreService();
+        cacheService = new EntityCacheServiceGAE();
     }
 
     private String degradeGracefullyMessage() {
@@ -773,7 +777,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             try {
                 Key keyCreated = datastore.put(entity.entity);
                 iEntity.setPrimaryKey(keyCreated.getId());
-
+                cacheService.put(iEntity);
                 return keyCreated;
             } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
                 throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
@@ -793,6 +797,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (int i = 0; i < iEntityList.size(); i++) {
                         iEntityList.get(i).setPrimaryKey(keys.get(i).getId());
                     }
+                    cacheService.put(iEntityList);
                     entityList.clear();
                     iEntityList.clear();
                 }
@@ -800,10 +805,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entityList.add(entity.entity);
                 iEntityList.add(iEntity);
             }
-            datastoreCallStats.get().writeCount++;
-            List<Key> keys = datastore.put(entityList);
-            for (int i = 0; i < iEntityList.size(); i++) {
-                iEntityList.get(i).setPrimaryKey(keys.get(i).getId());
+            if (entityList.size() > 0) {
+                datastoreCallStats.get().writeCount++;
+                List<Key> keys = datastore.put(entityList);
+                for (int i = 0; i < iEntityList.size(); i++) {
+                    iEntityList.get(i).setPrimaryKey(keys.get(i).getId());
+                }
+                cacheService.put(iEntityList);
             }
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
@@ -886,21 +894,29 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else {
             List<Key> needToGet = new Vector<Key>();
             EntityMeta entityMeta = EntityFactory.getEntityMeta((Class<IEntity>) member.getMeta().getValueClass());
+
             for (Key childKey : value) {
                 if (!entityMeta.getPersistenceName().equals(childKey.getKind())) {
                     throw new RuntimeException("Unexpected IEntity " + entityMeta.getPersistenceName() + " Kind " + childKey.getKind());
                 }
                 if (!retrievedMap.containsKey(childKey)) {
-                    needToGet.add(childKey);
+                    IEntity cachedEntity = cacheService.get(entityMeta.getEntityClass(), childKey.getId());
+                    if (cachedEntity != null) {
+                        retrievedMap.put(childKey, cachedEntity);
+                    } else {
+                        needToGet.add(childKey);
+                    }
                 }
             }
-
-            datastoreCallStats.get().readCount++;
-            Map<Key, Entity> gotData = datastore.get(needToGet);
-            for (Map.Entry<Key, Entity> me : gotData.entrySet()) {
-                IEntity childIEntity = EntityFactory.create(entityMeta.getEntityClass());
-                retrievedMap.put(me.getKey(), childIEntity);
-                updateIEntity(childIEntity, me.getValue(), retrievedMap);
+            if (needToGet.size() > 0) {
+                datastoreCallStats.get().readCount++;
+                Map<Key, Entity> gotData = datastore.get(needToGet);
+                for (Map.Entry<Key, Entity> me : gotData.entrySet()) {
+                    IEntity childIEntity = EntityFactory.create(entityMeta.getEntityClass());
+                    retrievedMap.put(me.getKey(), childIEntity);
+                    updateIEntity(childIEntity, me.getValue(), retrievedMap);
+                    cacheService.put(childIEntity);
+                }
             }
 
             for (Key childKey : value) {
@@ -995,6 +1011,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (retrievedMap.containsKey(key)) {
             iEntity.setValue(retrievedMap.get(key).getValue());
         } else {
+            IEntity cachedEntity = cacheService.get(iEntity.getEntityMeta().getEntityClass(), key.getId());
+            if (cachedEntity != null) {
+                iEntity.setValue(cachedEntity.getValue());
+                return;
+            }
+
             Entity entity;
             try {
                 datastoreCallStats.get().readCount++;
@@ -1004,15 +1026,20 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
             retrievedMap.put(key, iEntity);
             updateIEntity(iEntity, entity, retrievedMap);
+            cacheService.put(iEntity);
         }
     }
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
+        T iEntity = cacheService.get(entityClass, primaryKey);
+        if (iEntity != null) {
+            return iEntity;
+        }
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
 
-        T iEntity = EntityFactory.create(entityClass);
+        iEntity = EntityFactory.create(entityClass);
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
@@ -1028,6 +1055,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         if (entity != null) {
             updateIEntity(iEntity, entity, new HashMap<Key, IEntity>());
+            cacheService.put(iEntity);
         } else {
             iEntity = null;
         }
@@ -1047,16 +1075,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
 
-        Map<Long, T> ret = new HashMap<Long, T>();
-
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         if (meta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
+        Map<Long, T> cached = cacheService.get(entityClass, primaryKeys);
+        Map<Long, T> ret = new HashMap<Long, T>();
 
         List<Key> getKeys = new Vector<Key>();
         for (Long primaryKey : primaryKeys) {
-            getKeys.add(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
+            T iEntity = cached.get(primaryKey);
+            if (iEntity != null) {
+                ret.put(primaryKey, iEntity);
+            } else {
+                getKeys.add(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
+            }
+        }
+        if (getKeys.size() == 0) {
+            return ret;
         }
         datastoreCallStats.get().readCount++;
         Map<Key, Entity> entities = datastore.get(getKeys);
@@ -1067,6 +1103,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 T iEntity = EntityFactory.create(entityClass);
                 updateIEntity(iEntity, entity, retrievedMap);
                 ret.put(primaryKey, iEntity);
+                cacheService.put(iEntity);
             }
         }
 
@@ -1442,6 +1479,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         getAllKeysForDelete(keys, iEntity);
         datastoreCallStats.get().writeCount++;
         datastore.delete(keys);
+        cacheService.remove(iEntity);
     }
 
     @Override
@@ -1456,6 +1494,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
         }
+        cacheService.remove(entityClass, primaryKey);
     }
 
     @Override
@@ -1474,6 +1513,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             int removedCount = 0;
             List<Key> keys = new Vector<Key>();
             for (Entity entity : pq.asIterable()) {
+                cacheService.remove(entityClass, entity.getKey().getId());
                 if (keys.size() >= 500) {
                     datastoreCallStats.get().writeCount++;
                     datastore.delete(keys);
@@ -1499,6 +1539,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         List<Key> keys = new Vector<Key>();
         try {
+            cacheService.remove(entityClass, primaryKeys);
             for (Long primaryKey : primaryKeys) {
                 if (keys.size() >= 500) {
                     datastoreCallStats.get().writeCount++;

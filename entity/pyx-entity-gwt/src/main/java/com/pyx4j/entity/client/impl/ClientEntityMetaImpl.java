@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.impl;
 
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -110,6 +111,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     }
 
     @Override
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<String> getMemberNames() {
         if (memberNames == null) {
             SharedEntityHandler anInstance = (SharedEntityHandler) EntityFactory.create(getEntityClass());
@@ -133,6 +139,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         return memberMeta;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public MemberMeta getMemberMeta(Path path) {
         EntityMeta em = this;

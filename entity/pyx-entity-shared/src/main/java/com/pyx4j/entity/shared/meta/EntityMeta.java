@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.shared.meta;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -65,6 +66,14 @@ public interface EntityMeta {
      * See com.pyx4j.entity.annotations.RpcTransient
      */
     public boolean isRpcTransient();
+
+    /*
+     * Works only on server side.
+     * 
+     * Returns this element's annotation for the specified type if such an annotation is
+     * present, else null.
+     */
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
     public List<String> getMemberNames();
 

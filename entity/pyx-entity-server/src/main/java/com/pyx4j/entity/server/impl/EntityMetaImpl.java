@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server.impl;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
@@ -142,6 +143,11 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
+    public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+        return entityClass.getAnnotation(annotationClass);
+    }
+
+    @Override
     public MemberMeta getMemberMeta(String memberName) {
         MemberMeta memberMeta = membersMeta.get(memberName);
         if (memberMeta == null) {
@@ -220,6 +226,7 @@ public class EntityMetaImpl implements EntityMeta {
         }
     }
 
+    @Override
     public String getNullString() {
         ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
         if (annotation != null) {
