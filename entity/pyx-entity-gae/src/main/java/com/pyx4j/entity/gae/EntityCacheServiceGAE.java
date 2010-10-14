@@ -62,6 +62,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
         return (T) getMemcache().get(meta.getEntityClass().getName() + primaryKey);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends IEntity> Map<Long, T> get(Class<T> entityClass, Iterable<Long> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
@@ -73,16 +74,15 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
             for (Long primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);
             }
-            @SuppressWarnings("unchecked")
-            Map<String, T> raw = (Map<String, T>) getMemcache().getAll(keys);
+            Map<String, Object> raw = getMemcache().getAll(keys);
             if (raw.isEmpty()) {
                 return Collections.emptyMap();
             }
             Map<Long, T> ret = new HashMap<Long, T>();
             for (Long primaryKey : primaryKeys) {
-                T ent = raw.get(meta.getEntityClass().getName() + primaryKey);
+                Object ent = raw.get(meta.getEntityClass().getName() + primaryKey);
                 if (ent != null) {
-                    ret.put(primaryKey, ent);
+                    ret.put(primaryKey, (T) ent);
                 }
             }
             return ret;
