@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
@@ -101,13 +102,32 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
             // Entity delegate its value
             entity = (T) entity.cloneEntity();
         }
-        getMemcache().put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity);
+        if (cached.expirationSeconds() > 0) {
+            getMemcache().put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity, Expiration.byDeltaSeconds(cached.expirationSeconds()));
+        } else {
+            getMemcache().put(meta.getEntityClass().getName() + entity.getPrimaryKey(), entity);
+        }
     }
 
     @Override
     public <T extends IEntity> void put(Iterable<T> entityList) {
-        for (T ent : entityList) {
-            put(ent);
+        Cached cached = null;
+        Map<String, T> rawMap = null;
+        for (T entity : entityList) {
+            // Initialise once
+            if (cached == null) {
+                cached = entity.getEntityMeta().getAnnotation(Cached.class);
+                if (cached == null) {
+                    return;
+                }
+                rawMap = new HashMap<String, T>();
+            }
+            rawMap.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity);
+        }
+        if (cached.expirationSeconds() > 0) {
+            getMemcache().putAll(rawMap, Expiration.byDeltaSeconds(cached.expirationSeconds()));
+        } else {
+            getMemcache().putAll(rawMap);
         }
     }
 

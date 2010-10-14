@@ -32,6 +32,9 @@ public interface IEntityCacheService {
 
     public <T extends IEntity> void put(T entity);
 
+    /**
+     * Assume all entities are of the same type
+     */
     public <T extends IEntity> void put(Iterable<T> entityList);
 
     public <T extends IEntity> void remove(T entity);
