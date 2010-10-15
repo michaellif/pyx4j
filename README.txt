@@ -59,11 +59,11 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
     You may install SDKs bundle for GAE and GWT from google site for faster download.
 
 -- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
-2. Download and unzip appengine-java-sdk-1.3.7.zip
-		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.3.7.zip
+2. Download and unzip appengine-java-sdk-1.3.8.zip
+		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.3.8.zip
 3. Get from SVN https://pyx4j.com/sec/svn_internal/apps/incubator/gae-dev-classpath-hack and build it in Eclipse.
-   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.7-patch.zip
-4. Copy/Add results of the build (in target\classes) to appengine-java-sdk-1.3.7\lib\impl\appengine-local-runtime.jar located in App Engine SDK.
+   If you don't have access to Private SVN get the classes from here: http://pyx4j.com/downloads/appengine-local-runtime.jar-1.3.8-patch.zip
+4. Copy/Add results of the build (in target\classes) to appengine-java-sdk-1.3.8\lib\impl\appengine-local-runtime.jar located in App Engine SDK.
 
 ========= Eclipse Configuration for a new Workspace =========
 
