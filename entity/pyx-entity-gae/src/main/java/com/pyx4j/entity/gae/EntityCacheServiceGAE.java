@@ -38,8 +38,6 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityCacheServiceGAE implements IEntityCacheService {
 
-    public static final String MEMCACHE_NAMESPACE = "PyxEntityCache";
-
     private MemcacheService memcache;
 
     public EntityCacheServiceGAE() {
@@ -47,7 +45,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
 
     protected MemcacheService getMemcache() {
         if (this.memcache == null) {
-            this.memcache = MemcacheServiceFactory.getMemcacheService(MEMCACHE_NAMESPACE);
+            this.memcache = MemcacheServiceFactory.getMemcacheService();
         }
         return this.memcache;
     }
