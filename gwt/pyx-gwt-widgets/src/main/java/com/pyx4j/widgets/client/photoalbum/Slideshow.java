@@ -114,8 +114,6 @@ public class Slideshow extends AbsolutePanel {
         }
         controlPanel = new ControlPanel();
         add(controlPanel, 0, 0);
-        int x = width - controlPanel.getOffsetWidth() - 100;
-        setWidgetPosition(controlPanel, x, height - 30);
         show(initPosition);
         if (runOnInit) {
             controlPanel.play(true);
@@ -170,6 +168,8 @@ public class Slideshow extends AbsolutePanel {
                     }
                 };
                 animationTimer.scheduleRepeating(500 / ANIMATION_ITTERATIONS);
+                int x = width - controlPanel.getOffsetWidth() - 50;
+                setWidgetPosition(controlPanel, x, height - 30);
             }
         });
     }
