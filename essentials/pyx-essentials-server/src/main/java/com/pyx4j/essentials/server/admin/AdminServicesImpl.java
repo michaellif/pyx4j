@@ -22,6 +22,9 @@ package com.pyx4j.essentials.server.admin;
 
 import java.text.MessageFormat;
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.memcache.Stats;
+
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -76,6 +79,26 @@ public class AdminServicesImpl implements AdminServices {
             return DeferredProcessServicesImpl.register(new SessionsPurgeDeferredProcess(true));
         }
 
+    }
+
+    public static class MemcacheClearImpl implements AdminServices.MemcacheClear {
+
+        @Override
+        public VoidSerializable execute(VoidSerializable request) {
+            MemcacheServiceFactory.getMemcacheService().clearAll();
+            return null;
+        }
+
+    }
+
+    public static class MemcacheStatisticsImpl implements AdminServices.MemcacheStatistics {
+
+        @Override
+        public String execute(VoidSerializable request) {
+            Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
+            return MessageFormat.format("Alive items: {0}\nMemcache size: {1} Bytes\nHit Count: {2}\nMiss Count: {3}\n", stats.getItemCount(),
+                    stats.getTotalItemBytes(), stats.getHitCount(), stats.getMissCount());
+        }
     }
 
     public static class NetworkSimulationSetImpl implements AdminServices.NetworkSimulationSet {

@@ -28,9 +28,12 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IObject;
@@ -39,6 +42,7 @@ import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.widgets.client.GroupBoxPanel;
 
@@ -47,6 +51,8 @@ class SimulationWidget extends VerticalPanel implements InlineWidget {
     private static I18n i18n = I18nFactory.getI18n(SimulationWidget.class);
 
     private final AbstractEntityEditorPanel<NetworkSimulation> editorPanel;
+
+    private final HTML memcacheStats;
 
     SimulationWidget() {
         this.setWidth("100%");
@@ -89,10 +95,40 @@ class SimulationWidget extends VerticalPanel implements InlineWidget {
         });
 
         networkGroup.add(saveButton);
+
+        GroupBoxPanel memcacheGroup = new GroupBoxPanel(false);
+        memcacheGroup.setCaption("Mem Cache");
+        this.add(memcacheGroup);
+
+        memcacheGroup.add(memcacheStats = new HTML(CommonsStringUtils.NO_BREAK_SPACE_HTML + "<br/>" + CommonsStringUtils.NO_BREAK_SPACE_HTML + "<br/>"
+                + CommonsStringUtils.NO_BREAK_SPACE_HTML + "<br/>" + CommonsStringUtils.NO_BREAK_SPACE_HTML));
+
+        Anchor removeExpired = new Anchor("Empties the cache");
+        memcacheGroup.add(removeExpired);
+        removeExpired.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                AsyncCallback cb = new AsyncCallback<VoidSerializable>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnrecoverableClientError(caught);
+                    }
+
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        refreshMemcacheStats();
+                    }
+                };
+                RPCManager.execute(AdminServices.MemcacheClear.class, null, cb);
+            }
+        });
     }
 
     @Override
     public void populate(Map<String, String> args) {
+        refreshMemcacheStats();
         AsyncCallback cb = new AsyncCallback<NetworkSimulation>() {
 
             @Override
@@ -106,6 +142,24 @@ class SimulationWidget extends VerticalPanel implements InlineWidget {
             }
         };
         RPCManager.execute(AdminServices.NetworkSimulationRetrieve.class, null, cb);
+    }
+
+    private void refreshMemcacheStats() {
+        AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+
+            @Override
+            public void onSuccess(String value) {
+                memcacheStats.setHTML(value.replace("\n", "<br/>"));
+            }
+
+        };
+
+        RPCManager.execute(AdminServices.MemcacheStatistics.class, null, callback);
     }
 
 }

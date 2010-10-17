@@ -39,6 +39,14 @@ public interface AdminServices {
 
     };
 
+    public interface MemcacheClear extends Service<VoidSerializable, VoidSerializable> {
+
+    };
+
+    public interface MemcacheStatistics extends Service<VoidSerializable, String> {
+
+    };
+
     public interface NetworkSimulationSet extends EntityServices.Save, IsIgnoreNetworkSimulationService {
 
     };
