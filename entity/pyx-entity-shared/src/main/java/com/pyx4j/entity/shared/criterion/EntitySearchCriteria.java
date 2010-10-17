@@ -25,12 +25,13 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
-public class EntitySearchCriteria<E extends IEntity> implements Serializable {
+public class EntitySearchCriteria<E extends IEntity> implements Serializable, IHaveServiceCallMarker {
 
     private static final long serialVersionUID = 7483364285263499506L;
 
@@ -148,5 +149,10 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable {
         builder.append(" pageNumber=").append(getPageNumber());
         builder.append(" filters=").append(getFilters());
         return builder.toString();
+    }
+
+    @Override
+    public String getServiceCallMarker() {
+        return this.domainName.substring(domainName.lastIndexOf(".") + 1);
     }
 }

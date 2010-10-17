@@ -104,7 +104,7 @@ public class RPCManager {
         try {
             runningServicesCount++;
             fireStatusChangeEvent(When.START, executeBackground, serviceInterface, callback, -1);
-            requestBuilder.executing(serviceInterface);
+            requestBuilder.executing(serviceInterface, request);
             service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);

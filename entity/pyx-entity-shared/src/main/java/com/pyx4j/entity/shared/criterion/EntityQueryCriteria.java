@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
@@ -33,7 +34,7 @@ import com.pyx4j.entity.shared.IEntity;
  * 
  * Translates to org.hibernate.Criteria in RDBMS or Query in GAE
  */
-public class EntityQueryCriteria<E extends IEntity> implements Serializable {
+public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHaveServiceCallMarker {
 
     private static final long serialVersionUID = -6101566214650608853L;
 
@@ -184,4 +185,8 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable {
         return hashCode;
     }
 
+    @Override
+    public String getServiceCallMarker() {
+        return this.domainName.substring(domainName.lastIndexOf(".") + 1);
+    }
 }

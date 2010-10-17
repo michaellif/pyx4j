@@ -20,6 +20,8 @@
  */
 package com.pyx4j.rpc.client;
 
+import java.io.Serializable;
+
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -27,6 +29,7 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.RpcRequestBuilder;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 
@@ -63,8 +66,11 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
      * Mark service entry point with service name to be able to view statistic in GAE
      * console.
      */
-    void executing(@SuppressWarnings("rawtypes") final Class<? extends Service> serviceInterface) {
+    void executing(@SuppressWarnings("rawtypes") final Class<? extends Service> serviceInterface, Serializable request) {
         serviceInterfaceMarker = GWTJava5Helper.getSimpleName(serviceInterface).replace('$', '.');
+        if (request instanceof IHaveServiceCallMarker) {
+            serviceInterfaceMarker += "/" + ((IHaveServiceCallMarker) request).getServiceCallMarker();
+        }
     }
 
     void setSessionToken(String sessionToken, String sessionAclTimeStamp) {

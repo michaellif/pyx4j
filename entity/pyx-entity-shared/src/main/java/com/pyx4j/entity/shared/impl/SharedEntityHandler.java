@@ -32,6 +32,7 @@ import java.util.Vector;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IFullDebug;
+import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.LoopCounter;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -46,7 +47,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
-public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug {
+public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Object>> implements IEntity, IFullDebug, IHaveServiceCallMarker {
 
     private static final long serialVersionUID = -7590484996971406115L;
 
@@ -457,5 +458,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public String toString() {
         return debugString();
+    }
+
+    @Override
+    public String getServiceCallMarker() {
+        String domainName = getObjectClass().getName();
+        return domainName.substring(domainName.lastIndexOf(".") + 1);
     }
 }
