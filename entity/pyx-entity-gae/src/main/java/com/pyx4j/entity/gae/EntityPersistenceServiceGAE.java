@@ -1024,6 +1024,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             IEntity cachedEntity = cacheService.get(iEntity.getEntityMeta().getEntityClass(), key.getId());
             if (cachedEntity != null) {
                 iEntity.setValue(cachedEntity.getValue());
+                retrievedMap.put(key, cachedEntity);
                 return;
             }
 
@@ -1107,15 +1108,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         datastoreCallStats.get().readCount++;
         Map<Key, Entity> entities = datastore.get(getKeys);
         Map<Key, IEntity> retrievedMap = new HashMap<Key, IEntity>();
+        List<IEntity> toCacheList = new Vector<IEntity>();
         for (Long primaryKey : primaryKeys) {
             Entity entity = entities.get(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
             if (entity != null) {
                 T iEntity = EntityFactory.create(entityClass);
                 updateIEntity(iEntity, entity, retrievedMap);
                 ret.put(primaryKey, iEntity);
-                cacheService.put(iEntity);
+                toCacheList.add(iEntity);
             }
         }
+        cacheService.put(toCacheList);
 
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().readCount - initCount;
