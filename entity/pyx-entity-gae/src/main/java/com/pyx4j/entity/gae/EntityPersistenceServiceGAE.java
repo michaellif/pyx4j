@@ -1314,9 +1314,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         final QueryResultIterable<Entity> iterable;
         if (encodedCursorRefference != null) {
-            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withCursor(Cursor.fromWebSafeString(encodedCursorRefference)));
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(encodedCursorRefference)).prefetchSize(40));
         } else {
-            iterable = pq.asQueryResultIterable();
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withPrefetchSize(40));
         }
         final QueryResultIterator<Entity> iterator = iterable.iterator();
         long duration = System.nanoTime() - start;
@@ -1396,7 +1396,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         final QueryResultIterable<Entity> iterable;
         if (encodedCursorRefference != null) {
-            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withCursor(Cursor.fromWebSafeString(encodedCursorRefference)));
+            iterable = pq.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(encodedCursorRefference)));
         } else {
             iterable = pq.asQueryResultIterable();
         }
