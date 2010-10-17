@@ -895,12 +895,19 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             List<Key> needToGet = new Vector<Key>();
             EntityMeta entityMeta = EntityFactory.getEntityMeta((Class<IEntity>) member.getMeta().getValueClass());
 
+            List<Long> primaryKeys = new Vector<Long>();
             for (Key childKey : value) {
                 if (!entityMeta.getPersistenceName().equals(childKey.getKind())) {
                     throw new RuntimeException("Unexpected IEntity " + entityMeta.getPersistenceName() + " Kind " + childKey.getKind());
                 }
                 if (!retrievedMap.containsKey(childKey)) {
-                    IEntity cachedEntity = cacheService.get(entityMeta.getEntityClass(), childKey.getId());
+                    primaryKeys.add(childKey.getId());
+                }
+            }
+            Map<Long, IEntity> cached = (Map<Long, IEntity>) cacheService.get(entityMeta.getEntityClass(), primaryKeys);
+            for (Key childKey : value) {
+                if (!retrievedMap.containsKey(childKey)) {
+                    IEntity cachedEntity = cached.get(childKey.getId());
                     if (cachedEntity != null) {
                         retrievedMap.put(childKey, cachedEntity);
                     } else {
@@ -908,15 +915,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     }
                 }
             }
+
             if (needToGet.size() > 0) {
                 datastoreCallStats.get().readCount++;
                 Map<Key, Entity> gotData = datastore.get(needToGet);
+                List<IEntity> gotEntity = new Vector<IEntity>();
                 for (Map.Entry<Key, Entity> me : gotData.entrySet()) {
                     IEntity childIEntity = EntityFactory.create(entityMeta.getEntityClass());
                     retrievedMap.put(me.getKey(), childIEntity);
                     updateIEntity(childIEntity, me.getValue(), retrievedMap);
-                    cacheService.put(childIEntity);
+                    gotEntity.add(childIEntity);
                 }
+                cacheService.put(gotEntity);
             }
 
             for (Key childKey : value) {
