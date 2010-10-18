@@ -40,9 +40,9 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     private String domainName;
 
-    private List<Criterion> filters;
+    private Vector<Criterion> filters;
 
-    private List<Sort> sorts;
+    private Vector<Sort> sorts;
 
     private transient Class<E> entityClass;
 
@@ -136,7 +136,12 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     }
 
     public void setSorts(List<Sort> sorts) {
-        this.sorts = sorts;
+        if (this.sorts == null) {
+            this.sorts = new Vector<Sort>();
+        } else {
+
+        }
+        this.sorts.addAll(sorts);
     }
 
     @SuppressWarnings("unchecked")
