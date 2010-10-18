@@ -6,4 +6,6 @@
 	<inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name="com.google.gwt.maps.GoogleMaps" />
 	<source path="geo"/> 
+	
+	<extend-configuration-property name="rpc.blacklist" value="com.google.gwt.maps.*" />
 </module>
