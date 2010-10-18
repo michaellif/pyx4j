@@ -6,4 +6,7 @@
     <inherits name="pl.rmalinowski.gwt2swf.GWT2SWF-AjaxLoad"/>
     <source path="gwt2swf"/>
     <public path="gwt2swf/public"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.gwt2swf.*" />
+    <extend-configuration-property name="rpc.blacklist" value="pl.rmalinowski.gwt2swf.client.*" />
 </module>
