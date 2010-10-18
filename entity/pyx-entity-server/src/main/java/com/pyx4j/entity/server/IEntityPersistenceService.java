@@ -39,6 +39,8 @@ public interface IEntityPersistenceService {
          */
         public String encodedCursorRefference();
 
+        public void completeRetrieval();
+
     }
 
     public void persist(IEntity entity);

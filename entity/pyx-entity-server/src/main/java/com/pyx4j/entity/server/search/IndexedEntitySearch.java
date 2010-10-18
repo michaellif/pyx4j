@@ -367,6 +367,11 @@ public class IndexedEntitySearch {
                 PersistenceServicesFactory.getPersistenceService().delete(last);
                 last = null;
             }
+
+            @Override
+            public void completeRetrieval() {
+                unfiltered.completeRetrieval();
+            }
         };
 
     }

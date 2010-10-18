@@ -22,8 +22,10 @@ package com.pyx4j.entity.gae;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.appengine.api.memcache.Expiration;
@@ -31,6 +33,7 @@ import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import com.pyx4j.entity.annotations.Cached;
+import com.pyx4j.entity.server.EntityCollectionRequest;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -40,7 +43,17 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
 
     private MemcacheService memcache;
 
+    private static boolean disabled = false;
+
     public EntityCacheServiceGAE() {
+    }
+
+    public static boolean isDisabled() {
+        return disabled;
+    }
+
+    public static void setDisabled(boolean disabled) {
+        EntityCacheServiceGAE.disabled = disabled;
     }
 
     protected MemcacheService getMemcache() {
@@ -55,7 +68,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     public <T extends IEntity> T get(Class<T> entityClass, Long primaryKey) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
-        if (cached == null) {
+        if ((cached == null) || (disabled)) {
             return null;
         }
         return (T) getMemcache().get(meta.getEntityClass().getName() + primaryKey);
@@ -66,10 +79,10 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     public <T extends IEntity> Map<Long, T> get(Class<T> entityClass, Iterable<Long> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
-        if (cached == null) {
+        if ((cached == null) || (disabled)) {
             return Collections.emptyMap();
         } else {
-            List<String> keys = new Vector<String>();
+            Set<String> keys = new HashSet<String>();
             for (Long primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);
             }
@@ -88,12 +101,50 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
         }
     }
 
+    @Override
+    public Map<EntityCollectionRequest<IEntity>, Map<Long, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests) {
+        Map<EntityCollectionRequest<IEntity>, Map<Long, IEntity>> ret = new HashMap<EntityCollectionRequest<IEntity>, Map<Long, IEntity>>();
+        Set<String> allCacheKeys = new HashSet<String>();
+        for (EntityCollectionRequest<IEntity> request : requests) {
+            EntityMeta meta = EntityFactory.getEntityMeta(request.getEntityClass());
+            if ((meta.getAnnotation(Cached.class) != null) && (!disabled)) {
+                for (Long primaryKey : request.getPrimaryKeys()) {
+                    allCacheKeys.add(meta.getEntityClass().getName() + primaryKey);
+                }
+            }
+        }
+        Map<String, Object> raw;
+        if ((allCacheKeys.size() > 0) && (!disabled)) {
+            raw = getMemcache().getAll(allCacheKeys);
+        } else {
+            raw = Collections.emptyMap();
+        }
+
+        for (EntityCollectionRequest<IEntity> request : requests) {
+            EntityMeta meta = EntityFactory.getEntityMeta(request.getEntityClass());
+            Cached cached = meta.getAnnotation(Cached.class);
+            if ((cached == null) || (disabled) || (raw.isEmpty())) {
+                ret.put(request, Collections.EMPTY_MAP);
+            } else {
+                Map<Long, IEntity> responce = new HashMap<Long, IEntity>();
+                for (Long primaryKey : request.getPrimaryKeys()) {
+                    Object ent = raw.get(meta.getEntityClass().getName() + primaryKey);
+                    if (ent != null) {
+                        responce.put(primaryKey, (IEntity) ent);
+                    }
+                }
+                ret.put(request, responce);
+            }
+        }
+        return ret;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends IEntity> void put(T entity) {
         EntityMeta meta = entity.getEntityMeta();
         Cached cached = meta.getAnnotation(Cached.class);
-        if (cached == null) {
+        if ((cached == null) || (disabled)) {
             return;
         }
         if ((entity.getParent() != null) || (entity.getOwner() != null)) {
@@ -108,24 +159,31 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     }
 
     @Override
-    public <T extends IEntity> void put(Iterable<T> entityList) {
-        Cached cached = null;
-        Map<String, T> rawMap = null;
-        for (T entity : entityList) {
-            // Initialise once
-            if (cached == null) {
-                cached = entity.getEntityMeta().getAnnotation(Cached.class);
-                if (cached == null) {
-                    return;
-                }
-                rawMap = new HashMap<String, T>();
+    public void put(Iterable<IEntity> entityList) {
+        Map<Integer, Map<String, IEntity>> rawMaps = new HashMap<Integer, Map<String, IEntity>>();
+        for (IEntity entity : entityList) {
+            Cached cached = entity.getEntityMeta().getAnnotation(Cached.class);
+            if ((cached == null) || (disabled)) {
+                continue;
+            }
+
+            Map<String, IEntity> rawMap = rawMaps.get(cached.expirationSeconds());
+            if (rawMap == null) {
+                rawMap = new HashMap<String, IEntity>();
+                rawMaps.put(cached.expirationSeconds(), rawMap);
+            }
+            if ((entity.getParent() != null) || (entity.getOwner() != null)) {
+                // Entity delegate its value
+                entity = entity.cloneEntity();
             }
             rawMap.put(entity.getEntityMeta().getEntityClass().getName() + entity.getPrimaryKey(), entity);
         }
-        if (cached.expirationSeconds() > 0) {
-            getMemcache().putAll(rawMap, Expiration.byDeltaSeconds(cached.expirationSeconds()));
-        } else {
-            getMemcache().putAll(rawMap);
+        for (Map.Entry<Integer, Map<String, IEntity>> me : rawMaps.entrySet()) {
+            if (me.getKey() > 0) {
+                getMemcache().putAll(me.getValue(), Expiration.byDeltaSeconds(me.getKey()));
+            } else {
+                getMemcache().putAll(me.getValue());
+            }
         }
     }
 
@@ -133,7 +191,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     public <T extends IEntity> void remove(Class<T> entityClass, Long primaryKey) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
-        if (cached != null) {
+        if ((cached != null) && (!disabled)) {
             getMemcache().delete(entityClass.getName() + primaryKey);
         }
     }
@@ -142,7 +200,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     public <T extends IEntity> void remove(T entity) {
         EntityMeta meta = entity.getEntityMeta();
         Cached cached = meta.getAnnotation(Cached.class);
-        if (cached != null) {
+        if ((cached != null) && (!disabled)) {
             getMemcache().delete(meta.getEntityClass().getName() + entity.getPrimaryKey());
         }
     }
@@ -151,7 +209,7 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     public <T extends IEntity> void remove(Class<T> entityClass, Iterable<Long> primaryKeys) {
         EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
         Cached cached = meta.getAnnotation(Cached.class);
-        if (cached != null) {
+        if ((cached != null) && (!disabled)) {
             List<String> keys = new Vector<String>();
             for (Long primaryKey : primaryKeys) {
                 keys.add(meta.getEntityClass().getName() + primaryKey);

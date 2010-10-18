@@ -151,6 +151,7 @@ public class EntityServicesImpl {
                 }
             }
             r.hasMoreData(it.hasMoreData());
+            it.completeRetrieval();
 
             long duration = System.nanoTime() - start;
             int callsCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount() - initCount;

@@ -91,6 +91,7 @@ public class DBMaintenanceDeferredProcess implements IDeferredProcess {
         int currentFetchCount = 0;
         while (it.hasNext()) {
             IEntity ent = it.next();
+            it.completeRetrieval();
             SecurityController.assertPermission(EntityPermission.permissionRead(ent.getObjectClass()));
             boolean updateRequired = processor.process(ent);
             if (updateRequired) {

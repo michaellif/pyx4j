@@ -30,12 +30,14 @@ public interface IEntityCacheService {
 
     public <T extends IEntity> Map<Long, T> get(Class<T> entityClass, Iterable<Long> primaryKeys);
 
+    public Map<EntityCollectionRequest<IEntity>, Map<Long, IEntity>> get(Iterable<EntityCollectionRequest<IEntity>> requests);
+
     public <T extends IEntity> void put(T entity);
 
     /**
-     * Assume all entities are of the same type
+     * Does not assume that all entities are of the same type
      */
-    public <T extends IEntity> void put(Iterable<T> entityList);
+    public void put(Iterable<IEntity> entityList);
 
     public <T extends IEntity> void remove(T entity);
 
