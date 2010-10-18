@@ -136,12 +136,17 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     }
 
     public void setSorts(List<Sort> sorts) {
-        if (this.sorts == null) {
-            this.sorts = new Vector<Sort>();
+        if (sorts == null) {
+            this.sorts = null;
+            return;
         } else {
-
+            if (this.sorts == null) {
+                this.sorts = new Vector<Sort>();
+            } else {
+                this.sorts.clear();
+            }
+            this.sorts.addAll(sorts);
         }
-        this.sorts.addAll(sorts);
     }
 
     @SuppressWarnings("unchecked")
