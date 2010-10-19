@@ -23,8 +23,11 @@ package com.pyx4j.essentials.j2se.backup;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -62,7 +65,7 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
 
     @Override
     public void start() {
-        xml.start("Backup");
+        xml.startIdented("Backup");
     }
 
     @Override
@@ -70,20 +73,35 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
         for (HashMap<String, BackupEntityProperty> record : records) {
             BackupEntityProperty key = record.get(Entity.KEY_RESERVED_PROPERTY);
             BackupKey keyValue = (BackupKey) key.getValue();
-            xml.startIdented(keyValue.getKind());
-            xml.write("id", keyValue.getId());
+
+            Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
+            entityAttributes.put("id", String.valueOf(keyValue.getId()));
+
+            xml.startIdented(keyValue.getKind(), entityAttributes);
 
             for (Map.Entry<String, BackupEntityProperty> me : record.entrySet()) {
                 String propertyName = me.getKey();
                 if (propertyName.equals(Entity.KEY_RESERVED_PROPERTY)) {
                     continue;
                 }
+                Map<String, String> attributes = new LinkedHashMap<String, String>();
                 BackupEntityProperty property = me.getValue();
+                Serializable value = property.getValue();
+                attributes.put("type", XMLBackupUtils.getValueType(value));
                 if (property.isIndexed()) {
-                    // TODO
-                } else {
+                    attributes.put("idx", "Y");
                 }
-                xml.write(propertyName, property.getValue());
+                if (value instanceof Collection) {
+                    xml.startIdented(propertyName, attributes);
+                    for (Object item : (Collection<?>) value) {
+                        Map<String, String> itemAttributes = new HashMap<String, String>();
+                        itemAttributes.put("type", XMLBackupUtils.getValueType(item));
+                        xml.write("item", itemAttributes, XMLBackupUtils.getValueAsString(item));
+                    }
+                    xml.endIdented(propertyName);
+                } else {
+                    xml.write(propertyName, attributes, XMLBackupUtils.getValueAsString(value));
+                }
             }
             xml.endIdented(keyValue.getKind());
         }
@@ -92,7 +110,7 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
 
     @Override
     public void end() {
-        xml.end("Backup");
+        xml.endIdented("Backup");
         FileWriter writer = null;
         try {
             writer = new FileWriter(file);

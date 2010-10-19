@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.util.Map;
 import java.util.Stack;
 
 import com.pyx4j.entity.shared.IPrimitive;
@@ -50,10 +51,26 @@ public class XMLStringWriter {
         out.append("<").append(name).append(">");
     }
 
+    public void start(String name, Map<String, String> attributes) {
+        out.append("<").append(name);
+        if (attributes != null) {
+            for (Map.Entry<String, String> me : attributes.entrySet()) {
+                if (me.getValue() != null) {
+                    out.append(' ').append(me.getKey()).append("=\"").append(me.getValue()).append('"');
+                }
+            }
+        }
+        out.append(">");
+    }
+
     public void startIdented(String name) {
+        startIdented(name, null);
+    }
+
+    public void startIdented(String name, Map<String, String> attributes) {
         idented();
         level++;
-        start(name);
+        start(name, attributes);
         out.append("\n");
     }
 
@@ -77,12 +94,18 @@ public class XMLStringWriter {
     }
 
     public void write(String name, Object value) {
-        if (value == null) {
+        write(name, null, value);
+    }
+
+    public void write(String name, Map<String, String> attributes, Object value) {
+        if ((value == null) && (attributes == null)) {
             return;
         }
         idented();
-        start(name);
-        XMLEscape.appendEscapeText(out, value.toString());
+        start(name, attributes);
+        if (value != null) {
+            XMLEscape.appendEscapeText(out, value.toString());
+        }
         end(name);
     }
 
@@ -93,7 +116,7 @@ public class XMLStringWriter {
         //TODO use getStringView()
         write(name, value.getValue());
     }
-    
+
     public void writeRaw(String name, Object value) {
         if (value == null) {
             return;
