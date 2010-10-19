@@ -36,6 +36,11 @@ public class BackupKey implements Serializable {
 
     }
 
+    public BackupKey(String kind, long id) {
+        this.kind = kind;
+        this.id = id;
+    }
+
     public String getKind() {
         return kind;
     }
@@ -62,6 +67,18 @@ public class BackupKey implements Serializable {
 
     @Override
     public String toString() {
-        return String.valueOf(getKind()) + ":" + ((getId() == 0) ? getName() : String.valueOf(getId()));
+        return getKind() + ":" + ((getId() == 0) ? getName() : String.valueOf(getId()));
+    }
+
+    public static BackupKey valueOf(String s) {
+        BackupKey k = new BackupKey();
+        String[] v = s.split(":");
+        k.setKind(v[0]);
+        try {
+            k.setId(Long.parseLong(v[1]));
+        } catch (NumberFormatException e) {
+            k.setName(v[1]);
+        }
+        return k;
     }
 }

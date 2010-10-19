@@ -42,7 +42,7 @@ public abstract class AbstractBackupMain {
             AbstractBackupReceiver receiver;
 
             if (isFile(argFrom)) {
-                receiver = new LocalDatastoreBackupReceiver(argFrom);
+                receiver = createFileBackupReceiver(argFrom);
             } else {
                 receiver = new ServerBackupReceiver(createConnection("Backup Source", argFrom)) {
                     @Override
@@ -84,6 +84,14 @@ public abstract class AbstractBackupMain {
     protected abstract boolean isFile(String arg);
 
     protected abstract J2SEService createConnection(String name, String arg);
+
+    protected AbstractBackupReceiver createFileBackupReceiver(String name) {
+        if (name.endsWith(".xml")) {
+            return new LocalXMLBackupReceiver(name);
+        } else {
+            return new LocalDatastoreBackupReceiver(name);
+        }
+    }
 
     protected BackupConsumer createFileBackupConsumer(String name, Date backupDate) {
         if (name.endsWith(".xml")) {

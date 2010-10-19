@@ -20,15 +20,20 @@
  */
 package com.pyx4j.essentials.j2se.backup;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import com.google.appengine.repackaged.com.google.common.util.Base64;
+import com.google.appengine.repackaged.com.google.common.util.Base64DecoderException;
 
 import com.pyx4j.essentials.rpc.admin.BackupKey;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.gwt.server.DateUtils;
 
 public class XMLBackupUtils {
 
@@ -40,7 +45,7 @@ public class XMLBackupUtils {
         } else if (value instanceof BackupKey) {
             return "Key";
         } else if (value instanceof GeoPoint) {
-            return "GeoPoint";
+            return GeoPoint.class.getSimpleName();
         } else {
             String name = value.getClass().getName();
             if ((name.startsWith("java.lang.")) || (name.startsWith("java.util."))) {
@@ -65,6 +70,44 @@ public class XMLBackupUtils {
             return df.format((Date) value);
         } else {
             return value.toString();
+        }
+    }
+
+    public static Serializable valueOf(String s, String typeAttribute) {
+        if ((s == null) || (s.length() == 0)) {
+            return null;
+        } else if ((typeAttribute == null) || (typeAttribute.length() == 0) || (typeAttribute.equals(String.class.getSimpleName()))) {
+            return s;
+        } else if (typeAttribute.equals("Key")) {
+            return BackupKey.valueOf(s);
+        } else if (typeAttribute.equals(Long.class.getSimpleName())) {
+            return Long.valueOf(s);
+        } else if (typeAttribute.equals(Boolean.class.getSimpleName())) {
+            return Boolean.valueOf(s);
+        } else if (typeAttribute.equals(Date.class.getSimpleName())) {
+            return DateUtils.detectDateformat(s);
+        } else if (typeAttribute.equals(Vector.class.getSimpleName()) || (typeAttribute.equals(List.class.getSimpleName()))) {
+            return new Vector<Serializable>();
+        } else if (typeAttribute.equals(GeoPoint.class.getSimpleName())) {
+            return GeoPoint.valueOf(s);
+        } else if (typeAttribute.equals("byte[]")) {
+            try {
+                return Base64.decode(s);
+            } catch (Base64DecoderException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (typeAttribute.equals(Integer.class.getSimpleName())) {
+            return Integer.valueOf(s);
+        } else if (typeAttribute.equals(Double.class.getSimpleName())) {
+            return Double.valueOf(s);
+        } else if (typeAttribute.equals(Float.class.getSimpleName())) {
+            return Float.valueOf(s);
+        } else if (typeAttribute.equals(Short.class.getSimpleName())) {
+            return Short.valueOf(s);
+        } else if (typeAttribute.equals(Byte.class.getSimpleName())) {
+            return Byte.valueOf(s);
+        } else {
+            throw new RuntimeException("Unsupported data type [" + typeAttribute + "]");
         }
     }
 }

@@ -40,7 +40,6 @@ public class GeoPoint implements Serializable {
     public GeoPoint(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
-
     }
 
     /**
@@ -70,8 +69,9 @@ public class GeoPoint implements Serializable {
     }
 
     public List<String> getCells() {
-        if (cells == null)
+        if (cells == null) {
             computeCells();
+        }
         return cells;
     }
 
@@ -87,19 +87,29 @@ public class GeoPoint implements Serializable {
         return lat + "/" + lng;
     }
 
+    public static GeoPoint valueOf(String s) {
+        String[] v = s.split("/");
+        return new GeoPoint(Double.parseDouble(v[0]), Double.parseDouble(v[1]));
+    }
+
     public GeoPoint normalize() {
-        if (lat >= -90 && lat <= 90 && lng >= -180 && lng >= -180)
+        if (lat >= -90 && lat <= 90 && lng >= -180 && lng >= -180) {
             return this;
+        }
         double la = lat;
         double lo = lng;
-        if (la > 90)
+        if (la > 90) {
             la = -90 + (la - 90);
-        if (la < -90)
+        }
+        if (la < -90) {
             la = 90 - (-90 - la);
-        if (lo > 180)
+        }
+        if (lo > 180) {
             lo = -180 + (lo - 180);
-        if (lo < -180)
+        }
+        if (lo < -180) {
             lo = 180 - (-180 - lo);
+        }
         return new GeoPoint(la, lo);
     }
 

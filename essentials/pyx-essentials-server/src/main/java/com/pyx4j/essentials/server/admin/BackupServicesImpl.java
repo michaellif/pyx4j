@@ -81,7 +81,6 @@ public class BackupServicesImpl implements BackupServices {
         } else if (value instanceof Key) {
             return backupKey((Key) value);
         } else if (value instanceof Blob) {
-            //TODO support more types.
             return ((Blob) value).getBytes();
         } else if (value instanceof Collection) {
             Vector<Serializable> r = new Vector<Serializable>();
@@ -109,7 +108,8 @@ public class BackupServicesImpl implements BackupServices {
             PreparedQuery preparedQuery = datastore.prepare(query);
             QueryResultIterable<Entity> iterable;
             if (request.getEncodedCursorRefference() != null) {
-                iterable = preparedQuery.asQueryResultIterable(FetchOptions.Builder.withCursor(Cursor.fromWebSafeString(request.getEncodedCursorRefference())));
+                iterable = preparedQuery.asQueryResultIterable(FetchOptions.Builder.withStartCursor(Cursor.fromWebSafeString(request
+                        .getEncodedCursorRefference())));
             } else {
                 iterable = preparedQuery.asQueryResultIterable();
             }
@@ -125,7 +125,7 @@ public class BackupServicesImpl implements BackupServices {
                 record.put(Entity.KEY_RESERVED_PROPERTY, new BackupEntityProperty(backupKey(entity.getKey()), false));
                 response.addRecord(record);
                 boolean quotaExceeded = System.currentTimeMillis() - start > Consts.SEC2MSEC * TIME_QUOTA_SEC;
-                if ((response.size() > request.getResponceSize()) || (quotaExceeded)) {
+                if ((response.size() >= request.getResponceSize()) || (quotaExceeded)) {
                     response.setEncodedCursorRefference(iterator.getCursor().toWebSafeString());
                     log.debug("Executions time quota exceeded {}", System.currentTimeMillis() - start);
                     break;
@@ -162,15 +162,11 @@ public class BackupServicesImpl implements BackupServices {
                 r.add(gaeValue((Serializable) item));
             }
             return r;
-        } else if (value != null) {
-            if (value.getClass().isArray()) {
-                //TODO support more arrays
-                return new Blob((byte[]) value);
-            } else {
-                return value;
-            }
+        } else if (value instanceof byte[]) {
+            return new Blob((byte[]) value);
+        } else {
+            return value;
         }
-        return value;
     }
 
     public static class PutImpl implements BackupServices.Put {
