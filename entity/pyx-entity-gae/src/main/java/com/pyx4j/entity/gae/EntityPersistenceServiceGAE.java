@@ -489,14 +489,17 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 }
             } else if ((IList.class.isAssignableFrom(meta.getObjectClass())) && (value instanceof List<?>)) {
                 Set<Key> childKeys = new HashSet<Key>();
-                Vector<Long> childKeysOrder = new Vector<Long>();
+                StringBuilder childKeysOrder = new StringBuilder();
                 if (meta.isOwnedRelationships()) {
                     // Save Owned iEntity
                     IList<IEntity> memberList = (IList<IEntity>) iEntity.getMember(me.getKey());
                     for (IEntity childIEntity : memberList) {
                         Key key = persistImpl(childIEntity, merge);
                         childKeys.add(key);
-                        childKeysOrder.add(key.getId());
+                        if (childKeysOrder.length() > 0) {
+                            childKeysOrder.append(',');
+                        }
+                        childKeysOrder.append(key.getId());
                     }
 
                     // Cascade delete
@@ -525,10 +528,13 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         Key key = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass()).getPersistenceName(),
                                 childKey);
                         childKeys.add(key);
-                        childKeysOrder.add(childKey);
+                        if (childKeysOrder.length() > 0) {
+                            childKeysOrder.append(',');
+                        }
+                        childKeysOrder.append(childKey);
                     }
                 }
-                entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, false, createBlob(childKeysOrder));
+                entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, false, childKeysOrder.toString());
                 value = childKeys;
             } else {
                 value = convertToGAEValue(value, entity, null, iEntity, meta, true);
@@ -957,7 +963,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 } else if (member instanceof IList<?>) {
                     // retrieve order  and sort by this order
                     List<Long> childKeysOrder;
-                    childKeysOrder = (List<Long>) readObject((Blob) entity.getProperty(keyName + SECONDARY_PRROPERTY_SUFIX));
+                    Object childKeysOrderProperty = entity.getProperty(keyName + SECONDARY_PRROPERTY_SUFIX);
+                    if (childKeysOrderProperty instanceof Blob) {
+                        childKeysOrder = (List<Long>) readObject((Blob) childKeysOrderProperty);
+                    } else {
+                        childKeysOrder = readListOfLong((String) childKeysOrderProperty);
+                    }
                     if (childKeysOrder != null) {
                         Collections.sort(((List<Key>) value), new KeyComparator(childKeysOrder));
                     }
@@ -982,6 +993,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    private List<Long> readListOfLong(String value) {
+        if (value == null) {
+            return null;
+        } else {
+            List<Long> rc = new Vector<Long>();
+            for (String s : value.split(",")) {
+                rc.add(Long.valueOf(s));
+            }
+            return rc;
+        }
+    }
+
     @SuppressWarnings("serial")
     private static class KeyComparator implements Comparator<Key>, Serializable {
 
@@ -993,9 +1016,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
         @Override
         public int compare(Key k1, Key k2) {
-            int idx1 = keyIdOrdered.indexOf(k1.getId());
-            int idx2 = keyIdOrdered.indexOf(k2.getId());
-            return idx1 - idx2;
+            return keyIdOrdered.indexOf(k1.getId()) - keyIdOrdered.indexOf(k2.getId());
         }
 
     }
