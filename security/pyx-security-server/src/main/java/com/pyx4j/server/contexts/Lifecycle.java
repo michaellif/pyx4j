@@ -55,7 +55,8 @@ public class Lifecycle {
         if (session != null) {
             Visit visit = (Visit) session.getAttribute(Context.SESSION_VISIT);
             Context.setVisit(visit);
-            if ((visit != null) && visit.isUserLoggedIn() && visit.isAclRevalidationRequired(httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER))) {
+            String clientAclTimeStamp = httprequest.getHeader(RemoteService.SESSION_ACL_TIMESTAMP_HEADER);
+            if ((visit != null) && visit.isUserLoggedIn() && visit.isAclRevalidationRequired(clientAclTimeStamp)) {
                 AclRevalidator acv = ServerSideConfiguration.instance().getAclRevalidator();
                 if (acv != null) {
                     Set<Behavior> behaviours = acv.getCurrentBehaviours(visit.getUserVisit().getPrincipalPrimaryKey(), visit.getAcl().getBehaviours(),
@@ -69,6 +70,10 @@ public class Lifecycle {
                         visit.setAclChanged(true);
                         Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
                     } else {
+                        if ((clientAclTimeStamp != null) && (visit.getAclTimeStamp() != Long.parseLong(clientAclTimeStamp))) {
+                            log.info("AuthorizationChanged client needs sync {}", visit.getAcl().getBehaviours());
+                            Context.addResponseSystemNotification(new AuthorizationChangedSystemNotification());
+                        }
                         visit.aclRevalidated();
                     }
                 }
