@@ -82,4 +82,21 @@ public class UserVisit implements Serializable {
         return getPrincipalPrimaryKey() + " " + getName();
     }
 
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        if (principalPrimaryKey != null) {
+            hashCode += principalPrimaryKey.hashCode();
+        }
+        hashCode *= 0x1F;
+        if (name != null) {
+            hashCode += name.hashCode();
+        }
+        hashCode *= 0x1F;
+        if (email != null) {
+            hashCode += email.hashCode();
+        }
+        return hashCode;
+    }
+
 }

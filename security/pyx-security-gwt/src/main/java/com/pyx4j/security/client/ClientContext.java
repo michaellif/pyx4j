@@ -90,6 +90,14 @@ public class ClientContext {
         return userVisit;
     }
 
+    public static int visitHashCode() {
+        if (userVisit == null) {
+            return -1;
+        } else {
+            return userVisit.hashCode() * 0x1F + ClientSecurityController.instance().getAcl().hashCode();
+        }
+    }
+
     public static boolean isAuthenticated() {
         return userVisit != null;
     }

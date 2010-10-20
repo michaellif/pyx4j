@@ -73,6 +73,11 @@ public class ClientSecurityController extends SecurityController implements HasV
             return behaviours;
         }
 
+        @Override
+        public int hashCode() {
+            return behaviours.hashCode();
+        }
+
     }
 
     public ClientSecurityController() {

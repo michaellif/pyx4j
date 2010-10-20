@@ -165,9 +165,9 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
             sessionCookieValue = Cookies.getCookie(sessionCookieName);
         }
         if (sessionCookieValue == null) {
-            sessionCookieValueHashCode = "";
+            sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode());
         } else {
-            sessionCookieValueHashCode = String.valueOf(sessionCookieValue.hashCode());
+            sessionCookieValueHashCode = String.valueOf(ClientContext.visitHashCode()) + String.valueOf(sessionCookieValue.hashCode());
         }
     }
 
