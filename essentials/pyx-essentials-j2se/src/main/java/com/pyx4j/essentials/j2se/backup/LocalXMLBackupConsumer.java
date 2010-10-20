@@ -21,15 +21,20 @@
 package com.pyx4j.essentials.j2se.backup;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +44,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.pyx4j.essentials.rpc.admin.BackupEntityProperty;
 import com.pyx4j.essentials.rpc.admin.BackupKey;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class LocalXMLBackupConsumer implements BackupConsumer {
 
@@ -111,21 +117,30 @@ public class LocalXMLBackupConsumer implements BackupConsumer {
     @Override
     public void end() {
         xml.endIdented("Backup");
-        FileWriter writer = null;
+        Writer writer = null;
+        ZipOutputStream zip = null;
         try {
-            writer = new FileWriter(file);
-            writer.write(xml.toString());
-            writer.close();
-
+            if (file.getName().endsWith(".zip")) {
+                zip = new ZipOutputStream(new FileOutputStream(file));
+                String name = file.getName().substring(0, file.getName().length() - 4);
+                zip.putNextEntry(new ZipEntry(name));
+                writer = new OutputStreamWriter(zip);
+                writer.write(xml.toString());
+                writer.flush();
+                zip.closeEntry();
+                zip.close();
+            } else {
+                writer = new FileWriter(file);
+                writer.write(xml.toString());
+                writer.flush();
+                writer.close();
+            }
             log.info("Saved {} records to {}", totalRecords, file.getAbsolutePath());
         } catch (IOException e) {
             log.error("error saving records to file {}", e);
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (Exception ignore) {
-                }
-            }
+        } finally {
+            IOUtils.closeQuietly(writer);
+            IOUtils.closeQuietly(zip);
         }
     }
 

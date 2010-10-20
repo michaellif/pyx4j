@@ -21,17 +21,23 @@
 package com.pyx4j.essentials.j2se.backup;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -43,8 +49,11 @@ import com.pyx4j.essentials.rpc.admin.BackupEntityProperty;
 import com.pyx4j.essentials.rpc.admin.BackupKey;
 import com.pyx4j.essentials.rpc.admin.BackupRecordsResponse;
 import com.pyx4j.essentials.rpc.admin.BackupRequest;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class LocalXMLBackupReceiver extends AbstractBackupReceiver {
+
+    private static final Logger log = LoggerFactory.getLogger(LocalXMLBackupReceiver.class);
 
     private final File file;
 
@@ -66,7 +75,44 @@ public class LocalXMLBackupReceiver extends AbstractBackupReceiver {
             factory.setValidating(false);
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setErrorHandler(null);
-            Document xmlDoc = builder.parse(file);
+            Document xmlDoc;
+            // Read zip if necessary
+            if (file.getName().endsWith(".zip")) {
+                ZipFile zipFile = new ZipFile(file);
+                InputStream zipin = null;
+                try {
+                    String name = file.getName().substring(0, file.getName().length() - 4);
+                    ZipEntry entry = null;
+                    if (name.endsWith(".xml")) {
+                        entry = zipFile.getEntry(name);
+                    }
+                    if (entry == null) {
+                        // if not found 
+                        Enumeration<? extends ZipEntry> en = zipFile.entries();
+                        while (en.hasMoreElements()) {
+                            ZipEntry ze = en.nextElement();
+                            if (ze.isDirectory()) {
+                                continue;
+                            } else if (ze.getName().endsWith(".xml")) {
+                                entry = ze;
+                                break;
+                            }
+                        }
+                        if (entry == null) {
+                            throw new RuntimeException("XML file not found in zip");
+                        }
+                    }
+                    log.info("Reading file {}/{}", file.getAbsolutePath(), entry.getName());
+                    xmlDoc = builder.parse(zipin = zipFile.getInputStream(entry));
+                } finally {
+                    IOUtils.closeQuietly(zipin);
+                    zipFile.close();
+                }
+            } else {
+                log.info("Reading file {}", file.getAbsolutePath());
+                xmlDoc = builder.parse(file);
+            }
+            // Read the context
             NodeList list = xmlDoc.getElementsByTagName("Backup");
             if (list.getLength() == 0) {
                 throw new RuntimeException("Invalid XML root");

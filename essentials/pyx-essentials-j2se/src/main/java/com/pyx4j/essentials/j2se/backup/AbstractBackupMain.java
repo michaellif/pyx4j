@@ -85,8 +85,12 @@ public abstract class AbstractBackupMain {
 
     protected abstract J2SEService createConnection(String name, String arg);
 
+    protected boolean isXMLBackupFile(String name) {
+        return name.endsWith(".xml") || name.endsWith(".xml.zip");
+    }
+
     protected AbstractBackupReceiver createFileBackupReceiver(String name) {
-        if (name.endsWith(".xml")) {
+        if (isXMLBackupFile(name)) {
             return new LocalXMLBackupReceiver(name);
         } else {
             return new LocalDatastoreBackupReceiver(name);
@@ -94,7 +98,7 @@ public abstract class AbstractBackupMain {
     }
 
     protected BackupConsumer createFileBackupConsumer(String name, Date backupDate) {
-        if (name.endsWith(".xml")) {
+        if (isXMLBackupFile(name)) {
             return new LocalXMLBackupConsumer(name, true, backupDate);
         } else {
             return new LocalDatastoreBackupConsumer(name, true, backupDate);
