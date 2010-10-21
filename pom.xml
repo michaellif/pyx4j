@@ -556,7 +556,7 @@
                                 <if>
                                     <available file="${basedir}/jar-source-4gwt.marker"/>
                                     <then>
-                                        <copy todir="${project.build.directory}/sources" preservelastmodified="true" overwrite="true" failonerror="false">
+                                        <copy todir="${project.build.outputDirectory}" preservelastmodified="true" overwrite="true" failonerror="false">
                                             <fileset dir="${project.build.sourceDirectory}"/>
                                         </copy>
                                     </then>
@@ -578,8 +578,8 @@
                                     <available file="${basedir}/jar-source-4gwt.marker"/>
                                     <then>
                                         <delete quiet="true" includeemptydirs="true">
-                                            <fileset dir="${jar.classes}">
-                                                <include name="**/*.java"/>
+                                            <fileset dir="${project.build.outputDirectory}" includes="**/*.java">
+                                                <present present="both" targetdir="${project.build.sourceDirectory}"/>
                                             </fileset>
                                         </delete>
                                     </then>
