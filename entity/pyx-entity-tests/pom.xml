@@ -51,7 +51,7 @@
             <version>${project.version}</version>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-server</artifactId>
             <version>${project.version}</version>
@@ -109,14 +109,14 @@
                           <goal>run</goal>
                         </goals>
                         <configuration>
-                            <tasks>
+                            <target>
                                 <condition property="war.classes" value="${basedir}/war/WEB-INF/classes" else="${project.build.directory}/test-classes">
                                     <available file="${basedir}/war/WEB-INF/web.xml"/>
                                 </condition>
                                 <copy todir="${war.classes}" preservelastmodified="true" overwrite="true" failonerror="false">
                                     <fileset dir="${project.build.directory}/test-classes"/>
                                 </copy>
-                            </tasks>
+                            </target>
                         </configuration>
                     </execution>
 
