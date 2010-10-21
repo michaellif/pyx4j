@@ -24,7 +24,7 @@ import com.pyx4j.client.demo.client.meta.DemoSiteMap;
 import com.pyx4j.site.client.incubator.PagePanel;
 import com.pyx4j.site.client.incubator.annotations.Navigation;
 
-@Navigation(name = DemoSiteMap.Pub.Pub1.Pub12.class)
+@Navigation(navigNodes = { DemoSiteMap.Pub.Pub1.class, DemoSiteMap.Pub.Pub2.class })
 public class Pub12 extends PagePanel {
 
 }

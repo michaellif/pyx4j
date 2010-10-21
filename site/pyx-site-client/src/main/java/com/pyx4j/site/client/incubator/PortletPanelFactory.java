@@ -14,16 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 23, 2010
+ * Created on Oct 21, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.incubator.annotations;
+package com.pyx4j.site.client.incubator;
 
-import com.pyx4j.site.client.incubator.DiscriminatorAdapter;
+import java.util.List;
 
-public @interface Discriminator {
+import com.pyx4j.site.shared.meta.NavigNode;
 
-    Class<? extends DiscriminatorAdapter> type();
+public interface PortletPanelFactory {
+
+    enum Side {
+        left, right;
+    }
+
+    public void define(NavigNode node, Class<PortletPanel> pagePanel, Side side);
+
+    public void define(NavigNode node, String caption, String content, Side side);
+
+    public List<PortletPanel> obtain(NavigNode node, Side side);
 
 }

@@ -20,7 +20,6 @@
  */
 package com.pyx4j.client.demo.client.meta;
 
-import com.pyx4j.site.client.incubator.annotations.Discriminator;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
 
@@ -30,7 +29,6 @@ public class DemoSiteMap implements SiteMap {
 
         public interface Pub1 extends NavigNode {
 
-            @Discriminator(type = Pub11Discriminator.class)
             public interface Pub11 extends NavigNode {
             }
 

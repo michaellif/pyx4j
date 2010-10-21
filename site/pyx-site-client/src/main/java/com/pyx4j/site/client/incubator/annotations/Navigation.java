@@ -20,10 +20,16 @@
  */
 package com.pyx4j.site.client.incubator.annotations;
 
+import com.pyx4j.site.client.incubator.PagePanel;
 import com.pyx4j.site.shared.meta.NavigNode;
 
 public @interface Navigation {
 
-    Class<? extends NavigNode> name();
+    Class<? extends NavigNode>[] navigNodes();
+
+    Class<? extends PagePanel> restrictedAccessPage() default DEFAULT.class;
+
+    static final class DEFAULT extends PagePanel {
+    }
 
 }

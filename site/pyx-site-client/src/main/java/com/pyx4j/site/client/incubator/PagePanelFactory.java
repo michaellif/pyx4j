@@ -14,18 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Sep 23, 2010
+ * Created on Oct 21, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.client.demo.client.meta;
+package com.pyx4j.site.client.incubator;
 
-import com.pyx4j.client.demo.client.meta.pages.Pub1;
-import com.pyx4j.site.client.incubator.DiscriminatorAdapter;
+import com.pyx4j.site.shared.meta.NavigNode;
 
-public class Pub11Discriminator implements DiscriminatorAdapter {
+public interface PagePanelFactory {
 
-    public Class<Pub1> getPagePanel() {
-        return Pub1.class;
-    }
+    public void define(NavigNode node, Class<PagePanel> pagePanel);
+
+    public void define(NavigNode node, String caption, String content);
+
+    public PagePanel obtain(NavigNode node);
+
 }
