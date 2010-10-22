@@ -200,6 +200,19 @@
             </releases>
         </repository>
 
+        <repository>
+            <id>itextpdf.com</id>
+            <name>Maven Repository for iText</name>
+            <url>http://maven.itextpdf.com/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+
+
     </repositories>
 
     <pluginRepositories>
