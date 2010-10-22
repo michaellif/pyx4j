@@ -17,14 +17,6 @@
     <name>pyx-essentials-server</name>
     <description>Essentials Server Side Implementations</description>
 
-    <repositories>
-    	<repository>
-    		<id>iText</id>
-    		<name>iText PDF</name>
-    		<url>http://maven.itextpdf.com</url>
-    	</repository>
-    </repositories>
-
     <dependencies>
 
         <dependency>
