@@ -65,8 +65,8 @@ public class CrmTheme extends SiteTheme {
     protected void initContentPanelStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_ContentPanel.name());
         style.addProperty("width", "976px");
-        style.addProperty("padding-top", "20px");
-        style.addProperty("padding-bottom", "20px");
+        style.addProperty("padding-top", "4px");
+        style.addProperty("padding-bottom", "4px");
         addStyle(style);
     }
 
@@ -151,7 +151,7 @@ public class CrmTheme extends SiteTheme {
     protected void initLogoStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Logo.name());
         style.addProperty("margin-left", "20px");
-        style.addProperty("margin-top", "20px");
+        style.addProperty("margin-top", "2px");
         addStyle(style);
     }
 
