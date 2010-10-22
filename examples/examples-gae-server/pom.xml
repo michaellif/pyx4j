@@ -120,10 +120,10 @@
                         <phase>package</phase>
                         <goals><goal>run</goal></goals>
                         <configuration>
-                            <tasks>
+                            <target>
                                 <move file="${basedir}/war/WEB-INF/lib/appengine-api-1.0-sdk.jar" tofile="${basedir}/war/WEB-INF/lib/appengine-api-1.0-sdk-${gaeVersion}.jar"/>
                                 <move file="${basedir}/war/WEB-INF/lib/appengine-api-labs.jar" tofile="${basedir}/war/WEB-INF/lib/appengine-api-labs-${gaeVersion}.jar"/>
-                            </tasks>
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
@@ -154,9 +154,9 @@
                                 <phase>pre-integration-test</phase>
                                 <goals><goal>run</goal></goals>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <copy file="${project.build.directory}/${project.build.finalName}.jar" todir="${basedir}/war/WEB-INF/lib"/>
-                                    </tasks>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -231,11 +231,11 @@
                                 <inherited>false</inherited>
                                 <goals><goal>run</goal></goals>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <delete quiet="true" includeemptydirs="false">
                                             <fileset dir="${java.io.tmpdir}"/>
                                         </delete>
-                                    </tasks>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
