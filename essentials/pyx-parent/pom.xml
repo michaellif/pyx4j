@@ -24,6 +24,8 @@
     </organization>
     <inceptionYear>2006</inceptionYear>
 
+    <url>http://code.pyx4j.com</url>
+
     <ciManagement>
         <system>Cruisecontrol</system>
         <url>https://pyx4j.com/cruisecontrol/</url>

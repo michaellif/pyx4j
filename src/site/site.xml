@@ -11,9 +11,9 @@
             <item name="Live" href="http://pyx4j-demo.pyx4j.com"/>
         </links>
 
-        <menu name="Ver #build#" inherit="top"/>
-
-        <menu ref="parent" inherit="bottom"/>
+        <menu name="Ver #build#" inherit="top">
+            <item name="Pyx" href="http://code.pyx4j.com/index.html" />
+        </menu>
 
         <menu ref="modules" />
 
