@@ -131,6 +131,17 @@
             </releases>
         </pluginRepository>
 
+        <pluginRepository>
+            <id>gettext-commons-site</id>
+            <url>http://gettext-commons.googlecode.com/svn/maven-repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+
     </pluginRepositories>
 
     <properties>
