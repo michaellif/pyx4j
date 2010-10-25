@@ -34,6 +34,17 @@
         <url>https://pyx4j.com/bug/</url>
     </issueManagement>
 
+    <distributionManagement>
+        <repository>
+            <id>pyx4j.com-file-release</id>
+            <url>file:///home/apache/pyx4j-repository/maven2-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-file-development</id>
+            <url>file:///home/apache/pyx4j-repository/maven2-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <scm>
         <url>https://pyx4j.com/viewvc/trunk/essentials/pyx-parent</url>
         <connection>scm:svn:https://pyx4j.com/svn/trunk/essentials/pyx-parent</connection>
