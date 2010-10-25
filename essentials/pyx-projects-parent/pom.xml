@@ -23,7 +23,7 @@
     <distributionManagement>
         <site>
             <id>test-pyx4j-site</id>
-            <url>file:///home/apache/pyx4j/snapshot/pyx/essentials/pyx-projects-parent</url>
+            <url>file:///home/apache/pyx4j/snapshot/pyx/pyx-projects-parent</url>
         </site>
         <repository>
             <id>pyx4j.com-file-release</id>
