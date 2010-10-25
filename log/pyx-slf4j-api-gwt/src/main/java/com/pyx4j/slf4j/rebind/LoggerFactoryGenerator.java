@@ -51,7 +51,8 @@ public class LoggerFactoryGenerator extends Generator {
                 TypeOracle oracle = context.getTypeOracle();
                 JClassType factoryType = oracle.getType(org.slf4j.ILoggerFactory.class.getName());
                 for (JClassType type : oracle.getTypes()) {
-                    if ((type.isClass() != null) && type.isAssignableTo(factoryType) && (!type.isAbstract())) {
+                    if ((type.isClass() != null) && type.isAssignableTo(factoryType) && (!type.isAbstract())
+                            && (!type.getQualifiedSourceName().startsWith("org.slf4j.helpers"))) {
                         if (logOnce) {
                             logger.log(TreeLogger.DEBUG, "Use LoggerFactory class: " + type.getQualifiedSourceName());
                             logOnce = false;

@@ -22,7 +22,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package org.slf4j.helpers;
-
 //
 //import org.slf4j.spi.MDCAdapter;
 //
@@ -40,14 +39,13 @@ package org.slf4j.helpers;
 // * 
 // * @author Ceki Gulcu
 // * @author Maarten Bosteels
-// * @author Vlad S - Simplified GWT implementation
 // * 
 // * @since 1.5.0
 // */
 //public class BasicMDCAdapter implements MDCAdapter {
 //
 //  private InheritableThreadLocal inheritableThreadLocal = new InheritableThreadLocal();
-//    
+//
 //  /**
 //   * Put a context value (the <code>val</code> parameter) as identified with
 //   * the <code>key</code> parameter into the current thread's context map.

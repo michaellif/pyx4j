@@ -77,9 +77,9 @@ public class LogFormatter {
         }
         if (event.getFormatedMessage() == null) {
             if (event.getDataArray() != null) {
-                event.setFormatedMessage(MessageFormatter.arrayFormat(event.getMessage(), event.getDataArray()));
+                event.setFormatedMessage(MessageFormatter.arrayFormat(event.getMessage(), event.getDataArray()).getMessage());
             } else {
-                event.setFormatedMessage(MessageFormatter.format(event.getMessage(), event.getData1(), event.getData2()));
+                event.setFormatedMessage(MessageFormatter.format(event.getMessage(), event.getData1(), event.getData2()).getMessage());
             }
         }
         b.append(event.getFormatedMessage());
