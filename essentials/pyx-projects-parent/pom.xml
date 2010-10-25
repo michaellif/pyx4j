@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx-parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../pyx-parent/pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.pyx4j</groupId>
+    <artifactId>pyx-projects-parent</artifactId>
+
+    <packaging>pom</packaging>
+    <name>pyx-projects-parent</name>
+    <description>pyx-projects-parent</description>
+
+    <distributionManagement>
+        <!-- not ready, no-deployment -->
+        <repository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </repository>
+        <snapshotRepository>
+            <id>pyx4j.com-no-deployment</id>
+            <url>file:///${basedir}/target/tmp</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <url>https://pyx4j.com/viewvc/trunk/essentials/pyx-projects-parent</url>
+        <connection>scm:svn:https://pyx4j.com/svn/trunk/essentials/pyx-projects-parent</connection>
+        <developerConnection>scm:svn:https://pyx4j.com/svn/trunk/essentials/pyx-projects-parent</developerConnection>
+    </scm>
+
+
+    <repositories>
+
+        <repository>
+            <id>pyx4j-snapshot</id>
+            <url>http://repository.pyx4j.com/maven2-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+
+    </repositories>
+
+    <properties>
+        <pyxVersion>2.0.0-SNAPSHOT</pyxVersion><!--pyx-version-->
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-server</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-data</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-rpc</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+		        <groupId>com.pyx4j</groupId>
+		        <artifactId>pyx-essentials-gwt</artifactId>
+                <version>${pyxVersion}</version>
+		    </dependency>
+
+            <dependency>
+		        <groupId>com.pyx4j</groupId>
+		        <artifactId>pyx-gettext-i18n-gwt</artifactId>
+                <version>${pyxVersion}</version>
+		    </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-site-shared</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-site-admin</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-entity-gae</artifactId>
+                <version>${pyxVersion}</version>
+            </dependency>
+
+       </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+
+        <profile>
+            <id>pyx</id>
+            <activation>
+                <property>
+                    <name>pyx</name>
+                </property>
+            </activation>
+            <modules>
+                <module>../pyx4j</module>
+            </modules>
+        </profile>
+
+    </profiles>
+
+</project>

@@ -17,7 +17,7 @@
     <name>pyx-essentials-shared</name>
     <description>pyx-essentials-shared implementations</description>
 
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -30,13 +30,13 @@
             <artifactId>pyx-config-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-       
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-shared</artifactId>
@@ -45,15 +45,22 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-rpc</artifactId>
+            <version>${project.version}</version>
+       </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
             <artifactId>pyx-security-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-rpc</artifactId>
+            <artifactId>pyx-security-rpc</artifactId>
             <version>${project.version}</version>
-	   </dependency>
+       </dependency>
+
 
     </dependencies>
 
