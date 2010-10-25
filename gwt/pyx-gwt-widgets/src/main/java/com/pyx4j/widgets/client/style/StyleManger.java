@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.style;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,10 +93,15 @@ public class StyleManger {
         }
         NodeList<Element> styleElements = head.getElementsByTagName("style");
         if (styleElements != null) {
+            ArrayList<Element> styleElementsCahe = new ArrayList<Element>();
             for (int i = 0; i < styleElements.getLength(); i++) {
-                styleElements.getItem(i).removeFromParent();
+                styleElementsCahe.add(styleElements.getItem(i));
+            }
+            for (Element element : styleElementsCahe) {
+                element.removeFromParent();
             }
         }
+
     }
 
     public static Theme getTheme() {
