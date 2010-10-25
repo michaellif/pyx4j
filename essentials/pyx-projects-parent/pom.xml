@@ -122,20 +122,4 @@
        </dependencies>
     </dependencyManagement>
 
-    <profiles>
-
-        <profile>
-            <id>pyx</id>
-            <activation>
-                <property>
-                    <name>pyx</name>
-                </property>
-            </activation>
-            <modules>
-                <module>../pyx4j</module>
-            </modules>
-        </profile>
-
-    </profiles>
-
 </project>

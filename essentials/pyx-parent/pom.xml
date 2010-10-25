@@ -608,32 +608,4 @@
         </plugins>
     </build>
 
-    <profiles>
-
-        <profile>
-            <id>cruisecontrol-env</id>
-        </profile>
-
-        <profile>
-            <id>hasBuildLabel</id>
-            <activation>
-                <property>
-                    <name>label</name>
-                </property>
-            </activation>
-            <properties>
-                <buildLabel>${label}</buildLabel>
-            </properties>
-        </profile>
-
-        <!-- Used for speed up the GWT compiler for developers -->
-        <profile>
-            <id>draft</id>
-            <properties>
-                <gwtDraftCompile>true</gwtDraftCompile>
-            </properties>
-        </profile>
-
-    </profiles>
-
 </project>
