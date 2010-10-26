@@ -162,6 +162,27 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
     }
 
     @Override
+    protected void onLoad() {
+        AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                // ignore errors here since this is warm up request
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    MessageDialog.warn(i18n.tr("Application is in read-only"),
+                            i18n.tr("Application is in read-only due to short maintenance.\nPlease try again in one hour"));
+                }
+            }
+
+        };
+        RPCManager.execute(AuthenticationServices.GetReadOnly.class, null, callback);
+    }
+
+    @Override
     public boolean onClickOk() {
         CCaptcha captcha = ((CCaptcha) form.get(form.meta().captcha()));
         if (captcha.isVisible()) {
