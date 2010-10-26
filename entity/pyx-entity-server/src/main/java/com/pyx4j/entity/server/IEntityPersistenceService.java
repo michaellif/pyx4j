@@ -89,6 +89,13 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys);
 
+    /**
+     * Only affects retrieve by PK functions.
+     */
+    public void requestsAggregationStart();
+
+    public void requestsAggregationComplete();
+
     public int getDatastoreCallCount();
 
     public int getDatastoreWriteCallCount();

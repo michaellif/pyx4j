@@ -189,6 +189,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
+    public void requestsAggregationStart() {
+
+    }
+
+    @Override
+    public void requestsAggregationComplete() {
+
+    }
+
+    @Override
     public int getDatastoreCallCount() {
         // TODO Auto-generated method stub
         return 0;

@@ -122,6 +122,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     };
 
+    private final ThreadLocal<RetrieveRequestsAggregator> requestAggregator = new ThreadLocal<RetrieveRequestsAggregator>();
+
     static class CallStats {
 
         int readCount;
@@ -1049,90 +1051,100 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
-        T iEntity = cacheService.get(entityClass, primaryKey);
-        if (iEntity != null) {
-            return iEntity;
-        }
+        RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
+        final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
+
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
 
-        iEntity = EntityFactory.create(entityClass);
+        final T iEntity = EntityFactory.create(entityClass);
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), primaryKey);
-        Entity entity;
-        try {
-            datastoreCallStats.get().readCount++;
-            entity = datastore.get(key);
-        } catch (EntityNotFoundException e) {
-            log.debug("Entity " + entityClass.getSimpleName() + " " + primaryKey + " " + " NotFound");
-            entity = null;
-        }
-
-        if (entity != null) {
-            RetrieveRequestsAggregator aggregator = new RetrieveRequestsAggregator(this);
-            aggregator.cache(key, iEntity);
-            updateIEntity(iEntity, entity, aggregator);
+        final Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), primaryKey);
+        aggregator.request(iEntity.getEntityMeta(), key, new Runnable() {
+            @Override
+            public void run() {
+                IEntity cachedEntity = aggregator.getEntity(key);
+                if (cachedEntity != null) {
+                    iEntity.setValue(cachedEntity.getValue());
+                } else {
+                    Entity entity = aggregator.getRaw(key);
+                    if (entity != null) {
+                        aggregator.cache(key, iEntity);
+                        updateIEntity(iEntity, entity, aggregator);
+                    } else {
+                        log.debug("Entity " + iEntity.getEntityMeta().getPersistenceName() + " " + key.getId() + " NotFound");
+                    }
+                }
+            }
+        });
+        if (globalAggregator == null) {
             aggregator.complete();
+            long duration = System.nanoTime() - start;
+            int callsCount = datastoreCallStats.get().readCount - initCount;
+            if (duration > Consts.SEC2NANO) {
+                log.warn("Long running retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+            } else {
+                log.debug("retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+            }
+            if (iEntity.isNull()) {
+                return null;
+            } else {
+                return iEntity;
+            }
         } else {
-            iEntity = null;
+            return iEntity;
         }
-
-        long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().readCount - initCount;
-        if (duration > Consts.SEC2NANO) {
-            log.warn("Long running retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
-        } else {
-            log.debug("retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
-        }
-        return iEntity;
     }
 
     @Override
-    public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys) {
+    public <T extends IEntity> Map<Long, T> retrieve(final Class<T> entityClass, Iterable<Long> primaryKeys) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
 
-        EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-        if (meta.isTransient()) {
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        Map<Long, T> cached = cacheService.get(entityClass, primaryKeys);
-        Map<Long, T> ret = new HashMap<Long, T>();
+        RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
+        final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
 
-        List<Key> getKeys = new Vector<Key>();
+        final Map<Long, T> ret = new HashMap<Long, T>();
+        final List<Key> keys = new Vector<Key>();
         for (Long primaryKey : primaryKeys) {
-            T iEntity = cached.get(primaryKey);
-            if (iEntity != null) {
-                ret.put(primaryKey, iEntity);
+            keys.add(KeyFactory.createKey(entityMeta.getPersistenceName(), primaryKey));
+        }
+
+        aggregator.request(entityMeta, keys, new Runnable() {
+            @Override
+            public void run() {
+                for (Key key : keys) {
+                    IEntity cachedEntity = aggregator.getEntity(key);
+                    if (cachedEntity != null) {
+                        ret.put(key.getId(), (T) cachedEntity);
+                    } else {
+                        Entity entity = aggregator.getRaw(key);
+                        if (entity != null) {
+                            T iEntity = EntityFactory.create(entityClass);
+                            aggregator.cache(entity.getKey(), iEntity);
+                            updateIEntity(iEntity, entity, aggregator);
+                            ret.put(key.getId(), iEntity);
+                        }
+                    }
+                }
+            }
+        });
+
+        if (globalAggregator == null) {
+            aggregator.complete();
+            long duration = System.nanoTime() - start;
+            int callsCount = datastoreCallStats.get().readCount - initCount;
+            if (duration > Consts.SEC2NANO) {
+                log.warn("Long running retrieve {}s took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
             } else {
-                getKeys.add(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
+                log.debug("retrieve {}s took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
             }
-        }
-        if (getKeys.size() == 0) {
-            return ret;
-        }
-        datastoreCallStats.get().readCount++;
-        Map<Key, Entity> entities = datastore.get(getKeys);
-        RetrieveRequestsAggregator aggregator = new RetrieveRequestsAggregator(this);
-        for (Long primaryKey : primaryKeys) {
-            Entity entity = entities.get(KeyFactory.createKey(meta.getPersistenceName(), primaryKey));
-            if (entity != null) {
-                T iEntity = EntityFactory.create(entityClass);
-                aggregator.cache(entity.getKey(), iEntity);
-                updateIEntity(iEntity, entity, aggregator);
-                ret.put(primaryKey, iEntity);
-            }
-        }
-        aggregator.complete();
-
-        long duration = System.nanoTime() - start;
-        int callsCount = datastoreCallStats.get().readCount - initCount;
-        if (duration > Consts.SEC2NANO) {
-            log.warn("Long running retrieve {}s took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
-        } else {
-            log.debug("retrieve {}s took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
         }
         return ret;
     }
@@ -1586,6 +1598,27 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             datastore.delete(keys);
         } catch (com.google.apphosting.api.ApiProxy.CapabilityDisabledException e) {
             throw new UnRecoverableRuntimeException(degradeGracefullyMessage());
+        }
+    }
+
+    @Override
+    public void requestsAggregationStart() {
+        RetrieveRequestsAggregator aggregator = requestAggregator.get();
+        if (aggregator == null) {
+            aggregator = new RetrieveRequestsAggregator(this);
+            requestAggregator.set(aggregator);
+        }
+    }
+
+    @Override
+    public void requestsAggregationComplete() {
+        RetrieveRequestsAggregator aggregator = requestAggregator.get();
+        if (aggregator != null) {
+            try {
+                aggregator.complete();
+            } finally {
+                requestAggregator.remove();
+            }
         }
     }
 
