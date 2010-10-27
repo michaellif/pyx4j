@@ -79,9 +79,14 @@ public class SessionControlPanel extends GroupBoxPanel {
             }
         });
 
-        ClientContext.obtainAuthenticationData(new Runnable() {
+        ClientContext.obtainAuthenticationData(new AsyncCallback<Boolean>() {
+
             @Override
-            public void run() {
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
                 setStatus();
             }
         });

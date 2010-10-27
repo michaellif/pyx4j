@@ -62,9 +62,13 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
     }
 
     public static void asyncLoadSite(final AsyncCallback<SitePanel> callback) {
-        ClientContext.obtainAuthenticationData(new Runnable() {
+        ClientContext.obtainAuthenticationData(new AsyncCallback<Boolean>() {
             @Override
-            public void run() {
+            public void onFailure(Throwable caught) {
+            }
+
+            @Override
+            public void onSuccess(Boolean authenticated) {
                 if (SecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
                     callback.onSuccess(new ConsoleSitePanel());
                 } else {
