@@ -58,6 +58,7 @@ public class WindowsTheme extends Theme {
         initHyperlinkStyle();
         initGroupBoxStyle();
         initPhotoalbomStyle();
+        initSlideshowActionStyle();
         initSuggestBoxStyle();
     }
 
@@ -619,7 +620,11 @@ public class WindowsTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name());
+    }
+
+    protected void initSlideshowActionStyle() {
+
+        Style style = new Style("." + CSSClass.pyx4j_SlideshowAction.name());
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getURL() + "') no-repeat");
         style.addProperty("width", "17px");
         style.addProperty("height", "16px");

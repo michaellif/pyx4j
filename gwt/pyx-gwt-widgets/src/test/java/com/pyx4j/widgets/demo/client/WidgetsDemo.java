@@ -152,7 +152,7 @@ public class WidgetsDemo implements EntryPoint {
         }
 
         {
-            PhotoAlbum photoAlbum = new PhotoAlbum("example_SlideshowButton") {
+            PhotoAlbum photoAlbum = new PhotoAlbum() {
 
                 @Override
                 public void addPhotoCommand() {

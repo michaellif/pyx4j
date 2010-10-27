@@ -20,13 +20,12 @@
  */
 package com.pyx4j.widgets.client.photoalbum;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -68,19 +67,16 @@ public abstract class PhotoAlbum extends DockPanel {
 
     private PhotoAlbumModel model;
 
-    private final String buttonStyle;
-
     private final boolean editable;
 
     private final HashMap<Photo, PhotoImage> slidesCache = new HashMap<Photo, PhotoImage>();
 
-    public PhotoAlbum(String buttonStyle) {
-        this(buttonStyle, true);
+    public PhotoAlbum() {
+        this(true);
     }
 
-    public PhotoAlbum(String buttonStyle, boolean editable) {
+    public PhotoAlbum(boolean editable) {
 
-        this.buttonStyle = buttonStyle;
         this.editable = editable;
 
         actionPanel = new ActionPanel();

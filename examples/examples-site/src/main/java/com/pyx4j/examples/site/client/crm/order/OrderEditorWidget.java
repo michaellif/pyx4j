@@ -127,7 +127,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
         });
 
-        PhotoAlbum photoAlbum = new PhotoAlbum("example_SlideshowButton") {
+        PhotoAlbum photoAlbum = new PhotoAlbum() {
 
             @Override
             public void addPhotoCommand() {

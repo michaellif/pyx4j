@@ -373,8 +373,4 @@ public class CrmTheme extends SiteTheme {
         addStyle(style);
     }
 
-    @Override
-    protected void initSlideshowButtonStyles() {
-    }
-
 }

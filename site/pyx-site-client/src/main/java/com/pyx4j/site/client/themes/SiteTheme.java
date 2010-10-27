@@ -44,7 +44,6 @@ public abstract class SiteTheme extends WindowsTheme {
         initEntityCRUDStyles();
         initEntityDataTableStyles();
         initMapStyles();
-        initSlideshowButtonStyles();
     }
 
     @Override
@@ -122,5 +121,4 @@ public abstract class SiteTheme extends WindowsTheme {
 
     protected abstract void initMapStyles();
 
-    protected abstract void initSlideshowButtonStyles();
 }
