@@ -6,5 +6,6 @@
 	<inherits name='com.pyx4j.unit.Unit'/>
 	<inherits name='com.pyx4j.entity.Entity'/>
 
+	<source path="env" />
 	<source path="shared" />
 </module>
