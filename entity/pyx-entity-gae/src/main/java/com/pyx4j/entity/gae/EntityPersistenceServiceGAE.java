@@ -915,7 +915,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         IEntity childIEntity = EntityFactory.create(entityMeta.getEntityClass());
                         IEntity cachedEntity = aggregator.getEntity(key);
                         if (cachedEntity != null) {
-                            childIEntity.setValue(cachedEntity.getValue());
+                            childIEntity.set(cachedEntity);
                             member.add(childIEntity);
                         } else {
                             Entity entity = aggregator.getRaw(key);
@@ -1035,7 +1035,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 public void run() {
                     IEntity cachedEntity = aggregator.getEntity(key);
                     if (cachedEntity != null) {
-                        iEntity.setValue(cachedEntity.getValue());
+                        iEntity.set(cachedEntity);
                     } else {
                         Entity entity = aggregator.getRaw(key);
                         if (entity == null) {
@@ -1067,7 +1067,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             public void run() {
                 IEntity cachedEntity = aggregator.getEntity(key);
                 if (cachedEntity != null) {
-                    iEntity.setValue(cachedEntity.getValue());
+                    iEntity.set(cachedEntity);
                 } else {
                     Entity entity = aggregator.getRaw(key);
                     if (entity != null) {

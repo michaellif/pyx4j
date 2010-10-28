@@ -57,4 +57,14 @@ public class EntityCloneTest extends InitializerTestCase {
         assertEquals("Level 2 value Mod", "Home Mod", employee2.homeAddress().streetName().getValue());
         assertEquals("Level 2 value Orig", "Home Street", employee.homeAddress().streetName().getValue());
     }
+
+    public void testLateAssignment() {
+        Employee employee = EntityFactory.create(Employee.class);
+        Address address = EntityFactory.create(Address.class);
+        //System.out.println("assign address");
+        employee.homeAddress().set(address);
+        //System.out.println("set address name");
+        address.streetName().setValue("Home Street");
+        assertEquals("Level 2 value Not Updated", "Home Street", employee.homeAddress().streetName().getValue());
+    }
 }

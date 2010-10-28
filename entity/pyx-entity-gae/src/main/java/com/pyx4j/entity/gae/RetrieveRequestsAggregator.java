@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 
@@ -34,7 +37,13 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 
 class RetrieveRequestsAggregator {
 
+    private static final Logger log = LoggerFactory.getLogger(RetrieveRequestsAggregator.class);
+
+    private static final boolean trace = false;
+
     private final EntityPersistenceServiceGAE srv;
+
+    private int datastoreReadCount;
 
     final private Map<Key, IEntity> retrievedMap;
 
@@ -89,6 +98,9 @@ class RetrieveRequestsAggregator {
 
     public void request(EntityMeta entityMeta, Key key, Runnable onResponceReady) {
         if (retrievedMap.containsKey(key)) {
+            if (trace) {
+                log.trace("got from request cache {}", key);
+            }
             onResponceReady.run();
         } else {
             List<Long> missingKeys = new Vector<Long>();
@@ -107,6 +119,8 @@ class RetrieveRequestsAggregator {
         for (Key key : keys) {
             if (!retrievedMap.containsKey(key)) {
                 missingKeys.add(key.getId());
+            } else if (trace) {
+                log.trace("got from request cache {}", key);
             }
         }
         if (missingKeys.isEmpty()) {
@@ -149,6 +163,9 @@ class RetrieveRequestsAggregator {
                     IEntity cachedEntity = me.getValue().get(key.getId());
                     if (cachedEntity != null) {
                         retrievedMap.put(key, cachedEntity);
+                        if (trace) {
+                            log.trace("got from gae cache {}", key);
+                        }
                     } else {
                         needToGet.add(key);
                     }
@@ -158,6 +175,12 @@ class RetrieveRequestsAggregator {
         if (needToGet.size() > 0) {
             srv.datastoreCallStats.get().readCount++;
             rawData.putAll(srv.datastore.get(needToGet));
+            if (trace) {
+                datastoreReadCount++;
+                for (Key key : needToGet) {
+                    log.trace("got from datastore call# {} {}", datastoreReadCount, key);
+                }
+            }
         }
         for (AsyncRequest request : requests) {
             request.onResponceReady.run();

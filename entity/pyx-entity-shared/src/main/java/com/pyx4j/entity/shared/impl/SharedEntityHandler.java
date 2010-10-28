@@ -51,6 +51,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     private static final long serialVersionUID = -7590484996971406115L;
 
+    private static final boolean trace = false;
+
     private Map<String, Object> data;
 
     protected transient HashMap<String, IObject<?>> members;
@@ -112,6 +114,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     protected Map<String, Object> ensureValue() {
         Map<String, Object> v = getValue();
         if (v == null) {
+            if (trace) {
+                System.out.println("Value created for " + getObjectClass().getName());
+            }
             setValue(v = new EntityValueMap(super.hashCode()));
         }
         return v;
@@ -159,6 +164,14 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
+    @Override
+    public void set(IEntity entity) {
+        //Test type safety at development runtime.
+        assert this.getObjectClass().equals(entity.getObjectClass());
+
+        setValue(((SharedEntityHandler) entity).ensureValue());
+    }
+
     /**
      * IEntity equals by value or Map object (e.g. the same map) or value of PK.equals().
      */
@@ -191,12 +204,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return true;
         }
         return ((EntityValueMap) thisValue).isNull();
-    }
-
-    @Override
-    public void set(IEntity entity) {
-        //TODO at type safety at runtime.
-        setValue(entity.getValue());
     }
 
     @SuppressWarnings("unchecked")
