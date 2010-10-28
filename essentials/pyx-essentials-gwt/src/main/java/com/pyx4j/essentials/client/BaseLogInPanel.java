@@ -134,7 +134,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
                 onGoogleAccountsLogin();
             }
         });
-        googleLogin.setValue(i18n.tr("Login using Google Accounts"));
+        googleLogin.setValue(i18n.tr("or login using Google Accounts"));
         googleLogin.setVisible(false);
 
         add(googleLogin.initNativeComponent());
