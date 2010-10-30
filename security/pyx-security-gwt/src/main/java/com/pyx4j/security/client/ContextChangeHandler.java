@@ -14,23 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 29, 2009
+ * Created on Oct 29, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.rpc.shared;
+package com.pyx4j.security.client;
 
-import java.io.Serializable;
+import com.google.gwt.event.shared.EventHandler;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+public interface ContextChangeHandler extends EventHandler {
 
-/**
- * Do not use directly in code.
- * 
- * Use RPCManager.execute(...) in client code;
- */
-public interface RemoteServiceAsync {
-
-    public void execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode, AsyncCallback<? extends Serializable> callback);
+    /**
+     * Fired when context attribute is changed.
+     * 
+     * @param event
+     *            the event
+     */
+    void onContextChange(ContextChangeEvent event);
 
 }

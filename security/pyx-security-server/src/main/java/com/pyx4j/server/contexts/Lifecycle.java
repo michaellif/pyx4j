@@ -91,7 +91,12 @@ public class Lifecycle {
             if (session != null) {
                 Visit visit = Context.getVisit();
                 if ((visit != null) && (visit.isChanged())) {
+
+                    // Cleanup transient fields since they are preserved in GAE development environment
                     visit.setAclChanged(false);
+                    visit.unChanged();
+
+                    // Force object update in GAE session.
                     session.setAttribute(Context.SESSION_VISIT, visit);
                 }
             }

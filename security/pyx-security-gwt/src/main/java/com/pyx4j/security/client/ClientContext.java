@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.InitializeHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
@@ -38,12 +39,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableBlockingAsyncCallback;
+import com.pyx4j.rpc.client.SystemNotificationEvent;
+import com.pyx4j.rpc.client.SystemNotificationHandler;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
+import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
+import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.UserVisit;
 
 public class ClientContext {
+
+    public static String USER_VISIT_ATTRIBUTE = "UserVisit";
 
     private static Logger log = LoggerFactory.getLogger(ClientContext.class);
 
@@ -81,6 +88,35 @@ public class ClientContext {
     private static String sessionToken;
 
     private static final Map<String, Object> attributes = new HashMap<String, Object>();
+
+    private static HandlerManager handlerManager;
+
+    static {
+        RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
+            @Override
+            public void onSystemNotificationReceived(SystemNotificationEvent event) {
+                if (event.getSystemNotification() instanceof AuthorizationChangedSystemNotification) {
+                    if (((AuthorizationChangedSystemNotification) event.getSystemNotification()).isSessionTerminated()) {
+                        log.debug("Session terminated");
+                        ClientContext.terminateSession();
+                    } else {
+                        log.debug("Authorization Changed");
+                        ClientContext.obtainAuthenticationData(null, true, false);
+                    }
+                } else if (event.getSystemNotification() instanceof UserVisitChangedSystemNotification) {
+                    userVisit = ((UserVisitChangedSystemNotification) event.getSystemNotification()).getUserVisit();
+                    if (userVisit != null) {
+                        RPCManager.setUserVisitHashCode(userVisit.getServerSideHashCode());
+                    } else {
+                        RPCManager.setUserVisitHashCode(null);
+                    }
+                    if (handlerManager != null) {
+                        handlerManager.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+                    }
+                }
+            }
+        });
+    }
 
     private ClientContext() {
 
@@ -123,11 +159,25 @@ public class ClientContext {
     }
 
     public static Object removeAttribute(String name) {
-        return attributes.remove(name);
+        Object prev = attributes.remove(name);
+        if (handlerManager != null) {
+            handlerManager.fireEvent(new ContextChangeEvent(name, null));
+        }
+        return prev;
     }
 
     public static void setAttribute(String name, Object value) {
         attributes.put(name, value);
+        if (handlerManager != null) {
+            handlerManager.fireEvent(new ContextChangeEvent(name, value));
+        }
+    }
+
+    public static HandlerRegistration addContextChangeHandler(ContextChangeHandler handler) {
+        if (handlerManager == null) {
+            handlerManager = new HandlerManager(null);
+        }
+        return handlerManager.addHandler(ContextChangeEvent.TYPE, handler);
     }
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
@@ -155,9 +205,17 @@ public class ClientContext {
             }
             RPCManager.setSessionToken(ClientContext.sessionToken, authenticationResponse.getAclTimeStamp());
         }
+        if (userVisit != null) {
+            RPCManager.setUserVisitHashCode(userVisit.getServerSideHashCode());
+        } else {
+            RPCManager.setUserVisitHashCode(null);
+        }
         log.info("Authenticated {}", userVisit);
         attributes.clear();
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
+        if (handlerManager != null) {
+            handlerManager.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+        }
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
             RPCManager.enableAppEngineUsageStats();
         }
@@ -169,12 +227,17 @@ public class ClientContext {
      */
     public static void terminateSession() {
         userVisit = null;
+        attributes.clear();
         RPCManager.setSessionToken(null, null);
+        RPCManager.setUserVisitHashCode(null);
         if ((serverSession != null) && (serverSession.getSessionCookieName() != null)) {
             Cookies.removeCookie(serverSession.getSessionCookieName());
         }
         serverSession = null;
         ClientSecurityController.instance().authenticate(null);
+        if (handlerManager != null) {
+            handlerManager.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, null));
+        }
     }
 
     /**

@@ -97,6 +97,16 @@ public class Visit implements Serializable {
         return changed || ((this.userVisit != null) && (this.userVisit.isChanged()));
     }
 
+    /**
+     * Gae Session Hack
+     */
+    void unChanged() {
+        changed = false;
+        if (this.userVisit != null) {
+            this.userVisit.unChanged();
+        }
+    }
+
     public boolean isAclRevalidationRequired(String clientAclTimeStamp) {
         return (aclRevalidationTimeStamp + aclRevalidationDelayMillis) < System.currentTimeMillis()
                 || ((clientAclTimeStamp != null) && (aclTimeStamp != Long.parseLong(clientAclTimeStamp)));

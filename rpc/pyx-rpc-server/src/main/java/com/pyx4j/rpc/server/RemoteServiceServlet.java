@@ -65,8 +65,8 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     }
 
     @Override
-    public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException {
-        return implementation.execute(serviceInterfaceClassName, serviceRequest);
+    public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
+        return implementation.execute(serviceInterfaceClassName, serviceRequest, userVisitHashCode);
     }
 
 }

@@ -39,8 +39,10 @@ import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.SecurityViolationException;
+import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
@@ -56,7 +58,7 @@ public class RemoteServiceImpl implements RemoteService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest) throws RuntimeException {
+    public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
         boolean logOnce = true;
         try {
             SecurityController.assertPermission(new ServiceExecutePermission(serviceInterfaceClassName));
@@ -84,14 +86,18 @@ public class RemoteServiceImpl implements RemoteService {
                 }
                 throw new UnRecoverableRuntimeException("Fatal system error: " + e.getMessage());
             }
+            Visit visit = Context.getVisit();
             if (!(serviceInstance instanceof IsIgnoreSessionTokenService)) {
-                Visit visit = Context.getVisit();
                 if ((visit != null) && (!CommonsStringUtils.equals(Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER), visit.getSessionToken()))) {
                     logOnce = false;
                     log.error("X-XSRF error, {} user {}", Context.getSessionId(), visit);
                     log.error("X-XSRF tokens: session: {}, request: {}", visit.getSessionToken(), Context.getRequestHeader(RemoteService.SESSION_TOKEN_HEADER));
                     throw new SecurityViolationException("Request requires authentication.");
                 }
+            }
+            UserVisit userVisit = null;
+            if (visit != null) {
+                userVisit = visit.getUserVisit();
             }
             try {
                 List<IServiceFilter> filters = serviceFactory.getServiceFilterChain(clazz);
@@ -108,10 +114,22 @@ public class RemoteServiceImpl implements RemoteService {
                         returnValue = li.previous().filterOutgoing(clazz, returnValue);
                     }
                 }
+
+                // Ignores the case when user visit was created in this request.
+                if ((userVisit != null) && ((userVisit.isChanged() || (!String.valueOf(userVisit.hashCode()).equals(userVisitHashCode))))) {
+                    Context.addResponseSystemNotification(new UserVisitChangedSystemNotification(userVisit));
+                }
+
+                // make JVM hashCode available on GWT side
+                if ((visit != null) && (visit.getUserVisit() != null)) {
+                    visit.getUserVisit().createServerSideHashCode();
+                }
+
                 if (Context.getResponseSystemNotifications() != null) {
                     if (!(returnValue instanceof SystemNotificationsWrapper)) {
                         returnValue = new SystemNotificationsWrapper(returnValue);
                     }
+                    log.debug("sending Notifications {}", Context.getResponseSystemNotifications());
                     ((SystemNotificationsWrapper) returnValue).addSystemNotifications(Context.getResponseSystemNotifications());
                 }
                 return returnValue;

@@ -46,6 +46,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
@@ -101,6 +102,8 @@ public abstract class SitePanel extends SimplePanel {
     private SkinFactory skinFactory;
 
     private final ClientBundleWithLookup bundle;
+
+    protected HandlerRegistrationGC hrgc = new HandlerRegistrationGC();
 
     public SitePanel(Site site, ClientBundleWithLookup bundle) {
         this.site = site;
@@ -186,6 +189,11 @@ public abstract class SitePanel extends SimplePanel {
 
         currentPagePanel.populateInlineWidgets(args);
 
+    }
+
+    @Override
+    protected void onUnload() {
+        hrgc.removeHandlers();
     }
 
     private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, IList<Portlet> portlets) {

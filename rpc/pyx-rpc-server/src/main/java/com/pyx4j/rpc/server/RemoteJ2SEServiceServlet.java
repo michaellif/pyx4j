@@ -94,7 +94,7 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
             ois.close();
             is.close();
             is = null;
-            Serializable reply = implementation.execute(serviceDescriptor, serviceDO);
+            Serializable reply = implementation.execute(serviceDescriptor, serviceDO, null);
             if (reply != null) {
                 response.setContentType("application/binary");
                 os = response.getOutputStream();

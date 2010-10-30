@@ -62,6 +62,8 @@ public class RPCManager {
 
     private static PyxRpcRequestBuilder requestBuilder;
 
+    private static String userVisitHashCode;
+
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
         serializer = GWT.create(RPCSerializer.class);
@@ -80,6 +82,10 @@ public class RPCManager {
 
     public static void setSessionToken(String sessionToken, String sessionAclTimeStamp) {
         requestBuilder.setSessionToken(sessionToken, sessionAclTimeStamp);
+    }
+
+    public static void setUserVisitHashCode(String userVisitHashCode) {
+        RPCManager.userVisitHashCode = userVisitHashCode;
     }
 
     public static Serializer getSerializer() {
@@ -105,7 +111,7 @@ public class RPCManager {
             runningServicesCount++;
             fireStatusChangeEvent(When.START, executeBackground, serviceInterface, callback, -1);
             requestBuilder.executing(serviceInterface, request);
-            service.execute(serviceInterface.getName(), request, serviceHandlingCallback);
+            service.execute(serviceInterface.getName(), request, userVisitHashCode, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
         }

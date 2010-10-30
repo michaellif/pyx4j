@@ -22,6 +22,8 @@ package com.pyx4j.security.shared;
 
 import java.io.Serializable;
 
+import com.pyx4j.commons.CommonsStringUtils;
+
 /**
  * Extendable by application user Information
  */
@@ -34,6 +36,8 @@ public class UserVisit implements Serializable {
     private String name;
 
     private String email;
+
+    private String serverSideHashCode;
 
     protected transient boolean changed;
 
@@ -52,8 +56,10 @@ public class UserVisit implements Serializable {
     }
 
     public void setName(String name) {
+        if (!CommonsStringUtils.equals(this.name, name)) {
+            this.changed = true;
+        }
         this.name = name;
-        this.changed = true;
     }
 
     public String getEmail() {
@@ -61,8 +67,10 @@ public class UserVisit implements Serializable {
     }
 
     public void setEmail(String email) {
+        if (!CommonsStringUtils.equals(this.email, email)) {
+            this.changed = true;
+        }
         this.email = email;
-        this.changed = true;
     }
 
     public Long getPrincipalPrimaryKey() {
@@ -77,9 +85,24 @@ public class UserVisit implements Serializable {
         return changed;
     }
 
+    /**
+     * Gae Session Hack
+     */
+    public void unChanged() {
+        changed = false;
+    }
+
     @Override
     public String toString() {
         return getPrincipalPrimaryKey() + " " + getName();
+    }
+
+    public String getServerSideHashCode() {
+        return serverSideHashCode;
+    }
+
+    public void createServerSideHashCode() {
+        this.serverSideHashCode = String.valueOf(this.hashCode());
     }
 
     @Override

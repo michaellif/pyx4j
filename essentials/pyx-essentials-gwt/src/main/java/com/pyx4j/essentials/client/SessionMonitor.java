@@ -35,17 +35,14 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
 import com.pyx4j.rpc.client.RPCStatusChangeHandler;
-import com.pyx4j.rpc.client.SystemNotificationEvent;
-import com.pyx4j.rpc.client.SystemNotificationHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.webstorage.client.StorageEvent;
 import com.pyx4j.webstorage.client.StorageEventHandler;
 
-public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandler, SystemNotificationHandler {
+public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SessionMonitor.class);
 
@@ -101,7 +98,6 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     protected SessionMonitor() {
         RPCManager.addRPCStatusChangeHandler(this);
-        RPCManager.addSystemNotificationHandler(this);
         if (HTML5Storage.isSupported()) {
             HTML5Storage.getLocalStorage().addStorageEventHandler(this);
         }
@@ -214,19 +210,6 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
             ClientContext.obtainAuthenticationData(null, true, false);
         }
 
-    }
-
-    @Override
-    public void onSystemNotificationReceived(SystemNotificationEvent event) {
-        if (event.getSystemNotification() instanceof AuthorizationChangedSystemNotification) {
-            if (((AuthorizationChangedSystemNotification) event.getSystemNotification()).isSessionTerminated()) {
-                log.debug("Session terminated");
-                ClientContext.terminateSession();
-            } else {
-                log.debug("Authorization Changed");
-                ClientContext.obtainAuthenticationData(null, true, false);
-            }
-        }
     }
 
 }
