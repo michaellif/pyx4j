@@ -354,14 +354,15 @@ public abstract class SitePanel extends SimplePanel {
         }
     }
 
-    public void setLogoImageLink(Class<? extends NavigNode> page) {
-        setLogoImageLink(NavigUtils.getPageUri(page));
+    public void setLogoImageLink(Class<? extends NavigNode> page, String title) {
+        setLogoImageLink(NavigUtils.getPageUri(page), title);
     }
 
-    public void setLogoImageLink(String path) {
+    public void setLogoImageLink(String path, String title) {
         logoImageLink = path;
         if (logoImageLink != null) {
             logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
+            logoImage.setTitle(title);
         }
     }
 
