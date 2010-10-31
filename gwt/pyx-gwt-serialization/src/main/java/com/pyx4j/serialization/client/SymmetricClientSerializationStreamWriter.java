@@ -23,8 +23,8 @@ package com.pyx4j.serialization.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsonUtils;
+import com.google.gwt.lang.LongLib;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter;
 import com.google.gwt.user.client.rpc.impl.Serializer;
@@ -57,24 +57,13 @@ public class SymmetricClientSerializationStreamWriter extends AbstractSerializat
         encodeBuffer.add(token);
     }
 
-    @com.google.gwt.core.client.UnsafeNativeLong
-    // Keep synchronized with LongLib
-    private static native double[] makeLongComponents0(long value)
-    /*-{
-        return value;
-    }-*/;
-
     @Override
-    public void writeLong(long fieldValue) {
-        double[] parts;
-        if (GWT.isScript()) {
-            parts = makeLongComponents0(fieldValue);
-        } else {
-            parts = makeLongComponents((int) (fieldValue >> 32), (int) fieldValue);
-        }
-        assert parts.length == 2;
-        writeDouble(parts[0]);
-        writeDouble(parts[1]);
+    public void writeLong(long value) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('\'');
+        sb.append(LongLib.toBase64(value));
+        sb.append('\'');
+        append(sb.toString());
     }
 
     @Override

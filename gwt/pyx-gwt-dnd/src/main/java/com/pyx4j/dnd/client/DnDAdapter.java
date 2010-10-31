@@ -37,7 +37,7 @@ public abstract class DnDAdapter {
         if ($doc.addEventListener) {
         elt.addEventListener(type, @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
         } else {
-        var ieDispatcher = $entry(function() { @com.google.gwt.user.client.impl.DOMImplTrident::dispatchEvent.call(elt, $wnd.event); });    
+        var ieDispatcher = $entry(function() { @com.google.gwt.user.client.impl.DOMImplTrident::callDispatchEvent.call(elt, $wnd.event); });    
         elt.attachEvent("on"+ type, ieDispatcher);
         }
     }-*/;
