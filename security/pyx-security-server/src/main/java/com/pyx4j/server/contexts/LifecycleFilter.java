@@ -113,6 +113,9 @@ public class LifecycleFilter implements Filter {
                 chain.doFilter(request, response);
             } else {
                 HttpServletRequest httprequest = (HttpServletRequest) request;
+                if (!allowRequest(httprequest, (HttpServletResponse) response)) {
+                    return;
+                }
                 // TODO MDC
                 Lifecycle.beginRequest(httprequest, (HttpServletResponse) response);
                 try {
@@ -127,5 +130,15 @@ public class LifecycleFilter implements Filter {
             }
         }
 
+    }
+
+    protected boolean allowRequest(HttpServletRequest httprequest, HttpServletResponse httpresponse) throws IOException {
+        if (httprequest.getRequestURI().endsWith(".gwt.rpc")) {
+            log.error("access to *.gwt.rpc files blocked");
+            httpresponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return false;
+        } else {
+            return true;
+        }
     }
 }
