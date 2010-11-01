@@ -26,4 +26,8 @@
 	<extend-configuration-property name="rpc.blacklist" value="java.util.Stack" />
 	<extend-configuration-property name="rpc.blacklist" value="java.util.Linked.*" />
 	<extend-configuration-property name="rpc.blacklist" value="java.lang.Object" />
+	
+	<!-- we don't use this -->
+    <extend-configuration-property name="rpc.blacklist" value="java.math.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.Collections.*" />
 </module>
