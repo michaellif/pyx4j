@@ -70,6 +70,11 @@
 
 	</dependencies>
 
+    <properties>
+        <gwtModule>g.site</gwtModule>
+        <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
+    </properties>
+
     <build>
 
         <plugins>
@@ -84,7 +89,7 @@
                         <configuration>
                             <target>
                                 <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/../examples-gae-server/war/g.site"/>
+                                    <fileset dir="${basedir}/../examples-gae-server/war/${gwtModule}"/>
                                 </delete>
                             </target>
                         </configuration>
@@ -103,7 +108,6 @@
                     <plugin>
                         <groupId>com.pyx4j</groupId>
                         <artifactId>maven-gwt-plugin</artifactId>
-                        <version>${pyx4jGwtVersion}</version>
                         <executions>
                             <execution>
                                 <id>compile-java2script</id>
@@ -114,7 +118,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <module>g.site</module>
+                            <module>${gwtModuleCompile}</module>
                             <sourceDirectories>
                                 <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                             </sourceDirectories>

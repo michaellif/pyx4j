@@ -59,3 +59,8 @@ We can create Entity implementation classes at build-time so bytecode manipulati
 
     * {{{http://code.google.com/p/gwt-ent/}GWT ENT}}
 
+* GWT Compile Report
+
+    * {{{./incubator/tester/tester-client/soycReport/}GWT Compile Report for 'tester'}}
+
+    * {{{./examples/examples-site/soycReport/}GWT Compile Report for 'examples'}}

@@ -118,6 +118,11 @@
 
     </dependencies>
 
+    <properties>
+        <gwtModule>agregation.test</gwtModule>
+        <gwtModuleCompile>${gwtModule}</gwtModuleCompile>
+    </properties>
+
     <profiles>
 
         <profile>
@@ -127,7 +132,6 @@
                     <plugin>
                         <groupId>com.pyx4j</groupId>
                         <artifactId>maven-gwt-plugin</artifactId>
-                        <version>${pyx4jGwtVersion}</version>
                         <executions>
                             <execution>
                                 <id>compile-java2script</id>
@@ -138,7 +142,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <module>agregation.test</module>
+                            <module>${gwtModuleCompile}</module>
                             <sourceDirectories>
                                 <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                             </sourceDirectories>

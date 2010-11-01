@@ -184,6 +184,9 @@
 
         <profile>
             <id>cruisecontrol-env</id>
+            <properties>
+                <gwtCompileReport>true</gwtCompileReport>
+            </properties>
         </profile>
 
         <profile>
