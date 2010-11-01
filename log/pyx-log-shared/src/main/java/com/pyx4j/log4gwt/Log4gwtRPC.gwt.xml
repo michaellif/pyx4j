@@ -3,5 +3,8 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.log4gwt.Log4gwtShared'/>
+    
     <source path="rpc"/>
+    
+    <extend-configuration-property name="rpc.blacklist" value="java.util.logging.*" />
 </module>
