@@ -30,6 +30,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -40,6 +41,7 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.dom.client.Element;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -84,6 +86,10 @@ public abstract class AbstractSiteDispatcher {
 
     public AbstractSiteDispatcher() {
         instance = this;
+
+        Element head = Document.get().getElementsByTagName("html").getItem(0);
+        head.setPropertyString("xmlns:pyx", "");
+
         pathShown = new NavigationUri(History.getToken());
         historyChangeHandler = new ValueChangeHandler<String>() {
             @Override
