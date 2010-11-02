@@ -34,5 +34,7 @@
     <extend-configuration-property name="rpc.blacklist" value="java.security.*" />
     <extend-configuration-property name="rpc.blacklist" value="java.io.*" />
     <extend-configuration-property name="rpc.blacklist" value="java.lang.*Exception" />
+    <extend-configuration-property name="rpc.blacklist" value="java.lang.AssertionError" />
     <extend-configuration-property name="rpc.blacklist" value="java.util.*Exception" />
+
 </module>
