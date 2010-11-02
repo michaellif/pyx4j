@@ -23,8 +23,8 @@ package com.pyx4j.gwt.commons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Window;
 
 /**
@@ -73,7 +73,7 @@ public class GoogleAnalytics {
         if (isLoaded) {
             trackDeferred(actionName);
         } else {
-            DeferredCommand.addCommand(new Command() {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
 
@@ -98,7 +98,7 @@ public class GoogleAnalytics {
     }
 
     private static void trackDeferred(final String actionName) {
-        DeferredCommand.addCommand(new Command() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
                 try {

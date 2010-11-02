@@ -29,9 +29,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.ConverterUtils;
@@ -197,7 +197,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
             if (ReferenceDataManager.isCached(criteria)) {
                 ReferenceDataManager.obtain(criteria, handlingCallback, true);
             } else {
-                DeferredCommand.addCommand(new Command() {
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
                         ReferenceDataManager.obtain(criteria, handlingCallback, true);
@@ -231,10 +231,12 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
     class EntitySuggestFormat implements IFormat<E> {
 
+        @Override
         public String format(E value) {
             return value.getMember(stringViewMemberName).getStringView();
         }
 
+        @Override
         public E parse(String string) {
             for (E option : getOptions()) {
                 if (getOptionName(option).equals(string)) {

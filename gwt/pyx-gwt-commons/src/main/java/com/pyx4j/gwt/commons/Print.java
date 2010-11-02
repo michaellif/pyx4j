@@ -20,9 +20,9 @@
  */
 package com.pyx4j.gwt.commons;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -85,7 +85,8 @@ public class Print {
                                            frame.print();
                                            }-*/;
 
-    public static class PrintFrame implements Command {
+    public static class PrintFrame implements ScheduledCommand {
+        @Override
         public void execute() {
             printFrame();
         }
@@ -96,7 +97,7 @@ public class Print {
     public static void it(String html) {
         try {
             buildFrame(html);
-            DeferredCommand.addCommand(printFrameCommmand);
+            Scheduler.get().scheduleDeferred(printFrameCommmand);
         } catch (Throwable exc) {
             exc.printStackTrace();
         }

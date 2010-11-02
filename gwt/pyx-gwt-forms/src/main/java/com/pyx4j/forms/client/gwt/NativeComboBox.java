@@ -22,14 +22,14 @@ package com.pyx4j.forms.client.gwt;
 
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
+import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.widgets.client.ListBox;
 
 /**
@@ -211,7 +211,8 @@ public class NativeComboBox<E> extends ListBox implements INativeComboBox<E> {
         this.value = value;
         if (!deferredSetSelectedStarted) {
             deferredSetSelectedStarted = true;
-            DeferredCommand.addCommand(new Command() {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
                 public void execute() {
                     deferredSetSelectedStarted = false;
                     setSelectedIndex(getNativeOptionIndex(NativeComboBox.this.value));
@@ -220,6 +221,7 @@ public class NativeComboBox<E> extends ListBox implements INativeComboBox<E> {
         }
     }
 
+    @Override
     public CComboBox<E> getCComponent() {
         return comboBox;
     }

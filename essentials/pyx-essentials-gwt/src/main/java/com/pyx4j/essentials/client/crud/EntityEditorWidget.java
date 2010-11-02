@@ -27,11 +27,11 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -123,7 +123,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
                         AbstractSiteDispatcher.back();
                         //Handle entity new Case
                         if (doubleBack) {
-                            DeferredCommand.addCommand(new Command() {
+                            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                                 @Override
                                 public void execute() {
                                     AbstractSiteDispatcher.back();
@@ -229,7 +229,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
 
     @Override
     protected void onUnload() {
-        DeferredCommand.addCommand(new Command() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
                 try {

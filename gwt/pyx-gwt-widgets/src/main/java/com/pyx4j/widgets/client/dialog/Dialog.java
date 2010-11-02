@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -42,7 +44,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -425,7 +426,7 @@ public class Dialog extends DialogPanelNew {
         center();
         setVisible(true);
         // The insides of Dialog may be CForm that is only initialized on show.
-        DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
                 setupFocusManager();
@@ -450,7 +451,7 @@ public class Dialog extends DialogPanelNew {
         if (openDialogs.size() > 0) {
             final Dialog d = openDialogs.get(openDialogs.size() - 1);
             if (d.currentFocusWidget != null) {
-                DeferredCommand.addCommand(new com.google.gwt.user.client.Command() {
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
                         if (d.currentFocusWidget != null) {

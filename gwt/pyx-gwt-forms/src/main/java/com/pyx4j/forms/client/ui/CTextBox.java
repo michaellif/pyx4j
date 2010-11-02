@@ -20,8 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.FocusWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -93,7 +93,8 @@ public abstract class CTextBox<E> extends CTextComponent<E> {
     }
 
     public void requestFocus() {
-        DeferredCommand.addCommand(new Command() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
             public void execute() {
                 INativeEditableComponent<E> impl = initNativeComponent();
                 if (impl instanceof FocusWidget) {

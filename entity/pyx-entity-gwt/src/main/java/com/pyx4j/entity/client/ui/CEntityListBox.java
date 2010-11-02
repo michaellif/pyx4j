@@ -28,8 +28,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.client.ReferenceDataManager;
@@ -110,17 +110,19 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
             super.retriveOptions(callback);
         } else {
             final AsyncCallback<List<E>> handlingCallback = new AsyncCallback<List<E>>() {
+                @Override
                 public void onSuccess(List<E> result) {
                     optionsLoaded = true;
                     setOptions(result);
                     callback.onOptionsReady(getOptions());
                 }
 
+                @Override
                 public void onFailure(Throwable caught) {
                     log.error("can't load {} {}", getTitle(), caught);
                 }
             };
-            DeferredCommand.addCommand(new Command() {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
                     ReferenceDataManager.obtain(criteria, handlingCallback, true);

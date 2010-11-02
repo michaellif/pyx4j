@@ -29,9 +29,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -44,8 +44,8 @@ import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
+import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
@@ -204,10 +204,12 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                     log.error("can't load {} {}", getTitle(), caught);
                     if (unavailableValidator == null) {
                         unavailableValidator = new EditableValueValidator<E>() {
+                            @Override
                             public String getValidationMessage(CEditableComponent<E> component, E value) {
                                 return "Reference data unavailable";
                             }
 
+                            @Override
                             public boolean isValid(CEditableComponent<E> component, E value) {
                                 return !isUnavailable;
                             }
@@ -221,7 +223,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
             if (ReferenceDataManager.isCached(criteria)) {
                 ReferenceDataManager.obtain(criteria, handlingCallback, true);
             } else {
-                DeferredCommand.addCommand(new Command() {
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
                         ReferenceDataManager.obtain(criteria, handlingCallback, true);
