@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.forms.client.gwt.NativeRichTextArea;
 import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;

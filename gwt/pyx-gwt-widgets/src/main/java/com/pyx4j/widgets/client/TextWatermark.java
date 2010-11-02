@@ -106,7 +106,7 @@ public abstract class TextWatermark {
     }
 
     public boolean isShown() {
-        return !getText().isEmpty() && getText().equals(watermark);
+        return !getText().isEmpty() && (getText().startsWith("<pyx:watermark>") || getText().equals(watermark));
     }
 
 }

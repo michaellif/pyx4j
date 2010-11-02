@@ -96,7 +96,7 @@ public class HtmlArea extends ScrollPanel implements WatermarkComponent {
 
                 @Override
                 void setText(String text) {
-                    viewer.setHTML(text);
+                    viewer.setHTML("<pyx:watermark>" + text + "</pyx:watermark>");
                 }
 
                 @Override
