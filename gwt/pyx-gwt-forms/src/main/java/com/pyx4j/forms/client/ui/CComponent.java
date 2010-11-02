@@ -23,11 +23,12 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -51,7 +52,7 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
 
     ComponentAccessAdapter defaultAccessAdapter;
 
-    private HandlerManager handlerManager;
+    private EventBus eventBus;
 
     private String width = "";
 
@@ -135,21 +136,13 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
 
     @Override
     public void fireEvent(GwtEvent<?> event) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(event);
+        if (eventBus != null) {
+            eventBus.fireEventFromSource(event, this);
         }
     }
 
-    protected HandlerManager ensureHandlers() {
-        return handlerManager == null ? handlerManager = new HandlerManager(this) : handlerManager;
-    }
-
-    protected final boolean hasEventHandlers(GwtEvent.Type<?> type) {
-        if (handlerManager == null) {
-            return false;
-        } else {
-            return handlerManager.isEventHandled(type);
-        }
+    protected EventBus ensureHandlers() {
+        return eventBus == null ? eventBus = new SimpleEventBus() : eventBus;
     }
 
     protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
@@ -201,6 +194,7 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
         applyVisibilityRules();
     }
 
+    @Override
     public HandlerRegistration addPropertyChangeHandler(PropertyChangeHandler handler) {
         return addHandler(handler, PropertyChangeEvent.getType());
     }

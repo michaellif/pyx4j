@@ -32,10 +32,11 @@ import com.google.gwt.event.logical.shared.HasCloseHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.DeckPanel;
 
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
@@ -50,7 +51,7 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
 
     private final ArrayList<ITab> tabs = new ArrayList<ITab>();
 
-    private HandlerManager handlerManager;
+    private EventBus eventBus;
 
     public TabPanelModel() {
     }
@@ -176,18 +177,22 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
         return tabs;
     }
 
+    @Override
     public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<ITab> handler) {
         return addHandler(handler, BeforeSelectionEvent.getType());
     }
 
+    @Override
     public HandlerRegistration addSelectionHandler(SelectionHandler<ITab> handler) {
         return addHandler(handler, SelectionEvent.getType());
     }
 
+    @Override
     public HandlerRegistration addBeforeCloseHandler(BeforeCloseHandler<ITab> handler) {
         return addHandler(handler, BeforeCloseEvent.getType());
     }
 
+    @Override
     public HandlerRegistration addCloseHandler(CloseHandler<ITab> handler) {
         return addHandler(handler, CloseEvent.getType());
     }
@@ -196,14 +201,14 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
         return ensureHandlers().addHandler(type, handler);
     }
 
-    HandlerManager ensureHandlers() {
-        return handlerManager == null ? handlerManager = new HandlerManager(this) : handlerManager;
+    EventBus ensureHandlers() {
+        return eventBus == null ? eventBus = new SimpleEventBus() : eventBus;
     }
 
     @Override
     public void fireEvent(GwtEvent<?> event) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(event);
+        if (eventBus != null) {
+            eventBus.fireEventFromSource(event, this);
         }
     }
 

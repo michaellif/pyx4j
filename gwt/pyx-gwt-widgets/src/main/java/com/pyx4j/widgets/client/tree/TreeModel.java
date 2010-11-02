@@ -20,17 +20,18 @@
  */
 package com.pyx4j.widgets.client.tree;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class TreeModel implements HasHandlers {
 
     protected TreeNode root;
 
-    private HandlerManager handlerManager;
+    private EventBus eventBus;
 
     public TreeModel(TreeNode root) {
         this.root = root;
@@ -42,21 +43,13 @@ public class TreeModel implements HasHandlers {
 
     @Override
     public void fireEvent(GwtEvent<?> event) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(event);
+        if (eventBus != null) {
+            eventBus.fireEventFromSource(event, this);
         }
     }
 
-    protected HandlerManager ensureHandlers() {
-        return handlerManager == null ? handlerManager = new HandlerManager(this) : handlerManager;
-    }
-
-    protected final boolean hasEventHandlers(GwtEvent.Type<?> type) {
-        if (handlerManager == null) {
-            return false;
-        } else {
-            return handlerManager.isEventHandled(type);
-        }
+    protected EventBus ensureHandlers() {
+        return eventBus == null ? eventBus = new SimpleEventBus() : eventBus;
     }
 
     protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {

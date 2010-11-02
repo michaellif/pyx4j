@@ -26,8 +26,9 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -36,7 +37,7 @@ public class PopupWindow {
 
     private static I18n i18n = I18nFactory.getI18n(PopupWindow.class);
 
-    private static HandlerManager handlerManager;
+    private static EventBus eventBus;
 
     public static class PopupWindowHandle extends JavaScriptObject {
 
@@ -106,8 +107,8 @@ public class PopupWindow {
     }-*/;
 
     private static void popupWindowSelectionMade(String selectionValue) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new SelectionEvent<String>(selectionValue) {
+        if (eventBus != null) {
+            eventBus.fireEvent(new SelectionEvent<String>(selectionValue) {
             });
         }
     }
@@ -116,10 +117,10 @@ public class PopupWindow {
      * Allows the Child window to send some value to parent application.
      */
     public static HandlerRegistration addSelectionHandler(SelectionHandler<String> handler) {
-        if (handlerManager == null) {
-            handlerManager = new HandlerManager(null);
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
         }
-        return handlerManager.addHandler(SelectionEvent.getType(), handler);
+        return eventBus.addHandler(SelectionEvent.getType(), handler);
 
     }
 }

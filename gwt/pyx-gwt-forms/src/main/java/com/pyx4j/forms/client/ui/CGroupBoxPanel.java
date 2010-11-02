@@ -96,14 +96,12 @@ public class CGroupBoxPanel extends CContainer {
             }
             applyAccessibilityRules();
 
-            if (hasEventHandlers(KeyUpEvent.getType())) {
-                nativePanel.addKeyUpHandler(new KeyUpHandler() {
-                    @Override
-                    public void onKeyUp(KeyUpEvent event) {
-                        fireEvent(event);
-                    }
-                });
-            }
+            nativePanel.addKeyUpHandler(new KeyUpHandler() {
+                @Override
+                public void onKeyUp(KeyUpEvent event) {
+                    fireEvent(event);
+                }
+            });
         }
         return nativePanel;
     }
