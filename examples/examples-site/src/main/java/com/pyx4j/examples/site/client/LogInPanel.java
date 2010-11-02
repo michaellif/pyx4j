@@ -20,6 +20,8 @@
  */
 package com.pyx4j.examples.site.client;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -29,7 +31,10 @@ import com.pyx4j.essentials.client.BaseLogInPanel;
 import com.pyx4j.essentials.client.GoogleAccountsLoginPopup;
 import com.pyx4j.examples.domain.DemoData;
 import com.pyx4j.examples.domain.ExamplesBehavior;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.AbstractSiteDispatcher;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 public abstract class LogInPanel extends BaseLogInPanel {
 
@@ -37,7 +42,40 @@ public abstract class LogInPanel extends BaseLogInPanel {
 
     private int devKey = 0;
 
+    protected Dialog dialog;
+
     public static final boolean useLoginPopup = true;
+
+    public static void asyncShow() {
+        GWT.runAsync(new RunAsyncCallback() {
+            @Override
+            public void onSuccess() {
+                show();
+            }
+
+            @Override
+            public void onFailure(Throwable reason) {
+                throw new UnrecoverableClientError(reason);
+            }
+        });
+    }
+
+    public static void show() {
+        final LogInPanel logInPanel = new LogInPanel() {
+            @Override
+            public void onLogInComplete() {
+                this.dialog.hide();
+                if (ClientContext.isAuthenticated()) {
+                    AbstractSiteDispatcher.show(ExamplesSiteMap.Crm.Customers.class);
+                }
+            }
+
+        };
+        logInPanel.setSize("400px", "200px");
+        logInPanel.dialog = new Dialog("Sign In", logInPanel);
+        logInPanel.dialog.setBody(logInPanel);
+        logInPanel.dialog.show();
+    }
 
     public LogInPanel() {
 

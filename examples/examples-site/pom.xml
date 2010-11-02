@@ -101,6 +101,14 @@
 	</build>
 
     <profiles>
+
+        <profile>
+            <id>soyc</id>
+            <properties>
+                <gwtModuleCompile>${gwtModule}DeveloperWebKit</gwtModuleCompile>
+            </properties>
+        </profile>
+
         <profile>
             <id>gwtce</id>
             <build>

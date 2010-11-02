@@ -30,7 +30,6 @@ import com.pyx4j.site.client.SkinFactory;
 import com.pyx4j.site.client.themes.crm.CrmTheme;
 import com.pyx4j.site.shared.domain.Link;
 import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.style.Theme;
 
 public abstract class ExamplesSitePanel extends SitePanel {
@@ -59,24 +58,9 @@ public abstract class ExamplesSitePanel extends SitePanel {
         }
 
         logInLink = new CommandLink("Sign In", new Command() {
-            private Dialog dialog;
-
             @Override
             public void execute() {
-                final LogInPanel logInPanel = new LogInPanel() {
-                    @Override
-                    public void onLogInComplete() {
-                        dialog.hide();
-                        if (ClientContext.isAuthenticated()) {
-                            AbstractSiteDispatcher.show(ExamplesSiteMap.Crm.Customers.class);
-                        }
-                    }
-
-                };
-                logInPanel.setSize("400px", "200px");
-                dialog = new Dialog("Sign In", logInPanel);
-                dialog.setBody(logInPanel);
-                dialog.show();
+                LogInPanel.asyncShow();
             }
         });
 

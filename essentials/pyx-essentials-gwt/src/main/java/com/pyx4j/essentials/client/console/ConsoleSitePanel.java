@@ -20,6 +20,8 @@
  */
 package com.pyx4j.essentials.client.console;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.security.client.ClientContext;
@@ -61,6 +63,20 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
         return this;
     }
 
+    public static void asyncCreateSitePanel(final AsyncCallback<SitePanel> callback) {
+        GWT.runAsync(new RunAsyncCallback() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess(new ConsoleSitePanel());
+            }
+
+            @Override
+            public void onFailure(Throwable reason) {
+                callback.onFailure(reason);
+            }
+        });
+    }
+
     public static void asyncLoadSite(final AsyncCallback<SitePanel> callback) {
         ClientContext.obtainAuthenticationData(new AsyncCallback<Boolean>() {
             @Override
@@ -70,7 +86,7 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
             @Override
             public void onSuccess(Boolean authenticated) {
                 if (SecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
-                    callback.onSuccess(new ConsoleSitePanel());
+                    asyncCreateSitePanel(callback);
                 } else {
                     callback.onFailure(new AuthenticationRequiredException("Console require Authentication", true));
                 }
