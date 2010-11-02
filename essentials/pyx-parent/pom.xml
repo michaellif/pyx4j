@@ -423,6 +423,14 @@
                         <sdkDir>${appengine.sdk.root}</sdkDir>
                         <appDir>${basedir}/war</appDir>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.kindleit</groupId>
+                            <artifactId>gae-runtime</artifactId>
+                            <version>${gaeVersion}.1</version> <!-- remove .1 -->
+                            <type>pom</type>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
