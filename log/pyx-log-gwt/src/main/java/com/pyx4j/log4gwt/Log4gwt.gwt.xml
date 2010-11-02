@@ -4,6 +4,46 @@
 <module>
     <inherits name='com.pyx4j.slf4j.SLF4J-api'/>
     <inherits name='com.pyx4j.log4gwt.Log4gwtShared'/>
+	
+	
+	<replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplUnknown">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplIE">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+        <when-property-is name="user.agent" value="ie8"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplIE">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+        <when-property-is name="user.agent" value="ie6"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplMozilla">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+        <any>
+            <when-property-is name="user.agent" value="gecko"/>
+        </any>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplMozilla">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+        <any>
+            <when-property-is name="user.agent" value="gecko1_8"/>
+        </any>
+    </replace-with>
+    
+    <replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplSafari">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+
+    <replace-with class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.ImplOpera">
+        <when-type-is class="com.pyx4j.log4gwt.client.LoggerDefaultConfiguration.Impl"/>
+        <when-property-is name="user.agent" value="opera"/>
+    </replace-with>
+    
 	<source path="client"/>
 	
 	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.log4gwt.client.*" />
