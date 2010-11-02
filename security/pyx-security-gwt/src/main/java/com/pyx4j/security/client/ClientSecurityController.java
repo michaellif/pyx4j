@@ -32,10 +32,11 @@ import com.google.gwt.event.logical.shared.InitializeEvent;
 import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.security.shared.Acl;
@@ -47,7 +48,7 @@ public class ClientSecurityController extends SecurityController implements HasV
 
     private static Logger log = LoggerFactory.getLogger(ClientSecurityController.class);
 
-    private HandlerManager handlerManager;
+    private EventBus eventBus;
 
     private final AclImpl acl = new AclImpl();
 
@@ -118,18 +119,17 @@ public class ClientSecurityController extends SecurityController implements HasV
         return acl;
     }
 
-    protected HandlerManager ensureHandlers() {
-        return handlerManager == null ? handlerManager = new HandlerManager(this) : handlerManager;
-    }
-
     protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
-        return ensureHandlers().addHandler(type, handler);
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
+        }
+        return eventBus.addHandler(type, handler);
     }
 
     @Override
     public void fireEvent(GwtEvent<?> event) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(event);
+        if (eventBus != null) {
+            eventBus.fireEvent(event);
         }
     }
 

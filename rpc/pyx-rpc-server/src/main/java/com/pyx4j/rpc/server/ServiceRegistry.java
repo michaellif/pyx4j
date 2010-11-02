@@ -40,7 +40,6 @@ public class ServiceRegistry {
 
     }
 
-    @SuppressWarnings("unchecked")
     public static void register(String name, Class<? extends Service<?, ?>> srv) {
         Class<? extends Service<?, ?>> srvOrig = services.get(name);
         if (srvOrig != null) {
@@ -48,7 +47,7 @@ public class ServiceRegistry {
         }
         // validate 
         try {
-            Class interfaceClass = Class.forName(name);
+            Class<?> interfaceClass = Class.forName(name);
             if (!Service.class.isAssignableFrom(interfaceClass)) {
                 throw new RuntimeException("Interface " + name + " is not a service");
             }
@@ -63,14 +62,13 @@ public class ServiceRegistry {
         log.debug("registered service {}", name);
     }
 
-    @SuppressWarnings("unchecked")
     public static void register(Class<? extends Service<?, ?>> srv) {
-        for (Class interfaceClass : srv.getInterfaces()) {
+        for (Class<?> interfaceClass : srv.getInterfaces()) {
             if (!Service.class.isAssignableFrom(interfaceClass)) {
                 continue;
             }
             String name = interfaceClass.getName();
-            Class<? extends Service> srvOrig = services.get(name);
+            Class<? extends Service<?, ?>> srvOrig = services.get(name);
             if (srvOrig != null) {
                 log.warn("redefine service {} of class {}", name, srvOrig.getName());
             }
@@ -112,9 +110,8 @@ public class ServiceRegistry {
         return clone;
     }
 
-    @SuppressWarnings("unchecked")
     static void initAllService() {
-        for (Class<? extends Service> clazz : services.values()) {
+        for (Class<? extends Service<?, ?>> clazz : services.values()) {
             try {
                 clazz.newInstance();
             } catch (Throwable e) {

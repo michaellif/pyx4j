@@ -348,11 +348,12 @@ public class J2SEService {
         }
     }
 
-    protected String serviceInterfaceMarker(final Class<? extends Service> serviceInterface) {
+    protected String serviceInterfaceMarker(final Class<? extends Service<?, ?>> serviceInterface) {
         String simpleName = serviceInterface.getName();
         return simpleName.substring(simpleName.lastIndexOf(".") + 1).replace('$', '.');
     }
 
+    @SuppressWarnings("unchecked")
     public <I extends Serializable, O extends Serializable> O execute(final Class<? extends Service<I, O>> serviceInterface, I request) throws RuntimeException {
         logConnectingOnce();
         HttpURLConnection conn = null;

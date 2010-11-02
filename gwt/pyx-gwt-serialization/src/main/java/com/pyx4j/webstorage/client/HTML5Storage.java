@@ -21,8 +21,9 @@
 package com.pyx4j.webstorage.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.webstorage.client.StorageEvent.NativeStorageEvent;
 
@@ -32,7 +33,7 @@ import com.pyx4j.webstorage.client.StorageEvent.NativeStorageEvent;
  */
 public final class HTML5Storage extends JavaScriptObject {
 
-    private static HandlerManager handlerManager;
+    private static EventBus eventBus;
 
     private static JavaScriptObject dispatchStorageEvent;
 
@@ -102,16 +103,6 @@ public final class HTML5Storage extends JavaScriptObject {
         this.clear();
     }-*/;
 
-    protected HandlerManager ensureHandlers() {
-        if (dispatchStorageEvent == null) {
-            initEventDispatcher();
-        }
-        if (handlerManager == null) {
-            handlerManager = new HandlerManager(this);
-        }
-        return handlerManager;
-    }
-
     private native void initEventDispatcher() /*-{
         @com.pyx4j.webstorage.client.HTML5Storage::dispatchStorageEvent = $entry(function(e) {
         if (!e) { e = $wnd.event; }
@@ -125,8 +116,8 @@ public final class HTML5Storage extends JavaScriptObject {
     }-*/;
 
     private final static void fireEvent(NativeStorageEvent nativeEvent) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new StorageEvent(nativeEvent));
+        if (eventBus != null) {
+            eventBus.fireEvent(new StorageEvent(nativeEvent));
         }
     }
 
@@ -135,7 +126,13 @@ public final class HTML5Storage extends JavaScriptObject {
      * SessionStorage! We can't distinguish events.
      */
     public HandlerRegistration addStorageEventHandler(StorageEventHandler handler) {
-        return ensureHandlers().addHandler(StorageEvent.TYPE, handler);
+        if (dispatchStorageEvent == null) {
+            initEventDispatcher();
+        }
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
+        }
+        return eventBus.addHandler(StorageEvent.TYPE, handler);
     }
 
 }

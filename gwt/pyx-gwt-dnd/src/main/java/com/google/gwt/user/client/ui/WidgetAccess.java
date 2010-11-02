@@ -20,11 +20,11 @@
  */
 package com.google.gwt.user.client.ui;
 
-import com.google.gwt.event.shared.HandlerManager;
-
 public class WidgetAccess {
 
-    public static HandlerManager ensureHandlers(Widget widget) {
+    @SuppressWarnings("deprecation")
+    public static com.google.gwt.event.shared.HandlerManager ensureHandlers(Widget widget) {
         return widget.ensureHandlers();
     }
+
 }

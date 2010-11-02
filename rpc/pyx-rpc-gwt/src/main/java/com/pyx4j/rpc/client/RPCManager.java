@@ -26,8 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
@@ -54,7 +55,7 @@ public class RPCManager {
 
     private static final RemoteServiceSerializer serializer;
 
-    private static HandlerManager handlerManager;
+    private static EventBus eventBus;
 
     private static int runningServicesCount = 0;
 
@@ -102,8 +103,7 @@ public class RPCManager {
         executeImpl(serviceInterface, request, callback, false, 0);
     }
 
-    @SuppressWarnings("unchecked")
-    private static void executeImpl(final Class<? extends Service> serviceInterface, Serializable request, AsyncCallback<?> callback,
+    private static void executeImpl(final Class<? extends Service<?, ?>> serviceInterface, Serializable request, AsyncCallback<?> callback,
             boolean executeBackground, int retryAttempt) {
         final ServiceHandlingCallback serviceHandlingCallback = new ServiceHandlingCallback(serviceInterface, request, callback, executeBackground,
                 retryAttempt);
@@ -122,7 +122,7 @@ public class RPCManager {
     }
 
     @SuppressWarnings("unchecked")
-    private static class ServiceHandlingCallback implements AsyncCallback {
+    private static class ServiceHandlingCallback implements AsyncCallback<Serializable> {
 
         private final long requestStartTime = System.currentTimeMillis();
 
@@ -130,17 +130,17 @@ public class RPCManager {
 
         private final int retryAttempt;
 
-        final Class<? extends Service> serviceInterface;
+        final Class<? extends Service<?, ?>> serviceInterface;
 
-        private AsyncCallback callback;
+        private AsyncCallback<Serializable> callback;
 
         private Serializable request;
 
-        ServiceHandlingCallback(final Class<? extends Service> serviceInterface, Serializable request, AsyncCallback callback, boolean executeBackground,
-                int retryAttempt) {
+        ServiceHandlingCallback(final Class<? extends Service<?, ?>> serviceInterface, Serializable request, AsyncCallback<?> callback,
+                boolean executeBackground, int retryAttempt) {
             this.executeBackground = executeBackground;
             this.serviceInterface = serviceInterface;
-            this.callback = callback;
+            this.callback = (AsyncCallback<Serializable>) callback;
             this.request = request;
             this.retryAttempt = retryAttempt;
         }
@@ -151,9 +151,9 @@ public class RPCManager {
             try {
                 if (caught instanceof RuntimeExceptionNotificationsWrapper) {
                     RuntimeExceptionNotificationsWrapper wrapper = (RuntimeExceptionNotificationsWrapper) caught;
-                    if (handlerManager != null) {
+                    if (eventBus != null) {
                         for (Serializable systemNotification : wrapper.getSystemNotifications()) {
-                            handlerManager.fireEvent(new SystemNotificationEvent(systemNotification));
+                            eventBus.fireEvent(new SystemNotificationEvent(systemNotification));
                         }
                     }
                     caught = wrapper.getOriginal();
@@ -179,14 +179,14 @@ public class RPCManager {
         }
 
         @Override
-        public void onSuccess(Object result) {
+        public void onSuccess(Serializable result) {
             runningServicesCount--;
             try {
                 if (result instanceof SystemNotificationsWrapper) {
                     SystemNotificationsWrapper wrapper = (SystemNotificationsWrapper) result;
-                    if (handlerManager != null) {
+                    if (eventBus != null) {
                         for (Serializable systemNotification : wrapper.getSystemNotifications()) {
-                            handlerManager.fireEvent(new SystemNotificationEvent(systemNotification));
+                            eventBus.fireEvent(new SystemNotificationEvent(systemNotification));
                         }
                     }
                     result = wrapper.getServiceResult();
@@ -204,26 +204,25 @@ public class RPCManager {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service> serviceDescriptorClass, Object callbackInstance,
-            long requestDuration) {
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, executeBackground, serviceDescriptorClass, callbackInstance,
+    private static void fireStatusChangeEvent(When when, boolean executeBackground, Class<? extends Service<?, ?>> serviceDescriptorClass,
+            Object callbackInstance, long requestDuration) {
+        if (eventBus != null) {
+            eventBus.fireEvent(new RPCStatusChangeEvent(when, runningServicesCount == 0, executeBackground, serviceDescriptorClass, callbackInstance,
                     requestDuration));
         }
     }
 
     public static HandlerRegistration addRPCStatusChangeHandler(RPCStatusChangeHandler handler) {
-        if (handlerManager == null) {
-            handlerManager = new HandlerManager(null);
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
         }
-        return handlerManager.addHandler(RPCStatusChangeEvent.getType(), handler);
+        return eventBus.addHandler(RPCStatusChangeEvent.getType(), handler);
     }
 
     public static HandlerRegistration addSystemNotificationHandler(SystemNotificationHandler handler) {
-        if (handlerManager == null) {
-            handlerManager = new HandlerManager(null);
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
         }
-        return handlerManager.addHandler(SystemNotificationEvent.TYPE, handler);
+        return eventBus.addHandler(SystemNotificationEvent.TYPE, handler);
     }
 }

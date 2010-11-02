@@ -23,7 +23,6 @@ package com.pyx4j.dnd.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.WidgetAccess;
@@ -42,8 +41,9 @@ public abstract class DnDAdapter {
         }
     }-*/;
 
+    @SuppressWarnings("deprecation")
     private static <H extends EventHandler> HandlerRegistration addHandler(Widget widget, DomEvent.Type<H> type, final H handler) {
-        HandlerManager hm = WidgetAccess.ensureHandlers(widget);
+        com.google.gwt.event.shared.HandlerManager hm = WidgetAccess.ensureHandlers(widget);
         if (hm.getHandlerCount(type) == 0) {
             addEventListener(type.getName(), widget.getElement());
         }

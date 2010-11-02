@@ -75,9 +75,9 @@ public class RemoteServiceImpl implements RemoteService {
                 }
                 ServiceRegistry.register(serviceInterfaceClassName, clazz);
             }
-            Service serviceInstance;
+            Service<Serializable, Serializable> serviceInstance;
             try {
-                serviceInstance = clazz.newInstance();
+                serviceInstance = (Service<Serializable, Serializable>) clazz.newInstance();
             } catch (Throwable e) {
                 logOnce = false;
                 log.error("Fatal system error", e);

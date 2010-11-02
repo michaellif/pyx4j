@@ -30,8 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.InitializeHandler;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -89,7 +90,7 @@ public class ClientContext {
 
     private static final Map<String, Object> attributes = new HashMap<String, Object>();
 
-    private static HandlerManager handlerManager;
+    private static EventBus eventBus;
 
     static {
         RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
@@ -110,8 +111,8 @@ public class ClientContext {
                     } else {
                         RPCManager.setUserVisitHashCode(null);
                     }
-                    if (handlerManager != null) {
-                        handlerManager.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+                    if (eventBus != null) {
+                        eventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
                     }
                 }
             }
@@ -160,24 +161,24 @@ public class ClientContext {
 
     public static Object removeAttribute(String name) {
         Object prev = attributes.remove(name);
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new ContextChangeEvent(name, null));
+        if (eventBus != null) {
+            eventBus.fireEvent(new ContextChangeEvent(name, null));
         }
         return prev;
     }
 
     public static void setAttribute(String name, Object value) {
         attributes.put(name, value);
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new ContextChangeEvent(name, value));
+        if (eventBus != null) {
+            eventBus.fireEvent(new ContextChangeEvent(name, value));
         }
     }
 
     public static HandlerRegistration addContextChangeHandler(ContextChangeHandler handler) {
-        if (handlerManager == null) {
-            handlerManager = new HandlerManager(null);
+        if (eventBus == null) {
+            eventBus = new SimpleEventBus();
         }
-        return handlerManager.addHandler(ContextChangeEvent.TYPE, handler);
+        return eventBus.addHandler(ContextChangeEvent.TYPE, handler);
     }
 
     public static void authenticated(AuthenticationResponse authenticationResponse) {
@@ -213,8 +214,8 @@ public class ClientContext {
         log.info("Authenticated {}", userVisit);
         attributes.clear();
         ClientSecurityController.instance().authenticate(authenticationResponse.getBehaviors());
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
+        if (eventBus != null) {
+            eventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, userVisit));
         }
         if (ClientSecurityController.checkBehavior(CoreBehavior.DEVELOPER)) {
             RPCManager.enableAppEngineUsageStats();
@@ -235,8 +236,8 @@ public class ClientContext {
         }
         serverSession = null;
         ClientSecurityController.instance().authenticate(null);
-        if (handlerManager != null) {
-            handlerManager.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, null));
+        if (eventBus != null) {
+            eventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, null));
         }
     }
 

@@ -38,15 +38,13 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
 
     private final boolean executeBackground;
 
-    @SuppressWarnings("unchecked")
-    private final Class<? extends Service> serviceDescriptorClass;
+    private final Class<? extends Service<?, ?>> serviceDescriptorClass;
 
     private final Object callbackInstance;
 
     private final long requestDuration;
 
-    @SuppressWarnings("unchecked")
-    public RPCStatusChangeEvent(When when, boolean rpcIdle, boolean executeBackground, Class<? extends Service> serviceDescriptorClass,
+    public RPCStatusChangeEvent(When when, boolean rpcIdle, boolean executeBackground, Class<? extends Service<?, ?>> serviceDescriptorClass,
             Object callbackInstance, long requestDuration) {
         super();
         this.when = when;
@@ -65,8 +63,7 @@ public class RPCStatusChangeEvent extends GwtEvent<RPCStatusChangeHandler> {
         return rpcIdle;
     }
 
-    @SuppressWarnings("unchecked")
-    public Class<? extends Service> getServiceDescriptorClass() {
+    public Class<? extends Service<?, ?>> getServiceDescriptorClass() {
         return serviceDescriptorClass;
     }
 
