@@ -209,6 +209,13 @@
             </properties>
         </profile>
 
+        <profile>
+            <id>soyc</id>
+            <properties>
+                <gwtCompileReport>true</gwtCompileReport>
+            </properties>
+        </profile>
+
     </profiles>
 
     <reporting>
