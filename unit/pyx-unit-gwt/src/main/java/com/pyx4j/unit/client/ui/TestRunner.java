@@ -28,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -94,6 +96,7 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         checkAll = new CheckBox("All");
         checkAll.ensureDebugId("gUnitAll");
         checkAll.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent event) {
                 checkAll();
             }
@@ -192,7 +195,7 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         statusSuccess.setText("0");
         failedList.setText("");
 
-        runNextTest(testQueue);
+        schedulNextTest(testQueue);
     }
 
     private void setColor(Label result, String color) {
@@ -212,6 +215,15 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         }
     }
 
+    private void schedulNextTest(final List<TestInfo> testQueue) {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                runNextTest(testQueue);
+            }
+        });
+    }
+
     private void runNextTest(final List<TestInfo> testQueue) {
         statusDuration.setText(String.valueOf(System.currentTimeMillis() - runStart));
         if (testQueue.size() == 0) {
@@ -227,6 +239,7 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         t.time.setText("");
         t.meta.execute(new GCaseResultAsyncCallback() {
 
+            @Override
             public void onComplete(GResult result) {
                 if (result.isSuccess()) {
                     t.result.setText("Ok");
@@ -244,7 +257,7 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
                     failedList.setText(failedList.getText() + "; " + t.getFullName() + " [" + result.getMessage() + "]");
                 }
                 t.time.setText(String.valueOf(result.getDuration()));
-                runNextTest(testQueue);
+                schedulNextTest(testQueue);
             }
         });
     }
@@ -288,6 +301,7 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
             testsPanel.getFlexCellFormatter().setColSpan(numRows + 1, 1, 4);
 
             result.addClickHandler(new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     message.setVisible(!message.isVisible());
                 }
