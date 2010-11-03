@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+	<!--  
+	  This is list of classes not used by pyx in RPC!
+	  If you use some of them to send application data do not inherit this module! 
+	-->
+    <extend-configuration-property name="rpc.blacklist" value="java.lang.StackTraceElement" />
+    <extend-configuration-property name="rpc.blacklist" value="java.security.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.io.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.lang.*Exception" />
+    <extend-configuration-property name="rpc.blacklist" value="java.lang.AssertionError" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.*Exception" />
+    
+	<extend-configuration-property name="rpc.blacklist" value="java.math.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.Collections.*" />
+    
+    <extend-configuration-property name="rpc.blacklist" value="java.util.Array.*" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.Stack" />
+    
+    <extend-configuration-property name="rpc.blacklist" value="java.util.IdentityHashMap" />
+    <extend-configuration-property name="rpc.blacklist" value="java.util.Linked.*" />
+    <!--
+      java.util.Vector  used in IList
+      java.util.TreeSet used in ISet
+      java.util.HashSet used in IPrimitiveSet and AuthenticationResponse 
+      java.util.TreeMap in EntitySearchCriteria
+	  java.util.HashMap used in IEntity's EntityValueMap
+     -->
+</module>

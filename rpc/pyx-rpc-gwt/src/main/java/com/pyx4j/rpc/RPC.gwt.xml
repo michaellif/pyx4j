@@ -30,11 +30,6 @@
     <extend-configuration-property name="rpc.blacklist" value="java.util.Random" />
     <extend-configuration-property name="rpc.blacklist" value="java.lang.annotation.*" />
 
-    <extend-configuration-property name="rpc.blacklist" value="java.lang.StackTraceElement" />
-    <extend-configuration-property name="rpc.blacklist" value="java.security.*" />
-    <extend-configuration-property name="rpc.blacklist" value="java.io.*" />
-    <extend-configuration-property name="rpc.blacklist" value="java.lang.*Exception" />
-    <extend-configuration-property name="rpc.blacklist" value="java.lang.AssertionError" />
-    <extend-configuration-property name="rpc.blacklist" value="java.util.*Exception" />
+    <!-- See module com.pyx4j.rpc.RPCBlacklist for other JVM classes not use by framework -->
 
 </module>
