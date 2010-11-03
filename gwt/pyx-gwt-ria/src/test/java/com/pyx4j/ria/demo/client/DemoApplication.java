@@ -27,7 +27,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
@@ -85,7 +85,7 @@ public class DemoApplication implements IApplication {
         perspective.setHeaderPanel(new HeaderPanel("Demo"));
         perspective.setMenuBar(new MainMenu(this));
 
-        perspective.setActionsToolbar(new Toolbar(this));
+        perspective.setToolbar(new Toolbar(this));
 
         HorizontalPanel links = new HorizontalPanel();
         Anchor logoutHyperlink = new Anchor("Sign out", "Sign-out");
@@ -98,7 +98,7 @@ public class DemoApplication implements IApplication {
             }
         });
         links.add(logoutHyperlink);
-        perspective.setLinksToolbar(links);
+        //perspective.setLinksToolbar(links);
 
         mainPanel = new ThreeFoldersMainPanel();
 
@@ -113,7 +113,7 @@ public class DemoApplication implements IApplication {
 
         perspective.setStatusPanel(statusBar);
 
-        perspective.attachToParent(RootPanel.get());
+        perspective.attachToParent(RootLayoutPanel.get());
     }
 
     void runProgressBar() {

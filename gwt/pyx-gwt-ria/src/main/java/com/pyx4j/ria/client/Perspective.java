@@ -20,13 +20,15 @@
  */
 package com.pyx4j.ria.client;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.GlassPanel;
@@ -35,107 +37,75 @@ public class Perspective {
 
     private Panel parent;
 
-    private final DockPanel contentPanel;
+    private final DockLayoutPanel contentPanel;
 
-    private final SpaceHolderPanel headerHolder;
+    private final Separator headerHolder;
 
-    private final SpaceHolderPanel menuHolder;
+    private final Separator menuHolder;
 
-    private final SpaceHolderPanel toolbarLinksHolder;
+    private final Separator toolbarHolder;
 
-    private final SpaceHolderPanel toolbarActionsHolder;
+    private final Separator statusHolder;
 
-    private final SpaceHolderPanel mainPanelHolder;
-
-    private final SpaceHolderPanel statusHolder;
-
-    private final SpaceHolderPanel footerHolder;
+    private final Separator footerHolder;
 
     public Perspective() {
 
-        contentPanel = new DockPanel();
+        contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setSize("100%", "100%");
 
         //Header
-        headerHolder = new SpaceHolderPanel();
-        contentPanel.add(headerHolder, DockPanel.NORTH);
+        headerHolder = new Separator();
+        contentPanel.addNorth(headerHolder, 0);
 
         //Menu
-        menuHolder = new SpaceHolderPanel();
-        contentPanel.add(menuHolder, DockPanel.NORTH);
+        menuHolder = new Separator();
+        contentPanel.addNorth(menuHolder, 0);
 
         //Toolbar
-        HorizontalPanel toolbarHolder = new HorizontalPanel();
-
-        toolbarActionsHolder = new SpaceHolderPanel();
-        toolbarHolder.add(toolbarActionsHolder);
-        toolbarHolder.setCellHorizontalAlignment(toolbarActionsHolder, HasHorizontalAlignment.ALIGN_LEFT);
-        toolbarHolder.setCellVerticalAlignment(toolbarActionsHolder, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        toolbarLinksHolder = new SpaceHolderPanel();
-        toolbarHolder.add(toolbarLinksHolder);
-        toolbarHolder.setCellHorizontalAlignment(toolbarLinksHolder, HasHorizontalAlignment.ALIGN_RIGHT);
-        toolbarHolder.setCellVerticalAlignment(toolbarLinksHolder, HasVerticalAlignment.ALIGN_MIDDLE);
-        toolbarHolder.setCellWidth(toolbarLinksHolder, "100%");
-
-        contentPanel.add(toolbarHolder, DockPanel.NORTH);
-
-        //MainPanel
-        mainPanelHolder = new SpaceHolderPanel();
-        mainPanelHolder.setSize("100%", "100%");
-        contentPanel.add(mainPanelHolder, DockPanel.CENTER);
-        contentPanel.setCellHeight(mainPanelHolder, "100%");
-        contentPanel.setCellWidth(mainPanelHolder, "100%");
+        toolbarHolder = new Separator();
+        contentPanel.addNorth(toolbarHolder, 0);
 
         //Footer
-        footerHolder = new SpaceHolderPanel();
-        contentPanel.add(footerHolder, DockPanel.SOUTH);
+        footerHolder = new Separator();
+        contentPanel.addSouth(footerHolder, 0);
 
         //Status
-        statusHolder = new SpaceHolderPanel();
-        contentPanel.add(statusHolder, DockPanel.SOUTH);
+        statusHolder = new Separator();
+        contentPanel.addSouth(statusHolder, 0);
 
         Window.enableScrolling(false);
         Window.setMargin("0px");
     }
 
     public void setHeaderPanel(Widget headerPanel) {
-        headerHolder.add(headerPanel);
-    }
-
-    public void setFooterPanel(Widget footerPanel) {
-        footerHolder.add(footerPanel);
+        contentPanel.insertNorth(headerPanel, 1.5, headerHolder);
     }
 
     public void setMenuBar(Widget menuBar) {
-        menuHolder.add(menuBar);
+        contentPanel.insertNorth(menuBar, 1.5, menuHolder);
     }
 
-    public void setActionsToolbar(Widget actions) {
-        toolbarActionsHolder.add(actions);
-    }
-
-    public void setLinksToolbar(Widget links) {
-        toolbarLinksHolder.add(links);
+    public void setToolbar(Widget actions) {
+        contentPanel.insertNorth(actions, 2, toolbarHolder);
     }
 
     public void setMainPanel(Widget mainPanel) {
-        mainPanelHolder.add(mainPanel);
+        contentPanel.add(mainPanel);
     }
 
     public void setStatusPanel(Widget statusPanel) {
-        statusHolder.add(statusPanel);
+        contentPanel.insertSouth(statusPanel, 1.5, statusHolder);
     }
 
-    public void attachToParent(Panel parent) {
+    public void setFooterPanel(Widget footerPanel) {
+        contentPanel.insertSouth(footerPanel, 1.5, footerHolder);
+    }
+
+    public void attachToParent(LayoutPanel parent) {
         this.parent = parent;
-        if (parent instanceof RootPanel) {
-            ((RootPanel) parent).add(contentPanel, 0, 0);
-            ((RootPanel) parent).add(GlassPanel.instance(), 0, 0);
-        } else {
-            parent.add(contentPanel);
-            parent.add(GlassPanel.instance());
-        }
+        parent.add(GlassPanel.instance());
+        parent.add(contentPanel);
     }
 
     public void detachFromParent() {
@@ -144,4 +114,7 @@ public class Perspective {
         parent = null;
     }
 
+    private static class Separator extends SimplePanel {
+
+    }
 }
