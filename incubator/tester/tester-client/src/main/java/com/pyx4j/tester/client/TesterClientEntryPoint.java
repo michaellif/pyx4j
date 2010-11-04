@@ -23,11 +23,15 @@ package com.pyx4j.tester.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
@@ -36,6 +40,8 @@ import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.runner.ServerTestRunner;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.Theme;
+import com.pyx4j.widgets.client.style.ThemeColor;
 import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
 public class TesterClientEntryPoint implements EntryPoint {
@@ -47,14 +53,16 @@ public class TesterClientEntryPoint implements EntryPoint {
 
         ClientEntityFactory.ensureIEntityImplementations();
         UnrecoverableErrorHandlerDialog.register();
-        StyleManger.installTheme(new WindowsTheme());
+        Theme theme = new WindowsTheme();
+        theme.putThemeColor(ThemeColor.OBJECT_TONE1, "#FFFFFF");
+        StyleManger.installTheme(theme);
 
         ClientLogger.addAppender(new RPCAppender());
         ClientLogger.setDebugOn(true);
         RPCManager.enableAppEngineUsageStats();
 
         VerticalPanel menu = new VerticalPanel();
-        RootPanel.get().add(menu, 0, 0);
+        RootPanel.get().add(menu, 30, 30);
 
         final Button startButton = new Button("Start Client Side (GWT) Tests");
         menu.add(startButton);
@@ -74,9 +82,16 @@ public class TesterClientEntryPoint implements EntryPoint {
             }
         });
 
-        menu.add(new Image("http://code.google.com/appengine/images/appengine-noborder-120x30.gif"));
-
         menu.add(new SessionControlPanel());
+
+        HorizontalPanel logos = new HorizontalPanel();
+        menu.add(logos);
+
+        logos.add(new Image("pyx_logo-32x32.png"));
+        logos.add(new Anchor("code.pyx4j.com", "http://code.pyx4j.com"));
+        logos.add(new HTML(CommonsStringUtils.NO_BREAK_SPACE_HTML));
+        logos.add(new Image("gwt-logo-30x30.png"));
+        logos.add(new Image("http://code.google.com/appengine/images/appengine-noborder-120x30.gif"));
     }
 
 }
