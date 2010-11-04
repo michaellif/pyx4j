@@ -6,8 +6,10 @@
     <publishDate position="left" format="MM-dd-yyyy HH:mm" />
 
     <bannerLeft>
-        <name>Pyx Software Service - application development</name>
-        <src>http://code.pyx4j.com/pyx_logo-143x59.png</src>
+        <name>Pyx</name>
+        <alt>Pyx Software Service - application development</alt>
+        <src>pyx_logo-143x59.png</src>
+        <href>http://code.pyx4j.com/</href>
     </bannerLeft>
 
     <body>
