@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.FolderSectionPanel;
-import com.pyx4j.ria.client.ViewMemento;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 
 public interface IView extends ITab {

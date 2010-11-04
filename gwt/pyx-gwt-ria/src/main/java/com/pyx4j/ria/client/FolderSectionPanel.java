@@ -31,7 +31,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -40,6 +39,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.IView;
+import com.pyx4j.ria.client.view.ViewMemento;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
 import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
@@ -142,7 +142,6 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
             Widget toolbar = view.getToolbarPane();
             if (toolbar != null) {
                 toolbarHolderPane.add(toolbar);
-                toolbarHolderPane.setCellHorizontalAlignment(toolbar, HasHorizontalAlignment.ALIGN_RIGHT);
             }
             MenuBar menu = view.getMenu();
             if (menu != null) {

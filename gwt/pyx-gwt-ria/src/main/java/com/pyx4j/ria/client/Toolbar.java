@@ -25,8 +25,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,19 +36,11 @@ import com.pyx4j.widgets.client.style.CSSClass;
  * @author michaellif
  * 
  */
-public class Toolbar extends HorizontalPanel {
-
-    private final HorizontalPanel buttonsPanel;
+public class Toolbar extends FlowPanel {
 
     public Toolbar() {
-
-        buttonsPanel = new HorizontalPanel();
-        buttonsPanel.setWidth("1px");
-
-        add(buttonsPanel);
-        setCellHorizontalAlignment(buttonsPanel, HasHorizontalAlignment.ALIGN_LEFT);
-        //setSize("100%", "100%");
         setStyleName(CSSClass.pyx4j_Toolbar.name());
+        getElement().getStyle().setProperty("verticalAlign", "middle");
     }
 
     public void addItem(String caption, final Command command) {
@@ -76,20 +67,15 @@ public class Toolbar extends HorizontalPanel {
     }
 
     public void addItem(Widget widget) {
-        buttonsPanel.add(widget);
+        add(widget);
         DOM.setStyleAttribute(widget.getElement(), "padding", "3px");
         DOM.setStyleAttribute(widget.getElement(), "cursor", "pointer");
         DOM.setStyleAttribute(widget.getElement(), "cursor", "hand");
-        buttonsPanel.setCellHeight(widget, "100%");
-        buttonsPanel.setCellWidth(widget, "1px");
-        buttonsPanel.setCellVerticalAlignment(widget, ALIGN_MIDDLE);
     }
 
     public void addSeparator() {
         BarSeparator separator = new BarSeparator();
-        buttonsPanel.add(separator);
-        buttonsPanel.setCellHeight(separator, "100%");
-        buttonsPanel.setCellVerticalAlignment(separator, ALIGN_MIDDLE);
+        add(separator);
     }
 
 }
