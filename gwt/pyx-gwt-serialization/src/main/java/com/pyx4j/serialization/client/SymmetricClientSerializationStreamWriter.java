@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.lang.LongLib;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter;
 import com.google.gwt.user.client.rpc.impl.Serializer;
@@ -57,11 +56,31 @@ public class SymmetricClientSerializationStreamWriter extends AbstractSerializat
         encodeBuffer.add(token);
     }
 
+    // GWT 2.0.4 version for tests.
+    //    @com.google.gwt.core.client.UnsafeNativeLong
+    //    private static native double[] makeLongComponents0(long value)
+    //    /*-{
+    //        return value;
+    //    }-*/;
+    //
+    //    @Override
+    //    public void writeLong(long fieldValue) {
+    //        double[] parts;
+    //        if (com.google.gwt.core.client.GWT.isScript()) {
+    //            parts = makeLongComponents0(fieldValue);
+    //        } else {
+    //            parts = makeLongComponents((int) (fieldValue >> 32), (int) fieldValue);
+    //        }
+    //        assert parts.length == 2;
+    //        writeDouble(parts[0]);
+    //        writeDouble(parts[1]);
+    //    }
+
     @Override
     public void writeLong(long value) {
         StringBuilder sb = new StringBuilder();
         sb.append('\'');
-        sb.append(LongLib.toBase64(value));
+        sb.append(com.google.gwt.lang.LongLib.toBase64(value));
         sb.append('\'');
         append(sb.toString());
     }
