@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.AbstractView;
+import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.Button;
 
 public class TestView extends AbstractView {

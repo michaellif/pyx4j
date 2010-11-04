@@ -18,11 +18,13 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.client;
+package com.pyx4j.ria.client.view;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.ria.client.FolderSectionPanel;
+import com.pyx4j.ria.client.ViewMemento;
 import com.pyx4j.widgets.client.tabpanel.BasicTab;
 
 public abstract class AbstractView extends BasicTab implements IView {

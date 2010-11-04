@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.AbstractView;
+import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupBoxPanel;
 import com.pyx4j.widgets.client.style.Style;

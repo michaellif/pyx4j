@@ -14,14 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 28, 2009
+ * Created on Nov 4, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.ria.client;
+package com.pyx4j.ria.client.view;
 
-import com.pyx4j.ria.client.view.IView;
-
-public interface IEditor extends IView {
+public interface Position {
 
 }

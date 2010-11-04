@@ -14,29 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 28, 2009
+ * Created on Nov 4, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.client;
+package com.pyx4j.ria.client.view;
 
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.Widget;
-
-import com.pyx4j.widgets.client.tabpanel.ITab;
-
-public interface IView extends ITab {
-
-    Widget getToolbarPane();
-
-    Widget getFooterPane();
-
-    ViewMemento getViewMemento();
-
-    void setFolder(FolderSectionPanel folderSectionPanel);
-
-    FolderSectionPanel getFolder();
-
-    MenuBar getMenu();
-
+public enum FourFoldersPosition implements Position {
+    nw, sw, center, south
 }

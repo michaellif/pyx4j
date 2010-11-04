@@ -31,10 +31,10 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
-import com.pyx4j.ria.client.IView;
 import com.pyx4j.ria.client.Perspective;
 import com.pyx4j.ria.client.StatusBar;
-import com.pyx4j.ria.client.ThreeFoldersMainPanel;
+import com.pyx4j.ria.client.view.FourFoldersPosition;
+import com.pyx4j.ria.client.view.IView;
 
 public class DemoApplication implements IApplication {
 
@@ -48,7 +48,7 @@ public class DemoApplication implements IApplication {
 
     private final Command saveCommand;
 
-    private ThreeFoldersMainPanel mainPanel;
+    private MainPanel mainPanel;
 
     public DemoApplication() {
         openCommand = new Command() {
@@ -57,8 +57,7 @@ public class DemoApplication implements IApplication {
             @Override
             public void execute() {
                 TestView view = new TestView("Tab" + counter++);
-                mainPanel.getTopFolder().addView(view, true);
-                mainPanel.getTopFolder().showView(view);
+                openView(view);
             }
         };
         saveCommand = new Command() {
@@ -73,8 +72,7 @@ public class DemoApplication implements IApplication {
     }
 
     public void openView(IView view) {
-        mainPanel.getTopFolder().addView(view, true);
-        mainPanel.getTopFolder().showView(view);
+        mainPanel.openView(view, true);
     }
 
     public void onLoad() {
@@ -85,7 +83,11 @@ public class DemoApplication implements IApplication {
         perspective.setHeaderPanel(new HeaderPanel("Demo"));
         perspective.setMenuBar(new MainMenu(this));
 
-        perspective.setToolbar(new Toolbar(this));
+        HorizontalPanel toolbarPanel = new HorizontalPanel();
+        toolbarPanel.setWidth("100%");
+
+        Toolbar toolbar = new Toolbar(this);
+        toolbarPanel.add(toolbar);
 
         HorizontalPanel links = new HorizontalPanel();
         Anchor logoutHyperlink = new Anchor("Sign out", "Sign-out");
@@ -98,16 +100,20 @@ public class DemoApplication implements IApplication {
             }
         });
         links.add(logoutHyperlink);
-        //perspective.setLinksToolbar(links);
+        toolbarPanel.add(links);
+        toolbarPanel.setCellHorizontalAlignment(links, HorizontalPanel.ALIGN_RIGHT);
+        toolbarPanel.setCellVerticalAlignment(links, HorizontalPanel.ALIGN_MIDDLE);
 
-        mainPanel = new ThreeFoldersMainPanel();
+        perspective.setToolbar(toolbarPanel);
 
-        mainPanel.getLeftFolder().addView(new TestView("Long Tab1"), true);
-        mainPanel.getLeftFolder().addView(new TestView("Tab2"), true);
-        mainPanel.getLeftFolder().addView(new TestView("Tab3"), true);
+        mainPanel = new MainPanel();
+
+        mainPanel.openView(new TestView("Long Tab1"), true);
+        mainPanel.openView(new TestView("Tab2"), true);
+        mainPanel.openView(new TestView("Tab3"), true);
 
         //TODO mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));
-        mainPanel.getBottomFolder().addView(new TabPanelView("Tab Pane", null), true);
+        mainPanel.openView(new TabPanelView("Tab Pane", null), true);
 
         perspective.setMainPanel(mainPanel);
 

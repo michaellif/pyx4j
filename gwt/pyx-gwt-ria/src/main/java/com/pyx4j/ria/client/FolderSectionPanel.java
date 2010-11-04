@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.ria.client.view.IView;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
 import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
