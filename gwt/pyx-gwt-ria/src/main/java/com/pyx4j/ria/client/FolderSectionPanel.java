@@ -44,8 +44,6 @@ import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
 import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
 
-//TODO restore scroll position on view selection change
-
 public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<ITab>, SelectionHandler<ITab>, CloseHandler<ITab> {
 
     private final List<IView> views = new ArrayList<IView>();
@@ -175,7 +173,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         IView view = (IView) event.getSelectedItem();
         showToolbar(view);
         currentView = view;
-        onResize();
+        //onResize();
         ViewMemento viewMemento = currentView.getViewMemento();
         setHorizontalScrollPosition(viewMemento.getHorizontalScrollPosition());
         int verticalScrollPosition = viewMemento.getVerticalScrollPosition();
@@ -192,7 +190,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         views.remove(event.getTarget());
         if (views.size() == 0) {
             showToolbar(null);
-            onResize();
+            //onResize();
         }
     }
 

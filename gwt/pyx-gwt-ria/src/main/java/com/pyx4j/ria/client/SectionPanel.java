@@ -20,163 +20,97 @@
  */
 package com.pyx4j.ria.client;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.ResizableWidget;
-import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
-import com.pyx4j.widgets.client.DecoratorPanel;
-import com.pyx4j.widgets.client.style.CSSClass;
+public class SectionPanel extends LayoutPanel {
 
-public class SectionPanel extends DecoratorPanel implements ResizableWidget {
+    private final DockLayoutPanel contentPanel;
 
-    static private ResizableWidgetCollection resizableWidgetCollection = new ResizableWidgetCollection(50);
+    private final DockLayoutPanel rootPanel;
 
-    private final SimplePanel scrollPanel;
+    private final ScrollPanel scrollPanel;
 
-    private final Panel scrollPanelHolder;
+    private final SimplePanel header1Mark;
 
-    private final SpaceHolderPanel header1Holder;
+    private final SimplePanel header2Mark;
 
-    private final SpaceHolderPanel header2Holder;
-
-    private final SpaceHolderPanel footerHolder;
-
-    private final SpaceHolderPanel contentPaneHolder;
+    private final SimplePanel footerMark;
 
     public SectionPanel() {
 
-        super(true, true, true, true, 1, CSSClass.pyx4j_Section_Border.name());
+        super();
 
-        DockPanel rootPanel = new DockPanel();
+        rootPanel = new DockLayoutPanel(Unit.EM);
+        rootPanel.getElement().getStyle().setBorderColor("black");
+        rootPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        rootPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
 
-        header1Holder = new SpaceHolderPanel();
-        rootPanel.add(header1Holder, DockPanel.NORTH);
-        header1Holder.setWidth("100%");
-        rootPanel.setCellWidth(header1Holder, "100%");
+        header1Mark = new SimplePanel();
+        rootPanel.addNorth(header1Mark, 0);
 
-        DecoratorPanel header2Decorator = new DecoratorPanel(true, true, false, true, 2, CSSClass.pyx4j_Section_SelectionBorder.name());
-        header2Holder = new SpaceHolderPanel();
-        header2Decorator.setWidget(header2Holder);
+        footerMark = new SimplePanel();
+        rootPanel.addNorth(footerMark, 0);
 
-        rootPanel.add(header2Decorator, DockPanel.NORTH);
-        header2Decorator.setWidth("100%");
-        rootPanel.setCellWidth(header2Decorator, "100%");
+        contentPanel = new DockLayoutPanel(Unit.EM);
+        contentPanel.getElement().getStyle().setBorderColor("#86adc4");
+        contentPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        contentPanel.getElement().getStyle().setBorderWidth(2, Unit.PX);
 
-        contentPaneHolder = new SpaceHolderPanel();
+        header2Mark = new SimplePanel();
+        contentPanel.addNorth(header2Mark, 0);
 
-        scrollPanel = new SimplePanel();
-        DOM.setStyleAttribute(scrollPanel.getElement(), "position", "relative");
-        scrollPanel.setSize("100%", "100%");
+        scrollPanel = new ScrollPanel();
+        scrollPanel.getElement().getStyle().setBackgroundColor("white");
 
-        scrollPanelHolder = new SimplePanel();
-        scrollPanelHolder.add(contentPaneHolder);
+        contentPanel.add(scrollPanel);
 
-        scrollPanel.add(scrollPanelHolder);
+        rootPanel.add(contentPanel);
 
-        DOM.setStyleAttribute(scrollPanelHolder.getElement(), "overflow", "auto");
-        DOM.setStyleAttribute(scrollPanelHolder.getElement(), "position", "absolute");
-        DOM.setStyleAttribute(scrollPanelHolder.getElement(), "top", "0px");
-        DOM.setStyleAttribute(scrollPanelHolder.getElement(), "left", "0px");
+        add(rootPanel);
 
-        DecoratorPanel contentDecorator = new DecoratorPanel(false, true, true, true, 2, CSSClass.pyx4j_Section_SelectionBorder.name());
-        contentDecorator.setWidget(scrollPanel);
-
-        rootPanel.add(contentDecorator, DockPanel.CENTER);
-        contentDecorator.setSize("100%", "100%");
-        rootPanel.setCellHeight(contentDecorator, "100%");
-        rootPanel.setCellWidth(contentDecorator, "100%");
-
-        scrollPanelHolder.setStyleName(CSSClass.pyx4j_Section_Content.name());
-
-        footerHolder = new SpaceHolderPanel();
-        rootPanel.add(footerHolder, DockPanel.SOUTH);
-
-        rootPanel.setStyleName(CSSClass.pyx4j_Section_Background.name());
-
-        setWidget(rootPanel);
-
-        rootPanel.setSize("100%", "100%");
-        setCellWidth(rootPanel, "100%");
-        setCellHeight(rootPanel, "100%");
-
-        setStyleName(CSSClass.pyx4j_Section.name());
-
-        setSize("100%", "100%");
-
-    }
-
-    @Override
-    protected void onAttach() {
-        super.onAttach();
-        resizableWidgetCollection.add(this);
-    }
-
-    @Override
-    protected void onDetach() {
-        super.onDetach();
-        resizableWidgetCollection.remove(this);
-    }
-
-    @Override
-    public void onResize(int width, int height) {
-        onResize();
-    }
-
-    public void onResize() {
-        scrollPanelHolder.setWidth(scrollPanel.getOffsetWidth() + "px");
-        scrollPanelHolder.setHeight(scrollPanel.getOffsetHeight() + "px");
     }
 
     protected void setHeader1Pane(Widget headerPane) {
-        header1Holder.clear();
-        if (headerPane != null) {
-            header1Holder.add(headerPane);
-        }
+        rootPanel.insertNorth(headerPane, 1.6, header1Mark);
     }
 
     protected void setHeader2Pane(Widget headerPane) {
-        header2Holder.clear();
-        if (headerPane != null) {
-            header2Holder.add(headerPane);
-        }
+        contentPanel.insertNorth(headerPane, 2, header2Mark);
     }
 
     protected void setFooterPane(Widget footerPane) {
-        footerHolder.clear();
-        if (footerPane != null) {
-            footerHolder.add(footerPane);
-        }
+        rootPanel.insertSouth(footerPane, 1.5, footerMark);
     }
 
     protected void setContentPane(Widget contentPane) {
-        contentPaneHolder.clear();
-        if (contentPane != null) {
-            contentPaneHolder.add(contentPane);
-        }
+        scrollPanel.setWidget(contentPane);
     }
 
     public int getVerticalScrollPosition() {
-        return DOM.getElementPropertyInt(scrollPanelHolder.getElement(), "scrollTop");
+        return scrollPanel.getScrollPosition();
     }
 
     public void setVerticalScrollPosition(int position) {
-        DOM.setElementPropertyInt(scrollPanelHolder.getElement(), "scrollTop", position);
+        scrollPanel.setScrollPosition(position);
     }
 
     public void scrollToBottom() {
-        setVerticalScrollPosition(DOM.getElementPropertyInt(scrollPanelHolder.getElement(), "scrollHeight"));
+        scrollPanel.scrollToBottom();
     }
 
     public int getHorizontalScrollPosition() {
-        return DOM.getElementPropertyInt(scrollPanelHolder.getElement(), "scrollLeft");
+        return scrollPanel.getHorizontalScrollPosition();
+
     }
 
     public void setHorizontalScrollPosition(int position) {
-        DOM.setElementPropertyInt(scrollPanelHolder.getElement(), "scrollLeft", position);
+        scrollPanel.setHorizontalScrollPosition(position);
     }
 
 }

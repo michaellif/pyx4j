@@ -36,15 +36,15 @@ public class Perspective {
 
     private final DockLayoutPanel contentPanel;
 
-    private final PlaceMark headerMark;
+    private final SimplePanel headerMark;
 
-    private final PlaceMark menuMark;
+    private final SimplePanel menuMark;
 
-    private final PlaceMark toolbarMark;
+    private final SimplePanel toolbarMark;
 
-    private final PlaceMark statusMark;
+    private final SimplePanel statusMark;
 
-    private final PlaceMark footerMark;
+    private final SimplePanel footerMark;
 
     public Perspective() {
 
@@ -52,23 +52,23 @@ public class Perspective {
         contentPanel.setSize("100%", "100%");
 
         //Header
-        headerMark = new PlaceMark();
+        headerMark = new SimplePanel();
         contentPanel.addNorth(headerMark, 0);
 
         //Menu
-        menuMark = new PlaceMark();
+        menuMark = new SimplePanel();
         contentPanel.addNorth(menuMark, 0);
 
         //Toolbar
-        toolbarMark = new PlaceMark();
+        toolbarMark = new SimplePanel();
         contentPanel.addNorth(toolbarMark, 0);
 
         //Footer
-        footerMark = new PlaceMark();
+        footerMark = new SimplePanel();
         contentPanel.addSouth(footerMark, 0);
 
         //Status
-        statusMark = new PlaceMark();
+        statusMark = new SimplePanel();
         contentPanel.addSouth(statusMark, 0);
 
         Window.enableScrolling(false);
@@ -111,7 +111,4 @@ public class Perspective {
         parent = null;
     }
 
-    private static class PlaceMark extends SimplePanel {
-
-    }
 }
