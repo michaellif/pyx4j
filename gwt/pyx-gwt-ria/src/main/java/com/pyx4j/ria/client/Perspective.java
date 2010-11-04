@@ -23,9 +23,6 @@ package com.pyx4j.ria.client;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -39,15 +36,15 @@ public class Perspective {
 
     private final DockLayoutPanel contentPanel;
 
-    private final Separator headerHolder;
+    private final PlaceMark headerMark;
 
-    private final Separator menuHolder;
+    private final PlaceMark menuMark;
 
-    private final Separator toolbarHolder;
+    private final PlaceMark toolbarMark;
 
-    private final Separator statusHolder;
+    private final PlaceMark statusMark;
 
-    private final Separator footerHolder;
+    private final PlaceMark footerMark;
 
     public Perspective() {
 
@@ -55,39 +52,39 @@ public class Perspective {
         contentPanel.setSize("100%", "100%");
 
         //Header
-        headerHolder = new Separator();
-        contentPanel.addNorth(headerHolder, 0);
+        headerMark = new PlaceMark();
+        contentPanel.addNorth(headerMark, 0);
 
         //Menu
-        menuHolder = new Separator();
-        contentPanel.addNorth(menuHolder, 0);
+        menuMark = new PlaceMark();
+        contentPanel.addNorth(menuMark, 0);
 
         //Toolbar
-        toolbarHolder = new Separator();
-        contentPanel.addNorth(toolbarHolder, 0);
+        toolbarMark = new PlaceMark();
+        contentPanel.addNorth(toolbarMark, 0);
 
         //Footer
-        footerHolder = new Separator();
-        contentPanel.addSouth(footerHolder, 0);
+        footerMark = new PlaceMark();
+        contentPanel.addSouth(footerMark, 0);
 
         //Status
-        statusHolder = new Separator();
-        contentPanel.addSouth(statusHolder, 0);
+        statusMark = new PlaceMark();
+        contentPanel.addSouth(statusMark, 0);
 
         Window.enableScrolling(false);
         Window.setMargin("0px");
     }
 
     public void setHeaderPanel(Widget headerPanel) {
-        contentPanel.insertNorth(headerPanel, 1.5, headerHolder);
+        contentPanel.insertNorth(headerPanel, 1.5, headerMark);
     }
 
     public void setMenuBar(Widget menuBar) {
-        contentPanel.insertNorth(menuBar, 1.5, menuHolder);
+        contentPanel.insertNorth(menuBar, 1.5, menuMark);
     }
 
     public void setToolbar(Widget actions) {
-        contentPanel.insertNorth(actions, 2, toolbarHolder);
+        contentPanel.insertNorth(actions, 2, toolbarMark);
     }
 
     public void setMainPanel(Widget mainPanel) {
@@ -95,11 +92,11 @@ public class Perspective {
     }
 
     public void setStatusPanel(Widget statusPanel) {
-        contentPanel.insertSouth(statusPanel, 1.5, statusHolder);
+        contentPanel.insertSouth(statusPanel, 1.5, statusMark);
     }
 
     public void setFooterPanel(Widget footerPanel) {
-        contentPanel.insertSouth(footerPanel, 1.5, footerHolder);
+        contentPanel.insertSouth(footerPanel, 1.5, footerMark);
     }
 
     public void attachToParent(LayoutPanel parent) {
@@ -114,7 +111,7 @@ public class Perspective {
         parent = null;
     }
 
-    private static class Separator extends SimplePanel {
+    private static class PlaceMark extends SimplePanel {
 
     }
 }
