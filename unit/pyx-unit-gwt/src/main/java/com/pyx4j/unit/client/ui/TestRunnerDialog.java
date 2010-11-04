@@ -42,7 +42,9 @@ public class TestRunnerDialog extends Dialog {
 
     public TestRunnerDialog(TestRunner runner) {
         super("JUnit Client Side", runner);
-        runner.setSize("400px", "200px");
+        runner.setSize("100%", "100%");
+        //TODO
+        //this.setSize("600px", "400px");
         setBody(runner);
     }
 

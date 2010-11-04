@@ -35,11 +35,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.GCaseResultAsyncCallback;
@@ -60,6 +63,8 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
 
     private final CheckBox checkAll;
 
+    private final CheckBox useDeferred;
+
     private final Label failedList;
 
     private final Label statusRun;
@@ -76,32 +81,26 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         testsPanel.setCellSpacing(5);
         testsPanel.setCellPadding(3);
         testsPanel.setWidget(0, 0, new Label());
-        testsPanel.setWidget(0, 1, new Label("Class"));
-        testsPanel.setWidget(0, 2, new Label("Test"));
-        testsPanel.setWidget(0, 3, new Label("Result"));
-        testsPanel.setWidget(0, 4, new Label("Duration (Millis)"));
+        testsPanel.setWidget(0, 1, new HTML("<b>Class</b>"));
+        testsPanel.setWidget(0, 2, new HTML("<b>Test</b>"));
+        testsPanel.setWidget(0, 3, new HTML("<b>Result</b>"));
+        testsPanel.setWidget(0, 4, new HTML("<b>Duration (Millis)</b>"));
 
         for (List<GCaseMeta> caseGroup : testCases) {
             for (GCaseMeta meta : caseGroup) {
                 testInfo.add(new TestInfo(meta));
             }
         }
-        add(testsPanel);
 
+        ScrollPanel scrollPanel = new ScrollPanel(testsPanel);
+        scrollPanel.setAlwaysShowScrollBars(false);
         //TODO
-        //scrollPanel.setSize("700px", "400px");
+        scrollPanel.setSize("800px", "500px");
+        add(scrollPanel);
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
+        buttonsPanel.setHeight("30px");
 
-        checkAll = new CheckBox("All");
-        checkAll.ensureDebugId("gUnitAll");
-        checkAll.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                checkAll();
-            }
-        });
-        buttonsPanel.insert(checkAll, 0);
         HorizontalPanel statusPanel = new HorizontalPanel();
         statusPanel.setWidth("400px");
         statusPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
@@ -128,7 +127,23 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         statusPanel.add(new Label("Failed:"));
         statusPanel.add(statusFailed);
 
-        buttonsPanel.insert(statusPanel, 0);
+        buttonsPanel.add(statusPanel);
+
+        checkAll = new CheckBox("All");
+        checkAll.ensureDebugId("gUnitAll");
+        checkAll.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                checkAll();
+            }
+        });
+        buttonsPanel.add(checkAll);
+        buttonsPanel.add(new HTML(CommonsStringUtils.NO_BREAK_SPACE_HTML + CommonsStringUtils.NO_BREAK_SPACE_HTML));
+
+        useDeferred = new CheckBox("Exec in Deferred");
+        useDeferred.ensureDebugId("gUnitExecInDeferred");
+        useDeferred.setValue(true);
+        buttonsPanel.add(useDeferred);
 
         failedList = new Label();
         failedList.ensureDebugId("gUnitFailedList");
@@ -174,6 +189,8 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
 
     private int totalTestsError;
 
+    private boolean execInDeferred;
+
     public void runSelectedTests() {
         List<TestInfo> testQueue = new Vector<TestInfo>();
         for (final TestInfo t : testInfo) {
@@ -194,6 +211,8 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
         setColor(statusFailed, colorOk);
         statusSuccess.setText("0");
         failedList.setText("");
+
+        execInDeferred = useDeferred.getValue();
 
         schedulNextTest(testQueue);
     }
@@ -216,12 +235,16 @@ public class TestRunner extends VerticalPanel implements OkOption, OkOptionText,
     }
 
     private void schedulNextTest(final List<TestInfo> testQueue) {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                runNextTest(testQueue);
-            }
-        });
+        if (execInDeferred) {
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    runNextTest(testQueue);
+                }
+            });
+        } else {
+            runNextTest(testQueue);
+        }
     }
 
     private void runNextTest(final List<TestInfo> testQueue) {
