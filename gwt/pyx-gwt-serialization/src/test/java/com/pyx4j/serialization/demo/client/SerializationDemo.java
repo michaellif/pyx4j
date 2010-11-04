@@ -21,9 +21,11 @@
 package com.pyx4j.serialization.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -40,7 +42,8 @@ public class SerializationDemo implements EntryPoint {
         ClientLogger.setDebugOn(true);
 
         VerticalPanel panel = new VerticalPanel();
-        RootPanel.get().add(panel, 0, 0);
+        RootPanel.get().add(panel, 30, 30);
+        panel.add(new HTML("This version compiled with GWT <b>" + GWT.getVersion() + "</b>"));
 
         final Button startButton = new Button("Start Tests");
         panel.add(startButton);

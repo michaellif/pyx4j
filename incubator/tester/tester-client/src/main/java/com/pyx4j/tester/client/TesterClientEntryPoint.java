@@ -21,6 +21,7 @@
 package com.pyx4j.tester.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -63,6 +64,7 @@ public class TesterClientEntryPoint implements EntryPoint {
 
         VerticalPanel menu = new VerticalPanel();
         RootPanel.get().add(menu, 30, 30);
+        menu.add(new HTML("This version compiled with GWT <b>" + GWT.getVersion() + "</b>"));
 
         final Button startButton = new Button("Start Client Side (GWT) Tests");
         menu.add(startButton);
