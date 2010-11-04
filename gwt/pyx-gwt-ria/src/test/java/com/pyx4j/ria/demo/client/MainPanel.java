@@ -30,7 +30,11 @@ public class MainPanel extends FourFoldersLayout implements ViewManager<FourFold
 
     @Override
     public Position getPositionForView(Class<? extends IView> viewClass) {
-        return FourFoldersPosition.center;
+        if (TestView.class.equals(viewClass)) {
+            return FourFoldersPosition.center;
+        } else {
+            return FourFoldersPosition.south;
+        }
     }
 
     @Override
