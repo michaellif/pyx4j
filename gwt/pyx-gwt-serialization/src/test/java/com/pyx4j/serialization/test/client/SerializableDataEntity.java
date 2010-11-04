@@ -33,8 +33,8 @@ public class SerializableDataEntity implements Serializable {
 
     private Vector<SerializableDataEntity> children;
 
-    public static ArrayList<SerializableDataEntity> generateData(int rows, int columns, long offset, boolean setName) {
-        ArrayList<SerializableDataEntity> data = new ArrayList<SerializableDataEntity>();
+    public static Vector<SerializableDataEntity> generateData(int rows, int columns, long offset, boolean setName) {
+        Vector<SerializableDataEntity> data = new Vector<SerializableDataEntity>();
         long count = offset;
         for (int r = 0; r < rows; r++) {
             SerializableDataEntity rowData = new SerializableDataEntity();
