@@ -146,4 +146,55 @@ public class SymmetricSerializationGWTTest extends TestCase {
 
         assertTrue("Set eq", EqualsHelper.equals(members, rDs.getObjectsVectorValue()));
     }
+
+    public void testPerfomanceEnt5KWrite() throws SerializationException {
+        Object data = SerializableDataEntity.generateData(5000, 0, Integer.MAX_VALUE, true);
+        RPCSerializer sa = GWT.create(RPCSerializer.class);
+        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(sa.getSerializer());
+        w.prepareToWrite();
+        w.writeObject(data);
+    }
+
+    public void testPerfomanceEnt5KWriteRead() throws SerializationException {
+        Object data = SerializableDataEntity.generateData(5000, 0, Integer.MAX_VALUE, true);
+        Object o = serializeDeserialize(data);
+        assertNotNull(o);
+    }
+
+    public void testPerfomanceEnt7KWrite() throws SerializationException {
+        Object data = SerializableDataEntity.generateData(7000, 0, Integer.MAX_VALUE, true);
+        RPCSerializer sa = GWT.create(RPCSerializer.class);
+        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(sa.getSerializer());
+        w.prepareToWrite();
+        w.writeObject(data);
+    }
+
+    public void testPerfomanceEnt7KWriteRead() throws SerializationException {
+        Object data = SerializableDataEntity.generateData(7000, 0, Integer.MAX_VALUE, true);
+        Object o = serializeDeserialize(data);
+        assertNotNull(o);
+    }
+
+    public void testPerfomanceEnt50x50Write() throws SerializationException {
+        Object data = SerializableDataEntity.generateData(50, 50, Integer.MAX_VALUE, true);
+        RPCSerializer sa = GWT.create(RPCSerializer.class);
+        SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(sa.getSerializer());
+        w.prepareToWrite();
+        w.writeObject(data);
+    }
+
+    public void testPerfomanceEnt50x50WriteRead() throws SerializationException {
+        Object data = SerializableDataEntity.generateData(50, 50, Integer.MAX_VALUE, true);
+        Object o = serializeDeserialize(data);
+        assertNotNull(o);
+    }
+
+    /**
+     * This fails with Unresponsive Script Warning in IE
+     */
+    //    public void testPerfomanceEnt100x100WriteRead() throws SerializationException {
+    //        Object data = SerializableDataEntity.generateData(100, 100, Integer.MAX_VALUE, true);
+    //        Object o = serializeDeserialize(data);
+    //        assertNotNull(o);
+    //    }
 }
