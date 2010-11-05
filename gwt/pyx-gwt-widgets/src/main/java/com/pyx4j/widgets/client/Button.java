@@ -135,7 +135,7 @@ public class Button extends ButtonBase {
     }
 
     public void setTooltip(String text) {
-        Tooltip.tooltip(this, text);
+        setTitle(text);
     }
 
     @Override
