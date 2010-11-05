@@ -35,8 +35,6 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
 
     private String popupTooltipText;
 
-    private Tooltip popupTooltip;
-
     public CButton(String label, Command command) {
         this.label = label;
         this.command = command;
@@ -52,9 +50,7 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
         if (nativeButton == null) {
             nativeButton = new NativeButton(this, label, command);
             applyAccessibilityRules();
-            if (popupTooltipText != null) {
-                popupTooltip = Tooltip.tooltip(nativeButton, popupTooltipText);
-            }
+            nativeButton.setTitle(popupTooltipText);
         }
         return nativeButton;
     }
@@ -79,13 +75,8 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
     }
 
     public void setPopupTooltip(String popupTooltipText) {
-        this.popupTooltipText = popupTooltipText;
         if (nativeButton != null) {
-            if (popupTooltip != null) {
-                popupTooltip.setTooltipText(this.popupTooltipText);
-            } else {
-                popupTooltip = Tooltip.tooltip(nativeButton, popupTooltipText);
-            }
+            nativeButton.setTitle(popupTooltipText);
         }
     }
 

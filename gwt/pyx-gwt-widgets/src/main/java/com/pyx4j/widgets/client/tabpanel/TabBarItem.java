@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
 /**
@@ -126,7 +125,7 @@ public class TabBarItem extends HorizontalPanel {
                 }
             });
 
-            Tooltip.tooltip(closeImage, "Close");
+            closeImage.setTitle("Close");
 
             rightSubpanel.add(closeImage);
             rightSubpanel.setCellHorizontalAlignment(closeImage, HasHorizontalAlignment.ALIGN_RIGHT);
