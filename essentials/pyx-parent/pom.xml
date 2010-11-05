@@ -163,6 +163,13 @@
 
         <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
         <appengine.sdk.root>${CORP_TOOLS}/3p-libs/gae/appengine-java-sdk-${gaeVersion}</appengine.sdk.root>
+
+        <!--
+            dependency.details takes significant time on build server for site creation
+            http://maven.apache.org/plugins/maven-project-info-reports-plugin/dependencies-mojo.html
+        -->
+        <dependency.details.enabled>false</dependency.details.enabled>
+        <dependency.locations.enabled>false</dependency.locations.enabled>
     </properties>
 
     <dependencyManagement>
