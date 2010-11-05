@@ -604,10 +604,14 @@
                                 <replace dir="${project.build.directory}/site" includes="*.html,statscm/*.html">
                                     <replacefilter token="#build#" value="${buildLabel}"/>
                                     <replacefilter token="#version#" value="${project.version}"/>
+                                    <replacefilter token="@version@" value="${project.version}"/>
                                 </replace>
                                 <taskdef name="if" classname="net.sf.antcontrib.logic.IfTask" classpathref="maven.plugin.classpath"/>
                                 <if>
-                                    <equals arg1="${gwtCompileReport}" arg2="true" />
+                                    <and>
+                                        <equals arg1="${gwtCompileReport}" arg2="true" />
+                                        <available file="${project.build.directory}/gwt-extra"/>
+                                    </and>
                                     <then>
                                         <copy todir="${project.build.directory}/site/soycReport" preservelastmodified="true" overwrite="true" failonerror="false">
                                             <fileset dir="${project.build.directory}/gwt-extra/${gwtModule}/soycReport/compile-report"/>
