@@ -604,6 +604,13 @@
                         <goals>
                             <goal>source-jar</goal>
                         </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*.java</include>
+                                <include>**/*.gwt.xml</include>
+                                <include>META-INF/*.*</include>
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
