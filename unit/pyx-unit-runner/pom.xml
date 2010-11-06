@@ -46,6 +46,8 @@
 
 	</dependencies>
 
-	<!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
 
 </project>

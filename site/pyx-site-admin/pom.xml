@@ -81,7 +81,7 @@
 			<artifactId>pyx-essentials-shared</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.pyx4j</groupId>
 			<artifactId>pyx-gwt-server</artifactId>
@@ -99,8 +99,11 @@
 
 	</dependencies>
 
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
+
 	<build>
-		<!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

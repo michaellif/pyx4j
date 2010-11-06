@@ -36,7 +36,7 @@
         	<groupId>org.xnap.commons</groupId>
 	        <artifactId>gettext-commons</artifactId>
 		</dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-commons</artifactId>
@@ -45,8 +45,11 @@
 
 	</dependencies>
 
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
+
     <build>
-		<!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
 		<resources>
 			<!-- super-source -->
 			<resource>

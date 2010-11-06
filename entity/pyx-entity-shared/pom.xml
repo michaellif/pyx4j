@@ -30,7 +30,7 @@
             <artifactId>pyx-config-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
- 
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-security-shared</artifactId>
@@ -42,9 +42,11 @@
             <artifactId>gwt-user</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
-    <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
 
 </project>

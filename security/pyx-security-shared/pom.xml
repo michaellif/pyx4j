@@ -30,12 +30,15 @@
             <artifactId>pyx-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
     </dependencies>
+
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
 
     <build>
         <resources>
-            <!-- N.B. for gwt ready jars we use ${basedir}/jar-source-4gwt.marker -->
             <!-- super-source -->
 			<resource>
 				<directory>src/main/resources</directory>

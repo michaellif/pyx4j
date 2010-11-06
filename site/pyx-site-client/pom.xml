@@ -83,6 +83,10 @@
 
 	</dependencies>
 
+    <properties>
+        <project.jar-source-4gwt>true</project.jar-source-4gwt>
+    </properties>
+
     <build>
 
         <plugins>
