@@ -23,6 +23,7 @@ package com.pyx4j.entity.gae;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 
@@ -40,12 +41,16 @@ public class AdapterFactory {
             adapter = indexAdapters.get(adapterClass);
         }
         if (adapter == null) {
-            try {
-                adapter = adapterClass.newInstance();
-            } catch (InstantiationException e) {
-                throw new Error(e);
-            } catch (IllegalAccessException e) {
-                throw new Error(e);
+            if (adapterClass.isInterface()) {
+                adapter = ServerSideFactory.create(adapterClass);
+            } else {
+                try {
+                    adapter = adapterClass.newInstance();
+                } catch (InstantiationException e) {
+                    throw new Error(e);
+                } catch (IllegalAccessException e) {
+                    throw new Error(e);
+                }
             }
             indexAdapters.put(adapterClass, adapter);
         }
@@ -60,12 +65,16 @@ public class AdapterFactory {
             adapter = memberModificationAdapters.get(adapterClass);
         }
         if (adapter == null) {
-            try {
-                adapter = adapterClass.newInstance();
-            } catch (InstantiationException e) {
-                throw new Error(e);
-            } catch (IllegalAccessException e) {
-                throw new Error(e);
+            if (adapterClass.isInterface()) {
+                adapter = ServerSideFactory.create(adapterClass);
+            } else {
+                try {
+                    adapter = adapterClass.newInstance();
+                } catch (InstantiationException e) {
+                    throw new Error(e);
+                } catch (IllegalAccessException e) {
+                    throw new Error(e);
+                }
             }
             memberModificationAdapters.put(adapterClass, adapter);
         }
