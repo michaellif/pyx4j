@@ -152,10 +152,10 @@
                             <target>${basedir}/war</target>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
-                            <!--compilerClass>com.google.gwt.dev.GWTCompiler</compilerClass-->
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
-                            <compileReport>${gwtCompileReport}</compileReport>
+                            <compileReport>false</compileReport>
+                            <!--compileReport>${gwtCompileReport}</compileReport-->
                         </configuration>
                     </plugin>
                 </plugins>
