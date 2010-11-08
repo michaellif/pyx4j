@@ -61,6 +61,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
 import com.pyx4j.entity.adapters.ReferenceAdapter;
+import com.pyx4j.entity.annotations.Adapters;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -387,6 +388,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (iEntity.isNull()) {
             return;
         }
+        Class<? extends MemberModificationAdapter<?>>[] entityMemebersModificationAdapters = null;
+        Adapters adapters = iEntity.getEntityMeta().getAnnotation(Adapters.class);
+        if (adapters != null) {
+            entityMemebersModificationAdapters = adapters.modificationAdapters();
+        }
+
         nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
             if (me.getKey().equals(IEntity.PRIMARY_KEY)) {
                 continue nextValue;
@@ -548,18 +555,24 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     throw new Error("Changing readonly property " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
                 }
                 MemberColumn memberColumn = meta.getAnnotation(MemberColumn.class);
-                if (memberColumn != null && memberColumn.modificationAdapter() != null) {
-                    MemberModificationAdapter adapter;
-                    try {
-                        adapter = memberColumn.modificationAdapter().newInstance();
-                    } catch (InstantiationException e) {
-                        throw new Error(e);
-                    } catch (IllegalAccessException e) {
-                        throw new Error(e);
+                if (memberColumn != null && memberColumn.modificationAdapters() != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : memberColumn.modificationAdapters()) {
+                        @SuppressWarnings("rawtypes")
+                        MemberModificationAdapter adapter = getMemberModificationAdapter(adapterClass);
+                        if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
+                            log.error("Forbiden change [{}] -> [{}]", entity.lastValue, value);
+                            throw new Error("Forbiden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                        }
                     }
-                    if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
-                        log.error("Forbiden change [{}] -> [{}]", entity.lastValue, value);
-                        throw new Error("Forbiden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                }
+                if (entityMemebersModificationAdapters != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMemebersModificationAdapters) {
+                        @SuppressWarnings("rawtypes")
+                        MemberModificationAdapter adapter = getMemberModificationAdapter(adapterClass);
+                        if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
+                            log.error("Forbiden change [{}] -> [{}]", entity.lastValue, value);
+                            throw new Error("Forbiden change " + meta.getCaption() + " of " + iEntity.getEntityMeta().getCaption());
+                        }
                     }
                 }
             }
@@ -581,8 +594,30 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
     }
 
+    private Map<Class<? extends MemberModificationAdapter<?>>, MemberModificationAdapter<?>> memberModificationAdapters;
+
+    private MemberModificationAdapter<?> getMemberModificationAdapter(Class<? extends MemberModificationAdapter<?>> adapterClass) {
+        MemberModificationAdapter<?> adapter = null;
+        if (memberModificationAdapters == null) {
+            memberModificationAdapters = new HashMap<Class<? extends MemberModificationAdapter<?>>, MemberModificationAdapter<?>>();
+        } else {
+            adapter = memberModificationAdapters.get(adapterClass);
+        }
+        if (adapter == null) {
+            try {
+                adapter = adapterClass.newInstance();
+            } catch (InstantiationException e) {
+                throw new Error(e);
+            } catch (IllegalAccessException e) {
+                throw new Error(e);
+            }
+            memberModificationAdapters.put(adapterClass, adapter);
+        }
+        return adapter;
+    }
+
     private void addGloablIndex(EntityUpdateWrapper entity, char prefix, Set<String> newKeys) {
-        Set<String> keys = (Set<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
+        Collection<String> keys = (Collection<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
         if (keys == null) {
             keys = new HashSet<String>();
         }
@@ -593,7 +628,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     private void addGloablIndex(EntityUpdateWrapper entity, char prefix, String newKey) {
-        Set<String> keys = (Set<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
+        Collection<String> keys = (Collection<String>) entity.getProperty(GLOBAL_KEYWORD_PRROPERTY);
         if (keys == null) {
             keys = new HashSet<String>();
         }

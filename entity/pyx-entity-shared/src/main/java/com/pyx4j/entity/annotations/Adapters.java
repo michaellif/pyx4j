@@ -14,23 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-08-12
+ * Created on Nov 7, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.adapters;
+package com.pyx4j.entity.annotations;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import com.pyx4j.entity.adapters.MemberModificationAdapter;
 
 /**
- * Only called from IEntityPersistenceService.merge(...).
+ * Collection of Entity behaviors that are used on back-end.
  * 
- * Single instance of this class implementations may be called for different Entity in
- * different threads.
+ * TODO find a better name.
  */
-public interface MemberModificationAdapter<E extends IEntity> {
+@Target({ ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Adapters {
 
-    public boolean allowModifications(E entity, MemberMeta meta, Object valueOrig, Object valueNew);
+    Class<? extends MemberModificationAdapter<?>>[] modificationAdapters() default {};
 
 }

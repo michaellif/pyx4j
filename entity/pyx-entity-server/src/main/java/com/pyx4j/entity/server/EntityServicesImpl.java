@@ -210,4 +210,20 @@ public class EntityServicesImpl {
         }
 
     }
+
+    public static class MergeDeleteImpl implements EntityServices.MergeDelete {
+
+        @Override
+        public VoidSerializable execute(IEntity entity) {
+            if (ServerSideConfiguration.instance().datastoreReadOnly()) {
+                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+            }
+            SecurityController.assertPermission(new EntityPermission(entity.getObjectClass(), EntityPermission.DELETE));
+            IEntity actualEntity = PersistenceServicesFactory.getPersistenceService().retrieve(entity.getEntityMeta().getEntityClass(), entity.getPrimaryKey());
+            SecurityController.assertPermission(EntityPermission.permissionRead(actualEntity));
+            PersistenceServicesFactory.getPersistenceService().delete(entity);
+            return null;
+        }
+
+    }
 }

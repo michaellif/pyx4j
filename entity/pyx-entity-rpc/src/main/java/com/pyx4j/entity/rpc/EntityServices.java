@@ -57,6 +57,9 @@ public interface EntityServices {
     public interface Delete extends Service<IEntity, VoidSerializable> {
     };
 
+    public interface MergeDelete extends Service<IEntity, VoidSerializable> {
+    };
+
     public interface DeleteQuery extends Service<EntityQueryCriteria<?>, VoidSerializable> {
     };
 }

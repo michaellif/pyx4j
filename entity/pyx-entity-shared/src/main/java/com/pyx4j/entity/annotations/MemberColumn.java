@@ -31,6 +31,6 @@ import com.pyx4j.entity.adapters.MemberModificationAdapter;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MemberColumn {
 
-    Class<? extends MemberModificationAdapter<?>> modificationAdapter();
+    Class<? extends MemberModificationAdapter<?>>[] modificationAdapters() default {};
 
 }
