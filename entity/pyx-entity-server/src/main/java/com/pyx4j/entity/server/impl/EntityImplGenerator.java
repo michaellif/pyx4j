@@ -317,7 +317,11 @@ public class EntityImplGenerator {
             }
 
             CtMethod getMemebersMethod = new CtMethod(pool.get(String[].class.getName()), "getMemebers", null, implClass);
-            getMemebersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
+            if (membersNamesStringArray.length() == 0) {
+                getMemebersMethod.setBody("{ return new String[0]; }");
+            } else {
+                getMemebersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
+            }
             implClass.addMethod(getMemebersMethod);
 
             //Static for optimization
