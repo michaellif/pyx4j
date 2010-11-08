@@ -834,6 +834,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 if ((iEntity.getOwner() != null) && (iEntity.getEntityMeta().getMemberMeta(keyName).isOwner())) {
                     // Do not retrieve Owner
                 } else {
+                    childIEntity.setPrimaryKey(((Key) value).getId());
                     retrieveEntity(childIEntity, (Key) value, aggregator);
                 }
             }
