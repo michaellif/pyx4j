@@ -60,6 +60,7 @@ public class WindowsTheme extends Theme {
         initPhotoalbomStyle();
         initSlideshowActionStyle();
         initSuggestBoxStyle();
+        initBannerStyle();
     }
 
     protected void initThemeColors() {
@@ -659,7 +660,7 @@ public class WindowsTheme extends Theme {
 
     }
 
-    private void initSuggestBoxStyle() {
+    protected void initSuggestBoxStyle() {
         Style style = new Style(".gwt-SuggestBoxPopup");
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
@@ -675,6 +676,12 @@ public class WindowsTheme extends Theme {
 
         style = new Style(".gwt-SuggestBoxPopup .item-selected");
         style.addProperty("background-color", "#ffc");
+        addStyle(style);
+
+    }
+
+    protected void initBannerStyle() {
+        Style style = new Style(CSSClass.pyx4j_Banner);
         addStyle(style);
 
     }
