@@ -157,7 +157,10 @@
         <gwtDraftCompile>false</gwtDraftCompile>
         <!-- OBFUSCATED, PRETTY, or DETAILED -->
         <gwtCompilerOutputStyle>OBFUSCATED</gwtCompilerOutputStyle>
+        <gwtEnableAssertions>false</gwtEnableAssertions>
         <gwtCompileReport>false</gwtCompileReport>
+        <gwtDisableCastChecking>false</gwtDisableCastChecking>
+        <gwtDisableClassMetadata>false</gwtDisableClassMetadata>
 
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 
