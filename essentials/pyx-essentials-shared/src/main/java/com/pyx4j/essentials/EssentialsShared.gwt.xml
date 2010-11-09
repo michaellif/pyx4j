@@ -12,4 +12,7 @@
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupKey" />
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupRecordsResponse" />
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.essentials.rpc.admin.BackupRequest" />
+    
+    <!-- for now we define site only on client -->
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.shared.domain.*" />
 </module>
