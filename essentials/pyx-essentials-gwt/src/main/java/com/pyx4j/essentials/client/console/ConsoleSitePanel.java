@@ -31,11 +31,21 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.client.SitePanel;
+import com.pyx4j.site.client.SkinFactory;
+import com.pyx4j.site.client.themes.console.ConsoleTheme;
+import com.pyx4j.widgets.client.style.Theme;
 
 public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 
     public ConsoleSitePanel() {
         super(ConsoleSiteFactory.createSite(), null);
+
+        setSkinFactory(new SkinFactory() {
+            @Override
+            public Theme createSkin(String skinName) {
+                return new ConsoleTheme();
+            }
+        });
     }
 
     @Override

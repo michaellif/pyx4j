@@ -134,8 +134,6 @@ public abstract class SitePanel extends SimplePanel {
             }
             homePage = site.pages().get(0);
         }
-
-        skinFactory = new DefaultSkinFactory();
     }
 
     public Site getSite() {

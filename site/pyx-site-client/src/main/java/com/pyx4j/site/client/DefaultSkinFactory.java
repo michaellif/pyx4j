@@ -30,6 +30,11 @@ import com.pyx4j.site.client.themes.light.LightTheme;
 import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.widgets.client.style.Theme;
 
+/**
+ * @deprecated Create SkinFactory for each Site. This takes too much to download in
+ *             initial code (-17K in particular).
+ */
+@Deprecated
 public class DefaultSkinFactory implements SkinFactory {
 
     private final Map<String, Theme> themes = new HashMap<String, Theme>();
