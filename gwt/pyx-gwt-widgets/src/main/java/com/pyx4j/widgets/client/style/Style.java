@@ -33,6 +33,14 @@ public class Style {
         this.selector = selector;
     }
 
+    public Style(Enum<?> selector) {
+        this.selector = "." + selector.name();
+    }
+
+    public Style(Enum<?> selector, String ext) {
+        this.selector = "." + selector.name() + ext;
+    }
+
     public String getSelector() {
         return selector;
     }

@@ -93,39 +93,39 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initSectionStyles() {
-        Style style = new Style("." + CSSClass.pyx4j_Section_Border.name());
+        Style style = new Style(CSSClass.pyx4j_Section_Border);
         style.addProperty("background-color", ThemeColor.BORDER);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Section_SelectionBorder.name());
+        style = new Style(CSSClass.pyx4j_Section_SelectionBorder);
         style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Section_Background.name());
+        style = new Style(CSSClass.pyx4j_Section_Background);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Section_Content.name());
+        style = new Style(CSSClass.pyx4j_Section_Content);
         style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
         addStyle(style);
     }
 
     protected void initToolbarStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_Toolbar.name());
+        Style style = new Style(CSSClass.pyx4j_Toolbar);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
 
     protected void initStatusBarStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_StatusBar.name());
+        Style style = new Style(CSSClass.pyx4j_StatusBar);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
 
     protected void initBarSeparatorStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_BarSeparator.name());
+        Style style = new Style(CSSClass.pyx4j_BarSeparator);
         style.addProperty("border-left-width", "2px");
         style.addProperty("border-left-style", "ridge");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE1);
@@ -209,11 +209,11 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initDialogPanelStyles() {
-        Style style = new Style("." + CSSClass.pyx4j_Dialog.name());
+        Style style = new Style(CSSClass.pyx4j_Dialog);
         style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Dialog_Caption.name());
+        style = new Style(CSSClass.pyx4j_Dialog_Caption);
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
@@ -221,13 +221,13 @@ public class WindowsTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Dialog_Resizer.name());
+        style = new Style(CSSClass.pyx4j_Dialog_Resizer);
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Dialog_Content.name());
+        style = new Style(CSSClass.pyx4j_Dialog_Content);
         style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
         addStyle(style);
     }
@@ -277,7 +277,7 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initComboBoxStyles() {
-        Style style = new Style("." + CSSClass.pyx4j_Picker.name());
+        Style style = new Style(CSSClass.pyx4j_Picker);
         style.addProperty("border", "1px solid transparent");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
@@ -287,15 +287,15 @@ public class WindowsTheme extends Theme {
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPicker().getURL() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Picker.name() + "-hover");
+        style = new Style(CSSClass.pyx4j_Picker, "-hover");
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerHover().getURL() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Picker.name() + "-pushed");
+        style = new Style(CSSClass.pyx4j_Picker, "-pushed");
         style.addProperty("background", "url('" + ImageFactory.getImages().comboBoxPickerPushed().getURL() + "') no-repeat 100%");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_PickerPanel.name());
+        style = new Style(CSSClass.pyx4j_PickerPanel);
         style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
@@ -303,25 +303,25 @@ public class WindowsTheme extends Theme {
         addStyle(style);
 
         addStyle(style);
-        style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " td");
+        style = new Style(CSSClass.pyx4j_PickerPanel, " td");
         style.addProperty("padding", "0px");
 
-        style = new Style("." + CSSClass.pyx4j_PickerPanel.name() + " table");
+        style = new Style(CSSClass.pyx4j_PickerPanel, " table");
         style.addProperty("border-collapse", "collapse");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_PickerLine.name() + " .gwt-TreeItem-selected");
+        style = new Style(CSSClass.pyx4j_PickerLine, " .gwt-TreeItem-selected");
         style.addProperty("background", "transparent");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_PickerLine_Selected.name());
+        style = new Style(CSSClass.pyx4j_PickerLine_Selected);
         style.addProperty("background", "lightGray");
         addStyle(style);
 
     }
 
     protected void initButtonStyles() {
-        Style style = new Style("." + CSSClass.pyx4j_ButtonContent.name());
+        Style style = new Style(CSSClass.pyx4j_ButtonContent);
         style.addProperty("padding", "3px");
         style.addProperty("margin", "1px");
         style.addProperty("border", "2px solid transparent");
@@ -330,19 +330,19 @@ public class WindowsTheme extends Theme {
         style.addProperty("outline", "none");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_ButtonContent.name() + "-hover");
+        style = new Style(CSSClass.pyx4j_ButtonContent, "-hover");
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "outset");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_ButtonContent.name() + "-pushed");
+        style = new Style(CSSClass.pyx4j_ButtonContent, "-pushed");
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "ridge");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_ButtonContent.name() + "-checked");
+        style = new Style(CSSClass.pyx4j_ButtonContent, "-checked");
         style.addProperty("background", ThemeColor.OBJECT_TONE2);
         style.addProperty("border-width", "2px");
         style.addProperty("border-style", "inset");
@@ -363,7 +363,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("border", "1px outset #ccc");
         addStyle(style);
 
-        style = new Style("." + CSSClass.gwtButtonDefault.name());
+        style = new Style(CSSClass.gwtButtonDefault);
         style.addProperty("border", "1px outset #3090C7");
         addStyle(style);
 
@@ -393,13 +393,13 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initTooltipStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_Tooltip.name());
+        Style style = new Style(CSSClass.pyx4j_Tooltip);
         style.addProperty("border", "1px solid #000000");
         style.addProperty("background-color", "#FCFFDB");
         style.addProperty("padding", "1px 3px 1px 3px");
         style.addProperty("color", "#000000");
         addStyle(style);
-        style = new Style("." + CSSClass.pyx4j_Tooltip_Shadow.name());
+        style = new Style(CSSClass.pyx4j_Tooltip_Shadow);
         style.addProperty("background-color", "gray");
         style.addProperty("opacity", "0.2");
         style.addProperty("filter", "alpha(opacity=20)");
@@ -415,29 +415,30 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "hand");
         style.addProperty("cursor", "pointer");
         addStyle(style);
+
         style = new Style(".gwt-TreeItem-selected");
         style.addProperty("background", ThemeColor.SELECTION);
         addStyle(style);
     }
 
     protected void initGlassPanelStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_GlassPanel_SemiTransparent.name());
+        Style style = new Style(CSSClass.pyx4j_GlassPanel_SemiTransparent);
         style.addProperty("background-color", "#000");
         style.addProperty("opacity", "0.2");
         style.addProperty("filter", "alpha(opacity=20)");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_GlassPanel_Transparent.name());
+        style = new Style(CSSClass.pyx4j_GlassPanel_Transparent);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_GlassPanel_SemiTransparent_Label.name());
+        style = new Style(CSSClass.pyx4j_GlassPanel_SemiTransparent_Label);
         style.addProperty("background-color", "#FFFBD3");
         style.addProperty("opacity", "0.8");
         style.addProperty("filter", "alpha(opacity=80)");
         style.addProperty("padding", "3px");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_GlassPanel_Transparent_Label.name());
+        style = new Style(CSSClass.pyx4j_GlassPanel_Transparent_Label);
         style.addProperty("background-color", "#FFFBD3");
         style.addProperty("opacity", "0.8");
         style.addProperty("filter", "alpha(opacity=80)");
@@ -447,31 +448,31 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initCheckBoxStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_CheckBox.name());
+        Style style = new Style(CSSClass.pyx4j_CheckBox);
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
     }
 
     protected void initTextBoxStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_TextBox.name());
+        Style style = new Style(CSSClass.pyx4j_TextBox);
         style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_TextBox.name() + " td");
+        style = new Style(CSSClass.pyx4j_TextBox, " td");
         style.addProperty("padding", "0px");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_TextBox.name() + "-watermark");
+        style = new Style(CSSClass.pyx4j_TextBox, "-watermark");
         style.addProperty("color", "gray");
         addStyle(style);
 
     }
 
     protected void initListBoxStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_ListBox.name());
+        Style style = new Style(CSSClass.pyx4j_ListBox);
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
     }
@@ -573,23 +574,23 @@ public class WindowsTheme extends Theme {
 
     protected void initGroupBoxStyle() {
 
-        Style style = new Style("." + CSSClass.pyx4j_GroupBox.name());
+        Style style = new Style(CSSClass.pyx4j_GroupBox);
         style.addProperty("padding", "5px");
         style.addProperty("margin", "3px");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_GroupBox.name() + "-expanded");
+        style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.GROUP_BORDER);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_GroupBox.name() + "-collapsed");
+        style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
         style.addProperty("border-color", ThemeColor.GROUP_BORDER);
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_GroupBox_Caption.name());
+        style = new Style(CSSClass.pyx4j_GroupBox_Caption);
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
         style.addProperty("color", ThemeColor.GROUP_BORDER);
@@ -597,7 +598,7 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initPhotoalbomStyle() {
-        Style style = new Style("." + CSSClass.pyx4j_Photoalbom_Thumbnail.name());
+        Style style = new Style(CSSClass.pyx4j_Photoalbom_Thumbnail);
         style.addProperty("background-color", "#F6F9FF");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
@@ -606,7 +607,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("-moz-box-shadow", "4px 4px 2px #aaa");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowPopup.name());
+        style = new Style(CSSClass.pyx4j_SlideshowPopup);
         style.addProperty("background-color", "#F6F9FF");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
@@ -615,7 +616,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("-moz-box-shadow", "10px 10px 5px #aaa");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_Photoalbom_Caption.name());
+        style = new Style(CSSClass.pyx4j_Photoalbom_Caption);
         style.addProperty("color", "#333");
         style.addProperty("font-weight", "bold");
         addStyle(style);
@@ -624,7 +625,7 @@ public class WindowsTheme extends Theme {
 
     protected void initSlideshowActionStyle() {
 
-        Style style = new Style("." + CSSClass.pyx4j_SlideshowAction.name());
+        Style style = new Style(CSSClass.pyx4j_SlideshowAction);
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowItem().getURL() + "') no-repeat");
         style.addProperty("width", "17px");
         style.addProperty("height", "16px");
@@ -632,27 +633,27 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "hand");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name() + "-disabled");
+        style = new Style(CSSClass.pyx4j_SlideshowAction, "-disabled");
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name() + "-left");
+        style = new Style(CSSClass.pyx4j_SlideshowAction, "-left");
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowLeft().getURL() + "') no-repeat");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name() + "-right");
+        style = new Style(CSSClass.pyx4j_SlideshowAction, "-right");
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowRight().getURL() + "') no-repeat");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name() + "-selected");
+        style = new Style(CSSClass.pyx4j_SlideshowAction, "-selected");
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowSelectedItem().getURL() + "') no-repeat");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name() + "-playing");
+        style = new Style(CSSClass.pyx4j_SlideshowAction, "-playing");
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPause().getURL() + "') no-repeat");
         addStyle(style);
 
-        style = new Style("." + CSSClass.pyx4j_SlideshowAction.name() + "-paused");
+        style = new Style(CSSClass.pyx4j_SlideshowAction, "-paused");
         style.addProperty("background", "url('" + ImageFactory.getImages().slideshowPlay().getURL() + "') no-repeat");
         addStyle(style);
 
