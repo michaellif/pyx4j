@@ -171,6 +171,9 @@ public class NavigationUri {
     }
 
     public void addArg(String name, String value) {
+        if (args == null) {
+            args = new HashMap<String, String>();
+        }
         this.args.put(name, value);
         path = null;
     }
