@@ -64,7 +64,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
 
             @Override
             public void onClick(ClickEvent event) {
-                listWidget.show(0);
+                listWidget.submitSearchCriteria();
             }
 
         });

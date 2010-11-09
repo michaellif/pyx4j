@@ -160,6 +160,10 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         return editorPage;
     }
 
+    protected void submitSearchCriteria() {
+        show(0);
+    }
+
     protected void show(int pageNumber) {
         NavigationUri uri = new NavigationUri(serachPage);
         uri.setArgs(searchCriteriaPanel.getHistory());
