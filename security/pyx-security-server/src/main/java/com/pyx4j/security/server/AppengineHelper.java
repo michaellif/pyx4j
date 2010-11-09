@@ -20,23 +20,19 @@
  */
 package com.pyx4j.security.server;
 
-import com.google.appengine.api.memcache.MemcacheService;
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.memcache.StrictErrorHandler;
+import com.google.appengine.api.capabilities.CapabilitiesServiceFactory;
+import com.google.appengine.api.capabilities.Capability;
+import com.google.appengine.api.capabilities.CapabilityState;
+import com.google.appengine.api.capabilities.CapabilityStatus;
 
 public class AppengineHelper {
 
     /**
      * Detects GAE Maintenance
      */
-    public static boolean isMemcacheReadOnly() {
-        MemcacheService ms = MemcacheServiceFactory.getMemcacheService();
-        ms.setErrorHandler(new StrictErrorHandler());
-        try {
-            ms.put("test", System.currentTimeMillis());
-        } catch (com.google.appengine.api.memcache.MemcacheServiceException e) {
-            return true;
-        }
-        return false;
+    public static boolean isDBReadOnly() {
+        CapabilitiesServiceFactory.getCapabilitiesService();
+        CapabilityState state = CapabilitiesServiceFactory.getCapabilitiesService().getStatus(Capability.DATASTORE);
+        return (state.getStatus() != CapabilityStatus.ENABLED);
     }
 }

@@ -94,7 +94,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         @Override
         public Boolean execute(VoidSerializable request) {
-            return ServerSideConfiguration.instance().datastoreReadOnly() || AppengineHelper.isMemcacheReadOnly();
+            return ServerSideConfiguration.instance().datastoreReadOnly() || AppengineHelper.isDBReadOnly();
         }
 
     }
