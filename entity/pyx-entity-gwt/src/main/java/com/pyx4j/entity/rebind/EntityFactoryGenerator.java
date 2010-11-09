@@ -47,6 +47,7 @@ import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -134,7 +135,7 @@ public class EntityFactoryGenerator extends Generator {
             List<JClassType> cases = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
-                if (type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type) {
+                if (isInstantiabeEntity(type)) {
                     cases.add(type);
                     logger.log(TreeLogger.Type.DEBUG, "Creating IEntity:" + type.getName());
 
@@ -160,6 +161,13 @@ public class EntityFactoryGenerator extends Generator {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected boolean isInstantiabeEntity(JClassType type) {
+        if (!(type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type)) {
+            return false;
+        }
+        return (type.getAnnotation(AbstractEntity.class) == null);
     }
 
     private void writeEntityFactoryImplImpl(SourceWriter writer, String simpleName, List<JClassType> interfaceClasses) {
