@@ -8,42 +8,63 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
+
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
 public class MessageDialog {
 
-    public static Dialog error(String title, String text) {
-        return show(title, text, Type.Error);
+    public static void error(String title, String text) {
+        show(title, text, Type.Error);
     }
 
-    public static Dialog error(String title, Throwable caught) {
+    public static void error(String title, Throwable caught) {
         String text = caught.getMessage();
         if (text == null) {
             text = caught.getClass().getName();
         }
-        return show(title, text, Type.Error);
+        show(title, text, Type.Error);
     }
 
-    public static Dialog warn(String title, String text) {
-        return show(title, text, Type.Warning);
+    public static void warn(String title, String text) {
+        show(title, text, Type.Warning);
     }
 
-    public static Dialog info(String title, String text) {
-        return show(title, text, Type.Info);
+    public static void info(String title, String text) {
+        show(title, text, Type.Info);
     }
 
-    private static Dialog show(String title, String text, Type type) {
-        Dialog d = new Dialog(title, text, type, new OkOption() {
+    public static void show(String title, String text, Type type) {
+        show(title, text, type, new OkOption() {
+            @Override
             public boolean onClickOk() {
                 return true;
             }
         });
-        d.show();
-        return d;
+    }
+
+    /*
+     * Move all the Dialog and PopupPanel JS code to "Left over code"
+     */
+    public static void show(final String title, final String text, final Type type, final DialogOptions options) {
+        GWT.runAsync(new RunAsyncCallback() {
+
+            @Override
+            public void onFailure(Throwable reason) {
+                throw new UnrecoverableClientError(reason);
+            }
+
+            @Override
+            public void onSuccess() {
+                new Dialog(title, text, type, options).show();
+            }
+        });
     }
 
     public static void confirm(String title, String text, final Runnable onConfirmed) {
-        Dialog d = new Dialog(title, text, Dialog.Type.Confirm, new YesNoOption() {
+        show(title, text, Dialog.Type.Confirm, new YesNoOption() {
             @Override
             public boolean onClickYes() {
                 onConfirmed.run();
@@ -55,7 +76,6 @@ public class MessageDialog {
                 return true;
             }
         });
-        d.show();
     }
 
 }

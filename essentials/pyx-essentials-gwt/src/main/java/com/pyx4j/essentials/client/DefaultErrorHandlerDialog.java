@@ -25,6 +25,8 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
@@ -38,7 +40,7 @@ public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
     @Override
     protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
         if (caught instanceof UserRuntimeException) {
-            new SingleInstanceErrorDialog(i18n.tr("Error"), caught.getMessage()).show();
+            MessageDialog.show(i18n.tr("Error"), caught.getMessage(), Type.Error, new ShowOnceDialogOptions());
         } else {
             super.showDefaultErrorDialog(caught, errorCode);
         }

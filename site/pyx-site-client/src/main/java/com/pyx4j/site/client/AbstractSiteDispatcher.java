@@ -31,6 +31,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -41,7 +42,6 @@ import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.dom.client.Element;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -121,10 +121,9 @@ public abstract class AbstractSiteDispatcher {
                             }
                         };
 
-                        Dialog d = new Dialog(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n\n" + "{0}\n\n"
+                        MessageDialog.show(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n\n" + "{0}\n\n"
                                 + "Press OK to continue, or Cancel to stay on the current page.", ple.getMessage()), Dialog.Type.Confirm, options);
 
-                        d.show();
                         return;
                     }
                 }
@@ -298,7 +297,7 @@ public abstract class AbstractSiteDispatcher {
     }
 
     protected void showGoogleAccountsLoginRedirect(String title) {
-        Dialog d = new Dialog(title, i18n.tr("Redirect to Google login page?"), Dialog.Type.Confirm, new YesNoOption() {
+        MessageDialog.show(title, i18n.tr("Redirect to Google login page?"), Dialog.Type.Confirm, new YesNoOption() {
             @Override
             public boolean onClickYes() {
                 ClientContext.googleAccountsLogin();
@@ -311,7 +310,6 @@ public abstract class AbstractSiteDispatcher {
                 return true;
             }
         });
-        d.show();
     }
 
     protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);
@@ -366,10 +364,8 @@ public abstract class AbstractSiteDispatcher {
                 }
             };
 
-            Dialog d = new Dialog(i18n.tr("Confirm"), i18n.tr("Are you sure you want to logout?\n\n" + "{0}\n\n"
+            MessageDialog.show(i18n.tr("Confirm"), i18n.tr("Are you sure you want to logout?\n\n" + "{0}\n\n"
                     + "Press OK to continue, or Cancel to stay on the current page.", ple.getMessage()), Dialog.Type.Confirm, options);
-
-            d.show();
             return;
         } else {
             callbackOkToLogout.run();

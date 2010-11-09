@@ -25,10 +25,13 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -50,23 +53,23 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         UncaughtHandler.setUnrecoverableErrorHandler(new UnrecoverableErrorHandlerDialog());
     }
 
-    protected static class SingleInstanceErrorDialog extends Dialog {
+    protected static class ShowOnceDialogOptions implements OkOption, CloseHandler<PopupPanel> {
 
-        public SingleInstanceErrorDialog(String caption, String message) {
-            super(caption, message, Type.Error, new OkOption() {
-                @Override
-                public boolean onClickOk() {
-                    return true;
-                }
-            });
+        public ShowOnceDialogOptions() {
+            unrecoverableErrorDialogShown = true;
         }
 
         @Override
-        public void hide() {
-            unrecoverableErrorDialogShown = false;
-            super.hide();
+        public boolean onClickOk() {
+            return true;
         }
-    }
+
+        @Override
+        public void onClose(CloseEvent<PopupPanel> event) {
+            unrecoverableErrorDialogShown = false;
+        }
+
+    };
 
     /**
      * Session aware applications can override this function.
@@ -86,26 +89,29 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                Throwable cause = caught;
-                while ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause)) {
-                    cause = cause.getCause();
-                }
-
-                if (cause instanceof IncompatibleRemoteServiceException) {
-                    showReloadApplicationDialog();
-                } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
-                    showReloadApplicationDialog();
-                } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PRECONDITION_FAILED) {
-                    showThrottleDialog();
-                } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
-                    // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
-                    showReloadApplicationDialog();
-                } else {
-                    showDefaultErrorDialog(cause, errorCode);
-                }
+                selectErrorDialog(caught, errorCode);
             }
         });
 
+    }
+
+    protected void selectErrorDialog(final Throwable caught, final String errorCode) {
+        Throwable cause = caught;
+        while ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause)) {
+            cause = cause.getCause();
+        }
+        if (cause instanceof IncompatibleRemoteServiceException) {
+            showReloadApplicationDialog();
+        } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
+            showReloadApplicationDialog();
+        } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PRECONDITION_FAILED) {
+            showThrottleDialog();
+        } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
+            // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
+            showReloadApplicationDialog();
+        } else {
+            showDefaultErrorDialog(cause, errorCode);
+        }
     }
 
     protected void showReloadApplicationDialog() {
@@ -124,14 +130,13 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         };
         String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
                 + "\n Do you want to refresh the page now?");
-        Dialog d = new Dialog(i18n.tr("System error"), message, Type.Error, optYesNo);
-        d.show();
+        MessageDialog.show(i18n.tr("System error"), message, Type.Error, optYesNo);
     }
 
     protected void showThrottleDialog() {
-        new SingleInstanceErrorDialog(i18n.tr("We're sorry"),
-                i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                        + "To protect our users, we can't process your request at this time.")).show();
+        MessageDialog.show(i18n.tr("We're sorry"), i18n
+                .tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
+                        + "To protect our users, we can't process your request at this time."), Type.Error, new ShowOnceDialogOptions());
     }
 
     protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
@@ -153,7 +158,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         boolean sessionClosed = closeSessionOnUnrecoverableError();
 
-        new SingleInstanceErrorDialog(i18n.tr("An Unexpected Error Has Occurred"),
+        MessageDialog.show(i18n.tr("An Unexpected Error Has Occurred"),
 
         i18n.tr("Please report the incident to technical support,\n"
 
@@ -161,6 +166,6 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
 
-        + detailsMessage).show();
+        + detailsMessage, Type.Error, new ShowOnceDialogOptions());
     }
 }

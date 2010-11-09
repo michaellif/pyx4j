@@ -34,6 +34,8 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
 
     private static Logger log = LoggerFactory.getLogger(UncaughtHandler.class);
 
+    public static String UNEXPECTED_ERROR_MESSAGE = "An Unexpected Error Has Occurred";
+
     private static UncaughtHandler instance;
 
     private static UncaughtExceptionHandler handlerReplacement = null;
@@ -75,9 +77,8 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
             try {
                 if (!(caught instanceof IncompatibleRemoteServiceException)) {
                     try {
-                        log.error(
-                                "An Unexpected Error Has Occurred" + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href "
-                                        + Window.Location.getHref() + ";\n UserAgent " + userAgent(), caught);
+                        log.error(UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href " + Window.Location.getHref()
+                                + ";\n UserAgent " + userAgent(), caught);
                         GoogleAnalytics.track("unrecoverableError");
                     } catch (Throwable ignore) {
                     }
@@ -85,10 +86,10 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
                 if (UncaughtHandler.delegate != null) {
                     UncaughtHandler.delegate.onUnrecoverableError(caught, errorCode);
                 } else {
-                    Window.alert("An Unexpected Error Has Occurred." + (ApplicationMode.isDevelopment() ? "\n" + caught : ""));
+                    Window.alert(UNEXPECTED_ERROR_MESSAGE + "." + (ApplicationMode.isDevelopment() ? "\n" + caught : ""));
                 }
             } catch (Throwable e) {
-                Window.alert("An Unexpected Error Has Occurred!" + (ApplicationMode.isDevelopment() ? "\n" + caught : ""));
+                Window.alert(UNEXPECTED_ERROR_MESSAGE + "!" + (ApplicationMode.isDevelopment() ? "\n" + caught : ""));
                 log.error("Internal error [UH]", e);
             }
         }

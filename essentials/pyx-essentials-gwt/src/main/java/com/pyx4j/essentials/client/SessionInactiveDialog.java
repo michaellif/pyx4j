@@ -28,7 +28,9 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 public class SessionInactiveDialog {
 
@@ -36,13 +38,29 @@ public class SessionInactiveDialog {
 
     private static boolean shown;
 
-    public static void showSessionInactive(boolean timeout) {
+    private static class ShowOnceDialogOptions implements OkOption, CloseHandler<PopupPanel> {
+
+        @Override
+        public boolean onClickOk() {
+            return true;
+        }
+
+        @Override
+        public void onClose(CloseEvent<PopupPanel> event) {
+            shown = false;
+        }
+
+    };
+
+    public static void showSessionInactive(final boolean timeout) {
         if (shown) {
             return;
         }
         shown = true;
+
         String title = timeout ? i18n.tr("Session inactive") : i18n.tr("Your session has been terminated");
         String reasonMessage;
+
         if (timeout) {
             reasonMessage = i18n.tr("You have been logged out due to inactivity.");
         } else {
@@ -55,15 +73,10 @@ public class SessionInactiveDialog {
             reasonMessage += "\n" + i18n.tr("Open another browser instance to keep multiple active sessions.");
         } else {
             reasonMessage += "\n"
-                    + i18n.tr("Session duration {0}, inactive for {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()), TimeUtils
-                            .minutesSince(SessionMonitor.getSessionInactiveTime()));
+                    + i18n.tr("Session duration {0}, inactive for {1}", TimeUtils.minutesSince(SessionMonitor.getSessionStartTime()),
+                            TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime()));
         }
 
-        MessageDialog.info(title, reasonMessage).addCloseHandler(new CloseHandler<PopupPanel>() {
-            @Override
-            public void onClose(CloseEvent<PopupPanel> event) {
-                shown = false;
-            }
-        });
+        MessageDialog.show(title, reasonMessage, Dialog.Type.Info, new ShowOnceDialogOptions());
     }
 }
