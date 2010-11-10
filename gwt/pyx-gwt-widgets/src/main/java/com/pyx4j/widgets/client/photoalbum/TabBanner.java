@@ -193,6 +193,10 @@ public class TabBanner extends AbsolutePanel {
 
     }
 
+    public Iterable<BannerItem> items() {
+        return items;
+    }
+
     class ControlPanel extends HorizontalPanel {
 
         private final ArrayList<Button> itemActionList = new ArrayList<Button>();
