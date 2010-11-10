@@ -23,6 +23,8 @@ package com.pyx4j.site.shared.meta;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.resources.client.ExternalTextResource;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Page;
@@ -103,6 +105,11 @@ public class SiteFactory {
         return createSingleWidgetPage(null, caption, node, discriminator, inlineWidget, helpHtml, leftPortlets, rightPortlets);
     }
 
+    public static Page createSingleWidgetPage(String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
+            ExternalTextResource helpHtmlResource, Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        return createSingleWidgetPage(null, caption, node, discriminator, inlineWidget, helpHtmlResource, leftPortlets, rightPortlets);
+    }
+
     public static Page createSingleWidgetPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
             String helpHtml, Portlet[] leftPortlets, Portlet[] rightPortlets) {
         Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), helpHtml, leftPortlets, rightPortlets,
@@ -110,6 +117,17 @@ public class SiteFactory {
         if (tabName != null) {
             page.tabName().setValue(tabName);
         }
+        return page;
+    }
+
+    public static Page createSingleWidgetPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, Enum<?> inlineWidget,
+            ExternalTextResource helpHtmlResource, Portlet[] leftPortlets, Portlet[] rightPortlets) {
+        Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), null, leftPortlets, rightPortlets,
+                new String[] { inlineWidget.name() });
+        if (tabName != null) {
+            page.tabName().setValue(tabName);
+        }
+        page.data().helpResource().setValue(helpHtmlResource);
         return page;
     }
 

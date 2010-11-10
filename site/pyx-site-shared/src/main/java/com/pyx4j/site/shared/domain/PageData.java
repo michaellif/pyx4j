@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import com.google.gwt.resources.client.ExternalTextResource;
+
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,6 +36,8 @@ public interface PageData extends IEntity {
 
     @StringLength(8192)
     IPrimitive<String> help();
+
+    IPrimitive<ExternalTextResource> helpResource();
 
     @Owned
     IPrimitiveSet<String> inlineWidgetIds();
