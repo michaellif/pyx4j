@@ -80,7 +80,7 @@ public class DynamicHTML extends HTMLPanel {
                     String imageId = el.getSrc().substring("data:".length());
                     ImageResource imageResource = (ImageResource) bundle.getResource(imageId);
                     if (imageResource != null) {
-                        log.debug("replace img {} with {}", imageId, imageResource.getURL());
+                        log.trace("replace img {} with {}", imageId, imageResource.getURL());
                         Image image = new Image(imageResource);
                         ImageElement newImageElement = (ImageElement) Element.as(image.getElement());
                         newImageElement.setHeight(el.getHeight());
