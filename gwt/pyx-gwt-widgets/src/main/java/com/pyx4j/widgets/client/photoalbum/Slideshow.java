@@ -84,6 +84,10 @@ public class Slideshow extends AbsolutePanel {
         widget.setVisible(false);
     }
 
+    public Iterable<Widget> items() {
+        return items;
+    }
+
     public void start() {
         if (slideChangeTimer != null) {
             stop();

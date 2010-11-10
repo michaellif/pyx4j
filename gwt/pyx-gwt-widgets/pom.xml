@@ -69,6 +69,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 
     <properties>
