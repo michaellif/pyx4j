@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.style.StyleManger;
 public class StyleMangerTest extends TestCase {
 
     public void testAlternativeHostnames() {
-        StyleManger.setAlternativeHostnameSufix("www.pyx4j.com", "-a", "-b");
+        StyleManger.setAlternativeHostnameSufix("www44.pyx4j.com", "www", "-a", "-b");
         assertEquals("http://www-a.pyx4j.com/", StyleManger.getAlternativeHostname());
         assertEquals("http://www-b.pyx4j.com/", StyleManger.getAlternativeHostname());
         assertEquals("http://www-a.pyx4j.com/", StyleManger.getAlternativeHostname());

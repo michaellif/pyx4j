@@ -57,11 +57,9 @@ public class StyleManger {
         alternativeHostnameIdx = 0;
     }
 
-    public static void setAlternativeHostnameSufix(String host, String... sufix) {
+    public static void setAlternativeHostnameSufix(String host, String hostName, String... sufix) {
         alternativeHostnames = new String[sufix.length];
-        int dom = host.lastIndexOf('.', host.lastIndexOf('.') - 1);
-        String hostName = host.substring(0, dom);
-        String domainName = host.substring(dom);
+        String domainName = host.substring(host.lastIndexOf('.', host.lastIndexOf('.') - 1));
         for (int i = 0; i < sufix.length; i++) {
             alternativeHostnames[i] = hostName + sufix[i] + domainName;
         }
