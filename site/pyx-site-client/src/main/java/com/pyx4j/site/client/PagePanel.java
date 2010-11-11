@@ -28,8 +28,10 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
@@ -57,7 +59,7 @@ public class PagePanel extends ContentPanel {
 
     public void createInlineWidgets() {
         if (!page.data().inlineWidgetIds().isNull() && page.data().inlineWidgetIds().getValue().size() > 0) {
-            for (String widgetId : page.data().inlineWidgetIds().getValue()) {
+            for (final String widgetId : page.data().inlineWidgetIds().getValue()) {
                 //check in local (page) factory
                 InlineWidget inlineWidget = null;
                 //check in local (page) factory
@@ -69,35 +71,56 @@ public class PagePanel extends ContentPanel {
                     inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
                 }
 
-                if (inlineWidget == null) {
+                if (inlineWidget != null) {
+                    injectInlineWidget(widgetId, inlineWidget);
+                } else {
+                    AsyncInlineWidgetFactory async = getSitePanel().getAsyncInlineWidgetFactory();
+                    if (async != null) {
+                        async.obtainWidget(widgetId, new AsyncCallback<InlineWidget>() {
+
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                throw new UnrecoverableClientError(caught);
+                            }
+
+                            @Override
+                            public void onSuccess(InlineWidget result) {
+                                if (result == null) {
+                                    log.warn("Failed create inline widget {} in panel {}.", widgetId, page.caption().getValue());
+                                } else {
+                                    injectInlineWidget(widgetId, result);
+                                }
+                            }
+                        });
+                    }
                     log.warn("Failed create inline widget {} in panel {}.", widgetId, page.caption().getValue());
                     continue;
                 }
-
-                NodeList<Element> htmlElements = container.getElement().getElementsByTagName("div");
-                boolean replaced = false;
-                if (htmlElements != null) {
-                    for (int i = 0; i < htmlElements.getLength(); i++) {
-                        if (widgetId.endsWith(htmlElements.getItem(i).getId())) {
-
-                            DivElement el = DivElement.as(htmlElements.getItem(i));
-                            InlineWidgetRootPanel root = new InlineWidgetRootPanel(el, true);
-                            root.add((Widget) inlineWidget);
-                            addInlineWidget(inlineWidget);
-                            if (inlineWidget instanceof PageLeavingHandler) {
-                                container.addPageLeavingHandler((PageLeavingHandler) inlineWidget);
-                            }
-                            container.addInlineWidget(root);
-                            replaced = true;
-                            break;
-                        }
-                    }
-                }
-                if (!replaced) {
-                    log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption().getValue());
-                }
-
             }
+        }
+    }
+
+    protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
+        NodeList<Element> htmlElements = container.getElement().getElementsByTagName("div");
+        boolean replaced = false;
+        if (htmlElements != null) {
+            for (int i = 0; i < htmlElements.getLength(); i++) {
+                if (widgetId.endsWith(htmlElements.getItem(i).getId())) {
+                    DivElement el = DivElement.as(htmlElements.getItem(i));
+                    InlineWidgetRootPanel root = new InlineWidgetRootPanel(el, true);
+                    root.add((Widget) inlineWidget);
+                    addInlineWidget(inlineWidget);
+                    if (inlineWidget instanceof PageLeavingHandler) {
+                        container.addPageLeavingHandler((PageLeavingHandler) inlineWidget);
+                    }
+                    container.addInlineWidget(root);
+                    replaced = true;
+                    break;
+                }
+            }
+        }
+        if (!replaced) {
+            log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption().getValue());
         }
     }
 

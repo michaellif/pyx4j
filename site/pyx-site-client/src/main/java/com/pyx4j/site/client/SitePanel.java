@@ -222,6 +222,10 @@ public abstract class SitePanel extends SimplePanel {
 
     public abstract InlineWidgetFactory getLocalWidgetFactory();
 
+    public AsyncInlineWidgetFactory getAsyncInlineWidgetFactory() {
+        return null;
+    }
+
     protected Panel createContentPanel() {
         FlowPanel contentPanel = new FlowPanel();
 
