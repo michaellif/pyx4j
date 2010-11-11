@@ -31,7 +31,6 @@ import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
@@ -57,49 +56,11 @@ public class PagePanel extends ContentPanel {
         return page;
     }
 
-    public void createInlineWidgets() {
-        if (!page.data().inlineWidgetIds().isNull() && page.data().inlineWidgetIds().getValue().size() > 0) {
-            for (final String widgetId : page.data().inlineWidgetIds().getValue()) {
-                //check in local (page) factory
-                InlineWidget inlineWidget = null;
-                //check in local (page) factory
-                if (getSitePanel().getLocalWidgetFactory() != null) {
-                    inlineWidget = getSitePanel().getLocalWidgetFactory().createWidget(widgetId);
-                }
-                //check in global factory
-                if (inlineWidget == null) {
-                    inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
-                }
-
-                if (inlineWidget != null) {
-                    injectInlineWidget(widgetId, inlineWidget);
-                } else {
-                    AsyncInlineWidgetFactory async = getSitePanel().getAsyncInlineWidgetFactory();
-                    if (async != null) {
-                        async.obtainWidget(widgetId, new AsyncCallback<InlineWidget>() {
-
-                            @Override
-                            public void onFailure(Throwable caught) {
-                                throw new UnrecoverableClientError(caught);
-                            }
-
-                            @Override
-                            public void onSuccess(InlineWidget result) {
-                                if (result == null) {
-                                    log.warn("Failed create inline widget {} in panel {}.", widgetId, page.caption().getValue());
-                                } else {
-                                    injectInlineWidget(widgetId, result);
-                                }
-                            }
-                        });
-                    }
-                    log.warn("Failed create inline widget {} in panel {}.", widgetId, page.caption().getValue());
-                    continue;
-                }
-            }
-        }
+    public void createInlineWidgets(AsyncCallback<Void> widgetsAvalable) {
+        createInlineWidgets(page.data().inlineWidgetIds(), widgetsAvalable);
     }
 
+    @Override
     protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
         NodeList<Element> htmlElements = container.getElement().getElementsByTagName("div");
         boolean replaced = false;

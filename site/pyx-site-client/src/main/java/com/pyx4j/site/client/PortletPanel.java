@@ -15,6 +15,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -77,27 +78,15 @@ public class PortletPanel extends ContentPanel {
         setWidget(container);
     }
 
-    public void createInlineWidgets() {
-        if (!portlet.inlineWidgetIds().isNull() && portlet.inlineWidgetIds().getValue().size() > 0) {
-            for (String widgetId : portlet.inlineWidgetIds().getValue()) {
-                InlineWidget inlineWidget = null;
-                InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
-                //check in local (page) factory
-                if (getSitePanel().getLocalWidgetFactory() != null) {
-                    inlineWidget = getSitePanel().getLocalWidgetFactory().createWidget(widgetId);
-                }
-                //check in global factory
-                if (inlineWidget == null) {
-                    inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
-                }
-                if (root != null && inlineWidget != null) {
-                    root.add((Widget) inlineWidget);
-                    addInlineWidget(inlineWidget);
-                } else {
-                    log.warn("Failed to add inline widget " + widgetId + " to portlet.");
-                }
-            }
-        }
+    public void createInlineWidgets(AsyncCallback<Void> widgetsAvalable) {
+        createInlineWidgets(portlet.inlineWidgetIds(), widgetsAvalable);
+    }
+
+    @Override
+    protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
+        InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
+        root.add((Widget) inlineWidget);
+        addInlineWidget(inlineWidget);
     }
 
 }

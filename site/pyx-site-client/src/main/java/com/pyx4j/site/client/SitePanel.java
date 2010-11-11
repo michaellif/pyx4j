@@ -35,6 +35,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -46,7 +47,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.gwt.commons.AsyncCallbackAggregator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.LinkBar.LinkBarType;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
@@ -158,52 +161,78 @@ public abstract class SitePanel extends SimplePanel {
         }
     }
 
-    protected void show(Page page, final Map<String, String> args) {
+    protected void show(final Page page, final Map<String, String> args) {
 
         log.info("Show page " + page.uri().getStringView());
 
         StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
 
-        String key = page.uri().getValue() + "$" + page.discriminator();
+        final String key = page.uri().getValue() + "$" + page.discriminator();
         if (cachedPanels.containsKey(key)) {
             currentPagePanel = cachedPanels.get(key);
             mainSectionPanel.setWidget(currentPagePanel);
+            showAsyncContinue(page, args);
         } else {
-            currentPagePanel = new PagePanel(this, page, bundle);
-            cachedPanels.put(key, currentPagePanel);
-            mainSectionPanel.setWidget(currentPagePanel);
-            currentPagePanel.createInlineWidgets();
+            final PagePanel newPagePanel = new PagePanel(this, page, bundle);
+            newPagePanel.createInlineWidgets(new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    currentPagePanel = newPagePanel;
+                    cachedPanels.put(key, currentPagePanel);
+                    mainSectionPanel.setWidget(currentPagePanel);
+                    showAsyncContinue(page, args);
+                }
+            });
         }
 
+    }
+
+    private void showAsyncContinue(Page page, final Map<String, String> args) {
         Window.setTitle(page.caption().getValue() + " | " + site.siteCaption().getValue());
         Window.scrollTo(0, 0);
 
         setHeaderCaption(page.caption().getValue());
 
-        initPortlets(args, leftSectionPanel, page.data().leftPortlets());
-        initPortlets(args, rightSectionPanel, page.data().rightPortlets());
-
         primaryNavigationBar.setSelected(page.uri().getValue());
 
-        currentPagePanel.populateInlineWidgets(args);
+        final AsyncCallbackAggregator callback = new AsyncCallbackAggregator(new AsyncCallback<Void>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
 
+            @Override
+            public void onSuccess(Void result) {
+                currentPagePanel.populateInlineWidgets(args);
+            }
+        });
+        callback.expect();
+        initPortlets(args, leftSectionPanel, page.data().leftPortlets(), callback);
+        initPortlets(args, rightSectionPanel, page.data().rightPortlets(), callback);
+        callback.onSuccess(null);
     }
 
-    @Override
-    protected void onUnload() {
-        hrgc.removeHandlers();
-    }
-
-    private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, IList<Portlet> portlets) {
+    private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, IList<Portlet> portlets, AsyncCallbackAggregator callback) {
         sectionPanel.clear();
         for (Portlet portlet : portlets) {
             if (isPortletVisible(portlet)) {
                 PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
                 sectionPanel.add(portletPanel);
-                portletPanel.createInlineWidgets();
+                callback.expect();
+                portletPanel.createInlineWidgets(callback);
                 portletPanel.populateInlineWidgets(args);
             }
         }
+    }
+
+    @Override
+    protected void onUnload() {
+        hrgc.removeHandlers();
     }
 
     public PagePanel getCurrentPagePanel() {

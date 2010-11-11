@@ -24,14 +24,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.logical.shared.InitializeEvent;
 import com.google.gwt.event.logical.shared.InitializeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.gwt.commons.AsyncCallbackAggregator;
 import com.pyx4j.security.client.ClientContext;
 
-public class ContentPanel extends SimplePanel {
+public abstract class ContentPanel extends SimplePanel {
+
+    private static final Logger log = LoggerFactory.getLogger(ContentPanel.class);
 
     private final SitePanel sitePanel;
 
@@ -73,4 +80,53 @@ public class ContentPanel extends SimplePanel {
             });
         }
     }
+
+    public void createInlineWidgets(Iterable<String> widgetIds, AsyncCallback<Void> widgetsAvalable) {
+        final AsyncCallbackAggregator callback = new AsyncCallbackAggregator(widgetsAvalable);
+        callback.expect();
+        for (final String widgetId : widgetIds) {
+            //check in local (page) factory
+            InlineWidget inlineWidget = null;
+            //check in local (page) factory
+            if (getSitePanel().getLocalWidgetFactory() != null) {
+                inlineWidget = getSitePanel().getLocalWidgetFactory().createWidget(widgetId);
+            }
+            //check in global factory
+            if (inlineWidget == null) {
+                inlineWidget = SitePanel.getGlobalWidgetFactory().createWidget(widgetId);
+            }
+
+            if (inlineWidget != null) {
+                injectInlineWidget(widgetId, inlineWidget);
+            } else {
+                AsyncInlineWidgetFactory async = getSitePanel().getAsyncInlineWidgetFactory();
+                if (async != null) {
+                    callback.expect();
+                    async.obtainWidget(widgetId, new AsyncCallback<InlineWidget>() {
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            callback.onFailure(caught);
+                        }
+
+                        @Override
+                        public void onSuccess(InlineWidget result) {
+                            if (result == null) {
+                                log.warn("Failed create inline widget {}", widgetId);
+                            } else {
+                                injectInlineWidget(widgetId, result);
+                            }
+                            callback.onSuccess(null);
+                        }
+                    });
+                }
+                log.warn("Failed create inline widget {}", widgetId);
+                continue;
+            }
+        }
+        callback.onSuccess(null);
+    }
+
+    protected abstract void injectInlineWidget(String widgetId, InlineWidget inlineWidget);
+
 }
