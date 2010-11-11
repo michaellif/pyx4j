@@ -179,7 +179,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
             }
 
         };
-        RPCManager.execute(AuthenticationServices.GetReadOnly.class, null, callback);
+        RPCManager.executeBackground(AuthenticationServices.GetReadOnly.class, null, callback);
     }
 
     @Override
