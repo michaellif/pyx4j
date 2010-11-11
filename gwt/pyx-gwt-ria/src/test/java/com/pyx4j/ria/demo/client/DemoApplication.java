@@ -33,7 +33,6 @@ import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
 import com.pyx4j.ria.client.Perspective;
 import com.pyx4j.ria.client.StatusBar;
-import com.pyx4j.ria.client.view.FourFoldersPosition;
 import com.pyx4j.ria.client.view.IView;
 
 public class DemoApplication implements IApplication {

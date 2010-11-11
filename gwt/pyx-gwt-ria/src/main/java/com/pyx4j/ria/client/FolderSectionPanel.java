@@ -31,6 +31,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -53,6 +54,8 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
     private final TabPanelModel tabPanel;
 
     private final HorizontalPanel toolbarHolderPane;
+
+    private final HorizontalPanel footerHolderPane;
 
     public FolderSectionPanel() {
 
@@ -89,8 +92,11 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
 
         toolbarHolderPane = new HorizontalPanel();
         toolbarHolderPane.setWidth("100%");
-
         setHeader2Pane(toolbarHolderPane);
+
+        footerHolderPane = new HorizontalPanel();
+        footerHolderPane.setWidth("100%");
+        setFooterPane(footerHolderPane);
 
         DeckPanel contentDeck = tabPanel.getDeck();
         setContentPane(contentDeck);
@@ -153,6 +159,11 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
                 toolbarHolderPane.add(menuButtonBar);
                 toolbarHolderPane.setCellWidth(menuButtonBar, "1px");
             }
+            Widget footer = view.getFooterPane();
+            if (footer != null) {
+                footerHolderPane.add(footer);
+            }
+
         }
     }
 

@@ -54,9 +54,6 @@ public class SectionPanel extends LayoutPanel {
         header1Mark = new SimplePanel();
         rootPanel.addNorth(header1Mark, 0);
 
-        footerMark = new SimplePanel();
-        rootPanel.addNorth(footerMark, 0);
-
         contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.getElement().getStyle().setBorderColor("#86adc4");
         contentPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
@@ -64,6 +61,9 @@ public class SectionPanel extends LayoutPanel {
 
         header2Mark = new SimplePanel();
         contentPanel.addNorth(header2Mark, 0);
+
+        footerMark = new SimplePanel();
+        contentPanel.addSouth(footerMark, 0);
 
         scrollPanel = new ScrollPanel();
         scrollPanel.getElement().getStyle().setBackgroundColor("white");
@@ -85,7 +85,7 @@ public class SectionPanel extends LayoutPanel {
     }
 
     protected void setFooterPane(Widget footerPane) {
-        rootPanel.insertSouth(footerPane, 1.5, footerMark);
+        contentPanel.insertSouth(footerPane, 1.5, footerMark);
     }
 
     protected void setContentPane(Widget contentPane) {
