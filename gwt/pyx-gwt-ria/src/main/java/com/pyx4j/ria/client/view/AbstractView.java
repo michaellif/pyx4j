@@ -30,22 +30,12 @@ public abstract class AbstractView extends BasicTab implements IView {
 
     private final ViewMemento viewMemento = new ViewMemento();
 
-    private FolderSectionPanel folder;
-
     public AbstractView(Widget contentPane, String title, ImageResource imageResource) {
         super(contentPane, title, imageResource);
     }
 
     public ViewMemento getViewMemento() {
         return viewMemento;
-    }
-
-    public void setFolder(FolderSectionPanel folderSectionPanel) {
-        this.folder = folderSectionPanel;
-    }
-
-    public FolderSectionPanel getFolder() {
-        return folder;
     }
 
 }

@@ -111,7 +111,6 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
 
     public void addView(IView view, boolean closable) {
         views.add(view);
-        view.setFolder(this);
         tabPanel.insert(view, tabPanel.size(), closable);
         if (views.size() == 1) {
             tabPanel.select(0);
