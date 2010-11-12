@@ -37,15 +37,15 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.DeckPanel;
 
+import com.pyx4j.widgets.client.DeckLayoutPanel;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
 public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelectionHandlers<ITab>, HasCloseHandlers<ITab>, HasBeforeCloseHandlers<ITab> {
 
-    private final DeckPanel deck = new DeckPanel();
+    private final DeckLayoutPanel deck = new DeckLayoutPanel();
 
     private final TabBar tabBar = new TabBar(this);
 
@@ -169,7 +169,7 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
         return tabBar;
     }
 
-    public DeckPanel getDeck() {
+    public DeckLayoutPanel getDeck() {
         return deck;
     }
 

@@ -28,14 +28,8 @@ import com.pyx4j.widgets.client.tabpanel.BasicTab;
 
 public abstract class AbstractView extends BasicTab implements IView {
 
-    private final ViewMemento viewMemento = new ViewMemento();
-
     public AbstractView(Widget contentPane, String title, ImageResource imageResource) {
         super(contentPane, title, imageResource);
-    }
-
-    public ViewMemento getViewMemento() {
-        return viewMemento;
     }
 
 }

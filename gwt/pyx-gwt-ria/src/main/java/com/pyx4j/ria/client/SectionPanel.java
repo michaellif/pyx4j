@@ -24,7 +24,6 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,7 +33,7 @@ public class SectionPanel extends LayoutPanel {
 
     private final DockLayoutPanel rootPanel;
 
-    private final ScrollPanel scrollPanel;
+    private final LayoutPanel pagePanelHolder;
 
     private final SimplePanel header1Mark;
 
@@ -65,10 +64,10 @@ public class SectionPanel extends LayoutPanel {
         footerMark = new SimplePanel();
         contentPanel.addSouth(footerMark, 0);
 
-        scrollPanel = new ScrollPanel();
-        scrollPanel.getElement().getStyle().setBackgroundColor("white");
+        pagePanelHolder = new LayoutPanel();
+        pagePanelHolder.getElement().getStyle().setBackgroundColor("white");
 
-        contentPanel.add(scrollPanel);
+        contentPanel.add(pagePanelHolder);
 
         rootPanel.add(contentPanel);
 
@@ -88,29 +87,8 @@ public class SectionPanel extends LayoutPanel {
         contentPanel.insertSouth(footerPane, 1.5, footerMark);
     }
 
-    protected void setContentPane(Widget contentPane) {
-        scrollPanel.setWidget(contentPane);
-    }
-
-    public int getVerticalScrollPosition() {
-        return scrollPanel.getScrollPosition();
-    }
-
-    public void setVerticalScrollPosition(int position) {
-        scrollPanel.setScrollPosition(position);
-    }
-
-    public void scrollToBottom() {
-        scrollPanel.scrollToBottom();
-    }
-
-    public int getHorizontalScrollPosition() {
-        return scrollPanel.getHorizontalScrollPosition();
-
-    }
-
-    public void setHorizontalScrollPosition(int position) {
-        scrollPanel.setHorizontalScrollPosition(position);
+    protected void setPagePane(Widget pagePane) {
+        pagePanelHolder.add(pagePane);
     }
 
 }

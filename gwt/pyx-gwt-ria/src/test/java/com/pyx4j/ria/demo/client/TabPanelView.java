@@ -25,6 +25,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -52,7 +53,7 @@ public class TabPanelView extends AbstractView {
         panel1.add(new Label("First Tab"));
         panel1.add(new Label("First Tab"));
         panel1.add(new Label("First Tab"));
-        tabPanel.insert(new BasicTab(panel1, "First Tab", null), 0, true);
+        tabPanel.insert(new BasicTab(new ScrollPanel(panel1), "First Tab", null), 0, true);
         tabPanel.insert(new BasicTab(new Label("Second Tab"), "Second Tab", null), 1, true);
         tabPanel.insert(new BasicTab(new Label("Third Tab"), "Third Tab", null), 2, true);
 

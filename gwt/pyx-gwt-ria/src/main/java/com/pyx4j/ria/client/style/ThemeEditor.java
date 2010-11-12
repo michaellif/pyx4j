@@ -73,7 +73,7 @@ public class ThemeEditor extends AbstractView {
         super(new SimplePanel(), "Theme Editor", null);
         SimplePanel contentPane = (SimplePanel) getContentPane();
         HorizontalPanel mainPanel = new HorizontalPanel();
-        contentPane.add(mainPanel);
+        contentPane.setWidget(mainPanel);
 
         originalTheme = StyleManger.getTheme();
         theme = originalTheme.duplicate();

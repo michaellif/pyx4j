@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -36,7 +36,7 @@ public class TabPanelComposite extends SimplePanel {
         model.getDeck().setStyleName("gwt-TabPanelBottom");
         VerticalPanel panel = new VerticalPanel();
         TabBar tabBar = model.getTabBar();
-        DeckPanel deck = model.getDeck();
+        LayoutPanel deck = model.getDeck();
         panel.add(tabBar);
 
         DecoratorPanel deckDecorator = new DecoratorPanel(true, true, true, true, 2, CSSClass.pyx4j_Section_SelectionBorder.name());

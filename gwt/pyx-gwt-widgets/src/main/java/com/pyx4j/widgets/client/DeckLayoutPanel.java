@@ -14,23 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 28, 2009
+ * Created on Nov 12, 2010
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.ria.client.view;
+package com.pyx4j.widgets.client;
 
-import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.widgets.client.tabpanel.ITab;
+public class DeckLayoutPanel extends LayoutPanel {
 
-public interface IView extends ITab {
+    public DeckLayoutPanel() {
+        setStyleName("DeckLayoutPanel");
+    }
 
-    Widget getToolbarPane();
+    @Override
+    public void insert(Widget widget, int beforeIndex) {
+        super.insert(widget, beforeIndex);
+        setWidgetVisible(widget, false);
+    }
 
-    Widget getFooterPane();
+    public void showWidget(int index) {
+        for (int i = 0; i < getWidgetCount(); i++) {
+            if (index == i) {
+                setWidgetVisible(getWidget(i), true);
+            } else {
+                setWidgetVisible(getWidget(i), false);
+            }
+        }
 
-    MenuBar getMenu();
+    }
 
 }

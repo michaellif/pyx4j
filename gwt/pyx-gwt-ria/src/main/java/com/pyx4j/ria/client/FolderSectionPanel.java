@@ -31,7 +31,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -40,7 +39,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.IView;
-import com.pyx4j.ria.client.view.ViewMemento;
+import com.pyx4j.widgets.client.DeckLayoutPanel;
 import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
 import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
@@ -98,8 +97,8 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         footerHolderPane.setWidth("100%");
         setFooterPane(footerHolderPane);
 
-        DeckPanel contentDeck = tabPanel.getDeck();
-        setContentPane(contentDeck);
+        DeckLayoutPanel contentDeck = tabPanel.getDeck();
+        setPagePane(contentDeck);
 
         //        menuButton = new Image(ImageFactory.getImages().viewMenu());
         //
@@ -159,39 +158,29 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
                 toolbarHolderPane.add(menuButtonBar);
                 toolbarHolderPane.setCellWidth(menuButtonBar, "1px");
             }
+
+        }
+    }
+
+    private void showFooter(IView view) {
+        if (view != null) {
             Widget footer = view.getFooterPane();
             if (footer != null) {
                 footerHolderPane.add(footer);
             }
-
         }
     }
 
     @Override
     public void onBeforeSelection(BeforeSelectionEvent<ITab> event) {
-        IView currentView = getCurrentView();
-        if (currentView != null) {
-            ViewMemento viewMemento = currentView.getViewMemento();
-            viewMemento.setHorizontalScrollPosition(getHorizontalScrollPosition());
-            viewMemento.setVerticalScrollPosition(getVerticalScrollPosition());
-        }
     }
 
     @Override
     public void onSelection(SelectionEvent<ITab> event) {
         IView view = (IView) event.getSelectedItem();
         showToolbar(view);
+        showFooter(view);
         currentView = view;
-        //onResize();
-        ViewMemento viewMemento = currentView.getViewMemento();
-        setHorizontalScrollPosition(viewMemento.getHorizontalScrollPosition());
-        int verticalScrollPosition = viewMemento.getVerticalScrollPosition();
-        if (verticalScrollPosition == Integer.MAX_VALUE) {
-            scrollToBottom();
-        } else {
-            setVerticalScrollPosition(verticalScrollPosition);
-        }
-
     }
 
     @Override
@@ -199,7 +188,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         views.remove(event.getTarget());
         if (views.size() == 0) {
             showToolbar(null);
-            //onResize();
+            showFooter(null);
         }
     }
 

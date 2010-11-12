@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -78,7 +79,7 @@ public abstract class AbstractProvingView extends AbstractView {
     }
 
     public AbstractProvingView(String title, ImageResource imageResource) {
-        super(new SimplePanel(), title, imageResource);
+        super(new ScrollPanel(), title, imageResource);
         SimplePanel contentPane = (SimplePanel) getContentPane();
         this.mainPanel = new VerticalPanel();
         contentPane.add(this.mainPanel);

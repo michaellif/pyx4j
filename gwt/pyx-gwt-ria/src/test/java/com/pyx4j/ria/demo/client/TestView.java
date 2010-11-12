@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,9 +38,24 @@ public class TestView extends AbstractView {
     private final FlowPanel toolbarPane;
 
     public TestView(String label) {
-        super(new VerticalPanel(), label, ImageFactory.getImages().image());
-        VerticalPanel contentPane = (VerticalPanel) getContentPane();
+        super(new ScrollPanel(), label, ImageFactory.getImages().image());
+        VerticalPanel contentPane = new VerticalPanel();
 
+        ((ScrollPanel) getContentPane()).setWidget(contentPane);
+
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPaneContentPaneContentPaneContentPaneContentPaneContentPaneContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
+        contentPane.add(new Label("ContentPane" + label));
         contentPane.add(new Label("ContentPane" + label));
         contentPane.add(new Label("ContentPane" + label));
         contentPane.add(new Label("ContentPane" + label));
