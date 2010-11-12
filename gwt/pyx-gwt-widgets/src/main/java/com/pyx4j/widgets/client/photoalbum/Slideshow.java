@@ -64,6 +64,8 @@ public class Slideshow extends AbsolutePanel {
 
     private final boolean runOnInit;
 
+    private int slideChangeSpeed = 6000;
+
     public Slideshow(int width, int height) {
         this(width, height, 0, true);
     }
@@ -88,6 +90,10 @@ public class Slideshow extends AbsolutePanel {
         return items;
     }
 
+    public void setSlideChangeSpeed(int slideChangeSpeed) {
+        this.slideChangeSpeed = slideChangeSpeed;
+    }
+
     public void start() {
         if (slideChangeTimer != null) {
             stop();
@@ -99,7 +105,7 @@ public class Slideshow extends AbsolutePanel {
             }
         };
         slideChangeTimer.run();
-        slideChangeTimer.scheduleRepeating(15000);
+        slideChangeTimer.scheduleRepeating(slideChangeSpeed);
         controlPanel.play(true);
     }
 
