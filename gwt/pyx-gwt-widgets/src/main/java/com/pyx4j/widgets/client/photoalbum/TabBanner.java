@@ -98,7 +98,7 @@ public class TabBanner extends AbsolutePanel {
             }
         };
         slideChangeTimer.run();
-        slideChangeTimer.scheduleRepeating(10000);
+        slideChangeTimer.scheduleRepeating(15000);
     }
 
     public void stop() {
