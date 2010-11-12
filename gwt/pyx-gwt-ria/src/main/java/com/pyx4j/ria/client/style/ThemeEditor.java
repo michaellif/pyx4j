@@ -69,9 +69,14 @@ public class ThemeEditor extends AbstractView {
 
     private final TextArea styleEditor;
 
+    private SimplePanel contentPane;
+
     public ThemeEditor() {
-        super(new SimplePanel(), "Theme Editor", null);
-        SimplePanel contentPane = (SimplePanel) getContentPane();
+        super();
+        SimplePanel contentPane = new SimplePanel();
+        setContentPane(contentPane);
+        setTabTitle("Theme Editor");
+
         HorizontalPanel mainPanel = new HorizontalPanel();
         contentPane.setWidget(mainPanel);
 
@@ -293,7 +298,6 @@ public class ThemeEditor extends AbstractView {
         colorPickerDialog.showNear(h);
     }
 
-    @Override
     public Widget getToolbarPane() {
         FlowPanel toolbarPane = new FlowPanel();
 
@@ -314,11 +318,6 @@ public class ThemeEditor extends AbstractView {
         }));
 
         return toolbarPane;
-    }
-
-    @Override
-    public Widget getFooterPane() {
-        return null;
     }
 
     private void updateThemePresentation() {
@@ -350,8 +349,4 @@ public class ThemeEditor extends AbstractView {
         StyleManger.installTheme(theme);
     }
 
-    @Override
-    public MenuBar getMenu() {
-        return null;
-    }
 }

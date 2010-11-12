@@ -52,7 +52,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 
     private final SimplePanel scrollContainer;
 
-    private final TabPanelModel tabPanel;
+    private final TabPanel tabPanel;
 
     private TabBarItem selectedTab;
 
@@ -65,7 +65,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
     /**
      * Creates an empty tab bar.
      */
-    public TabBar(TabPanelModel tabPanel) {
+    public TabBar(TabPanel tabPanel) {
 
         this.tabPanel = tabPanel;
 
@@ -307,7 +307,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         return tabsPanel;
     }
 
-    TabPanelModel getTabPanelModel() {
+    TabPanel getTabPanelModel() {
         return tabPanel;
     }
 

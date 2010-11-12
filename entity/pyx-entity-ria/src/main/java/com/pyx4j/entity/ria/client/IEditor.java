@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.ria.client;
 
-import com.pyx4j.ria.client.view.IView;
-
-public interface IEditor extends IView {
+public interface IEditor {
 
 }

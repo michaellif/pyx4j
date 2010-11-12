@@ -78,9 +78,13 @@ public abstract class AbstractProvingView extends AbstractView {
 
     }
 
-    public AbstractProvingView(String title, ImageResource imageResource) {
-        super(new ScrollPanel(), title, imageResource);
-        SimplePanel contentPane = (SimplePanel) getContentPane();
+    public AbstractProvingView(String tabTitle, ImageResource tabImage) {
+        super();
+        ScrollPanel contentPane = new ScrollPanel();
+        setContentPane(contentPane);
+        setTabTitle(tabTitle);
+        setTabImage(tabImage);
+
         this.mainPanel = new VerticalPanel();
         contentPane.add(this.mainPanel);
         this.mainPanel.getElement().getStyle().setProperty("marginLeft", "10px");
@@ -117,21 +121,6 @@ public abstract class AbstractProvingView extends AbstractView {
 
     public void setDescription(String text) {
         descriptionText.setText(text);
-    }
-
-    @Override
-    public Widget getFooterPane() {
-        return null;
-    }
-
-    @Override
-    public Widget getToolbarPane() {
-        return null;
-    }
-
-    @Override
-    public MenuBar getMenu() {
-        return null;
     }
 
 }

@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.Button;
@@ -37,39 +36,36 @@ public class TestView extends AbstractView {
 
     private final FlowPanel toolbarPane;
 
-    public TestView(String label) {
-        super(new ScrollPanel(), label, ImageFactory.getImages().image());
-        VerticalPanel contentPane = new VerticalPanel();
+    public TestView(String tabTitle) {
+        super();
 
-        ((ScrollPanel) getContentPane()).setWidget(contentPane);
+        ScrollPanel contentPane = new ScrollPanel();
+        setContentPane(contentPane);
+        setTabTitle(tabTitle);
+        setTabImage(ImageFactory.getImages().image());
 
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPaneContentPaneContentPaneContentPaneContentPaneContentPaneContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        contentPane.add(new Label("ContentPane" + label));
-        //        contentPane.setPixelSize(200, 200);
+        VerticalPanel mainPane = new VerticalPanel();
+
+        contentPane.setWidget(mainPane);
+
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPaneContentPaneContentPaneContentPaneContentPaneContentPaneContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
+        mainPane.add(new Label("ContentPane" + tabTitle));
 
         toolbarPane = new FlowPanel();
 
         for (int i = 0; i < 1; i++) {
-            Button panel = new Button(label);
+            Button panel = new Button(tabTitle);
             toolbarPane.add(panel);
         }
 
@@ -84,34 +80,23 @@ public class TestView extends AbstractView {
         }
     }
 
-    @Override
-    public Widget getFooterPane() {
-        return new Label("FooterPane" + getTitle());
-    }
-
-    @Override
-    public Widget getToolbarPane() {
-        return toolbarPane;
-    }
-
-    @Override
     public MenuBar getMenu() {
         MenuBar menuBar = new MenuBar(true);
         menuBar.setAutoOpen(true);
-        MenuItem item1 = new MenuItem(getTitle() + "1", true, new Command() {
+        MenuItem item1 = new MenuItem(getTabTitle() + "1", true, new Command() {
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "1 clicked");
             }
         });
-        MenuItem item2 = new MenuItem(getTitle() + "2", true, new Command() {
+        MenuItem item2 = new MenuItem(getTabTitle() + "2", true, new Command() {
 
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "2 clicked");
             }
         });
-        MenuItem item3 = new MenuItem(getTitle() + "3", true, new Command() {
+        MenuItem item3 = new MenuItem(getTabTitle() + "3", true, new Command() {
 
             @Override
             public void execute() {
@@ -120,20 +105,20 @@ public class TestView extends AbstractView {
         });
         MenuBar subMenuBar = new MenuBar(true);
 
-        MenuItem item11 = new MenuItem(getTitle() + "11", true, new Command() {
+        MenuItem item11 = new MenuItem(getTabTitle() + "11", true, new Command() {
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "11 clicked");
             }
         });
-        MenuItem item12 = new MenuItem(getTitle() + "12", true, new Command() {
+        MenuItem item12 = new MenuItem(getTabTitle() + "12", true, new Command() {
 
             @Override
             public void execute() {
                 //TODO Logger.debug(getTitle() + "12 clicked");
             }
         });
-        MenuItem item13 = new MenuItem(getTitle() + "13", true, new Command() {
+        MenuItem item13 = new MenuItem(getTabTitle() + "13", true, new Command() {
 
             @Override
             public void execute() {

@@ -43,31 +43,32 @@ import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
-public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelectionHandlers<ITab>, HasCloseHandlers<ITab>, HasBeforeCloseHandlers<ITab> {
+public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, HasSelectionHandlers<E>, HasCloseHandlers<E>, HasBeforeCloseHandlers<E> {
 
     private final DeckLayoutPanel deck = new DeckLayoutPanel();
 
     private final TabBar tabBar = new TabBar(this);
 
-    private final ArrayList<ITab> tabs = new ArrayList<ITab>();
+    private final ArrayList<E> tabs = new ArrayList<E>();
 
     private EventBus eventBus;
 
-    public TabPanelModel() {
+    public TabPanel() {
     }
 
-    public void add(ITab tab) {
+    public void add(E tab) {
         insert(tab, deck.getWidgetCount(), false);
     }
 
-    public void add(ITab tab, boolean closable) {
+    public void add(E tab, boolean closable) {
         insert(tab, getSelectedTab() + 1, closable);
     }
 
-    public void insert(ITab tab, int index, boolean closable) {
-        tabBar.insertTab(tab.getTitle(), tab.getImageResource(), index, closable);
-        deck.insert(tab.getContentPane(), index);
+    public void insert(E tab, int index, boolean closable) {
+        tabBar.insertTab(tab.getTabTitle(), tab.getTabImage(), index, closable);
+        deck.insert(tab, index);
         tabs.add(index, tab);
+        tab.setParentTabPanel(this);
     }
 
     /**
@@ -78,7 +79,7 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
      * @param forced
      *            the tab will be close no metter what fireBeforeTabClosed returns
      */
-    public boolean remove(ITab tab, boolean forced) {
+    public boolean remove(E tab, boolean forced) {
         int index = tabs.indexOf(tab);
         if (index == -1) {
             return false;
@@ -100,7 +101,7 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
 
         tabBar.removeTab(index);
         deck.remove(index);
-        tabs.remove(index);
+        tabs.remove(index).setParentTabPanel(null);
         if (deck.getWidgetCount() == 0) {
             deck.removeStyleName("gwt-TabPanelBottom");
         }
@@ -111,12 +112,12 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
     }
 
     public boolean remove(int index, boolean forced) {
-        ITab tab = tabs.get(index);
+        E tab = tabs.get(index);
         return remove(tab, forced);
 
     }
 
-    public boolean select(ITab tab) {
+    public boolean select(E tab) {
 
         int index = tabs.indexOf(tab);
 
@@ -135,7 +136,7 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
     }
 
     public boolean select(int index) {
-        ITab tab = tabs.get(index);
+        E tab = tabs.get(index);
         return select(tab);
 
     }
@@ -173,27 +174,27 @@ public class TabPanelModel implements HasBeforeSelectionHandlers<ITab>, HasSelec
         return deck;
     }
 
-    public List<ITab> getTabs() {
+    protected List<E> getTabs() {
         return tabs;
     }
 
     @Override
-    public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<ITab> handler) {
+    public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<E> handler) {
         return addHandler(handler, BeforeSelectionEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addSelectionHandler(SelectionHandler<ITab> handler) {
+    public HandlerRegistration addSelectionHandler(SelectionHandler<E> handler) {
         return addHandler(handler, SelectionEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addBeforeCloseHandler(BeforeCloseHandler<ITab> handler) {
+    public HandlerRegistration addBeforeCloseHandler(BeforeCloseHandler<E> handler) {
         return addHandler(handler, BeforeCloseEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addCloseHandler(CloseHandler<ITab> handler) {
+    public HandlerRegistration addCloseHandler(CloseHandler<E> handler) {
         return addHandler(handler, CloseEvent.getType());
     }
 

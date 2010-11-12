@@ -29,10 +29,10 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class TabPanelComposite extends SimplePanel {
 
-    private final TabPanelModel model;
+    private final TabPanel<Tab> model;
 
     public TabPanelComposite() {
-        model = new TabPanelModel();
+        model = new TabPanel<Tab>();
         model.getDeck().setStyleName("gwt-TabPanelBottom");
         VerticalPanel panel = new VerticalPanel();
         TabBar tabBar = model.getTabBar();
@@ -59,7 +59,7 @@ public class TabPanelComposite extends SimplePanel {
         setStyleName("gwt-TabPanel");
     }
 
-    public void insert(ITab tab, int beforeIndex, boolean closable) {
+    public void insert(Tab tab, int beforeIndex, boolean closable) {
         model.insert(tab, beforeIndex, closable);
     }
 
@@ -67,11 +67,11 @@ public class TabPanelComposite extends SimplePanel {
         model.select(index);
     }
 
-    public boolean remove(ITab tab) {
+    public boolean remove(Tab tab) {
         return model.remove(tab, false);
     }
 
-    public ITab getTab(int index) {
+    public Tab getTab(int index) {
         return model.getTabs().get(index);
     }
 
@@ -79,7 +79,7 @@ public class TabPanelComposite extends SimplePanel {
         return model.getTabs().size();
     }
 
-    public int getTabIndex(ITab tab) {
+    public int getTabIndex(Tab tab) {
         return model.getTabs().indexOf(tab);
     }
 

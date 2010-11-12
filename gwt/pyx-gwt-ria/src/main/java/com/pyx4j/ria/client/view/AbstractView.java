@@ -20,16 +20,12 @@
  */
 package com.pyx4j.ria.client.view;
 
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Widget;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.pyx4j.ria.client.FolderSectionPanel;
-import com.pyx4j.widgets.client.tabpanel.BasicTab;
+public abstract class AbstractView extends Tab {
 
-public abstract class AbstractView extends BasicTab implements IView {
-
-    public AbstractView(Widget contentPane, String title, ImageResource imageResource) {
-        super(contentPane, title, imageResource);
+    public AbstractView() {
+        super();
     }
 
 }

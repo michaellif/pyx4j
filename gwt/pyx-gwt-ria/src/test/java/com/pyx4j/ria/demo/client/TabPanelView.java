@@ -30,13 +30,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanel.BasicTab;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanelComposite;
 
 public class TabPanelView extends AbstractView {
 
-    public TabPanelView(String title, ImageResource imageResource) {
-        super(createContentPane(), title, imageResource);
+    public TabPanelView(String tabTitle, ImageResource imageResource) {
+        super();
+        setContentPane(createContentPane());
+        setTabTitle(tabTitle);
+        setTabImage(imageResource);
     }
 
     private static Widget createContentPane() {
@@ -53,9 +56,9 @@ public class TabPanelView extends AbstractView {
         panel1.add(new Label("First Tab"));
         panel1.add(new Label("First Tab"));
         panel1.add(new Label("First Tab"));
-        tabPanel.insert(new BasicTab(new ScrollPanel(panel1), "First Tab", null), 0, true);
-        tabPanel.insert(new BasicTab(new Label("Second Tab"), "Second Tab", null), 1, true);
-        tabPanel.insert(new BasicTab(new Label("Third Tab"), "Third Tab", null), 2, true);
+        tabPanel.insert(new Tab(new ScrollPanel(panel1), "First Tab", null), 0, true);
+        tabPanel.insert(new Tab(new Label("Second Tab"), "Second Tab", null), 1, true);
+        tabPanel.insert(new Tab(new Label("Third Tab"), "Third Tab", null), 2, true);
 
         tabPanel.selectTab(0);
         tabPanel.setSize("400px", "300px");
@@ -69,21 +72,6 @@ public class TabPanelView extends AbstractView {
         DOM.setStyleAttribute(content.getElement(), "padding", "10px");
 
         return content;
-    }
-
-    @Override
-    public Widget getToolbarPane() {
-        return new Label("ToolbarPane");
-    }
-
-    @Override
-    public Widget getFooterPane() {
-        return null;
-    }
-
-    @Override
-    public MenuBar getMenu() {
-        return null;
     }
 
 }

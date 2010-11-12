@@ -20,16 +20,16 @@
  */
 package com.pyx4j.ria.demo.client;
 
+import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.ria.client.view.FourFoldersLayout;
 import com.pyx4j.ria.client.view.FourFoldersPosition;
-import com.pyx4j.ria.client.view.IView;
 import com.pyx4j.ria.client.view.Position;
 import com.pyx4j.ria.client.view.ViewManager;
 
 public class MainPanel extends FourFoldersLayout implements ViewManager<FourFoldersPosition> {
 
     @Override
-    public Position getPositionForView(Class<? extends IView> viewClass) {
+    public Position getPositionForView(Class<? extends AbstractView> viewClass) {
         if (TestView.class.equals(viewClass)) {
             return FourFoldersPosition.center;
         } else {
@@ -38,14 +38,14 @@ public class MainPanel extends FourFoldersLayout implements ViewManager<FourFold
     }
 
     @Override
-    public void openView(IView view, boolean closable) {
+    public void openView(AbstractView view, boolean closable) {
         Position position = getPositionForView(view.getClass());
         getFolder(position).addView(view, closable);
         getFolder(position).showView(view);
     }
 
     @Override
-    public void closeView(IView view) {
+    public void closeView(AbstractView view) {
         Position position = getPositionForView(view.getClass());
         getFolder(position).removeView(view, true);
     }

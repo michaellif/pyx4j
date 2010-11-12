@@ -33,7 +33,7 @@ import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
 import com.pyx4j.ria.client.Perspective;
 import com.pyx4j.ria.client.StatusBar;
-import com.pyx4j.ria.client.view.IView;
+import com.pyx4j.ria.client.view.AbstractView;
 
 public class DemoApplication implements IApplication {
 
@@ -70,7 +70,7 @@ public class DemoApplication implements IApplication {
 
     }
 
-    public void openView(IView view) {
+    public void openView(AbstractView view) {
         mainPanel.openView(view, true);
     }
 

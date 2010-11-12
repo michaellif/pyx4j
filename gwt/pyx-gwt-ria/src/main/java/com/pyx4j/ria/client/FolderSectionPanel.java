@@ -30,37 +30,28 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.ria.client.view.IView;
+import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.DeckLayoutPanel;
-import com.pyx4j.widgets.client.tabpanel.ITab;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
-import com.pyx4j.widgets.client.tabpanel.TabPanelModel;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
-public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<ITab>, SelectionHandler<ITab>, CloseHandler<ITab> {
+public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<AbstractView>, SelectionHandler<AbstractView>,
+        CloseHandler<AbstractView> {
 
-    private final List<IView> views = new ArrayList<IView>();
+    private final List<AbstractView> views = new ArrayList<AbstractView>();
 
-    private IView currentView;
+    private AbstractView currentView;
 
-    private final TabPanelModel tabPanel;
-
-    private final HorizontalPanel toolbarHolderPane;
-
-    private final HorizontalPanel footerHolderPane;
+    private final TabPanel<AbstractView> tabPanel;
 
     public FolderSectionPanel() {
 
         addStyleDependentName("folder");
 
-        tabPanel = new TabPanelModel();
+        tabPanel = new TabPanel<AbstractView>();
 
         tabPanel.addBeforeSelectionHandler(this);
         tabPanel.addSelectionHandler(this);
@@ -69,52 +60,18 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         TabBar tabBar = tabPanel.getTabBar();
 
         HorizontalPanel headerPane = new HorizontalPanel();
+        headerPane.setWidth("100%");
 
         headerPane.add(tabBar);
         headerPane.setCellWidth(tabBar, "100%");
 
-        Image minimizeFolderImage = new Image(ImageFactory.getImages().minimizeFolder());
-        minimizeFolderImage.setHeight("100%");
-
-        //Fix for Chrome
-        SimplePanel imageHolder = new SimplePanel();
-        imageHolder.setSize("13px", "20px");
-        DOM.setStyleAttribute(imageHolder.getElement(), "margin", "3px");
-
-        imageHolder.add(minimizeFolderImage);
-        headerPane.add(imageHolder);
-        headerPane.setCellWidth(imageHolder, "100%");
-        headerPane.setCellHeight(imageHolder, "100%");
-
-        headerPane.setWidth("100%");
-        setHeader1Pane(headerPane);
-
-        toolbarHolderPane = new HorizontalPanel();
-        toolbarHolderPane.setWidth("100%");
-        setHeader2Pane(toolbarHolderPane);
-
-        footerHolderPane = new HorizontalPanel();
-        footerHolderPane.setWidth("100%");
-        setFooterPane(footerHolderPane);
+        setHeaderPane(headerPane);
 
         DeckLayoutPanel contentDeck = tabPanel.getDeck();
-        setPagePane(contentDeck);
-
-        //        menuButton = new Image(ImageFactory.getImages().viewMenu());
-        //
-        //        DOM.setStyleAttribute(menuButton.getElement(), "cursor", "pointer");
-        //        DOM.setStyleAttribute(menuButton.getElement(), "cursor", "hand");
-        //        DOM.setStyleAttribute(menuButton.getElement(), "margin", "3");
-        //        menuButton.addClickHandler(new ClickHandler() {
-        //            @Override
-        //            public void onClick(ClickEvent event) {
-        //                menu.show(menuButton);
-        //            }
-        //        });
-
+        setContentPane(contentDeck);
     }
 
-    public void addView(IView view, boolean closable) {
+    public void addView(AbstractView view, boolean closable) {
         views.add(view);
         tabPanel.insert(view, tabPanel.size(), closable);
         if (views.size() == 1) {
@@ -122,7 +79,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         }
     }
 
-    public boolean removeView(IView view, boolean forced) {
+    public boolean removeView(AbstractView view, boolean forced) {
         if (tabPanel.remove(view, forced)) {
             views.remove(view);
             return true;
@@ -130,66 +87,27 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         return false;
     }
 
-    public void showView(IView view) {
+    public void showView(AbstractView view) {
         tabPanel.select(view);
     }
 
-    public IView getCurrentView() {
+    public AbstractView getCurrentView() {
         return currentView;
     }
 
-    private void showToolbar(IView view) {
-        if (toolbarHolderPane.getWidgetCount() > 0) {
-            toolbarHolderPane.clear();
-        }
-        if (view != null) {
-            Widget toolbar = view.getToolbarPane();
-            if (toolbar != null) {
-                toolbarHolderPane.add(toolbar);
-            }
-            MenuBar menu = view.getMenu();
-            if (menu != null) {
-                MenuBar menuButtonBar = new MenuBar();
-
-                //TODO didn't find a proper way to create menu with icon
-                MenuItem menuButtonItem = new MenuItem("<img src=images/view-menu.png ' alt=''>", true, menu);
-                menuButtonBar.addItem(menuButtonItem);
-
-                toolbarHolderPane.add(menuButtonBar);
-                toolbarHolderPane.setCellWidth(menuButtonBar, "1px");
-            }
-
-        }
-    }
-
-    private void showFooter(IView view) {
-        if (view != null) {
-            Widget footer = view.getFooterPane();
-            if (footer != null) {
-                footerHolderPane.add(footer);
-            }
-        }
+    @Override
+    public void onBeforeSelection(BeforeSelectionEvent<AbstractView> event) {
     }
 
     @Override
-    public void onBeforeSelection(BeforeSelectionEvent<ITab> event) {
-    }
-
-    @Override
-    public void onSelection(SelectionEvent<ITab> event) {
-        IView view = (IView) event.getSelectedItem();
-        showToolbar(view);
-        showFooter(view);
+    public void onSelection(SelectionEvent<AbstractView> event) {
+        AbstractView view = event.getSelectedItem();
         currentView = view;
     }
 
     @Override
-    public void onClose(CloseEvent<ITab> event) {
+    public void onClose(CloseEvent<AbstractView> event) {
         views.remove(event.getTarget());
-        if (views.size() == 0) {
-            showToolbar(null);
-            showFooter(null);
-        }
     }
 
 }

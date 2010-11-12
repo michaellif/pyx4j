@@ -29,17 +29,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class SectionPanel extends LayoutPanel {
 
-    private final DockLayoutPanel contentPanel;
+    private final LayoutPanel contentPanelHolder;
 
     private final DockLayoutPanel rootPanel;
 
-    private final LayoutPanel pagePanelHolder;
-
-    private final SimplePanel header1Mark;
-
-    private final SimplePanel header2Mark;
-
-    private final SimplePanel footerMark;
+    private final SimplePanel headerMark;
 
     public SectionPanel() {
 
@@ -50,45 +44,27 @@ public class SectionPanel extends LayoutPanel {
         rootPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         rootPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
 
-        header1Mark = new SimplePanel();
-        rootPanel.addNorth(header1Mark, 0);
+        headerMark = new SimplePanel();
+        rootPanel.addNorth(headerMark, 0);
 
-        contentPanel = new DockLayoutPanel(Unit.EM);
-        contentPanel.getElement().getStyle().setBorderColor("#86adc4");
-        contentPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        contentPanel.getElement().getStyle().setBorderWidth(2, Unit.PX);
+        contentPanelHolder = new LayoutPanel();
+        contentPanelHolder.getElement().getStyle().setBorderColor("#86adc4");
+        contentPanelHolder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        contentPanelHolder.getElement().getStyle().setBorderWidth(2, Unit.PX);
+        contentPanelHolder.getElement().getStyle().setBackgroundColor("white");
 
-        header2Mark = new SimplePanel();
-        contentPanel.addNorth(header2Mark, 0);
-
-        footerMark = new SimplePanel();
-        contentPanel.addSouth(footerMark, 0);
-
-        pagePanelHolder = new LayoutPanel();
-        pagePanelHolder.getElement().getStyle().setBackgroundColor("white");
-
-        contentPanel.add(pagePanelHolder);
-
-        rootPanel.add(contentPanel);
+        rootPanel.add(contentPanelHolder);
 
         add(rootPanel);
 
     }
 
-    protected void setHeader1Pane(Widget headerPane) {
-        rootPanel.insertNorth(headerPane, 1.6, header1Mark);
+    protected void setHeaderPane(Widget headerPane) {
+        rootPanel.insertNorth(headerPane, 1.6, headerMark);
     }
 
-    protected void setHeader2Pane(Widget headerPane) {
-        contentPanel.insertNorth(headerPane, 2, header2Mark);
-    }
-
-    protected void setFooterPane(Widget footerPane) {
-        contentPanel.insertSouth(footerPane, 1.5, footerMark);
-    }
-
-    protected void setPagePane(Widget pagePane) {
-        pagePanelHolder.add(pagePane);
+    protected void setContentPane(Widget pagePane) {
+        contentPanelHolder.add(pagePane);
     }
 
 }

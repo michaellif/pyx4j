@@ -20,13 +20,12 @@
  */
 package com.pyx4j.ria.client.view;
 
-
 public interface ViewManager<T extends Position> {
 
-    public Position getPositionForView(Class<? extends IView> viewClass);
+    public Position getPositionForView(Class<? extends AbstractView> viewClass);
 
-    public void openView(IView view, boolean closable);
+    public void openView(AbstractView view, boolean closable);
 
-    public void closeView(IView view);
+    public void closeView(AbstractView view);
 
 }
