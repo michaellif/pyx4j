@@ -40,8 +40,6 @@ import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
 public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 
-    private static final String FIRST_TAB_DEPENDENT_STYLE = "first";
-
     private final WidgetsImageBundle images = ImageFactory.getImages();
 
     private final HorizontalPanel tabBarPanel;
@@ -52,7 +50,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 
     private final SimplePanel scrollContainer;
 
-    private final TabPanel tabPanel;
+    private final TabPanel<? extends Tab> tabPanel;
 
     private TabBarItem selectedTab;
 
@@ -65,7 +63,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
     /**
      * Creates an empty tab bar.
      */
-    public TabBar(TabPanel tabPanel) {
+    public TabBar(TabPanel<? extends Tab> tabPanel, String styleName) {
 
         this.tabPanel = tabPanel;
 
@@ -76,7 +74,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         this.ensureDebugId(this.getClass().getName());
 
         sinkEvents(Event.ONCLICK);
-        setStyleName("gwt-TabBar");
+        setStyleName(styleName);
 
         tabBarPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 
@@ -93,8 +91,8 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
             }
         });
 
-        moveLeft.setStyleName("gwt-TabBarMoveLeft");
-        moveRight.setStyleName("gwt-TabBarMoveRight");
+        moveLeft.setStyleName(getStyleName() + TabPanel.StyleSufixes.BarMoveLeft);
+        moveRight.setStyleName(getStyleName() + TabPanel.StyleSufixes.BarMoveRight);
 
         tabBarPanel.add(moveLeft);
 
@@ -111,8 +109,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         DOM.setStyleAttribute(scrollContainer.getElement(), "overflow", "hidden");
         DOM.setStyleAttribute(scrollContainer.getElement(), "position", "relative");
         scrollContainer.setWidth("100%");
-        scrollContainer.setHeight("100%");
-        scrollContainer.setHeight("26px");
+        scrollContainer.setHeight("1.6em");
 
         scrollContainer.add(scrollPanel);
 
@@ -203,14 +200,14 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
             throw new IndexOutOfBoundsException();
         }
 
-        TabBarItem item = new TabBarItem(this, label, imageResource, closable);
+        TabBarItem item = new TabBarItem(this, label, imageResource, closable, getStyleName());
 
         if (beforeIndex == 0) {
             if (tabsPanel.getWidgetCount() > 0) {
                 Widget firstTab = tabsPanel.getWidget(0);
-                firstTab.removeStyleDependentName(FIRST_TAB_DEPENDENT_STYLE);
+                firstTab.removeStyleDependentName("first");
             }
-            item.addStyleDependentName(FIRST_TAB_DEPENDENT_STYLE);
+            item.addStyleDependentName("first");
         }
 
         tabsPanel.insert(item, beforeIndex);
@@ -265,10 +262,10 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         Widget toRemove = tabsPanel.getWidget(index);
 
         if (index == 0) {
-            toRemove.removeStyleDependentName(FIRST_TAB_DEPENDENT_STYLE);
+            toRemove.removeStyleDependentName("first");
             if (tabsPanel.getWidgetCount() > 1) {
                 Widget nextFirstTab = tabsPanel.getWidget(1);
-                nextFirstTab.addStyleDependentName(FIRST_TAB_DEPENDENT_STYLE);
+                nextFirstTab.addStyleDependentName("first");
             }
         }
 
@@ -307,7 +304,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         return tabsPanel;
     }
 
-    TabPanel getTabPanelModel() {
+    TabPanel<? extends Tab> getTabPanelModel() {
         return tabPanel;
     }
 

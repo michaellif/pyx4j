@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public class WindowsTheme extends Theme {
 
@@ -234,23 +235,29 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initTabPanelStyles() {
-        Style style = new Style(".gwt-TabPanel");
+        initTopTabPanelStyles(CSSClass.pyx4j_Tab);
+        initBottomTabPanelStyles(CSSClass.pyx4j_TabBottom);
+
+    }
+
+    private void initTopTabPanelStyles(Enum<?> name) {
+        Style style = new Style(name);
         addStyle(style);
 
-        style = new Style(".gwt-TabPanelBottom");
+        style = new Style(name, TabPanel.StyleSufixes.PanelBottom.name());
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
         addStyle(style);
 
-        style = new Style(".gwt-TabBarMoveLeft");
+        style = new Style(name, TabPanel.StyleSufixes.BarMoveLeft.name());
         style.addProperty("margin", "3px");
         addStyle(style);
 
-        style = new Style(".gwt-TabBarMoveRight");
+        style = new Style(name, TabPanel.StyleSufixes.BarMoveRight.name());
         style.addProperty("margin", "3px");
         addStyle(style);
 
-        style = new Style(".gwt-TabBarItem");
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name());
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
@@ -260,19 +267,73 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style(".gwt-TabBarItem-first");
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name() + "-first");
         style.addProperty("border-left-width", "1px");
         style.addProperty("border-left-style", "solid");
         style.addProperty("border-left-color", ThemeColor.BORDER);
         addStyle(style);
 
-        style = new Style(".gwt-TabBarItem-selected");
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name() + "-selected");
         style.addProperty("cursor", "default");
         style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
-        style = new Style(".gwt-TabBarItem-selected .gwt-TabBarItemLabel");
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name() + "-selected", name, TabPanel.StyleSufixes.BarItemLabel.name());
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarItemLabel.name());
+        style.addProperty("margin", "3px");
+        addStyle(style);
+
+    }
+
+    private void initBottomTabPanelStyles(Enum<?> name) {
+        Style style = new Style(name);
+        style.addProperty("background-color", "#ECE9D8");
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.PanelBottom.name());
+        style.addProperty("padding", "2px");
+        style.addProperty("margin", "0px");
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarMoveLeft.name());
+        style.addProperty("margin", "3px");
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarMoveRight.name());
+        style.addProperty("margin", "3px");
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name());
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("text-align", "center");
+        style.addProperty("border-right-width", "1px");
+        style.addProperty("border-right-style", "solid");
+        style.addProperty("border-right-color", ThemeColor.BORDER);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name() + "-first");
+        style.addProperty("border-left-width", "1px");
+        style.addProperty("border-left-style", "solid");
+        style.addProperty("border-left-color", ThemeColor.BORDER);
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name() + "-selected");
+        style.addProperty("cursor", "default");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarItem.name() + "-selected", name, TabPanel.StyleSufixes.BarItemLabel.name());
+        style.addProperty("color", "black");
+        addStyle(style);
+
+        style = new Style(name, TabPanel.StyleSufixes.BarItemLabel.name());
+        style.addProperty("margin-left", "2px");
+        style.addProperty("margin-right", "2px");
         addStyle(style);
 
     }

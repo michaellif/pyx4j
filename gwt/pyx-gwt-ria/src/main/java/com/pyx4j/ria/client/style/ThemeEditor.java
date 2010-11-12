@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
@@ -50,6 +49,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class ThemeEditor extends AbstractView {
 
@@ -69,12 +69,10 @@ public class ThemeEditor extends AbstractView {
 
     private final TextArea styleEditor;
 
-    private SimplePanel contentPane;
-
     public ThemeEditor() {
         super();
         SimplePanel contentPane = new SimplePanel();
-        setContentPane(contentPane);
+        addPage(new Tab(contentPane, null, null));
         setTabTitle("Theme Editor");
 
         HorizontalPanel mainPanel = new HorizontalPanel();

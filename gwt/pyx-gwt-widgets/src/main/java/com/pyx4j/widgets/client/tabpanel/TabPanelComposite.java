@@ -31,9 +31,8 @@ public class TabPanelComposite extends SimplePanel {
 
     private final TabPanel<Tab> model;
 
-    public TabPanelComposite() {
-        model = new TabPanel<Tab>();
-        model.getDeck().setStyleName("gwt-TabPanelBottom");
+    public TabPanelComposite(String styleName) {
+        model = new TabPanel<Tab>(styleName);
         VerticalPanel panel = new VerticalPanel();
         TabBar tabBar = model.getTabBar();
         LayoutPanel deck = model.getDeck();

@@ -41,6 +41,10 @@ public class Style {
         this.selector = "." + selector.name() + ext;
     }
 
+    public Style(Enum<?> selector1, String ext1, Enum<?> selector2, String ext2) {
+        this.selector = "." + selector1.name() + ext1 + " ." + selector2.name() + ext2;
+    }
+
     public String getSelector() {
         return selector;
     }

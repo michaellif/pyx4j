@@ -45,15 +45,24 @@ import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
 public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, HasSelectionHandlers<E>, HasCloseHandlers<E>, HasBeforeCloseHandlers<E> {
 
+    public static enum StyleSufixes {
+        PanelBottom, BarMoveLeft, BarMoveRight, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
+    }
+
     private final DeckLayoutPanel deck = new DeckLayoutPanel();
 
-    private final TabBar tabBar = new TabBar(this);
+    private final TabBar tabBar;
 
     private final ArrayList<E> tabs = new ArrayList<E>();
 
     private EventBus eventBus;
 
-    public TabPanel() {
+    private final String styleName;
+
+    public TabPanel(String styleName) {
+        this.styleName = styleName;
+        tabBar = new TabBar(this, styleName);
+        getDeck().setStyleName(styleName + StyleSufixes.PanelBottom.name());
     }
 
     public void add(E tab) {
@@ -103,7 +112,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
         deck.remove(index);
         tabs.remove(index).setParentTabPanel(null);
         if (deck.getWidgetCount() == 0) {
-            deck.removeStyleName("gwt-TabPanelBottom");
+            deck.removeStyleName(styleName + StyleSufixes.PanelBottom);
         }
 
         CloseEvent.fire(this, tab);

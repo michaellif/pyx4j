@@ -31,38 +31,21 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class TestView extends AbstractView {
-
-    private final FlowPanel toolbarPane;
 
     public TestView(String tabTitle) {
         super();
 
-        ScrollPanel contentPane = new ScrollPanel();
-        setContentPane(contentPane);
+        addPage(new Tab(createPageContent("page 1"), "page 1", null));
+        addPage(new Tab(createPageContent("page 2"), "page 2", null));
+        addPage(new Tab(createPageContent("page 3"), "page 3", null));
         setTabTitle(tabTitle);
         setTabImage(ImageFactory.getImages().image());
 
-        VerticalPanel mainPane = new VerticalPanel();
-
-        contentPane.setWidget(mainPane);
-
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPaneContentPaneContentPaneContentPaneContentPaneContentPaneContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-        mainPane.add(new Label("ContentPane" + tabTitle));
-
-        toolbarPane = new FlowPanel();
+        FlowPanel toolbarPane = new FlowPanel();
+        toolbarPane.getElement().getStyle().setBackgroundColor("#ECE9D8");
 
         for (int i = 0; i < 1; i++) {
             Button panel = new Button(tabTitle);
@@ -78,6 +61,32 @@ public class TestView extends AbstractView {
             Button panel = new Button(new Image(ImageFactory.getImages().image()), " B b b");
             toolbarPane.add(panel);
         }
+
+        setToolbarPane(toolbarPane);
+    }
+
+    private ScrollPanel createPageContent(String title) {
+        ScrollPanel contentPane = new ScrollPanel();
+
+        VerticalPanel mainPane = new VerticalPanel();
+
+        contentPane.setWidget(mainPane);
+
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPaneContentPaneContentPaneContentPaneContentPaneContentPaneContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("ContentPane" + title));
+
+        return contentPane;
     }
 
     public MenuBar getMenu() {

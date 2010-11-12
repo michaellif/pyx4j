@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GroupBoxPanel;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public abstract class AbstractProvingView extends AbstractView {
 
@@ -81,7 +82,8 @@ public abstract class AbstractProvingView extends AbstractView {
     public AbstractProvingView(String tabTitle, ImageResource tabImage) {
         super();
         ScrollPanel contentPane = new ScrollPanel();
-        setContentPane(contentPane);
+        addPage(new Tab(contentPane, null, null));
+
         setTabTitle(tabTitle);
         setTabImage(tabImage);
 

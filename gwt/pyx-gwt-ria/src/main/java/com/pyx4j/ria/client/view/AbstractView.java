@@ -20,12 +20,58 @@
  */
 package com.pyx4j.ria.client.view;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class AbstractView extends Tab {
 
+    private final DockLayoutPanel rootPanel;
+
+    private final SimplePanel toolbarMark;
+
+    private final SimplePanel tabsMark;
+
+    private final TabPanel<Tab> tabPanel;
+
     public AbstractView() {
         super();
+
+        rootPanel = new DockLayoutPanel(Unit.EM);
+
+        toolbarMark = new SimplePanel();
+        rootPanel.addNorth(toolbarMark, 0);
+
+        tabsMark = new SimplePanel();
+        rootPanel.addSouth(tabsMark, 0);
+
+        tabPanel = new TabPanel<Tab>(CSSClass.pyx4j_TabBottom.name());
+
+        rootPanel.add(tabPanel.getDeck());
+
+        super.setContentPane(rootPanel);
+    }
+
+    @Override
+    public void setContentPane(Widget contentPane) {
+        throw new RuntimeException("Use AbstractView methods to set pages");
+    }
+
+    protected void setToolbarPane(Widget toolbarPane) {
+        rootPanel.insertNorth(toolbarPane, 2, toolbarMark);
+    }
+
+    protected void addPage(Tab pagePane) {
+        if (tabPanel.size() == 1) {
+            rootPanel.insertSouth(tabPanel.getTabBar(), 1.3, tabsMark);
+        }
+        tabPanel.add(pagePane);
+        tabPanel.select(pagePane);
     }
 
 }

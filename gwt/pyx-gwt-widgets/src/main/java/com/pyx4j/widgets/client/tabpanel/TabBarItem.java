@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -60,27 +62,25 @@ public class TabBarItem extends HorizontalPanel {
 
     private final WidgetsImageBundle images = ImageFactory.getImages();
 
-    public TabBarItem(final TabBar parent, String labelString, ImageResource imageResource, boolean closable) {
+    public TabBarItem(final TabBar parent, String labelString, ImageResource imageResource, boolean closable, String styleName) {
         super();
 
         sinkEvents(Event.ONCLICK);
         addClickHandler(parent);
 
         HTML leftSubpanel = new HTML("&nbsp;");
-        leftSubpanel.setHeight("25px");
         leftSubpanel.setWidth("8px");
         add(leftSubpanel);
-        setStyleName("gwt-TabBarItem");
-        leftSubpanel.setStyleName("gwt-TabBarItemLeft");
+        setStyleName(styleName + TabPanel.StyleSufixes.BarItem);
+        leftSubpanel.setStyleName(styleName + TabPanel.StyleSufixes.BarItemLeft);
 
         final HorizontalPanel rightSubpanel = new HorizontalPanel();
         rightSubpanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
-        rightSubpanel.setStyleName("gwt-TabBarItemRight");
-        DOM.setElementProperty(rightSubpanel.getElement(), "cellSpacing", "4");
+        rightSubpanel.setStyleName(styleName + TabPanel.StyleSufixes.BarItemRight);
 
         if (imageResource != null) {
             Image image = new Image(imageResource);
-            image.setStyleName("gwt-TabBarItemImage");
+            image.setStyleName(styleName + TabPanel.StyleSufixes.BarItemImage);
             rightSubpanel.add(image);
             rightSubpanel.setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
         }
@@ -90,7 +90,7 @@ public class TabBarItem extends HorizontalPanel {
         rightSubpanel.add(modifyedLabel);
 
         label = new Label(labelString);
-        label.setStyleName("gwt-TabBarItemLabel");
+        label.setStyleName(styleName + TabPanel.StyleSufixes.BarItemLabel);
         label.setWordWrap(false);
         rightSubpanel.add(label);
 
@@ -98,8 +98,8 @@ public class TabBarItem extends HorizontalPanel {
 
             closeImage = new Image(images.closeTab());
 
-            DOM.setStyleAttribute(closeImage.getElement(), "cursor", "pointer");
-            DOM.setStyleAttribute(closeImage.getElement(), "cursor", "hand");
+            closeImage.getElement().getStyle().setCursor(Cursor.POINTER);
+            closeImage.getElement().getStyle().setMarginRight(3, Unit.PX);
             closeImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -136,7 +136,6 @@ public class TabBarItem extends HorizontalPanel {
         rightSubpanel.setCellHeight(label, "100%");
 
         add(rightSubpanel);
-        setCellHeight(leftSubpanel, "25px");
         setCellWidth(leftSubpanel, "8px");
         setCellHeight(rightSubpanel, "100%");
     }
@@ -172,13 +171,13 @@ public class TabBarItem extends HorizontalPanel {
     void setEnabled(boolean enabled) {
         this.isEnabled = enabled;
         if (!enabled) {
-            addStyleName("gwt-TabBarItem-disabled");
-            getWidget(0).addStyleName("gwt-TabBarItemLeft-disabled");
-            getWidget(1).addStyleName("gwt-TabBarItemRight-disabled");
+            addStyleDependentName("disabled");
+            getWidget(0).addStyleName("disabled");
+            getWidget(1).addStyleName("disabled");
         } else {
-            removeStyleName("gwt-TabBarItem-disabled");
-            getWidget(0).removeStyleName("gwt-TabBarItemLeft-disabled");
-            getWidget(1).removeStyleName("gwt-TabBarItemRight-disabled");
+            removeStyleName("disabled");
+            getWidget(0).removeStyleName("disabled");
+            getWidget(1).removeStyleName("disabled");
         }
     }
 

@@ -24,7 +24,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,14 +36,15 @@ public class TabPanelView extends AbstractView {
 
     public TabPanelView(String tabTitle, ImageResource imageResource) {
         super();
-        setContentPane(createContentPane());
+        addPage(new Tab(createContentPane(), null, null));
+
         setTabTitle(tabTitle);
         setTabImage(imageResource);
     }
 
     private static Widget createContentPane() {
 
-        TabPanelComposite tabPanel = new TabPanelComposite();
+        TabPanelComposite tabPanel = new TabPanelComposite("gwt-TabBar");
         VerticalPanel panel1 = new VerticalPanel();
         Label label1 = new Label("First Tab");
         panel1.add(label1);
