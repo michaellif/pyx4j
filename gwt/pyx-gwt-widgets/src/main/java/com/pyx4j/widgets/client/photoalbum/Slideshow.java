@@ -99,7 +99,7 @@ public class Slideshow extends AbsolutePanel {
             }
         };
         slideChangeTimer.run();
-        slideChangeTimer.scheduleRepeating(6000);
+        slideChangeTimer.scheduleRepeating(15000);
         controlPanel.play(true);
     }
 
