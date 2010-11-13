@@ -49,7 +49,7 @@ public class MessageDialog {
      * Move all the Dialog and PopupPanel JS code to "Left over code"
      */
     public static void show(final String title, final String text, final Type type, final DialogOptions options) {
-        GWT.runAsync(new RunAsyncCallback() {
+        GWT.runAsync(MessageDialog.class, new RunAsyncCallback() {
 
             @Override
             public void onFailure(Throwable reason) {
