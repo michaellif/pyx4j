@@ -71,7 +71,7 @@ public class ConsoleTheme extends SiteTheme {
     @Override
     protected void initHeaderStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_Header.name());
-        style.addProperty("height", "90px");
+        style.addProperty("height", "120px");
         addStyle(style);
     }
 
@@ -132,7 +132,7 @@ public class ConsoleTheme extends SiteTheme {
     protected void initHeaderCaptionsStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderCaptions.name());
         style.addProperty("margin-left", "10px");
-        style.addProperty("margin-top", "50px");
+        style.addProperty("margin-top", "80px");
         style.addProperty("font-size", "22px");
 
         addStyle(style);
@@ -149,7 +149,7 @@ public class ConsoleTheme extends SiteTheme {
     protected void initPrimaryNavigStyles() {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavig.name());
         style.addProperty("margin-left", "0px");
-        style.addProperty("margin-top", "10px");
+        style.addProperty("margin-top", "30px");
         style.addProperty("width", "700px");
         style.addProperty("height", "32px");
         style.addProperty("padding-left", "0px");
@@ -195,7 +195,7 @@ public class ConsoleTheme extends SiteTheme {
         Style style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name());
         style.addProperty("margin-left", "100px");
         style.addProperty("margin-top", "10px");
-        style.addProperty("width", "800px");
+        style.addProperty("width", "600px");
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_HeaderLinks.name() + " ul");
