@@ -300,7 +300,7 @@ public abstract class AbstractSiteDispatcher {
         MessageDialog.show(title, i18n.tr("Redirect to Google login page?"), Dialog.Type.Confirm, new YesNoOption() {
             @Override
             public boolean onClickYes() {
-                ClientContext.googleAccountsLogin();
+                googleAccountsLogin();
                 return true;
             }
 
@@ -310,6 +310,10 @@ public abstract class AbstractSiteDispatcher {
                 return true;
             }
         });
+    }
+
+    protected void googleAccountsLogin() {
+        ClientContext.googleAccountsLogin();
     }
 
     protected abstract void obtainSite(String siteName, AsyncCallback<SitePanel> callback);

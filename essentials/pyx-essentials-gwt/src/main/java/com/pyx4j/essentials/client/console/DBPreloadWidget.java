@@ -47,6 +47,8 @@ import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.widgets.client.GroupBoxPanel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -78,7 +80,21 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
 
                             final boolean useDeferred = true;
                             if (useDeferred) {
-                                DeferredActionProcessDialog.start("Remove All Data", DatastoreAdminServices.RemoveAllDataDeferred.class);
+                                final AsyncCallback<AuthenticationResponse> rpcCallback = new BlockingAsyncCallback<AuthenticationResponse>() {
+
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        MessageDialog.error("Start session failed", caught);
+                                    }
+
+                                    @Override
+                                    public void onSuccess(AuthenticationResponse result) {
+                                        ClientContext.authenticated(result);
+                                        DeferredActionProcessDialog.start("Remove All Data", DatastoreAdminServices.RemoveAllDataDeferred.class);
+                                    }
+                                };
+                                RPCManager.execute(DatastoreAdminServices.CreateSession.class, null, rpcCallback);
+
                             } else {
                                 final AsyncCallback<String> rpcCallback = new BlockingAsyncCallback<String>() {
 
@@ -123,7 +139,22 @@ class DBPreloadWidget extends SimplePanel implements InlineWidget {
                                 }
                             };
 
-                            RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
+                            final AsyncCallback<VoidSerializable> rpcPrepareCallback = new BlockingAsyncCallback<VoidSerializable>() {
+
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    MessageDialog.error("Execute Service failed", caught);
+
+                                }
+
+                                @Override
+                                public void onSuccess(VoidSerializable result) {
+                                    RPCManager.execute(DatastoreAdminServices.ResetInitialData.class, null, rpcCallback);
+
+                                }
+
+                            };
+                            RPCManager.execute(DatastoreAdminServices.ExectutePreloadersPrepare.class, null, rpcPrepareCallback);
                         }
                     });
                 }

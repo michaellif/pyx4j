@@ -56,12 +56,19 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
     }
 
     public void exectutePreloadersPrepare(Vector<DataPreloaderInfo> dpis) {
-        for (DataPreloaderInfo info : dpis) {
-            findPreloader: for (DataPreloader preloader : childPreloaders) {
-                if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
-                    preloader.setParametersValues(info.getParameters());
-                    preloader.prepare();
-                    break findPreloader;
+        if (dpis == null) {
+            // Prepare all.
+            for (DataPreloader preloader : childPreloaders) {
+                preloader.prepare();
+            }
+        } else {
+            for (DataPreloaderInfo info : dpis) {
+                findPreloader: for (DataPreloader preloader : childPreloaders) {
+                    if (preloader.getClass().getName().equals(info.getDataPreloaderClassName())) {
+                        preloader.setParametersValues(info.getParameters());
+                        preloader.prepare();
+                        break findPreloader;
+                    }
                 }
             }
         }

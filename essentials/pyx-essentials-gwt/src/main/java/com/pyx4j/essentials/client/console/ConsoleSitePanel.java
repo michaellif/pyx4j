@@ -22,12 +22,15 @@ package com.pyx4j.essentials.client.console;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.essentials.client.GoogleAccountsLoginPopup;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.AuthenticationRequiredException;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.CommandLink;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.InlineWidgetFactory;
 import com.pyx4j.site.client.SitePanel;
@@ -46,6 +49,13 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
                 return new ConsoleTheme();
             }
         });
+
+        addHeaderLink(new CommandLink("Sign Out", new Command() {
+            @Override
+            public void execute() {
+                GoogleAccountsLoginPopup.logout();
+            }
+        }), false);
     }
 
     @Override
