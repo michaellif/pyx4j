@@ -74,7 +74,7 @@ public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
     }
 
     public static void asyncCreateSitePanel(final AsyncCallback<SitePanel> callback) {
-        GWT.runAsync(new RunAsyncCallback() {
+        GWT.runAsync(ConsoleSitePanel.class, new RunAsyncCallback() {
             @Override
             public void onSuccess() {
                 callback.onSuccess(new ConsoleSitePanel());
