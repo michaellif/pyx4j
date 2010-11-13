@@ -10,6 +10,8 @@ package com.pyx4j.widgets.client.dialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
@@ -45,20 +47,37 @@ public class MessageDialog {
         });
     }
 
+    public static void show(final String title, final String text, final Type type, final DialogOptions options) {
+        show(title, text, type, options, false);
+    }
+
+    public static void prefetch() {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                show(null, null, null, null, true);
+            }
+        });
+    }
+
     /*
      * Move all the Dialog and PopupPanel JS code to "Left over code"
      */
-    public static void show(final String title, final String text, final Type type, final DialogOptions options) {
+    private static void show(final String title, final String text, final Type type, final DialogOptions options, final boolean prefetch) {
         GWT.runAsync(MessageDialog.class, new RunAsyncCallback() {
 
             @Override
             public void onFailure(Throwable reason) {
-                throw new UnrecoverableClientError(reason);
+                if (!prefetch) {
+                    throw new UnrecoverableClientError(reason);
+                }
             }
 
             @Override
             public void onSuccess() {
-                new Dialog(title, text, type, options).show();
+                if (!prefetch) {
+                    new Dialog(title, text, type, options).show();
+                }
             }
         });
     }
