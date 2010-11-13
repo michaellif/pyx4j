@@ -21,19 +21,17 @@
 package com.pyx4j.widgets.client.tabpanel;
 
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.DecoratorPanel;
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class TabPanelComposite extends SimplePanel {
+public class TabPanelComposite extends LayoutPanel {
 
     private final TabPanel<Tab> model;
 
-    public TabPanelComposite(String styleName) {
+    public TabPanelComposite() {
         model = new TabPanel<Tab>();
-        model.setStylePrefix(styleName);
         VerticalPanel panel = new VerticalPanel();
         TabBar tabBar = model.getTabBar();
         LayoutPanel deck = model.getDeck();
@@ -56,7 +54,10 @@ public class TabPanelComposite extends SimplePanel {
         tabPanelDecorator.setWidget(panel);
 
         add(tabPanelDecorator);
-        setStyleName("gwt-TabPanel");
+    }
+
+    public void setStylePrefix(String styleName) {
+        model.setStylePrefix(styleName);
     }
 
     public void insert(Tab tab, int beforeIndex, boolean closable) {
