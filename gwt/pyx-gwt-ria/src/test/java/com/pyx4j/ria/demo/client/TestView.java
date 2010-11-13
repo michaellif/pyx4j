@@ -21,8 +21,8 @@
 package com.pyx4j.ria.demo.client;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -30,7 +30,10 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.gray.GrayTheme;
+import com.pyx4j.widgets.client.style.window.WindowsTheme;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class TestView extends AbstractView {
@@ -44,25 +47,13 @@ public class TestView extends AbstractView {
         setTabTitle(tabTitle);
         setTabImage(ImageFactory.getImages().image());
 
-        FlowPanel toolbarPane = new FlowPanel();
-        toolbarPane.getElement().getStyle().setBackgroundColor("#ECE9D8");
+        HorizontalPanel toolbarPanel = new HorizontalPanel();
+        toolbarPanel.setWidth("100%");
 
-        for (int i = 0; i < 1; i++) {
-            Button panel = new Button(tabTitle);
-            toolbarPane.add(panel);
-        }
+        Toolbar toolbar = new Toolbar();
+        toolbarPanel.add(toolbar);
 
-        for (int i = 0; i < 3; i++) {
-            Button panel = new Button(new Image(ImageFactory.getImages().image()));
-            toolbarPane.add(panel);
-        }
-
-        for (int i = 0; i < 3; i++) {
-            Button panel = new Button(new Image(ImageFactory.getImages().image()), " B b b");
-            toolbarPane.add(panel);
-        }
-
-        setToolbarPane(toolbarPane);
+        setToolbarPane(toolbarPanel);
     }
 
     private ScrollPanel createPageContent(String title) {
@@ -146,5 +137,64 @@ public class TestView extends AbstractView {
         menuBar.addItem(item3);
 
         return menuBar;
+    }
+
+    class Toolbar extends com.pyx4j.ria.client.Toolbar {
+
+        public Toolbar() {
+
+            addItem(ImageFactory.getImages().image(), null, "Add");
+            addItem(ImageFactory.getImages().image(), null, "Save");
+            addItem(ImageFactory.getImages().image(), new Command() {
+                @Override
+                public void execute() {
+                    //TODO Logger.error("printAction", new Error("Test error"));
+                }
+            }, "Print");
+            addSeparator();
+
+            addItem("L&F Win", new Command() {
+                @Override
+                public void execute() {
+                    StyleManger.installTheme(new WindowsTheme());
+                }
+            });
+
+            addItem("L&F Gray", new Command() {
+                @Override
+                public void execute() {
+                    StyleManger.installTheme(new GrayTheme());
+                }
+            });
+
+            addItem(ImageFactory.getImages().image(), new Command() {
+                @Override
+                public void execute() {
+                }
+            }, "Theme Editor");
+
+            addSeparator();
+
+            addItem("Progress", new Command() {
+                @Override
+                public void execute() {
+                }
+            });
+
+            addItem("Glass ON (5 sec)", new Command() {
+                @Override
+                public void execute() {
+                    GlassPanel.show();
+                    Timer timer = new Timer() {
+                        @Override
+                        public void run() {
+                            GlassPanel.hide();
+                        }
+                    };
+                    timer.schedule(1000 * 5);
+                }
+            });
+
+        }
     }
 }

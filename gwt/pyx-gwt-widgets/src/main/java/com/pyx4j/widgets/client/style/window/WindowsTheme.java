@@ -135,10 +135,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-left-style", "ridge");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE1);
 
-        style.addProperty("height", "15px");
         style.addProperty("margin-left", "3px");
-        style.addProperty("margin-top", "2px");
-        style.addProperty("margin-bottom", "2px");
         addStyle(style);
     }
 
@@ -388,30 +385,36 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initButtonStyles() {
-        Style style = new Style(CSSClass.pyx4j_ButtonContent);
-        style.addProperty("padding", "3px");
-        style.addProperty("margin", "1px");
-        style.addProperty("border", "2px solid transparent");
+        Style style = new Style(CSSClass.pyx4j_ButtonContainer);
+        style.addProperty("height", "22px");
+        addStyle(style);
+
+        style = new Style(CSSClass.pyx4j_ButtonContent);
+        style.addProperty("padding-left", "2px");
+        style.addProperty("padding-right", "2px");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "outset");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_ButtonContent, "-hover");
-        style.addProperty("border-width", "2px");
+        style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
+        style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE2);
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_ButtonContent, "-pushed");
-        style.addProperty("border-width", "2px");
+        style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
+        style.addProperty("border-width", "1px");
         style.addProperty("border-style", "ridge");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_ButtonContent, "-checked");
+        style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
         style.addProperty("background", ThemeColor.OBJECT_TONE2);
-        style.addProperty("border-width", "2px");
+        style.addProperty("border-width", "1px");
         style.addProperty("border-style", "inset");
         style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
