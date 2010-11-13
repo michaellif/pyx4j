@@ -25,12 +25,15 @@ import java.util.List;
 
 public class Style {
 
-    private final String selector;
+    private String selector;
 
     private final List<Property> properties = new ArrayList<Property>();
 
-    public Style(String selector) {
-        this.selector = selector;
+    public Style(String... selector) {
+        this.selector = "";
+        for (int i = 0; i < selector.length; i++) {
+            this.selector += selector[i] + " ";
+        }
     }
 
     public Style(Enum<?> selector) {
@@ -39,10 +42,6 @@ public class Style {
 
     public Style(Enum<?> selector, String ext) {
         this.selector = "." + selector.name() + ext;
-    }
-
-    public Style(Enum<?> selector1, String ext1, Enum<?> selector2, String ext2) {
-        this.selector = "." + selector1.name() + ext1 + " ." + selector2.name() + ext2;
     }
 
     public String getSelector() {

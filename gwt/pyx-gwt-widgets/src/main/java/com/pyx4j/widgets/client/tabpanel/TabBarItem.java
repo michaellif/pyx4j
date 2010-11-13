@@ -30,7 +30,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -41,6 +40,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
+import com.pyx4j.widgets.client.style.Selector;
 
 /**
  * @author michaellif
@@ -71,16 +71,16 @@ public class TabBarItem extends HorizontalPanel {
         HTML leftSubpanel = new HTML("&nbsp;");
         leftSubpanel.setWidth("8px");
         add(leftSubpanel);
-        setStyleName(styleName + TabPanel.StyleSufixes.BarItem);
-        leftSubpanel.setStyleName(styleName + TabPanel.StyleSufixes.BarItemLeft);
+        setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItem));
+        leftSubpanel.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemLeft));
 
         final HorizontalPanel rightSubpanel = new HorizontalPanel();
         rightSubpanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
-        rightSubpanel.setStyleName(styleName + TabPanel.StyleSufixes.BarItemRight);
+        rightSubpanel.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemRight));
 
         if (imageResource != null) {
             Image image = new Image(imageResource);
-            image.setStyleName(styleName + TabPanel.StyleSufixes.BarItemImage);
+            image.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemImage));
             rightSubpanel.add(image);
             rightSubpanel.setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
         }
@@ -90,7 +90,7 @@ public class TabBarItem extends HorizontalPanel {
         rightSubpanel.add(modifyedLabel);
 
         label = new Label(labelString);
-        label.setStyleName(styleName + TabPanel.StyleSufixes.BarItemLabel);
+        label.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItemLabel));
         label.setWordWrap(false);
         rightSubpanel.add(label);
 
@@ -153,14 +153,15 @@ public class TabBarItem extends HorizontalPanel {
 
     void setSelected(boolean selected) {
         this.isSelected = selected;
+        String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.selected);
         if (selected) {
-            addStyleDependentName("selected");
-            getWidget(0).addStyleDependentName("selected");
-            getWidget(1).addStyleDependentName("selected");
+            addStyleDependentName(dependentSuffix);
+            getWidget(0).addStyleDependentName(dependentSuffix);
+            getWidget(1).addStyleDependentName(dependentSuffix);
         } else {
-            removeStyleDependentName("selected");
-            getWidget(0).removeStyleDependentName("selected");
-            getWidget(1).removeStyleDependentName("selected");
+            removeStyleDependentName(dependentSuffix);
+            getWidget(0).removeStyleDependentName(dependentSuffix);
+            getWidget(1).removeStyleDependentName(dependentSuffix);
         }
     }
 
@@ -170,14 +171,15 @@ public class TabBarItem extends HorizontalPanel {
 
     void setEnabled(boolean enabled) {
         this.isEnabled = enabled;
+        String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.disabled);
         if (!enabled) {
-            addStyleDependentName("disabled");
-            getWidget(0).addStyleName("disabled");
-            getWidget(1).addStyleName("disabled");
+            addStyleDependentName(dependentSuffix);
+            getWidget(0).addStyleDependentName(dependentSuffix);
+            getWidget(1).addStyleDependentName(dependentSuffix);
         } else {
-            removeStyleName("disabled");
-            getWidget(0).removeStyleName("disabled");
-            getWidget(1).removeStyleName("disabled");
+            removeStyleDependentName(dependentSuffix);
+            getWidget(0).removeStyleDependentName(dependentSuffix);
+            getWidget(1).removeStyleDependentName(dependentSuffix);
         }
     }
 

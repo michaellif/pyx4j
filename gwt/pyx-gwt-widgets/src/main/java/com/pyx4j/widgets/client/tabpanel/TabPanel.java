@@ -42,11 +42,19 @@ import com.pyx4j.widgets.client.DeckLayoutPanel;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, HasSelectionHandlers<E>, HasCloseHandlers<E>, HasBeforeCloseHandlers<E> {
 
-    public static enum StyleSufixes {
+    public static String pyx4j_Tab = "pyx4j_Tab";
+
+    public static enum StyleSuffix implements IStyleSuffix {
         PanelBottom, BarMoveLeft, BarMoveRight, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, first
     }
 
     private final DeckLayoutPanel deck = new DeckLayoutPanel();
@@ -57,12 +65,17 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
 
     private EventBus eventBus;
 
-    private final String styleName;
+    private String styleName;
 
-    public TabPanel(String styleName) {
+    public TabPanel() {
+        tabBar = new TabBar(this);
+        setStylePrefix(pyx4j_Tab);
+    }
+
+    public void setStylePrefix(String styleName) {
         this.styleName = styleName;
-        tabBar = new TabBar(this, styleName);
-        getDeck().setStyleName(styleName + StyleSufixes.PanelBottom.name());
+        tabBar.setStylePrefix(styleName);
+        getDeck().setStyleName(styleName + StyleSuffix.PanelBottom);
     }
 
     public void add(E tab) {
@@ -112,7 +125,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
         deck.remove(index);
         tabs.remove(index).setParentTabPanel(null);
         if (deck.getWidgetCount() == 0) {
-            deck.removeStyleName(styleName + StyleSufixes.PanelBottom);
+            deck.removeStyleName(styleName + StyleSuffix.PanelBottom);
         }
 
         CloseEvent.fire(this, tab);

@@ -37,6 +37,7 @@ import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
+import com.pyx4j.widgets.client.style.Selector;
 
 public class TabBar extends Composite implements ClickHandler, ResizableWidget {
 
@@ -63,7 +64,7 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
     /**
      * Creates an empty tab bar.
      */
-    public TabBar(TabPanel<? extends Tab> tabPanel, String styleName) {
+    public TabBar(TabPanel<? extends Tab> tabPanel) {
 
         this.tabPanel = tabPanel;
 
@@ -74,7 +75,6 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         this.ensureDebugId(this.getClass().getName());
 
         sinkEvents(Event.ONCLICK);
-        setStyleName(styleName);
 
         tabBarPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 
@@ -90,9 +90,6 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
                 tabScrollPosition = setTabScrollPosition(tabScrollPosition - 50);
             }
         });
-
-        moveLeft.setStyleName(getStyleName() + TabPanel.StyleSufixes.BarMoveLeft);
-        moveRight.setStyleName(getStyleName() + TabPanel.StyleSufixes.BarMoveRight);
 
         tabBarPanel.add(moveLeft);
 
@@ -124,6 +121,13 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         tabBarPanel.setCellHeight(moveRight, "100%");
         tabBarPanel.setCellVerticalAlignment(moveLeft, HasVerticalAlignment.ALIGN_TOP);
         tabBarPanel.setCellVerticalAlignment(moveRight, HasVerticalAlignment.ALIGN_TOP);
+
+    }
+
+    public void setStylePrefix(String styleName) {
+        setStyleName(styleName);
+        moveLeft.setStyleName(getStyleName() + TabPanel.StyleSuffix.BarMoveLeft);
+        moveRight.setStyleName(getStyleName() + TabPanel.StyleSuffix.BarMoveRight);
 
     }
 
@@ -205,9 +209,9 @@ public class TabBar extends Composite implements ClickHandler, ResizableWidget {
         if (beforeIndex == 0) {
             if (tabsPanel.getWidgetCount() > 0) {
                 Widget firstTab = tabsPanel.getWidget(0);
-                firstTab.removeStyleDependentName("first");
+                firstTab.removeStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.first));
             }
-            item.addStyleDependentName("first");
+            item.addStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.first));
         }
 
         tabsPanel.insert(item, beforeIndex);

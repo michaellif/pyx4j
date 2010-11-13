@@ -71,7 +71,4 @@ public enum CSSClass {
     //Banner
     pyx4j_Banner,
 
-    //Banner
-    pyx4j_Tab, pyx4j_TabBottom
-
 }
