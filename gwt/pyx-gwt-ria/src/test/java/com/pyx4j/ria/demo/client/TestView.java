@@ -20,7 +20,10 @@
  */
 package com.pyx4j.ria.demo.client;
 
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -52,6 +55,26 @@ public class TestView extends AbstractView {
 
         Toolbar toolbar = new Toolbar();
         toolbarPanel.add(toolbar);
+
+        ImageResource viewMenu = ImageFactory.getImages().viewMenu();
+        MenuBar actionsMenu = getMenu();
+        MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
+        menuButtonItem.removeStyleName("gwt-MenuItem");
+        menuButtonItem.getElement().getStyle().setCursor(Cursor.POINTER);
+
+        MenuBar menuButtonBar = new MenuBar() {
+            @Override
+            public void onBrowserEvent(Event event) {
+                if (event.getTypeInt() == Event.ONCLICK) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                super.onBrowserEvent(event);
+            }
+        };
+        menuButtonBar.addItem(menuButtonItem);
+
+        //toolbarPanel.add(menuButtonBar);
 
         setToolbarPane(toolbarPanel);
     }
