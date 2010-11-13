@@ -191,6 +191,10 @@ public abstract class SitePanel extends SimplePanel {
 
     }
 
+    protected int shownPanelCount() {
+        return cachedPanels.size();
+    }
+
     private void showAsyncContinue(Page page, final Map<String, String> args) {
         Window.setTitle(page.caption() + " | " + site.siteCaption());
         Window.scrollTo(0, 0);
