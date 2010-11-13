@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.style.Theme;
 public class ConsoleSitePanel extends SitePanel implements InlineWidgetFactory {
 
     public ConsoleSitePanel() {
-        super(ConsoleSiteFactory.createSite(), null);
+        super(new ConsoleSiteFactory().createSite(), null);
 
         setSkinFactory(new SkinFactory() {
             @Override

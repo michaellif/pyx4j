@@ -25,11 +25,13 @@ import java.util.List;
 
 import com.google.gwt.resources.client.ExternalTextResource;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.shared.domain.DefaultSkins;
 import com.pyx4j.site.shared.domain.Page;
+import com.pyx4j.site.shared.domain.PageDataImpl;
+import com.pyx4j.site.shared.domain.PageImpl;
 import com.pyx4j.site.shared.domain.Portlet;
+import com.pyx4j.site.shared.domain.PortletImpl;
 import com.pyx4j.site.shared.domain.Site;
+import com.pyx4j.site.shared.domain.SiteImpl;
 
 public class SiteFactory {
 
@@ -48,24 +50,12 @@ public class SiteFactory {
     }
 
     protected Portlet createPortlet(String portletId, String caption, String html, String styleName, String actionLabel, Class<? extends NavigNode> navigNode) {
-        Portlet portlet = EntityFactory.create(Portlet.class);
-        portlet.portletId().setValue(portletId);
-        portlet.caption().setValue(caption);
-        portlet.styleName().setValue(styleName);
-        portlet.html().setValue(html);
-        portlet.actionLabel().setValue(actionLabel);
-        portlet.navigNode().setValue(navigNode);
-        return portlet;
+        return new PortletImpl(portletId, caption, html, styleName, actionLabel, navigNode);
     }
 
     public Site createSite(String siteId, String caption) {
-        Site site = EntityFactory.create(Site.class);
-        site.updateTimestamp().setValue(System.currentTimeMillis());
-        site.siteId().setValue(siteId);
-        site.siteCaption().setValue(caption);
-        site.logoUrl().setValue("images/logo.png");
-        site.skinType().setValue(DefaultSkins.light.name());
-        site.footerCopyright().setValue(footerCopyright());
+        SiteImpl site = new SiteImpl(siteId, caption, footerCopyright());
+        site.setLogoUrl("images/logo.png");
         return site;
     }
 
@@ -88,7 +78,7 @@ public class SiteFactory {
     protected static Page createPage(String tabName, String caption, Class<? extends NavigNode> node, String discriminator, String html,
             Portlet[] leftPortlets, Portlet[] rightPortlets, String[] inlineWidgets) {
         Page page = createPage(caption, node, discriminator, html, null, leftPortlets, rightPortlets, inlineWidgets);
-        page.tabName().setValue(tabName);
+        ((PageImpl) page).setTabName(tabName);
         return page;
     }
 
@@ -115,7 +105,7 @@ public class SiteFactory {
         Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), helpHtml, leftPortlets, rightPortlets,
                 new String[] { inlineWidget.name() });
         if (tabName != null) {
-            page.tabName().setValue(tabName);
+            ((PageImpl) page).setTabName(tabName);
         }
         return page;
     }
@@ -125,9 +115,9 @@ public class SiteFactory {
         Page page = createPage(caption, node, discriminator, inlineWidgetHtml(inlineWidget), null, leftPortlets, rightPortlets,
                 new String[] { inlineWidget.name() });
         if (tabName != null) {
-            page.tabName().setValue(tabName);
+            ((PageImpl) page).setTabName(tabName);
         }
-        page.data().helpResource().setValue(helpHtmlResource);
+        ((PageDataImpl) page.data()).setHelpResource(helpHtmlResource);
         return page;
     }
 
@@ -137,36 +127,33 @@ public class SiteFactory {
 
     public static Page createPage(String caption, Class<? extends NavigNode> node, String discriminator, String html, String helpHtml, Portlet[] leftPortlets,
             Portlet[] rightPortlets, String[] inlineWidgets) {
-        Page page = EntityFactory.create(Page.class);
-        page.caption().setValue(caption);
+
         String uri = NavigUtils.getPageUri(node);
         if (!uriRegistry.contains(uri)) {
             uriRegistry.add(uri);
         }
-        page.uri().setValue(uri);
-        page.discriminator().setValue(discriminator);
+
         if (html == null) {
             html = caption;
         }
-        page.data().html().setValue(html);
-
-        page.data().help().setValue(helpHtml);
+        PageDataImpl pageData = new PageDataImpl(html, helpHtml);
+        PageImpl page = new PageImpl(caption, uri, discriminator, pageData);
 
         if (leftPortlets != null) {
             for (Portlet portlet : leftPortlets) {
-                page.data().leftPortlets().add(portlet);
+                pageData.addLeftPortlet(portlet);
             }
         }
 
         if (rightPortlets != null) {
             for (Portlet portlet : rightPortlets) {
-                page.data().rightPortlets().add(portlet);
+                pageData.addRightPortlet(portlet);
             }
         }
 
         if (inlineWidgets != null) {
             for (String widgetId : inlineWidgets) {
-                page.data().inlineWidgetIds().add(widgetId);
+                pageData.addInlineWidgetId(widgetId);
             }
         }
         return page;

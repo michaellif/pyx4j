@@ -46,7 +46,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.gwt.commons.AsyncCallbackAggregator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -128,8 +127,8 @@ public abstract class SitePanel extends SimplePanel {
 
         createFooterCopyrightPanel();
 
-        setLogoImage(site.logoUrl().getValue());
-        setFooterCopyright(site.footerCopyright().getValue());
+        setLogoImage(site.logoUrl());
+        setFooterCopyright(site.footerCopyright());
 
         {
             for (Page page : site.pages()) {
@@ -163,11 +162,11 @@ public abstract class SitePanel extends SimplePanel {
 
     protected void show(final Page page, final Map<String, String> args) {
 
-        log.info("Show page " + page.uri().getStringView());
+        log.info("Show page " + page.uri());
 
-        StyleManger.installTheme(skinFactory.createSkin(site.skinType().getValue()));
+        StyleManger.installTheme(skinFactory.createSkin(site.skinType()));
 
-        final String key = page.uri().getValue() + "$" + page.discriminator();
+        final String key = page.uri() + "$" + page.discriminator();
         if (cachedPanels.containsKey(key)) {
             currentPagePanel = cachedPanels.get(key);
             mainSectionPanel.setWidget(currentPagePanel);
@@ -193,12 +192,12 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     private void showAsyncContinue(Page page, final Map<String, String> args) {
-        Window.setTitle(page.caption().getValue() + " | " + site.siteCaption().getValue());
+        Window.setTitle(page.caption() + " | " + site.siteCaption());
         Window.scrollTo(0, 0);
 
-        setHeaderCaption(page.caption().getValue());
+        setHeaderCaption(page.caption());
 
-        primaryNavigationBar.setSelected(page.uri().getValue());
+        primaryNavigationBar.setSelected(page.uri());
 
         final AsyncCallbackAggregator callback = new AsyncCallbackAggregator(new AsyncCallback<Void>() {
             @Override
@@ -217,8 +216,11 @@ public abstract class SitePanel extends SimplePanel {
         callback.onSuccess(null);
     }
 
-    private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, IList<Portlet> portlets, AsyncCallbackAggregator callback) {
+    private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, List<Portlet> portlets, AsyncCallbackAggregator callback) {
         sectionPanel.clear();
+        if (portlets == null) {
+            return;
+        }
         for (Portlet portlet : portlets) {
             if (isPortletVisible(portlet)) {
                 PortletPanel portletPanel = new PortletPanel(this, portlet, bundle);
@@ -381,7 +383,7 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     public String getSiteName() {
-        return site.siteId().getValue();
+        return site.siteId();
     }
 
     public void setLogoImage(String logoUrl) {
@@ -448,15 +450,15 @@ public abstract class SitePanel extends SimplePanel {
     }
 
     private void addPage(Page page) {
-        List<Page> sameUriPages = pages.get(page.uri().getValue());
+        List<Page> sameUriPages = pages.get(page.uri());
         if (sameUriPages == null) {
             sameUriPages = new ArrayList<Page>();
-            pages.put(page.uri().getValue(), sameUriPages);
-            if (NavigUtils.isRoot(page.uri().getValue())) {
-                if (page.tabName().getValue() == null) {
-                    primaryNavigationBar.add(page.caption().getValue(), page.uri().getValue());
+            pages.put(page.uri(), sameUriPages);
+            if (NavigUtils.isRoot(page.uri())) {
+                if (page.tabName() == null) {
+                    primaryNavigationBar.add(page.caption(), page.uri());
                 } else {
-                    primaryNavigationBar.add(page.tabName().getValue(), page.uri().getValue());
+                    primaryNavigationBar.add(page.tabName(), page.uri());
                 }
             }
         }

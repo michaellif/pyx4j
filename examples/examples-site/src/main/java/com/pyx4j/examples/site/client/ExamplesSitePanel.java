@@ -28,7 +28,6 @@ import com.pyx4j.site.client.CommandLink;
 import com.pyx4j.site.client.SitePanel;
 import com.pyx4j.site.client.SkinFactory;
 import com.pyx4j.site.client.themes.crm.CrmTheme;
-import com.pyx4j.site.shared.domain.Link;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -47,15 +46,6 @@ public abstract class ExamplesSitePanel extends SitePanel {
                 return new CrmTheme();
             }
         });
-
-        {
-            boolean hasSeparator = false;
-            for (Link link : site.footerLinks()) {
-                //TODO
-                //addFooterLink(iterator.next(), hasSeparator);
-                hasSeparator = true;
-            }
-        }
 
         logInLink = new CommandLink("Sign In", new Command() {
             @Override

@@ -39,15 +39,15 @@ public class PortletPanel extends ContentPanel {
 
         container = new VerticalPanel();
 
-        String styleName = portlet.styleName().getValue();
+        String styleName = portlet.styleName();
         if (styleName == null) {
             styleName = SiteCSSClass.pyx4j_Site_HtmlPortlet.name();
         }
 
         container.setStyleName(styleName);
 
-        if (portlet.caption().getValue() != null) {
-            HTML captionPanel = new HTML(portlet.caption().getValue());
+        if (portlet.caption() != null) {
+            HTML captionPanel = new HTML(portlet.caption());
             captionPanel.setWordWrap(false);
             container.add(captionPanel);
             captionPanel.setStyleName(styleName + "Header");
@@ -57,16 +57,16 @@ public class PortletPanel extends ContentPanel {
             headerPanel.setStyleName(styleName + "EmptyHeader");
         }
 
-        DynamicHTML bodyPanel = new DynamicHTML(portlet.html().getValue(), bundle, true);
+        DynamicHTML bodyPanel = new DynamicHTML(portlet.html(), bundle, true);
         container.add(bodyPanel);
         bodyPanel.setStyleName(styleName + "Body");
 
-        if (!portlet.navigNode().isNull()) {
-            Button button = new Button(portlet.actionLabel().getStringView());
+        if (portlet.navigNode() != null) {
+            Button button = new Button(portlet.actionLabel());
             button.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    AbstractSiteDispatcher.show(NavigUtils.getPageUri(portlet.navigNode().getValue()));
+                    AbstractSiteDispatcher.show(NavigUtils.getPageUri(portlet.navigNode()));
                 }
             });
 

@@ -20,18 +20,15 @@
  */
 package com.pyx4j.site.rpc;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.shared.Service;
-import com.pyx4j.site.shared.domain.Site;
 
 public interface SiteServices {
 
-    public interface Save extends Service<IEntity, IEntity> {
-
-    };
-
-    public interface Retrieve extends Service<SiteRequest, Site> {
-
-    };
+    //    public interface Save extends Service<IEntity, IEntity> {
+    //
+    //    };
+    //
+    //    public interface Retrieve extends Service<SiteRequest, Site> {
+    //
+    //    };
 
 }

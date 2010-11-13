@@ -20,99 +20,99 @@
  */
 package com.pyx4j.site.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
-
-import com.pyx4j.entity.client.ClientEntityFactory;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.rpc.client.RecoverableAsyncCallback;
-import com.pyx4j.serialization.client.SymmetricClientSerializationStreamWriter;
-import com.pyx4j.site.rpc.SiteRequest;
-import com.pyx4j.site.rpc.SiteServices;
-import com.pyx4j.site.shared.domain.Site;
-import com.pyx4j.webstorage.client.HTML5Storage;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//
+//import com.google.gwt.user.client.rpc.AsyncCallback;
+//import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
+//
+//import com.pyx4j.entity.client.ClientEntityFactory;
+//import com.pyx4j.entity.shared.EntityFactory;
+//import com.pyx4j.rpc.client.RPCManager;
+//import com.pyx4j.rpc.client.RecoverableAsyncCallback;
+//import com.pyx4j.serialization.client.SymmetricClientSerializationStreamWriter;
+//import com.pyx4j.site.rpc.SiteRequest;
+//import com.pyx4j.site.rpc.SiteServices;
+//import com.pyx4j.site.shared.domain.Site;
+//import com.pyx4j.webstorage.client.HTML5Storage;
 
 /**
  * Use HTML 5 local storage as Cache for site information.
  */
 public class SiteCache {
-
-    private static Logger log = LoggerFactory.getLogger(SiteCache.class);
-
-    public static void obtain(final String siteId, final AsyncCallback<Site> callback) {
-
-        ClientEntityFactory.ensureIEntityImplementations();
-
-        final SiteRequest siteRequest = new SiteRequest();
-        siteRequest.setSiteId(siteId);
-
-        final String dataKey = "pyx4j.site." + siteId;
-        final Site siteLocal;
-        // Read the local site data then check for site update.
-        if (HTML5Storage.isSupported()) {
-            siteLocal = EntityFactory.create(Site.class);
-            HTML5Storage storage = HTML5Storage.getLocalStorage();
-            String siteDataSerial = storage.getItem(dataKey);
-            if (siteDataSerial != null) {
-                try {
-                    ClientSerializationStreamReader r = new ClientSerializationStreamReader(RPCManager.getSerializer());
-                    r.prepareToRead(siteDataSerial);
-                    Object o = r.readObject();
-                    if (o instanceof Site) {
-                        siteLocal.set((Site) o);
-                        siteRequest.setModificationTime(siteLocal.updateTimestamp().getValue());
-                        log.debug("local site {} payload processed", siteRequest.getModificationTime());
-                    }
-                } catch (Throwable t) {
-                    log.error("Unable to read local site", t);
-                }
-                if (siteLocal.isNull()) {
-                    storage.removeItem(dataKey);
-                }
-            }
-        } else {
-            siteLocal = null;
-        }
-
-        final AsyncCallback<Site> rpcCallback = new RecoverableAsyncCallback<Site>() {
-
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
-            }
-
-            public void onSuccess(Site result) {
-                // Old browser, no HTML5 storage or empty DB
-                if ((siteLocal == null) || (result == null)) {
-                    callback.onSuccess(result);
-                } else {
-                    if (result.isNull()) {
-                        log.debug("Site is not updated, local site version used");
-                        callback.onSuccess(siteLocal);
-                    } else {
-                        log.debug("Site updated {}, will store localy for future use", result.updateTimestamp().getValue());
-                        callback.onSuccess(result);
-                        storeSiteLocaly(dataKey, result);
-                    }
-                }
-            }
-        };
-
-        RPCManager.execute(SiteServices.Retrieve.class, siteRequest, rpcCallback);
-    }
-
-    private static void storeSiteLocaly(String dataKey, Site site) {
-        try {
-            HTML5Storage storage = HTML5Storage.getLocalStorage();
-            SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(RPCManager.getSerializer());
-            w.prepareToWrite();
-            w.writeObject(site);
-            storage.setItem(dataKey, w.toString());
-        } catch (Throwable t) {
-            log.error("Unable to store local site", t);
-        }
-    }
+    //
+    //    private static Logger log = LoggerFactory.getLogger(SiteCache.class);
+    //
+    //    public static void obtain(final String siteId, final AsyncCallback<Site> callback) {
+    //
+    //        ClientEntityFactory.ensureIEntityImplementations();
+    //
+    //        final SiteRequest siteRequest = new SiteRequest();
+    //        siteRequest.setSiteId(siteId);
+    //
+    //        final String dataKey = "pyx4j.site." + siteId;
+    //        final Site siteLocal;
+    //        // Read the local site data then check for site update.
+    //        if (HTML5Storage.isSupported()) {
+    //            siteLocal = EntityFactory.create(Site.class);
+    //            HTML5Storage storage = HTML5Storage.getLocalStorage();
+    //            String siteDataSerial = storage.getItem(dataKey);
+    //            if (siteDataSerial != null) {
+    //                try {
+    //                    ClientSerializationStreamReader r = new ClientSerializationStreamReader(RPCManager.getSerializer());
+    //                    r.prepareToRead(siteDataSerial);
+    //                    Object o = r.readObject();
+    //                    if (o instanceof Site) {
+    //                        siteLocal.set((Site) o);
+    //                        siteRequest.setModificationTime(siteLocal.updateTimestamp().getValue());
+    //                        log.debug("local site {} payload processed", siteRequest.getModificationTime());
+    //                    }
+    //                } catch (Throwable t) {
+    //                    log.error("Unable to read local site", t);
+    //                }
+    //                if (siteLocal.isNull()) {
+    //                    storage.removeItem(dataKey);
+    //                }
+    //            }
+    //        } else {
+    //            siteLocal = null;
+    //        }
+    //
+    //        final AsyncCallback<Site> rpcCallback = new RecoverableAsyncCallback<Site>() {
+    //
+    //            public void onFailure(Throwable caught) {
+    //                callback.onFailure(caught);
+    //            }
+    //
+    //            public void onSuccess(Site result) {
+    //                // Old browser, no HTML5 storage or empty DB
+    //                if ((siteLocal == null) || (result == null)) {
+    //                    callback.onSuccess(result);
+    //                } else {
+    //                    if (result.isNull()) {
+    //                        log.debug("Site is not updated, local site version used");
+    //                        callback.onSuccess(siteLocal);
+    //                    } else {
+    //                        log.debug("Site updated {}, will store localy for future use", result.updateTimestamp().getValue());
+    //                        callback.onSuccess(result);
+    //                        storeSiteLocaly(dataKey, result);
+    //                    }
+    //                }
+    //            }
+    //        };
+    //
+    //        RPCManager.execute(SiteServices.Retrieve.class, siteRequest, rpcCallback);
+    //    }
+    //
+    //    private static void storeSiteLocaly(String dataKey, Site site) {
+    //        try {
+    //            HTML5Storage storage = HTML5Storage.getLocalStorage();
+    //            SymmetricClientSerializationStreamWriter w = new SymmetricClientSerializationStreamWriter(RPCManager.getSerializer());
+    //            w.prepareToWrite();
+    //            w.writeObject(site);
+    //            storage.setItem(dataKey, w.toString());
+    //        } catch (Throwable t) {
+    //            log.error("Unable to store local site", t);
+    //        }
+    //    }
 }

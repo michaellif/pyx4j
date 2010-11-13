@@ -20,29 +20,24 @@
  */
 package com.pyx4j.site.shared.domain;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.StringLength;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+import java.util.Collection;
+
 import com.pyx4j.site.shared.meta.NavigNode;
 
-public interface Portlet extends IEntity {
+public interface Portlet {
 
-    IPrimitive<String> portletId();
+    String portletId();
 
-    IPrimitive<String> caption();
+    String caption();
 
-    IPrimitive<String> styleName();
+    String styleName();
 
-    IPrimitive<String> actionLabel();
+    String actionLabel();
 
-    IPrimitive<Class<? extends NavigNode>> navigNode();
+    Class<? extends NavigNode> navigNode();
 
-    @StringLength(4096)
-    IPrimitive<String> html();
+    String html();
 
-    @Owned
-    IPrimitiveSet<String> inlineWidgetIds();
+    Collection<String> inlineWidgetIds();
 
 }

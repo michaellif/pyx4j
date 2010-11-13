@@ -22,6 +22,7 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- 
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-rpc-shared</artifactId>
@@ -33,6 +34,7 @@
             <artifactId>pyx-entity-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
+        -->
 
 		<dependency>
 			<groupId>junit</groupId>

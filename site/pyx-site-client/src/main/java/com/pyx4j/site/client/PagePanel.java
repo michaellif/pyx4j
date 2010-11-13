@@ -46,7 +46,7 @@ public class PagePanel extends ContentPanel {
 
     public PagePanel(SitePanel parent, Page page, ClientBundleWithLookup bundle) {
         super(parent);
-        container = new PageContainer(page.data().html().getValue(), bundle, true);
+        container = new PageContainer(page.data().html(), bundle, true);
         this.page = page;
         container.setStyleName(SiteCSSClass.pyx4j_Site_PagePanel.name());
         setWidget(container);
@@ -81,7 +81,7 @@ public class PagePanel extends ContentPanel {
             }
         }
         if (!replaced) {
-            log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption().getValue());
+            log.warn("Failed to add inline widget {} to panel {}.", widgetId, page.caption());
         }
     }
 
@@ -91,13 +91,13 @@ public class PagePanel extends ContentPanel {
 
     @Override
     protected void onLoad() {
-        log.debug("PagePanel [{}] onLoad", page.caption().getValue());
+        log.debug("PagePanel [{}] onLoad", page.caption());
         super.onLoad();
     }
 
     @Override
     protected void onUnload() {
-        log.debug("PagePanel [{}] onUnload", page.caption().getValue());
+        log.debug("PagePanel [{}] onUnload", page.caption());
         super.onUnload();
     }
 

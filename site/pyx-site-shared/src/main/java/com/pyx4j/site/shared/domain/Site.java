@@ -20,43 +20,24 @@
  */
 package com.pyx4j.site.shared.domain;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.util.List;
 
-public interface Site extends IEntity {
+public interface Site {
 
-    IPrimitive<Long> updateTimestamp();
+    String siteId();
 
-    @NotNull
-    @Caption(name = "Site Id")
-    IPrimitive<String> siteId();
+    String siteCaption();
 
-    @NotNull
-    @Caption(name = "Caption")
-    IPrimitive<String> siteCaption();
+    String logoUrl();
 
-    @NotNull
-    @Caption(name = "Logo Url")
-    IPrimitive<String> logoUrl();
+    String skinType();
 
-    @NotNull
-    @Caption(name = "Skin Type")
-    IPrimitive<String> skinType();
+    List<Link> headerLinks();
 
-    @Owned
-    IList<Link> headerLinks();
+    List<Link> footerLinks();
 
-    @Owned
-    IList<Link> footerLinks();
+    String footerCopyright();
 
-    @Caption(name = "Footer Copyright")
-    IPrimitive<String> footerCopyright();
-
-    @Owned
-    IList<Page> pages();
+    List<Page> pages();
 
 }

@@ -24,6 +24,7 @@ import com.pyx4j.examples.site.client.ExamplesWidgets.ExamplesPubWidgets;
 import com.pyx4j.examples.site.client.pub.ExamplesPublicSiteResources;
 import com.pyx4j.site.shared.domain.Page;
 import com.pyx4j.site.shared.domain.Portlet;
+import com.pyx4j.site.shared.domain.PortletImpl;
 import com.pyx4j.site.shared.domain.Site;
 import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.site.shared.meta.SiteFactory;
@@ -34,7 +35,7 @@ public class ExamplesSiteFactory extends SiteFactory {
         Portlet portlet = createPortlet("portlet-technology", "<span style='text-align:center;'><h4>Our technology</h4></span>",
                 inlineWidgetHtml(ExamplesPubWidgets.pub$technologyWidget));
 
-        portlet.inlineWidgetIds().add(ExamplesPubWidgets.pub$technologyWidget.name());
+        ((PortletImpl) portlet).addInlineWidgetId(ExamplesPubWidgets.pub$technologyWidget.name());
         return portlet;
     }
 

@@ -20,23 +20,18 @@
  */
 package com.pyx4j.site.shared.domain;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+public interface Page {
 
-public interface Page extends IEntity {
+    String uri();
 
-    IPrimitive<String> uri();
+    String tabName();
 
-    IPrimitive<String> tabName();
+    String caption();
 
-    IPrimitive<String> caption();
+    String discriminator();
 
-    IPrimitive<String> discriminator();
+    boolean navigHidden();
 
-    IPrimitive<Boolean> navigHidden();
-
-    @Owned
     PageData data();
 
 }

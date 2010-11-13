@@ -20,30 +20,23 @@
  */
 package com.pyx4j.site.shared.domain;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.google.gwt.resources.client.ExternalTextResource;
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.StringLength;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
+public interface PageData {
 
-public interface PageData extends IEntity {
+    String html();
 
-    @StringLength(8192)
-    IPrimitive<String> html();
+    String help();
 
-    @StringLength(8192)
-    IPrimitive<String> help();
+    ExternalTextResource helpResource();
 
-    IPrimitive<ExternalTextResource> helpResource();
+    Collection<String> inlineWidgetIds();
 
-    @Owned
-    IPrimitiveSet<String> inlineWidgetIds();
+    List<Portlet> leftPortlets();
 
-    IList<Portlet> leftPortlets();
-
-    IList<Portlet> rightPortlets();
+    List<Portlet> rightPortlets();
 
 }
