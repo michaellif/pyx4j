@@ -71,7 +71,7 @@ public class DemoApplication implements IApplication {
     }
 
     public void openView(AbstractView view) {
-        mainPanel.openView(view, true);
+        mainPanel.addAndShowView(view, true);
     }
 
     public void onLoad() {
@@ -107,12 +107,12 @@ public class DemoApplication implements IApplication {
 
         mainPanel = new MainPanel();
 
-        mainPanel.openView(new TestView("Long Tab1"), true);
-        mainPanel.openView(new TestView("Tab2"), true);
-        mainPanel.openView(new TestView("Tab3"), true);
+        mainPanel.addAndShowView(new TestView("Long Tab1"), true);
+        mainPanel.addAndShowView(new TestView("Tab2"), true);
+        mainPanel.addAndShowView(new TestView("Tab3"), true);
 
         //TODO mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));
-        mainPanel.openView(new TabPanelView("Tab Pane", null), true);
+        mainPanel.addAndShowView(new TabPanelView("Tab Pane", null), true);
 
         perspective.setMainPanel(mainPanel);
 

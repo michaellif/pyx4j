@@ -24,7 +24,11 @@ public interface ViewManager<T extends Position> {
 
     public Position getPositionForView(Class<? extends AbstractView> viewClass);
 
-    public void openView(AbstractView view, boolean closable);
+    public void addView(AbstractView view, boolean closable);
+
+    public void showView(AbstractView view);
+
+    public void addAndShowView(AbstractView view, boolean closable);
 
     public void closeView(AbstractView view);
 

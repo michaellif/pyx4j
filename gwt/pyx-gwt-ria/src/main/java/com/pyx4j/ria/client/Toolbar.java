@@ -54,6 +54,17 @@ public class Toolbar extends FlowPanel {
         addItem(button);
     }
 
+    public void addItem(ImageResource imageResource, String caption, final Command command) {
+        Button button = new Button(new Image(imageResource), caption);
+        button.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                command.execute();
+            }
+        });
+        addItem(button);
+    }
+
     public void addItem(ImageResource imageResource, final Command command, String tooltip) {
         Button button = new Button(new Image(imageResource));
         button.setTooltip(tooltip);
