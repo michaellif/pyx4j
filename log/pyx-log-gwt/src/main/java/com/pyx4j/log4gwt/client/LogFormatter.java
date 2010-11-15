@@ -24,8 +24,6 @@ import java.util.Date;
 
 import org.slf4j.helpers.MessageFormatter;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-
 import com.pyx4j.log4gwt.shared.LogEvent;
 
 public class LogFormatter {
@@ -34,14 +32,13 @@ public class LogFormatter {
         LINE, HTML, FULL, FULL_HOSTED
     }
 
-    private static final DateTimeFormat timeFormatter = DateTimeFormat.getFormat("HH:mm:ss.SSS");
-
     public static String format(LogEvent event, FormatStyle style) {
         StringBuilder b = new StringBuilder();
         format(event, style, b);
         return b.toString();
     }
 
+    @SuppressWarnings("deprecation")
     private static void format(LogEvent event, FormatStyle style, StringBuilder b) {
         boolean closeFontTag = false;
         if (style == FormatStyle.HTML) {
@@ -71,7 +68,29 @@ public class LogFormatter {
             b.append(space);
         }
         b.append(space);
-        b.append(timeFormatter.format(new Date(event.getEventTime()))).append(space);
+        // "HH:mm:ss.SSS":  Use  Simple time format to exclude com.google.gwt.i18n.client.DateTimeFormat from linking
+        Date date = new Date(event.getEventTime());
+        b.append(date.getHours()).append(':');
+        if (date.getMinutes() < 10) {
+            b.append('0');
+        }
+        b.append(date.getMinutes());
+        b.append(':');
+        if (date.getSeconds() < 10) {
+            b.append('0');
+        }
+        b.append(date.getSeconds());
+        b.append('.');
+        int milliseconds = (int) (event.getEventTime() % 1000);
+        if (milliseconds < 10) {
+            b.append("00");
+        } else if (milliseconds < 100) {
+            b.append('0');
+        }
+        b.append(milliseconds);
+
+        b.append(space);
+
         if ((style == FormatStyle.HTML) && (closeFontTag)) {
             b.append("</font>");
         }
@@ -97,5 +116,4 @@ public class LogFormatter {
             break;
         }
     }
-
 }
