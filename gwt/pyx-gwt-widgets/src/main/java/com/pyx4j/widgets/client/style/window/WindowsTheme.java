@@ -120,11 +120,7 @@ public class WindowsTheme extends Theme {
         // style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
 
-        style.addProperty("filter", "progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000')");
-
-        style.addProperty("background", "-webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000))");
-
-        style.addProperty("background", "-moz-linear-gradient(top,  #ccc,  #000)");
+        style.addGradientBackground();
 
         addStyle(style);
     }

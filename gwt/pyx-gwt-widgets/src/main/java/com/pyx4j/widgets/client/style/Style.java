@@ -56,6 +56,16 @@ public class Style {
         properties.add(new Property(name, value));
     }
 
+    public void addGradientBackground() {
+
+        addProperty("filter", "progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000')");
+
+        addProperty("background", "-webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000))");
+
+        addProperty("background", "-moz-linear-gradient(top,  #ccc,  #000)");
+
+    }
+
     public void addProperty(String name, ThemeColor color) {
         properties.add(new Property(name, color));
     }
