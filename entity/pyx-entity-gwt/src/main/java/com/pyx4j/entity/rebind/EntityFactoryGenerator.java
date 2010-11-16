@@ -582,7 +582,7 @@ public class EntityFactoryGenerator extends Generator {
     }
 
     private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
-        final boolean optimizeForJS = false;
+        final boolean optimizeForJS = true;
 
         //Static for optimisation
         writer.println();
@@ -619,21 +619,11 @@ public class EntityFactoryGenerator extends Generator {
         List<JMethod> allMethods = getAllEntityMethods(interfaceType);
         if (optimizeForJS) {
             writer.println();
-            writer.println("static {");
-            writer.indent();
-            writer.println("if (GWT.isScript()) {");
-            writer.indent();
-
-            writer.println("createMemberMap = loadCreateMemberNative();");
-            writer.outdent();
-            writer.println("}");
-            writer.outdent();
-            writer.println("}");
 
             writer.println("private static native EntityMemberMapCreator loadCreateMemberNative() /*-{");
             writer.indent();
             writer.println("var map = {}");
-            for (JMethod method : allMethods) {
+            nextJSMethod: for (JMethod method : allMethods) {
                 JClassType type = (JClassType) method.getReturnType();
                 writer.print("map[\"" + method.getName() + "\"] = ");
 
@@ -654,7 +644,7 @@ public class EntityFactoryGenerator extends Generator {
                         writer.print(SharedEntityHandler.class.getName().replace('.', '/'));
                         writer.println(";Ljava/lang/String;);");
 
-                        continue;
+                        continue nextJSMethod;
                     }
                 }
 
@@ -710,6 +700,13 @@ public class EntityFactoryGenerator extends Generator {
         if (optimizeForJS) {
             writer.println("if (GWT.isScript()) {");
             writer.indent();
+
+            writer.println("if (createMemberMap == null) {");
+            writer.indent();
+            writer.println("createMemberMap = loadCreateMemberNative();");
+            writer.outdent();
+            writer.println("}");
+
             writer.println("return createMemberMap.createMember(this, name);");
             writer.outdent();
             writer.println("} else {");
