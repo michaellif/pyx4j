@@ -63,7 +63,7 @@ public class SearchCriteriaView extends AbstractView {
 
         public Toolbar() {
 
-            addItem(RiaEntityImageBundle.INSTANCE.image(), "Search", new Command() {
+            addItem(RiaEntityImageBundle.INSTANCE.searchRun(), "Search", new Command() {
 
                 @Override
                 public void execute() {

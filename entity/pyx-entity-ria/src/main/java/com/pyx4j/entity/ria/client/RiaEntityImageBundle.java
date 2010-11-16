@@ -47,8 +47,11 @@ public interface RiaEntityImageBundle extends ClientBundle, RiaImageBundle {
     @Source("search-result.png")
     ImageResource searchResult();
 
-    @Source("search-criteria.jpg")
+    @Source("search-criteria.png")
     ImageResource searchCriteria();
+
+    @Source("search-run.png")
+    ImageResource searchRun();
 
     @Source("print.png")
     ImageResource print();
