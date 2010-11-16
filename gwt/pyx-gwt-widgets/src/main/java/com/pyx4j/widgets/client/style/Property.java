@@ -85,7 +85,10 @@ public class Property {
 
     public String toString(Theme theme) {
         if (value == null) {
-            return name + ": " + theme.getThemeColor(color) + ";";
+            if (color == null) {
+                throw new Error("theme property " + name + " should be set with value or color");
+            }
+            return name + ": " + theme.getThemeColorString(color) + ";";
         }
         int urlIdx = value.indexOf("url(");
         if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {

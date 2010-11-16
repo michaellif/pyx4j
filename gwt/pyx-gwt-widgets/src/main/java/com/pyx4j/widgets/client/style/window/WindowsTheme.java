@@ -68,19 +68,19 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
-        putThemeColor(ThemeColor.OBJECT_TONE2, "#fdfae9");
-        putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
-        putThemeColor(ThemeColor.BORDER, "#666666");
-        putThemeColor(ThemeColor.GROUP_BORDER, "#387CBB");
-        putThemeColor(ThemeColor.SELECTION, "#86adc4");
-        putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
-        putThemeColor(ThemeColor.TEXT, "#000000");
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, "#ffffff");
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, "#fafafa");
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
-        putThemeColor(ThemeColor.SEPARATOR, "#eeeeee");
+        putThemeColor(ThemeColor.OBJECT_TONE1, 0xece9d8);
+        putThemeColor(ThemeColor.OBJECT_TONE2, 0xfdfae9);
+        putThemeColor(ThemeColor.OBJECT_TONE3, 0xdbd8c7);
+        putThemeColor(ThemeColor.BORDER, 0x666666);
+        putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
+        putThemeColor(ThemeColor.SELECTION, 0x86adc4);
+        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
+        putThemeColor(ThemeColor.TEXT, 0x000000);
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
 
     protected void initGeneralStyles() {
@@ -117,8 +117,15 @@ public class WindowsTheme extends Theme {
 
     protected void initToolbarStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Toolbar));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        // style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
+
+        style.addProperty("filter", "progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000')");
+
+        style.addProperty("background", "-webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000))");
+
+        style.addProperty("background", "-moz-linear-gradient(top,  #ccc,  #000)");
+
         addStyle(style);
     }
 

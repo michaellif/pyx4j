@@ -27,20 +27,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Theme {
+
+    private static final Logger log = LoggerFactory.getLogger(Theme.class);
 
     private final List<Style> styles;
 
-    private final Map<ThemeColor, String> themeColors;
+    private final Map<ThemeColor, Integer> themeColors;
 
     public Theme() {
         styles = new ArrayList<Style>();
-        themeColors = new HashMap<ThemeColor, String>();
+        themeColors = new HashMap<ThemeColor, Integer>();
     }
 
     protected Theme(Theme other) {
         styles = new ArrayList<Style>(other.styles);
-        themeColors = new HashMap<ThemeColor, String>(other.themeColors);
+        themeColors = new HashMap<ThemeColor, Integer>(other.themeColors);
     }
 
     public List<Style> getAllStyles() {
@@ -58,14 +63,32 @@ public class Theme {
     }
 
     public void addStyle(Style style) {
+        if (style == null) {
+            throw new Error("Style can't be null");
+        }
+
         styles.add(style);
     }
 
-    public String getThemeColor(ThemeColor color) {
+    public Integer getThemeColor(ThemeColor color) {
+        if (themeColors.get(color) == null) {
+            log.warn("Theme color {} is not set", color.name());
+            return 0xffffff;
+        }
         return themeColors.get(color);
     }
 
-    public void putThemeColor(ThemeColor color, String value) {
+    public String getThemeColorString(ThemeColor color) {
+        String colorString = Integer.toHexString(getThemeColor(color));
+        int appendZeros = 6 - colorString.length();
+        for (int i = 0; i < appendZeros; i++) {
+            colorString = "0" + colorString;
+        }
+
+        return "#" + colorString;
+    }
+
+    public void putThemeColor(ThemeColor color, Integer value) {
         themeColors.put(color, value);
     }
 

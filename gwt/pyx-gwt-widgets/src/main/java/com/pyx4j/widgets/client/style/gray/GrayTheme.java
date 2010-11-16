@@ -31,18 +31,19 @@ public class GrayTheme extends WindowsTheme {
 
     @Override
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, "#404040");
-        putThemeColor(ThemeColor.OBJECT_TONE2, "#303030");
-        putThemeColor(ThemeColor.OBJECT_TONE3, "#505050");
-        putThemeColor(ThemeColor.BORDER, "white");
-        putThemeColor(ThemeColor.SELECTION, "orange");
-        putThemeColor(ThemeColor.SELECTION_TEXT, "#000000");
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, "#000000");
-        putThemeColor(ThemeColor.TEXT, "#ffffff");
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, "#fafafa");
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
-        putThemeColor(ThemeColor.SEPARATOR, "#999999");
+        putThemeColor(ThemeColor.OBJECT_TONE1, 0x404040);
+        putThemeColor(ThemeColor.OBJECT_TONE2, 0x303030);
+        putThemeColor(ThemeColor.OBJECT_TONE3, 0x505050);
+        putThemeColor(ThemeColor.BORDER, 0xffffff);
+        putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
+        putThemeColor(ThemeColor.SELECTION, 0xffa500);
+        putThemeColor(ThemeColor.SELECTION_TEXT, 0x000000);
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0x000000);
+        putThemeColor(ThemeColor.TEXT, 0xffffff);
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemeColor.SEPARATOR, 0x999999);
     }
 
 }

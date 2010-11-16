@@ -55,7 +55,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         ClientEntityFactory.ensureIEntityImplementations();
         UnrecoverableErrorHandlerDialog.register();
         Theme theme = new WindowsTheme();
-        theme.putThemeColor(ThemeColor.OBJECT_TONE1, "#FFFFFF");
+        theme.putThemeColor(ThemeColor.OBJECT_TONE1, 0xFFFFFF);
         StyleManger.installTheme(theme);
 
         ClientLogger.addAppender(new RPCAppender());

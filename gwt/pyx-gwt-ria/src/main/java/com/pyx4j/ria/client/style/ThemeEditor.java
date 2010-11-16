@@ -181,9 +181,10 @@ public class ThemeEditor extends AbstractView {
             label.addClickHandler(h);
         }
 
-        private void setColor(String color) {
-            bar.getElement().getStyle().setProperty("backgroundColor", color);
-            label.setText(color);
+        private void setColor(Integer color) {
+            String colorString = Integer.toHexString(color);
+            bar.getElement().getStyle().setProperty("backgroundColor", colorString);
+            label.setText(colorString);
         }
     }
 
@@ -193,7 +194,7 @@ public class ThemeEditor extends AbstractView {
 
         private ThemeColor editThemeProperty;
 
-        private String colorOriginal;
+        private Integer colorOriginal;
 
         private boolean previewApplied;
 
@@ -251,15 +252,7 @@ public class ThemeEditor extends AbstractView {
             editThemeProperty = p;
             previewApplied = false;
             colorOriginal = theme.getThemeColor(p);
-            String color = colorOriginal;
-            try {
-                if (color.startsWith("#")) {
-                    color = color.substring(1);
-                }
-                //TODO picker.setHex(color);
-            } catch (Exception e) {
-                //TODO Logger.warn(color + " is invalid color", e);
-            }
+            Integer color = colorOriginal;
         }
 
         private void cancel() {
@@ -269,20 +262,20 @@ public class ThemeEditor extends AbstractView {
             }
         }
 
-        private void colorPreview(String color) {
+        private void colorPreview(Integer color) {
             previewApplied = true;
-            setThemeColor("#" + color);
+            setThemeColor(color);
             applyTheme();
         }
 
-        private void colorSelected(String color) {
-            setThemeColor("#" + color);
+        private void colorSelected(Integer color) {
+            setThemeColor(color);
             if (previewApplied) {
                 applyTheme();
             }
         }
 
-        private void setThemeColor(String color) {
+        private void setThemeColor(Integer color) {
             theme.putThemeColor(editThemeProperty, color);
             updateThemePresentation();
         }
@@ -320,7 +313,7 @@ public class ThemeEditor extends AbstractView {
 
     private void updateThemePresentation() {
         for (Map.Entry<ThemeColor, ColorLabel> pe : properties.entrySet()) {
-            String color = theme.getThemeColor(pe.getKey());
+            Integer color = theme.getThemeColor(pe.getKey());
             pe.getValue().setColor(color);
         }
 

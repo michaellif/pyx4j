@@ -23,7 +23,6 @@ package com.pyx4j.site.client.themes.crm;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.client.themes.SiteTheme;
-import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
@@ -32,18 +31,18 @@ public class CrmTheme extends SiteTheme {
     @Override
     protected void initThemeColors() {
         super.initThemeColors();
-        putThemeColor(ThemeColor.OBJECT_TONE1, "#ece9d8");
-        putThemeColor(ThemeColor.OBJECT_TONE2, "#F6F9FF");
-        putThemeColor(ThemeColor.OBJECT_TONE3, "#dbd8c7");
-        putThemeColor(ThemeColor.BORDER, "#D0CAC4");
-        putThemeColor(ThemeColor.SELECTION, "#86adc4");
-        putThemeColor(ThemeColor.SELECTION_TEXT, "#ffffff");
-        putThemeColor(ThemeColor.TEXT, "#000000");
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, "#ffffff");
-        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, "#fafafa");
-        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, "#fcba84");
-        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, "#eeeeee");
-        putThemeColor(ThemeColor.SEPARATOR, "#eeeeee");
+        putThemeColor(ThemeColor.OBJECT_TONE1, 0xece9d8);
+        putThemeColor(ThemeColor.OBJECT_TONE2, 0xF6F9FF);
+        putThemeColor(ThemeColor.OBJECT_TONE3, 0xdbd8c7);
+        putThemeColor(ThemeColor.BORDER, 0xD0CAC4);
+        putThemeColor(ThemeColor.SELECTION, 0x86adc4);
+        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
+        putThemeColor(ThemeColor.TEXT, 0x000000);
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
 
     @Override
@@ -172,7 +171,7 @@ public class CrmTheme extends SiteTheme {
         addStyle(style);
 
         style = new Style("." + SiteCSSClass.pyx4j_Site_PrimaryNavigTab.name() + " a");
-        style.addProperty("color", getThemeColor(ThemeColor.TEXT));
+        style.addProperty("color", getThemeColorString(ThemeColor.TEXT));
         style.addProperty("padding", "0px 16px 0px 20px");
         style.addProperty("height", "32px");
         style.addProperty("text-decoration", "none");
