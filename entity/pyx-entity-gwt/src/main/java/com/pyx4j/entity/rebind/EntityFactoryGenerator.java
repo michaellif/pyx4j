@@ -21,24 +21,14 @@
 package com.pyx4j.entity.rebind;
 
 import java.io.PrintWriter;
-import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.core.ext.typeinfo.JParameterizedType;
-import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -46,59 +36,13 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.EnglishGrammar;
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
-import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.StringLength;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
-import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
-import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
-import com.pyx4j.entity.client.impl.EntityImplNativeHelper;
-import com.pyx4j.entity.client.impl.EntityMemberMapCreator;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.entity.shared.impl.SharedEntityHandler;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityFactoryGenerator extends Generator {
-
-    private static String IMPL = IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
-
-    private static String META_IMPL = "_Meta" + IMPL;
-
-    private JClassType iPrimitiveInterfaceType;
-
-    private JClassType iSetInterfaceType;
-
-    private JClassType iListInterfaceType;
-
-    private JClassType iEnentityInterfaceType;
-
-    private JClassType iObjectInterfaceType;
-
-    private JClassType iPrimitiveSetInterfaceType;
-
-    private JClassType numberType;
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
@@ -106,7 +50,7 @@ public class EntityFactoryGenerator extends Generator {
         try {
             JClassType interfaceType = oracle.getType(typeName);
             String packageName = interfaceType.getPackage().getName();
-            String simpleName = interfaceType.getSimpleSourceName() + IMPL;
+            String simpleName = interfaceType.getSimpleSourceName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
             composer.setSuperclass(AbstractClientEntityFactoryImpl.class.getName());
@@ -116,7 +60,7 @@ public class EntityFactoryGenerator extends Generator {
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
                 // the generated type already exists
-                return interfaceType.getParameterizedQualifiedSourceName() + IMPL;
+                return interfaceType.getParameterizedQualifiedSourceName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
             }
 
             //TODO, this does not work!
@@ -127,18 +71,12 @@ public class EntityFactoryGenerator extends Generator {
 
             RpcBlacklistCheck rpcFilter = new RpcBlacklistCheck(logger, context.getPropertyOracle());
 
-            iObjectInterfaceType = oracle.getType(IObject.class.getName());
-            iEnentityInterfaceType = oracle.getType(IEntity.class.getName());
-            iPrimitiveInterfaceType = oracle.getType(IPrimitive.class.getName());
-            iSetInterfaceType = oracle.getType(ISet.class.getName());
-            iListInterfaceType = oracle.getType(IList.class.getName());
-            iPrimitiveSetInterfaceType = oracle.getType(IPrimitiveSet.class.getName());
-            numberType = oracle.getType(Number.class.getName());
+            ContextHelper contextHelper = new ContextHelper(logger, context);
 
             List<JClassType> cases = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
-                if (isInstantiabeEntity(type)) {
+                if (contextHelper.isInstantiabeEntity(type)) {
                     cases.add(type);
                     logger.log(TreeLogger.Type.DEBUG, "Creating IEntity:" + type.getName());
 
@@ -146,8 +84,8 @@ public class EntityFactoryGenerator extends Generator {
                         throw new RuntimeException("IEntity class :" + type.getPackage().getName() + "." + type.getName() + " should be in rpc.blacklist");
                     }
 
-                    createEntityHandlerImpl(logger, context, type);
-                    createEntityMetaImpl(logger, context, type);
+                    EntityHandlerWriter.createEntityHandlerImpl(contextHelper, type);
+                    EntityMetaWriter.createEntityMetaImpl(contextHelper, type);
                 }
             }
 
@@ -164,13 +102,6 @@ public class EntityFactoryGenerator extends Generator {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected boolean isInstantiabeEntity(JClassType type) {
-        if (!(type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type)) {
-            return false;
-        }
-        return (type.getAnnotation(AbstractEntity.class) == null);
     }
 
     private void writeEntityFactoryImplImpl(SourceWriter writer, String simpleName, List<JClassType> interfaceClasses) {
@@ -196,7 +127,7 @@ public class EntityFactoryGenerator extends Generator {
             writer.indent();
             writer.print("return (T)new ");
             writer.print(interfaceType.getQualifiedSourceName());
-            writer.println(IMPL + "(parent, fieldName);");
+            writer.println(IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX + "(parent, fieldName);");
             writer.outdent();
 
             writer.println("}");
@@ -208,7 +139,7 @@ public class EntityFactoryGenerator extends Generator {
             writer.indent();
             writer.print("return new ");
             writer.print(interfaceType.getQualifiedSourceName());
-            writer.println(META_IMPL + "();");
+            writer.println(EntityMetaWriter.META_IMPL + "();");
             writer.outdent();
 
             writer.println("}");
@@ -223,588 +154,4 @@ public class EntityFactoryGenerator extends Generator {
         writer.outdent();
     }
 
-    private boolean isEntityMemeber(JMethod method) {
-        return (method.getReturnType() != JPrimitiveType.VOID) && (method.getParameters().length == 0);
-    }
-
-    private void createEntityMetaImpl(TreeLogger logger, GeneratorContext context, JClassType interfaceType) {
-        String packageName = interfaceType.getPackage().getName();
-        String simpleName = interfaceType.getSimpleSourceName() + META_IMPL;
-        ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
-
-        composer.addImport(IObject.class.getName());
-        composer.addImport(MemberMeta.class.getName());
-        composer.addImport(ClientMemberMetaImpl.class.getName());
-        composer.setSuperclass(ClientEntityMetaImpl.class.getName());
-
-        PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
-        if (printWriter == null) {
-            // the generated type already exists
-            return;
-        }
-        SourceWriter writer = composer.createSourceWriter(context, printWriter);
-        writeEntityMetaImpl(writer, simpleName, interfaceType);
-        writer.commit(logger);
-    }
-
-    private String escapeSourceString(String value) {
-        if (value == null) {
-            return "null";
-        } else {
-            return "\"" + value.replace("\"", "\\\"").replace("\n", "\\n") + "\"";
-        }
-    }
-
-    private String i18nEscapeSourceString(String value) {
-        String s = escapeSourceString(value);
-        if (s.equals("\"\"") || s.equals("null")) {
-            return s;
-        } else {
-            return "i18n.tr(" + s + ")";
-        }
-    }
-
-    private void writeEntityMetaImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
-
-        String caption;
-        String description = null;
-        String watermark = null;
-        Caption captionAnnotation = interfaceType.getAnnotation(Caption.class);
-        if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
-            caption = captionAnnotation.name();
-        } else {
-            caption = EnglishGrammar.capitalize(interfaceType.getSimpleSourceName());
-        }
-        if (captionAnnotation != null) {
-            description = captionAnnotation.description();
-            watermark = captionAnnotation.watermark();
-        }
-        Boolean persistenceTransient = (interfaceType.getAnnotation(Transient.class) != null);
-        Boolean rpcTransient = (interfaceType.getAnnotation(RpcTransient.class) != null) || (interfaceType.getAnnotation(RpcBlacklist.class) != null);
-
-        List<String> toStringMemberNames = new Vector<String>();
-        final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
-
-        List<JMethod> allMethods = getAllEntityMethods(interfaceType);
-
-        for (JMethod method : allMethods) {
-            ToString ts = method.getAnnotation(ToString.class);
-            if (ts != null) {
-                toStringMemberNames.add(method.getName());
-                sortKeys.put(method.getName(), ts);
-            }
-        }
-
-        Collections.sort(toStringMemberNames, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                int v1 = sortKeys.get(o1).index();
-                int v2 = sortKeys.get(o2).index();
-                return (v1 < v2 ? -1 : (v1 == v2 ? 0 : 1));
-            }
-        });
-        StringBuilder toStringMemberNamesStringArray = new StringBuilder();
-        for (String memberName : toStringMemberNames) {
-            if (toStringMemberNamesStringArray.length() > 0) {
-                toStringMemberNamesStringArray.append(", ");
-            }
-            toStringMemberNamesStringArray.append(escapeSourceString(memberName));
-        }
-
-        writer.println();
-        writer.indent();
-        writer.println("public " + simpleName + "() { ");
-        writer.indent();
-        writer.print("super(");
-
-        writer.print(interfaceType.getName());
-        writer.print(".class, ");
-
-        writer.print(i18nEscapeSourceString(caption));
-        writer.print(", ");
-
-        writer.print(i18nEscapeSourceString(description));
-        writer.print(", ");
-
-        writer.print(i18nEscapeSourceString(watermark));
-        writer.print(", ");
-
-        writer.print(persistenceTransient.toString());
-        writer.print(", ");
-
-        writer.print(rpcTransient.toString());
-        writer.print(", ");
-
-        ToStringFormat toStringFormatAnnotation = interfaceType.getAnnotation(ToStringFormat.class);
-        if (toStringFormatAnnotation != null) {
-            writer.print(i18nEscapeSourceString(toStringFormatAnnotation.value()));
-            writer.print(", ");
-            writer.print(i18nEscapeSourceString(toStringFormatAnnotation.nil()));
-        } else {
-            writer.print("null, \"\"");
-        }
-        writer.print(", ");
-
-        writer.print("new String[] {");
-        writer.print(toStringMemberNamesStringArray.toString());
-        writer.print("}");
-
-        writer.println(");");
-        writer.outdent();
-        writer.println("}");
-
-        //----------
-
-        writer.println();
-        writer.println("@Override");
-        writer.println("protected MemberMeta createMemberMeta(String memberName) {");
-        writer.indent();
-
-        for (JMethod method : allMethods) {
-            if (!isEntityMemeber(method)) {
-                continue;
-            }
-            JClassType type = (JClassType) method.getReturnType();
-            writer.println("if (\"" + method.getName() + "\".equals(memberName)) {");
-            writer.indent();
-
-            writer.print(ClientMemberMetaImpl.class.getSimpleName());
-            writer.print(" mm = new ");
-            writer.print(ClientMemberMetaImpl.class.getSimpleName());
-            writer.print("(");
-
-            JClassType valueClass;
-            // Class<?> valueClass, Class<? extends IObject<?>> objectClass,
-            if (type.isAssignableTo(iPrimitiveInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.print(Boolean.valueOf(isNumber(valueClass)).toString());
-                writer.println(", ");
-            } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.print(Boolean.valueOf(isNumber(valueClass)).toString());
-                writer.println(", ");
-            } else if (type.isAssignableTo(iSetInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.println("false, ");
-            } else if (type.isAssignableTo(iListInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.println("false, ");
-            } else if (type.isAssignableTo(iEnentityInterfaceType)) {
-                valueClass = type;
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("true, ");
-                writer.println("false, ");
-            } else {
-                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
-                        + interfaceType.getQualifiedSourceName() + "'");
-            }
-
-            // String fieldName, String caption, String description,
-            writer.print(escapeSourceString(method.getName()));
-            writer.print(", ");
-
-            String memeberCaption;
-            String memeberDescription = null;
-            String memeberWatermark = null;
-            Caption memeberCaptionAnnotation = method.getAnnotation(Caption.class);
-            if ((memeberCaptionAnnotation != null) && (CommonsStringUtils.isStringSet(memeberCaptionAnnotation.name()))) {
-                memeberCaption = memeberCaptionAnnotation.name();
-            } else {
-                memeberCaption = EnglishGrammar.capitalize(method.getName());
-            }
-            if (memeberCaptionAnnotation != null) {
-                memeberDescription = memeberCaptionAnnotation.description();
-                memeberWatermark = memeberCaptionAnnotation.watermark();
-            }
-            writer.print(i18nEscapeSourceString(memeberCaption));
-            writer.print(", ");
-
-            writer.print(i18nEscapeSourceString(memeberDescription));
-            writer.println(", ");
-
-            writer.print(i18nEscapeSourceString(memeberWatermark));
-            writer.println(", ");
-
-            // persistenceTransient, rpcTransient, detached, ownedRelationships, owner, embedded, indexed, stringLength
-            writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf(method.getAnnotation(Detached.class) != null).toString());
-            writer.print(", ");
-            boolean embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
-            writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf(method.getAnnotation(Owner.class) != null).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf(embedded).toString());
-            writer.print(", ");
-            Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
-            writer.print(Boolean.valueOf((indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue())).toString());
-            writer.print(", ");
-
-            StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
-            if (stringLengthAnnotation != null) {
-                writer.print(String.valueOf(stringLengthAnnotation.value()));
-            } else {
-                writer.print("-1");
-            }
-            writer.print(", ");
-
-            Format formatAnnotation = method.getAnnotation(Format.class);
-            if (formatAnnotation != null) {
-                writer.print(i18nEscapeSourceString(formatAnnotation.value()));
-                writer.print(", ");
-                writer.print(Boolean.valueOf(formatAnnotation.messageFormat()).toString());
-                writer.print(", ");
-                writer.print(i18nEscapeSourceString(formatAnnotation.nil()));
-            } else {
-                writer.print("null, false, \"\"");
-            }
-
-            writer.println(");");
-
-            if (method.isAnnotationPresent(Editor.class)) {
-                writer.print("mm.setEditorType(");
-                writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
-                writer.print(method.getAnnotation(Editor.class).type().name());
-                writer.println(");");
-            }
-
-            addValidatorAnnotation(writer, method, NotNull.class);
-            addValidatorAnnotation(writer, method, Pattern.class);
-
-            writer.println("return mm;");
-            writer.outdent();
-            writer.println("}");
-        }
-        writer.println("throw new RuntimeException(\"Unknown member \" + memberName);");
-        writer.outdent();
-        writer.println("}");
-    }
-
-    private boolean isNumber(JClassType valueClass) {
-        return numberType == valueClass.getSuperclass();
-    }
-
-    private boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {
-        if (method.isAnnotationPresent(annotationClass)) {
-            writer.print("mm.addValidatorAnnotation(");
-            writer.print(annotationClass.getName());
-            writer.print(".class");
-            writer.println(");");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void createEntityHandlerImpl(TreeLogger logger, GeneratorContext context, JClassType interfaceType) {
-        String packageName = interfaceType.getPackage().getName();
-        String simpleName = interfaceType.getSimpleSourceName() + IMPL;
-        ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
-
-        composer.addImport(interfaceType.getQualifiedSourceName());
-        composer.addImport(IObject.class.getName());
-        composer.addImport(IEntity.class.getName());
-        composer.addImport(EntityMeta.class.getName());
-        composer.addImport(GWT.class.getName());
-        composer.addImport(EntityMemberMapCreator.class.getName());
-        composer.setSuperclass(SharedEntityHandler.class.getName());
-        composer.addImplementedInterface(interfaceType.getName());
-        composer.addAnnotationDeclaration("@SuppressWarnings(\"serial\")");
-
-        PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
-        if (printWriter == null) {
-            // the generated type already exists
-            return;
-        }
-
-        SourceWriter writer = composer.createSourceWriter(context, printWriter);
-        writeEntityHandlerImpl(writer, simpleName, interfaceType);
-        writer.commit(logger);
-    }
-
-    private List<JMethod> getAllEntityMethods(JClassType interfaceType) {
-        Set<String> uniqueNames = new HashSet<String>();
-        List<JMethod> allMethods = new Vector<JMethod>();
-        getAllEntityMethods(interfaceType, uniqueNames, allMethods);
-        return allMethods;
-    }
-
-    private void getAllEntityMethods(JClassType interfaceType, Set<String> uniqueNames, List<JMethod> allMethods) {
-        for (JMethod method : interfaceType.getMethods()) {
-            if (isEntityMemeber(method) && !uniqueNames.contains(method.getName())) {
-                allMethods.add(method);
-                uniqueNames.add(method.getName());
-            }
-        }
-        for (JClassType impls : interfaceType.getImplementedInterfaces()) {
-            if ((impls == iEnentityInterfaceType) || (impls == iObjectInterfaceType)) {
-                continue;
-            } else {
-                getAllEntityMethods(impls, uniqueNames, allMethods);
-            }
-        }
-    }
-
-    private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
-        final boolean optimizeForJS = true;
-
-        //Static for optimisation
-        writer.println();
-        writer.indent();
-        writer.println("private static EntityMeta entityMeta;");
-        if (optimizeForJS) {
-            writer.println();
-            writer.println("private static EntityMemberMapCreator createMemberMap;");
-        }
-
-        writer.outdent();
-
-        // Constructors
-        writer.println();
-        writer.indent();
-        writer.println("public " + simpleName + "() { ");
-        writer.indent();
-        writer.print("super(");
-        writer.print(interfaceType.getName());
-        writer.println(".class, null, null);");
-        writer.outdent();
-        writer.println("}");
-
-        writer.println();
-        writer.println("public " + simpleName + "(IObject<?> parent, String fieldName) { ");
-        writer.indent();
-        writer.print("super(");
-        writer.print(interfaceType.getName());
-        writer.println(".class, parent, fieldName);");
-        writer.outdent();
-        writer.println("}");
-
-        // Create all members
-        List<JMethod> allMethods = getAllEntityMethods(interfaceType);
-        if (optimizeForJS) {
-            writer.println();
-
-            writer.println("private static native EntityMemberMapCreator loadCreateMemberNative() /*-{");
-            writer.indent();
-            writer.println("var map = {}");
-            nextJSMethod: for (JMethod method : allMethods) {
-                JClassType type = (JClassType) method.getReturnType();
-                writer.print("map[\"" + method.getName() + "\"] = ");
-
-                if (type.isAssignableTo(iPrimitiveInterfaceType)) {
-                    String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                    if (valueClass.startsWith("java.lang.") || valueClass.equals("java.util.Date") || valueClass.equals("java.sql.Date")
-                            || valueClass.equals("byte[]")) {
-
-                        if (valueClass.equals("byte[]")) {
-                            valueClass = "byteArray";
-                        }
-
-                        writer.print("@");
-                        writer.print(EntityImplNativeHelper.class.getName());
-                        writer.print("::createMemberIPrimitive_");
-                        writer.print(valueClass.replace('.', '_'));
-                        writer.print("(L");
-                        writer.print(SharedEntityHandler.class.getName().replace('.', '/'));
-                        writer.println(";Ljava/lang/String;);");
-
-                        continue nextJSMethod;
-                    }
-                }
-
-                writer.println("function(handler, memberName) {");
-                writer.print("   return handler.@");
-                writer.print(SharedEntityHandler.class.getName());
-
-                String valueClass;
-
-                if (type.isAssignableTo(iPrimitiveInterfaceType)) {
-                    writer.println("::lazyCreateMemberIPrimitive(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
-                    writer.println("::lazyCreateMemberIPrimitiveSet(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                } else if (type.isAssignableTo(iSetInterfaceType)) {
-                    writer.println("::lazyCreateMemberISet(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                } else if (type.isAssignableTo(iListInterfaceType)) {
-                    writer.println("::lazyCreateMemberIList(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                } else if (type.isAssignableTo(iEnentityInterfaceType)) {
-                    writer.println("::lazyCreateMemberIEntity(Ljava/lang/String;Ljava/lang/Class;)(memberName");
-                    valueClass = type.getQualifiedSourceName();
-                } else {
-                    throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-
-                writer.print("     ,");
-                if (valueClass.equals("byte[]")) {
-                    writer.print("@" + EntityImplNativeHelper.class.getName() + "::BYTE_ARRAY_CLASS");
-                } else {
-                    writer.print("@" + valueClass + "::class");
-                }
-                writer.println("); };");
-                writer.println();
-            }
-
-            writer.println("return map;");
-            writer.outdent();
-            writer.println("}-*/;");
-
-        }
-
-        // --
-
-        writer.println();
-        writer.println("@Override");
-        writer.println("protected IObject<?> lazyCreateMember(String name) {");
-        writer.indent();
-
-        if (optimizeForJS) {
-            writer.println("if (GWT.isScript()) {");
-            writer.indent();
-
-            writer.println("if (createMemberMap == null) {");
-            writer.indent();
-            writer.println("createMemberMap = loadCreateMemberNative();");
-            writer.outdent();
-            writer.println("}");
-
-            writer.println("return createMemberMap.createMember(this, name);");
-            writer.outdent();
-            writer.println("} else {");
-            writer.indent();
-        }
-
-        for (JMethod method : allMethods) {
-            JClassType type = (JClassType) method.getReturnType();
-            writer.println("if (\"" + method.getName() + "\".equals(name)) {");
-            writer.indent();
-            if (type.isAssignableTo(iPrimitiveInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", " + valueClass + ".class);");
-            } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                writer.println("return lazyCreateMemberIPrimitiveSet(\"" + method.getName() + "\", " + valueClass + ".class);");
-            } else if (type.isAssignableTo(iSetInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                writer.println("return lazyCreateMemberISet(\"" + method.getName() + "\", " + valueClass + ".class);");
-            } else if (type.isAssignableTo(iListInterfaceType)) {
-                if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
-                }
-                String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
-                writer.println("return lazyCreateMemberIList(\"" + method.getName() + "\", " + valueClass + ".class);");
-            } else if (type.isAssignableTo(iEnentityInterfaceType)) {
-                writer.println("return lazyCreateMemberIEntity(\"" + method.getName() + "\", " + type.getQualifiedSourceName() + ".class);");
-            } else {
-                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
-                        + interfaceType.getQualifiedSourceName() + "'");
-            }
-            writer.outdent();
-            writer.println("}");
-        }
-        writer.println("throw new RuntimeException(\"Unknown member \" + name);");
-
-        if (optimizeForJS) {
-            writer.outdent();
-            writer.println("}"); // if GWT isScript()
-        }
-
-        writer.outdent();
-        writer.println("}");
-
-        StringBuilder membersNamesStringArray = new StringBuilder();
-        // Members access
-        for (JMethod method : allMethods) {
-            writer.println();
-            writer.println("@Override");
-            writer.println("@SuppressWarnings(\"unchecked\")");
-            writer.print("public ");
-            writer.print(method.getReturnType().getParameterizedQualifiedSourceName());
-            writer.println(" " + method.getName() + "() {");
-            writer.indent();
-
-            writer.println("return (" + method.getReturnType().getParameterizedQualifiedSourceName() + ") getMember(\"" + method.getName() + "\");");
-
-            writer.outdent();
-            writer.println("}");
-
-            if (membersNamesStringArray.length() > 0) {
-                membersNamesStringArray.append(", ");
-            }
-            membersNamesStringArray.append("\"").append(method.getName()).append("\"");
-        }
-
-        writer.println();
-        writer.println("@Override");
-        writer.println("public String[] getMemebers() {");
-        writer.indent();
-        writer.print("return new String[] {");
-        writer.print(membersNamesStringArray.toString());
-        writer.println("};");
-        writer.outdent();
-        writer.println("}");
-
-        // for optimisation
-        writer.println();
-        writer.println("@Override");
-        writer.println("public EntityMeta getEntityMeta() {");
-        writer.indent();
-        writer.println("if (entityMeta == null) { entityMeta = super.getEntityMeta(); }");
-        writer.println("return entityMeta;");
-        writer.outdent();
-        writer.println("}");
-
-    }
 }
