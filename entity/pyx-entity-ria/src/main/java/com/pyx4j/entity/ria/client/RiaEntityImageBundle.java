@@ -20,14 +20,37 @@
  */
 package com.pyx4j.entity.ria.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
-
 import com.pyx4j.ria.client.RiaImageBundle;
 
 public interface RiaEntityImageBundle extends ClientBundle, RiaImageBundle {
 
+    RiaEntityImageBundle INSTANCE = GWT.create(RiaEntityImageBundle.class);
+
     @Source("image.png")
     ImageResource image();
+
+    @Source("dashboard.gif")
+    ImageResource dashboard();
+
+    @Source("report-generate.gif")
+    ImageResource reportGenerate();
+
+    @Source("report-criteria.gif")
+    ImageResource reportCriteria();
+
+    @Source("report.png")
+    ImageResource report();
+
+    @Source("search-result.png")
+    ImageResource searchResult();
+
+    @Source("search-criteria.jpg")
+    ImageResource searchCriteria();
+
+    @Source("print.png")
+    ImageResource print();
 
 }

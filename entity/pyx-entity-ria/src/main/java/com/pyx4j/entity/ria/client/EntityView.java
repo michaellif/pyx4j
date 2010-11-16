@@ -41,14 +41,14 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class EntityView extends AbstractView {
 
-    public EntityView(String tabTitle) {
+    public EntityView(String tabTitle, ImageResource image) {
         super();
 
         addPage(new Tab(createPageContent("page 1"), "page 1", null));
         addPage(new Tab(createPageContent("page 2"), "page 2", null));
         addPage(new Tab(createPageContent("page 3"), "page 3", null));
         setTabTitle(tabTitle);
-        setTabImage(ImageFactory.getImages().image());
+        setTabImage(image);
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");
@@ -56,7 +56,7 @@ public class EntityView extends AbstractView {
         Toolbar toolbar = new Toolbar();
         toolbarPanel.add(toolbar);
 
-        ImageResource viewMenu = ImageFactory.getImages().viewMenu();
+        ImageResource viewMenu = RiaEntityImageBundle.INSTANCE.viewMenu();
         MenuBar actionsMenu = getMenu();
         MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
         menuButtonItem.removeStyleName("gwt-MenuItem");
@@ -166,9 +166,9 @@ public class EntityView extends AbstractView {
 
         public Toolbar() {
 
-            addItem(ImageFactory.getImages().image(), null, "Add");
-            addItem(ImageFactory.getImages().image(), null, "Save");
-            addItem(ImageFactory.getImages().image(), new Command() {
+            addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Add");
+            addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Save");
+            addItem(RiaEntityImageBundle.INSTANCE.image(), new Command() {
                 @Override
                 public void execute() {
                     //TODO Logger.error("printAction", new Error("Test error"));
@@ -190,7 +190,7 @@ public class EntityView extends AbstractView {
                 }
             });
 
-            addItem(ImageFactory.getImages().image(), new Command() {
+            addItem(RiaEntityImageBundle.INSTANCE.image(), new Command() {
                 @Override
                 public void execute() {
                 }

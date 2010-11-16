@@ -400,6 +400,10 @@ public class WindowsTheme extends Theme {
         style.addProperty("outline", "none");
         addStyle(style);
 
+        style = new Style(CSSClass.pyx4j_ButtonImage);
+        style.addProperty("padding-right", "4px");
+        addStyle(style);
+
         style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");

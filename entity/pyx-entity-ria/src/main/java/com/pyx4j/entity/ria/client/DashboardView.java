@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -46,7 +45,7 @@ public class DashboardView extends AbstractView {
 
         addPage(new Tab(createPageContent("page 1"), "page 1", null));
         setTabTitle("Dashboard");
-        setTabImage(ImageFactory.getImages().image());
+        setTabImage(RiaEntityImageBundle.INSTANCE.dashboard());
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");
@@ -54,7 +53,7 @@ public class DashboardView extends AbstractView {
         Toolbar toolbar = new Toolbar();
         toolbarPanel.add(toolbar);
 
-        ImageResource viewMenu = ImageFactory.getImages().viewMenu();
+        ImageResource viewMenu = RiaEntityImageBundle.INSTANCE.viewMenu();
         MenuBar actionsMenu = getMenu();
         MenuItem menuButtonItem = new MenuItem("<img src=" + viewMenu.getURL() + " ' alt=''>", true, actionsMenu);
         menuButtonItem.removeStyleName("gwt-MenuItem");
@@ -84,19 +83,7 @@ public class DashboardView extends AbstractView {
 
         contentPane.setWidget(mainPane);
 
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPaneContentPaneContentPaneContentPaneContentPaneContentPaneContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
-        mainPane.add(new Label("ContentPane" + title));
+        mainPane.add(new Label("Dashboard TODO"));
 
         return contentPane;
     }
@@ -164,9 +151,9 @@ public class DashboardView extends AbstractView {
 
         public Toolbar() {
 
-            addItem(ImageFactory.getImages().image(), null, "Add");
-            addItem(ImageFactory.getImages().image(), null, "Save");
-            addItem(ImageFactory.getImages().image(), new Command() {
+            addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Add");
+            addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Save");
+            addItem(RiaEntityImageBundle.INSTANCE.image(), new Command() {
                 @Override
                 public void execute() {
                     //TODO Logger.error("printAction", new Error("Test error"));
@@ -188,7 +175,7 @@ public class DashboardView extends AbstractView {
                 }
             });
 
-            addItem(ImageFactory.getImages().image(), new Command() {
+            addItem(RiaEntityImageBundle.INSTANCE.image(), new Command() {
                 @Override
                 public void execute() {
                 }
