@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -67,6 +68,8 @@ import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
+import com.pyx4j.entity.client.impl.EntityImplNativeHelper;
+import com.pyx4j.entity.client.impl.EntityMemberMapCreator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -538,6 +541,8 @@ public class EntityFactoryGenerator extends Generator {
         composer.addImport(IObject.class.getName());
         composer.addImport(IEntity.class.getName());
         composer.addImport(EntityMeta.class.getName());
+        composer.addImport(GWT.class.getName());
+        composer.addImport(EntityMemberMapCreator.class.getName());
         composer.setSuperclass(SharedEntityHandler.class.getName());
         composer.addImplementedInterface(interfaceType.getName());
         composer.addAnnotationDeclaration("@SuppressWarnings(\"serial\")");
@@ -577,10 +582,17 @@ public class EntityFactoryGenerator extends Generator {
     }
 
     private void writeEntityHandlerImpl(SourceWriter writer, String simpleName, JClassType interfaceType) {
+        final boolean optimizeForJS = false;
+
         //Static for optimisation
         writer.println();
         writer.indent();
         writer.println("private static EntityMeta entityMeta;");
+        if (optimizeForJS) {
+            writer.println();
+            writer.println("private static EntityMemberMapCreator createMemberMap;");
+        }
+
         writer.outdent();
 
         // Constructors
@@ -604,13 +616,105 @@ public class EntityFactoryGenerator extends Generator {
         writer.println("}");
 
         // Create all members
+        List<JMethod> allMethods = getAllEntityMethods(interfaceType);
+        if (optimizeForJS) {
+            writer.println();
+            writer.println("static {");
+            writer.indent();
+            writer.println("if (GWT.isScript()) {");
+            writer.indent();
+
+            writer.println("createMemberMap = loadCreateMemberNative();");
+            writer.outdent();
+            writer.println("}");
+            writer.outdent();
+            writer.println("}");
+
+            writer.println("private static native EntityMemberMapCreator loadCreateMemberNative() /*-{");
+            writer.indent();
+            writer.println("var map = {}");
+            for (JMethod method : allMethods) {
+                JClassType type = (JClassType) method.getReturnType();
+                writer.print("map[\"" + method.getName() + "\"] = ");
+
+                if (type.isAssignableTo(iPrimitiveInterfaceType)) {
+                    String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                    if (valueClass.startsWith("java.lang.") || valueClass.equals("java.util.Date") || valueClass.equals("java.sql.Date")
+                            || valueClass.equals("byte[]")) {
+
+                        if (valueClass.equals("byte[]")) {
+                            valueClass = "byteArray";
+                        }
+
+                        writer.print("@");
+                        writer.print(EntityImplNativeHelper.class.getName());
+                        writer.print("::createMemberIPrimitive_");
+                        writer.print(valueClass.replace('.', '_'));
+                        writer.print("(L");
+                        writer.print(SharedEntityHandler.class.getName().replace('.', '/'));
+                        writer.println(";Ljava/lang/String;);");
+
+                        continue;
+                    }
+                }
+
+                writer.println("function(handler, memberName) {");
+                writer.print("   return handler.@");
+                writer.print(SharedEntityHandler.class.getName());
+
+                String valueClass;
+
+                if (type.isAssignableTo(iPrimitiveInterfaceType)) {
+                    writer.println("::lazyCreateMemberIPrimitive(Ljava/lang/String;Ljava/lang/Class;)(memberName");
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                } else if (type.isAssignableTo(iPrimitiveSetInterfaceType)) {
+                    writer.println("::lazyCreateMemberIPrimitiveSet(Ljava/lang/String;Ljava/lang/Class;)(memberName");
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                } else if (type.isAssignableTo(iSetInterfaceType)) {
+                    writer.println("::lazyCreateMemberISet(Ljava/lang/String;Ljava/lang/Class;)(memberName");
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                } else if (type.isAssignableTo(iListInterfaceType)) {
+                    writer.println("::lazyCreateMemberIList(Ljava/lang/String;Ljava/lang/Class;)(memberName");
+                    valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
+                } else if (type.isAssignableTo(iEnentityInterfaceType)) {
+                    writer.println("::lazyCreateMemberIEntity(Ljava/lang/String;Ljava/lang/Class;)(memberName");
+                    valueClass = type.getQualifiedSourceName();
+                } else {
+                    throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
+                            + interfaceType.getQualifiedSourceName() + "'");
+                }
+
+                writer.print("     ,");
+                if (valueClass.equals("byte[]")) {
+                    writer.print("@" + EntityImplNativeHelper.class.getName() + "::BYTE_ARRAY_CLASS");
+                } else {
+                    writer.print("@" + valueClass + "::class");
+                }
+                writer.println("); };");
+                writer.println();
+            }
+
+            writer.println("return map;");
+            writer.outdent();
+            writer.println("}-*/;");
+
+        }
+
+        // --
 
         writer.println();
         writer.println("@Override");
         writer.println("protected IObject<?> lazyCreateMember(String name) {");
         writer.indent();
 
-        List<JMethod> allMethods = getAllEntityMethods(interfaceType);
+        if (optimizeForJS) {
+            writer.println("if (GWT.isScript()) {");
+            writer.indent();
+            writer.println("return createMemberMap.createMember(this, name);");
+            writer.outdent();
+            writer.println("} else {");
+            writer.indent();
+        }
 
         for (JMethod method : allMethods) {
             JClassType type = (JClassType) method.getReturnType();
@@ -654,6 +758,11 @@ public class EntityFactoryGenerator extends Generator {
             writer.println("}");
         }
         writer.println("throw new RuntimeException(\"Unknown member \" + name);");
+
+        if (optimizeForJS) {
+            writer.outdent();
+            writer.println("}"); // if GWT isScript()
+        }
 
         writer.outdent();
         writer.println("}");
