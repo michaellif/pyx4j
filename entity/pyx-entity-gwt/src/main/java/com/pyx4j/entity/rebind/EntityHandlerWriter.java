@@ -39,7 +39,15 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityHandlerWriter {
 
+    /**
+     * When enabled -6% of code for test domain
+     */
     final static boolean optimizeForJS = true;
+
+    /**
+     * When disabled adds 4% of code to generated domain.
+     */
+    final static boolean cacheEntityMeta = false;
 
     static void createEntityHandlerImpl(ContextHelper contextHelper, JClassType interfaceType) {
 
@@ -69,11 +77,13 @@ public class EntityHandlerWriter {
     }
 
     private static void writeEntityHandlerImpl(ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType) {
+        writer.indent();
 
         //Static for optimisation
-        writer.println();
-        writer.indent();
-        writer.println("private static EntityMeta entityMeta;");
+        if (cacheEntityMeta) {
+            writer.println();
+            writer.println("private static EntityMeta entityMeta;");
+        }
         if (optimizeForJS) {
             writer.println();
             writer.println("private static EntityMemberMapCreator createMemberMap;");
@@ -283,14 +293,16 @@ public class EntityHandlerWriter {
         writer.println("}");
 
         // for optimisation
-        writer.println();
-        writer.println("@Override");
-        writer.println("public EntityMeta getEntityMeta() {");
-        writer.indent();
-        writer.println("if (entityMeta == null) { entityMeta = super.getEntityMeta(); }");
-        writer.println("return entityMeta;");
-        writer.outdent();
-        writer.println("}");
+        if (cacheEntityMeta) {
+            writer.println();
+            writer.println("@Override");
+            writer.println("public EntityMeta getEntityMeta() {");
+            writer.indent();
+            writer.println("if (entityMeta == null) { entityMeta = super.getEntityMeta(); }");
+            writer.println("return entityMeta;");
+            writer.outdent();
+            writer.println("}");
+        }
 
     }
 }
