@@ -266,9 +266,9 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
         style.addProperty("margin-right", "1px");
-        style.addProperty("border-right", "1px solid {}", ThemeColor.BORDER);
-        style.addProperty("border-left", "1px solid {}", ThemeColor.BORDER);
-        style.addProperty("border-top", "1px solid {}", ThemeColor.BORDER);
+        style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("border-left", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("border-top", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
