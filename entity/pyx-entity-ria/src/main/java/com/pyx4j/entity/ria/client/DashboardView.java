@@ -34,8 +34,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.gray.GrayTheme;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
+import com.pyx4j.widgets.client.style.theme.GrayTheme;
+import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class DashboardView extends AbstractView {

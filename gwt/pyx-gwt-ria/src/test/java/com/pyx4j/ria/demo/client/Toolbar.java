@@ -26,8 +26,8 @@ import com.google.gwt.user.client.Timer;
 import com.pyx4j.ria.client.style.ThemeEditor;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.gray.GrayTheme;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
+import com.pyx4j.widgets.client.style.theme.GrayTheme;
+import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class Toolbar extends com.pyx4j.ria.client.Toolbar {
 

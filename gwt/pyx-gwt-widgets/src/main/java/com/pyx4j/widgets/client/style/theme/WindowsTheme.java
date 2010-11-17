@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.style.window;
+package com.pyx4j.widgets.client.style.theme;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -120,7 +120,9 @@ public class WindowsTheme extends Theme {
         // style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
 
-        style.addGradientBackground();
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+
+        //style.addGradientBackground();
 
         addStyle(style);
     }

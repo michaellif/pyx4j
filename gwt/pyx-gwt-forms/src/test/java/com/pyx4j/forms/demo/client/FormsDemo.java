@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
+import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

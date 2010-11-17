@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
+import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 
 public class TesterClientEntryPoint implements EntryPoint {
 

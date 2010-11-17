@@ -18,10 +18,9 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.widgets.client.style.gray;
+package com.pyx4j.widgets.client.style.theme;
 
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.style.window.WindowsTheme;
 
 public class GrayTheme extends WindowsTheme {
 
