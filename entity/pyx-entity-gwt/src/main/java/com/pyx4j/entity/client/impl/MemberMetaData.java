@@ -63,7 +63,7 @@ public class MemberMetaData {
     public MemberMetaData(Class<?> valueClass, boolean isNumber) {
         this.stringLength = -1;
         this.valueClass = valueClass;
-        this.objectClass = (Class<? extends IObject<?>>) com.pyx4j.entity.shared.IPrimitive.class;
+        this.objectClass = (Class<? extends IObject<?>>) ((Class<?>) com.pyx4j.entity.shared.IPrimitive.class);
         this.nullString = "";
         this.valueClassIsNumber = isNumber;
     }
