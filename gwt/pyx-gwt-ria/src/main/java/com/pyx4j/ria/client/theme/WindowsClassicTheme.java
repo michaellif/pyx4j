@@ -23,7 +23,7 @@ package com.pyx4j.ria.client.theme;
 public class WindowsClassicTheme extends RiaTheme {
 
     public WindowsClassicTheme() {
-        super((float) 40 / 360, (float) 0.06, (float) 0.75);
+        super((float) 40 / 360, (float) 0.1, (float) 0.5);
     }
 
 }
