@@ -311,15 +311,15 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
-        style.addProperty("border-right", "1px solid {}", ThemeColor.BORDER);
-        style.addProperty("border-bottom", "1px solid {}", ThemeColor.BORDER);
+        style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("border-bottom", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.first));
         style.addProperty("border-left-width", "1px");
         style.addProperty("border-left-style", "solid");
-        style.addProperty("border-left-color", ThemeColor.BORDER);
+        style.addProperty("border-left-color", ThemeColor.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
@@ -393,7 +393,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("padding-right", "2px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
