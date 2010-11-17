@@ -20,6 +20,7 @@
  */
 package com.pyx4j.ria.client.theme;
 
+import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.SectionPanel;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
@@ -44,12 +45,12 @@ public abstract class RiaTheme extends WindowsTheme {
 
     @Override
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.5));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.6));
-        putThemeColor(ThemeColor.BORDER, 0x666666);
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemeColor.BORDER, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
         putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
+        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
@@ -60,9 +61,27 @@ public abstract class RiaTheme extends WindowsTheme {
     }
 
     @Override
+    protected void initGeneralStyles() {
+        super.initGeneralStyles();
+
+        Style style = new Style(".gwt-SplitLayoutPanel");
+        addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel-HDragger");
+        style.addProperty("cursor", "col-resize");
+        addStyle(style);
+
+        style = new Style(".gwt-SplitLayoutPanel-VDragger");
+        style.addProperty("cursor", "row-resize");
+        addStyle(style);
+
+    }
+
+    @Override
     protected void initStyles() {
         super.initStyles();
         initSectionPanelStyles(SectionPanel.DEFAULT_STYLE_PREFIX);
+        initHeaderPanelStyles(HeaderPanel.DEFAULT_STYLE_PREFIX);
     }
 
     private void initSectionPanelStyles(String prefix) {
@@ -80,4 +99,23 @@ public abstract class RiaTheme extends WindowsTheme {
         addStyle(style);
 
     }
+
+    private void initHeaderPanelStyles(String prefix) {
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addGradientBackground(ThemeColor.BORDER);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, HeaderPanel.StyleSuffix.Label));
+        style.addProperty("color", "white");
+        style.addProperty("fontFamily", "Arial");
+        style.addProperty("fontWeight", "bold");
+        style.addProperty("margin-left", "5px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, HeaderPanel.StyleSuffix.Logo));
+        style.addProperty("margin-left", "5px");
+        addStyle(style);
+
+    }
+
 }

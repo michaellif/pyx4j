@@ -20,42 +20,42 @@
  */
 package com.pyx4j.ria.client;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
 
-import com.pyx4j.widgets.client.util.BrowserType;
+import com.pyx4j.ria.client.SectionPanel.StyleSuffix;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class HeaderPanel extends TransparentDeckPanel {
+public class HeaderPanel extends LayoutPanel {
+
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_HeaderPanel";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Label, Logo,
+    }
 
     private static final String HEADER_HEIGHT = "25px";
 
-    public HeaderPanel(String text) {
+    private final Label label;
 
-        String imageURL = ImageFactory.getImages().headerBackground().getURL();
+    private final Image logoImage;
 
-        HTML holder = new HTML();
-        holder.setHTML("<img src=" + imageURL + " style='width:100%; height:" + HEADER_HEIGHT + "' alt=''>");
+    public HeaderPanel(String text, ImageResource image) {
 
         ensureDebugId("HeaderPanel");
 
-        add(holder);
-
-        Label label = new Label(text, false);
-        DOM.setStyleAttribute(label.getElement(), "color", "white");
-        DOM.setStyleAttribute(label.getElement(), "fontFamily", "Arial");
-        DOM.setStyleAttribute(label.getElement(), "fontWeight", "bold");
+        label = new Label(text, false);
 
         HorizontalPanel panel = new HorizontalPanel();
         panel.setSpacing(0);
 
-        Image logoImage = new Image(ImageFactory.getImages().headerLogoImage());
-        DOM.setStyleAttribute(logoImage.getElement(), "margin", "0 6 0 6");
-        DOM.setStyleAttribute(logoImage.getElement(), "border", "0");
+        logoImage = new Image(image);
 
         panel.add(logoImage);
         panel.setCellVerticalAlignment(logoImage, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -65,19 +65,16 @@ public class HeaderPanel extends TransparentDeckPanel {
         panel.setCellWidth(label, "100%");
         add(panel);
 
-        if (BrowserType.isIE()) {
-            DOM.setStyleAttribute(holder.getElement(), "position", "absolute");
-            DOM.setStyleAttribute(holder.getElement(), "zIndex", "-1");
-            DOM.setStyleAttribute(panel.getElement(), "position", "static");
-        } else {
-            DOM.setStyleAttribute(holder.getElement(), "position", "fixed");
-            DOM.setStyleAttribute(holder.getElement(), "height", HEADER_HEIGHT);
-            DOM.setStyleAttribute(panel.getElement(), "position", "relative");
-            DOM.setStyleAttribute(panel.getElement(), "zIndex", "1");
-        }
-
         setHeight(HEADER_HEIGHT);
         setWidth("100%");
+        setStylePrefix(DEFAULT_STYLE_PREFIX);
+
+    }
+
+    public void setStylePrefix(String styleName) {
+        setStyleName(styleName);
+        label.setStyleName(styleName + StyleSuffix.Label);
+        logoImage.setStyleName(styleName + StyleSuffix.Logo);
     }
 
 }

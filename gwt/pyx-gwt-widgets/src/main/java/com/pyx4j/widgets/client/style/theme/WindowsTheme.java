@@ -245,6 +245,7 @@ public class WindowsTheme extends Theme {
 
     private void initTopTabPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("margin-top", "2px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
@@ -264,16 +265,11 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
-        style.addProperty("border-right-width", "1px");
-        style.addProperty("border-right-style", "solid");
-        style.addProperty("border-right-color", ThemeColor.BORDER);
+        style.addProperty("margin-right", "1px");
+        style.addProperty("border-right", "1px solid {}", ThemeColor.BORDER);
+        style.addProperty("border-left", "1px solid {}", ThemeColor.BORDER);
+        style.addProperty("border-top", "1px solid {}", ThemeColor.BORDER);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.first));
-        style.addProperty("border-left-width", "1px");
-        style.addProperty("border-left-style", "solid");
-        style.addProperty("border-left-color", ThemeColor.BORDER);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
@@ -315,9 +311,8 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
-        style.addProperty("border-right-width", "1px");
-        style.addProperty("border-right-style", "solid");
-        style.addProperty("border-right-color", ThemeColor.BORDER);
+        style.addProperty("border-right", "1px solid {}", ThemeColor.BORDER);
+        style.addProperty("border-bottom", "1px solid {}", ThemeColor.BORDER);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
