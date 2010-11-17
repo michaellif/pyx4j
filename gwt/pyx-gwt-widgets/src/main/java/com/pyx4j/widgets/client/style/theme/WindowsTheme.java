@@ -69,15 +69,15 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initThemeColors() {
-        //0xece9d8
-        //float baseColor = (float) 213 / 360;
-        float baseColor = (float) 31 / 360;
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.4));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.5));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.6));
+        float hue = (float) 213 / 360;
+        float saturation = (float) 0.3;
+        float brightness = (float) 0.9;
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
+        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.5));
+        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.6));
         putThemeColor(ThemeColor.BORDER, 0x666666);
         putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.99));
+        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
@@ -295,7 +295,7 @@ public class WindowsTheme extends Theme {
 
     private void initBottomTabPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", "#ECE9D8");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
