@@ -35,28 +35,6 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     private final String fieldName;
 
-    private final boolean persistenceTransient;
-
-    private final boolean rpcTransient;
-
-    private final boolean detached;
-
-    private final boolean ownedRelationships;
-
-    private final boolean owner;
-
-    private final boolean embedded;
-
-    private final boolean indexed;
-
-    private final Class<?> valueClass;
-
-    private final boolean entity;
-
-    private final boolean valueClassIsNumber;
-
-    private final Class<? extends IObject<?>> objectClass;
-
     private final String caption;
 
     /**
@@ -69,49 +47,57 @@ public class ClientMemberMetaImpl implements MemberMeta {
      */
     private final String watermark;
 
-    /**
-     * See com.pyx4j.entity.annotations.StringLength
-     */
-    private final int stringLength;
+    private final MemberMetaData data;
 
-    private final String format;
-
-    private final boolean useMessageFormat;
-
-    private final String nullString;
+    private boolean indexed;
 
     private EditorType editorType;
 
     private Set<Class<?>> annotations;
 
-    public ClientMemberMetaImpl(Class<?> valueClass, Class<? extends IObject<?>> objectClass, boolean entity, boolean valueClassIsNumber, String fieldName,
-            String caption, String description, String watermark, boolean persistenceTransient, boolean rpcTransient, boolean detached,
-            boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat,
-            String nullString) {
+    /**
+     * Generic constructor
+     */
+    public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
+            Class<? extends IObject<?>> objectClass, boolean entity, boolean valueClassIsNumber, boolean persistenceTransient, boolean rpcTransient,
+            boolean detached, boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed, int stringLength, String format,
+            boolean useMessageFormat, String nullString) {
         super();
-        this.valueClass = valueClass;
-        this.valueClassIsNumber = valueClassIsNumber;
-        this.entity = entity;
+        this.data = new MemberMetaData();
+        this.data.valueClass = valueClass;
+        this.data.valueClassIsNumber = valueClassIsNumber;
+        this.data.entity = entity;
         this.fieldName = fieldName;
-        this.persistenceTransient = persistenceTransient;
-        this.rpcTransient = rpcTransient;
-        this.detached = detached;
-        this.ownedRelationships = ownedRelationships;
-        this.owner = owner;
-        this.embedded = embedded;
-        this.indexed = indexed;
-        this.objectClass = objectClass;
+        this.data.persistenceTransient = persistenceTransient;
+        this.data.rpcTransient = rpcTransient;
+        this.data.detached = detached;
+        this.data.ownedRelationships = ownedRelationships;
+        this.data.owner = owner;
+        this.data.embedded = embedded;
+        this.data.objectClass = objectClass;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
         if (stringLength == -1) {
-            this.stringLength = ApplicationBackend.getDefaultDataStringLength();
+            this.data.stringLength = ApplicationBackend.getDefaultDataStringLength();
         } else {
-            this.stringLength = stringLength;
+            this.data.stringLength = stringLength;
         }
-        this.format = format;
-        this.useMessageFormat = useMessageFormat;
-        this.nullString = nullString;
+        this.data.format = format;
+        this.data.useMessageFormat = useMessageFormat;
+        this.data.nullString = nullString;
+    }
+
+    public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, boolean indexed, MemberMetaData data) {
+        this.fieldName = fieldName;
+        this.caption = caption;
+        this.description = description;
+        this.watermark = watermark;
+        this.indexed = indexed;
+        this.data = data;
+        if (data.stringLength == -1) {
+            data.stringLength = ApplicationBackend.getDefaultDataStringLength();
+        }
     }
 
     @Override
@@ -136,32 +122,32 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public boolean isTransient() {
-        return persistenceTransient;
+        return data.persistenceTransient;
     }
 
     @Override
     public boolean isRpcTransient() {
-        return rpcTransient;
+        return data.rpcTransient;
     }
 
     @Override
     public boolean isDetached() {
-        return detached;
+        return data.detached;
     }
 
     @Override
     public boolean isOwnedRelationships() {
-        return ownedRelationships;
+        return data.ownedRelationships;
     }
 
     @Override
     public boolean isOwner() {
-        return owner;
+        return data.owner;
     }
 
     @Override
     public boolean isEmbedded() {
-        return embedded;
+        return data.embedded;
     }
 
     @Override
@@ -171,27 +157,27 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public Class<?> getValueClass() {
-        return valueClass;
+        return data.valueClass;
     }
 
     @Override
     public boolean isEntity() {
-        return entity;
+        return data.entity;
     }
 
     @Override
     public boolean isNumberValueClass() {
-        return valueClassIsNumber;
+        return data.valueClassIsNumber;
     }
 
     @Override
     public Class<? extends IObject<?>> getObjectClass() {
-        return objectClass;
+        return data.objectClass;
     }
 
     @Override
     public int getStringLength() {
-        return stringLength;
+        return data.stringLength;
     }
 
     @Override
@@ -201,17 +187,17 @@ public class ClientMemberMetaImpl implements MemberMeta {
 
     @Override
     public String getFormat() {
-        return format;
+        return data.format;
     }
 
     @Override
     public boolean useMessageFormat() {
-        return useMessageFormat;
+        return data.useMessageFormat;
     }
 
     @Override
     public String getNullString() {
-        return nullString;
+        return data.nullString;
     }
 
     @Override

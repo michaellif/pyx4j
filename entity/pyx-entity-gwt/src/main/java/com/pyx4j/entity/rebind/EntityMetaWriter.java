@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.core.ext.typeinfo.JClassType;
@@ -54,6 +55,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.validator.Pattern;
 import com.pyx4j.entity.client.impl.ClientEntityMetaImpl;
 import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
+import com.pyx4j.entity.client.impl.MemberMetaData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -188,8 +190,45 @@ public class EntityMetaWriter {
         writer.outdent();
         writer.println("}");
 
-        //----------
+        writeEntityMemberMetaImpl(contextHelper, writer, allMethods, interfaceType);
 
+        writer.outdent();
+    }
+
+    static boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {
+        if (method.isAnnotationPresent(annotationClass)) {
+            writer.print("mm.addValidatorAnnotation(");
+            writer.print(annotationClass.getName());
+            writer.print(".class");
+            writer.println(");");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static Map<String, MemberMetaData> defaultMembers = new HashMap<String, MemberMetaData>();
+
+    static {
+        defaultMembers.put("defaultStringMember", MemberMetaData.defaultStringMember);
+        defaultMembers.put("defaultBooleanMember", MemberMetaData.defaultBooleanMember);
+        defaultMembers.put("defaultDoubleMember", MemberMetaData.defaultDoubleMember);
+        defaultMembers.put("defaultIntegerMember", MemberMetaData.defaultIntegerMember);
+        defaultMembers.put("defaultDateMember", MemberMetaData.defaultDateMember);
+        defaultMembers.put("defaultSqlDateMember", MemberMetaData.defaultSqlDateMember);
+    }
+
+    static String selectDefaultData(MemberMetaDataGeneration data) {
+        for (Map.Entry<String, MemberMetaData> m : defaultMembers.entrySet()) {
+            if (data.isDataEquals(m.getValue())) {
+                return m.getKey();
+            }
+        }
+        return null;
+    }
+
+    //----------
+    static void writeEntityMemberMetaImpl(ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods, JClassType interfaceType) {
         writer.println();
         writer.println("@Override");
         writer.println("protected MemberMeta createMemberMeta(String memberName) {");
@@ -200,13 +239,9 @@ public class EntityMetaWriter {
                 continue;
             }
             JClassType type = (JClassType) method.getReturnType();
-            writer.println("if (\"" + method.getName() + "\".equals(memberName)) {");
-            writer.indent();
 
-            writer.print(ClientMemberMetaImpl.class.getSimpleName());
-            writer.print(" mm = new ");
-            writer.print(ClientMemberMetaImpl.class.getSimpleName());
-            writer.print("(");
+            MemberMetaDataGeneration data = new MemberMetaDataGeneration();
+            data.objectClassSourceName = type.getQualifiedSourceName();
 
             JClassType valueClass;
             // Class<?> valueClass, Class<? extends IObject<?>> objectClass,
@@ -216,60 +251,43 @@ public class EntityMetaWriter {
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.print(Boolean.valueOf(contextHelper.isNumber(valueClass)).toString());
-                writer.println(", ");
+
+                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.valueClassIsNumber = contextHelper.isNumber(valueClass);
             } else if (type.isAssignableTo(contextHelper.iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.print(Boolean.valueOf(contextHelper.isNumber(valueClass)).toString());
-                writer.println(", ");
+
+                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.valueClassIsNumber = contextHelper.isNumber(valueClass);
             } else if (type.isAssignableTo(contextHelper.iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.println("false, ");
+                data.valueClassSourceName = valueClass.getQualifiedSourceName();
             } else if (type.isAssignableTo(contextHelper.iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
                             + interfaceType.getQualifiedSourceName() + "'");
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
-                writer.println(valueClass.getQualifiedSourceName() + ".class, ");
-                writer.print("(Class<? extends IObject<?>>)");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("false, ");
-                writer.println("false, ");
+
+                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+
             } else if (type.isAssignableTo(contextHelper.iEnentityInterfaceType)) {
                 valueClass = type;
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println(type.getQualifiedSourceName() + ".class, ");
-                writer.println("true, ");
-                writer.println("false, ");
+
+                data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.entity = true;
             } else {
                 throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
                         + interfaceType.getQualifiedSourceName() + "'");
             }
-
-            // String fieldName, String caption, String description,
-            writer.print(escapeSourceString(method.getName()));
-            writer.print(", ");
 
             String memeberCaption;
             String memeberDescription = null;
@@ -284,82 +302,123 @@ public class EntityMetaWriter {
                 memeberDescription = memeberCaptionAnnotation.description();
                 memeberWatermark = memeberCaptionAnnotation.watermark();
             }
-            writer.print(i18nEscapeSourceString(memeberCaption));
-            writer.print(", ");
 
-            writer.print(i18nEscapeSourceString(memeberDescription));
-            writer.println(", ");
+            data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
+            data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
+            data.detached = (method.getAnnotation(Detached.class) != null);
+            data.embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
+            data.owner = (method.getAnnotation(Owner.class) != null);
+            data.ownedRelationships = (method.getAnnotation(Owned.class) != null) || (data.embedded);
 
-            writer.print(i18nEscapeSourceString(memeberWatermark));
-            writer.println(", ");
-
-            // persistenceTransient, rpcTransient, detached, ownedRelationships, owner, embedded, indexed, stringLength
-            writer.print(Boolean.valueOf((method.getAnnotation(Transient.class) != null)).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf((method.getAnnotation(RpcTransient.class) != null)).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf(method.getAnnotation(Detached.class) != null).toString());
-            writer.print(", ");
-            boolean embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
-            writer.print(Boolean.valueOf((method.getAnnotation(Owned.class) != null) || (embedded)).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf(method.getAnnotation(Owner.class) != null).toString());
-            writer.print(", ");
-            writer.print(Boolean.valueOf(embedded).toString());
-            writer.print(", ");
             Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
-            writer.print(Boolean.valueOf((indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue())).toString());
-            writer.print(", ");
+            boolean indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
 
             StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
             if (stringLengthAnnotation != null) {
-                writer.print(String.valueOf(stringLengthAnnotation.value()));
+                data.stringLength = stringLengthAnnotation.value();
             } else {
-                writer.print("-1");
+                data.stringLength = -1;
             }
-            writer.print(", ");
 
             Format formatAnnotation = method.getAnnotation(Format.class);
             if (formatAnnotation != null) {
-                writer.print(i18nEscapeSourceString(formatAnnotation.value()));
-                writer.print(", ");
-                writer.print(Boolean.valueOf(formatAnnotation.messageFormat()).toString());
-                writer.print(", ");
-                writer.print(i18nEscapeSourceString(formatAnnotation.nil()));
+                data.format = formatAnnotation.value();
+                data.useMessageFormat = formatAnnotation.messageFormat();
+                data.nullString = formatAnnotation.nil();
             } else {
-                writer.print("null, false, \"\"");
+                data.nullString = "";
             }
+
+            String useDefaultData = selectDefaultData(data);
+
+            boolean requireAdditionalData = (method.isAnnotationPresent(Editor.class)) || (method.isAnnotationPresent(NotNull.class))
+                    || (method.isAnnotationPresent(Pattern.class));
+
+            /// Write implementation
+            //writer.println("if (\"" + method.getName() + "\".equals(memberName)) {");
+            writer.println("if (memberName.equals(\"" + method.getName() + "\")) {");
+            writer.indent();
+
+            if (requireAdditionalData) {
+                writer.print(ClientMemberMetaImpl.class.getSimpleName());
+                writer.print(" mm = new ");
+            } else {
+                writer.print("return new ");
+            }
+
+            writer.print(ClientMemberMetaImpl.class.getSimpleName());
+            writer.print("(");
+
+            // String fieldName, String caption, String description,
+            writer.print(escapeSourceString(method.getName()));
+            writer.print(", ");
+            writer.print(i18nEscapeSourceString(memeberCaption));
+            writer.print(", ");
+            writer.print(i18nEscapeSourceString(memeberDescription));
+            writer.print(", ");
+            writer.print(i18nEscapeSourceString(memeberWatermark));
+            writer.println(", ");
+            writer.indent();
+
+            if (useDefaultData != null) {
+                writer.print(Boolean.valueOf(indexed).toString() + ", ");
+                writer.print(MemberMetaData.class.getName() + "." + useDefaultData);
+            } else {
+                writeDataParams(writer, data, indexed);
+            }
+            //
 
             writer.println(");");
+            writer.outdent();
 
-            if (method.isAnnotationPresent(Editor.class)) {
-                writer.print("mm.setEditorType(");
-                writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
-                writer.print(method.getAnnotation(Editor.class).type().name());
-                writer.println(");");
+            if (requireAdditionalData) {
+                if (method.isAnnotationPresent(Editor.class)) {
+                    writer.print("mm.setEditorType(");
+                    writer.print(Editor.class.getName() + "." + Editor.EditorType.class.getSimpleName() + ".");
+                    writer.print(method.getAnnotation(Editor.class).type().name());
+                    writer.println(");");
+                }
+
+                addValidatorAnnotation(writer, method, NotNull.class);
+                addValidatorAnnotation(writer, method, Pattern.class);
+
+                writer.println("return mm;");
             }
 
-            addValidatorAnnotation(writer, method, NotNull.class);
-            addValidatorAnnotation(writer, method, Pattern.class);
-
-            writer.println("return mm;");
             writer.outdent();
             writer.println("}");
         }
-        writer.println("throw new RuntimeException(\"Unknown member \" + memberName);");
+        writer.println("return null;");
         writer.outdent();
         writer.println("}");
     }
 
-    static boolean addValidatorAnnotation(SourceWriter writer, JMethod method, Class<? extends Annotation> annotationClass) {
-        if (method.isAnnotationPresent(annotationClass)) {
-            writer.print("mm.addValidatorAnnotation(");
-            writer.print(annotationClass.getName());
-            writer.print(".class");
-            writer.println(");");
-            return true;
+    private static void writeDataParams(SourceWriter writer, MemberMetaData data, boolean indexed) {
+        if (data instanceof MemberMetaDataGeneration) {
+            writer.print(((MemberMetaDataGeneration) data).valueClassSourceName + ".class, ");
         } else {
-            return false;
+            writer.print(data.valueClass.getName() + ".class, ");
         }
+
+        writer.print("(Class<? extends IObject<?>>)");
+        if (data instanceof MemberMetaDataGeneration) {
+            writer.println(((MemberMetaDataGeneration) data).objectClassSourceName + ".class, ");
+        } else {
+            writer.println(data.objectClass.getName() + ".class, ");
+        }
+
+        writer.print(Boolean.valueOf(data.entity).toString() + ", ");
+        writer.print(Boolean.valueOf(data.valueClassIsNumber).toString() + ", ");
+        writer.print(Boolean.valueOf(data.persistenceTransient).toString() + ", ");
+        writer.print(Boolean.valueOf(data.rpcTransient).toString() + ", ");
+        writer.print(Boolean.valueOf(data.detached).toString() + ", ");
+        writer.print(Boolean.valueOf(data.ownedRelationships).toString() + ", ");
+        writer.print(Boolean.valueOf(data.owner).toString() + ", ");
+        writer.print(Boolean.valueOf(data.embedded).toString() + ", ");
+        writer.print(Boolean.valueOf(indexed).toString() + ", ");
+        writer.print(data.stringLength + ", ");
+        writer.print(i18nEscapeSourceString(data.format) + ", ");
+        writer.print(Boolean.valueOf(data.useMessageFormat).toString() + ", ");
+        writer.print(i18nEscapeSourceString(data.nullString));
     }
 }

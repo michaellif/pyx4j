@@ -250,7 +250,7 @@ public class EntityHandlerWriter {
             writer.outdent();
             writer.println("}");
         }
-        writer.println("throw new RuntimeException(\"Unknown member \" + name);");
+        writer.println("return null;");
 
         if (optimizeForJS) {
             writer.outdent();

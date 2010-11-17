@@ -134,6 +134,9 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         MemberMeta memberMeta = membersMeta.get(memberName);
         if (memberMeta == null) {
             memberMeta = createMemberMeta(memberName);
+            if (memberMeta == null) {
+                throw new RuntimeException("Unknown member " + memberName);
+            }
             membersMeta.put(memberName, memberMeta);
         }
         return memberMeta;

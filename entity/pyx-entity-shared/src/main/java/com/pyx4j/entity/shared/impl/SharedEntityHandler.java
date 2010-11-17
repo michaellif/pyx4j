@@ -226,6 +226,9 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         IObject<?> member = members.get(memberName);
         if (member == null) {
             member = lazyCreateMember(memberName);
+            if (member == null) {
+                throw new RuntimeException("Unknown member " + memberName);
+            }
             members.put(memberName, member);
         }
         return member;
