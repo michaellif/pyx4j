@@ -33,8 +33,8 @@ public class GrayTheme extends WindowsTheme {
         putThemeColor(ThemeColor.OBJECT_TONE1, 0x404040);
         putThemeColor(ThemeColor.OBJECT_TONE2, 0x303030);
         putThemeColor(ThemeColor.OBJECT_TONE3, 0x505050);
+        putThemeColor(ThemeColor.OBJECT_TONE4, 0x387CBB);
         putThemeColor(ThemeColor.BORDER, 0xffffff);
-        putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
         putThemeColor(ThemeColor.SELECTION, 0xffa500);
         putThemeColor(ThemeColor.SELECTION_TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0x000000);

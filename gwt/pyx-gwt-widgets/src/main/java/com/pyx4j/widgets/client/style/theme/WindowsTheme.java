@@ -70,14 +70,14 @@ public class WindowsTheme extends Theme {
 
     protected void initThemeColors() {
         float hue = (float) 213 / 360;
-        float saturation = (float) 0.3;
-        float brightness = (float) 0.9;
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.5));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.6));
+        float saturation = (float) 0.9;
+        float brightness = (float) 0.7;
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
         putThemeColor(ThemeColor.BORDER, 0x666666);
-        putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
-        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
+        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
@@ -393,10 +393,11 @@ public class WindowsTheme extends Theme {
         style.addProperty("padding-right", "2px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
+        style.addProperty("border-color", ThemeColor.BORDER);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_ButtonImage);
@@ -404,22 +405,16 @@ public class WindowsTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("border-width", "1px");
         style.addProperty("border-style", "ridge");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
         style.addProperty("background", ThemeColor.OBJECT_TONE2);
-        style.addProperty("border-width", "1px");
         style.addProperty("border-style", "inset");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
     }
 
@@ -654,19 +649,19 @@ public class WindowsTheme extends Theme {
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColor.GROUP_BORDER);
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColor.GROUP_BORDER);
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox_Caption);
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
-        style.addProperty("color", ThemeColor.GROUP_BORDER);
+        style.addProperty("color", ThemeColor.OBJECT_TONE4);
         addStyle(style);
     }
 

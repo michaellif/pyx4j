@@ -30,7 +30,7 @@ public enum ThemeColor {
 
     BORDER,
 
-    GROUP_BORDER,
+    OBJECT_TONE4,
 
     SELECTION,
 
