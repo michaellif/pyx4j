@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client.style.theme;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
+import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.Theme;
@@ -68,12 +69,15 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, 0xece9d8);
-        putThemeColor(ThemeColor.OBJECT_TONE2, 0xfdfae9);
-        putThemeColor(ThemeColor.OBJECT_TONE3, 0xdbd8c7);
+        //0xece9d8
+        //float baseColor = (float) 213 / 360;
+        float baseColor = (float) 31 / 360;
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.4));
+        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.5));
+        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.6));
         putThemeColor(ThemeColor.BORDER, 0x666666);
         putThemeColor(ThemeColor.GROUP_BORDER, 0x387CBB);
-        putThemeColor(ThemeColor.SELECTION, 0x86adc4);
+        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(baseColor, (float) 0.30, (float) 0.90, (float) 0.99));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
         putThemeColor(ThemeColor.TEXT, 0x000000);
         putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
@@ -120,9 +124,9 @@ public class WindowsTheme extends Theme {
         // style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("padding", "2 2 2 8");
 
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        //style.addGradientBackground();
+        style.addGradientBackground(ThemeColor.OBJECT_TONE1);
 
         addStyle(style);
     }
@@ -136,9 +140,7 @@ public class WindowsTheme extends Theme {
 
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
-        style.addProperty("border-left-width", "2px");
-        style.addProperty("border-left-style", "ridge");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("border-left", "2px ridge {}", ThemeColor.OBJECT_TONE1);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -176,9 +178,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
         style.addProperty("background", ThemeColor.TEXT_BACKGROUND);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.SELECTION);
+        style.addProperty("border", "1px solid {}", ThemeColor.SELECTION);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
@@ -197,9 +197,7 @@ public class WindowsTheme extends Theme {
     protected void initDialogBoxStyles() {
 
         Style style = new Style(".gwt-DialogBox");
-        style.addProperty("border-width", "2px");
-        style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border", "2px outset {}", ThemeColor.BORDER);
         style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
@@ -240,7 +238,7 @@ public class WindowsTheme extends Theme {
     }
 
     protected void initTabPanelStyles() {
-        initTopTabPanelStyles(TabPanel.pyx4j_Tab);
+        initTopTabPanelStyles(TabPanel.DEFAULT_STYLE_PREFIX);
         initBottomTabPanelStyles(pyx4j_TabBottom);
 
     }
@@ -280,12 +278,13 @@ public class WindowsTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
         style.addProperty("cursor", "default");
-        style.addProperty("background-color", ThemeColor.SELECTION);
+        style.addGradientBackground(ThemeColor.SELECTION);
+
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
                 TabPanel.StyleSuffix.BarItemLabel));
-        style.addProperty("color", ThemeColor.SELECTION_TEXT);
+        //style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItemLabel));

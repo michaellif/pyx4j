@@ -47,7 +47,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, HasSelectionHandlers<E>, HasCloseHandlers<E>, HasBeforeCloseHandlers<E> {
 
-    public static String pyx4j_Tab = "pyx4j_Tab";
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_Tab";
 
     public static enum StyleSuffix implements IStyleSuffix {
         PanelBottom, BarMoveLeft, BarMoveRight, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
@@ -69,7 +69,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
 
     public TabPanel() {
         tabBar = new TabBar(this);
-        setStylePrefix(pyx4j_Tab);
+        setStylePrefix(DEFAULT_STYLE_PREFIX);
     }
 
     public void setStylePrefix(String styleName) {

@@ -86,16 +86,23 @@ public class Property {
     public String toString(Theme theme) {
         if (value == null) {
             if (color == null) {
-                throw new Error("theme property " + name + " should be set with value or color");
+                throw new RuntimeException("theme property " + name + " should be set with value or color");
             }
             return name + ": " + theme.getThemeColorString(color) + ";";
         }
-        int urlIdx = value.indexOf("url(");
-        if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {
-            return name + ": " + value.substring(0, urlIdx) + " url(" + StyleManger.getAlternativeHostname() + GWT.getModuleName() + "/"
-                    + value.substring(urlIdx + 4) + ";";
-        } else {
-            return name + ": " + value + ";";
+
+        String retVal = name + ": " + value + ";";
+
+        int urlIdx = retVal.indexOf("url(");
+        if ((urlIdx != -1) && (retVal.indexOf("url('data:image/") == -1) && (retVal.indexOf("url('http://") == -1)) {
+            retVal = retVal.substring(0, urlIdx) + " url(" + StyleManger.getAlternativeHostname() + GWT.getModuleName() + "/" + retVal.substring(urlIdx + 4);
         }
+
+        int colorIdx = retVal.indexOf("{}");
+        if (colorIdx != -1) {
+            retVal = retVal.substring(0, colorIdx) + theme.getThemeColorString(color) + retVal.substring(colorIdx + 2);
+        }
+
+        return retVal;
     }
 }

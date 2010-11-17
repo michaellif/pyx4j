@@ -23,7 +23,7 @@ package com.pyx4j.ria.demo.client;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 
-import com.pyx4j.ria.client.style.ThemeEditor;
+import com.pyx4j.ria.client.theme.ThemeEditor;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.GrayTheme;

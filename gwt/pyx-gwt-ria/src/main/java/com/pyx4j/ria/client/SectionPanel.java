@@ -20,14 +20,21 @@
  */
 package com.pyx4j.ria.client;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+
 public class SectionPanel extends LayoutPanel {
+
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_SectionPanel";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Root, Content
+    }
 
     private final LayoutPanel contentPanelHolder;
 
@@ -40,23 +47,23 @@ public class SectionPanel extends LayoutPanel {
         super();
 
         rootPanel = new DockLayoutPanel(Unit.EM);
-        rootPanel.getElement().getStyle().setBorderColor("black");
-        rootPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        rootPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
 
         headerMark = new SimplePanel();
         rootPanel.addNorth(headerMark, 0);
 
         contentPanelHolder = new LayoutPanel();
-        contentPanelHolder.getElement().getStyle().setBorderColor("#86adc4");
-        contentPanelHolder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        contentPanelHolder.getElement().getStyle().setBorderWidth(2, Unit.PX);
-        contentPanelHolder.getElement().getStyle().setBackgroundColor("white");
 
         rootPanel.add(contentPanelHolder);
 
         add(rootPanel);
 
+        setStylePrefix(DEFAULT_STYLE_PREFIX);
+    }
+
+    public void setStylePrefix(String styleName) {
+        setStyleName(styleName);
+        rootPanel.setStyleName(styleName + StyleSuffix.Root);
+        contentPanelHolder.setStyleName(styleName + StyleSuffix.Content);
     }
 
     protected void setHeaderPane(Widget headerPane) {

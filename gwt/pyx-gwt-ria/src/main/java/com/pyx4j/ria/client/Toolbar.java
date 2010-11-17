@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -41,6 +42,7 @@ public class Toolbar extends FlowPanel {
     public Toolbar() {
         setStyleName(CSSClass.pyx4j_Toolbar.name());
         getElement().getStyle().setProperty("verticalAlign", "middle");
+
     }
 
     public void addItem(String caption, final Command command) {

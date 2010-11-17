@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.ria.client.style;
+package com.pyx4j.ria.client.theme;
 
 import java.util.EnumSet;
 import java.util.HashMap;
