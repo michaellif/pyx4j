@@ -81,7 +81,7 @@ class SimulationWidget extends VerticalPanel implements InlineWidget {
         this.add(networkGroup);
         networkGroup.add(editorPanel);
 
-        editorPanel.setWidget(editorPanel.createFormWidget(LabelAlignment.LEFT));
+        editorPanel.add(editorPanel.createFormWidget(LabelAlignment.LEFT));
 
         Button saveButton = new Button(i18n.tr("Save"));
         saveButton.getElement().getStyle().setProperty("margin", "20px");

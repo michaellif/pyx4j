@@ -33,9 +33,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends AbstractEntitySearchCriteriaPanel<E> {
+public abstract class EntitySearchCriteriaPart<E extends IEntity> extends AbstractEntitySearchCriteriaPanel<E> {
 
-    public EntitySearchCriteriaPanel(Class<E> clazz) {
+    public EntitySearchCriteriaPart(Class<E> clazz) {
         super(clazz);
 
         ScrollPanel contentPanel = new ScrollPanel();

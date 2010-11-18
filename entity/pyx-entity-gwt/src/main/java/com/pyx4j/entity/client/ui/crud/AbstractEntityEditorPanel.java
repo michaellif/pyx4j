@@ -33,7 +33,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -61,7 +61,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.event.shared.PageLeavingEvent;
 import com.pyx4j.widgets.client.event.shared.PageLeavingHandler;
 
-public abstract class AbstractEntityEditorPanel<E extends IEntity> extends SimplePanel implements PageLeavingHandler {
+public abstract class AbstractEntityEditorPanel<E extends IEntity> extends LayoutPanel implements PageLeavingHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEntityEditorPanel.class);
 
