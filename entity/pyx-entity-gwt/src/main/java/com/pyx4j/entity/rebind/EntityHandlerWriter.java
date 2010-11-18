@@ -24,6 +24,8 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
@@ -49,7 +51,8 @@ public class EntityHandlerWriter {
      */
     final static boolean cacheEntityMeta = false;
 
-    static void createEntityHandlerImpl(ContextHelper contextHelper, JClassType interfaceType) {
+    static void createEntityHandlerImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {
+        TreeLogger implLogger = logger.branch(TreeLogger.DEBUG, "Creating implementation for " + interfaceType.getName());
 
         String packageName = interfaceType.getPackage().getName();
         String simpleName = interfaceType.getSimpleSourceName() + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
@@ -65,18 +68,19 @@ public class EntityHandlerWriter {
         composer.addImplementedInterface(interfaceType.getName());
         composer.addAnnotationDeclaration("@SuppressWarnings(\"serial\")");
 
-        PrintWriter printWriter = contextHelper.context.tryCreate(contextHelper.logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
+        PrintWriter printWriter = contextHelper.context.tryCreate(implLogger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
         if (printWriter == null) {
             // the generated type already exists
             return;
         }
 
         SourceWriter writer = composer.createSourceWriter(contextHelper.context, printWriter);
-        writeEntityHandlerImpl(contextHelper, writer, simpleName, interfaceType);
-        writer.commit(contextHelper.logger);
+        writeEntityHandlerImpl(implLogger, contextHelper, writer, simpleName, interfaceType);
+        writer.commit(implLogger);
     }
 
-    private static void writeEntityHandlerImpl(ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType) {
+    private static void writeEntityHandlerImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType)
+            throws UnableToCompleteException {
         writer.indent();
 
         //Static for optimisation
@@ -151,6 +155,12 @@ public class EntityHandlerWriter {
                 String valueClass;
 
                 if (type.isAssignableTo(contextHelper.iPrimitiveInterfaceType)) {
+                    if (!(type instanceof JParameterizedType)) {
+                        logger.log(TreeLogger.Type.ERROR,
+                                "IPrimitive " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName()
+                                        + "'");
+                        throw new UnableToCompleteException();
+                    }
                     writer.println("::lazyCreateMemberIPrimitive(Ljava/lang/String;Ljava/lang/Class;)(memberName");
                     valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 } else if (type.isAssignableTo(contextHelper.iPrimitiveSetInterfaceType)) {
@@ -166,8 +176,10 @@ public class EntityHandlerWriter {
                     writer.println("::lazyCreateMemberIEntity(Ljava/lang/String;Ljava/lang/Class;)(memberName");
                     valueClass = type.getQualifiedSourceName();
                 } else {
-                    throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
+                    logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
+                            + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                    logger.log(TreeLogger.Type.ERROR, "Only IEntity, IPrimitive<>, IPrimitiveSet<>, ISet<>, IList<> are expected.");
+                    throw new UnableToCompleteException();
                 }
 
                 writer.print("     ,");
@@ -215,8 +227,10 @@ public class EntityHandlerWriter {
             writer.indent();
             if (type.isAssignableTo(contextHelper.iPrimitiveInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
-                    throw new RuntimeException("IPrimitive " + method.getName() + " type should be ParameterizedType in interface '"
-                            + interfaceType.getQualifiedSourceName() + "'");
+                    logger.log(TreeLogger.Type.ERROR,
+                            "IPrimitive " + method.getName() + " type should be ParameterizedType in interface '" + interfaceType.getQualifiedSourceName()
+                                    + "'");
+                    throw new UnableToCompleteException();
                 }
                 String valueClass = ((JParameterizedType) type).getTypeArgs()[0].getQualifiedSourceName();
                 writer.println("return lazyCreateMemberIPrimitive(\"" + method.getName() + "\", " + valueClass + ".class);");
@@ -244,8 +258,10 @@ public class EntityHandlerWriter {
             } else if (type.isAssignableTo(contextHelper.iEnentityInterfaceType)) {
                 writer.println("return lazyCreateMemberIEntity(\"" + method.getName() + "\", " + type.getQualifiedSourceName() + ".class);");
             } else {
-                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
-                        + interfaceType.getQualifiedSourceName() + "'");
+                logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
+                        + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                logger.log(TreeLogger.Type.ERROR, "Only IEntity, IPrimitive<>, IPrimitiveSet<>, ISet<>, IList<> are expected.");
+                throw new UnableToCompleteException();
             }
             writer.outdent();
             writer.println("}");

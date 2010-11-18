@@ -26,7 +26,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.ext.GeneratorContext;
-import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
@@ -42,8 +41,6 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 
 class ContextHelper {
-
-    final TreeLogger logger;
 
     final GeneratorContext context;
 
@@ -61,8 +58,7 @@ class ContextHelper {
 
     final JClassType numberType;
 
-    ContextHelper(TreeLogger logger, GeneratorContext context) throws NotFoundException {
-        this.logger = logger;
+    ContextHelper(GeneratorContext context) throws NotFoundException {
         this.context = context;
 
         TypeOracle oracle = context.getTypeOracle();

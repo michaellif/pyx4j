@@ -71,7 +71,7 @@ public class EntityFactoryGenerator extends Generator {
 
             RpcBlacklistCheck rpcFilter = new RpcBlacklistCheck(logger, context.getPropertyOracle());
 
-            ContextHelper contextHelper = new ContextHelper(logger, context);
+            ContextHelper contextHelper = new ContextHelper(context);
 
             List<JClassType> cases = new Vector<JClassType>();
 
@@ -84,8 +84,8 @@ public class EntityFactoryGenerator extends Generator {
                         throw new RuntimeException("IEntity class :" + type.getPackage().getName() + "." + type.getName() + " should be in rpc.blacklist");
                     }
 
-                    EntityHandlerWriter.createEntityHandlerImpl(contextHelper, type);
-                    EntityMetaWriter.createEntityMetaImpl(contextHelper, type);
+                    EntityHandlerWriter.createEntityHandlerImpl(logger, contextHelper, type);
+                    EntityMetaWriter.createEntityMetaImpl(logger, contextHelper, type);
                 }
             }
 

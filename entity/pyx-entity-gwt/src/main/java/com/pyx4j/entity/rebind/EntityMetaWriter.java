@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
@@ -64,7 +66,8 @@ public class EntityMetaWriter {
 
     static String META_IMPL = "_Meta" + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;
 
-    static void createEntityMetaImpl(ContextHelper contextHelper, JClassType interfaceType) {
+    static void createEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, JClassType interfaceType) throws UnableToCompleteException {
+        TreeLogger implLogger = logger.branch(TreeLogger.DEBUG, "Creating EntityMeta implementation for " + interfaceType.getName());
         String packageName = interfaceType.getPackage().getName();
         String simpleName = interfaceType.getSimpleSourceName() + META_IMPL;
         ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
@@ -74,14 +77,14 @@ public class EntityMetaWriter {
         composer.addImport(ClientMemberMetaImpl.class.getName());
         composer.setSuperclass(ClientEntityMetaImpl.class.getName());
 
-        PrintWriter printWriter = contextHelper.context.tryCreate(contextHelper.logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
+        PrintWriter printWriter = contextHelper.context.tryCreate(implLogger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
         if (printWriter == null) {
             // the generated type already exists
             return;
         }
         SourceWriter writer = composer.createSourceWriter(contextHelper.context, printWriter);
-        writeEntityMetaImpl(contextHelper, writer, simpleName, interfaceType);
-        writer.commit(contextHelper.logger);
+        writeEntityMetaImpl(implLogger, contextHelper, writer, simpleName, interfaceType);
+        writer.commit(implLogger);
     }
 
     static String escapeSourceString(String value) {
@@ -101,7 +104,8 @@ public class EntityMetaWriter {
         }
     }
 
-    static void writeEntityMetaImpl(ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType) {
+    static void writeEntityMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, String simpleName, JClassType interfaceType)
+            throws UnableToCompleteException {
 
         String caption;
         String description = null;
@@ -190,7 +194,7 @@ public class EntityMetaWriter {
         writer.outdent();
         writer.println("}");
 
-        writeEntityMemberMetaImpl(contextHelper, writer, allMethods, interfaceType);
+        writeEntityMemberMetaImpl(logger, contextHelper, writer, allMethods, interfaceType);
 
         writer.outdent();
     }
@@ -228,7 +232,8 @@ public class EntityMetaWriter {
     }
 
     //----------
-    static void writeEntityMemberMetaImpl(ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods, JClassType interfaceType) {
+    static void writeEntityMemberMetaImpl(TreeLogger logger, ContextHelper contextHelper, SourceWriter writer, List<JMethod> allMethods,
+            JClassType interfaceType) throws UnableToCompleteException {
         writer.println();
         writer.println("@Override");
         writer.println("protected MemberMeta createMemberMeta(String memberName) {");
@@ -285,8 +290,10 @@ public class EntityMetaWriter {
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
                 data.entity = true;
             } else {
-                throw new RuntimeException("Unknown member type " + method.getReturnType() + " of method '" + method.getName() + "' in interface '"
-                        + interfaceType.getQualifiedSourceName() + "'");
+                logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
+                        + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
+                logger.log(TreeLogger.Type.ERROR, "Only IEntity, IPrimitive<>, IPrimitiveSet<>, ISet<>, IList<> are expected.");
+                throw new UnableToCompleteException();
             }
 
             String memeberCaption;
