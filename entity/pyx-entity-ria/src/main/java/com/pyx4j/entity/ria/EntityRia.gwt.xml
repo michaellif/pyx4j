@@ -3,7 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.entity.Entity'/>
-    <inherits name='com.pyx4j.ria.RIA'/>
+    <inherits name='com.pyx4j.ria.Ria'/>
     
 	<source path="client"/>
 </module>
