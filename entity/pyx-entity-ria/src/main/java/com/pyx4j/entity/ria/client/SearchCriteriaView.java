@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.ria.client.crud.EntitySearchCriteriaPanel;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -34,7 +36,6 @@ public class SearchCriteriaView extends AbstractView {
     public SearchCriteriaView() {
         super();
 
-        addPage(new Tab(createPageContent("page 1"), "page 1", null));
         setTabTitle("Find");
         setTabImage(RiaEntityImageBundle.INSTANCE.searchCriteria());
 
@@ -73,5 +74,9 @@ public class SearchCriteriaView extends AbstractView {
             });
 
         }
+    }
+
+    public void setSearchCriteriaPart(EntitySearchCriteriaPanel<? extends IEntity> searchCriteriaPart) {
+        addPage(new Tab(searchCriteriaPart, "page 1", null));
     }
 }
