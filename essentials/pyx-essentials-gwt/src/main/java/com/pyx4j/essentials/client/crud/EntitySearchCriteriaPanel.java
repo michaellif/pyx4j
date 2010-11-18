@@ -47,7 +47,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
         super(clazz);
 
         VerticalPanel contentPanel = new VerticalPanel();
-        setWidget(contentPanel);
+        add(contentPanel);
 
         Widget searchForm = CForm.createDecoratedFormWidget(LabelAlignment.TOP, getComponents(), "Search");
         contentPanel.add(searchForm);

@@ -24,7 +24,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
@@ -38,10 +38,10 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
     public EntitySearchCriteriaPanel(Class<E> clazz) {
         super(clazz);
 
-        VerticalPanel contentPanel = new VerticalPanel();
-        setWidget(contentPanel);
+        ScrollPanel contentPanel = new ScrollPanel();
+        add(contentPanel);
 
-        Widget searchForm = CForm.createDecoratedFormWidget(LabelAlignment.TOP, getComponents(), "Search");
+        Widget searchForm = CForm.createFormWidget(LabelAlignment.TOP, getComponents());
         contentPanel.add(searchForm);
 
         enhanceComponents();
