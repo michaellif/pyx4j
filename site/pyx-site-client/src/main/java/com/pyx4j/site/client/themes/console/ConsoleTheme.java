@@ -34,6 +34,8 @@ public class ConsoleTheme extends SiteTheme {
         putThemeColor(ThemeColor.OBJECT_TONE1, 0xece9d8);
         putThemeColor(ThemeColor.OBJECT_TONE2, 0xF6F9FF);
         putThemeColor(ThemeColor.OBJECT_TONE3, 0xdbd8c7);
+        putThemeColor(ThemeColor.OBJECT_TONE4, 0xdbd8c7);
+        putThemeColor(ThemeColor.OBJECT_TONE5, 0xdbd8c7);
         putThemeColor(ThemeColor.BORDER, 0xE5ECF9);
         putThemeColor(ThemeColor.SELECTION, 0x86adc4);
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);

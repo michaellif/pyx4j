@@ -45,10 +45,11 @@ public abstract class RiaTheme extends WindowsTheme {
 
     @Override
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
-        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
-        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
-        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
+        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
         putThemeColor(ThemeColor.BORDER, 0x666666);
         putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
@@ -102,7 +103,7 @@ public abstract class RiaTheme extends WindowsTheme {
 
     private void initHeaderPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
-        style.addGradientBackground(ThemeColor.OBJECT_TONE4);
+        style.addGradientBackground(ThemeColor.OBJECT_TONE5);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, HeaderPanel.StyleSuffix.Label));

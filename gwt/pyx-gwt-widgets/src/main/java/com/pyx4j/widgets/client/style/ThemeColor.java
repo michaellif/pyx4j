@@ -28,9 +28,11 @@ public enum ThemeColor {
 
     OBJECT_TONE3,
 
-    BORDER,
-
     OBJECT_TONE4,
+
+    OBJECT_TONE5,
+
+    BORDER,
 
     SELECTION,
 
