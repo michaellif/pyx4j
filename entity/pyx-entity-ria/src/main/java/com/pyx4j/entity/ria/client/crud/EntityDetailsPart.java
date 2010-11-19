@@ -20,29 +20,29 @@
  */
 package com.pyx4j.entity.ria.client.crud;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
-
-import com.pyx4j.entity.client.ui.crud.AbstractEntityEditorPanel;
+import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public abstract class EntityDetailsPart<E extends IEntity> extends AbstractEntityEditorPanel<E> {
+public abstract class EntityDetailsPart<E extends IEntity> {
 
-    private static I18n i18n = I18nFactory.getI18n(EntityDetailsPart.class);
+    private CEntityForm<E> form;
 
     public EntityDetailsPart(Class<E> clazz) {
-        super(clazz);
 
-        populateForm(null);
+    }
 
-        ScrollPanel contentPanel = new ScrollPanel();
-        add(contentPanel);
+    protected void createForm(EntityFormFactory<E> formFactory) {
+        form = formFactory.createForm();
+        form.populate(null);
+        form.setAllignment(LabelAlignment.LEFT);
+    }
 
-        contentPanel.add(createFormWidget(LabelAlignment.LEFT));
-
+    public Widget initNativeComponent() {
+        return (Widget) form.initNativeComponent();
     }
 
 }

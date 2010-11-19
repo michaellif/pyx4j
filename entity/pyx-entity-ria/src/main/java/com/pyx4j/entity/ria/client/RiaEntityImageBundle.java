@@ -56,4 +56,7 @@ public interface RiaEntityImageBundle extends ClientBundle, RiaImageBundle {
     @Source("print.png")
     ImageResource print();
 
+    @Source("save.png")
+    ImageResource save();
+
 }

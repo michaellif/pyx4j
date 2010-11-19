@@ -20,54 +20,29 @@
  */
 package com.pyx4j.entity.ria.client.crud;
 
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.crud.AbstractEntitySearchCriteriaPanel;
+import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.SearchCriteriaFormFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public abstract class EntitySearchCriteriaPart<E extends IEntity> extends AbstractEntitySearchCriteriaPanel<E> {
+public abstract class EntitySearchCriteriaPart<E extends IEntity> {
+
+    private CEntityForm<E> form;
 
     public EntitySearchCriteriaPart(Class<E> clazz) {
-        super(clazz);
 
-        ScrollPanel contentPanel = new ScrollPanel();
-        add(contentPanel);
+    }
 
-        Widget searchForm = CForm.createFormWidget(LabelAlignment.TOP, getComponents());
-        contentPanel.add(searchForm);
-
-        enhanceComponents();
-
+    protected void createForm(SearchCriteriaFormFactory<E> formFactory) {
+        form = formFactory.createForm();
         form.populate(null);
-
-        this.addKeyDownHandler(new KeyDownHandler() {
-
-            @Override
-            public void onKeyDown(KeyDownEvent event) {
-                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    //listWidget.show(0);
-                }
-            }
-        });
-
+        form.setAllignment(LabelAlignment.TOP);
     }
 
-    protected abstract CComponent<?>[][] getComponents();
-
-    protected void enhanceComponents() {
-
-    }
-
-    public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return addDomHandler(handler, KeyDownEvent.getType());
+    public Widget initNativeComponent() {
+        return (Widget) form.initNativeComponent();
     }
 
 }

@@ -24,18 +24,14 @@ import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.GlassPanel;
-import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.theme.GrayTheme;
-import com.pyx4j.widgets.client.style.theme.WindowsTheme;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class DashboardView extends AbstractView {
@@ -153,55 +149,6 @@ public class DashboardView extends AbstractView {
 
             addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Add");
             addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Save");
-            addItem(RiaEntityImageBundle.INSTANCE.image(), new Command() {
-                @Override
-                public void execute() {
-                    //TODO Logger.error("printAction", new Error("Test error"));
-                }
-            }, "Print");
-            addSeparator();
-
-            addItem("L&F Win", new Command() {
-                @Override
-                public void execute() {
-                    StyleManger.installTheme(new WindowsTheme());
-                }
-            });
-
-            addItem("L&F Gray", new Command() {
-                @Override
-                public void execute() {
-                    StyleManger.installTheme(new GrayTheme());
-                }
-            });
-
-            addItem(RiaEntityImageBundle.INSTANCE.image(), new Command() {
-                @Override
-                public void execute() {
-                }
-            }, "Theme Editor");
-
-            addSeparator();
-
-            addItem("Progress", new Command() {
-                @Override
-                public void execute() {
-                }
-            });
-
-            addItem("Glass ON (5 sec)", new Command() {
-                @Override
-                public void execute() {
-                    GlassPanel.show();
-                    Timer timer = new Timer() {
-                        @Override
-                        public void run() {
-                            GlassPanel.hide();
-                        }
-                    };
-                    timer.schedule(1000 * 5);
-                }
-            });
 
         }
     }
