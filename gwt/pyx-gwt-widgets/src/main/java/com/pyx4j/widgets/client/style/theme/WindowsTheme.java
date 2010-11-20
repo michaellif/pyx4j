@@ -292,7 +292,7 @@ public class WindowsTheme extends Theme {
 
     private void initBottomTabPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
