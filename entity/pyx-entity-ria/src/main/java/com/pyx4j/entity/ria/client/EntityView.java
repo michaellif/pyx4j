@@ -21,13 +21,17 @@
 package com.pyx4j.entity.ria.client;
 
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.ria.client.crud.EntityDetailsPart;
 import com.pyx4j.entity.ria.client.crud.EntityDetailsTab;
@@ -153,7 +157,14 @@ public class EntityView extends AbstractView {
     public void addDetailsPart(EntityDetailsPart<?> part) {
 
         for (EntityDetailsTab<?> tab : part.getTabs()) {
-            addPage(new Tab(new ScrollPanel(tab.initNativeComponent()), tab.getTitle(), null));
+            VerticalPanel page = new VerticalPanel();
+            Label title = new Label(tab.getTitle());
+            title.getElement().getStyle().setFontSize(1.5, Unit.EM);
+            title.getElement().getStyle().setMargin(2, Unit.PX);
+            title.getElement().getStyle().setMarginLeft(20, Unit.PX);
+            page.add(title);
+            page.add(tab.initNativeComponent());
+            addPage(new Tab(new ScrollPanel(page), tab.getTitle(), null));
         }
     }
 }
