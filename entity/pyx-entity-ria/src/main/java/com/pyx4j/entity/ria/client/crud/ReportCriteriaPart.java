@@ -14,38 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 24, 2010
+ * Created on Feb 18, 2010
  * @author michaellif
- * @version $Id: EntityEditorPanel.java 6674 2010-08-04 11:16:46Z michaellif $
+ * @version $Id: EntitySearchCriteriaPart.java 7552 2010-11-19 17:03:47Z michaellif $
  */
 package com.pyx4j.entity.ria.client.crud;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityForm;
-import com.pyx4j.entity.client.ui.EntityFormFactory;
+import com.pyx4j.entity.client.ui.CriteriaFormFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
-public abstract class EntityDetailsPart<E extends IEntity> {
+public abstract class ReportCriteriaPart<E extends IEntity> {
 
-    private final List<EntityDetailsTab<E>> tabs;
+    private CEntityForm<E> form;
 
-    public EntityDetailsPart(Class<E> clazz) {
-        tabs = new ArrayList<EntityDetailsTab<E>>();
+    public ReportCriteriaPart(Class<E> clazz) {
+
     }
 
-    protected void createForm(String title, EntityFormFactory<E> formFactory) {
-        CEntityForm<E> form = formFactory.createForm();
+    protected void createForm(CriteriaFormFactory<E> formFactory) {
+        form = formFactory.createForm();
         form.populate(null);
-        form.setAllignment(LabelAlignment.LEFT);
-
-        tabs.add(new EntityDetailsTab<E>(title, form));
+        form.setAllignment(LabelAlignment.TOP);
     }
 
-    public List<EntityDetailsTab<E>> getTabs() {
-        return tabs;
+    public Widget initNativeComponent() {
+        return (Widget) form.initNativeComponent();
     }
 
 }

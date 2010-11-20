@@ -23,7 +23,7 @@ package com.pyx4j.entity.ria.client.crud;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityForm;
-import com.pyx4j.entity.client.ui.SearchCriteriaFormFactory;
+import com.pyx4j.entity.client.ui.CriteriaFormFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 
@@ -35,7 +35,7 @@ public abstract class EntitySearchCriteriaPart<E extends IEntity> {
 
     }
 
-    protected void createForm(SearchCriteriaFormFactory<E> formFactory) {
+    protected void createForm(CriteriaFormFactory<E> formFactory) {
         form = formFactory.createForm();
         form.populate(null);
         form.setAllignment(LabelAlignment.TOP);

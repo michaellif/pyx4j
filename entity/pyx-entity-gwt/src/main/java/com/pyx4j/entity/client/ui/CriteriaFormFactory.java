@@ -32,19 +32,19 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.FormFactory;
 
-public abstract class SearchCriteriaFormFactory<E extends IEntity> implements FormFactory {
+public abstract class CriteriaFormFactory<E extends IEntity> implements FormFactory {
 
-    private static final Logger log = LoggerFactory.getLogger(SearchCriteriaFormFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(CriteriaFormFactory.class);
 
     protected final E metaEntity;
 
     private final EditableComponentFactory editableComponentFactory;
 
-    public SearchCriteriaFormFactory(Class<E> entityClass) {
+    public CriteriaFormFactory(Class<E> entityClass) {
         this(entityClass, new BaseEditableComponentFactory());
     }
 
-    public SearchCriteriaFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
+    public CriteriaFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
         metaEntity = EntityFactory.create(entityClass);
         this.editableComponentFactory = editableComponentFactory;
     }

@@ -22,10 +22,9 @@ package com.pyx4j.entity.ria.client;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.ria.client.crud.ReportCriteriaPart;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -34,7 +33,6 @@ public class ReportCriteriaView extends AbstractView {
     public ReportCriteriaView() {
         super();
 
-        addPage(new Tab(createPageContent("page 1"), "page 1", null));
         setTabTitle("Report");
         setTabImage(RiaEntityImageBundle.INSTANCE.reportCriteria());
 
@@ -45,18 +43,6 @@ public class ReportCriteriaView extends AbstractView {
         toolbarPanel.add(toolbar);
 
         setToolbarPane(toolbarPanel);
-    }
-
-    private ScrollPanel createPageContent(String title) {
-        ScrollPanel contentPane = new ScrollPanel();
-
-        VerticalPanel mainPane = new VerticalPanel();
-
-        contentPane.setWidget(mainPane);
-
-        mainPane.add(new Label("Report Criteria TODO"));
-
-        return contentPane;
     }
 
     class Toolbar extends com.pyx4j.ria.client.Toolbar {
@@ -74,4 +60,9 @@ public class ReportCriteriaView extends AbstractView {
 
         }
     }
+
+    public void setReportCriteriaPart(ReportCriteriaPart<?> part) {
+        addPage(new Tab(new ScrollPanel(part.initNativeComponent()), "Report", null));
+    }
+
 }

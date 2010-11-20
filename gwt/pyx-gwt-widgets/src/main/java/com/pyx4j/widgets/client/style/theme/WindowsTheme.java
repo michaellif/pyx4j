@@ -314,7 +314,7 @@ public class WindowsTheme extends Theme {
         style.addProperty("text-align", "center");
         style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("border-bottom", "1px solid {}", ThemeColor.SELECTION);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.first));

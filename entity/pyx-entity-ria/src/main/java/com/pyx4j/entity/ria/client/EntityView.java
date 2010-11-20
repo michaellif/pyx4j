@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.ria.client.crud.EntityDetailsPart;
+import com.pyx4j.entity.ria.client.crud.EntityDetailsTab;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -149,8 +150,10 @@ public class EntityView extends AbstractView {
         }
     }
 
-    public void addDetailsPart(EntityDetailsPart<?> part, String partName) {
-        addPage(new Tab(new ScrollPanel(part.initNativeComponent()), partName, null));
-    }
+    public void addDetailsPart(EntityDetailsPart<?> part) {
 
+        for (EntityDetailsTab<?> tab : part.getTabs()) {
+            addPage(new Tab(new ScrollPanel(tab.initNativeComponent()), tab.getTitle(), null));
+        }
+    }
 }
