@@ -248,8 +248,12 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
             retriveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
-                    setValueByItemName(name);
-
+                    for (E o : opt) {
+                        if (getItemName(o).equals(name)) {
+                            setValue(o);
+                            break;
+                        }
+                    }
                 }
             });
         }
