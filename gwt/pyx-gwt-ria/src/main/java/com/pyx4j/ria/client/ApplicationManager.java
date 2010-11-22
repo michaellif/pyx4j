@@ -20,9 +20,6 @@
  */
 package com.pyx4j.ria.client;
 
-import com.pyx4j.ria.client.theme.Windows7Theme;
-import com.pyx4j.widgets.client.style.StyleManger;
-
 public class ApplicationManager {
 
     private static ApplicationManager instance;
@@ -30,7 +27,6 @@ public class ApplicationManager {
     private IApplication currentApplication;
 
     private ApplicationManager() {
-        StyleManger.installTheme(new Windows7Theme());
     }
 
     public static ApplicationManager instance() {

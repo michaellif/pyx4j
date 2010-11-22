@@ -36,7 +36,7 @@ public abstract class RiaTheme extends WindowsTheme {
 
     private final float brightness;
 
-    RiaTheme(float hue, float saturation, float brightness) {
+    protected RiaTheme(float hue, float saturation, float brightness) {
         this.hue = hue;
         this.saturation = saturation;
         this.brightness = brightness;

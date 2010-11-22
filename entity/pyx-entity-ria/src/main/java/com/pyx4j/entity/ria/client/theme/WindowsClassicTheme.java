@@ -18,12 +18,12 @@
  * @author Misha
  * @version $Id: code-templates.xml 4670 2010-01-10 07:33:42Z vlads $
  */
-package com.pyx4j.ria.client.theme;
+package com.pyx4j.entity.ria.client.theme;
 
-public class Windows7Theme extends RiaTheme {
+public class WindowsClassicTheme extends EntityRiaTheme {
 
-    public Windows7Theme() {
-        super((float) 213 / 360, (float) 0.9, (float) 0.7);
+    public WindowsClassicTheme() {
+        super((float) 40 / 360, (float) 0.1, (float) 0.5);
     }
 
 }
