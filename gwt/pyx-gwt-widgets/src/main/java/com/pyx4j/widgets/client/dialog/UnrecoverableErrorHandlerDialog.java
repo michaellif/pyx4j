@@ -98,14 +98,17 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
     protected void selectErrorDialog(final Throwable caught, final String errorCode) {
         Throwable cause = caught;
-        if (cause instanceof UmbrellaException) {
-            try {
-                cause = ((UmbrellaException) cause).getCauses().iterator().next();
-            } catch (Throwable ignore) {
+        while ((cause instanceof UmbrellaException)
+                || ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause))) {
+            if (cause instanceof UmbrellaException) {
+                try {
+                    cause = ((UmbrellaException) cause).getCauses().iterator().next();
+                } catch (Throwable ignore) {
+                    break;
+                }
+            } else {
+                cause = cause.getCause();
             }
-        }
-        while ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause)) {
-            cause = cause.getCause();
         }
         if (cause instanceof IncompatibleRemoteServiceException) {
             showReloadApplicationDialog();
