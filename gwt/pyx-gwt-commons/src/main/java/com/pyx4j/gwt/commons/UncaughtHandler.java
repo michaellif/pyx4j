@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 
@@ -77,8 +78,21 @@ public class UncaughtHandler implements UncaughtExceptionHandler {
             try {
                 if (!(caught instanceof IncompatibleRemoteServiceException)) {
                     try {
+                        Throwable cause = caught;
+                        while ((cause instanceof UmbrellaException)
+                                || ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause))) {
+                            if (cause instanceof UmbrellaException) {
+                                try {
+                                    cause = ((UmbrellaException) cause).getCauses().iterator().next();
+                                } catch (Throwable ignore) {
+                                    break;
+                                }
+                            } else {
+                                cause = cause.getCause();
+                            }
+                        }
                         log.error(UNEXPECTED_ERROR_MESSAGE + ((errorCode != null) ? "[" + errorCode + "] " : " ") + ";\n Href " + Window.Location.getHref()
-                                + ";\n UserAgent " + userAgent(), caught);
+                                + ";\n UserAgent " + userAgent(), cause);
                         GoogleAnalytics.track("unrecoverableError");
                     } catch (Throwable ignore) {
                     }
