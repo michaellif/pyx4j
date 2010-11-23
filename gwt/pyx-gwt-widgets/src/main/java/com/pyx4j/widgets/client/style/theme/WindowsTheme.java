@@ -270,12 +270,13 @@ public class WindowsTheme extends Theme {
         style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("border-left", "1px solid {}", ThemeColor.SELECTION);
         style.addProperty("border-top", "1px solid {}", ThemeColor.SELECTION);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addGradientBackground(ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
         style.addProperty("cursor", "default");
-        style.addGradientBackground(ThemeColor.SELECTION);
+        style.addProperty("background", ThemeColor.SELECTION);
+        style.addProperty("color", "white");
 
         addStyle(style);
 

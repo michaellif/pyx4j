@@ -96,6 +96,7 @@ public abstract class RiaTheme extends WindowsTheme {
 
         style = new Style(Selector.valueOf(prefix, SectionPanel.StyleSuffix.Content));
         style.addProperty("border", "2px solid {}", ThemeColor.SELECTION);
+        style.addProperty("border-top", "4px solid {}", ThemeColor.SELECTION);
         style.addProperty("background-color", "white");
         addStyle(style);
 
