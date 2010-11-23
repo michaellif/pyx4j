@@ -20,12 +20,12 @@
  */
 package com.pyx4j.ria.client;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,6 +42,8 @@ public class Toolbar extends FlowPanel {
     public Toolbar() {
         setStyleName(CSSClass.pyx4j_Toolbar.name());
         getElement().getStyle().setProperty("verticalAlign", "middle");
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        setWidth("100%");
 
     }
 
@@ -53,10 +55,14 @@ public class Toolbar extends FlowPanel {
                 command.execute();
             }
         });
-        addItem(button);
+        addItem(button, false);
     }
 
     public void addItem(ImageResource imageResource, String caption, final Command command) {
+        addItem(imageResource, caption, command, false);
+    }
+
+    public void addItem(ImageResource imageResource, String caption, final Command command, boolean floatRight) {
         Button button = new Button(new Image(imageResource), caption);
         button.addClickHandler(new ClickHandler() {
             @Override
@@ -64,10 +70,14 @@ public class Toolbar extends FlowPanel {
                 command.execute();
             }
         });
-        addItem(button);
+        addItem(button, floatRight);
     }
 
     public void addItem(ImageResource imageResource, final Command command, String tooltip) {
+        addItem(imageResource, command, tooltip, false);
+    }
+
+    public void addItem(ImageResource imageResource, final Command command, String tooltip, boolean floatRight) {
         Button button = new Button(new Image(imageResource));
         button.setTooltip(tooltip);
         button.addClickHandler(new ClickHandler() {
@@ -76,14 +86,20 @@ public class Toolbar extends FlowPanel {
                 command.execute();
             }
         });
-        addItem(button);
+        addItem(button, floatRight);
     }
 
     public void addItem(Widget widget) {
+        addItem(widget, false);
+    }
+
+    public void addItem(Widget widget, boolean floatRight) {
         add(widget);
-        DOM.setStyleAttribute(widget.getElement(), "padding", "3px");
-        DOM.setStyleAttribute(widget.getElement(), "cursor", "pointer");
-        DOM.setStyleAttribute(widget.getElement(), "cursor", "hand");
+        widget.getElement().getStyle().setPadding(3, Unit.PX);
+        widget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        if (floatRight) {
+            widget.getElement().getStyle().setProperty("cssFloat", "right");
+        }
     }
 
     public void addSeparator() {

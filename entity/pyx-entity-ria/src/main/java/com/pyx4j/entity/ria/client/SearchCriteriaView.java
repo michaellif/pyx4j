@@ -20,15 +20,25 @@
  */
 package com.pyx4j.entity.ria.client;
 
+import java.util.Arrays;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.ria.client.crud.EntitySearchCriteriaPart;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.ria.client.view.AbstractView;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class SearchCriteriaView extends AbstractView {
+
+    private final CForm otherForm;
 
     public SearchCriteriaView() {
         super();
@@ -43,6 +53,23 @@ public class SearchCriteriaView extends AbstractView {
         toolbarPanel.add(toolbar);
 
         setToolbarPane(toolbarPanel);
+
+        CComboBox<String> sortBy = new CComboBox<String>("Sort by");
+        sortBy.setOptions(Arrays.asList(new String[] { "Name", "Phone" }));
+
+        CComboBox<String> perPage = new CComboBox<String>("Results per page");
+        perPage.setOptions(Arrays.asList(new String[] { "10", "25", "50", "100" }));
+
+        otherForm = new CForm(LabelAlignment.TOP);
+        CComponent<?>[][] components = new CComponent<?>[][] {
+
+        { sortBy },
+
+        { perPage },
+
+        };
+        otherForm.setComponents(components);
+
     }
 
     class Toolbar extends com.pyx4j.ria.client.Toolbar {
@@ -58,10 +85,12 @@ public class SearchCriteriaView extends AbstractView {
                 }
             });
 
+            addItem(new Anchor("Clear"));
         }
     }
 
     public void setSearchCriteriaPart(EntitySearchCriteriaPart<?> part) {
-        addPage(new Tab(new ScrollPanel(part.initNativeComponent()), "Search", null));
+        addPage(new Tab(new ScrollPanel(part.initNativeComponent()), "Criteria", null));
+        addPage(new Tab(new ScrollPanel((Widget) otherForm.initNativeComponent()), "Other", null));
     }
 }

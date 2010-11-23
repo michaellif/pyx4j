@@ -70,8 +70,8 @@ public abstract class EntityRiaTheme extends RiaTheme {
         style.addProperty("background-color", "white");
         addStyle(style);
         style = new Style("." + EntityCSSClass.pyx4j_Entity_DataTableHeader.name());
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
-        style.addProperty("color", "white");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("color", "black");
         addStyle(style);
     }
 }

@@ -20,10 +20,9 @@
  */
 package com.pyx4j.entity.ria.client;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.ria.client.crud.EntityListPart;
 import com.pyx4j.ria.client.view.AbstractView;
@@ -50,7 +49,14 @@ public class SearchResultView extends AbstractView {
 
         public Toolbar() {
 
-            addItem(RiaEntityImageBundle.INSTANCE.image(), null, "Add");
+            addItem(RiaEntityImageBundle.INSTANCE.next(), null, "Next", true);
+
+            HTML items = new HTML("1-8");
+            items.getElement().getStyle().setProperty("verticalAlign", "middle");
+
+            addItem(items, true);
+
+            addItem(RiaEntityImageBundle.INSTANCE.previous(), null, "Previous", true);
 
         }
     }
