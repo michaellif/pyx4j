@@ -24,45 +24,28 @@ import com.pyx4j.forms.client.gwt.NativeFormGroup;
 
 public abstract class CFormGroup<E> extends CFormContainer<E> {
 
-    private CForm form;
+    private final CForm form;
 
-    private final FormFactory factory;
-
-    private NativeFormGroup<E> nativeFormFolder;
-
-    private String itemCaption;
+    private NativeFormGroup<E> nativeFormGroup;
 
     public CFormGroup(FormFactory factory) {
         super();
-        this.factory = factory;
-    }
-
-    public final CForm createForm() {
-        CForm form = factory.createForm();
+        form = factory.createForm();
         form.setParentContainer(this);
-        return form;
-    }
-
-    public void setItemCaption(String itemCaption) {
-        this.itemCaption = itemCaption;
-    }
-
-    public String getItemCaption() {
-        return itemCaption;
     }
 
     @Override
     public INativeEditableComponent<E> getNativeComponent() {
-        return nativeFormFolder;
+        return nativeFormGroup;
     }
 
     @Override
     public INativeEditableComponent<E> initNativeComponent() {
-        if (nativeFormFolder == null) {
-            nativeFormFolder = new NativeFormGroup<E>(this);
+        if (nativeFormGroup == null) {
+            nativeFormGroup = new NativeFormGroup<E>(this);
             setNativeComponentValue(getValue());
         }
-        return nativeFormFolder;
+        return nativeFormGroup;
     }
 
     @Override
@@ -76,6 +59,10 @@ public abstract class CFormGroup<E> extends CFormContainer<E> {
             results.appendValidationErrors(form.getValidationResults());
         }
         return results;
+    }
+
+    public CForm getForm() {
+        return form;
     }
 
 }

@@ -75,6 +75,15 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
             }
         });
 
+        container.getElement().getStyle().setPadding(10, Unit.PX);
+        container.getElement().getStyle().setPaddingBottom(4, Unit.PX);
+
+        NativeForm nativeForm = (NativeForm) group.getForm().initNativeComponent();
+        nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
+        nativeForm.setWidth("100%");
+        container.add(nativeForm);
+        container.setCellWidth(nativeForm, "100%");
+
         add(container, CENTER);
 
         add(label, NORTH);
@@ -98,30 +107,6 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
 
     @Override
     public void setNativeValue(E value) {
-        //        container.clear();
-        //        if (value != null) {
-        //            LinkedHashMap map = folder.getFormsMap();
-        //            container.getElement().getStyle().setPadding(10, Unit.PX);
-        //            container.getElement().getStyle().setPaddingBottom(4, Unit.PX);
-        //            for (int i = 0; i < value.size(); i++) {
-        //                E item = value.get(i);
-        //                NativeForm nativeForm = (NativeForm) ((CForm) map.get(item)).initNativeComponent();
-        //                nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
-        //                nativeForm.setWidth("100%");
-        //                container.add(nativeForm);
-        //                container.setCellWidth(nativeForm, "100%");
-        //                if (i == 0 && value.size() == 1) {
-        //                    nativeForm.setToolbarMode(ToolbarMode.Only);
-        //                } else if (i == 0) {
-        //                    nativeForm.setToolbarMode(ToolbarMode.First);
-        //                } else if (i == value.size() - 1) {
-        //                    nativeForm.setToolbarMode(ToolbarMode.Last);
-        //                } else {
-        //                    nativeForm.setToolbarMode(ToolbarMode.Inner);
-        //                }
-        //
-        //            }
-        //        }
     }
 
     @Override

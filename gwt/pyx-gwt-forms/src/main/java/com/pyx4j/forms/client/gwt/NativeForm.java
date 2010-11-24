@@ -59,6 +59,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
+import com.pyx4j.forms.client.ui.CFormContainer;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CFormFolder;
@@ -146,7 +147,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         }
 
         if (form.getParentContainer() != null) {
-            toolbar = new Toolbar();
+            toolbar = new Toolbar(form.getParentContainer() instanceof CFormFolder<?>);
             toolbarHolder.setWidget(toolbar);
             getElement().getStyle().setBorderWidth(1, Unit.PX);
             getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
@@ -183,7 +184,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     private void addComponent(CComponent<?> component, int row, int column) {
 
-        if (component instanceof CFormFolder) {
+        if (component instanceof CFormContainer<?>) {
             grid.setWidget(row, column, (Widget) component.initNativeComponent());
         } else {
             grid.setWidget(row, column, new WidgetContainer(component));
@@ -388,11 +389,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     class Toolbar extends HorizontalPanel {
 
-        Image removeCommand;
-
-        Image upCommand;
-
-        Image downCommand;
+        ActionsPanel actionsPanel;
 
         Image collapseImage;
 
@@ -402,7 +399,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         Tooltip tooltipWarn;
 
-        Toolbar() {
+        Toolbar(boolean showActions) {
             setWidth("100%");
 
             SimplePanel collapseImageHolder = new SimplePanel();
@@ -443,64 +440,78 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             add(captionHolder);
             setCellWidth(captionHolder, "100%");
 
-            HorizontalPanel actionsPanel = new HorizontalPanel();
-
             imageWarn = new Image(ImageFactory.getImages().formTooltipWarn());
             imageWarn.setVisible(false);
             imageWarn.getElement().getStyle().setMargin(2, Unit.PX);
-            actionsPanel.add(imageWarn);
+            imageWarn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+            add(imageWarn);
 
-            upCommand = new Image();
-            upCommand.setResource(ImageFactory.getImages().moveUp());
-            upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
-            upCommand.getElement().getStyle().setMargin(2, Unit.PX);
-            upCommand.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), true);
-                    mouseOver = false;
-                    installMouseOverStyles();
+            if (showActions) {
+                actionsPanel = new ActionsPanel();
+                add(actionsPanel);
+                actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+                if (BrowserType.isIE7()) {
+                    actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
                 }
-            });
-            actionsPanel.add(upCommand);
-            upCommand.setTitle(i18n.tr("Move up"));
-
-            downCommand = new Image();
-            downCommand.setResource(ImageFactory.getImages().moveDown());
-            downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
-            downCommand.getElement().getStyle().setMargin(2, Unit.PX);
-            downCommand.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), false);
-                    mouseOver = false;
-                    installMouseOverStyles();
-                }
-            });
-            actionsPanel.add(downCommand);
-            downCommand.setTitle(i18n.tr("Move down"));
-
-            removeCommand = new Image();
-            removeCommand.setResource(ImageFactory.getImages().deleteItem());
-            removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
-            removeCommand.getElement().getStyle().setMargin(2, Unit.PX);
-            removeCommand.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    ((CFormFolder) getCComponent().getParentContainer()).removeItem(getCComponent());
-                }
-            });
-            actionsPanel.add(removeCommand);
-            removeCommand.setTitle(i18n.tr("Delete Item"));
-
-            add(actionsPanel);
-            actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-            if (BrowserType.isIE7()) {
-                actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
             }
 
             installMouseOverStyles();
 
+        }
+
+        class ActionsPanel extends HorizontalPanel {
+
+            Image removeCommand;
+
+            Image upCommand;
+
+            Image downCommand;
+
+            ActionsPanel() {
+
+                upCommand = new Image();
+                upCommand.setResource(ImageFactory.getImages().moveUp());
+                upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+                upCommand.getElement().getStyle().setMargin(2, Unit.PX);
+                upCommand.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), true);
+                        mouseOver = false;
+                        installMouseOverStyles();
+                    }
+                });
+                add(upCommand);
+                upCommand.setTitle(i18n.tr("Move up"));
+
+                downCommand = new Image();
+                downCommand.setResource(ImageFactory.getImages().moveDown());
+                downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+                downCommand.getElement().getStyle().setMargin(2, Unit.PX);
+                downCommand.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), false);
+                        mouseOver = false;
+                        installMouseOverStyles();
+                    }
+                });
+                add(downCommand);
+                downCommand.setTitle(i18n.tr("Move down"));
+
+                removeCommand = new Image();
+                removeCommand.setResource(ImageFactory.getImages().deleteItem());
+                removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
+                removeCommand.getElement().getStyle().setMargin(2, Unit.PX);
+                removeCommand.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        ((CFormFolder) getCComponent().getParentContainer()).removeItem(getCComponent());
+                    }
+                });
+                add(removeCommand);
+                removeCommand.setTitle(i18n.tr("Delete Item"));
+            }
         }
     }
 
@@ -686,25 +697,25 @@ public class NativeForm extends FlowPanel implements INativeComponent {
     }
 
     public void setToolbarMode(ToolbarMode mode) {
-        if (toolbar == null) {
+        if (toolbar == null || toolbar.actionsPanel == null) {
             return;
         }
         switch (mode) {
         case First:
-            toolbar.upCommand.setVisible(false);
-            toolbar.downCommand.setVisible(true);
+            toolbar.actionsPanel.upCommand.setVisible(false);
+            toolbar.actionsPanel.downCommand.setVisible(true);
             break;
         case Last:
-            toolbar.upCommand.setVisible(true);
-            toolbar.downCommand.setVisible(false);
+            toolbar.actionsPanel.upCommand.setVisible(true);
+            toolbar.actionsPanel.downCommand.setVisible(false);
             break;
         case Only:
-            toolbar.upCommand.setVisible(false);
-            toolbar.downCommand.setVisible(false);
+            toolbar.actionsPanel.upCommand.setVisible(false);
+            toolbar.actionsPanel.downCommand.setVisible(false);
             break;
         case Inner:
-            toolbar.upCommand.setVisible(true);
-            toolbar.downCommand.setVisible(true);
+            toolbar.actionsPanel.upCommand.setVisible(true);
+            toolbar.actionsPanel.downCommand.setVisible(true);
             break;
 
         default:
@@ -738,17 +749,21 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         if (mouseOver) {
             if (toolbar != null) {
                 getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-                toolbar.removeCommand.getElement().getStyle().setOpacity(1);
-                toolbar.upCommand.getElement().getStyle().setOpacity(1);
-                toolbar.downCommand.getElement().getStyle().setOpacity(1);
+                if (toolbar.actionsPanel != null) {
+                    toolbar.actionsPanel.removeCommand.getElement().getStyle().setOpacity(1);
+                    toolbar.actionsPanel.upCommand.getElement().getStyle().setOpacity(1);
+                    toolbar.actionsPanel.downCommand.getElement().getStyle().setOpacity(1);
+                }
                 toolbar.collapseImage.getElement().getStyle().setOpacity(1);
             }
         } else {
             if (toolbar != null) {
                 getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-                toolbar.removeCommand.getElement().getStyle().setOpacity(0.3);
-                toolbar.upCommand.getElement().getStyle().setOpacity(0.3);
-                toolbar.downCommand.getElement().getStyle().setOpacity(0.3);
+                if (toolbar.actionsPanel != null) {
+                    toolbar.actionsPanel.removeCommand.getElement().getStyle().setOpacity(0.3);
+                    toolbar.actionsPanel.upCommand.getElement().getStyle().setOpacity(0.3);
+                    toolbar.actionsPanel.downCommand.getElement().getStyle().setOpacity(0.3);
+                }
                 toolbar.collapseImage.getElement().getStyle().setOpacity(0.3);
             }
         }

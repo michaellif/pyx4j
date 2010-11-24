@@ -47,7 +47,6 @@ public class CEntityFormGroup<E extends IEntity> extends CFormGroup<E> implement
     public CEntityFormGroup(String title, Class<E> entityClass, EntityFormFactory<E> factory, boolean expended, ImageResource image) {
         super(factory);
         this.setTitleImage(image);
-        this.setItemCaption(EntityFactory.getEntityMeta(entityClass).getCaption());
         this.setTitle(title);
         this.entityClass = entityClass;
         this.expended = expended;
@@ -62,8 +61,8 @@ public class CEntityFormGroup<E extends IEntity> extends CFormGroup<E> implement
 
     @Override
     public void populateModel(E orig, E value) {
-        // TODO Auto-generated method stub
-
+        ((DelegatingEntityEditableComponent) getForm()).populateModel(null, value);
+        getForm().setExpended(expended);
     }
 
 }
