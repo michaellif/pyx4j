@@ -48,7 +48,7 @@ public class CForm extends CContainer {
 
     private final InfoImageAlignment infoImageAlignment;
 
-    private CFormFolder folder;
+    private CFormContainer<?> parentContainer;
 
     private boolean expended = true;
 
@@ -72,8 +72,12 @@ public class CForm extends CContainer {
         this.infoImageAlignment = infoImageAlignment;
     }
 
-    public void setFolder(CFormFolder folder) {
-        this.folder = folder;
+    public void setParentContainer(CFormContainer<?> folder) {
+        this.parentContainer = folder;
+    }
+
+    public CFormContainer<?> getParentContainer() {
+        return parentContainer;
     }
 
     public LabelAlignment getAllignment() {
@@ -157,10 +161,6 @@ public class CForm extends CContainer {
     @Override
     public NativeForm getNativeComponent() {
         return nativeForm;
-    }
-
-    public CFormFolder getFolder() {
-        return folder;
     }
 
     @Override

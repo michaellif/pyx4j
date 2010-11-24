@@ -31,7 +31,6 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.pyx4j.widgets.client.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -43,6 +42,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.util.BrowserType;
 
 public class NativeFormFolder<E> extends DockPanel implements INativeEditableComponent<List<E>> {
@@ -88,6 +88,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         setVisible(folder.isVisible());
 
         folder.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
                 if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
                     label.setVisible(folder.isVisible());

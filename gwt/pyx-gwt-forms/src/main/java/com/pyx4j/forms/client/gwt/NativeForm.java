@@ -40,6 +40,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HTML;
@@ -49,7 +50,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Printable;
@@ -59,10 +59,10 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CFormFolder;
-import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.forms.client.ui.CFormFolder;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -145,7 +145,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             componentsInitialized = true;
         }
 
-        if (form.getFolder() != null) {
+        if (form.getParentContainer() != null) {
             toolbar = new Toolbar();
             toolbarHolder.setWidget(toolbar);
             getElement().getStyle().setBorderWidth(1, Unit.PX);
@@ -331,13 +331,16 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         return table.toString();
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
     }
 
+    @Override
     public CForm getCComponent() {
         return form;
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
@@ -407,6 +410,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             collapseImage = new Image();
             collapseImage.addClickHandler(new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     form.setExpended(!form.isExpended());
                 }
@@ -422,13 +426,14 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             caption = new HTML();
             caption.setWidth("100%");
             caption.addClickHandler(new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     form.setExpended(!form.isExpended());
                 }
             });
 
-            if (form.getFolder() != null && form.getFolder().getTitleImage() != null) {
-                Image image = new Image(form.getFolder().getTitleImage());
+            if (form.getParentContainer() != null && form.getParentContainer().getTitleImage() != null) {
+                Image image = new Image(form.getParentContainer().getTitleImage());
                 image.getElement().getStyle().setMarginTop(2, Unit.PX);
                 image.getElement().getStyle().setPaddingRight(2, Unit.PX);
                 captionHolder.add(image);
@@ -452,7 +457,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             upCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    getCComponent().getFolder().moveItem(getCComponent(), true);
+                    ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), true);
                     mouseOver = false;
                     installMouseOverStyles();
                 }
@@ -467,7 +472,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             downCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    getCComponent().getFolder().moveItem(getCComponent(), false);
+                    ((CFormFolder) getCComponent().getParentContainer()).moveItem(getCComponent(), false);
                     mouseOver = false;
                     installMouseOverStyles();
                 }
@@ -482,7 +487,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             removeCommand.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    getCComponent().getFolder().removeItem(getCComponent());
+                    ((CFormFolder) getCComponent().getParentContainer()).removeItem(getCComponent());
                 }
             });
             actionsPanel.add(removeCommand);
@@ -546,6 +551,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             if (nativeComponent instanceof Focusable) {
                 label.addClickHandler(new ClickHandler() {
+                    @Override
                     public void onClick(ClickEvent event) {
                         ((Focusable) nativeComponent).setFocus(true);
                     }
@@ -565,6 +571,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             setVisible(component.isVisible());
 
             component.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
                 public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
                     if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
                         label.setVisible(component.isVisible());

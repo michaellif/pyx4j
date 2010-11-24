@@ -27,15 +27,13 @@ import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.forms.client.gwt.NativeFormFolder;
 
-public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
+public abstract class CFormFolder<E> extends CFormContainer<List<E>> {
 
     private final LinkedHashMap<E, CForm> formsMap;
 
     private final FormFactory factory;
 
     private NativeFormFolder<E> nativeFormFolder;
-
-    private ImageResource image;
 
     private String itemCaption;
 
@@ -47,7 +45,7 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     public final CForm createForm() {
         CForm form = factory.createForm();
-        form.setFolder(this);
+        form.setParentContainer(this);
         return form;
     }
 
@@ -61,14 +59,6 @@ public abstract class CFormFolder<E> extends CEditableComponent<List<E>> {
 
     public String getItemCaption() {
         return itemCaption;
-    }
-
-    public void setTitleImage(ImageResource image) {
-        this.image = image;
-    }
-
-    public ImageResource getTitleImage() {
-        return image;
     }
 
     @Override
