@@ -45,7 +45,7 @@ public abstract class RiaTheme extends WindowsTheme {
 
     @Override
     protected void initThemeColors() {
-        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.04));
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.02));
         putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
         putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
         putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
@@ -59,6 +59,13 @@ public abstract class RiaTheme extends WindowsTheme {
         putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
         putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
+    }
+
+    @Override
+    protected void initStyles() {
+        super.initStyles();
+        initSectionPanelStyles(SectionPanel.DEFAULT_STYLE_PREFIX);
+        initHeaderPanelStyles(HeaderPanel.DEFAULT_STYLE_PREFIX);
     }
 
     @Override
@@ -79,10 +86,12 @@ public abstract class RiaTheme extends WindowsTheme {
     }
 
     @Override
-    protected void initStyles() {
-        super.initStyles();
-        initSectionPanelStyles(SectionPanel.DEFAULT_STYLE_PREFIX);
-        initHeaderPanelStyles(HeaderPanel.DEFAULT_STYLE_PREFIX);
+    protected void initBodyStyles() {
+        Style style = new Style("body");
+        style.addProperty("font-size", "0.9em");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("color", ThemeColor.TEXT);
+        addStyle(style);
     }
 
     private void initSectionPanelStyles(String prefix) {

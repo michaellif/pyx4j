@@ -252,6 +252,7 @@ public class WindowsTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveLeft));
@@ -299,6 +300,7 @@ public class WindowsTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveLeft));
@@ -326,7 +328,7 @@ public class WindowsTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
         style.addProperty("cursor", "default");
-        style.addProperty("background-color", "white");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
