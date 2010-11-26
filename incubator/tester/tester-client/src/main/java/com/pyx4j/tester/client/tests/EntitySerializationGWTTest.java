@@ -233,4 +233,69 @@ public class EntitySerializationGWTTest extends TestCase {
 
         RPCManager.execute(TestServices.EchoSerializable.class, dept, callback);
     }
+
+    private void validateServerError(final String message, Serializable data) {
+        GUnitTester.delayTestFinish(this, TIME_OUT);
+
+        final AsyncCallback<Serializable> callback = new AsyncCallback<Serializable>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                GUnitTester.finishTest(EntitySerializationGWTTest.this);
+            }
+
+            @Override
+            public void onSuccess(Serializable result) {
+                fail(message + " error expected");
+            }
+
+        };
+
+        RPCManager.execute(TestServices.EchoSerializable.class, data, callback);
+    }
+
+    public void testRpcStringTypeValidation() {
+        Employee emp = EntityFactory.create(Employee.class);
+        // Initialise value map
+        emp.firstName().setValue("Name");
+        // Hack our way in
+        emp.getValue().put(emp.firstName().getFieldName(), new Long(20));
+        validateServerError("String -> Long", emp);
+    }
+
+    public void testRpcLongTypeValidation() {
+        Employee emp = EntityFactory.create(Employee.class);
+        // Initialise value map
+        emp.firstName().setValue("Name");
+        // Hack our way in
+        emp.getValue().put(emp.holidays().getFieldName(), new Double(20.0));
+        validateServerError("Long -> Double", emp);
+    }
+
+    public void testRpcEnumTypeValidation() {
+        Employee emp = EntityFactory.create(Employee.class);
+        // Initialise value map
+        emp.firstName().setValue("Name");
+        // Hack our way in
+        emp.getValue().put(emp.employmentStatus().getFieldName(), new Double(20.0));
+        validateServerError("Enum -> Double", emp);
+    }
+
+    public void testRpcEntityTypeValidation() {
+        Employee emp = EntityFactory.create(Employee.class);
+        // Initialise value map
+        emp.firstName().setValue("Name");
+        // Hack our way in
+        emp.getValue().put(emp.manager().getFieldName(), new Long(20));
+        validateServerError("IEntity -> Long", emp);
+    }
+
+    public void testRpcUnknownTypeValidation() {
+        Employee emp = EntityFactory.create(Employee.class);
+        // Initialise value map
+        emp.firstName().setValue("Name");
+        // Hack our way in
+        emp.getValue().put("unknown", new Long(20));
+        validateServerError("unknown", emp);
+    }
 }
