@@ -23,11 +23,14 @@ package com.pyx4j.entity.server;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -49,7 +52,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
     protected void filterRpcTransient(Serializable value, Set<Serializable> processed) {
         if (value instanceof IEntity) {
-            filterTransientMembers((IEntity) value, processed);
+            filterMembers((IEntity) value, processed);
         } else if (value instanceof Collection<?>) {
             for (Object v : (Collection<?>) value) {
                 if (v instanceof Serializable) {
@@ -59,7 +62,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
         }
     }
 
-    protected void filterTransientMembers(IEntity entity, Set<Serializable> processed) {
+    protected void filterMembers(IEntity entity, Set<Serializable> processed) {
         if (entity.isNull() || processed.contains(entity)) {
             return;
         }
@@ -68,20 +71,39 @@ public class RpcEntityServiceFilter implements IServiceFilter {
             throw new Error("Should not serialize " + entity.getObjectClass());
         }
         processed.add(entity);
-        for (String memberName : em.getMemberNames()) {
+        nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
+            String memberName = me.getKey();
+            if (memberName.equals(IEntity.PRIMARY_KEY)) {
+                if ((me.getValue() != null) && (!(me.getValue() instanceof Long))) {
+                    throw new Error("Data type corruption");
+                }
+                continue nextValue;
+            }
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (em.getMemberMeta(memberName).isRpcTransient()) {
-                entity.removeMemberValue(memberName);
+                me.setValue(null);
             } else if (memberMeta.isEntity()) {
-                filterTransientMembers((IEntity) entity.getMember(memberName), processed);
+                filterMembers((IEntity) entity.getMember(memberName), processed);
             } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
-                    filterTransientMembers(value, processed);
+                    filterMembers(value, processed);
                 }
             } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 for (IEntity value : (IList<?>) entity.getMember(memberName)) {
-                    filterTransientMembers(value, processed);
+                    filterMembers(value, processed);
                 }
+            } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                if ((me.getValue() != null) && (!(memberMeta.getValueClass().isAssignableFrom(me.getValue().getClass())))) {
+                    throw new Error("Data type corruption");
+                }
+            } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                for (Object value : (IPrimitiveSet<?>) entity.getMember(memberName)) {
+                    if ((value != null) && (!(memberMeta.getValueClass().isAssignableFrom(value.getClass())))) {
+                        throw new Error("Data type corruption");
+                    }
+                }
+            } else {
+                throw new Error("Data type corruption");
             }
         }
     }
