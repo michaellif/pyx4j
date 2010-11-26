@@ -538,6 +538,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 entity.setProperty(me.getKey() + SECONDARY_PRROPERTY_SUFIX, false, childKeysOrder.toString());
                 value = childKeys;
             } else {
+                if ((value != null) && (!IPrimitiveSet.class.isAssignableFrom(meta.getObjectClass()))
+                        && (!(meta.getValueClass().isAssignableFrom(value.getClass())))) {
+                    throw new Error("Data type corruption " + meta.getValueClass() + " != " + value.getClass());
+                }
                 value = convertToGAEValue(value, entity, null, iEntity, meta, true);
             }
 
