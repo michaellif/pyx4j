@@ -55,6 +55,8 @@ public class RPCManager {
 
     private static final RemoteServiceSerializer serializer;
 
+    private static final ServiceNames serviceNames;
+
     private static EventBus eventBus;
 
     private static int runningServicesCount = 0;
@@ -68,6 +70,7 @@ public class RPCManager {
     static {
         service = (RemoteServiceAsync) GWT.create(RemoteService.class);
         serializer = GWT.create(RPCSerializer.class);
+        serviceNames = GWT.create(ServiceNames.class);
         ServiceDefTarget target = (ServiceDefTarget) service;
         target.setRpcRequestBuilder(requestBuilder = new PyxRpcRequestBuilder());
     }
@@ -110,8 +113,9 @@ public class RPCManager {
         try {
             runningServicesCount++;
             fireStatusChangeEvent(When.START, executeBackground, serviceInterface, callback, -1);
-            requestBuilder.executing(serviceInterface, request);
-            service.execute(serviceInterface.getName(), request, userVisitHashCode, serviceHandlingCallback);
+            String name = serviceNames.getServiceName(serviceInterface);
+            requestBuilder.executing(name, request);
+            service.execute(name, request, userVisitHashCode, serviceHandlingCallback);
         } catch (Throwable e) {
             serviceHandlingCallback.onFailure(e);
         }

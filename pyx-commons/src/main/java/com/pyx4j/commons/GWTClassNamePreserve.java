@@ -14,22 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 21, 2010
- * @author Misha
+ * Created on Nov 27, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.shared.meta;
+package com.pyx4j.commons;
 
-import com.pyx4j.commons.GWTClassNamePreserve;
-
-public interface NavigNode extends GWTClassNamePreserve {
-
-    public static String PAGE_SEPARATOR = "/";
-
-    public static String ARGS_GROUP_SEPARATOR = "?";
-
-    public static String ARGS_SEPARATOR = "&";
-
-    public static String NAME_VALUE_SEPARATOR = "=";
+/**
+ * When disableClassMetadata GWT compile flag is used classes marked with this interface
+ * will preserve its name.
+ * 
+ * Use ClassName.getClassName(MuClass.class) to get the name.
+ */
+public interface GWTClassNamePreserve {
 
 }

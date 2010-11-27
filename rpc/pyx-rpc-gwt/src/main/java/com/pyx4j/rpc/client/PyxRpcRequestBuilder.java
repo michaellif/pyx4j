@@ -28,10 +28,8 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.RpcRequestBuilder;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.rpc.shared.RemoteService;
-import com.pyx4j.rpc.shared.Service;
 
 public class PyxRpcRequestBuilder extends RpcRequestBuilder {
 
@@ -66,8 +64,13 @@ public class PyxRpcRequestBuilder extends RpcRequestBuilder {
      * Mark service entry point with service name to be able to view statistic in GAE
      * console.
      */
-    void executing(@SuppressWarnings("rawtypes") final Class<? extends Service> serviceInterface, Serializable request) {
-        serviceInterfaceMarker = GWTJava5Helper.getSimpleName(serviceInterface).replace('$', '.');
+    void executing(String serviceInterfaceName, Serializable request) {
+        int simpleNameIdx = serviceInterfaceName.lastIndexOf(".");
+        if (simpleNameIdx == -1) {
+            serviceInterfaceMarker = serviceInterfaceName;
+        } else {
+            serviceInterfaceMarker = serviceInterfaceName.substring(simpleNameIdx + 1).replace('$', '.');
+        }
         if (request instanceof IHaveServiceCallMarker) {
             serviceInterfaceMarker += "/" + ((IHaveServiceCallMarker) request).getServiceCallMarker();
         }

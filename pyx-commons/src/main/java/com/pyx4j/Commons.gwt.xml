@@ -4,4 +4,15 @@
 <module>
 	<source path="commons"/> 
 	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.commons.LoopCounter.*" />
+	
+	<!--
+    	When disableClassMetadata GWT compile flag is used should enable this for site to work.
+ 	-->
+ 	<define-configuration-property name="pyx.classNamePreserve" is-multi-valued="false" />
+	<set-configuration-property name="pyx.classNamePreserve" value="false" />
+	
+    <generate-with class="com.pyx4j.rebind.ClassNameGenerator">
+        <when-type-assignable class="com.pyx4j.commons.ClassName.ClassNames"/>
+    </generate-with>
+    
 </module>

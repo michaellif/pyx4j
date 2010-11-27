@@ -22,6 +22,12 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
 		<!-- 
         <dependency>
             <groupId>com.pyx4j</groupId>

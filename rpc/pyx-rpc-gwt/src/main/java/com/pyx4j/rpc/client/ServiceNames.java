@@ -14,22 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on May 21, 2010
- * @author Misha
+ * Created on Nov 27, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.shared.meta;
+package com.pyx4j.rpc.client;
 
-import com.pyx4j.commons.GWTClassNamePreserve;
+import com.pyx4j.rpc.shared.Service;
 
-public interface NavigNode extends GWTClassNamePreserve {
+interface ServiceNames {
 
-    public static String PAGE_SEPARATOR = "/";
-
-    public static String ARGS_GROUP_SEPARATOR = "?";
-
-    public static String ARGS_SEPARATOR = "&";
-
-    public static String NAME_VALUE_SEPARATOR = "=";
+    public String getServiceName(@SuppressWarnings("rawtypes") final Class<? extends Service> serviceInterface);
 
 }

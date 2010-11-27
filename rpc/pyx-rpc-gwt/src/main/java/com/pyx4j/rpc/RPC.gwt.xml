@@ -8,6 +8,19 @@
     
     <source path="client"/>
 
+	<!--
+  		Remove Service type names from the RPC payload. 
+  		Can be: classMetadata, preserve, obfuscated or trunk
+  		Also see com.google.gwt.user.RemoteServiceObfuscateTypeNames and disableClassMetadata GWT compile flag
+ 	-->
+ 	<define-configuration-property name="pyx.elideServiceNamesFromRPC" is-multi-valued="false" />
+	<set-configuration-property name="pyx.elideServiceNamesFromRPC" value="classMetadata" />
+	
+    <generate-with class="com.pyx4j.rpc.rebind.ServiceNamesGenerator">
+        <when-type-assignable class="com.pyx4j.rpc.client.ServiceNames"/>
+    </generate-with>
+    
+    
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.rpc.client.*" />
 
     <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.core.client.*" />

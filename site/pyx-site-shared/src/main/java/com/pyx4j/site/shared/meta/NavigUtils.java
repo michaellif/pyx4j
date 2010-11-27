@@ -28,6 +28,8 @@ import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.commons.ClassName;
+
 public class NavigUtils {
 
     public static final String ENTITY_ID = "id";
@@ -35,7 +37,7 @@ public class NavigUtils {
     public static final String PARENT_ID = "pid";
 
     public static String getPageUri(Class<? extends NavigNode> node) {
-        String[] parts = node.getName().split("\\$");
+        String[] parts = ClassName.getClassName(node).split("\\$");
 
         StringBuilder builder = new StringBuilder();
         for (int i = 1; i < parts.length; i++) {
@@ -53,7 +55,7 @@ public class NavigUtils {
     }
 
     public static String getSiteId(Class<? extends NavigNode> node) {
-        String[] parts = node.getName().split("\\$");
+        String[] parts = ClassName.getClassName(node).split("\\$");
         if (parts.length != 2) {
             throw new IllegalArgumentException("Node is not a site node");
         }
