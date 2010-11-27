@@ -35,6 +35,7 @@ import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.DeckLayoutPanel;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
+import com.pyx4j.widgets.client.tabpanel.TabBarNew;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<AbstractView>, SelectionHandler<AbstractView>,
@@ -56,15 +57,9 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         tabPanel.addSelectionHandler(this);
         tabPanel.addCloseHandler(this);
 
-        TabBar tabBar = tabPanel.getTabBar();
+        TabBarNew tabBar = tabPanel.getTabBar();
 
-        HorizontalPanel headerPane = new HorizontalPanel();
-        headerPane.setWidth("100%");
-
-        headerPane.add(tabBar);
-        headerPane.setCellWidth(tabBar, "100%");
-
-        setHeaderPane(headerPane);
+        setHeaderPane(tabBar);
 
         DeckLayoutPanel contentDeck = tabPanel.getDeck();
         setContentPane(contentDeck);

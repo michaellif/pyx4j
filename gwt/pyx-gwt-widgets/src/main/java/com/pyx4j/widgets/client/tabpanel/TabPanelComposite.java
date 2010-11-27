@@ -33,7 +33,7 @@ public class TabPanelComposite extends LayoutPanel {
     public TabPanelComposite() {
         model = new TabPanel<Tab>();
         VerticalPanel panel = new VerticalPanel();
-        TabBar tabBar = model.getTabBar();
+        TabBarNew tabBar = model.getTabBar();
         LayoutPanel deck = model.getDeck();
         panel.add(tabBar);
 

@@ -59,7 +59,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
 
     private final DeckLayoutPanel deck = new DeckLayoutPanel();
 
-    private final TabBar tabBar;
+    private final TabBarNew tabBar;
 
     private final ArrayList<E> tabs = new ArrayList<E>();
 
@@ -68,7 +68,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
     private String styleName;
 
     public TabPanel() {
-        tabBar = new TabBar(this);
+        tabBar = new TabBarNew(this);
         setStylePrefix(DEFAULT_STYLE_PREFIX);
     }
 
@@ -188,7 +188,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
      * 
      * @return the tab bar
      */
-    public TabBar getTabBar() {
+    public TabBarNew getTabBar() {
         return tabBar;
     }
 
