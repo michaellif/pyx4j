@@ -35,13 +35,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.Selector;
 
-public class TabBarNew extends DockLayoutPanel implements ClickHandler {
+public class TabBar extends DockLayoutPanel implements ClickHandler {
 
     private final FlowPanel tabsBar;
 
     private final TabPanel<? extends Tab> tabPanel;
 
-    private TabBarItemNew selectedTab;
+    private TabBarItem selectedTab;
 
     private final ListAllTabsTrigger listAllTabsTrigger;
 
@@ -50,7 +50,7 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
     /**
      * Creates an empty tab bar.
      */
-    public TabBarNew(TabPanel<? extends Tab> tabPanel) {
+    public TabBar(TabPanel<? extends Tab> tabPanel) {
         super(Unit.PX);
 
         this.tabPanel = tabPanel;
@@ -153,7 +153,7 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
             throw new IndexOutOfBoundsException();
         }
 
-        TabBarItemNew item = new TabBarItemNew(this, label, imageResource, closable, getStyleName());
+        TabBarItem item = new TabBarItem(this, label, imageResource, closable, getStyleName());
 
         if (beforeIndex == 0) {
             if (tabsBar.getWidgetCount() > 0) {
@@ -172,19 +172,19 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
         if (labelText == null || labelText.trim().length() == 0) {
             labelText = "___";
         }
-        ((TabBarItemNew) widget).setLabel(labelText);
+        ((TabBarItem) widget).setLabel(labelText);
     }
 
     public void setModifyed(int index, boolean modifyed) {
         Widget widget = tabsBar.getWidget(index);
-        ((TabBarItemNew) widget).setModifyed(modifyed);
+        ((TabBarItem) widget).setModifyed(modifyed);
     }
 
     @Override
     public void onClick(ClickEvent event) {
         for (int i = 0; i < tabsBar.getWidgetCount(); ++i) {
 
-            TabBarItemNew tabBarItem = getTabBarItemParent((Widget) event.getSource());
+            TabBarItem tabBarItem = getTabBarItemParent((Widget) event.getSource());
             if (tabsBar.getWidget(i) == tabBarItem) {
                 if (tabBarItem.isEnabled()) {
                     checkTabIndex(i);
@@ -195,11 +195,11 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
         }
     }
 
-    private TabBarItemNew getTabBarItemParent(Widget child) {
-        while ((child != null) && !(child instanceof TabBarItemNew)) {
+    private TabBarItem getTabBarItemParent(Widget child) {
+        while ((child != null) && !(child instanceof TabBarItem)) {
             child = child.getParent();
         }
-        return (TabBarItemNew) child;
+        return (TabBarItem) child;
     }
 
     /**
@@ -230,12 +230,12 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
 
     public void selectTab(int index) {
         setSelected(selectedTab, false);
-        selectedTab = (TabBarItemNew) tabsBar.getWidget(index);
+        selectedTab = (TabBarItem) tabsBar.getWidget(index);
         setSelected(selectedTab, true);
     }
 
     public void enableTab(int index, boolean isEnabled) {
-        TabBarItemNew tab = (TabBarItemNew) tabsBar.getWidget(index);
+        TabBarItem tab = (TabBarItem) tabsBar.getWidget(index);
         tab.setEnabled(isEnabled);
     }
 
@@ -245,7 +245,7 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
         }
     }
 
-    private void setSelected(TabBarItemNew item, boolean selected) {
+    private void setSelected(TabBarItem item, boolean selected) {
         if (item != null) {
             item.setSelected(selected);
         }

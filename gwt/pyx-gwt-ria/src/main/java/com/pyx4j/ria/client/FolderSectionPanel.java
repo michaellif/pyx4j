@@ -29,13 +29,10 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.DeckLayoutPanel;
-import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.tabpanel.TabBar;
-import com.pyx4j.widgets.client.tabpanel.TabBarNew;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<AbstractView>, SelectionHandler<AbstractView>,
@@ -57,7 +54,7 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         tabPanel.addSelectionHandler(this);
         tabPanel.addCloseHandler(this);
 
-        TabBarNew tabBar = tabPanel.getTabBar();
+        TabBar tabBar = tabPanel.getTabBar();
 
         setHeaderPane(tabBar);
 

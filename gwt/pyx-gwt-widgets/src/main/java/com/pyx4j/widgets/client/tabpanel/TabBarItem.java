@@ -46,7 +46,7 @@ import com.pyx4j.widgets.client.style.Selector;
  * @author michaellif
  * 
  */
-public class TabBarItemNew extends HorizontalPanel {
+public class TabBarItem extends HorizontalPanel {
 
     private final Label label;
 
@@ -62,7 +62,7 @@ public class TabBarItemNew extends HorizontalPanel {
 
     private final WidgetsImageBundle images = ImageFactory.getImages();
 
-    public TabBarItemNew(final TabBarNew parent, String labelString, ImageResource imageResource, boolean closable, String styleName) {
+    public TabBarItem(final TabBar parent, String labelString, ImageResource imageResource, boolean closable, String styleName) {
         super();
 
         sinkEvents(Event.ONCLICK);

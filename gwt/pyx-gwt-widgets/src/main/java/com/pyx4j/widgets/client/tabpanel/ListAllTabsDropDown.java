@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.DropDownPanel;
-import com.pyx4j.widgets.client.tabpanel.TabBarNew.ListAllTabsTrigger;
+import com.pyx4j.widgets.client.tabpanel.TabBar.ListAllTabsTrigger;
 
 public class ListAllTabsDropDown extends DropDownPanel {
 
