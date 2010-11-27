@@ -247,6 +247,7 @@ public class WindowsTheme extends Theme {
     private void initTopTabPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("margin-top", "2px");
+        style.addProperty("margin-left", "6px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
@@ -295,13 +296,12 @@ public class WindowsTheme extends Theme {
 
     private void initBottomTabPanelStyles(String prefix) {
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
+        style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveLeft));
@@ -316,18 +316,12 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-align", "center");
-        style.addProperty("border-right", "1px solid {}", ThemeColor.SELECTION);
-        style.addProperty("border-bottom", "1px solid {}", ThemeColor.SELECTION);
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.first));
-        style.addProperty("border-left-width", "1px");
-        style.addProperty("border-left-style", "solid");
-        style.addProperty("border-left-color", ThemeColor.SELECTION);
+        style.addProperty("border-top", "1px solid {}", ThemeColor.SELECTION);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected));
+        style.addProperty("border-top", "1px solid {}", ThemeColor.OBJECT_TONE1);
         style.addProperty("cursor", "default");
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
