@@ -29,6 +29,8 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
+import com.pyx4j.widgets.client.DropDownPanel;
+
 public class DatePickerDropDownPanel extends DropDownPanel {
 
     private static final Logger log = LoggerFactory.getLogger(DatePickerDropDownPanel.class);
@@ -47,6 +49,7 @@ public class DatePickerDropDownPanel extends DropDownPanel {
 
         picker.addValueChangeHandler(new ValueChangeHandler<Date>() {
 
+            @Override
             public void onValueChange(ValueChangeEvent<Date> event) {
                 NativeDatePicker receiver = currenttextBox;
                 if (receiver != null) {

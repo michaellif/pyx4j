@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -37,7 +40,7 @@ import com.pyx4j.widgets.client.style.Selector;
 
 public class TabBar extends DockLayoutPanel implements ClickHandler {
 
-    private final FlowPanel tabsBar;
+    private final FlowPanel tabsHolder;
 
     private final TabPanel<? extends Tab> tabPanel;
 
@@ -76,9 +79,9 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
 
         addEast(listAllTabsTrigger, 30);
 
-        tabsBar = new FlowPanel();
+        tabsHolder = new FlowPanel();
 
-        add(tabsBar);
+        add(tabsHolder);
 
         this.ensureDebugId(this.getClass().getName());
 
@@ -112,7 +115,7 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
         if (selectedTab == null) {
             return -1;
         }
-        return tabsBar.getWidgetIndex(selectedTab);
+        return tabsHolder.getWidgetIndex(selectedTab);
     }
 
     /**
@@ -121,7 +124,7 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
      * @return the tab count
      */
     public int getTabCount() {
-        return tabsBar.getWidgetCount();
+        return tabsHolder.getWidgetCount();
     }
 
     /**
@@ -135,7 +138,7 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
         if (index >= getTabCount()) {
             return null;
         }
-        return ((HTML) tabsBar.getWidget(index)).getHTML();
+        return ((HTML) tabsHolder.getWidget(index)).getHTML();
     }
 
     /**
@@ -156,19 +159,19 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
         TabBarItem item = new TabBarItem(this, label, imageResource, closable, getStyleName());
 
         if (beforeIndex == 0) {
-            if (tabsBar.getWidgetCount() > 0) {
-                Widget firstTab = tabsBar.getWidget(0);
+            if (tabsHolder.getWidgetCount() > 0) {
+                Widget firstTab = tabsHolder.getWidget(0);
                 firstTab.removeStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.first));
             }
             item.addStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.first));
         }
 
-        tabsBar.insert(item, beforeIndex);
+        tabsHolder.insert(item, beforeIndex);
 
     }
 
     public void setLabelText(int index, String labelText) {
-        Widget widget = tabsBar.getWidget(index);
+        Widget widget = tabsHolder.getWidget(index);
         if (labelText == null || labelText.trim().length() == 0) {
             labelText = "___";
         }
@@ -176,16 +179,16 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
     }
 
     public void setModifyed(int index, boolean modifyed) {
-        Widget widget = tabsBar.getWidget(index);
+        Widget widget = tabsHolder.getWidget(index);
         ((TabBarItem) widget).setModifyed(modifyed);
     }
 
     @Override
     public void onClick(ClickEvent event) {
-        for (int i = 0; i < tabsBar.getWidgetCount(); ++i) {
+        for (int i = 0; i < tabsHolder.getWidgetCount(); ++i) {
 
             TabBarItem tabBarItem = getTabBarItemParent((Widget) event.getSource());
-            if (tabsBar.getWidget(i) == tabBarItem) {
+            if (tabsHolder.getWidget(i) == tabBarItem) {
                 if (tabBarItem.isEnabled()) {
                     checkTabIndex(i);
                     tabPanel.select(i);
@@ -211,12 +214,12 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
     public void removeTab(int index) {
         checkTabIndex(index);
 
-        Widget toRemove = tabsBar.getWidget(index);
+        Widget toRemove = tabsHolder.getWidget(index);
 
         if (index == 0) {
             toRemove.removeStyleDependentName("first");
-            if (tabsBar.getWidgetCount() > 1) {
-                Widget nextFirstTab = tabsBar.getWidget(1);
+            if (tabsHolder.getWidgetCount() > 1) {
+                Widget nextFirstTab = tabsHolder.getWidget(1);
                 nextFirstTab.addStyleDependentName("first");
             }
         }
@@ -224,18 +227,18 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
         if (toRemove == selectedTab) {
             selectedTab = null;
         }
-        tabsBar.remove(toRemove);
+        tabsHolder.remove(toRemove);
 
     }
 
     public void selectTab(int index) {
         setSelected(selectedTab, false);
-        selectedTab = (TabBarItem) tabsBar.getWidget(index);
+        selectedTab = (TabBarItem) tabsHolder.getWidget(index);
         setSelected(selectedTab, true);
     }
 
     public void enableTab(int index, boolean isEnabled) {
-        TabBarItem tab = (TabBarItem) tabsBar.getWidget(index);
+        TabBarItem tab = (TabBarItem) tabsHolder.getWidget(index);
         tab.setEnabled(isEnabled);
     }
 
@@ -252,7 +255,7 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
     }
 
     FlowPanel getTabBarPanel() {
-        return tabsBar;
+        return tabsHolder;
     }
 
     TabPanel<? extends Tab> getTabPanelModel() {
@@ -262,8 +265,8 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
     @Override
     public void onResize() {
         boolean isVisibleHandler = false;
-        for (int i = 0; i < tabsBar.getWidgetCount(); i++) {
-            if (getAbsoluteTop() - tabsBar.getWidget(i).getAbsoluteTop() < 0) {
+        for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
+            if (getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < 0) {
                 isVisibleHandler = true;
                 break;
             }
@@ -273,6 +276,27 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
     }
 
     class ListAllTabsTrigger extends SimplePanel {
+
+        List<TabBarItem> getAllTabBarItems() {
+            ArrayList<TabBarItem> retVal = new ArrayList<TabBarItem>();
+            for (int i = 0; i < tabsHolder.getWidgetCount(); ++i) {
+                retVal.add((TabBarItem) tabsHolder.getWidget(i));
+            }
+            return retVal;
+        }
+
+        public void selectTab(TabBarItem tabBarItem) {
+            for (int i = 0; i < tabsHolder.getWidgetCount(); ++i) {
+                if (tabsHolder.getWidget(i) == tabBarItem) {
+                    if (tabBarItem.isEnabled()) {
+                        checkTabIndex(i);
+                        tabPanel.select(i);
+                    }
+                    return;
+                }
+            }
+
+        }
 
     }
 

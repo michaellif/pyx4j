@@ -20,6 +20,8 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Unit;
@@ -51,9 +53,9 @@ public class ListAllTabsDropDown extends DropDownPanel {
 
     public void showSelector() {
         itemsPanel.clear();
-        for (int i = 0; i < 10; i++) {
-
-            Label item = new Label("Label");
+        List<TabBarItem> allTabBarItems = trigger.getAllTabBarItems();
+        for (final TabBarItem tabBarItem : allTabBarItems) {
+            Label item = new Label(tabBarItem.getLabel());
             item.getElement().getStyle().setPadding(2, Unit.PX);
             item.getElement().getStyle().setPaddingLeft(4, Unit.PX);
             item.getElement().getStyle().setPaddingRight(4, Unit.PX);
@@ -65,7 +67,7 @@ public class ListAllTabsDropDown extends DropDownPanel {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    //setSelectedSearch(searchType);
+                    trigger.selectTab(tabBarItem);
                     hide();
                 }
             });

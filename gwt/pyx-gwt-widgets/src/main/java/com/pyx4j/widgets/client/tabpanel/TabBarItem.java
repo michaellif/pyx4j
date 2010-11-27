@@ -148,6 +148,10 @@ public class TabBarItem extends HorizontalPanel {
         label.setText(labelString);
     }
 
+    public String getLabel() {
+        return label.getText();
+    }
+
     boolean isSelected() {
         return isSelected;
     }
