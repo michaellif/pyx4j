@@ -43,7 +43,9 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
 
     private TabBarItemNew selectedTab;
 
-    private final SimplePanel dropdownHandler;
+    private final ListAllTabsTrigger listAllTabsTrigger;
+
+    private final ListAllTabsDropDown listAllTabsDropDown;
 
     /**
      * Creates an empty tab bar.
@@ -53,13 +55,26 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
 
         this.tabPanel = tabPanel;
 
-        dropdownHandler = new SimplePanel();
-        dropdownHandler.setVisible(false);
+        listAllTabsTrigger = new ListAllTabsTrigger();
+        listAllTabsTrigger.setVisible(false);
 
-        Image listAllTabsImage = new Image(ImageFactory.getImages().moveTabbarRight());
-        dropdownHandler.setWidget(listAllTabsImage);
+        listAllTabsTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
 
-        addEast(dropdownHandler, 30);
+        listAllTabsDropDown = new ListAllTabsDropDown(listAllTabsTrigger);
+
+        listAllTabsTrigger.addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (listAllTabsDropDown.isShowing()) {
+                    listAllTabsDropDown.hideSelector();
+                } else {
+                    listAllTabsDropDown.showSelector();
+                }
+            }
+
+        }, ClickEvent.getType());
+
+        addEast(listAllTabsTrigger, 30);
 
         tabsBar = new FlowPanel();
 
@@ -73,7 +88,7 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
 
     public void setStylePrefix(String styleName) {
         setStyleName(styleName);
-        dropdownHandler.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
+        listAllTabsTrigger.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
     }
 
     /**
@@ -253,8 +268,12 @@ public class TabBarNew extends DockLayoutPanel implements ClickHandler {
                 break;
             }
         }
-        dropdownHandler.setVisible(isVisibleHandler);
+        listAllTabsTrigger.setVisible(isVisibleHandler);
         super.onResize();
+    }
+
+    class ListAllTabsTrigger extends SimplePanel {
+
     }
 
 }
