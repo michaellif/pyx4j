@@ -34,17 +34,16 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class SearchCriteriaView extends AbstractView {
 
     private final CForm otherForm;
 
     public SearchCriteriaView() {
-        super();
+        super(RiaEntityImageBundle.INSTANCE.searchCriteria(), false);
 
         setTabTitle("Find");
-        setTabImage(RiaEntityImageBundle.INSTANCE.searchCriteria());
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");
@@ -90,7 +89,7 @@ public class SearchCriteriaView extends AbstractView {
     }
 
     public void setSearchCriteriaPart(EntitySearchCriteriaPart<?> part) {
-        addPage(new Tab(new ScrollPanel(part.initNativeComponent()), "Criteria", null));
-        addPage(new Tab(new ScrollPanel((Widget) otherForm.initNativeComponent()), "Properties", null));
+        addPage(new Tab(new ScrollPanel(part.initNativeComponent()), "Criteria", null, false));
+        addPage(new Tab(new ScrollPanel((Widget) otherForm.initNativeComponent()), "Properties", null, false));
     }
 }

@@ -25,7 +25,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -36,15 +35,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.ria.client.crud.EntityDetailsPart;
 import com.pyx4j.entity.ria.client.crud.EntityDetailsTab;
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class EntityView extends AbstractView {
 
     public EntityView(String tabTitle, ImageResource image) {
-        super();
+        super(image, true);
 
         setTabTitle(tabTitle);
-        setTabImage(image);
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");
@@ -164,7 +162,7 @@ public class EntityView extends AbstractView {
             title.getElement().getStyle().setMarginLeft(20, Unit.PX);
             page.add(title);
             page.add(tab.initNativeComponent());
-            addPage(new Tab(new ScrollPanel(page), tab.getTitle(), null));
+            addPage(new Tab(new ScrollPanel(page), tab.getTitle(), null, false));
         }
     }
 }

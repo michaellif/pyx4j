@@ -149,7 +149,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
             return false;
         }
 
-        deck.showWidget(index);
+        deck.showWidget(tab);
         tabBar.selectTab(index);
 
         SelectionEvent.fire(this, tab);

@@ -20,27 +20,24 @@
  */
 package com.pyx4j.ria.demo.client;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanel.Tab;
-import com.pyx4j.widgets.client.tabpanel.TabPanelComposite;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.TabPanelComposite;
 
 public class TabPanelView extends AbstractView {
 
-    public TabPanelView(String tabTitle, ImageResource imageResource) {
-        super();
-        addPage(new Tab(createContentPane(), null, null));
+    public TabPanelView(String tabTitle, ImageResource imageResource, boolean closable) {
+        super(imageResource, closable);
+        addPage(new Tab(createContentPane(), null, null, false));
 
         setTabTitle(tabTitle);
-        setTabImage(imageResource);
     }
 
     private static Widget createContentPane() {
@@ -58,11 +55,10 @@ public class TabPanelView extends AbstractView {
         panel1.add(new Label("First Tab"));
 
         TabPanelComposite tabPanel = new TabPanelComposite();
-        tabPanel.insert(new Tab(new ScrollPanel(panel1), "First Tab", null), 0, true);
-        tabPanel.insert(new Tab(new Label("Second Tab"), "Second Tab", null), 1, true);
-        tabPanel.insert(new Tab(new Label("Third Tab"), "Third Tab", null), 2, true);
+        tabPanel.add(new Tab(new ScrollPanel(panel1), "First Tab", null, true));
+        tabPanel.add(new Tab(new Label("Second Tab"), "Second Tab", null, true));
+        tabPanel.add(new Tab(new Label("Third Tab"), "Third Tab", null, true));
 
-        tabPanel.selectTab(0);
         tabPanel.setSize("400px", "300px");
 
         ScrollPanel content = new ScrollPanel();

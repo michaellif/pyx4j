@@ -27,16 +27,15 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class ReportView extends AbstractView {
 
     public ReportView(String tabTitle) {
-        super();
+        super(RiaEntityImageBundle.INSTANCE.report(), true);
 
-        addPage(new Tab(createPageContent("page 1"), "page 1", null));
+        addPage(new Tab(createPageContent("page 1"), "page 1", null, true));
         setTabTitle(tabTitle);
-        setTabImage(RiaEntityImageBundle.INSTANCE.report());
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");

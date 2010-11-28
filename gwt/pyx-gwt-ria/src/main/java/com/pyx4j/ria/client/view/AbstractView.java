@@ -21,14 +21,15 @@
 package com.pyx4j.ria.client.view;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
-import com.pyx4j.widgets.client.tabpanel.Tab;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.TabPanel;
 
 public abstract class AbstractView extends Tab {
 
@@ -38,10 +39,10 @@ public abstract class AbstractView extends Tab {
 
     private final SimplePanel tabsMark;
 
-    private final TabPanel<Tab> tabPanel;
+    private final TabPanel tabPanel;
 
-    public AbstractView() {
-        super();
+    public AbstractView(ImageResource tabImage, boolean closable) {
+        super(tabImage, closable);
 
         rootPanel = new DockLayoutPanel(Unit.EM);
 
@@ -51,8 +52,7 @@ public abstract class AbstractView extends Tab {
         tabsMark = new SimplePanel();
         rootPanel.addSouth(tabsMark, 0);
 
-        tabPanel = new TabPanel<Tab>();
-        tabPanel.setStylePrefix(WindowsTheme.pyx4j_TabBottom);
+        tabPanel = new TabPanel(WindowsTheme.pyx4j_TabBottom);
 
         rootPanel.add(tabPanel.getDeck());
 

@@ -32,23 +32,23 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.DeckLayoutPanel;
-import com.pyx4j.widgets.client.tabpanel.TabBar;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.TabBar;
+import com.pyx4j.widgets.client.tabpanelnew.TabPanel;
 
-public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<AbstractView>, SelectionHandler<AbstractView>,
-        CloseHandler<AbstractView> {
+public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<Tab>, SelectionHandler<Tab>, CloseHandler<Tab> {
 
     private final List<AbstractView> views = new ArrayList<AbstractView>();
 
     private AbstractView currentView;
 
-    private final TabPanel<AbstractView> tabPanel;
+    private final TabPanel tabPanel;
 
     public FolderSectionPanel() {
 
         addStyleDependentName("folder");
 
-        tabPanel = new TabPanel<AbstractView>();
+        tabPanel = new TabPanel();
 
         tabPanel.addBeforeSelectionHandler(this);
         tabPanel.addSelectionHandler(this);
@@ -62,16 +62,16 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
         setContentPane(contentDeck);
     }
 
-    public void addView(AbstractView view, boolean closable) {
+    public void addView(AbstractView view) {
         views.add(view);
-        tabPanel.insert(view, tabPanel.size(), closable);
+        tabPanel.add(view);
         if (views.size() == 1) {
-            tabPanel.select(0);
+            tabPanel.select(view);
         }
     }
 
-    public boolean removeView(AbstractView view, boolean forced) {
-        if (tabPanel.remove(view, forced)) {
+    public boolean removeView(AbstractView view) {
+        if (tabPanel.remove(view)) {
             views.remove(view);
             return true;
         }
@@ -87,17 +87,17 @@ public class FolderSectionPanel extends SectionPanel implements BeforeSelectionH
     }
 
     @Override
-    public void onBeforeSelection(BeforeSelectionEvent<AbstractView> event) {
+    public void onBeforeSelection(BeforeSelectionEvent<Tab> event) {
     }
 
     @Override
-    public void onSelection(SelectionEvent<AbstractView> event) {
-        AbstractView view = event.getSelectedItem();
+    public void onSelection(SelectionEvent<Tab> event) {
+        AbstractView view = (AbstractView) event.getSelectedItem();
         currentView = view;
     }
 
     @Override
-    public void onClose(CloseEvent<AbstractView> event) {
+    public void onClose(CloseEvent<Tab> event) {
         views.remove(event.getTarget());
     }
 

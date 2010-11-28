@@ -49,7 +49,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class ThemeEditor extends AbstractView {
 
@@ -70,9 +70,9 @@ public class ThemeEditor extends AbstractView {
     private final TextArea styleEditor;
 
     public ThemeEditor() {
-        super();
+        super(null, false);
         SimplePanel contentPane = new SimplePanel();
-        addPage(new Tab(contentPane, null, null));
+        addPage(new Tab(contentPane, null, null, false));
         setTabTitle("Theme Editor");
 
         HorizontalPanel mainPanel = new HorizontalPanel();

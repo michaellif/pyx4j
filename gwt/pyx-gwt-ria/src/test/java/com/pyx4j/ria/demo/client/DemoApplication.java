@@ -72,9 +72,10 @@ public class DemoApplication implements IApplication {
     }
 
     public void openView(AbstractView view) {
-        mainPanel.addAndShowView(view, true);
+        mainPanel.addAndShowView(view);
     }
 
+    @Override
     public void onLoad() {
         perspective = new Perspective();
 
@@ -108,12 +109,12 @@ public class DemoApplication implements IApplication {
 
         mainPanel = new MainPanel();
 
-        mainPanel.addAndShowView(new TestView("Long Tab1"), true);
-        mainPanel.addAndShowView(new TestView("Tab2"), true);
-        mainPanel.addAndShowView(new TestView("Tab3"), true);
+        mainPanel.addAndShowView(new TestView("Long Tab1"));
+        mainPanel.addAndShowView(new TestView("Tab2"));
+        mainPanel.addAndShowView(new TestView("Tab3"));
 
         //TODO mainPanel.getBottomFolder().addView(new LogView("Log", mainPanel.getBottomFolder()));
-        mainPanel.addAndShowView(new TabPanelView("Tab Pane", null), true);
+        mainPanel.addAndShowView(new TabPanelView("Tab Pane", null, true));
 
         perspective.setMainPanel(mainPanel);
 
@@ -144,6 +145,7 @@ public class DemoApplication implements IApplication {
         progressBarTimer.scheduleRepeating(100);
     }
 
+    @Override
     public void onDiscard() {
         // TODO Auto-generated method stub
 

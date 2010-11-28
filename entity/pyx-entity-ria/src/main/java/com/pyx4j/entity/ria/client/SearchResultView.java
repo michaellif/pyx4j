@@ -26,15 +26,14 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.ria.client.crud.EntityListPart;
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class SearchResultView extends AbstractView {
 
     public SearchResultView() {
-        super();
+        super(RiaEntityImageBundle.INSTANCE.searchResult(), false);
 
         setTabTitle("Search");
-        setTabImage(RiaEntityImageBundle.INSTANCE.searchResult());
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");
@@ -62,7 +61,7 @@ public class SearchResultView extends AbstractView {
     }
 
     public void setEntityListPart(EntityListPart<?> part) {
-        addPage(new Tab(new ScrollPanel(part), "List", null));
+        addPage(new Tab(new ScrollPanel(part), "List", null, false));
     }
 
 }

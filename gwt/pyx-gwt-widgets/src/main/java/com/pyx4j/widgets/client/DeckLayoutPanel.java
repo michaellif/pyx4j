@@ -30,14 +30,14 @@ public class DeckLayoutPanel extends LayoutPanel {
     }
 
     @Override
-    public void insert(Widget widget, int beforeIndex) {
-        super.insert(widget, beforeIndex);
+    public void add(Widget widget) {
+        super.add(widget);
         setWidgetVisible(widget, false);
     }
 
-    public void showWidget(int index) {
+    public void showWidget(Widget widget) {
         for (int i = 0; i < getWidgetCount(); i++) {
-            if (index == i) {
+            if (getWidget(i).equals(widget)) {
                 setWidgetVisible(getWidget(i), true);
             } else {
                 setWidgetVisible(getWidget(i), false);

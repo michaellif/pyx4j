@@ -37,18 +37,17 @@ import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.GrayTheme;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class TestView extends AbstractView {
 
     public TestView(String tabTitle) {
-        super();
+        super(ImageFactory.getImages().image(), false);
 
-        addPage(new Tab(createPageContent("page 1"), "page 1", null));
-        addPage(new Tab(createPageContent("page 2"), "page 2", null));
-        addPage(new Tab(createPageContent("page 3"), "page 3", null));
+        addPage(new Tab(createPageContent("page 1"), "page 1", null, true));
+        addPage(new Tab(createPageContent("page 2"), "page 2", null, true));
+        addPage(new Tab(createPageContent("page 3"), "page 3", null, true));
         setTabTitle(tabTitle);
-        setTabImage(ImageFactory.getImages().image());
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");

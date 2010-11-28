@@ -38,20 +38,20 @@ public class MainPanel extends FourFoldersLayout implements ViewManager<FourFold
     }
 
     @Override
-    public void addAndShowView(AbstractView view, boolean closable) {
+    public void addAndShowView(AbstractView view) {
         Position position = getPositionForView(view.getClass());
-        getFolder(position).addView(view, closable);
+        getFolder(position).addView(view);
         getFolder(position).showView(view);
     }
 
     @Override
     public void closeView(AbstractView view) {
         Position position = getPositionForView(view.getClass());
-        getFolder(position).removeView(view, true);
+        getFolder(position).removeView(view);
     }
 
     @Override
-    public void addView(AbstractView view, boolean closable) {
+    public void addView(AbstractView view) {
         // TODO Auto-generated method stub
 
     }

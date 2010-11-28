@@ -28,15 +28,13 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GroupBoxPanel;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public abstract class AbstractProvingView extends AbstractView {
 
@@ -69,6 +67,7 @@ public abstract class AbstractProvingView extends AbstractView {
 
         public Button addAction(String name, final Runnable runnable) {
             Button b = new Button(name, new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     runnable.run();
                 }
@@ -80,12 +79,11 @@ public abstract class AbstractProvingView extends AbstractView {
     }
 
     public AbstractProvingView(String tabTitle, ImageResource tabImage) {
-        super();
+        super(tabImage, false);
         ScrollPanel contentPane = new ScrollPanel();
-        addPage(new Tab(contentPane, null, null));
+        addPage(new Tab(contentPane, null, null, true));
 
         setTabTitle(tabTitle);
-        setTabImage(tabImage);
 
         this.mainPanel = new VerticalPanel();
         contentPane.add(this.mainPanel);

@@ -32,16 +32,15 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanelnew.Tab;
 
 public class DashboardView extends AbstractView {
 
     public DashboardView() {
-        super();
+        super(RiaEntityImageBundle.INSTANCE.dashboard(), false);
 
-        addPage(new Tab(createPageContent("page 1"), "page 1", null));
+        addPage(new Tab(createPageContent("page 1"), "page 1", null, false));
         setTabTitle("Dashboard");
-        setTabImage(RiaEntityImageBundle.INSTANCE.dashboard());
 
         HorizontalPanel toolbarPanel = new HorizontalPanel();
         toolbarPanel.setWidth("100%");
