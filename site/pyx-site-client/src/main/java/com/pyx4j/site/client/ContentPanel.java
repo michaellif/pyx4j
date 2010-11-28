@@ -123,8 +123,9 @@ public abstract class ContentPanel extends SimplePanel {
                             callback.onSuccess(null);
                         }
                     });
+                } else {
+                    log.warn("Failed create inline widget {}", widgetId);
                 }
-                log.warn("Failed create inline widget {}", widgetId);
                 continue;
             }
         }
