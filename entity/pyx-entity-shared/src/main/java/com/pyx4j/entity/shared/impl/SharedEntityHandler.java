@@ -30,7 +30,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.LoopCounter;
@@ -258,15 +257,15 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
-    private final void assertPath(Path path) {
-        if (!GWTJava5Helper.getSimpleName(this.getObjectClass()).equals(path.getRootObjectClassName())) {
-            throw new IllegalArgumentException("Path of " + path.getRootObjectClassName() + " expected");
-        }
-    }
+    //    private final void assertPath(Path path) {
+    //        if (!GWTJava5Helper.getSimpleName(this.getObjectClass()).equals(path.getRootObjectClassName())) {
+    //            throw new IllegalArgumentException("Path of " + path.getRootObjectClassName() + " expected");
+    //        }
+    //    }
 
     @Override
     public IObject<?> getMember(Path path) {
-        assertPath(path);
+        //assertPath(path);
         IObject<?> obj = this;
         for (String memberName : path.getPathMembers()) {
             //TODO ICollection support
@@ -280,7 +279,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public Object getValue(Path path) {
-        assertPath(path);
+        //assertPath(path);
         Object value = this.getValue();
         for (String memberName : path.getPathMembers()) {
             if (value == null) {
@@ -297,7 +296,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public void setValue(Path path, Object value) {
-        assertPath(path);
+        //assertPath(path);
         Map<String, Object> ownerValueMap = ensureValue();
         LoopCounter c = new LoopCounter(path.getPathMembers());
         for (String memberName : path.getPathMembers()) {

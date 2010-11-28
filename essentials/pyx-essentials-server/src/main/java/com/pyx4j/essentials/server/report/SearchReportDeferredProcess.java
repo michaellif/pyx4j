@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.search.IndexedEntitySearch;
 import com.pyx4j.entity.server.search.SearchResultIterator;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -69,10 +68,10 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
     private boolean formatCompleate;
 
     public SearchReportDeferredProcess(ReportRequest request) {
-        SecurityController.assertPermission(new EntityPermission(request.getCriteria().getDomainName(), EntityPermission.READ));
+        SecurityController.assertPermission(new EntityPermission(request.getCriteria().getEntityClass(), EntityPermission.READ));
         this.request = request;
         this.request.getCriteria().setPageSize(0);
-        this.entityClass = ServerEntityFactory.entityClass(request.getCriteria().getDomainName());
+        this.entityClass = request.getCriteria().getEntityClass();
         this.formater = new ReportTableCSVFormater();
         ((ReportTableCSVFormater) this.formater).setTimezoneOffset(request.getTimezoneOffset());
     }

@@ -113,7 +113,7 @@ public class EntityServicesImpl {
         @SuppressWarnings("unchecked")
         @Override
         public Vector execute(EntityQueryCriteria request) {
-            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
             List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(request);
             Vector<IEntity> v = new Vector<IEntity>();
             for (IEntity ent : rc) {
@@ -136,7 +136,7 @@ public class EntityServicesImpl {
             long start = System.nanoTime();
             int initCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount();
 
-            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
             IndexedEntitySearch search = new IndexedEntitySearch(request);
             search.buildQueryCriteria();
             EntitySearchResult<IEntity> r = new EntitySearchResult<IEntity>();
@@ -156,9 +156,9 @@ public class EntityServicesImpl {
             long duration = System.nanoTime() - start;
             int callsCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount() - initCount;
             if (duration > Consts.SEC2NANO) {
-                log.warn("Long running search {} took {}ms; calls " + callsCount, request.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+                log.warn("Long running search {} took {}ms; calls " + callsCount, request.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
             } else {
-                log.debug("search {} took {}ms; calls " + callsCount, request.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+                log.debug("search {} took {}ms; calls " + callsCount, request.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
             }
             return r;
         }
@@ -168,11 +168,10 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity execute(EntityQueryCriteria<?> request) {
-            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
+            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
             IEntity ent;
             if (request instanceof EntityCriteriaByPK) {
-                ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
-                        ((EntityCriteriaByPK<?>) request).getPrimaryKey());
+                ent = PersistenceServicesFactory.getPersistenceService().retrieve(request.getEntityClass(), ((EntityCriteriaByPK<?>) request).getPrimaryKey());
             } else {
                 ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
             }
@@ -187,9 +186,8 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
-            SecurityController.assertPermission(new EntityPermission(request.getDomainName(), EntityPermission.READ));
-            IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(ServerEntityFactory.entityClass(request.getDomainName()),
-                    request.getPrimaryKey());
+            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
+            IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(request.getEntityClass(), request.getPrimaryKey());
             if (ent != null) {
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent));
             }

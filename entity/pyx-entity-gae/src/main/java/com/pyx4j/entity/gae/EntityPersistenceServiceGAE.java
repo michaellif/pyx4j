@@ -70,7 +70,6 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -1151,10 +1150,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         return ret;
     }
 
-    private <T extends IEntity> Class<T> entityClass(EntityQueryCriteria<T> criteria) {
-        return ServerEntityFactory.entityClass(criteria.getDomainName());
-    }
-
     private static Query.FilterOperator operator(PropertyCriterion.Restriction restriction) {
         switch (restriction) {
         case LESS_THAN:
@@ -1261,7 +1256,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
-        Class<T> entityClass = entityClass(criteria);
+        Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -1283,9 +1278,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running retrieve query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running retrieve query {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("retrieve query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("retrieve query {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
         return iEntity;
     }
@@ -1294,7 +1289,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
-        Class<T> entityClass = entityClass(criteria);
+        Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -1315,9 +1310,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running query {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("query {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("query {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
         return rc;
     }
@@ -1326,7 +1321,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
-        final Class<T> entityClass = entityClass(criteria);
+        final Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -1347,9 +1342,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running query iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running query iterator {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("query iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("query iterator {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
 
         return new ICursorIterator<T>() {
@@ -1387,7 +1382,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        Class<T> entityClass = entityClass(criteria);
+        Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -1403,9 +1398,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
         long duration = System.nanoTime() - start;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running queryKeys {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running queryKeys {} took {}ms", criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("queryKeys {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("queryKeys {} took {}ms", criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
         return rc;
     }
@@ -1414,7 +1409,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> ICursorIterator<Long> queryKeys(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
-        final Class<T> entityClass = entityClass(criteria);
+        final Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -1434,9 +1429,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         long duration = System.nanoTime() - start;
         int callsCount = datastoreCallStats.get().readCount - initCount;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("queryKeys iterator {} took {}ms; calls " + callsCount, criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
 
         return new ICursorIterator<Long>() {
@@ -1472,7 +1467,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
         long start = System.nanoTime();
-        Class<T> entityClass = entityClass(criteria);
+        Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
@@ -1484,9 +1479,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         int rc = pq.countEntities();
         long duration = System.nanoTime() - start;
         if (duration > Consts.SEC2NANO) {
-            log.warn("Long running countQuery {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.warn("Long running countQuery {} took {}ms", criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         } else {
-            log.debug("countQuery {} took {}ms", criteria.getDomainName(), (int) (duration / Consts.MSEC2NANO));
+            log.debug("countQuery {} took {}ms", criteria.getEntityClass(), (int) (duration / Consts.MSEC2NANO));
         }
         return rc;
     }
@@ -1547,7 +1542,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
-        Class<T> entityClass = entityClass(criteria);
+        Class<T> entityClass = criteria.getEntityClass();
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
         if (entityMeta.isTransient()) {
             throw new Error("Can't delete Transient Entity");

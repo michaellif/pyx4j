@@ -68,11 +68,12 @@ public class PathTest extends InitializerTestCase {
 
         Path path = EntityFactory.create(Employee.class).homeAddress().streetName().getPath();
 
-        try {
-            address.getMember(path);
-            fail("Allow invalid access to path");
-        } catch (IllegalArgumentException ok) {
-        }
+        //TODO  this was removed with SharedEntityHandler.assertPath
+        //        try {
+        //            address.getMember(path);
+        //            fail("Allow invalid access to path");
+        //        } catch (IllegalArgumentException ok) {
+        //        }
 
         IObject<?> object = employee.getMember(path);
         assertEquals("member by Path FieldName", "streetName", object.getFieldName());

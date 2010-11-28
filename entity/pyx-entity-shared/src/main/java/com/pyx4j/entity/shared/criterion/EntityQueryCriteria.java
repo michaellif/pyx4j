@@ -38,15 +38,11 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     private static final long serialVersionUID = -6101566214650608853L;
 
-    private String domainName;
-
     private Vector<Criterion> filters;
 
     private Vector<Sort> sorts;
 
-    private transient Class<E> entityClass;
-
-    private transient E metaEntity;
+    private E metaEntity;
 
     public static class Sort implements Serializable {
 
@@ -80,8 +76,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     }
 
     public EntityQueryCriteria(Class<E> entityClass) {
-        this.entityClass = entityClass;
-        this.domainName = entityClass.getName();
+        this.metaEntity = EntityFactory.create(entityClass);
     }
 
     public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass) {
@@ -89,10 +84,12 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     }
 
     public E meta() {
-        if (metaEntity == null) {
-            metaEntity = EntityFactory.create(entityClass);
-        }
         return metaEntity;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<E> getEntityClass() {
+        return (Class<E>) metaEntity.getObjectClass();
     }
 
     public EntityQueryCriteria<E> add(Criterion criterion) {
@@ -117,10 +114,6 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         }
         sorts.add(sort);
         return this;
-    }
-
-    public String getDomainName() {
-        return domainName;
     }
 
     public boolean hasCriteria() {
@@ -166,7 +159,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         if (t == this) {
             return true;
         }
-        if ((domainName == null) || !domainName.equals(t.getDomainName())) {
+        if (this.metaEntity.getEntityMeta() != t.metaEntity.getEntityMeta()) {
             return false;
         }
         if (!EqualsHelper.equals(filters, t.filters)) {
@@ -181,9 +174,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     @Override
     public int hashCode() {
         int hashCode = 0;
-        if (domainName != null) {
-            hashCode += domainName.hashCode();
-        }
+        hashCode += this.metaEntity.getEntityMeta().hashCode();
         hashCode *= 0x1F;
         if (filters != null) {
             hashCode += filters.hashCode();
@@ -197,6 +188,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     @Override
     public String getServiceCallMarker() {
-        return this.domainName.substring(domainName.lastIndexOf(".") + 1);
+        String domainName = this.metaEntity.getEntityMeta().getCaption();
+        return domainName.substring(domainName.lastIndexOf(".") + 1);
     }
 }

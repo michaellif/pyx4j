@@ -35,11 +35,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     private static final long serialVersionUID = 7483364285263499506L;
 
-    private String domainName;
-
-    private transient Class<E> entityClass;
-
-    private transient E metaEntity;
+    private E metaEntity;
 
     private int pageNumber;
 
@@ -54,23 +50,20 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
     }
 
     public EntitySearchCriteria(Class<E> entityClass) {
-        this.entityClass = entityClass;
-        this.domainName = entityClass.getName();
+        this.metaEntity = EntityFactory.create(entityClass);
     }
 
     public static <T extends IEntity> EntitySearchCriteria<T> create(Class<T> entityClass) {
         return new EntitySearchCriteria<T>(entityClass);
     }
 
-    public String getDomainName() {
-        return domainName;
+    public E meta() {
+        return metaEntity;
     }
 
-    public E meta() {
-        if (metaEntity == null) {
-            metaEntity = EntityFactory.create(entityClass);
-        }
-        return metaEntity;
+    @SuppressWarnings("unchecked")
+    public Class<E> getEntityClass() {
+        return (Class<E>) metaEntity.getObjectClass();
     }
 
     public Map<PathSearch, Serializable> getFilters() {
@@ -144,7 +137,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("domainName=").append(getDomainName());
+        builder.append("domainName=").append(this.metaEntity.getEntityMeta().getCaption());
         builder.append(" pageSize=").append(getPageSize());
         builder.append(" pageNumber=").append(getPageNumber());
         builder.append(" filters=").append(getFilters());
@@ -153,6 +146,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     @Override
     public String getServiceCallMarker() {
-        return this.domainName.substring(domainName.lastIndexOf(".") + 1);
+        String domainName = this.metaEntity.getEntityMeta().getCaption();
+        return domainName.substring(domainName.lastIndexOf(".") + 1);
     }
 }

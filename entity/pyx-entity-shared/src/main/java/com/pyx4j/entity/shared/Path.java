@@ -96,6 +96,8 @@ public class Path implements Serializable {
         pathMembers = Collections.unmodifiableList(members);
     }
 
+    //This does not work after RPC!
+    @Deprecated
     public String getRootObjectClassName() {
         if (rootObjectClassName == null) {
             parsPath();

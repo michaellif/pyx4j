@@ -124,7 +124,7 @@ public class ReferenceDataManager {
      */
     public static <T extends IEntity> void update(T ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
-            if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
+            if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
                 boolean found = false;
                 for (IEntity item : me.getValue()) {
                     if (ent.equals(item) && (item != ent)) {
@@ -144,17 +144,17 @@ public class ReferenceDataManager {
 
     public static void remove(IEntity ent) {
         for (Map.Entry<EntityQueryCriteria<?>, List<? extends IEntity>> me : cache.entrySet()) {
-            if (me.getKey().getDomainName().equals(ent.getObjectClass().getName())) {
+            if (me.getKey().getEntityClass().equals(ent.getObjectClass())) {
                 me.getValue().remove(ent);
             }
         }
     }
 
-    public static void invalidate(String domain) {
+    public static <T extends IEntity> void invalidate(Class<T> domain) {
         Iterator<EntityQueryCriteria<?>> it = cache.keySet().iterator();
         while (it.hasNext()) {
             EntityQueryCriteria<?> terms = it.next();
-            if (terms.getDomainName().equals(domain)) {
+            if (terms.getEntityClass().equals(domain)) {
                 it.remove();
             }
         }

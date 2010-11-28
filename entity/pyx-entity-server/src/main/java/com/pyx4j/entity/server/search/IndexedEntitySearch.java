@@ -41,7 +41,6 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.IndexString;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
-import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -78,7 +77,7 @@ public class IndexedEntitySearch {
 
     public IndexedEntitySearch(EntitySearchCriteria<?> searchCriteria) {
         this.searchCriteria = searchCriteria;
-        this.entityClass = ServerEntityFactory.entityClass(searchCriteria.getDomainName());
+        this.entityClass = searchCriteria.getEntityClass();
         this.meta = EntityFactory.getEntityMeta(entityClass);
     }
 

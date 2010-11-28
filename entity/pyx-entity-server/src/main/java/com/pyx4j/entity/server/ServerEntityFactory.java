@@ -36,6 +36,7 @@ public class ServerEntityFactory implements IEntityFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ServerEntityFactory.class);
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T create(Class<T> clazz, IObject<?> parent, String fieldName) {
         if (IEntity.class.equals(clazz)) {
