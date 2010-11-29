@@ -20,52 +20,48 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.Selector;
 
-public class TabBar extends DockLayoutPanel implements ClickHandler {
+public class TabBar extends DockLayoutPanel {
 
     private final FlowPanel tabsHolder;
 
-    private final TabPanel<? extends Tab> tabPanel;
+    private final TabPanel tabPanel;
 
-    private TabBarItem selectedTab;
+    private Tab selectedTab;
 
-    private final ListAllTabsTrigger listAllTabsTrigger;
+    private final ListAllTabsTrigger tabListTrigger;
 
     private final ListAllTabsDropDown listAllTabsDropDown;
 
     /**
      * Creates an empty tab bar.
      */
-    public TabBar(TabPanel<? extends Tab> tabPanel) {
+    public TabBar(TabPanel tabPanel) {
         super(Unit.PX);
 
         this.tabPanel = tabPanel;
 
-        listAllTabsTrigger = new ListAllTabsTrigger();
-        listAllTabsTrigger.setVisible(false);
+        tabListTrigger = new ListAllTabsTrigger();
+        tabListTrigger.setVisible(false);
 
-        listAllTabsTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
+        tabListTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
 
-        listAllTabsDropDown = new ListAllTabsDropDown(listAllTabsTrigger);
+        listAllTabsDropDown = new ListAllTabsDropDown(tabListTrigger);
 
-        listAllTabsTrigger.addDomHandler(new ClickHandler() {
+        tabListTrigger.addDomHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (listAllTabsDropDown.isShowing()) {
@@ -77,7 +73,7 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
 
         }, ClickEvent.getType());
 
-        addEast(listAllTabsTrigger, 30);
+        addEast(tabListTrigger, 30);
 
         tabsHolder = new FlowPanel();
 
@@ -91,179 +87,80 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
 
     public void setStylePrefix(String styleName) {
         setStyleName(styleName);
-        listAllTabsTrigger.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
+        tabListTrigger.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
     }
 
-    /**
-     * Adds a new tab with the specified text.
-     * 
-     * @param text
-     *            the new tab's text
-     * @param asHTML
-     *            <code>true</code> to treat the specified text as html
-     */
-    public void addTab(String text, ImageResource imageResource, boolean closable) {
-        insertTab(text, imageResource, getTabCount(), closable);
+    public void addTabBarItem(Tab tab) {
+        insertTabBarItem(tab, null);
     }
 
-    /**
-     * Gets the tab that is currently selected.
-     * 
-     * @return the selected tab
-     */
-    public int getSelectedTab() {
-        if (selectedTab == null) {
-            return -1;
+    public void insertTabBarItem(Tab tab, Tab beforeTab) {
+        if (beforeTab == null) {
+            tabsHolder.add(tab.getTabBarItem());
+        } else {
+            int beforeIndex = tabsHolder.getWidgetIndex(beforeTab.getTabBarItem());
+            tabsHolder.insert(tab.getTabBarItem(), beforeIndex);
         }
-        return tabsHolder.getWidgetIndex(selectedTab);
+        ensureTabListTriggerVisible();
+        ensureSelectedTabVisible();
     }
 
-    /**
-     * Gets the number of tabs present.
-     * 
-     * @return the tab count
-     */
-    public int getTabCount() {
-        return tabsHolder.getWidgetCount();
-    }
-
-    /**
-     * Gets the specified tab's HTML.
-     * 
-     * @param index
-     *            the index of the tab whose HTML is to be retrieved
-     * @return the tab's HTML
-     */
-    public String getTabHTML(int index) {
-        if (index >= getTabCount()) {
-            return null;
-        }
-        return ((HTML) tabsHolder.getWidget(index)).getHTML();
-    }
-
-    /**
-     * Inserts a new tab at the specified index.
-     * 
-     * @param text
-     *            the new tab's text
-     * @param asHTML
-     *            <code>true</code> to treat the specified text as HTML
-     * @param beforeIndex
-     *            the index before which this tab will be inserted
-     */
-    public void insertTab(String label, ImageResource imageResource, int beforeIndex, boolean closable) {
-        if ((beforeIndex < 0) || (beforeIndex > getTabCount())) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        TabBarItem item = new TabBarItem(this, label, imageResource, closable, getStyleName());
-
-        if (beforeIndex == 0) {
-            if (tabsHolder.getWidgetCount() > 0) {
-                Widget firstTab = tabsHolder.getWidget(0);
-                firstTab.removeStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.first));
-            }
-            item.addStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.first));
-        }
-
-        tabsHolder.insert(item, beforeIndex);
-
-    }
-
-    public void setLabelText(int index, String labelText) {
-        Widget widget = tabsHolder.getWidget(index);
-        if (labelText == null || labelText.trim().length() == 0) {
-            labelText = "___";
-        }
-        ((TabBarItem) widget).setLabel(labelText);
-    }
-
-    public void setModifyed(int index, boolean modifyed) {
-        Widget widget = tabsHolder.getWidget(index);
-        ((TabBarItem) widget).setModifyed(modifyed);
-    }
-
-    @Override
-    public void onClick(ClickEvent event) {
-        for (int i = 0; i < tabsHolder.getWidgetCount(); ++i) {
-
-            TabBarItem tabBarItem = getTabBarItemParent((Widget) event.getSource());
-            if (tabsHolder.getWidget(i) == tabBarItem) {
-                if (tabBarItem.isEnabled()) {
-                    checkTabIndex(i);
-                    tabPanel.select(i);
-                }
-                return;
-            }
-        }
-    }
-
-    private TabBarItem getTabBarItemParent(Widget child) {
-        while ((child != null) && !(child instanceof TabBarItem)) {
-            child = child.getParent();
-        }
-        return (TabBarItem) child;
-    }
-
-    /**
-     * Removes the tab at the specified index.
-     * 
-     * @param index
-     *            the index of the tab to be removed
-     */
-    public void removeTab(int index) {
-        checkTabIndex(index);
-
-        Widget toRemove = tabsHolder.getWidget(index);
-
-        if (index == 0) {
-            toRemove.removeStyleDependentName("first");
-            if (tabsHolder.getWidgetCount() > 1) {
-                Widget nextFirstTab = tabsHolder.getWidget(1);
-                nextFirstTab.addStyleDependentName("first");
-            }
-        }
-
-        if (toRemove == selectedTab) {
+    public void removeTabBarItem(Tab tab) {
+        if (tab == selectedTab) {
             selectedTab = null;
         }
-        tabsHolder.remove(toRemove);
-
+        tabsHolder.remove(tab.getTabBarItem());
+        ensureTabListTriggerVisible();
+        ensureSelectedTabVisible();
     }
 
-    public void selectTab(int index) {
-        setSelected(selectedTab, false);
-        selectedTab = (TabBarItem) tabsHolder.getWidget(index);
-        setSelected(selectedTab, true);
+    public void onTabSelection(Tab tab) {
+        if (selectedTab != null) {
+            selectedTab.getTabBarItem().onSelected(false);
+        }
+        selectedTab = tab;
+        if (selectedTab != null) {
+            selectedTab.getTabBarItem().onSelected(true);
+        }
+        ensureSelectedTabVisible();
     }
 
-    public void enableTab(int index, boolean isEnabled) {
-        TabBarItem tab = (TabBarItem) tabsHolder.getWidget(index);
-        tab.setEnabled(isEnabled);
+    public void enableTab(Tab tab, boolean isEnabled) {
+        tab.getTabBarItem().onEnabled(isEnabled);
     }
 
-    private void checkTabIndex(int index) {
-        if ((index < 0) || (index >= getTabCount())) {
-            throw new IndexOutOfBoundsException("TabBar index " + String.valueOf(index));
+    public Tab getSelectedTab() {
+        return selectedTab;
+    }
+
+    public Tab getFollowingTab(Tab tab) {
+        int index = tabsHolder.getWidgetIndex(tab.getTabBarItem()) + 1;
+        if (index >= 0 && tabsHolder.getWidgetCount() > index) {
+            TabBarItem item = (TabBarItem) tabsHolder.getWidget(index);
+            return item.getTab();
+        } else {
+            return null;
         }
     }
 
-    private void setSelected(TabBarItem item, boolean selected) {
-        if (item != null) {
-            item.setSelected(selected);
+    public Tab getPrecedingTab(Tab tab) {
+        int index = tabsHolder.getWidgetIndex(tab.getTabBarItem()) - 1;
+        if (index >= 0 && tabsHolder.getWidgetCount() > index) {
+            TabBarItem item = (TabBarItem) tabsHolder.getWidget(index);
+            return item.getTab();
+        } else {
+            return null;
         }
-    }
-
-    FlowPanel getTabBarPanel() {
-        return tabsHolder;
-    }
-
-    TabPanel<? extends Tab> getTabPanelModel() {
-        return tabPanel;
     }
 
     @Override
     public void onResize() {
+        ensureTabListTriggerVisible();
+        ensureSelectedTabVisible();
+        super.onResize();
+    }
+
+    private void ensureTabListTriggerVisible() {
         boolean isTriggerVisible = false;
         for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
             if (getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < 0) {
@@ -271,31 +168,30 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
                 break;
             }
         }
-        listAllTabsTrigger.setVisible(isTriggerVisible);
-        super.onResize();
+        tabListTrigger.setVisible(isTriggerVisible);
+    }
+
+    private void ensureSelectedTabVisible() {
+        if (selectedTab == null) {
+            return;
+        } else if (getAbsoluteTop() - selectedTab.getTabBarItem().getAbsoluteTop() == 0) {
+            return;
+        } else {
+            TabBarItem item = (TabBarItem) tabsHolder.getWidget(0);
+            tabsHolder.remove(item);
+            tabsHolder.add(item);
+            ensureSelectedTabVisible();
+        }
     }
 
     class ListAllTabsTrigger extends SimplePanel {
 
-        List<TabBarItem> getAllTabBarItems() {
-            ArrayList<TabBarItem> retVal = new ArrayList<TabBarItem>();
-            for (int i = 0; i < tabsHolder.getWidgetCount(); ++i) {
-                retVal.add((TabBarItem) tabsHolder.getWidget(i));
-            }
-            return retVal;
+        Set<Tab> getAllTabs() {
+            return tabPanel.getTabs();
         }
 
-        public void selectTab(TabBarItem tabBarItem) {
-            for (int i = 0; i < tabsHolder.getWidgetCount(); ++i) {
-                if (tabsHolder.getWidget(i) == tabBarItem) {
-                    if (tabBarItem.isEnabled()) {
-                        checkTabIndex(i);
-                        tabPanel.select(i);
-                    }
-                    return;
-                }
-            }
-
+        public void selectTab(Tab tab) {
+            tab.select();
         }
 
     }

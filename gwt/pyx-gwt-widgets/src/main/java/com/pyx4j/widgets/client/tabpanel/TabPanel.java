@@ -16,12 +16,14 @@
  *
  * Created on Apr 22, 2009
  * @author michaellif
- * @version $Id$
+ * @version $Id: TabPanel.java 7601 2010-11-27 15:40:11Z michaellif $
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
@@ -45,7 +47,9 @@ import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, HasSelectionHandlers<E>, HasCloseHandlers<E>, HasBeforeCloseHandlers<E> {
+public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>, HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
+
+    private static final Logger log = LoggerFactory.getLogger(TabPanel.class);
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Tab";
 
@@ -54,56 +58,49 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, first
+        selected, disabled
     }
 
     private final DeckLayoutPanel deck = new DeckLayoutPanel();
 
     private final TabBar tabBar;
 
-    private final ArrayList<E> tabs = new ArrayList<E>();
+    private final HashSet<Tab> tabs = new HashSet<Tab>();
+
+    private final String stylePrefix;
 
     private EventBus eventBus;
 
-    private String styleName;
-
     public TabPanel() {
+        this(DEFAULT_STYLE_PREFIX);
+    }
+
+    public TabPanel(String stylePrefix) {
         tabBar = new TabBar(this);
-        setStylePrefix(DEFAULT_STYLE_PREFIX);
+        this.stylePrefix = stylePrefix;
+        tabBar.setStylePrefix(stylePrefix);
+        deck.setStyleName(stylePrefix + StyleSuffix.PanelBottom);
     }
 
-    public void setStylePrefix(String styleName) {
-        this.styleName = styleName;
-        tabBar.setStylePrefix(styleName);
-        getDeck().setStyleName(styleName + StyleSuffix.PanelBottom);
+    public String getStylePrefix() {
+        return stylePrefix;
     }
 
-    public void add(E tab) {
-        insert(tab, deck.getWidgetCount(), false);
+    public void add(Tab tab) {
+        insert(tab, null);
     }
 
-    public void add(E tab, boolean closable) {
-        insert(tab, getSelectedTab() + 1, closable);
-    }
-
-    public void insert(E tab, int index, boolean closable) {
-        tabBar.insertTab(tab.getTabTitle(), tab.getTabImage(), index, closable);
-        deck.insert(tab, index);
-        tabs.add(index, tab);
+    public void insert(Tab tab, Tab beforeTab) {
+        tabBar.insertTabBarItem(tab, beforeTab);
+        deck.add(tab);
+        tabs.add(tab);
         tab.setParentTabPanel(this);
+        tab.select();
     }
 
-    /**
-     * Removes the given widget, and its associated tab.
-     * 
-     * @param widget
-     *            the widget to be removed
-     * @param forced
-     *            the tab will be close no metter what fireBeforeTabClosed returns
-     */
-    public boolean remove(E tab, boolean forced) {
-        int index = tabs.indexOf(tab);
-        if (index == -1) {
+    public boolean remove(Tab tab) {
+        if (!tabs.contains(tab)) {
+            log.error("Tab can't be removed. TabPanel doesn't contain this Tab.");
             return false;
         }
 
@@ -113,19 +110,21 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
             return false;
         }
 
-        if (getSelectedTab() == index) {
-            if (index > 0) {
-                select(index - 1);
-            } else if ((index == 0) && (tabBar.getTabBarPanel().getWidgetCount() > 1)) {
-                select(index + 1);
+        if (getSelectedTab() == tab) {
+            Tab selectTab = tabBar.getFollowingTab(tab);
+            if (selectTab == null) {
+                selectTab = tabBar.getPrecedingTab(tab);
             }
+            select(selectTab);
+
         }
 
-        tabBar.removeTab(index);
-        deck.remove(index);
-        tabs.remove(index).setParentTabPanel(null);
+        tabBar.removeTabBarItem(tab);
+        deck.remove(tab);
+        tabs.remove(tab);
+        tab.setParentTabPanel(null);
         if (deck.getWidgetCount() == 0) {
-            deck.removeStyleName(styleName + StyleSuffix.PanelBottom);
+            deck.removeStyleName(getStylePrefix() + StyleSuffix.PanelBottom);
         }
 
         CloseEvent.fire(this, tab);
@@ -133,15 +132,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
         return true;
     }
 
-    public boolean remove(int index, boolean forced) {
-        E tab = tabs.get(index);
-        return remove(tab, forced);
-
-    }
-
-    public boolean select(E tab) {
-
-        int index = tabs.indexOf(tab);
+    public boolean select(Tab tab) {
 
         BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, tab);
 
@@ -150,73 +141,50 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
         }
 
         deck.showWidget(tab);
-        tabBar.selectTab(index);
+        tabBar.onTabSelection(tab);
 
         SelectionEvent.fire(this, tab);
 
         return true;
     }
 
-    public boolean select(int index) {
-        E tab = tabs.get(index);
-        return select(tab);
-
-    }
-
-    public void enableTab(int index, boolean isEnabled) {
-        tabBar.enableTab(index, isEnabled);
-    }
-
-    public void setLabelText(int index, String labelText) {
-        tabBar.setLabelText(index, labelText);
-    }
-
-    public void setModifyed(int index, boolean modifyed) {
-        tabBar.setModifyed(index, modifyed);
-    }
-
-    public int getSelectedTab() {
+    public Tab getSelectedTab() {
         return tabBar.getSelectedTab();
     }
 
-    public int size() {
-        return deck.getWidgetCount();
-    }
-
-    /**
-     * Gets the tab bar within this tab panel
-     * 
-     * @return the tab bar
-     */
-    public TabBar getTabBar() {
-        return tabBar;
+    public HashSet<Tab> getTabs() {
+        return tabs;
     }
 
     public DeckLayoutPanel getDeck() {
         return deck;
     }
 
-    protected List<E> getTabs() {
-        return tabs;
+    public int size() {
+        return tabs.size();
+    }
+
+    public TabBar getTabBar() {
+        return tabBar;
     }
 
     @Override
-    public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<E> handler) {
+    public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<Tab> handler) {
         return addHandler(handler, BeforeSelectionEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addSelectionHandler(SelectionHandler<E> handler) {
+    public HandlerRegistration addSelectionHandler(SelectionHandler<Tab> handler) {
         return addHandler(handler, SelectionEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addBeforeCloseHandler(BeforeCloseHandler<E> handler) {
+    public HandlerRegistration addBeforeCloseHandler(BeforeCloseHandler<Tab> handler) {
         return addHandler(handler, BeforeCloseEvent.getType());
     }
 
     @Override
-    public HandlerRegistration addCloseHandler(CloseHandler<E> handler) {
+    public HandlerRegistration addCloseHandler(CloseHandler<Tab> handler) {
         return addHandler(handler, CloseEvent.getType());
     }
 

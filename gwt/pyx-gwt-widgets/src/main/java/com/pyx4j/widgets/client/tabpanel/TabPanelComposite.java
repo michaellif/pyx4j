@@ -16,7 +16,7 @@
  *
  * Created on Apr 29, 2009
  * @author michaellif
- * @version $Id$
+ * @version $Id: TabPanelComposite.java 7601 2010-11-27 15:40:11Z michaellif $
  */
 package com.pyx4j.widgets.client.tabpanel;
 
@@ -28,13 +28,17 @@ import com.pyx4j.widgets.client.style.CSSClass;
 
 public class TabPanelComposite extends LayoutPanel {
 
-    private final TabPanel<Tab> model;
+    private final TabPanel tabPanel;
 
     public TabPanelComposite() {
-        model = new TabPanel<Tab>();
+        this(TabPanel.DEFAULT_STYLE_PREFIX);
+    }
+
+    public TabPanelComposite(String stylePrefix) {
+        tabPanel = new TabPanel(stylePrefix);
         VerticalPanel panel = new VerticalPanel();
-        TabBar tabBar = model.getTabBar();
-        LayoutPanel deck = model.getDeck();
+        TabBar tabBar = tabPanel.getTabBar();
+        LayoutPanel deck = tabPanel.getDeck();
         panel.add(tabBar);
 
         DecoratorPanel deckDecorator = new DecoratorPanel(true, true, true, true, 2, CSSClass.pyx4j_Section_SelectionBorder.name());
@@ -56,32 +60,24 @@ public class TabPanelComposite extends LayoutPanel {
         add(tabPanelDecorator);
     }
 
-    public void setStylePrefix(String styleName) {
-        model.setStylePrefix(styleName);
+    public void add(Tab tab) {
+        tabPanel.add(tab);
     }
 
-    public void insert(Tab tab, int beforeIndex, boolean closable) {
-        model.insert(tab, beforeIndex, closable);
+    public void insert(Tab tab, Tab beforeTab) {
+        tabPanel.insert(tab, beforeTab);
     }
 
-    public void selectTab(int index) {
-        model.select(index);
+    public void selectTab(Tab tab) {
+        tabPanel.select(tab);
     }
 
     public boolean remove(Tab tab) {
-        return model.remove(tab, false);
-    }
-
-    public Tab getTab(int index) {
-        return model.getTabs().get(index);
+        return tabPanel.remove(tab);
     }
 
     public int getTabCount() {
-        return model.getTabs().size();
-    }
-
-    public int getTabIndex(Tab tab) {
-        return model.getTabs().indexOf(tab);
+        return tabPanel.getTabs().size();
     }
 
 }

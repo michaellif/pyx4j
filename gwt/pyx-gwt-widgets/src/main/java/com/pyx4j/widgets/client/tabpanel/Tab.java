@@ -16,7 +16,7 @@
  *
  * Created on May 14, 2009
  * @author michaellif
- * @version $Id$
+ * @version $Id: Tab.java 7474 2010-11-12 20:04:38Z michaellif $
  */
 package com.pyx4j.widgets.client.tabpanel;
 
@@ -26,27 +26,22 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Tab extends LayoutPanel {
 
-    private ImageResource tabImage;
-
     private String tabTitle;
 
-    private TabPanel<? extends Tab> parentTabPanel;
+    private final TabBarItem tabBarItem;
 
-    public Tab(Widget contentPane, String tabTitle, ImageResource tabImage) {
-        add(contentPane);
-        this.tabImage = tabImage;
-        this.tabTitle = tabTitle;
+    private TabPanel parentTabPanel;
+
+    public Tab(ImageResource tabImage, boolean closable) {
+        this(null, null, tabImage, closable);
     }
 
-    public Tab() {
-    }
-
-    public ImageResource getTabImage() {
-        return tabImage;
-    }
-
-    public void setTabImage(ImageResource tabImage) {
-        this.tabImage = tabImage;
+    public Tab(Widget contentPane, String tabTitle, ImageResource tabImage, boolean closable) {
+        tabBarItem = new TabBarItem(this, tabImage, closable);
+        setTabTitle(tabTitle);
+        if (contentPane != null) {
+            add(contentPane);
+        }
     }
 
     public String getTabTitle() {
@@ -55,6 +50,7 @@ public class Tab extends LayoutPanel {
 
     public void setTabTitle(String tabTitle) {
         this.tabTitle = tabTitle;
+        tabBarItem.onTabTitleChange(tabTitle);
     }
 
     public void setContentPane(Widget contentPane) {
@@ -62,11 +58,28 @@ public class Tab extends LayoutPanel {
         add(contentPane);
     }
 
-    protected void setParentTabPanel(TabPanel<? extends Tab> parentTabPanel) {
-        this.parentTabPanel = parentTabPanel;
+    public boolean isModifyed() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
-    public TabPanel<? extends Tab> getParentTabPanel() {
-        return parentTabPanel;
+    public void close() {
+        parentTabPanel.remove(this);
     }
+
+    public void select() {
+        parentTabPanel.select(this);
+    }
+
+    protected void setParentTabPanel(TabPanel parentTabPanel) {
+        this.parentTabPanel = parentTabPanel;
+        if (parentTabPanel != null) {
+            tabBarItem.setStylePrefix(parentTabPanel.getStylePrefix());
+        }
+    }
+
+    protected TabBarItem getTabBarItem() {
+        return tabBarItem;
+    }
+
 }
