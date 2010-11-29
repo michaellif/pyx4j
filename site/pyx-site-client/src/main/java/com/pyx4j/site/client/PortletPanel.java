@@ -11,6 +11,7 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -84,7 +85,7 @@ public class PortletPanel extends ContentPanel {
 
     @Override
     protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
-        InlineWidgetRootPanel root = InlineWidgetRootPanel.get(widgetId);
+        InlineWidgetRootPanel root = new InlineWidgetRootPanel(Document.get().getElementById(widgetId));
         root.add((Widget) inlineWidget);
         addInlineWidget(inlineWidget);
     }

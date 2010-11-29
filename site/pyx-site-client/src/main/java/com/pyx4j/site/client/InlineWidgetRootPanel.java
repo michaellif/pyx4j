@@ -31,7 +31,7 @@ public class InlineWidgetRootPanel extends AbsolutePanel {
 
     private static Map<String, InlineWidgetRootPanel> rootPanels = new HashMap<String, InlineWidgetRootPanel>();
 
-    public static InlineWidgetRootPanel get(String widgetId) {
+    private static InlineWidgetRootPanel get(String widgetId) {
         InlineWidgetRootPanel rp = rootPanels.get(widgetId);
 
         Element elem = null;
@@ -57,7 +57,7 @@ public class InlineWidgetRootPanel extends AbsolutePanel {
         return rp;
     }
 
-    private InlineWidgetRootPanel(Element elem) {
+    InlineWidgetRootPanel(Element elem) {
         super(elem.<com.google.gwt.user.client.Element> cast());
         onAttach();
     }
