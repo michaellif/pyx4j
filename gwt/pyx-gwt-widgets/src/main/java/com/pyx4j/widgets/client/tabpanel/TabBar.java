@@ -103,8 +103,7 @@ public class TabBar extends DockLayoutPanel {
             int beforeIndex = tabsHolder.getWidgetIndex(beforeTab.getTabBarItem());
             tabsHolder.insert(tab.getTabBarItem(), beforeIndex);
         }
-        ensureTabListTriggerVisible();
-        ensureSelectedTabVisible();
+        layout();
     }
 
     public void removeTabBarItem(Tab tab) {
@@ -112,8 +111,7 @@ public class TabBar extends DockLayoutPanel {
             selectedTab = null;
         }
         tabsHolder.remove(tab.getTabBarItem());
-        ensureTabListTriggerVisible();
-        ensureSelectedTabVisible();
+        layout();
     }
 
     public void onTabSelection(Tab tab) {
@@ -157,12 +155,11 @@ public class TabBar extends DockLayoutPanel {
 
     @Override
     public void onResize() {
-        ensureTabListTriggerVisible();
-        ensureSelectedTabVisible();
+        layout();
         super.onResize();
     }
 
-    protected void ensureTabListTriggerVisible() {
+    private void ensureTabListTriggerVisible() {
         boolean isTriggerVisible = false;
         for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
             if (getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < 0) {
@@ -173,7 +170,7 @@ public class TabBar extends DockLayoutPanel {
         tabListTrigger.setVisible(isTriggerVisible);
     }
 
-    protected void ensureSelectedTabVisible() {
+    private void ensureSelectedTabVisible() {
         if (selectedTab == null) {
             return;
         } else if (getAbsoluteTop() - selectedTab.getTabBarItem().getAbsoluteTop() == 0) {
@@ -184,6 +181,11 @@ public class TabBar extends DockLayoutPanel {
             tabsHolder.add(item);
             ensureSelectedTabVisible();
         }
+    }
+
+    public void layout() {
+        ensureSelectedTabVisible();
+        ensureTabListTriggerVisible();
     }
 
     protected boolean isTabVisible(Tab tab) {
@@ -205,6 +207,12 @@ public class TabBar extends DockLayoutPanel {
             tab.setSelected();
         }
 
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        layout();
     }
 
 }

@@ -59,8 +59,7 @@ public class Tab extends LayoutPanel {
         this.tabTitle = tabTitle;
         tabBarItem.onTabTitleChange(tabTitle);
         if (parentTabPanel != null) {
-            parentTabPanel.getTabBar().ensureTabListTriggerVisible();
-            parentTabPanel.getTabBar().ensureSelectedTabVisible();
+            parentTabPanel.getTabBar().layout();
         }
     }
 
@@ -68,8 +67,7 @@ public class Tab extends LayoutPanel {
         this.modifyed = modifyed;
         tabBarItem.onModifyed(modifyed);
         if (parentTabPanel != null) {
-            parentTabPanel.getTabBar().ensureTabListTriggerVisible();
-            parentTabPanel.getTabBar().ensureSelectedTabVisible();
+            parentTabPanel.getTabBar().layout();
         }
     }
 
