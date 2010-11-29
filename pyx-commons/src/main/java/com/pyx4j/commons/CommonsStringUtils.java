@@ -63,6 +63,20 @@ public class CommonsStringUtils {
         return ((value1 == value2) || (nvl(value1).equals(nvl(value2))));
     }
 
+    /**
+     * Mainly used to avoid automatic strings concatenation in generated GWT
+     * 
+     * @param strs
+     * @return
+     */
+    public static String concat(String... strs) {
+        StringBuilder b = new StringBuilder();
+        for (String s : strs) {
+            b.append(s);
+        }
+        return b.toString();
+    }
+
     public static String nvl_concat(String value1, String value2, String sep) {
         if (value1 == null) {
             return nvl(value2);
