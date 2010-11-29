@@ -20,11 +20,19 @@
  */
 package com.pyx4j.rpc.rebind;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
@@ -36,9 +44,11 @@ import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.linker.GeneratedResource;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.dev.util.Util;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -95,10 +105,19 @@ public class ServiceNamesGenerator extends Generator {
                     logger.log(TreeLogger.Type.DEBUG, "Service class:" + type.getName());
                 }
             }
+            Collections.sort(serviceClasses, new Comparator<JClassType>() {
+
+                @Override
+                public int compare(JClassType o1, JClassType o2) {
+                    return o1.getQualifiedSourceName().compareTo(o2.getQualifiedSourceName());
+                }
+            });
 
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
-            Map<JClassType, String> namesMap = createNamesMap(generationType, serviceClasses);
-            writeImpl(writer, generationType, serviceClasses, namesMap);
+            Map<JClassType, String> namesMap = new HashMap<JClassType, String>();
+            String permutationId = createNamesMap(generationType, serviceClasses, namesMap);
+            writeImpl(writer, generationType, serviceClasses, namesMap, permutationId);
+            exportServiceNames(logger, context, generationType, serviceClasses, namesMap, permutationId);
             writer.commit(logger);
             return composer.getCreatedClassName();
         } catch (NotFoundException e) {
@@ -106,12 +125,29 @@ public class ServiceNamesGenerator extends Generator {
         }
     }
 
-    private Map<JClassType, String> createNamesMap(GenerationType generationType, List<JClassType> serviceClasses) {
-        Map<JClassType, String> result = new HashMap<JClassType, String>();
+    private String createNamesMap(GenerationType generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap) {
 
         Set<String> uniqueNames = new HashSet<String>();
+        String permutationId = "";
 
         int count = 0;
+        if (generationType == GenerationType.obfuscated) {
+            // Offset value depends on all services used. To minimize semi-compatible manifests
+            StringBuilder b = new StringBuilder();
+            for (JClassType serviceClass : serviceClasses) {
+                b.append(serviceClass.getQualifiedSourceName());
+            }
+            int seed = b.toString().hashCode();
+            count = Math.abs(seed) % 30;
+            List<JClassType> serviceClassesRandom = new Vector<JClassType>();
+            serviceClassesRandom.addAll(serviceClasses);
+            Collections.shuffle(serviceClassesRandom, new Random(seed));
+
+            permutationId = Util.computeStrongName(b.toString().getBytes(Charset.forName("UTF-8"))) + ".";
+
+            serviceClasses = serviceClassesRandom;
+        }
+
         for (JClassType serviceClass : serviceClasses) {
             String name;
             switch (generationType) {
@@ -133,10 +169,33 @@ public class ServiceNamesGenerator extends Generator {
                 throw new RuntimeException();
             }
 
-            result.put(serviceClass, name);
+            namesMap.put(serviceClass, name);
         }
 
-        return result;
+        return permutationId;
+    }
+
+    private void exportServiceNames(TreeLogger logger, GeneratorContext context, GenerationType generationType, List<JClassType> serviceClasses,
+            Map<JClassType, String> namesMap, String permutationId) throws UnableToCompleteException {
+
+        try {
+            OutputStream os = context.tryCreateResource(logger, "pyx-service-manifest.rpc");
+            Writer writer = new OutputStreamWriter(os, "UTF-8");
+            for (JClassType serviceClass : serviceClasses) {
+                writer.write(permutationId + namesMap.get(serviceClass));
+                writer.write("=");
+                writer.write(serviceClass.getQualifiedBinaryName());
+                writer.write("\n");
+            }
+            writer.close();
+
+            GeneratedResource resource = context.commitResource(logger, os);
+
+        } catch (IOException e) {
+            logger.log(TreeLogger.ERROR, null, e);
+            throw new UnableToCompleteException();
+        }
+
     }
 
     //TODO test this
@@ -144,7 +203,8 @@ public class ServiceNamesGenerator extends Generator {
         return "\"" + name + "\"";
     }
 
-    private void writeImpl(SourceWriter writer, GenerationType generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap) {
+    private void writeImpl(SourceWriter writer, GenerationType generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap,
+            String permutationId) {
         writer.println();
 
         writer.beginJavaDocComment();
@@ -153,7 +213,11 @@ public class ServiceNamesGenerator extends Generator {
 
         boolean useClassMetadata = (generationType == GenerationType.classMetadata);
 
+        writer.println("private static final String permutationId = \"" + permutationId + "\";");
+        writer.println();
+
         if (!useClassMetadata) {
+
             writer.println("private static final Map<Class<? extends Service>, String> nameMapJava;");
             writer.println("private static final JsArrayString nameMapNative;");
             writer.println();
@@ -187,11 +251,11 @@ public class ServiceNamesGenerator extends Generator {
         } else {
             writer.println("if (GWT.isScript()) {");
             writer.indent();
-            writer.println("return nameMapNative.get(serviceInterface.hashCode());");
+            writer.println("return permutationId + nameMapNative.get(serviceInterface.hashCode());");
             writer.outdent();
             writer.println("} else {");
             writer.indent();
-            writer.println("return nameMapJava.get(serviceInterface);");
+            writer.println("return permutationId + nameMapJava.get(serviceInterface);");
             writer.outdent();
             writer.println("}");
         }
