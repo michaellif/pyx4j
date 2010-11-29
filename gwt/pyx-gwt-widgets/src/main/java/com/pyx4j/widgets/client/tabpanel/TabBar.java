@@ -23,9 +23,14 @@ package com.pyx4j.widgets.client.tabpanel;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -36,6 +41,8 @@ import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.Selector;
 
 public class TabBar extends DockLayoutPanel {
+
+    private static final Logger log = LoggerFactory.getLogger(TabBar.class);
 
     private final FlowPanel tabsHolder;
 
@@ -184,8 +191,13 @@ public class TabBar extends DockLayoutPanel {
     }
 
     public void layout() {
-        ensureSelectedTabVisible();
-        ensureTabListTriggerVisible();
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                ensureSelectedTabVisible();
+                ensureTabListTriggerVisible();
+            }
+        });
     }
 
     protected boolean isTabVisible(Tab tab) {
