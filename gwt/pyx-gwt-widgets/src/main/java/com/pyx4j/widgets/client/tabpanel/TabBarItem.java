@@ -49,7 +49,7 @@ public class TabBarItem extends HorizontalPanel {
 
     private final Label label;
 
-    private final Label modifyedLabel;
+    private boolean modifyedMarker = false;
 
     private final HTML leftSubpanel;
 
@@ -80,10 +80,6 @@ public class TabBarItem extends HorizontalPanel {
             rightSubpanel.add(icon);
             rightSubpanel.setCellVerticalAlignment(icon, HasVerticalAlignment.ALIGN_MIDDLE);
         }
-
-        modifyedLabel = new Label("*");
-        modifyedLabel.setVisible(tab.isModifyed());
-        rightSubpanel.add(modifyedLabel);
 
         label = new Label(tab.getTabTitle());
         label.setWordWrap(false);
@@ -180,7 +176,14 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     public void onModifyed(boolean isModifyed) {
-        modifyedLabel.setVisible(isModifyed);
+        if (!modifyedMarker && isModifyed) {
+            label.setText("*" + label.getText());
+            modifyedMarker = true;
+        } else if (modifyedMarker && !isModifyed) {
+            label.setText(label.getText().substring(1, label.getText().length()));
+            modifyedMarker = false;
+        }
+
     }
 
     public Tab getTab() {

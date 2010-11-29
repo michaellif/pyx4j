@@ -139,13 +139,13 @@ public class EntityView extends AbstractView {
             addItem(RiaEntityImageBundle.INSTANCE.save(), "Save", new Command() {
                 @Override
                 public void execute() {
-                    //TODO Logger.error("printAction", new Error("Test error"));
+                    setModifyed(false);
                 }
             });
             addItem(RiaEntityImageBundle.INSTANCE.print(), "Print", new Command() {
                 @Override
                 public void execute() {
-                    //TODO Logger.error("printAction", new Error("Test error"));
+                    setModifyed(true);
                 }
             });
 

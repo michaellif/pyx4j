@@ -160,7 +160,7 @@ public class TabBar extends DockLayoutPanel {
         super.onResize();
     }
 
-    private void ensureTabListTriggerVisible() {
+    protected void ensureTabListTriggerVisible() {
         boolean isTriggerVisible = false;
         for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
             if (getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < 0) {
@@ -171,7 +171,7 @@ public class TabBar extends DockLayoutPanel {
         tabListTrigger.setVisible(isTriggerVisible);
     }
 
-    private void ensureSelectedTabVisible() {
+    protected void ensureSelectedTabVisible() {
         if (selectedTab == null) {
             return;
         } else if (getAbsoluteTop() - selectedTab.getTabBarItem().getAbsoluteTop() == 0) {

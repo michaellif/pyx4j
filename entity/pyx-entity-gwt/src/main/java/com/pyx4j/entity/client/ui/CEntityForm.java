@@ -50,10 +50,10 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
 
     private final HashMap<CEditableComponent<?>, Path> binding = new HashMap<CEditableComponent<?>, Path>();
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valuePropagation;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private class ValuePropagation implements ValueChangeHandler {
 
         @Override

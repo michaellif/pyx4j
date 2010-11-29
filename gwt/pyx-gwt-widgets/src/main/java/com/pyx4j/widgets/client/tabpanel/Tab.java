@@ -32,6 +32,8 @@ public class Tab extends LayoutPanel {
 
     private TabPanel parentTabPanel;
 
+    private boolean modifyed;
+
     public Tab(ImageResource tabImage, boolean closable) {
         this(null, null, tabImage, closable);
     }
@@ -44,6 +46,11 @@ public class Tab extends LayoutPanel {
         }
     }
 
+    public void setContentPane(Widget contentPane) {
+        clear();
+        add(contentPane);
+    }
+
     public String getTabTitle() {
         return tabTitle;
     }
@@ -51,16 +58,23 @@ public class Tab extends LayoutPanel {
     public void setTabTitle(String tabTitle) {
         this.tabTitle = tabTitle;
         tabBarItem.onTabTitleChange(tabTitle);
+        if (parentTabPanel != null) {
+            parentTabPanel.getTabBar().ensureTabListTriggerVisible();
+            parentTabPanel.getTabBar().ensureSelectedTabVisible();
+        }
     }
 
-    public void setContentPane(Widget contentPane) {
-        clear();
-        add(contentPane);
+    public void setModifyed(boolean modifyed) {
+        this.modifyed = modifyed;
+        tabBarItem.onModifyed(modifyed);
+        if (parentTabPanel != null) {
+            parentTabPanel.getTabBar().ensureTabListTriggerVisible();
+            parentTabPanel.getTabBar().ensureSelectedTabVisible();
+        }
     }
 
     public boolean isModifyed() {
-        // TODO Auto-generated method stub
-        return false;
+        return modifyed;
     }
 
     public void close() {
