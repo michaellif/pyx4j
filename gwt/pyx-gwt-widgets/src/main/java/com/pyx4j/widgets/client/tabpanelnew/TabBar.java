@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.tabpanelnew;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -141,7 +141,7 @@ public class TabBar extends DockLayoutPanel {
 
     class ListAllTabsTrigger extends SimplePanel {
 
-        List<Tab> getAllTabs() {
+        Set<Tab> getAllTabs() {
             return tabPanel.getTabs();
         }
 

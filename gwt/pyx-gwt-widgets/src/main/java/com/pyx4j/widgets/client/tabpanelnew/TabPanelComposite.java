@@ -76,16 +76,8 @@ public class TabPanelComposite extends LayoutPanel {
         return tabPanel.remove(tab);
     }
 
-    public Tab getTab(int index) {
-        return tabPanel.getTabs().get(index);
-    }
-
     public int getTabCount() {
         return tabPanel.getTabs().size();
-    }
-
-    public int getTabIndex(Tab tab) {
-        return tabPanel.getTabs().indexOf(tab);
     }
 
 }

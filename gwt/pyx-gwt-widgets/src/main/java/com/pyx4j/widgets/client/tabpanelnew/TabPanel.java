@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.tabpanelnew;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +41,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.widgets.client.DeckLayoutPanel;
-import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
-import com.pyx4j.widgets.client.tabpanel.TabPanel.StyleSuffix;
 
 public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>, HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
 
@@ -56,7 +54,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Tab";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        PanelBottom, BarMoveLeft, BarMoveRight, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
+        PanelBottom, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -67,7 +65,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
 
     private final TabBar tabBar;
 
-    private final ArrayList<Tab> tabs = new ArrayList<Tab>();
+    private final HashSet<Tab> tabs = new HashSet<Tab>();
 
     private final String stylePrefix;
 
@@ -87,8 +85,6 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
     public String getStylePrefix() {
         return stylePrefix;
     }
-
-    ///////////////////////////////////////////
 
     public void add(Tab tab) {
         insert(tab, null);
@@ -155,9 +151,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         return tabBar.getSelectedTab();
     }
 
-    //////////////////////////////////////////
-
-    public ArrayList<Tab> getTabs() {
+    public HashSet<Tab> getTabs() {
         return tabs;
     }
 

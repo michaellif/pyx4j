@@ -20,7 +20,7 @@
  */
 package com.pyx4j.widgets.client.tabpanelnew;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -53,7 +53,7 @@ public class ListAllTabsDropDown extends DropDownPanel {
 
     public void showSelector() {
         itemsPanel.clear();
-        List<Tab> allTabs = trigger.getAllTabs();
+        Set<Tab> allTabs = trigger.getAllTabs();
         for (final Tab tab : allTabs) {
             Label item = new Label(tab.getTabTitle());
             item.getElement().getStyle().setPadding(2, Unit.PX);
