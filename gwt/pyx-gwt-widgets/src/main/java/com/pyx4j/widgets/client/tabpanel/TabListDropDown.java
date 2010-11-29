@@ -32,14 +32,18 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 
-import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.tabpanel.TabBar.TabListTrigger;
 
-public class TabListDropDown extends DropDownPanel {
+public class TabListDropDown extends PopupPanel {
 
     private final TabListTrigger trigger;
 
@@ -47,7 +51,10 @@ public class TabListDropDown extends DropDownPanel {
 
     private String stylePrefix;
 
+    private HandlerRegistration resizeHandlerRegistration;
+
     TabListDropDown(TabListTrigger trigger) {
+        super(true);
         this.trigger = trigger;
 
         itemsPanel = new FlowPanel();
@@ -96,18 +103,33 @@ public class TabListDropDown extends DropDownPanel {
                 @Override
                 public void onClick(ClickEvent event) {
                     trigger.selectTab(tab);
-                    hide();
+                    hideSelector();
                 }
             });
             item.getElement().getStyle().setCursor(Cursor.POINTER);
 
             itemsPanel.add(item);
         }
+
+        ResizeHandler resizeHandler = new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                hideSelector();
+            }
+        };
+        resizeHandlerRegistration = Window.addResizeHandler(resizeHandler);
+
         showRelativeTo(trigger);
     }
 
     public void hideSelector() {
         hide();
+    }
+
+    @Override
+    public void hide(boolean autoClosed) {
+        resizeHandlerRegistration.removeHandler();
+        super.hide(autoClosed);
     }
 
 }
