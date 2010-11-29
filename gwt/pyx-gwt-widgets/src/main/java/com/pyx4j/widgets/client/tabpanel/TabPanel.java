@@ -54,11 +54,11 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Tab";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        PanelBottom, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
+        PanelBottom, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage, List, ListItem
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected, disabled
+        selected, disabled, hover
     }
 
     private final DeckLayoutPanel deck = new DeckLayoutPanel();
@@ -95,7 +95,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         deck.add(tab);
         tabs.add(tab);
         tab.setParentTabPanel(this);
-        tab.select();
+        tab.setSelected();
     }
 
     public boolean remove(Tab tab) {

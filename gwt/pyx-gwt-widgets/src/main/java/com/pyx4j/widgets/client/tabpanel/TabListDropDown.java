@@ -20,49 +20,77 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import java.util.Set;
+import java.util.List;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.DropDownPanel;
-import com.pyx4j.widgets.client.tabpanel.TabBar.ListAllTabsTrigger;
+import com.pyx4j.widgets.client.style.Selector;
+import com.pyx4j.widgets.client.tabpanel.TabBar.TabListTrigger;
 
-public class ListAllTabsDropDown extends DropDownPanel {
+public class TabListDropDown extends DropDownPanel {
 
-    private final ListAllTabsTrigger trigger;
+    private final TabListTrigger trigger;
 
     private final FlowPanel itemsPanel;
 
-    ListAllTabsDropDown(ListAllTabsTrigger trigger) {
+    private String stylePrefix;
+
+    TabListDropDown(TabListTrigger trigger) {
         this.trigger = trigger;
-        getElement().getStyle().setBorderColor("gray");
-        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        getElement().getStyle().setBorderWidth(1, Unit.PX);
 
         itemsPanel = new FlowPanel();
-        itemsPanel.getElement().getStyle().setBackgroundColor("white");
-        itemsPanel.getElement().getStyle().setPadding(2, Unit.PX);
         setWidget(itemsPanel);
+    }
+
+    public void setStylePrefix(String stylePrefix) {
+        this.stylePrefix = stylePrefix;
+        setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleSuffix.List));
     }
 
     public void showSelector() {
         itemsPanel.clear();
-        Set<Tab> allTabs = trigger.getAllTabs();
+        List<Tab> allTabs = trigger.getAllTabs();
         for (final Tab tab : allTabs) {
-            Label item = new Label(tab.getTabTitle());
+            final Label item = new Label(tab.getTabTitle(), false);
+            item.setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleSuffix.ListItem));
+
+            item.addDomHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                    item.addStyleDependentName(dependentSuffix);
+                }
+            }, MouseOverEvent.getType());
+
+            item.addDomHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                    item.removeStyleDependentName(dependentSuffix);
+                }
+            }, MouseOutEvent.getType());
+
             item.getElement().getStyle().setPadding(2, Unit.PX);
             item.getElement().getStyle().setPaddingLeft(4, Unit.PX);
             item.getElement().getStyle().setPaddingRight(4, Unit.PX);
-            //            if (selectedSearch.equals(searchType)) {
-            //                item.getElement().getStyle().setBackgroundColor("#88AEB5");
-            //                item.getElement().getStyle().setColor("#fff");
-            //            }
+            if (tab.isSelected()) {
+                item.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            }
+            if (!tab.isTabVisible()) {
+                item.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
+            }
             item.addClickHandler(new ClickHandler() {
 
                 @Override

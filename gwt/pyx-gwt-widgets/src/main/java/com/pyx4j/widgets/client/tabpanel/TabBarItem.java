@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 /**
  * @author michaellif
@@ -58,6 +57,10 @@ public class TabBarItem extends HorizontalPanel {
     private Image icon;
 
     private final Tab tab;
+
+    private boolean selected;
+
+    private boolean enabled = true;
 
     public TabBarItem(final Tab tab, ImageResource tabImage, boolean closable) {
         super();
@@ -130,9 +133,28 @@ public class TabBarItem extends HorizontalPanel {
 
             @Override
             public void onClick(ClickEvent event) {
-                tab.select();
+                tab.setSelected();
             }
         }, ClickEvent.getType());
+
+        addDomHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                if (!selected && enabled) {
+                    String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                    addStyleDependentName(dependentSuffix);
+                }
+            }
+        }, MouseOverEvent.getType());
+
+        addDomHandler(new MouseOutHandler() {
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                removeStyleDependentName(dependentSuffix);
+            }
+        }, MouseOutEvent.getType());
+
     }
 
     public void setStylePrefix(String styleName) {
@@ -150,11 +172,13 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onSelected(boolean selected) {
+        this.selected = selected;
         String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.selected);
         if (selected) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);
             getWidget(1).addStyleDependentName(dependentSuffix);
+            removeStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.hover));
         } else {
             removeStyleDependentName(dependentSuffix);
             getWidget(0).removeStyleDependentName(dependentSuffix);
@@ -163,6 +187,7 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onEnabled(boolean enabled) {
+        this.enabled = enabled;
         String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.disabled);
         if (!enabled) {
             addStyleDependentName(dependentSuffix);

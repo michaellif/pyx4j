@@ -273,7 +273,10 @@ public class WindowsTheme extends Theme {
         style.addProperty("cursor", "default");
         style.addProperty("background", ThemeColor.SELECTION);
         style.addProperty("color", "white");
+        addStyle(style);
 
+        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.hover));
+        style.addProperty("background", ThemeColor.OBJECT_TONE3);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem, TabPanel.StyleDependent.selected), Selector.valueOf(prefix,
@@ -283,6 +286,21 @@ public class WindowsTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItemLabel));
         style.addProperty("margin", "3px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.List));
+        style.addProperty("background-color", "white");
+        style.addProperty("border", "1px solid {}", ThemeColor.SELECTION);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem));
+        style.addProperty("color", "black");
+        style.addProperty("padding", "4px 14px 4px 1px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.ListItem, TabPanel.StyleDependent.hover));
+        style.addProperty("background", ThemeColor.SELECTION);
+        style.addProperty("color", ThemeColor.SELECTION_TEXT);
         addStyle(style);
 
     }

@@ -20,7 +20,8 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,9 +43,9 @@ public class TabBar extends DockLayoutPanel {
 
     private Tab selectedTab;
 
-    private final ListAllTabsTrigger tabListTrigger;
+    private final TabListTrigger tabListTrigger;
 
-    private final ListAllTabsDropDown listAllTabsDropDown;
+    private final TabListDropDown listAllTabsDropDown;
 
     /**
      * Creates an empty tab bar.
@@ -54,12 +55,12 @@ public class TabBar extends DockLayoutPanel {
 
         this.tabPanel = tabPanel;
 
-        tabListTrigger = new ListAllTabsTrigger();
+        tabListTrigger = new TabListTrigger();
         tabListTrigger.setVisible(false);
 
         tabListTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
 
-        listAllTabsDropDown = new ListAllTabsDropDown(tabListTrigger);
+        listAllTabsDropDown = new TabListDropDown(tabListTrigger);
 
         tabListTrigger.addDomHandler(new ClickHandler() {
             @Override
@@ -87,7 +88,8 @@ public class TabBar extends DockLayoutPanel {
 
     public void setStylePrefix(String styleName) {
         setStyleName(styleName);
-        tabListTrigger.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
+        tabListTrigger.setStyleName(Selector.getStyleName(styleName, TabPanel.StyleSuffix.BarItem));
+        listAllTabsDropDown.setStylePrefix(styleName);
     }
 
     public void addTabBarItem(Tab tab) {
@@ -184,14 +186,23 @@ public class TabBar extends DockLayoutPanel {
         }
     }
 
-    class ListAllTabsTrigger extends SimplePanel {
+    protected boolean isTabVisible(Tab tab) {
+        assert (tab != null);
+        return (getAbsoluteTop() - tab.getTabBarItem().getAbsoluteTop() == 0);
+    }
 
-        Set<Tab> getAllTabs() {
-            return tabPanel.getTabs();
+    class TabListTrigger extends SimplePanel {
+
+        List<Tab> getAllTabs() {
+            ArrayList<Tab> ordererList = new ArrayList<Tab>();
+            for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
+                ordererList.add(((TabBarItem) tabsHolder.getWidget(i)).getTab());
+            }
+            return ordererList;
         }
 
         public void selectTab(Tab tab) {
-            tab.select();
+            tab.setSelected();
         }
 
     }
