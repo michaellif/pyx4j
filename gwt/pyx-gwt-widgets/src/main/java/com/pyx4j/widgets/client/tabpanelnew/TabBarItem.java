@@ -57,8 +57,12 @@ public class TabBarItem extends HorizontalPanel {
 
     private Image icon;
 
+    private final Tab tab;
+
     public TabBarItem(final Tab tab, ImageResource tabImage, boolean closable) {
         super();
+
+        this.tab = tab;
 
         sinkEvents(Event.ONCLICK);
 
@@ -177,6 +181,10 @@ public class TabBarItem extends HorizontalPanel {
 
     public void onModifyed(boolean isModifyed) {
         modifyedLabel.setVisible(isModifyed);
+    }
+
+    public Tab getTab() {
+        return tab;
     }
 
 }

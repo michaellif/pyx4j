@@ -95,6 +95,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         deck.add(tab);
         tabs.add(tab);
         tab.setParentTabPanel(this);
+        tab.select();
     }
 
     public boolean remove(Tab tab) {
@@ -109,14 +110,14 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
             return false;
         }
 
-        //TODO next selected 
-        //        if (getSelectedTab() == tab) {
-        //            if (index > 0) {
-        //                select(index - 1);
-        //            } else if ((index == 0) && (tabs.size() > 1)) {
-        //                select(index + 1);
-        //            }
-        //        }
+        if (getSelectedTab() == tab) {
+            Tab selectTab = tabBar.getFollowingTab(tab);
+            if (selectTab == null) {
+                selectTab = tabBar.getPrecedingTab(tab);
+            }
+            select(selectTab);
+
+        }
 
         tabBar.removeTabBarItem(tab);
         deck.remove(tab);
@@ -140,7 +141,7 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         }
 
         deck.showWidget(tab);
-        tabBar.selectTab(tab);
+        tabBar.onTabSelection(tab);
 
         SelectionEvent.fire(this, tab);
 

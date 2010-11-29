@@ -264,14 +264,14 @@ public class TabBar extends DockLayoutPanel implements ClickHandler {
 
     @Override
     public void onResize() {
-        boolean isVisibleHandler = false;
+        boolean isTriggerVisible = false;
         for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
             if (getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < 0) {
-                isVisibleHandler = true;
+                isTriggerVisible = true;
                 break;
             }
         }
-        listAllTabsTrigger.setVisible(isVisibleHandler);
+        listAllTabsTrigger.setVisible(isTriggerVisible);
         super.onResize();
     }
 

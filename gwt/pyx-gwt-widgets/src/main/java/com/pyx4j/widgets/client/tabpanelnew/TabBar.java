@@ -42,7 +42,7 @@ public class TabBar extends DockLayoutPanel {
 
     private Tab selectedTab;
 
-    private final ListAllTabsTrigger listAllTabsTrigger;
+    private final ListAllTabsTrigger tabListTrigger;
 
     private final ListAllTabsDropDown listAllTabsDropDown;
 
@@ -54,14 +54,14 @@ public class TabBar extends DockLayoutPanel {
 
         this.tabPanel = tabPanel;
 
-        listAllTabsTrigger = new ListAllTabsTrigger();
-        listAllTabsTrigger.setVisible(false);
+        tabListTrigger = new ListAllTabsTrigger();
+        tabListTrigger.setVisible(false);
 
-        listAllTabsTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
+        tabListTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
 
-        listAllTabsDropDown = new ListAllTabsDropDown(listAllTabsTrigger);
+        listAllTabsDropDown = new ListAllTabsDropDown(tabListTrigger);
 
-        listAllTabsTrigger.addDomHandler(new ClickHandler() {
+        tabListTrigger.addDomHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (listAllTabsDropDown.isShowing()) {
@@ -73,7 +73,7 @@ public class TabBar extends DockLayoutPanel {
 
         }, ClickEvent.getType());
 
-        addEast(listAllTabsTrigger, 30);
+        addEast(tabListTrigger, 30);
 
         tabsHolder = new FlowPanel();
 
@@ -87,7 +87,7 @@ public class TabBar extends DockLayoutPanel {
 
     public void setStylePrefix(String styleName) {
         setStyleName(styleName);
-        listAllTabsTrigger.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
+        tabListTrigger.setStyleName(Selector.getStyleName(getStyleName(), TabPanel.StyleSuffix.BarItem));
     }
 
     public void addTabBarItem(Tab tab) {
@@ -101,6 +101,8 @@ public class TabBar extends DockLayoutPanel {
             int beforeIndex = tabsHolder.getWidgetIndex(beforeTab.getTabBarItem());
             tabsHolder.insert(tab.getTabBarItem(), beforeIndex);
         }
+        ensureTabListTriggerVisible();
+        ensureSelectedTabVisible();
     }
 
     public void removeTabBarItem(Tab tab) {
@@ -108,14 +110,19 @@ public class TabBar extends DockLayoutPanel {
             selectedTab = null;
         }
         tabsHolder.remove(tab.getTabBarItem());
+        ensureTabListTriggerVisible();
+        ensureSelectedTabVisible();
     }
 
-    public void selectTab(Tab tab) {
+    public void onTabSelection(Tab tab) {
         if (selectedTab != null) {
             selectedTab.getTabBarItem().onSelected(false);
         }
         selectedTab = tab;
-        selectedTab.getTabBarItem().onSelected(true);
+        if (selectedTab != null) {
+            selectedTab.getTabBarItem().onSelected(true);
+        }
+        ensureSelectedTabVisible();
     }
 
     public void enableTab(Tab tab, boolean isEnabled) {
@@ -126,17 +133,55 @@ public class TabBar extends DockLayoutPanel {
         return selectedTab;
     }
 
+    public Tab getFollowingTab(Tab tab) {
+        int index = tabsHolder.getWidgetIndex(tab.getTabBarItem()) + 1;
+        if (index >= 0 && tabsHolder.getWidgetCount() > index) {
+            TabBarItem item = (TabBarItem) tabsHolder.getWidget(index);
+            return item.getTab();
+        } else {
+            return null;
+        }
+    }
+
+    public Tab getPrecedingTab(Tab tab) {
+        int index = tabsHolder.getWidgetIndex(tab.getTabBarItem()) - 1;
+        if (index >= 0 && tabsHolder.getWidgetCount() > index) {
+            TabBarItem item = (TabBarItem) tabsHolder.getWidget(index);
+            return item.getTab();
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public void onResize() {
-        boolean isVisibleHandler = false;
+        ensureTabListTriggerVisible();
+        ensureSelectedTabVisible();
+        super.onResize();
+    }
+
+    private void ensureTabListTriggerVisible() {
+        boolean isTriggerVisible = false;
         for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
             if (getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < 0) {
-                isVisibleHandler = true;
+                isTriggerVisible = true;
                 break;
             }
         }
-        listAllTabsTrigger.setVisible(isVisibleHandler);
-        super.onResize();
+        tabListTrigger.setVisible(isTriggerVisible);
+    }
+
+    private void ensureSelectedTabVisible() {
+        if (selectedTab == null) {
+            return;
+        } else if (getAbsoluteTop() - selectedTab.getTabBarItem().getAbsoluteTop() == 0) {
+            return;
+        } else {
+            TabBarItem item = (TabBarItem) tabsHolder.getWidget(0);
+            tabsHolder.remove(item);
+            tabsHolder.add(item);
+            ensureSelectedTabVisible();
+        }
     }
 
     class ListAllTabsTrigger extends SimplePanel {
@@ -146,6 +191,7 @@ public class TabBar extends DockLayoutPanel {
         }
 
         public void selectTab(Tab tab) {
+            tab.select();
         }
 
     }
