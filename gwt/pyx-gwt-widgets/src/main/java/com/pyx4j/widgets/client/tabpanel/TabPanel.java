@@ -50,7 +50,7 @@ public class TabPanel<E extends Tab> implements HasBeforeSelectionHandlers<E>, H
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_Tab";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        PanelBottom, BarMoveLeft, BarMoveRight, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
+        PanelBottom, BarItem, BarItemLeft, BarItemRight, BarItemLabel, BarItemImage
     }
 
     public static enum StyleDependent implements IStyleDependent {

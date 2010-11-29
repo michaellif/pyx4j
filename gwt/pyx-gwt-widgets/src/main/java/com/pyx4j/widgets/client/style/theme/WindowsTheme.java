@@ -256,17 +256,10 @@ public class WindowsTheme extends Theme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveLeft));
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveRight));
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
+        style.addProperty("height", "2em");
         style.addProperty("text-align", "center");
         style.addProperty("margin-right", "1px");
         style.addProperty("margin-left", "1px");
@@ -302,14 +295,6 @@ public class WindowsTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.PanelBottom));
         style.addProperty("padding", "2px");
         style.addProperty("margin", "0px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveLeft));
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarMoveRight));
-        style.addProperty("margin", "3px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, TabPanel.StyleSuffix.BarItem));

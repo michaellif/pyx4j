@@ -67,7 +67,7 @@ public class SectionPanel extends LayoutPanel {
     }
 
     protected void setHeaderPane(Widget headerPane) {
-        rootPanel.insertNorth(headerPane, 1.6, headerMark);
+        rootPanel.insertNorth(headerPane, 1.9, headerMark);
     }
 
     protected void setContentPane(Widget pagePane) {
