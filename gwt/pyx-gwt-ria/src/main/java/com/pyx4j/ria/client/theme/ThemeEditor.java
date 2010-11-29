@@ -49,7 +49,7 @@ import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
 import com.pyx4j.widgets.client.style.ThemeColor;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class ThemeEditor extends AbstractView {
 

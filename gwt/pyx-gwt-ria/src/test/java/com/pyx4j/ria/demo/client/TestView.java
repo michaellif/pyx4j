@@ -37,7 +37,7 @@ import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.theme.GrayTheme;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class TestView extends AbstractView {
 

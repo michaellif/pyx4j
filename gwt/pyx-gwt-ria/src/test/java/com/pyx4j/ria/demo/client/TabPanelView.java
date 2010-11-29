@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
-import com.pyx4j.widgets.client.tabpanelnew.TabPanelComposite;
+import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanel.TabPanelComposite;
 
 public class TabPanelView extends AbstractView {
 

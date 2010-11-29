@@ -32,9 +32,9 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.DeckLayoutPanel;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
-import com.pyx4j.widgets.client.tabpanelnew.TabBar;
-import com.pyx4j.widgets.client.tabpanelnew.TabPanel;
+import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanel.TabBar;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public class FolderSectionPanel extends SectionPanel implements BeforeSelectionHandler<Tab>, SelectionHandler<Tab>, CloseHandler<Tab> {
 

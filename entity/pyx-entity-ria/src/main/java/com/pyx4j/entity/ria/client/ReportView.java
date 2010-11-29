@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.ria.client.view.AbstractView;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class ReportView extends AbstractView {
 

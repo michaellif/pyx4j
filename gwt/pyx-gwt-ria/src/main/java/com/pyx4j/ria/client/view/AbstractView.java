@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
-import com.pyx4j.widgets.client.tabpanelnew.TabPanel;
+import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class AbstractView extends Tab {
 

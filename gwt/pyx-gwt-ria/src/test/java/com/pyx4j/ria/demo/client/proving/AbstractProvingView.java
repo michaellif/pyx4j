@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.GroupBoxPanel;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public abstract class AbstractProvingView extends AbstractView {
 

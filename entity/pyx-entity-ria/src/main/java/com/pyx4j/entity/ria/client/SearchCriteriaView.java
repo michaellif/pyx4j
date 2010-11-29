@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.tabpanelnew.Tab;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 public class SearchCriteriaView extends AbstractView {
 
