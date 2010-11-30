@@ -44,7 +44,6 @@ import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
-import com.google.gwt.core.ext.linker.GeneratedResource;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
@@ -56,7 +55,7 @@ import com.pyx4j.rpc.shared.Service;
 
 public class ServiceNamesGenerator extends Generator {
 
-    public static enum GenerationType {
+    public static enum ElideServiceNamesFromRPC {
 
         classMetadata, preserve, obfuscated, trunk
     }
@@ -64,17 +63,22 @@ public class ServiceNamesGenerator extends Generator {
     /**
      * Configuration property.
      */
-    public static final String GENERATION_TYPE = "pyx.elideServiceNamesFromRPC";
+    public static final String GENERATION_TYPE = "pyx." + ElideServiceNamesFromRPC.class.getSimpleName();
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
-        GenerationType generationType = GenerationType.classMetadata;
+        ElideServiceNamesFromRPC generationType = ElideServiceNamesFromRPC.classMetadata;
         try {
             ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(GENERATION_TYPE);
-            generationType = GenerationType.valueOf(prop.getValues().get(0));
+            generationType = ElideServiceNamesFromRPC.valueOf(prop.getValues().get(0));
         } catch (BadPropertyValueException e) {
             logger.log(TreeLogger.ERROR, "The configuration property " + GENERATION_TYPE + " was not defined. Is com.pyx4j.rpc.RPC.gwt.xml inherited?");
             throw new UnableToCompleteException();
+        }
+
+        //TODO !!!
+        if (generationType == ElideServiceNamesFromRPC.obfuscated) {
+            generationType = ElideServiceNamesFromRPC.preserve;
         }
 
         TypeOracle oracle = context.getTypeOracle();
@@ -116,8 +120,8 @@ public class ServiceNamesGenerator extends Generator {
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
             Map<JClassType, String> namesMap = new HashMap<JClassType, String>();
             String permutationId = createNamesMap(generationType, serviceClasses, namesMap);
-            writeImpl(writer, generationType, serviceClasses, namesMap, permutationId);
             exportServiceNames(logger, context, generationType, serviceClasses, namesMap, permutationId);
+            writeImpl(writer, generationType, serviceClasses, namesMap, permutationId);
             writer.commit(logger);
             return composer.getCreatedClassName();
         } catch (NotFoundException e) {
@@ -125,13 +129,13 @@ public class ServiceNamesGenerator extends Generator {
         }
     }
 
-    private String createNamesMap(GenerationType generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap) {
+    private String createNamesMap(ElideServiceNamesFromRPC generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap) {
 
         Set<String> uniqueNames = new HashSet<String>();
         String permutationId = "";
 
         int count = 0;
-        if (generationType == GenerationType.obfuscated) {
+        if (generationType == ElideServiceNamesFromRPC.obfuscated) {
             // Offset value depends on all services used. To minimize semi-compatible manifests
             StringBuilder b = new StringBuilder();
             for (JClassType serviceClass : serviceClasses) {
@@ -175,7 +179,7 @@ public class ServiceNamesGenerator extends Generator {
         return permutationId;
     }
 
-    private void exportServiceNames(TreeLogger logger, GeneratorContext context, GenerationType generationType, List<JClassType> serviceClasses,
+    private void exportServiceNames(TreeLogger logger, GeneratorContext context, ElideServiceNamesFromRPC generationType, List<JClassType> serviceClasses,
             Map<JClassType, String> namesMap, String permutationId) throws UnableToCompleteException {
 
         try {
@@ -189,7 +193,7 @@ public class ServiceNamesGenerator extends Generator {
             }
             writer.close();
 
-            GeneratedResource resource = context.commitResource(logger, os);
+            context.commitResource(logger, os);
 
         } catch (IOException e) {
             logger.log(TreeLogger.ERROR, null, e);
@@ -198,12 +202,7 @@ public class ServiceNamesGenerator extends Generator {
 
     }
 
-    //TODO test this
-    private String optimizedStringStorage(String name) {
-        return "\"" + name + "\"";
-    }
-
-    private void writeImpl(SourceWriter writer, GenerationType generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap,
+    private void writeImpl(SourceWriter writer, ElideServiceNamesFromRPC generationType, List<JClassType> serviceClasses, Map<JClassType, String> namesMap,
             String permutationId) {
         writer.println();
 
@@ -211,7 +210,7 @@ public class ServiceNamesGenerator extends Generator {
         writer.print("generationType = " + generationType.name());
         writer.endJavaDocComment();
 
-        boolean useClassMetadata = (generationType == GenerationType.classMetadata);
+        boolean useClassMetadata = (generationType == ElideServiceNamesFromRPC.classMetadata);
 
         writer.println("private static final String permutationId = \"" + permutationId + "\";");
         writer.println();
@@ -288,10 +287,15 @@ public class ServiceNamesGenerator extends Generator {
             writer.println("private static native JsArrayString loadNamesNative() /*-{");
             writer.indent();
             writer.println("var result = [];");
+
+            if (generationType == ElideServiceNamesFromRPC.obfuscated) {
+                Collections.shuffle(serviceClasses, new Random());
+            }
+
             for (JClassType serviceClass : serviceClasses) {
                 writer.print("result[@com.google.gwt.core.client.impl.Impl::getHashCode(Ljava/lang/Object;)(@");
                 writer.print(serviceClass.getQualifiedSourceName() + "::class)] = ");
-                writer.print(optimizedStringStorage(namesMap.get(serviceClass)));
+                writer.print("'" + namesMap.get(serviceClass) + "'");
                 writer.println(";");
             }
             writer.println("return result;");

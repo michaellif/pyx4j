@@ -137,9 +137,9 @@ public class RemoteServiceImpl implements RemoteService {
             } catch (Throwable e) {
                 logOnce = false;
                 if (e instanceof IsWarningException) {
-                    log.warn("Service call exception for " + Context.getVisit(), e);
+                    log.warn("Service call exception for {}", Context.getVisit(), e);
                 } else {
-                    log.error("Service call error for " + Context.getVisit(), e);
+                    log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, e);
                 }
                 if (e instanceof RuntimeExceptionSerializable) {
                     throw (RuntimeExceptionSerializable) e;
@@ -161,7 +161,7 @@ public class RemoteServiceImpl implements RemoteService {
             }
         } catch (RuntimeExceptionSerializable oe) {
             if (logOnce) {
-                log.error("Service call error for " + Context.getVisit(), oe);
+                log.error("Service call error {} for " + Context.getVisit(), serviceInterfaceClassName, oe);
             }
             if (Context.getResponseSystemNotifications() != null) {
                 throw new RuntimeExceptionNotificationsWrapper(oe, Context.getResponseSystemNotifications());

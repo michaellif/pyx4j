@@ -13,8 +13,8 @@
   		Can be: classMetadata, preserve, obfuscated or trunk
   		Also see com.google.gwt.user.RemoteServiceObfuscateTypeNames and disableClassMetadata GWT compile flag
  	-->
- 	<define-configuration-property name="pyx.elideServiceNamesFromRPC" is-multi-valued="false" />
-	<set-configuration-property name="pyx.elideServiceNamesFromRPC" value="classMetadata" />
+ 	<define-configuration-property name="pyx.ElideServiceNamesFromRPC" is-multi-valued="false" />
+	<set-configuration-property name="pyx.ElideServiceNamesFromRPC" value="classMetadata" />
 	
     <generate-with class="com.pyx4j.rpc.rebind.ServiceNamesGenerator">
         <when-type-assignable class="com.pyx4j.rpc.client.ServiceNames"/>

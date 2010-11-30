@@ -20,17 +20,27 @@
  */
 package com.pyx4j.rpc.server;
 
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.rpc.shared.RemoteService;
 
 @SuppressWarnings("serial")
@@ -39,6 +49,10 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     private static final Logger log = LoggerFactory.getLogger(RemoteServiceServlet.class);
 
     private RemoteService implementation;
+
+    private final transient Map<String, Map<String, String>> servicePolicyCache = new HashMap<String, Map<String, String>>();
+
+    protected final transient ThreadLocal<Map<String, String>> perThreadServicePolicy = new ThreadLocal<Map<String, String>>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -65,8 +79,68 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     }
 
     @Override
+    protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
+        SerializationPolicy policy = super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
+
+        // All error handling is already done in GWT
+        try {
+            perThreadServicePolicy.remove();
+            String contextPath = request.getContextPath();
+            String modulePath = new URL(moduleBaseURL).getPath();
+            String moduleRelativePath = modulePath.substring(contextPath.length());
+
+            Map<String, String> servicePolicy = servicePolicyCache.get(moduleRelativePath);
+            if (servicePolicy == null) {
+                InputStream is = this.getServletContext().getResourceAsStream(moduleRelativePath + "pyx-service-manifest.rpc");
+                try {
+                    Properties prop = new Properties();
+                    prop.load(is);
+                    if (prop.size() == 0) {
+                        log.warn("service-manifest is empty");
+                    } else {
+                        log.debug("{} service-manifest has {} service", moduleRelativePath, prop.size());
+                    }
+                    servicePolicy = new HashMap<String, String>();
+                    for (Map.Entry<Object, Object> me : prop.entrySet()) {
+                        if ((me.getKey() instanceof String) && (me.getValue() instanceof String)) {
+                            servicePolicy.put((String) me.getKey(), (String) me.getValue());
+                        }
+                    }
+                    servicePolicyCache.put(moduleRelativePath, servicePolicy);
+                    log.debug("{}", servicePolicy);
+                } finally {
+                    IOUtils.closeQuietly(is);
+                }
+            }
+            perThreadServicePolicy.set(servicePolicy);
+        } catch (Throwable t) {
+            log.error("unable to load service-manifest", t);
+            throw new IncompatibleRemoteServiceException();
+        }
+
+        return policy;
+    }
+
+    @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
-        return implementation.execute(serviceInterfaceClassName, serviceRequest, userVisitHashCode);
+        String realServiceName = null;
+        Map<String, String> servicePolicy = perThreadServicePolicy.get();
+        if (servicePolicy != null) {
+            realServiceName = servicePolicy.get(serviceInterfaceClassName);
+        }
+        if (realServiceName != null) {
+            serviceInterfaceClassName = realServiceName;
+        } else if ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)
+                && (ServerSideConfiguration.instance().isDevelopmentBehavior())) {
+            realServiceName = serviceInterfaceClassName;
+            log.warn("Using development serveice name {}", serviceInterfaceClassName);
+        } else {
+            //throw new IncompatibleRemoteServiceException();
+            //TODO
+            realServiceName = serviceInterfaceClassName;
+        }
+
+        return implementation.execute(realServiceName, serviceRequest, userVisitHashCode);
     }
 
 }
