@@ -52,8 +52,6 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
     private final transient Map<String, Map<String, String>> servicePolicyCache = new HashMap<String, Map<String, String>>();
 
-    protected final transient ThreadLocal<Map<String, String>> perThreadServicePolicy = new ThreadLocal<Map<String, String>>();
-
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -84,12 +82,11 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
         // All error handling is already done in GWT
         try {
-            perThreadServicePolicy.remove();
             String contextPath = request.getContextPath();
             String modulePath = new URL(moduleBaseURL).getPath();
             String moduleRelativePath = modulePath.substring(contextPath.length());
 
-            Map<String, String> servicePolicy = servicePolicyCache.get(moduleRelativePath);
+            Map<String, String> servicePolicy = servicePolicyCache.get(getPermutationStrongName());
             if (servicePolicy == null) {
                 InputStream is = this.getServletContext().getResourceAsStream(moduleRelativePath + "pyx-service-manifest.rpc");
                 try {
@@ -106,13 +103,12 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                             servicePolicy.put((String) me.getKey(), (String) me.getValue());
                         }
                     }
-                    servicePolicyCache.put(moduleRelativePath, servicePolicy);
+                    servicePolicyCache.put(getPermutationStrongName(), servicePolicy);
                     log.debug("{}", servicePolicy);
                 } finally {
                     IOUtils.closeQuietly(is);
                 }
             }
-            perThreadServicePolicy.set(servicePolicy);
         } catch (Throwable t) {
             log.error("unable to load service-manifest", t);
             throw new IncompatibleRemoteServiceException();
@@ -124,7 +120,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
         String realServiceName = null;
-        Map<String, String> servicePolicy = perThreadServicePolicy.get();
+        Map<String, String> servicePolicy = servicePolicyCache.get(getPermutationStrongName());
         if (servicePolicy != null) {
             realServiceName = servicePolicy.get(serviceInterfaceClassName);
         }
@@ -135,9 +131,8 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
             realServiceName = serviceInterfaceClassName;
             log.warn("Using development serveice name {}", serviceInterfaceClassName);
         } else {
-            //throw new IncompatibleRemoteServiceException();
-            //TODO
-            realServiceName = serviceInterfaceClassName;
+            log.error("unable to find service-manifest");
+            throw new IncompatibleRemoteServiceException();
         }
 
         return implementation.execute(realServiceName, serviceRequest, userVisitHashCode);

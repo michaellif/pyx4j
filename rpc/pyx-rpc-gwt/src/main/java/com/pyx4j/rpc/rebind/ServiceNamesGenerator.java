@@ -76,11 +76,6 @@ public class ServiceNamesGenerator extends Generator {
             throw new UnableToCompleteException();
         }
 
-        //TODO !!!
-        if (generationType == ElideServiceNamesFromRPC.obfuscated) {
-            generationType = ElideServiceNamesFromRPC.preserve;
-        }
-
         TypeOracle oracle = context.getTypeOracle();
         try {
             JClassType interfaceType = oracle.getType(typeName);
