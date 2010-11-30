@@ -86,6 +86,8 @@ public class PortletPanel extends ContentPanel {
     @Override
     protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
         InlineWidgetRootPanel root = new InlineWidgetRootPanel(Document.get().getElementById(widgetId));
+        root.clear();
+
         root.add((Widget) inlineWidget);
         addInlineWidget(inlineWidget);
     }
