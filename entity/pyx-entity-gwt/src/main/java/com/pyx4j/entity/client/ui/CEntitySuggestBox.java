@@ -34,6 +34,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -242,6 +243,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
         @Override
         public E parse(String string) {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null;
+            }
             for (E option : getOptions()) {
                 if (getOptionName(option).equals(string)) {
                     return option;
