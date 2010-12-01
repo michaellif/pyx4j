@@ -107,7 +107,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                         }
                     }
                     servicePolicyCache.put(moduleRelativePath, servicePolicy);
-                    log.debug("{}", servicePolicy);
+                    log.trace("servicePolicy {}", servicePolicy);
                 } finally {
                     IOUtils.closeQuietly(is);
                 }
