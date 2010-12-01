@@ -63,6 +63,10 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
         this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 
+    public E meta() {
+        return this.criteria.meta();
+    }
+
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
         if (optionsLoaded) {
             throw new RuntimeException();

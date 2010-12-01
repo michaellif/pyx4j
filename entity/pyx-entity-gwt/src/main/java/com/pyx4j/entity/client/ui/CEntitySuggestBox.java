@@ -82,6 +82,10 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
         return this.criteria.add(criterion);
     }
 
+    public E meta() {
+        return this.criteria.meta();
+    }
+
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
         this.optionsFilter = optionsFilter;
         setOptions(getOptions());

@@ -87,6 +87,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
         super(title, policy);
     }
 
+    public E meta() {
+        return this.criteria.meta();
+    }
+
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
         if (optionsLoaded) {
             throw new RuntimeException();
