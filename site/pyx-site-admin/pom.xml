@@ -120,7 +120,7 @@
 							<stripVersion>true</stripVersion>
 							<excludeScope>provided</excludeScope>
 							<outputDirectory>war/WEB-INF/lib</outputDirectory>
-							<excludeArtifactIds>gwt-incubator,pyx-gwt-widgets,pyx-slf4j-api-gwt,pyx-log-gwt,pyx-gwt-ria
+							<excludeArtifactIds>pyx-gwt-widgets,pyx-slf4j-api-gwt,pyx-log-gwt,pyx-gwt-ria
 							</excludeArtifactIds>
 						</configuration>
 					</execution>

@@ -23,7 +23,6 @@ package com.pyx4j.ria.client;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.ProgressBar;
 
 import com.pyx4j.widgets.client.style.CSSClass;
 

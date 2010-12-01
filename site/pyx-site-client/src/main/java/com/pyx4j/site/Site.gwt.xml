@@ -3,7 +3,6 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='com.google.gwt.widgetideas.BasicWidget' />
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.pyx4j.forms.Forms'/>
 	<inherits name='com.pyx4j.entity.Entity' />
@@ -14,10 +13,10 @@
     <inherits name='com.pyx4j.site.client.themes.dark.DarkTheme' />
     <inherits name='com.pyx4j.site.client.themes.business.BusinessTheme' />
     <inherits name='com.pyx4j.site.client.themes.console.ConsoleTheme' />
-    
 
-    
+
+
 	<source path="client" />
-	
+
 	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.client.*" />
 </module>

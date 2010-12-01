@@ -91,7 +91,7 @@
                             <stripVersion>true</stripVersion>
                             <excludeScope>provided</excludeScope>
                             <outputDirectory>war/WEB-INF/lib</outputDirectory>
-                            <!-- excludeArtifactIds>gwt-user,gwt-incubator,pyx-unit-gwt,pyx-gwt-widgets,pyx-gwt-ria,pyx-slf4j-api-gwt,pyx-log-gwt,pyx-entity-gwt</excludeArtifactIds-->
+                            <!-- excludeArtifactIds>gwt-user,pyx-unit-gwt,pyx-gwt-widgets,pyx-gwt-ria,pyx-slf4j-api-gwt,pyx-log-gwt,pyx-entity-gwt</excludeArtifactIds-->
                         </configuration>
                     </execution>
                     <execution>

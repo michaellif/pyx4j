@@ -3,12 +3,11 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='com.google.gwt.widgetideas.BasicWidget' />
     <inherits name='com.pyx4j.widgets.Widgets'/>
     <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
     <inherits name='com.pyx4j.Commons'/>
-    
+
 	<source path="client" />
-	
+
 	<extend-configuration-property name="rpc.blacklist" value="com.pyx4j.forms.client.*" />
 </module>

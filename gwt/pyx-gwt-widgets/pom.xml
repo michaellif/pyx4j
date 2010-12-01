@@ -26,11 +26,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.googlecode.gwt-incubator</groupId>
-            <artifactId>gwt-incubator</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-commons</artifactId>
             <version>${project.version}</version>
@@ -75,7 +70,7 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
     <properties>
@@ -100,7 +95,7 @@
                             <stripVersion>true</stripVersion>
                             <excludeScope>provided</excludeScope>
                             <outputDirectory>war/WEB-INF/lib</outputDirectory>
-                            <excludeArtifactIds>gwt-incubator,pyx-gwt-widgets,pyx-slf4j-api-gwt,pyx-log-gwt</excludeArtifactIds>
+                            <excludeArtifactIds>pyx-gwt-widgets,pyx-slf4j-api-gwt,pyx-log-gwt</excludeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
