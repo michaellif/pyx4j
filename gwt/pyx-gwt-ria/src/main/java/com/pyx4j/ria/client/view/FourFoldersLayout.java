@@ -26,14 +26,14 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 import com.pyx4j.ria.client.FolderSectionPanel;
 
-public class FourFoldersLayout extends SplitLayoutPanel implements LayoutManager<FourFoldersPosition> {
+public class FourFoldersLayout extends SplitLayoutPanel implements ILayoutManager<FourFoldersPosition> {
 
-    private final HashMap<Position, FolderSectionPanel> folders;
+    private final HashMap<FourFoldersPosition, FolderSectionPanel> folders;
 
     public FourFoldersLayout() {
         super();
 
-        folders = new HashMap<Position, FolderSectionPanel>();
+        folders = new HashMap<FourFoldersPosition, FolderSectionPanel>();
 
         SplitLayoutPanel westPanel = new SplitLayoutPanel();
         addWest(westPanel, 250);
@@ -65,7 +65,7 @@ public class FourFoldersLayout extends SplitLayoutPanel implements LayoutManager
     }
 
     @Override
-    public FolderSectionPanel getFolder(Position position) {
+    public FolderSectionPanel getFolder(FourFoldersPosition position) {
         return folders.get(position);
     }
 

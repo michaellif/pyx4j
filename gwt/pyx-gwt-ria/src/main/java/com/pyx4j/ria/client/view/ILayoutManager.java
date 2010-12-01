@@ -22,8 +22,8 @@ package com.pyx4j.ria.client.view;
 
 import com.pyx4j.ria.client.FolderSectionPanel;
 
-public interface LayoutManager<T extends Position> {
+public interface ILayoutManager<T extends IPosition> {
 
-    public FolderSectionPanel getFolder(Position position);
+    public FolderSectionPanel getFolder(T position);
 
 }

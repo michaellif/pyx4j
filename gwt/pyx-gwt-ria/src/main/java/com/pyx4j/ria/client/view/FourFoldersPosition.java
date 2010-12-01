@@ -20,6 +20,6 @@
  */
 package com.pyx4j.ria.client.view;
 
-public enum FourFoldersPosition implements Position {
+public enum FourFoldersPosition implements IPosition {
     nw, sw, center, south
 }
