@@ -20,12 +20,23 @@
  */
 package com.pyx4j.entity.ria.client;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.HasHandlers;
+import com.google.gwt.event.shared.SimpleEventBus;
+
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.ria.client.view.ILayoutManager;
 import com.pyx4j.ria.client.view.IPosition;
 import com.pyx4j.ria.client.view.IViewManager;
 
-public abstract class AbstractViewManager<T extends IPosition> implements IViewManager<T> {
+public abstract class AbstractViewManager<T extends IPosition> implements IViewManager<T>, HasHandlers {
+
+    private EventBus eventBus;
 
     private final ILayoutManager<T> layoutManager;
 
@@ -57,4 +68,24 @@ public abstract class AbstractViewManager<T extends IPosition> implements IViewM
         T position = getPositionForView(view.getClass());
         layoutManager.getFolder(position).removeView(view);
     }
+
+    //    abstract void showEntity(IEntity entity);
+    //
+    //    abstract void showEntityList(EntitySearchCriteria<?> criteria);
+
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        if (eventBus != null) {
+            eventBus.fireEventFromSource(event, this);
+        }
+    }
+
+    protected EventBus ensureHandlers() {
+        return eventBus == null ? eventBus = new SimpleEventBus() : eventBus;
+    }
+
+    protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
+        return ensureHandlers().addHandler(type, handler);
+    }
+
 }
