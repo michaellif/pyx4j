@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.ProgressBar;
 import com.pyx4j.widgets.client.style.CSSClass;
 
 /**

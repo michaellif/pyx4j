@@ -51,7 +51,7 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
 public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityTextSuggestBox.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntitySuggestBox.class);
 
     private final Class<E> entityClass;
 
