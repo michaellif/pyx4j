@@ -43,11 +43,14 @@ import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -124,6 +127,10 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     public E meta() {
         return formFactory.meta();
+    }
+
+    public Decorator decorator(String name) {
+        return new Decorator(name);
     }
 
     public CEntityForm<E> getForm() {

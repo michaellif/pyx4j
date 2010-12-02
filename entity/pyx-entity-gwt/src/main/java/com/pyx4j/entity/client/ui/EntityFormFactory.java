@@ -23,8 +23,8 @@ package com.pyx4j.entity.client.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.annotations.StringLength;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.client.ui.crud.Decorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -61,6 +61,10 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
         return editableComponentFactory.create(member);
     }
 
+    protected CComponent<?> createDecoration(Decorator decorator) {
+        return null;
+    }
+
     protected void enhanceComponents(CEntityForm<E> form) {
 
     }
@@ -79,6 +83,8 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
                     components[i][j] = null;
                 } else if (form.contains(member)) {
                     components[i][j] = form.get(member);
+                } else if (member instanceof Decorator) {
+                    components[i][j] = createDecoration((Decorator) member);
                 } else {
                     components[i][j] = createComponent(member);
                     MemberMeta mm = member.getMeta();

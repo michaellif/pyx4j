@@ -125,7 +125,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     }
 
     public boolean isMandatoryConditionMet() {
-        return !isMandatory() || (!isValueEmpty());
+        return !isEnabled() || !isEditable() || !isMandatory() || !isValueEmpty();
     }
 
     public String getValidationMessage() {

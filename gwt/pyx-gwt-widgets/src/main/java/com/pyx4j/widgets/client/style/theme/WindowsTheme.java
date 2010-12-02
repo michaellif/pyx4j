@@ -539,6 +539,10 @@ public class WindowsTheme extends Theme {
         style.addProperty("color", "gray");
         addStyle(style);
 
+        style = new Style(CSSClass.pyx4j_TextBox, "[disabled]");
+        style.addProperty("background-color", "#eee");
+        addStyle(style);
+
     }
 
     protected void initListBoxStyle() {
