@@ -92,7 +92,7 @@ public class EntityFactoryGenerator extends Generator {
             if (cases.size() == 0) {
                 logger.log(TreeLogger.Type.WARN, "No IEntity implementations found");
             } else {
-                logger.log(TreeLogger.Type.INFO, "Adding " + cases.size() + " IEntity generated implementations");
+                logger.log(TreeLogger.Type.DEBUG, "Adding " + cases.size() + " IEntity generated implementations");
             }
             composer.addImport(EntityMeta.class.getName());
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
