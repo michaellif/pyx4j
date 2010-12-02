@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -87,6 +89,11 @@ public class PortletPanel extends ContentPanel {
     protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
         InlineWidgetRootPanel root = new InlineWidgetRootPanel(Document.get().getElementById(widgetId));
         root.clear();
+
+        NodeList<Node> children = root.getElement().getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            children.getItem(i).removeFromParent();
+        }
 
         root.add((Widget) inlineWidget);
         addInlineWidget(inlineWidget);
