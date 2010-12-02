@@ -243,9 +243,6 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
         @Override
         public E parse(String string) {
-            if (CommonsStringUtils.isEmpty(string)) {
-                return null;
-            }
             for (E option : getOptions()) {
                 if (getOptionName(option).equals(string)) {
                     return option;
@@ -256,6 +253,12 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
             return entity;
         }
 
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        String value = (String) getValue().getMemberValue(stringViewMemberName);
+        return value == null || value.trim().equals("");
     }
 
 }
