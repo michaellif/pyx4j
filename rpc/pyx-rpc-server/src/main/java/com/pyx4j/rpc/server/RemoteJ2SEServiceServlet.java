@@ -48,6 +48,8 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(RemoteServiceServlet.class);
 
+    private static int VERSION = 1;
+
     private RemoteService implementation;
 
     private static int requestCount = 0;
@@ -85,6 +87,7 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
         ServletInputStream is = null;
         try {
             log.debug("request# {}", requestCount++);
+            response.addHeader("pyx-j2se-version", String.valueOf(VERSION));
             is = req.getInputStream();
 
             ObjectInputStream ois = new ObjectInputStream(is);
@@ -94,7 +97,10 @@ public class RemoteJ2SEServiceServlet extends HttpServlet {
             ois.close();
             is.close();
             is = null;
-            Serializable reply = implementation.execute(serviceDescriptor, serviceDO, null);
+
+            String userVisitHashCode = req.getHeader("pyx-userVisitHashCode");
+
+            Serializable reply = implementation.execute(serviceDescriptor, serviceDO, userVisitHashCode);
             if (reply != null) {
                 response.setContentType("application/binary");
                 os = response.getOutputStream();

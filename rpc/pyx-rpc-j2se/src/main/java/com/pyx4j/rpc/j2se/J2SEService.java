@@ -41,7 +41,9 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.rpc.shared.SystemNotificationsWrapper;
+import com.pyx4j.security.rpc.UserVisitChangedSystemNotification;
 import com.pyx4j.security.server.ThrottleConfig;
+import com.pyx4j.security.shared.UserVisit;
 
 public class J2SEService {
 
@@ -59,6 +61,8 @@ public class J2SEService {
 
     protected String serverUrl;
 
+    protected int serverVersion = 0;
+
     protected String forceDeveloperLoginPath;
 
     protected String userAgent = "pyx-j2se/1.0";
@@ -74,6 +78,8 @@ public class J2SEService {
     private ThrottleConfig throttleConfig;
 
     protected String sessionToken;
+
+    protected UserVisit userVisit;
 
     protected boolean connectedLoged;
 
@@ -375,6 +381,9 @@ public class J2SEService {
             if (sessionToken != null) {
                 conn.setRequestProperty(RemoteService.SESSION_TOKEN_HEADER, sessionToken);
             }
+            if (userVisit != null) {
+                conn.setRequestProperty("pyx-userVisitHashCode", userVisit.getServerSideHashCode());
+            }
             conn.setRequestProperty("Cache-Control", "no-cache, no-transform");
             conn.setRequestProperty("Content-Type", "application/binary");
             conn.setRequestProperty("User-agent", userAgent);
@@ -391,19 +400,24 @@ public class J2SEService {
             out = null;
 
             Serializable reply = null;
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            int responseCode = conn.getResponseCode();
+            String serverVersionHeader = conn.getHeaderField("pyx-j2se-version");
+            if (CommonsStringUtils.isStringSet(serverVersionHeader)) {
+                serverVersion = Integer.valueOf(serverVersionHeader);
+            }
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 in = conn.getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(in);
                 reply = (Serializable) ois.readObject();
                 ois.close();
-            } else if (conn.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT) {
+            } else if (responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
                 reply = null;
             } else {
                 String msg = conn.getHeaderField("message");
                 if (msg != null) {
                     throw new RuntimeExceptionSerializable(msg);
                 } else {
-                    throw new RuntimeExceptionSerializable(conn.getResponseCode() + ":" + conn.getResponseMessage());
+                    throw new RuntimeExceptionSerializable(responseCode + ":" + conn.getResponseMessage());
                 }
             }
             getCookie(conn.getHeaderFields());
@@ -411,6 +425,10 @@ public class J2SEService {
                 SystemNotificationsWrapper wrapper = (SystemNotificationsWrapper) reply;
                 for (Serializable systemNotification : wrapper.getSystemNotifications()) {
                     log.warn("Got systemNotification {}", systemNotification);
+                    if (systemNotification instanceof UserVisitChangedSystemNotification) {
+                        userVisit = ((UserVisitChangedSystemNotification) systemNotification).getUserVisit();
+                    }
+
                 }
                 reply = wrapper.getServiceResult();
             }
