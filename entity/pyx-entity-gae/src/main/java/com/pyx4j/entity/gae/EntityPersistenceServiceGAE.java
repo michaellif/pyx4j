@@ -427,7 +427,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
                     if (childKeyId == null) {
                         log.error("Saving non persisted reference {}", iEntity.getMember(me.getKey()));
-                        throw new Error("Saving non persisted reference " + meta.getCaption());
+                        throw new Error("Saving non persisted reference " + iEntity.getValueClass() + "." + propertyName + "." + meta.getCaption());
                     }
                     value = KeyFactory
                             .createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKeyId);
@@ -480,7 +480,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     for (Object el : (Set<?>) value) {
                         Long childKey = (Long) ((Map<String, Object>) el).get(IEntity.PRIMARY_KEY);
                         if (childKey == null) {
-                            throw new Error("Saving non persisted reference " + meta.getCaption());
+                            throw new Error("Saving non persisted reference " + iEntity.getValueClass() + "." + propertyName + "." + meta.getCaption());
                         }
                         childKeys.add(KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass()).getPersistenceName(),
                                 childKey));
