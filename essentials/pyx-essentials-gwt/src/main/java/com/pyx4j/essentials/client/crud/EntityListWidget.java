@@ -45,6 +45,7 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
+import com.pyx4j.site.client.DynamicHTML;
 import com.pyx4j.site.client.InlineWidget;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigNode;
@@ -62,7 +63,7 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
 
     private final Class<? extends NavigNode> editorPage;
 
-    private final HTML descriptionPanel;
+    private final SimplePanel descriptionPanelHolder;
 
     protected final E metaEntity;
 
@@ -97,8 +98,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
         actionsHolderPanel.setWidth("220px");
         actionsHolderPanel.getElement().getStyle().setMarginRight(5, Unit.PX);
 
-        descriptionPanel = new HTML();
-        add(descriptionPanel, DockPanel.NORTH);
+        descriptionPanelHolder = new SimplePanel();
+        add(descriptionPanelHolder, DockPanel.NORTH);
 
         add(actionsHolderPanel, DockPanel.NORTH);
 
@@ -111,7 +112,8 @@ public class EntityListWidget<E extends IEntity> extends DockPanel implements In
     }
 
     public void setDescription(String description) {
-        descriptionPanel.setHTML(description);
+        DynamicHTML dynHtml = new DynamicHTML(description, null, true);
+        descriptionPanelHolder.setWidget(dynHtml);
     }
 
     protected ActionsPanel createActionsPanel() {
