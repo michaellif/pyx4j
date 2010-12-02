@@ -55,6 +55,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -94,6 +95,11 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             return AbstractEntityEditorPanel.this.createComponent(member);
         }
 
+        @Override
+        protected CComponent<?> createDecoration(Decorator decorator) {
+            return AbstractEntityEditorPanel.this.createDecoration(decorator);
+        }
+
         protected CEditableComponent<?> defaultCreateComponent(IObject<?> member) {
             return super.createComponent(member);
         }
@@ -125,12 +131,18 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     }
 
-    public E meta() {
-        return formFactory.meta();
+    protected CComponent<?> createDecoration(Decorator decorator) {
+        if (decorator instanceof DecoratorLabel) {
+            CLabel label = new CLabel();
+            label.setValue(((DecoratorLabel) decorator).getLabel());
+            return label;
+        } else {
+            return null;
+        }
     }
 
-    public Decorator decorator(String name) {
-        return new Decorator(name);
+    public E meta() {
+        return formFactory.meta();
     }
 
     public CEntityForm<E> getForm() {

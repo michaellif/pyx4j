@@ -28,97 +28,80 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class Decorator implements IPrimitive<String> {
 
-    public Decorator(String name) {
+    public Decorator() {
 
     }
 
     @Override
     public boolean isNull() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setValue(String value) throws ClassCastException {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public String getValue() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Path getPath() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Class<? extends IObject> getObjectClass() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IEntity getOwner() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IObject<?> getParent() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getFieldName() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public MemberMeta getMeta() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public boolean metaEquals(IObject<?> other) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public String getStringView() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Class<String> getValueClass() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void set(IPrimitive<String> primitiveValue) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public String pars(String value) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public boolean isBooleanTrue() {
-        // TODO Auto-generated method stub
         return false;
     }
 
