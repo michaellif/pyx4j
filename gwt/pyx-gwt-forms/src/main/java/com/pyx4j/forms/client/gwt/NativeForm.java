@@ -64,6 +64,7 @@ import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeComponent;
+import com.pyx4j.forms.client.ui.SelfManagedComponent;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -184,7 +185,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
     private void addComponent(CComponent<?> component, int row, int column) {
 
-        if (component instanceof CFormContainer<?>) {
+        if (component instanceof SelfManagedComponent) {
             grid.setWidget(row, column, (Widget) component.initNativeComponent());
         } else {
             grid.setWidget(row, column, new WidgetContainer(component));

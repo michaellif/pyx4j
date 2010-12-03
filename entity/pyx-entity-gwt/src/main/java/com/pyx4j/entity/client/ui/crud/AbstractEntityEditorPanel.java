@@ -53,6 +53,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CCaption;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -133,9 +134,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     protected CComponent<?> createDecoration(Decorator decorator) {
         if (decorator instanceof DecoratorLabel) {
-            CLabel label = new CLabel();
-            label.setValue(((DecoratorLabel) decorator).getLabel());
-            return label;
+            return new CCaption(((DecoratorLabel) decorator).getLabel());
         } else {
             return null;
         }

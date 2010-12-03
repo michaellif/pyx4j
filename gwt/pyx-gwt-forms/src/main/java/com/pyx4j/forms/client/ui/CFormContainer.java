@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.resources.client.ImageResource;
 
-public abstract class CFormContainer<E> extends CEditableComponent<E> {
+public abstract class CFormContainer<E> extends CEditableComponent<E> implements SelfManagedComponent {
 
     private ImageResource image;
 
