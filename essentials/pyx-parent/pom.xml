@@ -150,7 +150,7 @@
         <buildLabel>${project.version}</buildLabel>
 
         <gwtVersion>2.1.0</gwtVersion>
-        <gaeVersion>1.3.8</gaeVersion>
+        <gaeVersion>1.4.0</gaeVersion>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
@@ -431,7 +431,7 @@
                         <dependency>
                             <groupId>net.kindleit</groupId>
                             <artifactId>gae-runtime</artifactId>
-                            <version>${gaeVersion}.1</version> <!-- remove .1 -->
+                            <version>1.3.8.1</version> <!-- TODO use new GAE ${gaeVersion} -->
                             <type>pom</type>
                         </dependency>
                     </dependencies>
