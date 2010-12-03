@@ -105,4 +105,9 @@ public class Decorator implements IPrimitive<String> {
         return false;
     }
 
+    @Override
+    public int compareTo(IPrimitive<String> o) {
+        return 0;
+    }
+
 }

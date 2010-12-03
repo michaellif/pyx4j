@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.CompareHelper;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -105,6 +106,22 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             return (((IPrimitive<?>) other).getValue() == null);
         }
         return thisValue.equals(((IPrimitive<?>) other).getValue());
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public int compareTo(IPrimitive<TYPE> other) {
+        if (other == this) {
+            return 0;
+        }
+        TYPE thisValue = this.getValue();
+        if (thisValue == null) {
+            return (other.getValue() == null) ? 0 : -1;
+        } else if (thisValue instanceof Comparable) {
+            return CompareHelper.compareTo((Comparable) thisValue, other.getValue());
+        } else {
+            throw new ClassCastException();
+        }
     }
 
     @Override

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.shared;
 
-public interface IPrimitive<TYPE> extends IObject<TYPE> {
+public interface IPrimitive<TYPE> extends IObject<TYPE>, Comparable<IPrimitive<TYPE>> {
 
     @Override
     public Class<TYPE> getValueClass();
