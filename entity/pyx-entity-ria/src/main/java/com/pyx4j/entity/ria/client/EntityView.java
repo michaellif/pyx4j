@@ -44,11 +44,7 @@ public class EntityView extends AbstractView {
 
         setTabTitle(tabTitle);
 
-        HorizontalPanel toolbarPanel = new HorizontalPanel();
-        toolbarPanel.setWidth("100%");
-
         Toolbar toolbar = new Toolbar();
-        toolbarPanel.add(toolbar);
 
         ImageResource viewMenu = RiaEntityImageBundle.INSTANCE.viewMenu();
         MenuBar actionsMenu = getMenu();
@@ -68,9 +64,9 @@ public class EntityView extends AbstractView {
         };
         menuButtonBar.addItem(menuButtonItem);
 
-        //toolbarPanel.add(menuButtonBar);
+        //toolbar.addItem(menuButtonBar, true);
 
-        setToolbarPane(toolbarPanel);
+        setToolbarPane(toolbar);
     }
 
     public MenuBar getMenu() {

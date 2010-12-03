@@ -36,11 +36,11 @@ public class FourFoldersLayout extends SplitLayoutPanel implements ILayoutManage
         folders = new HashMap<FourFoldersPosition, FolderSectionPanel>();
 
         SplitLayoutPanel westPanel = new SplitLayoutPanel();
-        addWest(westPanel, 250);
+        addWest(westPanel, 350);
 
         {
             FolderSectionPanel folder = new FolderSectionPanel();
-            westPanel.addSouth(folder, 250);
+            westPanel.addSouth(folder, 350);
             folders.put(FourFoldersPosition.sw, folder);
         }
 
@@ -52,7 +52,7 @@ public class FourFoldersLayout extends SplitLayoutPanel implements ILayoutManage
 
         {
             FolderSectionPanel folder = new FolderSectionPanel();
-            addSouth(folder, 250);
+            addSouth(folder, 350);
             folders.put(FourFoldersPosition.south, folder);
         }
 
