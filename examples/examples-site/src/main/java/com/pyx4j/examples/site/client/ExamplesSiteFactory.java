@@ -43,8 +43,8 @@ public class ExamplesSiteFactory extends SiteFactory {
 
         Site site = createSite(NavigUtils.getSiteId(ExamplesSiteMap.Pub.class), "pyx4j.com");
 
-        Page pageHome = createPage("Home", ExamplesSiteMap.Pub.Home.class, ExamplesPublicSiteResources.INSTANCE.pageHome().getText());
-        pageHome.data().rightPortlets().add(createTechnologyPortlet());
+        Page pageHome = createPage("Home", ExamplesSiteMap.Pub.Home.class, null, ExamplesPublicSiteResources.INSTANCE.pageHome().getText(), null, null,
+                new Portlet[] { createTechnologyPortlet() }, null);
         site.pages().add(pageHome);
 
         site.pages().add(
