@@ -42,6 +42,7 @@ import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.essentials.client.ReportDialog;
+import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
@@ -147,7 +148,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        ReportDialog.start(searchCriteriaPanel.getEntityCriteria());
+                        ReportDialog.start(getReportService(), searchCriteriaPanel.getEntityCriteria());
                     }
                 });
                 break;
@@ -222,6 +223,10 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
     protected Class<? extends EntityServices.Search> getSearchService() {
         return EntityServices.Search.class;
+    }
+
+    protected Class<? extends ReportServices.Search> getReportService() {
+        return ReportServices.Search.class;
     }
 
     protected void populateData(List<E> entities, int pageNumber, boolean hasMoreData) {
