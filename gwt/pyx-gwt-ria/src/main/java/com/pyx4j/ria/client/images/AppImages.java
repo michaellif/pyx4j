@@ -38,9 +38,11 @@ public interface AppImages extends ClientBundle, Resources, com.google.gwt.user.
     @Source("debug_on.gif")
     ImageResource debugOn();
 
+    @Override
     @Source("empty3x3.png")
     ImageResource horizontalSplitPanelThumb();
 
+    @Override
     @Source("empty3x3.png")
     ImageResource verticalSplitPanelThumb();
 
