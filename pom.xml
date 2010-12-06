@@ -9,13 +9,13 @@
     <parent>
         <groupId>com.pyx4j</groupId>
         <artifactId>pyx-parent</artifactId>
-        <version>2.0.1-SNAPSHOT</version><!--pyx-version-->
+        <version>2.0.2-SNAPSHOT</version><!--pyx-version-->
         <relativePath>essentials/pyx-parent/pom.xml</relativePath>
     </parent>
 
     <groupId>com.pyx4j</groupId>
     <artifactId>pyx</artifactId>
-    <version>2.0.1-SNAPSHOT</version><!--pyx-version-->
+    <version>2.0.2-SNAPSHOT</version><!--pyx-version-->
 
     <packaging>pom</packaging>
     <name>pyx</name>
