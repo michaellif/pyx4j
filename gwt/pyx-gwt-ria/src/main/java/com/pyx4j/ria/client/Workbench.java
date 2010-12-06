@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.GlassPanel;
 
-public class Perspective {
+public class Workbench {
 
     private Panel parent;
 
@@ -46,7 +46,7 @@ public class Perspective {
 
     private final SimplePanel footerMark;
 
-    public Perspective() {
+    public Workbench() {
 
         contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setSize("100%", "100%");
