@@ -218,6 +218,7 @@ public abstract class SitePanel extends SimplePanel {
         initPortlets(args, leftSectionPanel, page.data().leftPortlets(), callback);
         initPortlets(args, rightSectionPanel, page.data().rightPortlets(), callback);
         callback.onSuccess(null);
+
     }
 
     private void initPortlets(final Map<String, String> args, FlowPanel sectionPanel, List<Portlet> portlets, AsyncCallbackAggregator callback) {
