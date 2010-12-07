@@ -757,6 +757,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         String updatedTs = entityMeta.getUpdatedTimestampMember();
         if (merge && isUpdate && (updatedTs != null)) {
             if (!EqualsHelper.equals(iEntity.getMemberValue(updatedTs), entity.getProperty(updatedTs))) {
+                log.debug("Timestamp change {} -> {}", entity.getProperty(updatedTs), iEntity.getMemberValue(updatedTs));
                 throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", entityMeta.getCaption()));
             }
         }
