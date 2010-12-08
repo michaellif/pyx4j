@@ -133,9 +133,9 @@ public class LifecycleFilter implements Filter {
     }
 
     protected boolean allowRequest(HttpServletRequest httprequest, HttpServletResponse httpresponse) throws IOException {
-        if (httprequest.getRequestURI().endsWith(".gwt.rpc")) {
-            log.error("access to *.gwt.rpc files blocked");
-            httpresponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+        if (httprequest.getRequestURI().endsWith(".rpc")) {
+            log.error("access to *.rpc files blocked");
+            httpresponse.sendError(HttpServletResponse.SC_NOT_FOUND);
             return false;
         } else {
             return true;
