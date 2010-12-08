@@ -67,6 +67,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             case combo:
                 if (mm.isEntity()) {
                     comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+                    if (mm.isEmbedded()) {
+                        ((CEntityComboBox) comp).setUseNamesComparison(true);
+                    }
                 } else {
                     comp = new CComboBox();
                 }
@@ -100,6 +103,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             comp = new CTextField();
         } else if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            if (mm.isEmbedded()) {
+                ((CEntityComboBox) comp).setUseNamesComparison(true);
+            }
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
