@@ -92,7 +92,7 @@ public class StyleManger {
         log.debug("install style {} ", theme.getClass().getName());
         log.trace("{}", stylesString.toString());
 
-        StyleInjector.inject(stylesString.toString());
+        StyleInjector.inject(stylesString.toString(), true);
     }
 
     private static void cleanUpInjectedStyles() {
