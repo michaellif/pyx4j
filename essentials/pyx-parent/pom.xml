@@ -149,7 +149,7 @@
     <properties>
         <buildLabel>${project.version}</buildLabel>
 
-        <gwtVersion>2.1.0</gwtVersion>
+        <gwtVersion>2.1.1</gwtVersion>
         <gaeVersion>1.4.0</gaeVersion>
         <pyx4jGwtVersion>0.5.6-SNAPSHOT</pyx4jGwtVersion>
 
