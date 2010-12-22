@@ -62,7 +62,8 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
     In client projects we don't use GAE SDK installed inside Eclipse!
 
     For project that store Eclipse **-server.launch in SVN.
-    Star this bug: http://code.google.com/p/googleappengine/issues/detail?id=3401
+    Star this bugs: http://code.google.com/p/googleappengine/issues/detail?id=3401
+                    http://code.google.com/p/googleappengine/issues/detail?id=2282
 
 2. Download and unzip appengine-java-sdk-1.4.0.zip
 		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.4.0.zip
