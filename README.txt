@@ -9,6 +9,8 @@
    Or full Target on Windows 32:
         D:\prog\dev\eclipse\eclipse-3.6.1\eclipse.exe -vm D:/jdk1.6.0/bin/javaw.exe -vmargs -Xmx456M
 
+   On Windows 64 When using 64-bit JDK set -Xmx1024M:
+
 4. Install Eclipse Plugins.
     - Subclipse                  (From Eclipse Marketplace)
     - Google plugins for Eclipse (From Eclipse Marketplace)
@@ -29,7 +31,7 @@
 ========= maven build =========
 
 for cmd line maven build add OS env variable (this values are for 32bit os)
-MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
+MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
 
 * Maven build with "GWT" modules compilations to JavaScript
 
@@ -53,18 +55,23 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k
 
 ========= Install Google App Engine SDK for Java =========
 
-1. Install "Google plugins for Eclipse 3.6 version 1.3.3"
+1. Install "Google plugins for Eclipse 3.6 version 1.4.1"
     site url: http://dl.google.com/eclipse/plugin/3.6
 
     You may install SDKs bundle for GAE and GWT from google site for faster download.
-    In client projects we don't use GAE SDK installed inside Eclipse.
+    In client projects we don't use GAE SDK installed inside Eclipse!
 
--- (Optionally) Patch the development mode SDK to avoid maven build after each code change in dependencies.
+    For project that store Eclipse **-server.launch in SVN.
+    Star this bug: http://code.google.com/p/googleappengine/issues/detail?id=3401
+
 2. Download and unzip appengine-java-sdk-1.4.0.zip
 		from http://googleappengine.googlecode.com/files/appengine-java-sdk-1.4.0.zip
-3. For project that store Eclipse **-server.launch in SVN.
-   Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.4.0
+3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.4.0  (or make NTFS link)
+4. Configure Eclipse -> Preferences -> Google -> App Engine to use SDK above!
+
 4. For heavy server side development use jrebel
+   Star this bug: http://code.google.com/p/googleappengine/issues/detail?id=4122
+   Install it to C:\3p-libs\jrebel
 
 ========= Eclipse Configuration for a new Workspace =========
 
