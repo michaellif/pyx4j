@@ -20,17 +20,13 @@
  */
 package com.pyx4j.essentials.server.xml;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Element;
@@ -40,35 +36,24 @@ import org.w3c.dom.NodeList;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
+import com.pyx4j.entity.shared.impl.PrimitiveHandler;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.essentials.rpc.admin.BackupKey;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class XMLEntityConverter {
 
-    public static String getValueType(Object value) {
-        if ((value == null) || (value instanceof String)) {
-            return null;
-        } else if (value instanceof byte[]) {
-            return "byte[]";
-        } else if (value instanceof GeoPoint) {
-            return GeoPoint.class.getSimpleName();
-        } else {
-            String name = value.getClass().getName();
-            if ((name.startsWith("java.lang.")) || (name.startsWith("java.util."))) {
-                name = value.getClass().getSimpleName();
-            }
-            return name;
-        }
-    }
-
-    public static String getValueAsString(Object value) {
+    private static String getValueAsString(Object value) {
         if (value == null) {
             return null;
+        } else if (value instanceof Enum<?>) {
+            return ((Enum<?>) value).name();
         } else if (value instanceof byte[]) {
             return new Base64().encodeToString((byte[]) value);
         } else if (value instanceof java.sql.Date) {
@@ -81,40 +66,6 @@ public class XMLEntityConverter {
             return df.format((Date) value);
         } else {
             return value.toString();
-        }
-    }
-
-    public static Serializable valueOf(String s, String typeAttribute) {
-        if ((s == null) || (s.length() == 0)) {
-            return null;
-        } else if ((typeAttribute == null) || (typeAttribute.length() == 0) || (typeAttribute.equals(String.class.getSimpleName()))) {
-            return s;
-        } else if (typeAttribute.equals("Key")) {
-            return BackupKey.valueOf(s);
-        } else if (typeAttribute.equals(Long.class.getSimpleName())) {
-            return Long.valueOf(s);
-        } else if (typeAttribute.equals(Boolean.class.getSimpleName())) {
-            return Boolean.valueOf(s);
-        } else if (typeAttribute.equals(Date.class.getSimpleName())) {
-            return DateUtils.detectDateformat(s);
-        } else if (typeAttribute.equals(Vector.class.getSimpleName()) || (typeAttribute.equals(List.class.getSimpleName()))) {
-            return new Vector<Serializable>();
-        } else if (typeAttribute.equals(GeoPoint.class.getSimpleName())) {
-            return GeoPoint.valueOf(s);
-        } else if (typeAttribute.equals("byte[]")) {
-            return new Base64().decode(s);
-        } else if (typeAttribute.equals(Integer.class.getSimpleName())) {
-            return Integer.valueOf(s);
-        } else if (typeAttribute.equals(Double.class.getSimpleName())) {
-            return Double.valueOf(s);
-        } else if (typeAttribute.equals(Float.class.getSimpleName())) {
-            return Float.valueOf(s);
-        } else if (typeAttribute.equals(Short.class.getSimpleName())) {
-            return Short.valueOf(s);
-        } else if (typeAttribute.equals(Byte.class.getSimpleName())) {
-            return Byte.valueOf(s);
-        } else {
-            throw new RuntimeException("Unsupported data type [" + typeAttribute + "]");
         }
     }
 
@@ -136,21 +87,23 @@ public class XMLEntityConverter {
             }
             Object value = me.getValue();
 
-            Map<String, String> attributes = new LinkedHashMap<String, String>();
-            attributes.put("type", getValueType(value));
-
             if (value instanceof Map<?, ?>) {
                 XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName);
             } else if (value instanceof Collection) {
-                xml.startIdented(propertyName, attributes);
-                for (Object item : (Collection<?>) value) {
-                    Map<String, String> itemAttributes = new HashMap<String, String>();
-                    itemAttributes.put("type", getValueType(item));
-                    xml.write("item", itemAttributes, getValueAsString(item));
+                xml.startIdented(propertyName);
+                IObject<?> member = entity.getMember(propertyName);
+                if (member instanceof ICollection<?, ?>) {
+                    for (Object item : (ICollection<?, ?>) member) {
+                        XMLEntityConverter.write(xml, (IEntity) item, "item");
+                    }
+                } else {
+                    for (Object item : (Collection<?>) value) {
+                        xml.write("item", getValueAsString(item));
+                    }
                 }
                 xml.endIdented(propertyName);
             } else {
-                xml.write(propertyName, attributes, getValueAsString(value));
+                xml.write(propertyName, getValueAsString(value));
             }
         }
 
@@ -168,6 +121,7 @@ public class XMLEntityConverter {
         return pars(node, entity);
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T extends IEntity> T pars(Element node, T entity) {
         String id = node.getAttribute("id");
         if (CommonsStringUtils.isStringSet(id)) {
@@ -179,11 +133,30 @@ public class XMLEntityConverter {
             Node valueNode = nodeList.item(i);
             if (valueNode instanceof Element) {
                 String memberName = valueNode.getNodeName();
+                IObject<?> member = entity.getMember(memberName);
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
                 if (memberMeta.isEntity()) {
-                    pars((Element) valueNode, (IEntity) entity.getMember(memberName));
+                    pars((Element) valueNode, (IEntity) member);
+                } else if (member instanceof ICollection<?, ?>) {
+                    NodeList collectionNodeList = valueNode.getChildNodes();
+                    for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
+                        Node itemNode = collectionNodeList.item(ci);
+                        if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
+                            IEntity item = ((ICollection<?, ?>) member).$();
+                            pars((Element) itemNode, item);
+                            ((ICollection) member).add(item);
+                        }
+                    }
+                } else if (member instanceof IPrimitiveSet<?>) {
+                    NodeList collectionNodeList = valueNode.getChildNodes();
+                    for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
+                        Node itemNode = collectionNodeList.item(ci);
+                        if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
+                            ((IPrimitiveSet) member).add(parsPrimitive((Element) itemNode, memberMeta.getValueClass()));
+                        }
+                    }
                 } else {
-                    entity.setMemberValue(memberName, parsValueNode((Element) valueNode, memberMeta));
+                    entity.setMemberValue(memberName, parsValueNode((Element) valueNode, memberMeta, member));
                 }
             }
         }
@@ -191,12 +164,34 @@ public class XMLEntityConverter {
         return entity;
     }
 
-    private static Serializable parsValueNode(Element valueNode, MemberMeta memberMeta) {
-        String typeAttr = valueNode.getAttribute("type");
-        if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-            return valueOf(valueNode.getTextContent(), typeAttr);
+    private static Object parsPrimitive(Element valueNode, Class<?> valueClass) {
+        String str = valueNode.getTextContent();
+        if (valueClass.isAssignableFrom(byte[].class)) {
+            return new Base64().decode(str);
+        } else if (valueClass.isAssignableFrom(Date.class)) {
+            return DateUtils.detectDateformat(str);
+        } else if (valueClass.equals(GeoPoint.class)) {
+            return GeoPoint.valueOf(str);
         } else {
-            throw new Error("Not yet implemented");
+            return PrimitiveHandler.parsString(valueClass, str);
+        }
+    }
+
+    private static Object parsValueNode(Element valueNode, MemberMeta memberMeta, IObject<?> member) {
+        String str = valueNode.getTextContent();
+        if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
+            Class<?> valueClass = member.getValueClass();
+            if (valueClass.isAssignableFrom(byte[].class)) {
+                return new Base64().decode(str);
+            } else if (valueClass.isAssignableFrom(Date.class)) {
+                return DateUtils.detectDateformat(str);
+            } else if (valueClass.equals(GeoPoint.class)) {
+                return GeoPoint.valueOf(str);
+            } else {
+                return ((IPrimitive<?>) member).pars(str);
+            }
+        } else {
+            throw new Error("Pars of " + member.getFieldName() + " (" + memberMeta.getValueClass() + ") '" + str + "' Not yet implemented");
         }
     }
 }

@@ -51,9 +51,13 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
         ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public TYPE pars(String value) {
+        return parsString(valueClass, value);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static <TYPE> TYPE parsString(Class<TYPE> valueClass, String value) {
         if (CommonsStringUtils.isEmpty(value)) {
             return null;
         }
@@ -72,6 +76,12 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
             converted = (TYPE) java.sql.Date.valueOf(value);
         } else if (valueClass.isEnum()) {
             converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
+        } else if (valueClass.equals(Boolean.class)) {
+            converted = (TYPE) Boolean.valueOf(value);
+        } else if (valueClass.equals(Short.class)) {
+            converted = (TYPE) Short.valueOf(value);
+        } else if (valueClass.equals(Byte.class)) {
+            converted = (TYPE) Byte.valueOf(value);
         } else {
             throw new RuntimeException("Unsupported type " + valueClass.getName());
         }

@@ -33,16 +33,45 @@ import org.xml.sax.InputSource;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
 
 public class XMLEntityConverterTest extends TestCase {
 
-    public void testWrite() {
-
+    private static Employee createData() {
         Employee employee = EntityFactory.create(Employee.class);
+        employee.setPrimaryKey(Long.valueOf(22));
         employee.firstName().setValue("First Name");
+        employee.employmentStatus().setValue(EmploymentStatus.FULL_TIME);
 
         employee.homeAddress().streetName().setValue("Home Street");
+
+        Task t1 = EntityFactory.create(Task.class);
+        t1.setPrimaryKey(Long.valueOf(23));
+        t1.description().setValue("Task1");
+        t1.notes().add("Note 1");
+        t1.notes().add("Note 2");
+        t1.oldStatus().add(Status.SUSPENDED);
+
+        employee.tasks().add(t1);
+
+        Task t2 = EntityFactory.create(Task.class);
+        t2.setPrimaryKey(Long.valueOf(24));
+        t2.finished().setValue(Boolean.TRUE);
+        t2.description().setValue("Task2");
+        t2.notes().add("Note 21");
+        t2.notes().add("Note 22");
+        t2.oldStatus().add(Status.ACTIVE);
+        employee.tasks().add(t2);
+
+        return employee;
+    }
+
+    public void testWrite() {
+
+        Employee employee = createData();
 
         XMLStringWriter xml = new XMLStringWriter();
 
@@ -70,13 +99,12 @@ public class XMLEntityConverterTest extends TestCase {
     }
 
     public void testPars() throws Exception {
-        Employee employee1 = EntityFactory.create(Employee.class);
-        employee1.firstName().setValue("First Name");
-        employee1.homeAddress().streetName().setValue("Home Street");
+        Employee employee1 = createData();
 
         Employee employee2 = XMLEntityConverter.pars(getDom(getXML(employee1)).getDocumentElement());
 
         assertEquals("Level 1 value", employee1.firstName().getValue(), employee2.firstName().getValue());
+        assertEquals("Level 1 enum value", employee1.employmentStatus().getValue(), employee2.employmentStatus().getValue());
         assertEquals("Level 2 value", employee1.homeAddress().streetName().getValue(), employee2.homeAddress().streetName().getValue());
     }
 }
