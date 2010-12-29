@@ -82,6 +82,11 @@
         </dependency>
 
 		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+
+		<dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>
@@ -124,7 +129,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
     <build>

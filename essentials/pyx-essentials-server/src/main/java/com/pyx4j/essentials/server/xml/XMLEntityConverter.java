@@ -32,12 +32,10 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.google.appengine.repackaged.com.google.common.util.Base64;
-import com.google.appengine.repackaged.com.google.common.util.Base64DecoderException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -73,7 +71,7 @@ public class XMLEntityConverter {
         if (value == null) {
             return null;
         } else if (value instanceof byte[]) {
-            return Base64.encode((byte[]) value);
+            return new Base64().encodeToString((byte[]) value);
         } else if (value instanceof java.sql.Date) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -105,11 +103,7 @@ public class XMLEntityConverter {
         } else if (typeAttribute.equals(GeoPoint.class.getSimpleName())) {
             return GeoPoint.valueOf(s);
         } else if (typeAttribute.equals("byte[]")) {
-            try {
-                return Base64.decode(s);
-            } catch (Base64DecoderException e) {
-                throw new RuntimeException(e);
-            }
+            return new Base64().decode(s);
         } else if (typeAttribute.equals(Integer.class.getSimpleName())) {
             return Integer.valueOf(s);
         } else if (typeAttribute.equals(Double.class.getSimpleName())) {
