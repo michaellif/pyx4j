@@ -42,7 +42,6 @@ import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.essentials.rpc.admin.BackupKey;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
@@ -120,13 +119,15 @@ public class XMLEntityConverter {
     }
 
     public static void write(XMLStringWriter xml, IEntity entity) {
-        EntityMeta entityMeta = entity.getEntityMeta();
+        write(xml, entity, entity.getEntityMeta().getEntityClass().getName());
+    }
 
+    public static void write(XMLStringWriter xml, IEntity entity, String name) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (entity.getPrimaryKey() != null) {
             entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
         }
-        xml.startIdented(entityMeta.getEntityClass().getName(), entityAttributes);
+        xml.startIdented(name, entityAttributes);
 
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String propertyName = me.getKey();
@@ -139,9 +140,7 @@ public class XMLEntityConverter {
             attributes.put("type", getValueType(value));
 
             if (value instanceof Map<?, ?>) {
-                xml.startIdented(propertyName);
-                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName));
-                xml.endIdented(propertyName);
+                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName);
             } else if (value instanceof Collection) {
                 xml.startIdented(propertyName, attributes);
                 for (Object item : (Collection<?>) value) {
@@ -155,14 +154,21 @@ public class XMLEntityConverter {
             }
         }
 
-        xml.endIdented(entityMeta.getEntityClass().getName());
+        xml.endIdented(name);
     }
 
     public static <T extends IEntity> T pars(Element node) {
         String entityClassName = node.getNodeName();
         Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
-        T entity = EntityFactory.create(entityClass);
+        return pars(node, entityClass);
+    }
 
+    public static <T extends IEntity> T pars(Element node, Class<T> entityClass) {
+        T entity = EntityFactory.create(entityClass);
+        return pars(node, entity);
+    }
+
+    public static <T extends IEntity> T pars(Element node, T entity) {
         String id = node.getAttribute("id");
         if (CommonsStringUtils.isStringSet(id)) {
             entity.setPrimaryKey(Long.valueOf(id));
@@ -173,7 +179,12 @@ public class XMLEntityConverter {
             Node valueNode = nodeList.item(i);
             if (valueNode instanceof Element) {
                 String memberName = valueNode.getNodeName();
-                entity.setMemberValue(memberName, parsValueNode((Element) valueNode, entity.getEntityMeta().getMemberMeta(memberName)));
+                MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
+                if (memberMeta.isEntity()) {
+                    pars((Element) valueNode, (IEntity) entity.getMember(memberName));
+                } else {
+                    entity.setMemberValue(memberName, parsValueNode((Element) valueNode, memberMeta));
+                }
             }
         }
 
@@ -181,10 +192,6 @@ public class XMLEntityConverter {
     }
 
     private static Serializable parsValueNode(Element valueNode, MemberMeta memberMeta) {
-        if (memberMeta.isEntity()) {
-            return pars(valueNode);
-        }
-
         String typeAttr = valueNode.getAttribute("type");
         if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
             return valueOf(valueNode.getTextContent(), typeAttr);

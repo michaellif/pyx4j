@@ -42,6 +42,8 @@ public class XMLEntityConverterTest extends TestCase {
         Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("First Name");
 
+        employee.homeAddress().streetName().setValue("Home Street");
+
         XMLStringWriter xml = new XMLStringWriter();
 
         XMLEntityConverter.write(xml, employee);
@@ -70,9 +72,11 @@ public class XMLEntityConverterTest extends TestCase {
     public void testPars() throws Exception {
         Employee employee1 = EntityFactory.create(Employee.class);
         employee1.firstName().setValue("First Name");
+        employee1.homeAddress().streetName().setValue("Home Street");
 
         Employee employee2 = XMLEntityConverter.pars(getDom(getXML(employee1)).getDocumentElement());
 
-        assertEquals("Firstname", employee1.firstName().getValue(), employee2.firstName().getValue());
+        assertEquals("Level 1 value", employee1.firstName().getValue(), employee2.firstName().getValue());
+        assertEquals("Level 2 value", employee1.homeAddress().streetName().getValue(), employee2.homeAddress().streetName().getValue());
     }
 }
