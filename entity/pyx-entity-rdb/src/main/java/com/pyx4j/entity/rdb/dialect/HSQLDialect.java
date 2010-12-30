@@ -27,6 +27,7 @@ public class HSQLDialect extends Dialect {
         typeNames.put(Long.class, "bigint");
         typeNames.put(Double.class, "double");
         typeNames.put(Boolean.class, "boolean");
+        typeNames.put(byte[].class, "blob");
     }
 
 }

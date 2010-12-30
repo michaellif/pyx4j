@@ -14,21 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2010-07-08
+ * Created on 2010-12-30
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.dialect;
+package com.pyx4j.entity.rdb.mysql;
 
-public class MySQLDialect extends Dialect {
+import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
+import com.pyx4j.entity.test.server.PersistenceEnvironment;
+import com.pyx4j.entity.test.server.PrimitivePersistanceTestCase;
 
-    public MySQLDialect() {
-        super();
-        typeNames.put(Integer.class, "int");
-        typeNames.put(Short.class, "smallint");
-        typeNames.put(Long.class, "bigint");
-        typeNames.put(Double.class, "double");
-        typeNames.put(Boolean.class, "bit");
-        typeNames.put(byte[].class, "blob");
+public class PrimitivePersistanceTest extends PrimitivePersistanceTestCase {
+
+    @Override
+    protected PersistenceEnvironment getPersistenceEnvironment() {
+        return PersistenceEnvironmentFactory.getMySQLPersistenceEnvironment();
     }
+
 }

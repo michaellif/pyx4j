@@ -89,7 +89,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (entityMeta.isTransient()) {
             throw new Error("Can't persist Transient Entity");
         }
-        mappings.ensureTable(entityMeta);
+        TableModel tm = mappings.ensureTable(entityMeta);
+        if (entity.getPrimaryKey() == null) {
+            tm.insert(connectionProvider, entity);
+        } else {
+
+        }
     }
 
     @Override

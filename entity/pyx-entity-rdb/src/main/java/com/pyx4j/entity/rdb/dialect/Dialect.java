@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.rdb.dialect;
 
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.pyx4j.entity.shared.IEntity;
 
 public abstract class Dialect {
 
@@ -41,11 +44,43 @@ public abstract class Dialect {
     public String getSqlType(Class<?> klass) {
         if (Enum.class.isAssignableFrom(klass)) {
             klass = String.class;
+        } else if (IEntity.class.isAssignableFrom(klass)) {
+            klass = Long.class;
         }
         String name = typeNames.get(klass);
         if (name == null) {
             throw new RuntimeException("Undefined SQL type for class " + klass.getName());
         }
         return name;
+    }
+
+    public int getTargetSqlType(Class<?> valueClass) {
+        if (valueClass.equals(String.class)) {
+            return Types.VARCHAR;
+        } else if (valueClass.equals(Double.class)) {
+            return Types.DOUBLE;
+        } else if (valueClass.equals(Float.class)) {
+            return Types.FLOAT;
+        } else if (valueClass.equals(Long.class)) {
+            return Types.BIGINT;
+        } else if (valueClass.equals(Integer.class)) {
+            return Types.INTEGER;
+        } else if (valueClass.equals(java.sql.Date.class)) {
+            return Types.DATE;
+        } else if (valueClass.equals(java.util.Date.class)) {
+            return Types.TIMESTAMP;
+        } else if (valueClass.isEnum()) {
+            return Types.VARCHAR;
+        } else if (valueClass.equals(Boolean.class)) {
+            return Types.BOOLEAN;
+        } else if (valueClass.equals(Short.class)) {
+            return Types.SMALLINT;
+        } else if (valueClass.equals(Byte.class)) {
+            return Types.TINYINT;
+        } else if (valueClass.equals(byte[].class)) {
+            return Types.BLOB;
+        } else {
+            throw new RuntimeException("Unsupported type " + valueClass.getName());
+        }
     }
 }

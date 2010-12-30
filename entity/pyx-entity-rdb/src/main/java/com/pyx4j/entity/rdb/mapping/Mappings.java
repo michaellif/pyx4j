@@ -48,7 +48,7 @@ public class Mappings {
         this.connectionProvider = connectionProvider;
     }
 
-    public void ensureTable(EntityMeta entityMeta) {
+    public TableModel ensureTable(EntityMeta entityMeta) {
         synchronized (entityMeta.getEntityClass()) {
             TableModel model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
@@ -66,6 +66,7 @@ public class Mappings {
                 tables.put(entityMeta.getEntityClass(), model);
                 usedTableNames.add(tableName);
             }
+            return model;
         }
     }
 }

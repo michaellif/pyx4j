@@ -22,9 +22,12 @@ package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -36,6 +39,8 @@ import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
+import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -48,6 +53,10 @@ public class TableModel {
     private static final Logger log = LoggerFactory.getLogger(TableModel.class);
 
     private final EntityMeta entityMeta;
+
+    private String sqlInsert;
+
+    private String sqlUpdate;
 
     public TableModel(EntityMeta entityMeta) {
         this.entityMeta = entityMeta;
@@ -80,35 +89,6 @@ public class TableModel {
         }
     }
 
-    private void validateAndAlter(ConnectionProvider connectionProvider, TableMetadata tableMetadata) throws SQLException {
-        List<String> alterSqls = new Vector<String>();
-        for (String memberName : entityMeta.getMemberNames()) {
-            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
-                continue;
-            }
-            ColumnMetadata columnMeta = tableMetadata.getColumn(memberName);
-            if (columnMeta == null) {
-                StringBuilder sql = new StringBuilder("alter table ");
-                sql.append(sqlName(entityMeta.getPersistenceName()));
-                sql.append(" add column ");
-                sql.append(sqlName(memberName)).append(' ');
-                sql.append(sqlType(connectionProvider.getDialect(), memberMeta));
-                alterSqls.add(sql.toString());
-            } else {
-                String mappingSqlType = connectionProvider.getDialect().getSqlType(memberMeta.getValueClass());
-                if (!mappingSqlType.equalsIgnoreCase(columnMeta.getTypeName())) {
-                    throw new RuntimeException(entityMeta.getPersistenceName() + "." + memberName + " incompatible SQL type " + columnMeta.getTypeName());
-                }
-            }
-
-        }
-
-        if (alterSqls.size() > 0) {
-            execute(connectionProvider, alterSqls);
-        }
-    }
-
     List<String> sqlCreate(Dialect dialect) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
@@ -121,6 +101,12 @@ public class TableModel {
             if (memberMeta.isTransient()) {
                 continue;
             }
+            if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                // For now create a join table
+                sqls.add(sqlCreateJoin(dialect, memberMeta));
+                continue;
+            }
+
             if (first) {
                 first = false;
             } else {
@@ -128,12 +114,49 @@ public class TableModel {
             }
 
             sql.append(' ').append(sqlName(memberName)).append(' ');
+            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                // TODO create FK
+            }
             sql.append(sqlType(dialect, memberMeta));
         }
         sql.append(')');
         sqls.add(sql.toString());
 
+        Collections.reverse(sqls);
         return sqls;
+    }
+
+    private void validateAndAlter(ConnectionProvider connectionProvider, TableMetadata tableMetadata) throws SQLException {
+        List<String> alterSqls = new Vector<String>();
+        for (String memberName : entityMeta.getMemberNames()) {
+            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
+            if (memberMeta.isTransient()) {
+                continue;
+            }
+            ColumnMetadata columnMeta = tableMetadata.getColumn(memberName);
+            if (columnMeta == null) {
+                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    continue;
+                }
+                StringBuilder sql = new StringBuilder("alter table ");
+                sql.append(sqlName(entityMeta.getPersistenceName()));
+                sql.append(" add column ");
+                sql.append(sqlName(memberName)).append(' ');
+                sql.append(sqlType(connectionProvider.getDialect(), memberMeta));
+                alterSqls.add(sql.toString());
+            } else {
+                String mappingSqlType = connectionProvider.getDialect().getSqlType(memberMeta.getValueClass());
+                if (!mappingSqlType.equalsIgnoreCase(columnMeta.getTypeName())) {
+                    throw new RuntimeException(entityMeta.getPersistenceName() + "." + memberName + " incompatible SQL type " + columnMeta.getTypeName()
+                            + " != " + mappingSqlType);
+                }
+            }
+
+        }
+
+        if (alterSqls.size() > 0) {
+            execute(connectionProvider, alterSqls);
+        }
     }
 
     String sqlType(Dialect dialect, MemberMeta memberMeta) {
@@ -144,6 +167,24 @@ public class TableModel {
         } else if (String.class == memberMeta.getValueClass()) {
             sql.append('(').append((memberMeta.getStringLength() == 0) ? ORDINARY_STRING_LENGHT_MAX : memberMeta.getStringLength()).append(')');
         }
+        return sql.toString();
+    }
+
+    String sqlCreateJoin(Dialect dialect, MemberMeta memberMeta) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("create table ");
+
+        // TODO enable join table name
+        sql.append(sqlName(entityMeta.getPersistenceName()));
+        sql.append("_");
+        sql.append(sqlName(memberMeta.getFieldName()));
+
+        sql.append(" (");
+
+        sql.append(" id ").append(dialect.getSqlType(Long.class)).append(", ");
+        sql.append(sqlName(memberMeta.getFieldName())).append(" ").append(dialect.getSqlType(Long.class));
+
+        sql.append(')');
         return sql.toString();
     }
 
@@ -176,4 +217,95 @@ public class TableModel {
         }
     }
 
+    private String sqlInsert() {
+        if (sqlInsert == null) {
+            StringBuilder sql = new StringBuilder();
+            sql.append("INSERT INTO ");
+            sql.append(sqlName(entityMeta.getPersistenceName()));
+            sql.append(" (");
+            int numberOfParams = 0;
+            for (String memberName : entityMeta.getMemberNames()) {
+                MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
+                if (memberMeta.isTransient()) {
+                    continue;
+                }
+                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    continue;
+                }
+                if (numberOfParams != 0) {
+                    sql.append(',');
+                }
+                sql.append(sqlName(memberName));
+                numberOfParams++;
+            }
+            sql.append(" ) VALUES (");
+            for (int i = 0; i < numberOfParams; i++) {
+                if (i != 0) {
+                    sql.append(", ");
+                }
+                sql.append("?");
+            }
+            sql.append(" )");
+            sqlInsert = sql.toString();
+        }
+        return sqlInsert;
+    }
+
+    private void bindParameter(Dialect dialect, PreparedStatement stmt, int parameterIndex, Class<?> valueClass, Object value) throws SQLException {
+        if (value == null) {
+            stmt.setNull(parameterIndex, dialect.getTargetSqlType(valueClass));
+        } else {
+            int targetSqlType = dialect.getTargetSqlType(valueClass);
+            if (valueClass.isEnum()) {
+                stmt.setString(parameterIndex, ((Enum<?>) value).name());
+                if (value != null) {
+                    value = ((Enum<?>) value).name();
+                }
+            }
+            stmt.setObject(parameterIndex, value, targetSqlType);
+        }
+    }
+
+    private void bindInsertParameter(Dialect dialect, PreparedStatement stmt, IEntity entity) throws SQLException {
+        int parameterIndex = 1;
+        for (String memberName : entityMeta.getMemberNames()) {
+            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
+            if (memberMeta.isTransient()) {
+                continue;
+            }
+            if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                continue;
+            }
+            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                Long primaryKey = ((IEntity) entity.getMember(memberName)).getPrimaryKey();
+                if (primaryKey == null) {
+                    stmt.setNull(parameterIndex, Types.BIGINT);
+                } else {
+                    stmt.setLong(parameterIndex, primaryKey);
+                }
+            } else {
+                bindParameter(dialect, stmt, parameterIndex, memberMeta.getValueClass(), entity.getMemberValue(memberName));
+            }
+            parameterIndex++;
+        }
+    }
+
+    public void insert(ConnectionProvider connectionProvider, IEntity entity) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = connectionProvider.getConnection();
+            stmt = connection.prepareStatement(sqlInsert());
+            bindInsertParameter(connectionProvider.getDialect(), stmt, entity);
+            stmt.executeUpdate();
+            // We have defaultAutoCommit = true in ConnectionProvider
+            //connection.commit();
+        } catch (SQLException e) {
+            log.error("SQL insert error", e);
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+            SQLUtils.closeQuietly(connection);
+        }
+    }
 }
