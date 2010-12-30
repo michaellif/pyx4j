@@ -32,7 +32,10 @@ public class Style {
     public Style(String... selector) {
         this.selector = "";
         for (int i = 0; i < selector.length; i++) {
-            this.selector += selector[i] + " ";
+            if (this.selector.length() != 0) {
+                this.selector += " ";
+            }
+            this.selector += selector[i];
         }
     }
 
