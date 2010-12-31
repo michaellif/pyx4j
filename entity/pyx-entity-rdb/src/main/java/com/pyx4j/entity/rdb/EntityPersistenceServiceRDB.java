@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.TableModel;
@@ -93,7 +94,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (entity.getPrimaryKey() == null) {
             tm.insert(connectionProvider, entity);
         } else {
-
+            if (!tm.update(connectionProvider, entity)) {
+                if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
+                    tm.insert(connectionProvider, entity);
+                } else {
+                    throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                }
+            }
         }
     }
 
@@ -111,8 +118,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
-        // TODO Auto-generated method stub
-        return null;
+        final T entity = EntityFactory.create(entityClass);
+        EntityMeta entityMeta = entity.getEntityMeta();
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        TableModel tm = mappings.ensureTable(entityMeta);
+        if (tm.retrieve(connectionProvider, primaryKey, entity)) {
+            return entity;
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -34,7 +34,7 @@ import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class DDLTestCase extends DatastoreTestBase {
 
-    @Table(name = "task")
+    @Table(prefix = "test", name = "task")
     public interface TaskAlt extends IEntity {
 
         IPrimitive<Boolean> finished();

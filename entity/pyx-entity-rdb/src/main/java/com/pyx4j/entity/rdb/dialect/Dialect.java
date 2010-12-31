@@ -41,6 +41,10 @@ public abstract class Dialect {
         typeNames.put(java.sql.Date.class, "date");
     }
 
+    public String getGeneratedIdColumnString() {
+        return "";
+    }
+
     public String getSqlType(Class<?> klass) {
         if (Enum.class.isAssignableFrom(klass)) {
             klass = String.class;

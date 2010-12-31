@@ -31,4 +31,9 @@ public class MySQLDialect extends Dialect {
         typeNames.put(Boolean.class, "bit");
         typeNames.put(byte[].class, "blob");
     }
+
+    @Override
+    public String getGeneratedIdColumnString() {
+        return "NOT NULL AUTO_INCREMENT";
+    }
 }

@@ -61,7 +61,7 @@ public class Mappings {
                     model.ensureExists(connectionProvider);
                 } catch (SQLException e) {
                     log.error("SQL Error", e);
-                    throw new RuntimeException(e.getMessage());
+                    throw new RuntimeException(e);
                 }
                 tables.put(entityMeta.getEntityClass(), model);
                 usedTableNames.add(tableName);

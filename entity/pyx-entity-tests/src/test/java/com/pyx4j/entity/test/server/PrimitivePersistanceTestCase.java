@@ -26,8 +26,8 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
-import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
+import com.pyx4j.entity.test.shared.domain.Status;
 
 public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
 
@@ -47,7 +47,8 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Employee emp = EntityFactory.create(Employee.class);
         Assert.assertNull("Initial value", emp.hiredate().getValue());
         Assert.assertEquals("Class of Value", Date.class, emp.hiredate().getValueClass());
-        Date today = new Date();
+        // Round to seconds
+        Date today = new Date(1000 * (new Date().getTime() / 1000));
         emp.hiredate().setValue(today);
 
         srv.persist(emp);

@@ -21,11 +21,13 @@
 package com.pyx4j.entity.test.shared.domain;
 
 import com.pyx4j.entity.annotations.Reference;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.test.shared.adapters.ProvinceReferenceAdapter;
 
+@Table(prefix = "test")
 public interface Address extends IEntity {
 
     public static int TEST_DECLARED_MEMEBERS = 4;

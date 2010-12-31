@@ -22,11 +22,13 @@ package com.pyx4j.entity.test.shared.domain;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
+@Table(prefix = "test")
 public interface Task extends IEntity {
 
     IPrimitive<Boolean> finished();
