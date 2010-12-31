@@ -82,6 +82,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+
+                    <testFailureIgnore>true</testFailureIgnore>
+
                     <forkMode>once</forkMode>
                     <argLine>-Xmx256m -XX:MaxPermSize=256m</argLine>
                 </configuration>
