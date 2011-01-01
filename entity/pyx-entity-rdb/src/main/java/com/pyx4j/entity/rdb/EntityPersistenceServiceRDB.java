@@ -133,8 +133,17 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return null;
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(criteria.getEntityClass());
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        TableModel tm = mappings.ensureTable(entityMeta);
+        List<T> rs = tm.query(connectionProvider, criteria, 1);
+        if (rs.isEmpty()) {
+            return null;
+        } else {
+            return rs.get(0);
+        }
     }
 
     @Override
@@ -157,8 +166,12 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return null;
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(criteria.getEntityClass());
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't retrieve Transient Entity");
+        }
+        TableModel tm = mappings.ensureTable(entityMeta);
+        return tm.query(connectionProvider, criteria, -1);
     }
 
     @Override

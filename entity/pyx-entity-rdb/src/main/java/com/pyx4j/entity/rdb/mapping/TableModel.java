@@ -41,8 +41,10 @@ import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
@@ -444,6 +446,35 @@ public class TableModel {
                 retrieveValues(rs, entity);
                 return true;
             }
+        } catch (SQLException e) {
+            log.error("SQL select error", e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    public <T extends IEntity> List<T> query(ConnectionProvider connectionProvider, EntityQueryCriteria<T> criteria, int limit) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = connectionProvider.getConnection();
+            QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
+            stmt = connection.prepareStatement("SELECT * FROM " + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            qb.bindParameters(stmt);
+
+            ResultSet rs = stmt.executeQuery();
+
+            List<T> rc = new Vector<T>();
+            while (rs.next()) {
+                @SuppressWarnings("unchecked")
+                T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
+                entity.setPrimaryKey(rs.getLong("id"));
+                retrieveValues(rs, entity);
+                rc.add(entity);
+            }
+            return rc;
         } catch (SQLException e) {
             log.error("SQL select error", e);
             throw new RuntimeException(e);
