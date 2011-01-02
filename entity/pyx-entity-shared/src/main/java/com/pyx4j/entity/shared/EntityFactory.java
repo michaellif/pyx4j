@@ -35,10 +35,27 @@ public class EntityFactory {
     private static final Map<Class<?>, EntityMeta> entityMetaCache = new HashMap<Class<?>, EntityMeta>();
 
     static {
+        if (hasGWT()) {
+            initializeWithGWT();
+        } else {
+            impl = ServerSideFactory.create(IEntityFactory.class);
+        }
+    }
+
+    private static void initializeWithGWT() {
         if (GWT.isClient()) {
             impl = GWT.create(IEntityFactory.class);
         } else {
             impl = ServerSideFactory.create(IEntityFactory.class);
+        }
+    }
+
+    private static boolean hasGWT() {
+        try {
+            GWT.isClient();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
