@@ -21,22 +21,123 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 class QueryBuilder<T extends IEntity> {
 
-    QueryBuilder(EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
+    private static final Logger log = LoggerFactory.getLogger(QueryBuilder.class);
 
+    private final StringBuilder sql = new StringBuilder();
+
+    private final List<Object> bindParams = new Vector<Object>();
+
+    QueryBuilder(EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
+        if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
+            sql.append(" WHERE ");
+            boolean firstCriteria = true;
+            for (Criterion cr : criteria.getFilters()) {
+                if (firstCriteria) {
+                    firstCriteria = false;
+                } else {
+                    sql.append(" AND ");
+                }
+                if (cr instanceof PropertyCriterion) {
+                    PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
+                    sql.append(propertyCriterion.getPropertyName());
+                    if (valueIsNull(propertyCriterion.getValue())) {
+                        switch (propertyCriterion.getRestriction()) {
+                        case EQUAL:
+                            sql.append(" IS NULL ");
+                            break;
+                        case NOT_EQUAL:
+                            sql.append(" IS NOT NULL ");
+                            break;
+                        default:
+                            throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction() + " for NULL value");
+                        }
+                    } else {
+                        switch (propertyCriterion.getRestriction()) {
+                        case LESS_THAN:
+                            sql.append(" < ? ");
+                            break;
+                        case LESS_THAN_OR_EQUAL:
+                            sql.append(" <= ? ");
+                            break;
+                        case GREATER_THAN:
+                            sql.append(" > ? ");
+                            break;
+                        case GREATER_THAN_OR_EQUAL:
+                            sql.append(" >= ? ");
+                            break;
+                        case EQUAL:
+                            sql.append(" = ? ");
+                            break;
+                        case NOT_EQUAL:
+                            sql.append(" != ? ");
+                            break;
+                        case IN:
+                            sql.append(" IN ? ");
+                            break;
+                        default:
+                            throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
+                        }
+                        bindParams.add(propertyCriterion.getValue());
+                    }
+                }
+            }
+        }
+        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
+            log.debug("sort by {}", criteria.getSorts());
+            sql.append(" ORDER BY ");
+            boolean firstOrderBy = true;
+            for (EntityQueryCriteria.Sort sort : criteria.getSorts()) {
+                if (firstOrderBy) {
+                    firstOrderBy = false;
+                } else {
+                    sql.append(", ");
+                }
+                sql.append(sort.getPropertyName()).append(' ');
+                sql.append(sort.isDescending() ? "DESC" : "ASC");
+            }
+        }
+    }
+
+    private boolean valueIsNull(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof IEntity) {
+            return (((IEntity) value).getPrimaryKey() == null);
+        } else {
+            return false;
+        }
     }
 
     String getWhere() {
-        return "";
+        return sql.toString();
     }
 
-    void bindParameters(PreparedStatement stmt) {
-
+    void bindParameters(PreparedStatement stmt) throws SQLException {
+        int parameterIndex = 1;
+        for (Object param : bindParams) {
+            if (param instanceof Enum) {
+                param = ((Enum<?>) param).name();
+            } else if (param instanceof IEntity) {
+                param = ((IEntity) param).getPrimaryKey();
+            }
+            stmt.setObject(parameterIndex, param);
+            parameterIndex++;
+        }
     }
 }

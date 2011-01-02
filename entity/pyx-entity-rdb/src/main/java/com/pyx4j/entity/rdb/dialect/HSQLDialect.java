@@ -28,6 +28,7 @@ public class HSQLDialect extends Dialect {
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "boolean");
         addTypeMeta(byte[].class, "longvarbinary", "varbinary");
+        addTypeMeta(java.util.Date.class, "timestamp");
     }
 
     @Override

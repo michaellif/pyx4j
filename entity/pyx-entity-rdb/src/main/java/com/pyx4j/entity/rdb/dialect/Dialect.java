@@ -37,7 +37,6 @@ public abstract class Dialect {
         addTypeMeta(Float.class, "float");
         addTypeMeta(Double.class, "double");
 
-        addTypeMeta(java.util.Date.class, "timestamp");
         addTypeMeta(java.sql.Date.class, "date");
     }
 

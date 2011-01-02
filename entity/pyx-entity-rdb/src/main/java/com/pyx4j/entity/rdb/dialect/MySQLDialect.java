@@ -30,6 +30,7 @@ public class MySQLDialect extends Dialect {
         addTypeMeta(Double.class, "double");
         addTypeMeta(Boolean.class, "bit");
         addTypeMeta(byte[].class, "blob");
+        addTypeMeta(java.util.Date.class, "datetime");
     }
 
     @Override

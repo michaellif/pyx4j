@@ -20,14 +20,28 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Status;
 
 public abstract class QueryTestBase extends DatastoreTestBase {
+
+    protected Employee metaEmp;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        metaEmp = EntityFactory.create(Employee.class);
+    }
 
     public void testQueryByString() {
         Employee emp = EntityFactory.create(Employee.class);
@@ -42,6 +56,100 @@ public abstract class QueryTestBase extends DatastoreTestBase {
         Assert.assertNotNull("retrieve", emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
         Assert.assertEquals("Search Value", empName, emp1.firstName().getValue());
+
+        List<Employee> emps = srv.query(criteria1);
+        Assert.assertEquals("result set size", 1, emps.size());
+        emp1 = emps.get(0);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value", empName, emp1.firstName().getValue());
     }
 
+    protected void execTestQuery(IObject<?> member, Serializable value) {
+        execTestQuery(member, value, false);
+    }
+
+    protected void execTestQuery(IObject<?> member, Serializable value, boolean addAndName) {
+        Employee emp = EntityFactory.create(Employee.class);
+        String empName = "Bob " + uniqueString();
+        emp.firstName().setValue(empName);
+
+        emp.setMemberValue(member.getFieldName(), value);
+
+        srv.persist(emp);
+
+        EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
+        criteria1.add(PropertyCriterion.eq(member, value));
+        if (addAndName) {
+            criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName));
+        }
+        Employee emp1 = srv.retrieve(criteria1);
+        Assert.assertNotNull("retrieve", emp1);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
+        Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
+
+        List<Employee> emps = srv.query(criteria1);
+        Assert.assertEquals("result set size", 1, emps.size());
+        emp1 = emps.get(0);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value", value, emp1.getMemberValue(member.getFieldName()));
+        Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
+    }
+
+    public void testQueryByDate() {
+        execTestQuery(metaEmp.hiredate(), new Date(1000 * (new Date().getTime() / 1000)));
+    }
+
+    public void testQueryByLong() {
+        execTestQuery(metaEmp.holidays(), new Date().getTime());
+    }
+
+    public void testQueryByInteger() {
+        Integer i = (int) (new Date().getTime() % 100000);
+        execTestQuery(metaEmp.rating(), i);
+    }
+
+    public void testQueryByDouble() {
+        Double d = (double) new Date().getTime();
+        execTestQuery(metaEmp.salary(), d);
+    }
+
+    public void testQueryByEnum() {
+        execTestQuery(metaEmp.accessStatus(), Status.DEACTIVATED, true);
+    }
+
+    public void testQueryByBoolean() {
+        execTestQuery(metaEmp.reliable(), Boolean.FALSE, true);
+    }
+
+    public void testQueryByEntity() {
+        Employee mrg = EntityFactory.create(Employee.class);
+        String mgrName = "Manager " + uniqueString();
+        mrg.firstName().setValue(mgrName);
+        srv.persist(mrg);
+
+        Employee emp = EntityFactory.create(Employee.class);
+        String empName = "Bob " + uniqueString();
+        emp.firstName().setValue(empName);
+
+        emp.manager().set(mrg);
+
+        srv.persist(emp);
+
+        EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
+        criteria1.add(PropertyCriterion.eq(criteria1.meta().manager(), mrg));
+
+        Employee emp1 = srv.retrieve(criteria1);
+        Assert.assertNotNull("retrieve", emp1);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value", mrg, emp1.manager());
+        Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
+
+        List<Employee> emps = srv.query(criteria1);
+        Assert.assertEquals("result set size", 1, emps.size());
+        emp1 = emps.get(0);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value", mrg, emp1.manager());
+        Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
+    }
 }
