@@ -54,7 +54,7 @@ public class EntityFactory {
         try {
             GWT.isClient();
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }
