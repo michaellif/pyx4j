@@ -198,22 +198,32 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void delete(IEntity entity) {
-        // TODO Auto-generated method stub
-
+        delete((Class<IEntity>) entity.getObjectClass(), entity.getPrimaryKey());
     }
 
     @Override
     public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey) {
-        // TODO Auto-generated method stub
-
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't delete Transient Entity");
+        }
+        TableModel tm = mappings.ensureTable(entityMeta);
+        if (!tm.delete(connectionProvider, primaryKey)) {
+            throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
+        }
     }
 
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return 0;
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(criteria.getEntityClass());
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't delete Transient Entity");
+        }
+        TableModel tm = mappings.ensureTable(entityMeta);
+        return tm.delete(connectionProvider, criteria);
     }
 
     @Override
