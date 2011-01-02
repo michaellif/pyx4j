@@ -165,10 +165,9 @@ public class TableModel {
                 sql.append(sqlType(connectionProvider.getDialect(), memberMeta));
                 alterSqls.add(sql.toString());
             } else {
-                String mappingSqlType = connectionProvider.getDialect().getSqlType(memberMeta.getValueClass());
-                if (!mappingSqlType.equalsIgnoreCase(columnMeta.getTypeName())) {
+                if (!connectionProvider.getDialect().isCompatibleType(memberMeta.getValueClass(), columnMeta.getTypeName())) {
                     throw new RuntimeException(entityMeta.getPersistenceName() + "." + memberName + " incompatible SQL type " + columnMeta.getTypeName()
-                            + " != " + mappingSqlType);
+                            + " != " + connectionProvider.getDialect().getSqlType(memberMeta.getValueClass()));
                 }
             }
 

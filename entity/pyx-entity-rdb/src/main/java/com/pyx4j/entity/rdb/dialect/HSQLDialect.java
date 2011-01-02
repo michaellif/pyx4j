@@ -23,11 +23,11 @@ package com.pyx4j.entity.rdb.dialect;
 public class HSQLDialect extends Dialect {
 
     public HSQLDialect() {
-        typeNames.put(Short.class, "smallint");
-        typeNames.put(Long.class, "bigint");
-        typeNames.put(Double.class, "double");
-        typeNames.put(Boolean.class, "boolean");
-        typeNames.put(byte[].class, "longvarbinary");
+        addTypeMeta(Short.class, "smallint");
+        addTypeMeta(Long.class, "bigint");
+        addTypeMeta(Double.class, "double");
+        addTypeMeta(Boolean.class, "boolean");
+        addTypeMeta(byte[].class, "longvarbinary", "varbinary");
     }
 
     @Override

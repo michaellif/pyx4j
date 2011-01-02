@@ -28,34 +28,55 @@ import com.pyx4j.entity.shared.IEntity;
 
 public abstract class Dialect {
 
-    protected final Map<Class<?>, String> typeNames = new HashMap<Class<?>, String>();
+    protected final Map<Class<?>, TypeMeta> typeNames = new HashMap<Class<?>, TypeMeta>();
 
     protected Dialect() {
-        typeNames.put(Integer.class, "integer");
-        typeNames.put(Character.class, "char");
-        typeNames.put(String.class, "varchar");
-        typeNames.put(Float.class, "float");
-        typeNames.put(Double.class, "double");
+        addTypeMeta(Integer.class, "integer");
+        addTypeMeta(Character.class, "char");
+        addTypeMeta(String.class, "varchar");
+        addTypeMeta(Float.class, "float");
+        addTypeMeta(Double.class, "double");
 
-        typeNames.put(java.util.Date.class, "timestamp");
-        typeNames.put(java.sql.Date.class, "date");
+        addTypeMeta(java.util.Date.class, "timestamp");
+        addTypeMeta(java.sql.Date.class, "date");
+    }
+
+    protected void addTypeMeta(Class<?> javaClass, String sqlType) {
+        typeNames.put(javaClass, new TypeMeta(javaClass, sqlType));
+    }
+
+    protected void addTypeMeta(Class<?> javaClass, String sqlType, String... compatibleTypeNames) {
+        typeNames.put(javaClass, new TypeMeta(javaClass, sqlType, compatibleTypeNames));
     }
 
     public String getGeneratedIdColumnString() {
         return "";
     }
 
-    public String getSqlType(Class<?> klass) {
+    public Class<?> getType(Class<?> klass) {
         if (Enum.class.isAssignableFrom(klass)) {
-            klass = String.class;
+            return String.class;
         } else if (IEntity.class.isAssignableFrom(klass)) {
-            klass = Long.class;
+            return Long.class;
+        } else {
+            return klass;
         }
-        String name = typeNames.get(klass);
-        if (name == null) {
-            throw new RuntimeException("Undefined SQL type for class " + klass.getName());
+    }
+
+    public String getSqlType(Class<?> klass) {
+        TypeMeta typeMeta = typeNames.get(getType(klass));
+        if (typeMeta == null) {
+            throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
         }
-        return name;
+        return typeMeta.sqlType;
+    }
+
+    public boolean isCompatibleType(Class<?> klass, String typeName) {
+        TypeMeta typeMeta = typeNames.get(getType(klass));
+        if (typeMeta == null) {
+            throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
+        }
+        return typeMeta.isCompatibleType(typeName);
     }
 
     public int getTargetSqlType(Class<?> valueClass) {

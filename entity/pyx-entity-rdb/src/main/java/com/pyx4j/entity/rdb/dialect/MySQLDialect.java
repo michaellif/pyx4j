@@ -24,12 +24,12 @@ public class MySQLDialect extends Dialect {
 
     public MySQLDialect() {
         super();
-        typeNames.put(Integer.class, "int");
-        typeNames.put(Short.class, "smallint");
-        typeNames.put(Long.class, "bigint");
-        typeNames.put(Double.class, "double");
-        typeNames.put(Boolean.class, "bit");
-        typeNames.put(byte[].class, "blob");
+        addTypeMeta(Integer.class, "int");
+        addTypeMeta(Short.class, "smallint");
+        addTypeMeta(Long.class, "bigint");
+        addTypeMeta(Double.class, "double");
+        addTypeMeta(Boolean.class, "bit");
+        addTypeMeta(byte[].class, "blob");
     }
 
     @Override
