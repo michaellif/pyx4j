@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.gae;
 
+import org.junit.Ignore;
+
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 import com.pyx4j.entity.test.server.QueryTestBase;
 
@@ -30,4 +32,15 @@ public class QueryTest extends QueryTestBase {
         return GAEPersistenceEnvironmentFactory.getPersistenceEnvironment();
     }
 
+    @Override
+    @Ignore
+    public void testQueryByEnum() {
+
+    }
+
+    @Override
+    @Ignore
+    public void testQueryByBoolean() {
+
+    }
 }

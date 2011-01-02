@@ -50,14 +50,18 @@ public interface Employee extends IEntity {
     @Indexed
     IPrimitive<String> firstName();
 
+    @Indexed
     IPrimitive<Date> hiredate();
 
     IPrimitive<Boolean> reliable();
 
+    @Indexed
     IPrimitive<Long> holidays();
 
+    @Indexed
     IPrimitive<Integer> rating();
 
+    @Indexed
     IPrimitive<Double> salary();
 
     IPrimitive<EmploymentStatus> employmentStatus();
@@ -73,6 +77,7 @@ public interface Employee extends IEntity {
 
     Department department();
 
+    @Indexed
     Employee manager();
 
     @Owned
