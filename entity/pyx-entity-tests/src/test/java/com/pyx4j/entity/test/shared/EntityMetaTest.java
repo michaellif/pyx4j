@@ -94,7 +94,7 @@ public class EntityMetaTest extends InitializerTestCase {
         assertFalse("@Owner is Detached", EntityFactory.create(Department.class).organization().getMeta().isDetached());
         assertFalse("@Detached", EntityFactory.create(Employee.class).homeAddress().getMeta().isDetached());
         assertTrue("@Indexed", EntityFactory.create(Employee.class).firstName().getMeta().isIndexed());
-        assertFalse("not @Indexed", EntityFactory.create(Employee.class).holidays().getMeta().isIndexed());
+        assertFalse("not @Indexed", EntityFactory.create(Employee.class).reliable().getMeta().isIndexed());
     }
 
     public void testInherited() {
