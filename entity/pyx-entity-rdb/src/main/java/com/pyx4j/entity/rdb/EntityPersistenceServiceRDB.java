@@ -32,6 +32,7 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -87,9 +88,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public void persist(IEntity entity) {
         EntityMeta entityMeta = entity.getEntityMeta();
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't persist Transient Entity");
-        }
         TableModel tm = mappings.ensureTable(entityMeta);
         if (entity.getPrimaryKey() == null) {
             tm.insert(connectionProvider, entity);
@@ -119,11 +117,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
         final T entity = EntityFactory.create(entityClass);
-        EntityMeta entityMeta = entity.getEntityMeta();
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't retrieve Transient Entity");
-        }
-        TableModel tm = mappings.ensureTable(entityMeta);
+        TableModel tm = mappings.ensureTable(entity.getEntityMeta());
         if (tm.retrieve(connectionProvider, primaryKey, entity)) {
             return entity;
         } else {
@@ -133,11 +127,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
-        EntityMeta entityMeta = EntityFactory.getEntityMeta(criteria.getEntityClass());
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't retrieve Transient Entity");
-        }
-        TableModel tm = mappings.ensureTable(entityMeta);
+        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         List<T> rs = tm.query(connectionProvider, criteria, 1);
         if (rs.isEmpty()) {
             return null;
@@ -166,11 +156,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
-        EntityMeta entityMeta = EntityFactory.getEntityMeta(criteria.getEntityClass());
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't retrieve Transient Entity");
-        }
-        TableModel tm = mappings.ensureTable(entityMeta);
+        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         return tm.query(connectionProvider, criteria, -1);
     }
 
@@ -194,8 +180,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return 0;
+        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        Number count = (Number) tm.aggregate(connectionProvider, criteria, SQLAggregateFunctions.COUNT, null);
+        if (count == null) {
+            return 0;
+        } else {
+            return count.intValue();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -207,9 +198,6 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't delete Transient Entity");
-        }
         TableModel tm = mappings.ensureTable(entityMeta);
         if (!tm.delete(connectionProvider, primaryKey)) {
             throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
@@ -218,18 +206,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
-        EntityMeta entityMeta = EntityFactory.getEntityMeta(criteria.getEntityClass());
-        if (entityMeta.isTransient()) {
-            throw new Error("Can't delete Transient Entity");
-        }
-        TableModel tm = mappings.ensureTable(entityMeta);
+        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         return tm.delete(connectionProvider, criteria);
     }
 
     @Override
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys) {
         // TODO Auto-generated method stub
-
     }
 
     @Override

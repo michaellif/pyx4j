@@ -49,6 +49,9 @@ public class Mappings {
     }
 
     public TableModel ensureTable(EntityMeta entityMeta) {
+        if (entityMeta.isTransient()) {
+            throw new Error("Can't operate on Transient Entity");
+        }
         synchronized (entityMeta.getEntityClass()) {
             TableModel model = tables.get(entityMeta.getEntityClass());
             if (model == null) {

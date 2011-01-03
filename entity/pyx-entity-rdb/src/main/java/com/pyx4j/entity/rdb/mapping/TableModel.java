@@ -40,6 +40,7 @@ import com.pyx4j.entity.annotations.Table.PrimaryKeyStrategy;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -476,6 +477,31 @@ public class TableModel {
                 rc.add(entity);
             }
             return rc;
+        } catch (SQLException e) {
+            log.error("SQL select error", e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    public <T extends IEntity> Object aggregate(ConnectionProvider connectionProvider, EntityQueryCriteria<T> criteria, SQLAggregateFunctions func, String args) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = connectionProvider.getConnection();
+            QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
+            stmt = connection.prepareStatement("SELECT " + connectionProvider.getDialect().sqlFunction(func, args) + " FROM "
+                    + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            qb.bindParameters(stmt);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getObject(1);
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             log.error("SQL select error", e);
             throw new RuntimeException(e);

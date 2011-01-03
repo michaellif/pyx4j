@@ -107,4 +107,12 @@ public abstract class Dialect {
             throw new RuntimeException("Unsupported type " + valueClass.getName());
         }
     }
+
+    public String sqlFunction(SQLAggregateFunctions func, String args) {
+        if (args == null) {
+            return func.name() + "(*)";
+        } else {
+            return func.name() + "( " + args + " )";
+        }
+    }
 }
