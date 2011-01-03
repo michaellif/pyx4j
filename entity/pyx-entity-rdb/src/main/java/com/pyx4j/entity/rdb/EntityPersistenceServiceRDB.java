@@ -89,7 +89,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public void dropTable(Class<? extends IEntity> entityClass) {
-        TableModel tm = new TableModel(EntityFactory.getEntityMeta(entityClass));
+        TableModel tm = new TableModel(connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
         try {
             tm.dropTable(connectionProvider);
         } catch (SQLException e) {
@@ -98,16 +98,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    private TableModel tableModel(EntityMeta entityMeta) {
+        return mappings.ensureTable(connectionProvider.getDialect(), entityMeta);
+    }
+
     @Override
     public void persist(IEntity entity) {
-        persist(mappings.ensureTable(entity.getEntityMeta()), entity, new Date());
+        persist(tableModel(entity.getEntityMeta()), entity, new Date());
     }
 
     private void persist(TableModel tm, IEntity entity, Date now) {
         for (MemberMeta memberMeta : tm.operationsMeta().getCascadePersistMembers()) {
             if (memberMeta.isEntity()) {
                 IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
-                persist(mappings.ensureTable(childEntity.getEntityMeta()), childEntity, now);
+                persist(tableModel(childEntity.getEntityMeta()), childEntity, now);
             } else {
                 //TODO Collections  
             }
@@ -136,7 +140,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void merge(IEntity entity) {
-        merge(mappings.ensureTable(entity.getEntityMeta()), entity, new Date());
+        merge(tableModel(entity.getEntityMeta()), entity, new Date());
     }
 
     @SuppressWarnings("unchecked")
@@ -219,7 +223,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         delete(baseChildEntity);
                     }
                 }
-                merge(mappings.ensureTable(childEntity.getEntityMeta()), childEntity, now);
+                merge(tableModel(childEntity.getEntityMeta()), childEntity, now);
             } else {
                 //TODO Collections  
             }
@@ -245,7 +249,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
         final T entity = EntityFactory.create(entityClass);
-        TableModel tm = mappings.ensureTable(entity.getEntityMeta());
+        TableModel tm = tableModel(entity.getEntityMeta());
         if (tm.retrieve(connectionProvider, primaryKey, entity)) {
             return cascadeRetrieve(tm, entity);
         } else {
@@ -262,7 +266,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (memberMeta.isEntity()) {
                 IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
                 if (childEntity.getPrimaryKey() != null) {
-                    TableModel ctm = mappings.ensureTable(childEntity.getEntityMeta());
+                    TableModel ctm = tableModel(childEntity.getEntityMeta());
                     if (ctm.retrieve(connectionProvider, childEntity.getPrimaryKey(), childEntity)) {
                         cascadeRetrieve(ctm, childEntity);
                     }
@@ -276,7 +280,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria) {
-        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         List<T> rs = tm.query(connectionProvider, criteria, 1);
         if (rs.isEmpty()) {
             return null;
@@ -305,7 +309,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
-        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         List<T> l = tm.query(connectionProvider, criteria, -1);
         for (T entity : l) {
             cascadeRetrieve(tm, entity);
@@ -321,7 +325,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria) {
-        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         return tm.queryKeys(connectionProvider, criteria, -1);
     }
 
@@ -333,7 +337,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
-        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         Number count = (Number) tm.aggregate(connectionProvider, criteria, SQLAggregateFunctions.COUNT, null);
         if (count == null) {
             return 0;
@@ -351,7 +355,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey) {
         EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
-        TableModel tm = mappings.ensureTable(entityMeta);
+        TableModel tm = tableModel(entityMeta);
         if (!tm.delete(connectionProvider, primaryKey)) {
             throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + primaryKey + " NotFound");
         }
@@ -359,7 +363,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
-        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         return tm.delete(connectionProvider, criteria);
     }
 

@@ -29,7 +29,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -57,6 +56,8 @@ public class TableModel {
 
     private static final Logger log = LoggerFactory.getLogger(TableModel.class);
 
+    private final String tableName;
+
     private final EntityMeta entityMeta;
 
     private final EntityOperationsMeta entityOperationsMeta;
@@ -67,7 +68,7 @@ public class TableModel {
 
     private String sqlUpdate;
 
-    public TableModel(EntityMeta entityMeta) {
+    public TableModel(Dialect dialect, EntityMeta entityMeta) {
         this.entityMeta = entityMeta;
         Table tableAnnotation = entityMeta.getEntityClass().getAnnotation(Table.class);
         if (tableAnnotation != null) {
@@ -75,7 +76,8 @@ public class TableModel {
         } else {
             primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED;
         }
-        entityOperationsMeta = new EntityOperationsMeta(entityMeta);
+        tableName = dialect.sqlName(entityMeta.getPersistenceName());
+        entityOperationsMeta = new EntityOperationsMeta(dialect, entityMeta);
     }
 
     public void ensureExists(ConnectionProvider connectionProvider) throws SQLException {
@@ -96,16 +98,12 @@ public class TableModel {
         return entityOperationsMeta;
     }
 
-    public static String sqlName(String name) {
-        return name.toUpperCase(Locale.ENGLISH);
-    }
-
     public boolean exists(ConnectionProvider connectionProvider) throws SQLException {
         Connection connection = connectionProvider.getConnection();
         ResultSet rs = null;
         try {
             DatabaseMetaData dbMeta = connection.getMetaData();
-            rs = dbMeta.getTables(null, null, sqlName(entityMeta.getPersistenceName()), null);
+            rs = dbMeta.getTables(null, null, tableName, null);
             if (rs.next()) {
                 validateAndAlter(connectionProvider, new TableMetadata(rs, dbMeta));
                 return true;
@@ -121,27 +119,21 @@ public class TableModel {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("create table ");
-        sql.append(sqlName(entityMeta.getPersistenceName()));
+        sql.append(tableName);
         sql.append(" (");
         sql.append(" id ").append(dialect.getSqlType(Long.class));
         if (getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
             sql.append(" ").append(dialect.getGeneratedIdColumnString());
         }
 
-        for (String memberName : entityMeta.getMemberNames()) {
-            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
-                continue;
-            }
+        for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 // For now create a join table
                 sqls.add(sqlCreateJoin(dialect, memberMeta));
                 continue;
             }
-
-            sql.append(',');
-
-            sql.append(' ').append(sqlName(memberName)).append(' ');
+            sql.append(", ").append(member.sqlName()).append(' ');
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 // TODO create FK
             }
@@ -160,29 +152,25 @@ public class TableModel {
 
     private void validateAndAlter(ConnectionProvider connectionProvider, TableMetadata tableMetadata) throws SQLException {
         List<String> alterSqls = new Vector<String>();
-        for (String memberName : entityMeta.getMemberNames()) {
-            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
-                continue;
-            }
-            ColumnMetadata columnMeta = tableMetadata.getColumn(memberName);
+        for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
+            ColumnMetadata columnMeta = tableMetadata.getColumn(member.sqlName());
             if (columnMeta == null) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     continue;
                 }
                 StringBuilder sql = new StringBuilder("alter table ");
-                sql.append(sqlName(entityMeta.getPersistenceName()));
+                sql.append(tableName);
                 sql.append(" add column ");
-                sql.append(sqlName(memberName)).append(' ');
+                sql.append(member.sqlName()).append(' ');
                 sql.append(sqlType(connectionProvider.getDialect(), memberMeta));
                 alterSqls.add(sql.toString());
             } else {
                 if (!connectionProvider.getDialect().isCompatibleType(memberMeta.getValueClass(), columnMeta.getTypeName())) {
-                    throw new RuntimeException(entityMeta.getPersistenceName() + "." + memberName + " incompatible SQL type " + columnMeta.getTypeName()
-                            + " != " + connectionProvider.getDialect().getSqlType(memberMeta.getValueClass()));
+                    throw new RuntimeException(tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName() + " != "
+                            + connectionProvider.getDialect().getSqlType(memberMeta.getValueClass()));
                 }
             }
-
         }
 
         if (alterSqls.size() > 0) {
@@ -206,14 +194,12 @@ public class TableModel {
         sql.append("create table ");
 
         // TODO enable join table name
-        sql.append(sqlName(entityMeta.getPersistenceName()));
-        sql.append("_");
-        sql.append(sqlName(memberMeta.getFieldName()));
+        sql.append(dialect.sqlName(tableName + "_" + memberMeta.getFieldName()));
 
         sql.append(" (");
 
         sql.append(" id ").append(dialect.getSqlType(Long.class)).append(", ");
-        sql.append(sqlName(memberMeta.getFieldName())).append(" ").append(dialect.getSqlType(Long.class));
+        sql.append(dialect.sqlName(memberMeta.getFieldName())).append(" ").append(dialect.getSqlType(Long.class));
 
         sql.append(')');
         return sql.toString();
@@ -221,7 +207,7 @@ public class TableModel {
 
     public void dropTable(ConnectionProvider connectionProvider) throws SQLException {
         List<String> sqls = new Vector<String>();
-        sqls.add("drop table " + sqlName(entityMeta.getPersistenceName()));
+        sqls.add("drop table " + tableName);
         execute(connectionProvider, sqls);
     }
 
@@ -252,21 +238,18 @@ public class TableModel {
         if (sqlInsert == null) {
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO ");
-            sql.append(sqlName(entityMeta.getPersistenceName()));
+            sql.append(tableName);
             sql.append(" (");
             int numberOfParams = 0;
-            for (String memberName : entityMeta.getMemberNames()) {
-                MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-                if (memberMeta.isTransient()) {
-                    continue;
-                }
+            for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
+                MemberMeta memberMeta = member.getMemberMeta();
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     continue;
                 }
                 if (numberOfParams != 0) {
                     sql.append(',');
                 }
-                sql.append(sqlName(memberName));
+                sql.append(member.sqlName());
                 numberOfParams++;
             }
             if (!autoGeneratedKeys) {
@@ -290,14 +273,11 @@ public class TableModel {
         if (sqlUpdate == null) {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE  ");
-            sql.append(sqlName(entityMeta.getPersistenceName()));
+            sql.append(tableName);
             sql.append(" SET ");
             boolean first = true;
-            for (String memberName : entityMeta.getMemberNames()) {
-                MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-                if (memberMeta.isTransient()) {
-                    continue;
-                }
+            for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
+                MemberMeta memberMeta = member.getMemberMeta();
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     continue;
                 }
@@ -306,7 +286,7 @@ public class TableModel {
                 } else {
                     sql.append(',');
                 }
-                sql.append(sqlName(memberName)).append(" = ? ");
+                sql.append(member.sqlName()).append(" = ? ");
             }
             sql.append(" WHERE id = ?");
             sqlUpdate = sql.toString();
@@ -330,23 +310,20 @@ public class TableModel {
 
     private int bindPersistParameters(Dialect dialect, PreparedStatement stmt, IEntity entity) throws SQLException {
         int parameterIndex = 1;
-        for (String memberName : entityMeta.getMemberNames()) {
-            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
-                continue;
-            }
+        for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 continue;
             }
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                Long primaryKey = ((IEntity) entity.getMember(memberName)).getPrimaryKey();
+                Long primaryKey = ((IEntity) member.getMember(entity)).getPrimaryKey();
                 if (primaryKey == null) {
                     stmt.setNull(parameterIndex, Types.BIGINT);
                 } else {
                     stmt.setLong(parameterIndex, primaryKey);
                 }
             } else {
-                bindParameter(dialect, stmt, parameterIndex, memberMeta.getValueClass(), entity.getMemberValue(memberName));
+                bindParameter(dialect, stmt, parameterIndex, memberMeta.getValueClass(), member.getMemberValue(entity));
             }
             parameterIndex++;
         }
@@ -425,19 +402,16 @@ public class TableModel {
     }
 
     private void retrieveValues(ResultSet rs, IEntity entity) throws SQLException {
-        for (String memberName : entityMeta.getMemberNames()) {
-            MemberMeta memberMeta = entityMeta.getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
-                continue;
-            }
+        for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 continue;
             }
-            Object value = rs.getObject(sqlName(memberName));
+            Object value = rs.getObject(member.sqlName());
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                ((IEntity) entity.getMember(memberName)).setPrimaryKey((Long) value);
+                ((IEntity) member.getMember(entity)).setPrimaryKey((Long) value);
             } else {
-                entity.setMemberValue(memberName, decodeValue(value, memberMeta));
+                member.setMemberValue(entity, decodeValue(value, memberMeta));
             }
         }
     }
@@ -448,7 +422,7 @@ public class TableModel {
         ResultSet rs = null;
         try {
             connection = connectionProvider.getConnection();
-            stmt = connection.prepareStatement("SELECT * FROM " + sqlName(entityMeta.getPersistenceName()) + " WHERE id = ?");
+            stmt = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?");
 
             stmt.setLong(1, primaryKey);
 
@@ -481,7 +455,7 @@ public class TableModel {
         try {
             connection = connectionProvider.getConnection();
             QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT * FROM " + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            stmt = connection.prepareStatement("SELECT * FROM " + tableName + qb.getWhere());
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
@@ -515,7 +489,7 @@ public class TableModel {
         try {
             connection = connectionProvider.getConnection();
             QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT id FROM " + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            stmt = connection.prepareStatement("SELECT id FROM " + tableName + qb.getWhere());
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
@@ -545,8 +519,7 @@ public class TableModel {
         try {
             connection = connectionProvider.getConnection();
             QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT " + connectionProvider.getDialect().sqlFunction(func, args) + " FROM "
-                    + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            stmt = connection.prepareStatement("SELECT " + connectionProvider.getDialect().sqlFunction(func, args) + " FROM " + tableName + qb.getWhere());
             qb.bindParameters(stmt);
 
             rs = stmt.executeQuery();
@@ -570,7 +543,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         try {
             connection = connectionProvider.getConnection();
-            stmt = connection.prepareStatement("DELETE FROM " + sqlName(entityMeta.getPersistenceName()) + " WHERE id = ?");
+            stmt = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?");
 
             stmt.setLong(1, primaryKey);
 
@@ -591,7 +564,7 @@ public class TableModel {
         try {
             connection = connectionProvider.getConnection();
             QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
-            stmt = connection.prepareStatement("DELETE FROM " + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            stmt = connection.prepareStatement("DELETE FROM " + tableName + qb.getWhere());
             qb.bindParameters(stmt);
             return stmt.executeUpdate();
         } catch (SQLException e) {

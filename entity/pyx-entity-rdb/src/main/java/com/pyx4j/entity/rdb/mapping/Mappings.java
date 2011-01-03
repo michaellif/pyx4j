@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.rdb.ConnectionProvider;
+import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
@@ -48,14 +49,14 @@ public class Mappings {
         this.connectionProvider = connectionProvider;
     }
 
-    public TableModel ensureTable(EntityMeta entityMeta) {
+    public TableModel ensureTable(Dialect dialect, EntityMeta entityMeta) {
         if (entityMeta.isTransient()) {
             throw new Error("Can't operate on Transient Entity");
         }
         synchronized (entityMeta.getEntityClass()) {
             TableModel model = tables.get(entityMeta.getEntityClass());
             if (model == null) {
-                model = new TableModel(entityMeta);
+                model = new TableModel(dialect, entityMeta);
                 String tableName = entityMeta.getPersistenceName().toUpperCase(Locale.ENGLISH);
                 if (usedTableNames.contains(tableName)) {
                     log.warn("redefining/extending table {} for class {}", tableName, entityMeta.getEntityClass());

@@ -113,7 +113,7 @@ public class ConnectionProvider {
         }
     }
 
-    public Dialect getDialect() throws SQLException {
+    public Dialect getDialect() {
         return dialect;
     }
 

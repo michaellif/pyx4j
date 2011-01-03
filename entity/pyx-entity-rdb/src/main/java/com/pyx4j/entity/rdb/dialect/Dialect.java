@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb.dialect;
 
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -38,6 +39,10 @@ public abstract class Dialect {
         addTypeMeta(Double.class, "double");
 
         addTypeMeta(java.sql.Date.class, "date");
+    }
+
+    public String sqlName(String name) {
+        return name.toUpperCase(Locale.ENGLISH);
     }
 
     protected void addTypeMeta(Class<?> javaClass, String sqlType) {
