@@ -21,8 +21,11 @@
 package com.pyx4j.entity.test.server;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
+
+import com.ibm.icu.util.Calendar;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
@@ -48,13 +51,17 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertNull("Initial value", emp.hiredate().getValue());
         Assert.assertEquals("Class of Value", Date.class, emp.hiredate().getValueClass());
         // Round to seconds
+        GregorianCalendar c = new GregorianCalendar();
         Date today = new Date(1000 * (new Date().getTime() / 1000));
-        emp.hiredate().setValue(today);
+        c.setTime(today);
+        c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
+        Date day = c.getTime();
+        emp.hiredate().setValue(day);
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Class of Value", Date.class, emp2.hiredate().getValue().getClass());
-        Assert.assertEquals("Value", today, emp2.hiredate().getValue());
+        Assert.assertEquals("Value", day, emp2.hiredate().getValue());
     }
 
     public void testBoolean() {

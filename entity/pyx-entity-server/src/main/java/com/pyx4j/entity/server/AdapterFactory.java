@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.gae;
+package com.pyx4j.entity.server;
 
 import java.util.HashMap;
 import java.util.Map;

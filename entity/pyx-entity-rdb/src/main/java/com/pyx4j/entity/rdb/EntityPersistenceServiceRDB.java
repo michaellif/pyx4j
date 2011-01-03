@@ -21,32 +21,44 @@
 package com.pyx4j.entity.rdb;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.annotations.Adapters;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.TableModel;
+import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
+import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.i18n.shared.I18nFactory;
 
 public class EntityPersistenceServiceRDB implements IEntityPersistenceService, IEntityPersistenceServiceExt {
 
     private static final Logger log = LoggerFactory.getLogger(EntityPersistenceServiceRDB.class);
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     private final ConnectionProvider connectionProvider;
 
@@ -88,17 +100,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void persist(IEntity entity) {
-        persist(mappings.ensureTable(entity.getEntityMeta()), entity);
+        persist(mappings.ensureTable(entity.getEntityMeta()), entity, new Date());
     }
 
-    private void persist(TableModel tm, IEntity entity) {
+    private void persist(TableModel tm, IEntity entity, Date now) {
         for (MemberMeta memberMeta : tm.operationsMeta().getCascadePersistMembers()) {
             if (memberMeta.isEntity()) {
                 IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
-                persist(mappings.ensureTable(childEntity.getEntityMeta()), childEntity);
+                persist(mappings.ensureTable(childEntity.getEntityMeta()), childEntity, now);
             } else {
                 //TODO Collections  
             }
+        }
+        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
+        if (updatedTs != null) {
+            entity.setMemberValue(updatedTs, now);
         }
         if (entity.getPrimaryKey() == null) {
             tm.insert(connectionProvider, entity);
@@ -116,13 +132,114 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void merge(IEntity entity) {
-        // TODO Auto-generated method stub
+        merge(mappings.ensureTable(entity.getEntityMeta()), entity, new Date());
+    }
 
+    @SuppressWarnings("unchecked")
+    private boolean applyModifications(IEntity baseEntity, IEntity entity) {
+        boolean updated = false;
+        Class<? extends MemberModificationAdapter<?>>[] entityMemebersModificationAdapters = null;
+        Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
+        if (adapters != null) {
+            entityMemebersModificationAdapters = adapters.modificationAdapters();
+        }
+        for (String memberName : entity.getEntityMeta().getMemberNames()) {
+            MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
+            if (memberMeta.isTransient()) {
+                continue;
+            }
+            Object value;
+            Object lastValue;
+            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                value = ((IEntity) entity.getMember(memberMeta.getFieldName())).getPrimaryKey();
+                lastValue = ((IEntity) baseEntity.getMember(memberMeta.getFieldName())).getPrimaryKey();
+            } else {
+                value = entity.getMemberValue(memberName);
+                lastValue = baseEntity.getMemberValue(memberName);
+            }
+            if (!EqualsHelper.equals(lastValue, value)) {
+                updated = true;
+                if (memberMeta.getAnnotation(ReadOnly.class) != null) {
+                    log.error("Changing readonly property [{}] -> [{}]", lastValue, value);
+                    throw new Error("Changing readonly property " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                }
+                MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+                if (memberColumn != null && memberColumn.modificationAdapters() != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : memberColumn.modificationAdapters()) {
+                        @SuppressWarnings("rawtypes")
+                        MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
+                        if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
+                            log.error("Forbiden change [{}] -> [{}]", lastValue, value);
+                            throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        }
+                    }
+                }
+                if (entityMemebersModificationAdapters != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMemebersModificationAdapters) {
+                        @SuppressWarnings("rawtypes")
+                        MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
+                        if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {
+                            log.error("Forbiden change [{}] -> [{}]", lastValue, value);
+                            throw new Error("Forbiden change " + memberMeta.getCaption() + " of " + entity.getEntityMeta().getCaption());
+                        }
+                    }
+                }
+            }
+        }
+        return updated;
+    }
+
+    private void merge(TableModel tm, IEntity entity, Date now) {
+        final IEntity baseEntity = EntityFactory.create(tm.entityMeta().getEntityClass());
+        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
+        boolean updated;
+        if (entity.getPrimaryKey() != null) {
+            if (!tm.retrieve(connectionProvider, entity.getPrimaryKey(), baseEntity)) {
+                throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+            }
+            if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
+                log.debug("Timestamp change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
+                throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
+            }
+            updated = applyModifications(baseEntity, entity);
+        } else {
+            updated = true;
+        }
+        for (MemberMeta memberMeta : tm.operationsMeta().getCascadePersistMembers()) {
+            if (memberMeta.isEntity()) {
+                IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
+                IEntity baseChildEntity = (IEntity) baseEntity.getMember(memberMeta.getFieldName());
+                if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
+                    if (baseChildEntity.getPrimaryKey() != null) {
+                        // Cascade delete
+                        delete(baseChildEntity);
+                    }
+                }
+                merge(mappings.ensureTable(childEntity.getEntityMeta()), childEntity, now);
+            } else {
+                //TODO Collections  
+            }
+        }
+        if (updated) {
+            if (updatedTs != null) {
+                entity.setMemberValue(updatedTs, now);
+            }
+            if (entity.getPrimaryKey() == null) {
+                tm.insert(connectionProvider, entity);
+            } else {
+                if (!tm.update(connectionProvider, entity)) {
+                    if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
+                        tm.insert(connectionProvider, entity);
+                    } else {
+                        throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                    }
+                }
+            }
+        }
     }
 
     @Override
