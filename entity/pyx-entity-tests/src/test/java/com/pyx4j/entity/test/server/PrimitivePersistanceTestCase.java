@@ -20,12 +20,11 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import junit.framework.Assert;
-
-import com.ibm.icu.util.Calendar;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
