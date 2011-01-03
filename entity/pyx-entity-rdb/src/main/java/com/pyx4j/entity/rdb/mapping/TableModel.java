@@ -464,6 +464,9 @@ public class TableModel {
             connection = connectionProvider.getConnection();
             QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
             stmt = connection.prepareStatement("SELECT * FROM " + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            if (limit > 0) {
+                stmt.setMaxRows(limit);
+            }
             qb.bindParameters(stmt);
 
             ResultSet rs = stmt.executeQuery();
@@ -475,6 +478,34 @@ public class TableModel {
                 entity.setPrimaryKey(rs.getLong("id"));
                 retrieveValues(rs, entity);
                 rc.add(entity);
+            }
+            return rc;
+        } catch (SQLException e) {
+            log.error("SQL select error", e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    public <T extends IEntity> List<Long> queryKeys(ConnectionProvider connectionProvider, EntityQueryCriteria<T> criteria, int limit) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = connectionProvider.getConnection();
+            QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
+            stmt = connection.prepareStatement("SELECT id FROM " + sqlName(entityMeta.getPersistenceName()) + qb.getWhere());
+            if (limit > 0) {
+                stmt.setMaxRows(limit);
+            }
+            qb.bindParameters(stmt);
+
+            ResultSet rs = stmt.executeQuery();
+
+            List<Long> rc = new Vector<Long>();
+            while (rs.next()) {
+                rc.add(rs.getLong("id"));
             }
             return rc;
         } catch (SQLException e) {

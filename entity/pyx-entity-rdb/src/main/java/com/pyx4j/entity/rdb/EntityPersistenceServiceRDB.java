@@ -168,8 +168,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<Long> queryKeys(EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return null;
+        TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        return tm.queryKeys(connectionProvider, criteria, -1);
     }
 
     @Override
