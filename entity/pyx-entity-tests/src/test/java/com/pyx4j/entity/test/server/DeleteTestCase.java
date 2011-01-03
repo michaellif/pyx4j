@@ -20,11 +20,44 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.util.List;
+
+import junit.framework.Assert;
+
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Department;
+import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 
 public abstract class DeleteTestCase extends DatastoreTestBase {
+
+    public void testSingleDelete() {
+        Employee emp = EntityFactory.create(Employee.class);
+        String empName = "Bob " + uniqueString();
+        emp.firstName().setValue(empName);
+
+        srv.persist(emp);
+
+        EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
+        criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName));
+        Employee emp1 = srv.retrieve(criteria1);
+        Assert.assertNotNull("verify retrieve", emp1);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
+        Assert.assertEquals("Search Value", empName, emp1.firstName().getValue());
+
+        srv.delete(emp);
+
+        List<Employee> emps = srv.query(criteria1);
+        Assert.assertEquals("result set size", 0, emps.size());
+
+        EntityQueryCriteria<Employee> criteria2 = EntityQueryCriteria.create(Employee.class);
+        criteria2.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, emp.getPrimaryKey()));
+        Employee emp2 = srv.retrieve(criteria1);
+        Assert.assertNull("retrieve by PK", emp2);
+    }
 
     public void testOwnedSetCascadeDelete() {
         Organization org = EntityFactory.create(Organization.class);
