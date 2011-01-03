@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javassist.CannotCompileException;
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
@@ -161,9 +162,11 @@ public class EntityImplGenerator {
             log.error("Unable to find jar markers", e);
             return;
         }
+        int jarCount = 0;
         while (urls.hasMoreElements()) {
             String u = urls.nextElement().toExternalForm();
             String pathname = u.substring(0, u.lastIndexOf(MARKER_RESOURCE_NAME) - 2);
+            //log.debug("path {}", pathname);
             String prefix = "jar:file:";
             if (!pathname.startsWith(prefix)) {
                 continue;
@@ -179,9 +182,15 @@ public class EntityImplGenerator {
             try {
                 log.trace("ClassPool append path {}", pathname);
                 pool.appendClassPath(pathname);
+                jarCount++;
             } catch (NotFoundException e) {
                 log.error("Can't append path", e);
             }
+        }
+        if (jarCount == 0) {
+            log.warn("No jars found in ContextClassLoader webapp={}", webapp);
+            // Allow to work as eclipse plugin.
+            pool.appendClassPath(new ClassClassPath(IEntity.class));
         }
     }
 
