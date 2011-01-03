@@ -59,6 +59,8 @@ public class TableModel {
 
     private final EntityMeta entityMeta;
 
+    private final EntityOperationsMeta entityOperationsMeta;
+
     private final PrimaryKeyStrategy primaryKeyStrategy;
 
     private String sqlInsert;
@@ -73,6 +75,7 @@ public class TableModel {
         } else {
             primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED;
         }
+        entityOperationsMeta = new EntityOperationsMeta(entityMeta);
     }
 
     public void ensureExists(ConnectionProvider connectionProvider) throws SQLException {
@@ -81,8 +84,16 @@ public class TableModel {
         }
     }
 
+    public EntityMeta entityMeta() {
+        return entityMeta;
+    }
+
     public PrimaryKeyStrategy getPrimaryKeyStrategy() {
         return primaryKeyStrategy;
+    }
+
+    public EntityOperationsMeta operationsMeta() {
+        return entityOperationsMeta;
     }
 
     public static String sqlName(String name) {

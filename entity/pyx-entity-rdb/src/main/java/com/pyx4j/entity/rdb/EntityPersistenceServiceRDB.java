@@ -42,6 +42,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityPersistenceServiceRDB implements IEntityPersistenceService, IEntityPersistenceServiceExt {
 
@@ -87,8 +88,18 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void persist(IEntity entity) {
-        EntityMeta entityMeta = entity.getEntityMeta();
-        TableModel tm = mappings.ensureTable(entityMeta);
+        persist(mappings.ensureTable(entity.getEntityMeta()), entity);
+    }
+
+    private void persist(TableModel tm, IEntity entity) {
+        for (MemberMeta memberMeta : tm.operationsMeta().getCascadePersistMembers()) {
+            if (memberMeta.isEntity()) {
+                IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
+                persist(mappings.ensureTable(childEntity.getEntityMeta()), childEntity);
+            } else {
+                //TODO Collections  
+            }
+        }
         if (entity.getPrimaryKey() == null) {
             tm.insert(connectionProvider, entity);
         } else {
@@ -96,7 +107,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
                     tm.insert(connectionProvider, entity);
                 } else {
-                    throw new RuntimeException("Entity " + entityMeta.getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                    throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
                 }
             }
         }
@@ -119,10 +130,31 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         final T entity = EntityFactory.create(entityClass);
         TableModel tm = mappings.ensureTable(entity.getEntityMeta());
         if (tm.retrieve(connectionProvider, primaryKey, entity)) {
-            return entity;
+            return cascadeRetrieve(tm, entity);
         } else {
             return null;
         }
+    }
+
+    private <T extends IEntity> T cascadeRetrieve(TableModel tm, T entity) {
+        for (MemberMeta memberMeta : tm.operationsMeta().getCascadeRetrieveMembers()) {
+            // Do not retrieve Owner, since already retrieved
+            if ((entity.getOwner() != null) && (memberMeta.isOwner())) {
+                continue;
+            }
+            if (memberMeta.isEntity()) {
+                IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
+                if (childEntity.getPrimaryKey() != null) {
+                    TableModel ctm = mappings.ensureTable(childEntity.getEntityMeta());
+                    if (ctm.retrieve(connectionProvider, childEntity.getPrimaryKey(), childEntity)) {
+                        cascadeRetrieve(ctm, childEntity);
+                    }
+                }
+            } else {
+                //TODO Collections                
+            }
+        }
+        return entity;
     }
 
     @Override
@@ -132,7 +164,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (rs.isEmpty()) {
             return null;
         } else {
-            return rs.get(0);
+            return cascadeRetrieve(tm, rs.get(0));
         }
     }
 
@@ -157,7 +189,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria) {
         TableModel tm = mappings.ensureTable(EntityFactory.getEntityMeta(criteria.getEntityClass()));
-        return tm.query(connectionProvider, criteria, -1);
+        List<T> l = tm.query(connectionProvider, criteria, -1);
+        for (T entity : l) {
+            cascadeRetrieve(tm, entity);
+        }
+        return l;
     }
 
     @Override
