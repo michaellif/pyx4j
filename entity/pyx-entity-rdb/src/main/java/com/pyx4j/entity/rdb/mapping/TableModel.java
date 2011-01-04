@@ -316,8 +316,13 @@ public class TableModel {
                 continue;
             }
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                Long primaryKey = ((IEntity) member.getMember(entity)).getPrimaryKey();
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                Long primaryKey = childEntity.getPrimaryKey();
                 if (primaryKey == null) {
+                    if (!childEntity.isNull()) {
+                        log.error("Saving non persisted reference {}", childEntity);
+                        throw new Error("Saving non persisted reference " + memberMeta.getValueClass() + " " + memberMeta.getCaption());
+                    }
                     stmt.setNull(parameterIndex, Types.BIGINT);
                 } else {
                     stmt.setLong(parameterIndex, primaryKey);
@@ -357,7 +362,7 @@ public class TableModel {
             //TODO We have defaultAutoCommit = true in ConnectionProvider
             //connection.commit();
         } catch (SQLException e) {
-            log.error("SQL insert error", e);
+            log.error("{} SQL insert error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(stmt);
@@ -380,7 +385,7 @@ public class TableModel {
 
             return (rc == 1);
         } catch (SQLException e) {
-            log.error("SQL update error", e);
+            log.error("{} SQL update error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(stmt);
@@ -439,7 +444,7 @@ public class TableModel {
                 return true;
             }
         } catch (SQLException e) {
-            log.error("SQL select error", e);
+            log.error("{} SQL select error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(rs);
@@ -452,10 +457,11 @@ public class TableModel {
         Connection connection = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        String sql = null;
         try {
             connection = connectionProvider.getConnection();
             QueryBuilder<T> qb = new QueryBuilder<T>(entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT * FROM " + tableName + qb.getWhere());
+            stmt = connection.prepareStatement(sql = "SELECT * FROM " + tableName + qb.getWhere());
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
@@ -473,7 +479,8 @@ public class TableModel {
             }
             return rc;
         } catch (SQLException e) {
-            log.error("SQL select error", e);
+            log.error("{} SQL {}", tableName, sql);
+            log.error("{} SQL select error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(rs);
@@ -503,7 +510,7 @@ public class TableModel {
             }
             return rc;
         } catch (SQLException e) {
-            log.error("SQL select error", e);
+            log.error("{} SQL select error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(rs);
@@ -529,7 +536,7 @@ public class TableModel {
                 return null;
             }
         } catch (SQLException e) {
-            log.error("SQL select error", e);
+            log.error("{} SQL select error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(rs);
@@ -550,7 +557,7 @@ public class TableModel {
             int rc = stmt.executeUpdate();
             return rc >= 1;
         } catch (SQLException e) {
-            log.error("SQL delete error", e);
+            log.error("{} SQL delete error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(stmt);
@@ -568,7 +575,7 @@ public class TableModel {
             qb.bindParameters(stmt);
             return stmt.executeUpdate();
         } catch (SQLException e) {
-            log.error("SQL delete error", e);
+            log.error("{} SQL delete error", tableName, e);
             throw new RuntimeException(e);
         } finally {
             SQLUtils.closeQuietly(stmt);

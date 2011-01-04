@@ -35,28 +35,31 @@ public class MemberEmbeddedOperationsMeta extends MemberOperationsMeta {
         this.path = path;
     }
 
-    @Override
-    public Object getMemberValue(IEntity entity) {
+    protected IEntity actualEntity(IEntity entity) {
         for (String memberName : path) {
             entity = (IEntity) entity.getMember(memberName);
         }
-        return entity.getMemberValue(memberName);
+        return entity;
+    }
+
+    @Override
+    public Object getMemberValue(IEntity entity) {
+        return actualEntity(entity).getMemberValue(memberName);
+    }
+
+    @Override
+    public boolean containsMemberValue(IEntity entity) {
+        return actualEntity(entity).containsMemberValue(memberName);
     }
 
     @Override
     public void setMemberValue(IEntity entity, Object value) {
-        for (String memberName : path) {
-            entity = (IEntity) entity.getMember(memberName);
-        }
-        entity.setMemberValue(memberName, value);
+        actualEntity(entity).setMemberValue(memberName, value);
     }
 
     @Override
     public IObject<?> getMember(IEntity entity) {
-        for (String memberName : path) {
-            entity = (IEntity) entity.getMember(memberName);
-        }
-        return entity.getMember(memberName);
+        return actualEntity(entity).getMember(memberName);
     }
 
 }

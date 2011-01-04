@@ -69,6 +69,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public Object removeMemberValue(String memberName);
 
+    public boolean containsMemberValue(String memberName);
+
     @Override
     public Class<? extends IEntity> getValueClass();
 

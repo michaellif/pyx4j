@@ -23,6 +23,7 @@ package com.pyx4j.entity.rdb.mapping;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -34,9 +35,9 @@ public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> members = new Vector<MemberOperationsMeta>();
 
-    private final List<MemberMeta> cascadePersistMembers = new Vector<MemberMeta>();
+    private final List<MemberOperationsMeta> cascadePersistMembers = new Vector<MemberOperationsMeta>();
 
-    private final List<MemberMeta> cascadeRetrieveMembers = new Vector<MemberMeta>();
+    private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
 
     EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
         for (String memberName : entityMeta.getMemberNames()) {
@@ -45,18 +46,25 @@ public class EntityOperationsMeta {
                 continue;
             }
             if (memberMeta.isEmbedded()) {
-                addEmbededMemebers(dialect, new Vector<String>(), memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    //TODO
+                } else {
+                    addEmbededMemebers(dialect, new Vector<String>(), memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                }
             } else {
-                members.add(new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta));
+                MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta);
+                members.add(member);
 
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    if (memberMeta.isOwnedRelationships() && !memberMeta.isEmbedded()) {
-                        cascadePersistMembers.add(memberMeta);
+                    if (memberMeta.isOwnedRelationships()) {
+                        cascadePersistMembers.add(member);
+                    } else if (memberMeta.getAnnotation(Reference.class) != null) {
+                        cascadePersistMembers.add(member);
                     }
                     if (!memberMeta.isDetached()) {
-                        cascadeRetrieveMembers.add(memberMeta);
+                        cascadeRetrieveMembers.add(member);
                     }
                 }
             }
@@ -80,20 +88,25 @@ public class EntityOperationsMeta {
                 continue;
             }
             if (memberMeta.isEmbedded()) {
-                addEmbededMemebers(dialect, thisPath, memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    //TODO
+                } else {
+                    addEmbededMemebers(dialect, thisPath, memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                }
             } else {
-                members.add(new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta));
+                MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta);
+                members.add(member);
 
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    if (memberMeta.isOwnedRelationships() && !memberMeta.isEmbedded()) {
-                        //TODO
-                        //cascadePersistMembers.add(memberMeta);
+                    if (memberMeta.isOwnedRelationships()) {
+                        cascadePersistMembers.add(member);
+                    } else if (memberMeta.getAnnotation(Reference.class) != null) {
+                        cascadePersistMembers.add(member);
                     }
                     if (!memberMeta.isDetached()) {
-                        //TODO
-                        //cascadeRetrieveMembers.add(memberMeta);
+                        cascadeRetrieveMembers.add(member);
                     }
                 }
             }
@@ -104,11 +117,11 @@ public class EntityOperationsMeta {
         return members;
     }
 
-    public List<MemberMeta> getCascadePersistMembers() {
+    public List<MemberOperationsMeta> getCascadePersistMembers() {
         return cascadePersistMembers;
     }
 
-    public List<MemberMeta> getCascadeRetrieveMembers() {
+    public List<MemberOperationsMeta> getCascadeRetrieveMembers() {
         return cascadeRetrieveMembers;
     }
 

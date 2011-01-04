@@ -257,6 +257,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
     }
 
+    @Override
+    public boolean containsMemberValue(String memberName) {
+        Map<String, Object> v = getValue();
+        if (v != null) {
+            return v.containsKey(memberName);
+        } else {
+            return false;
+        }
+    }
+
     //    private final void assertPath(Path path) {
     //        if (!GWTJava5Helper.getSimpleName(this.getObjectClass()).equals(path.getRootObjectClassName())) {
     //            throw new IllegalArgumentException("Path of " + path.getRootObjectClassName() + " expected");

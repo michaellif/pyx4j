@@ -34,13 +34,16 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.adapters.ReferenceAdapter;
 import com.pyx4j.entity.annotations.Adapters;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
+import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -107,11 +110,35 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         persist(tableModel(entity.getEntityMeta()), entity, new Date());
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void mergeReference(MemberMeta meta, IEntity entity, Date now) {
+        ReferenceAdapter adapter;
+        try {
+            adapter = meta.getAnnotation(Reference.class).adapter().newInstance();
+        } catch (InstantiationException e) {
+            throw new Error(e);
+        } catch (IllegalAccessException e) {
+            throw new Error(e);
+        }
+        IEntity ent = retrieve(adapter.getMergeCriteria(entity));
+        if (ent != null) {
+            entity.setPrimaryKey(ent.getPrimaryKey());
+        } else {
+            entity = adapter.onEntityCreation(entity);
+            persist(tableModel(entity.getEntityMeta()), entity, now);
+        }
+    }
+
     private void persist(TableModel tm, IEntity entity, Date now) {
-        for (MemberMeta memberMeta : tm.operationsMeta().getCascadePersistMembers()) {
+        for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             if (memberMeta.isEntity()) {
-                IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
-                persist(tableModel(childEntity.getEntityMeta()), childEntity, now);
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                if (memberMeta.isOwnedRelationships()) {
+                    persist(tableModel(childEntity.getEntityMeta()), childEntity, now);
+                } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
+                    mergeReference(memberMeta, childEntity, now);
+                }
             } else {
                 //TODO Collections  
             }
@@ -144,26 +171,29 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @SuppressWarnings("unchecked")
-    private boolean applyModifications(IEntity baseEntity, IEntity entity) {
+    private boolean applyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
         boolean updated = false;
         Class<? extends MemberModificationAdapter<?>>[] entityMemebersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
             entityMemebersModificationAdapters = adapters.modificationAdapters();
         }
-        for (String memberName : entity.getEntityMeta().getMemberNames()) {
-            MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
-            if (memberMeta.isTransient()) {
-                continue;
-            }
+        for (MemberOperationsMeta member : tm.operationsMeta().getMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             Object value;
             Object lastValue;
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                value = ((IEntity) entity.getMember(memberMeta.getFieldName())).getPrimaryKey();
-                lastValue = ((IEntity) baseEntity.getMember(memberMeta.getFieldName())).getPrimaryKey();
+                value = ((IEntity) member.getMember(entity)).getPrimaryKey();
+                lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
+                // TODO // merge incomplete data
             } else {
-                value = entity.getMemberValue(memberName);
-                lastValue = baseEntity.getMemberValue(memberName);
+                value = member.getMemberValue(entity);
+                lastValue = member.getMemberValue(baseEntity);
+                // merge incomplete data
+                if ((value == null) && (lastValue != null) && !member.containsMemberValue(entity)) {
+                    member.setMemberValue(entity, lastValue);
+                    continue;
+                }
             }
             if (!EqualsHelper.equals(lastValue, value)) {
                 updated = true;
@@ -209,21 +239,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 log.debug("Timestamp change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
                 throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
             }
-            updated = applyModifications(baseEntity, entity);
+            updated = applyModifications(tm, baseEntity, entity);
         } else {
             updated = true;
         }
-        for (MemberMeta memberMeta : tm.operationsMeta().getCascadePersistMembers()) {
+        for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             if (memberMeta.isEntity()) {
-                IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
-                IEntity baseChildEntity = (IEntity) baseEntity.getMember(memberMeta.getFieldName());
-                if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
-                    if (baseChildEntity.getPrimaryKey() != null) {
-                        // Cascade delete
-                        delete(baseChildEntity);
+                IEntity childEntity = (IEntity) member.getMember(entity);
+                IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
+                if (memberMeta.isOwnedRelationships()) {
+                    if (!EqualsHelper.equals(childEntity.getPrimaryKey(), baseChildEntity.getPrimaryKey())) {
+                        if (baseChildEntity.getPrimaryKey() != null) {
+                            // Cascade delete
+                            delete(baseChildEntity);
+                        }
                     }
+                    merge(tableModel(childEntity.getEntityMeta()), childEntity, now);
+                } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
+                    mergeReference(memberMeta, childEntity, now);
                 }
-                merge(tableModel(childEntity.getEntityMeta()), childEntity, now);
             } else {
                 //TODO Collections  
             }
@@ -258,13 +293,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> T cascadeRetrieve(TableModel tm, T entity) {
-        for (MemberMeta memberMeta : tm.operationsMeta().getCascadeRetrieveMembers()) {
+        for (MemberOperationsMeta member : tm.operationsMeta().getCascadeRetrieveMembers()) {
+            MemberMeta memberMeta = member.getMemberMeta();
             // Do not retrieve Owner, since already retrieved
             if ((entity.getOwner() != null) && (memberMeta.isOwner())) {
                 continue;
             }
             if (memberMeta.isEntity()) {
-                IEntity childEntity = (IEntity) entity.getMember(memberMeta.getFieldName());
+                IEntity childEntity = (IEntity) member.getMember(entity);
                 if (childEntity.getPrimaryKey() != null) {
                     TableModel ctm = tableModel(childEntity.getEntityMeta());
                     if (ctm.retrieve(connectionProvider, childEntity.getPrimaryKey(), childEntity)) {

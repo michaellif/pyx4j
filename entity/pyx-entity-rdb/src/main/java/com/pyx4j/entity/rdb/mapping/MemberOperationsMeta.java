@@ -50,6 +50,10 @@ public class MemberOperationsMeta {
         return entity.getMemberValue(memberName);
     }
 
+    public boolean containsMemberValue(IEntity entity) {
+        return entity.containsMemberValue(memberName);
+    }
+
     public void setMemberValue(IEntity entity, Object value) {
         entity.setMemberValue(memberName, value);
     }
