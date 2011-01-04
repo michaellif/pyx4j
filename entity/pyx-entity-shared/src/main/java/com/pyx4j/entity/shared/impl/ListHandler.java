@@ -80,12 +80,12 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public boolean add(TYPE entity) {
-        return ensureValue().add(((SharedEntityHandler) entity).ensureValue());
+        return ensureValue().add(ensureTypedValue(entity));
     }
 
     @Override
     public void add(int index, TYPE entity) {
-        ensureValue().add(index, entity.getValue());
+        ensureValue().add(index, ensureTypedValue(entity));
 
     }
 
@@ -94,7 +94,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
         boolean rc = false;
         List<Map<String, Object>> value = ensureValue();
         for (TYPE el : c) {
-            if (value.add(((SharedEntityHandler) el).ensureValue())) {
+            if (value.add(ensureTypedValue(el))) {
                 rc = true;
             }
         }
@@ -136,10 +136,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     public TYPE get(int index) {
         List<Map<String, Object>> value = getValue();
         if (value != null) {
-            Map<String, Object> entityValue = value.get(index);
-            TYPE entity = $();
-            entity.setValue(entityValue);
-            return entity;
+            return createTypedEntity(value.get(index));
         } else {
             throw new NullPointerException();
         }
@@ -204,10 +201,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
             @Override
             public TYPE next() {
-                Map<String, Object> entityValue = iter.next();
-                TYPE entity = $();
-                entity.setValue(entityValue);
-                return entity;
+                return createTypedEntity(iter.next());
             }
 
             @Override

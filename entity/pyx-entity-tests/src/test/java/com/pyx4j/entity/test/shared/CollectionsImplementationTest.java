@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
 import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
@@ -106,5 +107,9 @@ public class CollectionsImplementationTest extends InitializerTestCase {
         RefferenceEntity ent2 = EntityFactory.create(RefferenceEntity.class);
 
         ent2.refferences().add(ent1);
+
+        Base1Entity item = ent2.refferences().iterator().next();
+
+        assertTrue("item data type " + item.getClass(), item instanceof ConcreteEntity);
     }
 }

@@ -34,6 +34,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public static String SERIALIZABLE_IMPL_CLASS_SUFIX = "_Impl";
 
+    public static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
+
     public Long getPrimaryKey();
 
     public void setPrimaryKey(Long pk);

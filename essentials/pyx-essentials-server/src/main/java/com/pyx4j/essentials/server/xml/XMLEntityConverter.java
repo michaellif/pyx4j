@@ -82,7 +82,7 @@ public class XMLEntityConverter {
 
         nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
             String propertyName = me.getKey();
-            if (propertyName.equals(IEntity.PRIMARY_KEY)) {
+            if (propertyName.equals(IEntity.PRIMARY_KEY) || propertyName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
                 continue nextValue;
             }
             Object value = me.getValue();

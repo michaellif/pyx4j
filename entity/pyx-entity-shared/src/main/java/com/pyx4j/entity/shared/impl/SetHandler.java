@@ -109,7 +109,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
     @Override
     public boolean add(TYPE entity) {
-        return ensureValue().add(((SharedEntityHandler) entity).ensureValue());
+        return ensureValue().add(ensureTypedValue(entity));
     }
 
     @Override
@@ -117,7 +117,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         boolean rc = false;
         Set<Map<String, Object>> value = ensureValue();
         for (TYPE el : c) {
-            if (value.add(((SharedEntityHandler) el).ensureValue())) {
+            if (value.add(ensureTypedValue(el))) {
                 rc = true;
             }
         }
@@ -194,10 +194,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
             @Override
             public TYPE next() {
-                Map<String, Object> entityValue = iter.next();
-                TYPE entity = $();
-                entity.setValue(entityValue);
-                return entity;
+                return createTypedEntity(iter.next());
             }
 
             @Override

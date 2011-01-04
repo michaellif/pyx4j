@@ -52,8 +52,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     private static final boolean trace = false;
 
-    private static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
-
     private Map<String, Object> data;
 
     protected transient HashMap<String, IObject<?>> members;

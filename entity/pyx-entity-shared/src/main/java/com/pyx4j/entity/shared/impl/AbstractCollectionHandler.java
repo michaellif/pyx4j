@@ -56,6 +56,26 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return EntityFactory.create(getValueClass(), this, getFieldName());
     }
 
+    protected TYPE createTypedEntity(Map<String, Object> entityValue) {
+        TYPE entity;
+        TYPE typeAttr = (TYPE) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+        if (typeAttr == null) {
+            entity = $();
+        } else {
+            entity = EntityFactory.create((Class<TYPE>) typeAttr.getValueClass(), this, getFieldName());
+        }
+        entity.setValue(entityValue);
+        return entity;
+    }
+
+    protected Map<String, Object> ensureTypedValue(TYPE entity) {
+        Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
+        if (!this.getValueClass().equals(entity.getObjectClass())) {
+            value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
+        }
+        return value;
+    }
+
     @Override
     public Object[] toArray() {
         Object[] array = new Object[this.size()];
