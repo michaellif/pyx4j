@@ -41,4 +41,9 @@ public class EnumCollectionIndexAdapter extends AbstractIndexAdapter<Collection<
         return idxValue;
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return String[].class;
+    }
+
 }

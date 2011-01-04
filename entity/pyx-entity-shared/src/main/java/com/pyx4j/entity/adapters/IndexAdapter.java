@@ -35,4 +35,6 @@ public interface IndexAdapter<E> {
 
     public String getIndexedColumnName(String embeddedPath, MemberMeta memberMeta);
 
+    public Class<?> getIndexValueClass();
+
 }

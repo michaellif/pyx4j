@@ -51,4 +51,9 @@ public class KeywordsIndexAdapter extends AbstractIndexAdapter<String> {
         }
         return set;
     }
+
+    @Override
+    public Class<?> getIndexValueClass() {
+        return String[].class;
+    }
 }

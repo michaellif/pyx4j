@@ -37,4 +37,9 @@ public class DayIndexAdapter extends AbstractIndexAdapter<Date> {
         return TimeUtils.dayStart(value);
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return Date.class;
+    }
+
 }

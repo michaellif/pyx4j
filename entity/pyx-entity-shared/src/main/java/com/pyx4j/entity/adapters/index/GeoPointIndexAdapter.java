@@ -34,4 +34,8 @@ public class GeoPointIndexAdapter extends AbstractIndexAdapter<GeoPoint> {
         return value.getCells();
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return String[].class;
+    }
 }

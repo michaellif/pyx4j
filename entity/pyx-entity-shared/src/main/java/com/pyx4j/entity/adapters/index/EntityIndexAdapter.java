@@ -33,4 +33,9 @@ public class EntityIndexAdapter extends AbstractIndexAdapter<IEntity> {
         return value.getPrimaryKey();
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return Long.class;
+    }
+
 }

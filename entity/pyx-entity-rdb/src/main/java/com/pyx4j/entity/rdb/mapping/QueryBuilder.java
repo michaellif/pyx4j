@@ -28,6 +28,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -42,7 +43,7 @@ class QueryBuilder<T extends IEntity> {
 
     private final List<Object> bindParams = new Vector<Object>();
 
-    QueryBuilder(EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
+    QueryBuilder(Dialect dialect, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
             sql.append(" WHERE ");
             boolean firstCriteria = true;
@@ -54,7 +55,7 @@ class QueryBuilder<T extends IEntity> {
                 }
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    sql.append(propertyCriterion.getPropertyName());
+                    sql.append(dialect.sqlName(propertyCriterion.getPropertyName()));
                     if (valueIsNull(propertyCriterion.getValue())) {
                         switch (propertyCriterion.getRestriction()) {
                         case EQUAL:

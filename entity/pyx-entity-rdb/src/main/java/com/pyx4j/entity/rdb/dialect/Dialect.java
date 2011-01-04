@@ -42,7 +42,7 @@ public abstract class Dialect {
     }
 
     public String sqlName(String name) {
-        return name.toUpperCase(Locale.ENGLISH);
+        return name.replace("-", "_").toUpperCase(Locale.ENGLISH);
     }
 
     protected void addTypeMeta(Class<?> javaClass, String sqlType) {

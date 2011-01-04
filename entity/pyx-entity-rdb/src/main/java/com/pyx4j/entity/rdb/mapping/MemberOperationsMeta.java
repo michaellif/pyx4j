@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -32,10 +34,20 @@ public class MemberOperationsMeta {
 
     private final String sqlName;
 
+    private final Class<? extends IndexAdapter<?>> indexAdapterClass;
+
+    private final Class<?> indexValueClass;
+
     public MemberOperationsMeta(String sqlName, MemberMeta memberMeta) {
+        this(sqlName, memberMeta, null, null);
+    }
+
+    public MemberOperationsMeta(String sqlName, MemberMeta memberMeta, Class<? extends IndexAdapter<?>> indexAdapterClass, Class<?> indexValueClass) {
         this.memberMeta = memberMeta;
         this.memberName = memberMeta.getFieldName();
         this.sqlName = sqlName;
+        this.indexAdapterClass = indexAdapterClass;
+        this.indexValueClass = indexValueClass;
     }
 
     public MemberMeta getMemberMeta() {
@@ -60,5 +72,19 @@ public class MemberOperationsMeta {
 
     public IObject<?> getMember(IEntity entity) {
         return entity.getMember(memberName);
+    }
+
+    public Class<? extends IndexAdapter<?>> getIndexAdapter() {
+        return indexAdapterClass;
+    }
+
+    public Class<?> getIndexValueClass() {
+        return indexValueClass;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Object getIndexedValue(IEntity entity) {
+        IndexAdapter adapter = AdapterFactory.getIndexAdapter(indexAdapterClass);
+        return adapter.getIndexedValue(entity, memberMeta, memberMeta.isEntity() ? getMember(entity) : getMemberValue(entity));
     }
 }

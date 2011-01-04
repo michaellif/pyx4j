@@ -33,4 +33,8 @@ public class EnumIndexAdapter extends AbstractIndexAdapter<Enum<?>> {
         return value.name();
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return String.class;
+    }
 }

@@ -23,8 +23,11 @@ package com.pyx4j.entity.rdb.mapping;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -38,6 +41,8 @@ public class EntityOperationsMeta {
     private final List<MemberOperationsMeta> cascadePersistMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
+
+    private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
     EntityOperationsMeta(Dialect dialect, EntityMeta entityMeta) {
         for (String memberName : entityMeta.getMemberNames()) {
@@ -65,6 +70,15 @@ public class EntityOperationsMeta {
                     }
                     if (!memberMeta.isDetached()) {
                         cascadeRetrieveMembers.add(member);
+                    }
+                }
+
+                Indexed index = memberMeta.getAnnotation(Indexed.class);
+                if ((index != null) && (index.adapters() != null) && (index.adapters().length > 0)) {
+                    for (Class<? extends IndexAdapter<?>> adapterClass : index.adapters()) {
+                        IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(adapterClass);
+                        String indexedPropertyName = dialect.sqlName(adapter.getIndexedColumnName(null, member.getMemberMeta()));
+                        indexMembers.add(new MemberOperationsMeta(indexedPropertyName, memberMeta, adapterClass, adapter.getIndexValueClass()));
                     }
                 }
             }
@@ -123,6 +137,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getCascadeRetrieveMembers() {
         return cascadeRetrieveMembers;
+    }
+
+    public List<MemberOperationsMeta> getIndexMembers() {
+        return indexMembers;
     }
 
 }

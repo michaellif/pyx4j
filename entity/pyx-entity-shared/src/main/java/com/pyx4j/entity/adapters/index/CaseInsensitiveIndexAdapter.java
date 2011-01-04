@@ -33,4 +33,9 @@ public class CaseInsensitiveIndexAdapter extends AbstractIndexAdapter<String> {
         return value.toLowerCase();
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return String.class;
+    }
+
 }

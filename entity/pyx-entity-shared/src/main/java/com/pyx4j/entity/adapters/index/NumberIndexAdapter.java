@@ -33,4 +33,8 @@ public class NumberIndexAdapter extends AbstractIndexAdapter<Number> {
         return value.toString();
     }
 
+    @Override
+    public Class<?> getIndexValueClass() {
+        return String.class;
+    }
 }
