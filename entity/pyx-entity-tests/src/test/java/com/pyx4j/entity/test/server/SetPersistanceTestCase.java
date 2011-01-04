@@ -41,11 +41,15 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         employee.firstName().setValue(empName);
         department.employees().add(employee);
 
+        boolean saved = false;
         try {
             srv.persist(department);
-            fail("Should not save UnownedSetMemebr");
+            saved = true;
         } catch (Error e) {
             // OK
+        }
+        if (saved) {
+            fail("Should not save UnownedSetMemebr");
         }
 
         // See if it is not updated with cascade
@@ -84,13 +88,16 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         employee2.firstName().setValue(empName2);
         department.employees().add(employee2);
 
+        boolean saved = false;
         try {
             srv.persist(org);
-            fail("Should not save UnownedSetMemebr");
+            saved = true;
         } catch (Error e) {
             // OK
         }
-
+        if (saved) {
+            fail("Should not save UnownedSetMemebr");
+        }
         department.employees().remove(employee2);
         employee1.salary().setValue(120000.0);
         srv.persist(org);

@@ -88,6 +88,27 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
 
     }
 
+    public void testOwnedOneToOnePersistNonPersisted() {
+        Country country = EntityFactory.create(Country.class);
+        String countryName = "Canada" + uniqueString();
+        country.name().setValue(countryName);
+        // Do not save!
+        //srv.persist(country);
+
+        Address address = EntityFactory.create(Address.class);
+        address.country().set(country);
+        boolean saved = false;
+        try {
+            srv.persist(address);
+            saved = true;
+        } catch (Error e) {
+            // OK
+        }
+        if (saved) {
+            fail("Should not save non persisted reference");
+        }
+    }
+
     public void testOwnedOneToOnePersist() {
         Employee employee = EntityFactory.create(Employee.class);
         employee.firstName().setValue("Firstname");
