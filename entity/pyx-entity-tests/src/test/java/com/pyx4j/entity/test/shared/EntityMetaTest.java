@@ -38,6 +38,8 @@ import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
+import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
 
 public class EntityMetaTest extends InitializerTestCase {
 
@@ -104,5 +106,24 @@ public class EntityMetaTest extends InitializerTestCase {
         assertTrue("has filed city", meta.getMemberNames().contains(addressExt.city().getFieldName()));
 
         assertEquals("caption", "inherited city", meta.getMemberMeta(new Path(addressExt.city())).getCaption());
+    }
+
+    public void testInheritedLevel2() {
+        Base1Entity base = null;
+
+        try {
+            base = EntityFactory.create(Base1Entity.class);
+        } catch (Error e) {
+            // OK
+        }
+        if (base != null) {
+            fail("Should not create AbstractEntity");
+        }
+
+        base = EntityFactory.create(ConcreteEntity.class);
+        assertTrue("Right class", base instanceof ConcreteEntity);
+        assertTrue("Has member name1", base.getEntityMeta().getMemberNames().contains("name1"));
+        assertTrue("Has member name2", base.getEntityMeta().getMemberNames().contains("name2"));
+        assertTrue("Has member name", base.getEntityMeta().getMemberNames().contains("name"));
     }
 }
