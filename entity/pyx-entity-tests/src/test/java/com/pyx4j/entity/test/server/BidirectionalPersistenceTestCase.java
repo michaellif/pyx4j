@@ -29,7 +29,7 @@ import com.pyx4j.entity.test.shared.domain.Organization;
 
 public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase {
 
-    public void testOwnerValue() {
+    public void testOwnerValueOneToMany() {
         Organization org = EntityFactory.create(Organization.class);
         org.name().setValue("org" + uniqueString());
 
