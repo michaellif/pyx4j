@@ -43,7 +43,6 @@ import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.impl.SharedEntityHandler;
@@ -256,9 +255,9 @@ public class EntityImplGenerator {
     }
 
     public <T extends IEntity> CtClass createImplementationClass(Class<T> interfaceClass) {
-        if (interfaceClass.getAnnotation(AbstractEntity.class) != null) {
-            throw new Error(interfaceClass.getName() + " is AbstractEntity");
-        }
+        //        if (interfaceClass.getAnnotation(AbstractEntity.class) != null) {
+        //            throw new Error(interfaceClass.getName() + " is AbstractEntity");
+        //        }
 
         String interfaceName = interfaceClass.getName();
         String name = interfaceName + IEntity.SERIALIZABLE_IMPL_CLASS_SUFIX;

@@ -32,7 +32,6 @@ import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -75,8 +74,10 @@ class ContextHelper {
     boolean isInstantiabeEntity(JClassType type) {
         if (!(type.isAssignableTo(iEnentityInterfaceType) && (type.isInterface() != null) && iEnentityInterfaceType != type)) {
             return false;
+        } else {
+            return true; //return (type.getAnnotation(AbstractEntity.class) == null);
         }
-        return (type.getAnnotation(AbstractEntity.class) == null);
+
     }
 
     boolean isEntityMemeber(JMethod method) {

@@ -26,6 +26,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 
 public class CollectionsImplementationTest extends InitializerTestCase {
 
@@ -98,4 +100,11 @@ public class CollectionsImplementationTest extends InitializerTestCase {
         assertEquals("status", task1.status(), task1ref.status());
     }
 
+    public void testAbstractSetMember() {
+        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+
+        RefferenceEntity ent2 = EntityFactory.create(RefferenceEntity.class);
+
+        ent2.refferences().add(ent1);
+    }
 }

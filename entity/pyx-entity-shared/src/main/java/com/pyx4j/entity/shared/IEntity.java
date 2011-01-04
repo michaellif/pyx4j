@@ -57,6 +57,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
      */
     public void set(IEntity entity);
 
+    public void assign(IEntity entity);
+
     /**
      * Safer way to assign members value
      * 
@@ -83,6 +85,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public List<Validator> getValidators(Path memberPath);
 
     public IEntity cloneEntity();
+
+    public <T extends IEntity> T cast(Class<T> clazz);
 
     @Override
     public String getStringView();

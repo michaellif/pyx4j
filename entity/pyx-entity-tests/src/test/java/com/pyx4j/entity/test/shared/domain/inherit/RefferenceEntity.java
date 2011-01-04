@@ -20,13 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-public interface ConcreteEntity extends Base2Entity {
+public interface RefferenceEntity extends IEntity {
 
     IPrimitive<String> name();
 
-    // Reference of undefined type.
-    Base1Entity refference();
-
+    ISet<Base1Entity> refferences();
 }

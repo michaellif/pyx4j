@@ -52,6 +52,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     private static final boolean trace = false;
 
+    private static String CONCRETE_TYPE_DATA_ATTR = "$concrete";
+
     private Map<String, Object> data;
 
     protected transient HashMap<String, IObject<?>> members;
@@ -166,9 +168,24 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public void set(IEntity entity) {
         //Test type safety at development runtime.
+        //TODO , allow AbstractMember
         assert this.getObjectClass().equals(entity.getObjectClass());
 
         setValue(((SharedEntityHandler) entity).ensureValue());
+    }
+
+    @Override
+    public void assign(IEntity entity) {
+        Map<String, Object> v = entity.getValue();
+        if (v != null) {
+            Map<String, Object> data2 = new EntityValueMap();
+            cloneMap(v, data2);
+            this.setValue(data2);
+        }
+
+        if (!this.getObjectClass().equals(entity.getObjectClass())) {
+            ensureValue().put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
+        }
     }
 
     /**
@@ -421,6 +438,17 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             cloneMap(v, data2);
             entity.setValue(data2);
         }
+        return entity;
+    }
+
+    @Override
+    public <T extends IEntity> T cast(Class<T> clazz) {
+        T entity = EntityFactory.create(clazz, getParent(), getFieldName());
+        // TODO add validations
+        // (entity instanceof this.class)
+
+        entity.setValue(ensureValue());
+
         return entity;
     }
 

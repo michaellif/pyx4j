@@ -29,7 +29,6 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.server.ClassFinder;
 
@@ -75,6 +74,6 @@ public class EntityClassFinder extends ClassFinder {
             log.warn("Can't load class {} {}", className, e);
             return false;
         }
-        return candidate.isInterface() && IEntity.class.isAssignableFrom(candidate) && (candidate.getAnnotation(AbstractEntity.class) == null);
+        return candidate.isInterface() && IEntity.class.isAssignableFrom(candidate);// && (candidate.getAnnotation(AbstractEntity.class) == null);
     }
 }
