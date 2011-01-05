@@ -21,13 +21,11 @@
 package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -40,7 +38,6 @@ import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
-import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -50,13 +47,13 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class TableModel {
 
-    public final int ORDINARY_STRING_LENGHT_MAX = 500;
+    public static final int ORDINARY_STRING_LENGHT_MAX = 500;
 
-    public final int ENUM_STRING_LENGHT_MAX = 50;
+    public static final int ENUM_STRING_LENGHT_MAX = 50;
 
     private static final Logger log = LoggerFactory.getLogger(TableModel.class);
 
-    private final String tableName;
+    final String tableName;
 
     private final EntityMeta entityMeta;
 
@@ -81,8 +78,27 @@ public class TableModel {
     }
 
     public void ensureExists(ConnectionProvider connectionProvider) throws SQLException {
-        if (!exists(connectionProvider)) {
-            execute(connectionProvider, sqlCreate(connectionProvider.getDialect()));
+        Connection connection = connectionProvider.getConnection();
+        try {
+            {
+                TableMetadata tableMetadata = TableMetadata.getTableMetadata(connection, tableName);
+                if (tableMetadata == null) {
+                    execute(connection, TableDDL.sqlCreate(connectionProvider.getDialect(), this));
+                } else {
+                    execute(connection, TableDDL.validateAndAlter(connectionProvider.getDialect(), tableMetadata, this));
+                }
+            }
+
+            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+                TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
+                if (memberTableMetadata == null) {
+                    //execute(connection, TableDDL.sqlCreateMemeber(connectionProvider.getDialect(), this, member));
+                } else {
+                    //execute(connection, TableDDL.validateAndAlterMemeber(connection, connectionProvider.getDialect(), memberTableMetadata, this, member));
+                }
+            }
+        } finally {
+            SQLUtils.closeQuietly(connection);
         }
     }
 
@@ -98,151 +114,6 @@ public class TableModel {
         return entityOperationsMeta;
     }
 
-    public boolean exists(ConnectionProvider connectionProvider) throws SQLException {
-        Connection connection = connectionProvider.getConnection();
-        ResultSet rs = null;
-        try {
-            DatabaseMetaData dbMeta = connection.getMetaData();
-            rs = dbMeta.getTables(null, null, tableName, null);
-            if (rs.next()) {
-                validateAndAlter(connectionProvider, new TableMetadata(rs, dbMeta));
-                return true;
-            }
-            return false;
-        } finally {
-            SQLUtils.closeQuietly(rs);
-            SQLUtils.closeQuietly(connection);
-        }
-    }
-
-    List<String> sqlCreate(Dialect dialect) {
-        List<String> sqls = new Vector<String>();
-        StringBuilder sql = new StringBuilder();
-        sql.append("create table ");
-        sql.append(tableName);
-        sql.append(" (");
-        sql.append(" id ").append(dialect.getSqlType(Long.class));
-        if (getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
-            sql.append(" ").append(dialect.getGeneratedIdColumnString());
-        }
-
-        for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
-            MemberMeta memberMeta = member.getMemberMeta();
-            if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                // For now create a join table
-                sqls.add(sqlCreateJoin(dialect, memberMeta));
-                continue;
-            }
-            sql.append(", ").append(member.sqlName()).append(' ');
-            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                // TODO create FK
-            }
-            sql.append(sqlType(dialect, memberMeta));
-        }
-
-        for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
-            sql.append(", ").append(member.sqlName()).append(' ');
-            sql.append(indexSqlType(dialect, member));
-        }
-
-        // TODO other dialects
-        sql.append(", PRIMARY KEY (id)");
-
-        sql.append(')');
-        sqls.add(sql.toString());
-
-        Collections.reverse(sqls);
-        return sqls;
-    }
-
-    private void validateAndAlter(ConnectionProvider connectionProvider, TableMetadata tableMetadata) throws SQLException {
-        List<String> alterSqls = new Vector<String>();
-        for (MemberOperationsMeta member : entityOperationsMeta.getMembers()) {
-            MemberMeta memberMeta = member.getMemberMeta();
-            ColumnMetadata columnMeta = tableMetadata.getColumn(member.sqlName());
-            if (columnMeta == null) {
-                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    continue;
-                }
-                StringBuilder sql = new StringBuilder("alter table ");
-                sql.append(tableName);
-                sql.append(" add column ");
-                sql.append(member.sqlName()).append(' ');
-                sql.append(sqlType(connectionProvider.getDialect(), memberMeta));
-                alterSqls.add(sql.toString());
-            } else {
-                if (!connectionProvider.getDialect().isCompatibleType(memberMeta.getValueClass(), columnMeta.getTypeName())) {
-                    throw new RuntimeException(tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName() + " != "
-                            + connectionProvider.getDialect().getSqlType(memberMeta.getValueClass()));
-                }
-            }
-        }
-
-        for (MemberOperationsMeta member : entityOperationsMeta.getIndexMembers()) {
-            MemberMeta memberMeta = member.getMemberMeta();
-            ColumnMetadata columnMeta = tableMetadata.getColumn(member.sqlName());
-            if (columnMeta == null) {
-                if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    continue;
-                }
-                StringBuilder sql = new StringBuilder("alter table ");
-                sql.append(tableName);
-                sql.append(" add column ");
-                sql.append(member.sqlName()).append(' ');
-                sql.append(indexSqlType(connectionProvider.getDialect(), member));
-                alterSqls.add(sql.toString());
-            } else {
-                if (!connectionProvider.getDialect().isCompatibleType(member.getIndexValueClass(), columnMeta.getTypeName())) {
-                    throw new RuntimeException(tableName + "." + member.sqlName() + " incompatible SQL type " + columnMeta.getTypeName() + " != "
-                            + connectionProvider.getDialect().getSqlType(member.getIndexValueClass()));
-                }
-            }
-        }
-
-        if (alterSqls.size() > 0) {
-            execute(connectionProvider, alterSqls);
-        }
-    }
-
-    String sqlType(Dialect dialect, MemberMeta memberMeta) {
-        StringBuilder sql = new StringBuilder();
-        sql.append(dialect.getSqlType(memberMeta.getValueClass()));
-        if (Enum.class.isAssignableFrom(memberMeta.getValueClass())) {
-            sql.append("(" + ENUM_STRING_LENGHT_MAX + ")");
-        } else if (String.class == memberMeta.getValueClass()) {
-            sql.append('(').append((memberMeta.getStringLength() == 0) ? ORDINARY_STRING_LENGHT_MAX : memberMeta.getStringLength()).append(')');
-        }
-        return sql.toString();
-    }
-
-    String indexSqlType(Dialect dialect, MemberOperationsMeta member) {
-        StringBuilder sql = new StringBuilder();
-        sql.append(dialect.getSqlType(member.getIndexValueClass()));
-        if (Enum.class.isAssignableFrom(member.getIndexValueClass())) {
-            sql.append("(" + ENUM_STRING_LENGHT_MAX + ")");
-        } else if (String.class == member.getIndexValueClass()) {
-            sql.append('(').append((member.getMemberMeta().getStringLength() == 0) ? ORDINARY_STRING_LENGHT_MAX : member.getMemberMeta().getStringLength())
-                    .append(')');
-        }
-        return sql.toString();
-    }
-
-    String sqlCreateJoin(Dialect dialect, MemberMeta memberMeta) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("create table ");
-
-        // TODO enable join table name
-        sql.append(dialect.sqlName(tableName + "_" + memberMeta.getFieldName()));
-
-        sql.append(" (");
-
-        sql.append(" id ").append(dialect.getSqlType(Long.class)).append(", ");
-        sql.append(dialect.sqlName(memberMeta.getFieldName())).append(" ").append(dialect.getSqlType(Long.class));
-
-        sql.append(')');
-        return sql.toString();
-    }
-
     public void dropTable(ConnectionProvider connectionProvider) throws SQLException {
         List<String> sqls = new Vector<String>();
         sqls.add("drop table " + tableName);
@@ -251,6 +122,17 @@ public class TableModel {
 
     public void execute(ConnectionProvider connectionProvider, List<String> sqls) throws SQLException {
         Connection connection = connectionProvider.getConnection();
+        try {
+            execute(connection, sqls);
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    public void execute(Connection connection, List<String> sqls) throws SQLException {
+        if (sqls.size() == 0) {
+            return;
+        }
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
@@ -268,7 +150,6 @@ public class TableModel {
             }
         } finally {
             SQLUtils.closeQuietly(stmt);
-            SQLUtils.closeQuietly(connection);
         }
     }
 

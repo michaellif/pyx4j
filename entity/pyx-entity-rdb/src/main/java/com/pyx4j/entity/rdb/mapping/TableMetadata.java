@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,6 +45,21 @@ class TableMetadata {
 
     private final Map<String, ColumnMetadata> columnsMetadata = new HashMap<String, ColumnMetadata>();
 
+    static TableMetadata getTableMetadata(Connection connection, String name) throws SQLException {
+        ResultSet rs = null;
+        try {
+            DatabaseMetaData dbMeta = connection.getMetaData();
+            rs = dbMeta.getTables(null, null, name, null);
+            if (rs.next()) {
+                return new TableMetadata(rs, dbMeta);
+            } else {
+                return null;
+            }
+        } finally {
+            SQLUtils.closeQuietly(rs);
+        }
+    }
+
     TableMetadata(ResultSet rs, DatabaseMetaData dbMeta) throws SQLException {
         catalog = rs.getString("TABLE_CAT");
         schema = rs.getString("TABLE_SCHEM");
@@ -57,7 +73,7 @@ class TableMetadata {
                 columnsMetadata.put(cm.getName(), cm);
             }
         } finally {
-            SQLUtils.closeQuietly(rs);
+            SQLUtils.closeQuietly(crs);
         }
 
         log.debug("table {} @ {} ", name, schema);

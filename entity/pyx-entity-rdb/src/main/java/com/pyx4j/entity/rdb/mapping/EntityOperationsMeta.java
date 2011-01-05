@@ -31,9 +31,13 @@ import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
+/**
+ * Categorize member types for later use in the frequent update/select operations
+ */
 public class EntityOperationsMeta {
 
     private final List<MemberOperationsMeta> members = new Vector<MemberOperationsMeta>();
@@ -41,6 +45,8 @@ public class EntityOperationsMeta {
     private final List<MemberOperationsMeta> cascadePersistMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> cascadeRetrieveMembers = new Vector<MemberOperationsMeta>();
+
+    private final List<MemberOperationsMeta> primitiveSetMembers = new Vector<MemberOperationsMeta>();
 
     private final List<MemberOperationsMeta> indexMembers = new Vector<MemberOperationsMeta>();
 
@@ -57,12 +63,11 @@ public class EntityOperationsMeta {
                     addEmbededMemebers(dialect, new Vector<String>(), memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
-                MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta);
-                members.add(member);
-
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta);
+                    members.add(member);
                     if (memberMeta.isOwnedRelationships()) {
                         cascadePersistMembers.add(member);
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
@@ -71,13 +76,20 @@ public class EntityOperationsMeta {
                     if (!memberMeta.isDetached()) {
                         cascadeRetrieveMembers.add(member);
                     }
+                } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + memberName);
+                    MemberOperationsMeta member = new MemberOperationsMeta(sqlName, memberMeta);
+                    primitiveSetMembers.add(member);
+                } else {
+                    MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta);
+                    members.add(member);
                 }
 
                 Indexed index = memberMeta.getAnnotation(Indexed.class);
                 if ((index != null) && (index.adapters() != null) && (index.adapters().length > 0)) {
                     for (Class<? extends IndexAdapter<?>> adapterClass : index.adapters()) {
                         IndexAdapter<?> adapter = AdapterFactory.getIndexAdapter(adapterClass);
-                        String indexedPropertyName = dialect.sqlName(adapter.getIndexedColumnName(null, member.getMemberMeta()));
+                        String indexedPropertyName = dialect.sqlName(adapter.getIndexedColumnName(null, memberMeta));
                         indexMembers.add(new MemberOperationsMeta(indexedPropertyName, memberMeta, adapterClass, adapter.getIndexValueClass()));
                     }
                 }
@@ -108,12 +120,11 @@ public class EntityOperationsMeta {
                     addEmbededMemebers(dialect, thisPath, memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
-                MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta);
-                members.add(member);
-
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta);
+                    members.add(member);
                     if (memberMeta.isOwnedRelationships()) {
                         cascadePersistMembers.add(member);
                     } else if (memberMeta.getAnnotation(Reference.class) != null) {
@@ -122,6 +133,13 @@ public class EntityOperationsMeta {
                     if (!memberMeta.isDetached()) {
                         cascadeRetrieveMembers.add(member);
                     }
+                } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + sqlPrefix.toString() + memberName);
+                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(sqlName, thisPath, memberMeta);
+                    primitiveSetMembers.add(member);
+                } else {
+                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta);
+                    members.add(member);
                 }
             }
         }
@@ -137,6 +155,10 @@ public class EntityOperationsMeta {
 
     public List<MemberOperationsMeta> getCascadeRetrieveMembers() {
         return cascadeRetrieveMembers;
+    }
+
+    public List<MemberOperationsMeta> getPrimitiveSetMembers() {
+        return primitiveSetMembers;
     }
 
     public List<MemberOperationsMeta> getIndexMembers() {
