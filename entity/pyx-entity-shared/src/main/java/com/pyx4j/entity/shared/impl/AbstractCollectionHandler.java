@@ -134,7 +134,15 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         if (value != null) {
             Set<Map> processed = new HashSet<Map>();
             b.append('[');
+            b.append(((Collection<?>) value).size());
+            b.append(' ');
+            boolean first = true;
             for (Object o : (Collection<?>) value) {
+                if (first) {
+                    first = false;
+                } else {
+                    b.append(", ");
+                }
                 if (o instanceof Map<?, ?>) {
                     EntityValueMap.dumpMap(b, (Map<String, Object>) o, processed);
                 } else {
