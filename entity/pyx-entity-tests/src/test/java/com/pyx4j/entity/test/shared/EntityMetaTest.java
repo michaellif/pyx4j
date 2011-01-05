@@ -140,9 +140,12 @@ public class EntityMetaTest extends InitializerTestCase {
         assertFalse("Has member name2", ent2.refference().getEntityMeta().getMemberNames().contains("name2"));
         assertFalse("Has member name", ent2.refference().getEntityMeta().getMemberNames().contains("name"));
 
-        ent2.refference().assign(ent1);
+        ent2.refference().set(ent1);
 
-        ConcreteEntity ent1x = ent2.refference().cast(ConcreteEntity.class);
+        ConcreteEntity ent1x;
+        // This does not work.
+        //ent1x = (ConcreteEntity) ent2.refference();
+        ent1x = ent2.refference().cast(ConcreteEntity.class);
 
         assertEquals("value of name1", "v-name1", ent1x.name1().getValue());
         assertEquals("value of name2", "v-name2", ent1x.name2().getValue());

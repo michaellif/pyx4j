@@ -165,24 +165,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public void set(IEntity entity) {
-        //Test type safety at development runtime.
-        //TODO , allow AbstractMember
-        assert this.getObjectClass().equals(entity.getObjectClass());
-
-        setValue(((SharedEntityHandler) entity).ensureValue());
-    }
-
-    @Override
-    public void assign(IEntity entity) {
-        Map<String, Object> v = entity.getValue();
-        if (v != null) {
-            Map<String, Object> data2 = new EntityValueMap();
-            cloneMap(v, data2);
-            this.setValue(data2);
-        }
-
-        if (!this.getObjectClass().equals(entity.getObjectClass())) {
-            ensureValue().put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
+        if (entity == null) {
+            setValue(null);
+        } else {
+            Map<String, Object> value = ((SharedEntityHandler) entity).ensureValue();
+            //TODO Test type safety at runtime.
+            if (!this.getObjectClass().equals(entity.getObjectClass())) {
+                // allow AbstractMember
+                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
+            }
+            setValue(value);
         }
     }
 
