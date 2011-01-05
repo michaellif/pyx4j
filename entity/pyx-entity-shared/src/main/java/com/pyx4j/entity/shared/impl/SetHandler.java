@@ -241,9 +241,4 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
         }
     }
 
-    @Override
-    public String toString() {
-        return getObjectClass().getName() + getValue();
-    }
-
 }
