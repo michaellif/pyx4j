@@ -188,6 +188,22 @@ public abstract class EntityPersistenceServiceTestCase extends DatastoreTestBase
             assertEquals("iterator. first()", "Note2", el1);
             assertEquals("iterator. second()", "Note1", el2);
         }
+
+        // Test update/remove
+        task.notes().remove("Note2");
+        srv.persist(task);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("removed size", 1, task2.notes().size());
+        assertTrue("contains(1)", task2.notes().contains("Note1"));
+        assertFalse("not contains(2)", task2.notes().contains("Note2"));
+
+        // Test update/add
+        task.notes().add("Note3");
+        srv.persist(task);
+        task2 = srv.retrieve(Task.class, task.getPrimaryKey());
+        assertEquals("added size", 2, task2.notes().size());
+        assertTrue("contains(1)", task2.notes().contains("Note1"));
+        assertTrue("contains(3)", task2.notes().contains("Note3"));
     }
 
 }

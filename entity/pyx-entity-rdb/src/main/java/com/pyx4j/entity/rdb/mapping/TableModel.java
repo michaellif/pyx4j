@@ -92,9 +92,9 @@ public class TableModel {
             for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
                 TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
                 if (memberTableMetadata == null) {
-                    //execute(connection, TableDDL.sqlCreateMemeber(connectionProvider.getDialect(), this, member));
+                    execute(connection, TableDDL.sqlCreateMemeber(connectionProvider.getDialect(), this, member));
                 } else {
-                    //execute(connection, TableDDL.validateAndAlterMemeber(connection, connectionProvider.getDialect(), memberTableMetadata, this, member));
+                    execute(connection, TableDDL.validateAndAlterMemeber(connection, connectionProvider.getDialect(), memberTableMetadata, this, member));
                 }
             }
         } finally {
@@ -227,13 +227,7 @@ public class TableModel {
         if (value == null) {
             stmt.setNull(parameterIndex, dialect.getTargetSqlType(valueClass));
         } else {
-            int targetSqlType = dialect.getTargetSqlType(valueClass);
-            if (valueClass.isEnum()) {
-                if (value != null) {
-                    value = ((Enum<?>) value).name();
-                }
-            }
-            stmt.setObject(parameterIndex, value, targetSqlType);
+            stmt.setObject(parameterIndex, encodeValue(valueClass, value), dialect.getTargetSqlType(valueClass));
         }
     }
 
@@ -292,6 +286,9 @@ public class TableModel {
                     SQLUtils.closeQuietly(keys);
                 }
             }
+            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+                TableModelPrimitiveSet.insert(connection, connectionProvider.getDialect(), entity, member);
+            }
             //TODO We have defaultAutoCommit = true in ConnectionProvider
             //connection.commit();
         } catch (SQLException e) {
@@ -313,6 +310,10 @@ public class TableModel {
             stmt.setLong(parameterIndex, entity.getPrimaryKey());
             int rc = stmt.executeUpdate();
 
+            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+                TableModelPrimitiveSet.update(connection, connectionProvider.getDialect(), entity, member);
+            }
+
             //TODO We have defaultAutoCommit = true in ConnectionProvider
             //connection.commit();
 
@@ -326,8 +327,16 @@ public class TableModel {
         }
     }
 
+    static Object encodeValue(Class<?> valueClass, Object value) {
+        if (valueClass.isEnum()) {
+            return ((Enum<?>) value).name();
+        } else {
+            return value;
+        }
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Object decodeValue(Object value, MemberMeta memberMeta) {
+    static Object decodeValue(Object value, MemberMeta memberMeta) {
         if (value == null) {
             return null;
         } else if (memberMeta.getValueClass().isEnum()) {
@@ -374,6 +383,11 @@ public class TableModel {
                 }
                 entity.setPrimaryKey(key);
                 retrieveValues(rs, entity);
+
+                for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+                    TableModelPrimitiveSet.retrieve(connection, entity, member);
+                }
+
                 return true;
             }
         } catch (SQLException e) {
@@ -408,6 +422,11 @@ public class TableModel {
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
                 entity.setPrimaryKey(rs.getLong("id"));
                 retrieveValues(rs, entity);
+
+                for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+                    TableModelPrimitiveSet.retrieve(connection, entity, member);
+                }
+
                 rc.add(entity);
             }
             return rc;
@@ -483,6 +502,11 @@ public class TableModel {
         PreparedStatement stmt = null;
         try {
             connection = connectionProvider.getConnection();
+
+            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+                TableModelPrimitiveSet.delete(connection, primaryKey, member);
+            }
+
             stmt = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?");
 
             stmt.setLong(1, primaryKey);
@@ -506,6 +530,12 @@ public class TableModel {
             QueryBuilder<T> qb = new QueryBuilder<T>(connectionProvider.getDialect(), entityMeta, criteria);
             stmt = connection.prepareStatement("DELETE FROM " + tableName + qb.getWhere());
             qb.bindParameters(stmt);
+
+            // TODO ???
+            //            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
+            //                TableModelPrimitiveSet.delete(connection, primaryKey, member);
+            //            }
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             log.error("{} SQL delete error", tableName, e);

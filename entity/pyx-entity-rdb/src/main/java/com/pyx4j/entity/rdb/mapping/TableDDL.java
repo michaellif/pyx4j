@@ -171,8 +171,12 @@ class TableDDL {
 
         sql.append(" (");
 
+        sql.append(" id ").append(dialect.getSqlType(Long.class)).append(" ").append(dialect.getGeneratedIdColumnString()).append(", ");
         sql.append(" owner ").append(dialect.getSqlType(Long.class)).append(", ");
         sql.append(" value ").append(sqlType(dialect, member.getMemberMeta()));
+
+        // TODO other dialects
+        sql.append(", PRIMARY KEY (id)");
 
         sql.append(')');
 
