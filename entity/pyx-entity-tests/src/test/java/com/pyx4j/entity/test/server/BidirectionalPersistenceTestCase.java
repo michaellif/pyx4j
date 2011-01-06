@@ -69,8 +69,7 @@ public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase
         org.departments().add(department);
         srv.persist(org);
 
-        // Little bit of hack, to get owned department with department.organization() set properly.
-        department = org.departments().iterator().next();
+        assertEquals("Owner ID Update", org.getPrimaryKey(), department.organization().getPrimaryKey());
 
         // Test if it can be saved at all
         department.name().setValue("deptX" + uniqueString());

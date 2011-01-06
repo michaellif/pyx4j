@@ -279,6 +279,9 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         // Test value removal
 
         emp2.workAddress().removeMemberValue(emp2.workAddress().city().getFieldName());
+
+        Assert.assertTrue("department is null", emp2.department().isNull());
+
         srv.persist(emp2);
 
         Employee emp3 = srv.retrieve(Employee.class, primaryKey);

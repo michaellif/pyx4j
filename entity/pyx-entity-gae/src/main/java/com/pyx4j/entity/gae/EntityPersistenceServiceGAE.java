@@ -575,18 +575,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         }
 
         // Special case for values not present in Map, e.g. owner reference
-        for (String memberName : iEntity.getEntityMeta().getBidirectionalReferenceMemberNames()) {
-            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(memberName);
-            IEntity ownerEntity = (IEntity) iEntity.getMember(memberName);
-            if (ownerEntity.isNull()) {
-                continue;
+        String ownerMemberName = iEntity.getEntityMeta().getOwnerMemberName();
+        if (ownerMemberName != null) {
+            MemberMeta meta = iEntity.getEntityMeta().getMemberMeta(ownerMemberName);
+            IEntity ownerEntity = (IEntity) iEntity.getMember(ownerMemberName);
+            if (!ownerEntity.isNull()) {
+                Object ownerId = ownerEntity.getPrimaryKey();
+                if (ownerId == null) {
+                    throw new Error("Saving non persisted reference " + ownerEntity.getEntityMeta().getCaption());
+                }
+                Key ownerKey = KeyFactory.createKey(EntityFactory.getEntityMeta(ownerEntity.getValueClass()).getPersistenceName(), (Long) ownerId);
+                entity.setProperty(ownerMemberName, meta.isIndexed(), ownerKey);
             }
-            Object ownerId = ownerEntity.getPrimaryKey();
-            if (ownerId == null) {
-                throw new Error("Saving non persisted reference " + ownerEntity.getEntityMeta().getCaption());
-            }
-            Key ownerKey = KeyFactory.createKey(EntityFactory.getEntityMeta(ownerEntity.getValueClass()).getPersistenceName(), (Long) ownerId);
-            entity.setProperty(memberName, meta.isIndexed(), ownerKey);
         }
     }
 
@@ -708,10 +708,9 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             MemberMeta meta = entityMeta.getMemberMeta(memberName);
             if (IEntity.class.isAssignableFrom(meta.getValueClass())) {
                 EntityMeta childEntityMeta = EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getValueClass());
-                for (String childMemberName : childEntityMeta.getBidirectionalReferenceMemberNames()) {
-                    if (childEntityMeta.getMemberMeta(childMemberName).getValueClass().equals(entityMeta.getEntityClass())) {
-                        return true;
-                    }
+                String ownerMemberName = childEntityMeta.getOwnerMemberName();
+                if ((ownerMemberName != null) && (childEntityMeta.getMemberMeta(ownerMemberName).getValueClass().equals(entityMeta.getEntityClass()))) {
+                    return true;
                 }
             }
         }

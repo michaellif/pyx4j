@@ -36,13 +36,17 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
 
     private transient IEntity owner;
 
-    private transient final IObject<?> parent;
+    private transient IObject<?> parent;
 
-    private transient final String fieldName;
+    private transient String fieldName;
 
     @SuppressWarnings("unchecked")
     public ObjectHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
         this.clazz = (Class<? extends IObject<VALUE_TYPE>>) clazz;
+        attachToOwner(parent, fieldName);
+    }
+
+    void attachToOwner(IObject<?> parent, String fieldName) {
         this.parent = parent;
         if (parent instanceof ICollection<?, ?>) {
             this.owner = parent.getOwner();

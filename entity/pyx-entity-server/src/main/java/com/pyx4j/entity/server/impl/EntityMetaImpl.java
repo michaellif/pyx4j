@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
@@ -69,7 +70,7 @@ public class EntityMetaImpl implements EntityMeta {
 
     private List<String> toStringMemberNames;
 
-    private List<String> bidirectionalReferenceMemberNames;
+    private String ownerMemberName = null;
 
     private String createdTimestampMember;
 
@@ -207,6 +208,12 @@ public class EntityMetaImpl implements EntityMeta {
                     updatedTimestampMember = method.getName();
                 }
             }
+            if (method.getAnnotation(Owner.class) != null) {
+                if (ownerMemberName != null) {
+                    throw new Error("Duplicate @Owner declaration " + method.getName() + " and " + ownerMemberName);
+                }
+                ownerMemberName = method.getName();
+            }
         }
     }
 
@@ -264,22 +271,9 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public synchronized List<String> getBidirectionalReferenceMemberNames() {
-        //TODO move this list creation to EntityImplGenerator for better performance
-        if (bidirectionalReferenceMemberNames == null) {
-            bidirectionalReferenceMemberNames = new Vector<String>();
-            //Hack for Abstract IEntity as a filed
-            if (getEntityClass().equals(IEntity.class)) {
-                return bidirectionalReferenceMemberNames;
-            }
-            for (String memberName : getMemberNames()) {
-                MemberMeta meta = getMemberMeta(memberName);
-                if (meta.isOwner()) {
-                    bidirectionalReferenceMemberNames.add(memberName);
-                }
-            }
-        }
-        return bidirectionalReferenceMemberNames;
+    public String getOwnerMemberName() {
+        lazyCreateMembersNamesList();
+        return ownerMemberName;
     }
 
     @Override

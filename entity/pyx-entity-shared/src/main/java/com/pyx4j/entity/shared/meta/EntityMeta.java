@@ -93,8 +93,7 @@ public interface EntityMeta {
      * 
      * 
      */
-    //TODO Do we need this ever on client ?
-    public List<String> getBidirectionalReferenceMemberNames();
+    public String getOwnerMemberName();
 
     /*
      * Works only on server side.

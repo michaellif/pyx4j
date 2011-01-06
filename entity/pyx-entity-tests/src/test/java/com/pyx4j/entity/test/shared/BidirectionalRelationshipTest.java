@@ -23,10 +23,43 @@ package com.pyx4j.entity.test.shared;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.bidir.Child;
+import com.pyx4j.entity.test.shared.domain.bidir.Master;
 
 public class BidirectionalRelationshipTest extends InitializerTestCase {
 
-    public void testOwnerValue() {
+    public void testOwnedEntityValue() {
+        Master m = EntityFactory.create(Master.class);
+        m.name().setValue("m1");
+
+        Child c1 = EntityFactory.create(Child.class);
+        String c1Name = "c1";
+        c1.name().setValue(c1Name);
+
+        assertTrue("Not owned Yet", c1.master().isNull());
+        m.child().name().setValue("!" + c1Name);
+
+        m.child().set(c1);
+
+        assertFalse("Owned now", c1.master().isNull());
+        assertEquals("Owned properly", m, c1.master());
+        assertEquals("Same value", c1Name, m.child().name().getValue());
+
+        assertNull("Owner Entity FieldName", m.getFieldName());
+        assertNotNull("Owner Filed Entity FieldName", c1.master().getFieldName());
+
+        assertEquals("Owner the same value", m.getValue(), c1.getMemberValue(c1.master().getFieldName()));
+        assertTrue("Owner refferes to the same value", c1.getMemberValue(c1.master().getFieldName()) == m.getValue());
+
+        m.setPrimaryKey(76L);
+        assertEquals("Owner ID Update", m.getPrimaryKey(), c1.master().getPrimaryKey());
+
+        String c2Name = "c2";
+        c1.name().setValue(c2Name);
+        assertEquals("Value updated", c2Name, m.child().name().getValue());
+    }
+
+    public void testOwnedSetValue() {
         Organization org = EntityFactory.create(Organization.class);
         org.name().setValue("org");
 
@@ -39,11 +72,15 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         org.departments().add(department);
         assertEquals("set size", 1, org.departments().size());
 
+        assertFalse("Owned now", department.organization().isNull());
+        org.setPrimaryKey(77L);
+        assertEquals("Owner ID Update", org.getPrimaryKey(), department.organization().getPrimaryKey());
+
         Department orgDepartment = org.departments().iterator().next();
-        assertNull("Direct value access", orgDepartment.getMemberValue("organization"));
+        assertNotNull("Direct value access", orgDepartment.getMemberValue("organization"));
         assertFalse("Owned now", orgDepartment.organization().isNull());
-        assertTrue("Owned properly", orgDepartment.organization() == org);
-        assertNull("Direct value access", orgDepartment.getMemberValue("organization"));
+        assertEquals("Owned properly", orgDepartment.organization(), org);
+        assertNotNull("Direct value access", orgDepartment.getMemberValue("organization"));
 
         // Test Recursive print
         System.out.println(orgDepartment.toString());

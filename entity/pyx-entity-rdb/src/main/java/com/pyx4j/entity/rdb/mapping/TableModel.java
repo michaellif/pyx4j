@@ -236,7 +236,8 @@ public class TableModel {
                 if (primaryKey == null) {
                     if (!childEntity.isNull()) {
                         log.error("Saving non persisted reference {}", childEntity);
-                        throw new Error("Saving non persisted reference " + memberMeta.getValueClass() + " " + memberMeta.getCaption());
+                        throw new Error("Saving non persisted reference " + memberMeta.getValueClass() + " " + memberMeta.getCaption() + " of "
+                                + entity.getEntityMeta().getCaption());
                     }
                     stmt.setNull(parameterIndex, Types.BIGINT);
                 } else {

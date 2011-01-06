@@ -59,7 +59,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     /**
      * N.B. Default initialization during serialization to 'false'.
      */
-    private transient final boolean delegateValue;
+    private transient boolean delegateValue;
 
     /**
      * Creation of stand alone or member Entity
@@ -68,10 +68,24 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
      * @param parent
      * @param fieldName
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     public SharedEntityHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
         delegateValue = (parent != null) && (getOwner() == parent);
+    }
+
+    @Override
+    void attachToOwner(IObject<?> parent, String fieldName) {
+        super.attachToOwner(parent, fieldName);
+        delegateValue = (parent != null) && (getOwner() == parent);
+
+        //reset owner member
+        if (members != null) {
+            String ownerMemberName = getEntityMeta().getOwnerMemberName();
+            if (ownerMemberName != null) {
+                members.remove(ownerMemberName);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -92,10 +106,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @SuppressWarnings("unchecked")
     public <T extends IEntity> T lazyCreateMemberIEntity(String memberName, Class<T> valueClass) {
-        // Is Bidirectional Relationship ?
-        if ((getOwner() != null) && (getEntityMeta().getMemberMeta(memberName).isOwner())) {
-            return (T) getOwner();
-        }
+        //        // Is Bidirectional Relationship ?
+        //        if ((getOwner() != null) && (getEntityMeta().getMemberMeta(memberName).isOwner())) {
+        //            return (T) getOwner();
+        //        }
         return EntityFactory.create(valueClass, this, memberName);
     }
 
@@ -158,6 +172,10 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
         if (delegateValue) {
             ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
+            String ownerMemberName = getEntityMeta().getOwnerMemberName();
+            if ((ownerMemberName != null) && (value != null)) {
+                value.put(ownerMemberName, getOwner().getValue());
+            }
         } else {
             this.data = value;
         }
@@ -174,7 +192,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 // allow AbstractMember
                 value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
             }
+            if ((getOwner() != null) && getMeta().isOwnedRelationships()) {
+                // attach incoming entity to new owner
+                ((SharedEntityHandler) entity).attachToOwner(this.getOwner(), this.getFieldName());
+            }
             setValue(value);
+
         }
     }
 

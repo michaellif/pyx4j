@@ -130,11 +130,19 @@ public class EntityMetaWriter {
 
         List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType);
 
+        String ownerMemberName = null;
+
         for (JMethod method : allMethods) {
             ToString ts = method.getAnnotation(ToString.class);
             if (ts != null) {
                 toStringMemberNames.add(method.getName());
                 sortKeys.put(method.getName(), ts);
+            }
+            if (method.getAnnotation(Owner.class) != null) {
+                if (ownerMemberName != null) {
+                    throw new Error("Duplicate @Owner declaration " + method.getName() + " and " + ownerMemberName);
+                }
+                ownerMemberName = method.getName();
             }
         }
 
@@ -186,6 +194,9 @@ public class EntityMetaWriter {
         } else {
             writer.print("null, \"\"");
         }
+        writer.print(", ");
+
+        writer.print(escapeSourceString(ownerMemberName));
         writer.print(", ");
 
         writer.print("new String[] {");

@@ -61,12 +61,17 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     public boolean isNull() {
+        return isNull(new HashSet<Map>());
+    }
+
+    private boolean isNull(Set<Map> processed) {
+        processed.add(this);
         if (this.isEmpty()) {
             return true;
         }
         for (Map.Entry<String, Object> me : this.entrySet()) {
             if (me.getValue() instanceof EntityValueMap) {
-                if (!((EntityValueMap) me.getValue()).isNull()) {
+                if ((!processed.contains(me.getValue())) && (!((EntityValueMap) me.getValue()).isNull(processed))) {
                     return false;
                 }
             } else if (me.getValue() != null) {
