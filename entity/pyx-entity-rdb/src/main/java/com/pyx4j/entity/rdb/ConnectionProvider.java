@@ -117,8 +117,13 @@ public class ConnectionProvider {
         return dialect;
     }
 
-    public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+    public Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            log.error("SQL connection error", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }

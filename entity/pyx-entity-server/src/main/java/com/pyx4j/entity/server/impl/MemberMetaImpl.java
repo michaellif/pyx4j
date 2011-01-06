@@ -46,6 +46,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -75,6 +76,8 @@ public class MemberMetaImpl implements MemberMeta {
 
     private final Class<? extends IObject<?>> objectClass;
 
+    private final ObjectClassType objectClassType;
+
     private final String caption;
 
     /**
@@ -99,18 +102,23 @@ public class MemberMetaImpl implements MemberMeta {
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
             entity = false;
-        } else if (ISet.class.equals(objectClass)) {
-            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            entity = false;
-        } else if (IList.class.equals(objectClass)) {
-            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            entity = false;
+            objectClassType = ObjectClassType.Primitive;
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
             valueClass = objectClass;
             entity = true;
+            objectClassType = ObjectClassType.Entity;
+        } else if (ISet.class.equals(objectClass)) {
+            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            entity = false;
+            objectClassType = ObjectClassType.EntitySet;
+        } else if (IList.class.equals(objectClass)) {
+            valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
+            entity = false;
+            objectClassType = ObjectClassType.EntityList;
         } else if (IPrimitiveSet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
             entity = false;
+            objectClassType = ObjectClassType.PrimitiveSet;
         } else {
             throw new RuntimeException("Unknown member type" + objectClass);
         }
@@ -227,6 +235,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public Class<? extends IObject<?>> getObjectClass() {
         return objectClass;
+    }
+
+    @Override
+    public ObjectClassType getObjectClassType() {
+        return objectClassType;
     }
 
     @Override

@@ -28,6 +28,7 @@ import java.util.Set;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -59,9 +60,9 @@ public class ClientMemberMetaImpl implements MemberMeta {
      * Generic constructor
      */
     public ClientMemberMetaImpl(String fieldName, String caption, String description, String watermark, Class<?> valueClass,
-            Class<? extends IObject<?>> objectClass, boolean entity, boolean valueClassIsNumber, boolean persistenceTransient, boolean rpcTransient,
-            boolean detached, boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed, int stringLength, String format,
-            boolean useMessageFormat, String nullString) {
+            Class<? extends IObject<?>> objectClass, ObjectClassType objectClassType, boolean entity, boolean valueClassIsNumber, boolean persistenceTransient,
+            boolean rpcTransient, boolean detached, boolean ownedRelationships, boolean owner, boolean embedded, boolean indexed, int stringLength,
+            String format, boolean useMessageFormat, String nullString) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -75,6 +76,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.data.owner = owner;
         this.data.embedded = embedded;
         this.data.objectClass = objectClass;
+        this.data.objectClassType = objectClassType;
         this.caption = caption;
         this.description = description;
         this.watermark = watermark;
@@ -173,6 +175,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public Class<? extends IObject<?>> getObjectClass() {
         return data.objectClass;
+    }
+
+    @Override
+    public ObjectClassType getObjectClassType() {
+        return data.objectClassType;
     }
 
     @Override

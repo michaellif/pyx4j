@@ -31,6 +31,7 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class TableDDL {
@@ -46,13 +47,8 @@ class TableDDL {
             sql.append(" ").append(dialect.getGeneratedIdColumnString());
         }
 
-        for (MemberOperationsMeta member : tableModel.operationsMeta().getMembers()) {
+        for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
-            if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                // For now create a join table
-                sqls.add(sqlCreateJoin(dialect, tableModel, memberMeta));
-                continue;
-            }
             sql.append(", ").append(member.sqlName()).append(' ');
             if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 // TODO create FK
@@ -77,7 +73,7 @@ class TableDDL {
 
     static List<String> validateAndAlter(Dialect dialect, TableMetadata tableMetadata, TableModel tableModel) throws SQLException {
         List<String> alterSqls = new Vector<String>();
-        for (MemberOperationsMeta member : tableModel.operationsMeta().getMembers()) {
+        for (MemberOperationsMeta member : tableModel.operationsMeta().getColumnMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             ColumnMetadata columnMeta = tableMetadata.getColumn(member.sqlName());
             if (columnMeta == null) {
@@ -146,23 +142,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    private static String sqlCreateJoin(Dialect dialect, TableModel tableModel, MemberMeta memberMeta) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("create table ");
-
-        // TODO enable join table name
-        sql.append(dialect.sqlName(tableModel.entityMeta().getPersistenceName() + "_" + memberMeta.getFieldName()));
-
-        sql.append(" (");
-
-        sql.append(" id ").append(dialect.getSqlType(Long.class)).append(", ");
-        sql.append(dialect.sqlName(memberMeta.getFieldName())).append(" ").append(dialect.getSqlType(Long.class));
-
-        sql.append(')');
-        return sql.toString();
-    }
-
-    public static List<String> sqlCreateMemeber(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
+    public static List<String> sqlCreateCollectionMemeber(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("create table ");
@@ -175,6 +155,13 @@ class TableDDL {
         sql.append(" owner ").append(dialect.getSqlType(Long.class)).append(", ");
         sql.append(" value ").append(sqlType(dialect, member.getMemberMeta()));
 
+        // TODO store value class for AbstractEntity
+
+        if (member.getMemberMeta().getObjectClassType() == ObjectClassType.EntityList) {
+            sql.append(", ");
+            sql.append(" seq ").append(dialect.getSqlType(Integer.class));
+        }
+
         // TODO other dialects
         sql.append(", PRIMARY KEY (id)");
 
@@ -185,8 +172,8 @@ class TableDDL {
         return sqls;
     }
 
-    public static List<String> validateAndAlterMemeber(Connection connection, Dialect dialect, TableMetadata memberTableMetadata, TableModel tableModel,
-            MemberOperationsMeta member) {
+    public static List<String> validateAndAlterCollectionMemeber(Connection connection, Dialect dialect, TableMetadata memberTableMetadata,
+            TableModel tableModel, MemberOperationsMeta member) {
         List<String> alterSqls = new Vector<String>();
         // TODO Auto-generated method stub
         return alterSqls;

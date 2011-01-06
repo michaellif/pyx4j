@@ -60,6 +60,7 @@ import com.pyx4j.entity.client.impl.ClientMemberMetaImpl;
 import com.pyx4j.entity.client.impl.MemberMetaData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class EntityMetaWriter {
@@ -74,6 +75,7 @@ public class EntityMetaWriter {
 
         composer.addImport(IObject.class.getName());
         composer.addImport(MemberMeta.class.getName());
+        composer.addImport(ObjectClassType.class.getName());
         composer.addImport(ClientMemberMetaImpl.class.getName());
         composer.setSuperclass(ClientEntityMetaImpl.class.getName());
 
@@ -259,6 +261,7 @@ public class EntityMetaWriter {
 
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
                 data.valueClassIsNumber = contextHelper.isNumber(valueClass);
+                data.objectClassType = ObjectClassType.Primitive;
             } else if (type.isAssignableTo(contextHelper.iPrimitiveSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IPrimitiveSet " + method.getName() + " type should be ParameterizedType in interface '"
@@ -268,6 +271,7 @@ public class EntityMetaWriter {
 
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
                 data.valueClassIsNumber = contextHelper.isNumber(valueClass);
+                data.objectClassType = ObjectClassType.PrimitiveSet;
             } else if (type.isAssignableTo(contextHelper.iSetInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("ISet " + method.getName() + " type should be ParameterizedType in interface '"
@@ -275,6 +279,7 @@ public class EntityMetaWriter {
                 }
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
+                data.objectClassType = ObjectClassType.EntitySet;
             } else if (type.isAssignableTo(contextHelper.iListInterfaceType)) {
                 if (!(type instanceof JParameterizedType)) {
                     throw new RuntimeException("IList " + method.getName() + " type should be ParameterizedType in interface '"
@@ -283,12 +288,13 @@ public class EntityMetaWriter {
                 valueClass = ((JParameterizedType) type).getTypeArgs()[0];
 
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
-
+                data.objectClassType = ObjectClassType.EntityList;
             } else if (type.isAssignableTo(contextHelper.iEnentityInterfaceType)) {
                 valueClass = type;
 
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
                 data.entity = true;
+                data.objectClassType = ObjectClassType.Entity;
             } else {
                 logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
                         + "' in interface '" + interfaceType.getQualifiedSourceName() + "'");
@@ -413,6 +419,7 @@ public class EntityMetaWriter {
         } else {
             writer.println(data.objectClass.getName() + ".class, ");
         }
+        writer.println(ObjectClassType.class.getSimpleName() + "." + data.objectClassType.name() + ", ");
 
         writer.print(Boolean.valueOf(data.entity).toString() + ", ");
         writer.print(Boolean.valueOf(data.valueClassIsNumber).toString() + ", ");

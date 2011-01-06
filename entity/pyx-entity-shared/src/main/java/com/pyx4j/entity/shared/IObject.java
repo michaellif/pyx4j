@@ -22,7 +22,6 @@ package com.pyx4j.entity.shared;
 
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-@SuppressWarnings("unchecked")
 public interface IObject<VALUE_TYPE> {
 
     public boolean isNull();
@@ -51,7 +50,7 @@ public interface IObject<VALUE_TYPE> {
     public MemberMeta getMeta();
 
     public boolean metaEquals(IObject<?> other);
-        
+
     /**
      * Business toString() presentation.
      * 

@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.impl;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 
 public class MemberMetaData {
 
@@ -44,6 +45,8 @@ public class MemberMetaData {
 
     public Class<? extends IObject<?>> objectClass;
 
+    public ObjectClassType objectClassType;
+
     /**
      * See com.pyx4j.entity.annotations.StringLength
      */
@@ -63,6 +66,7 @@ public class MemberMetaData {
     public MemberMetaData(Class<?> valueClass, boolean isNumber) {
         this.stringLength = -1;
         this.valueClass = valueClass;
+        this.objectClassType = ObjectClassType.Primitive;
         this.objectClass = (Class<? extends IObject<?>>) ((Class<?>) com.pyx4j.entity.shared.IPrimitive.class);
         this.nullString = "";
         this.valueClassIsNumber = isNumber;

@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -54,6 +55,7 @@ public class EntityMetaTest extends InitializerTestCase {
 
         MemberMeta setMemberMeta = emp.tasks().getMeta();
         assertEquals("ISet Meta valueClass", Task.class, setMemberMeta.getValueClass());
+        assertEquals("ISet Meta valueClass", ObjectClassType.EntitySet, setMemberMeta.getObjectClassType());
     }
 
     public void testStringView() {

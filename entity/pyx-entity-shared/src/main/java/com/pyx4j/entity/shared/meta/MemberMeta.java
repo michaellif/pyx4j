@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.validator.Validator;
 
 /**
@@ -102,6 +103,8 @@ public interface MemberMeta {
      * @return
      */
     public Class<? extends IObject<?>> getObjectClass();
+
+    public ObjectClassType getObjectClassType();
 
     /**
      * See com.pyx4j.entity.annotations.StringLength
