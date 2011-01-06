@@ -70,7 +70,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         department.name().setValue(deptName);
 
         Employee employee1 = EntityFactory.create(Employee.class);
-        String empName = "emp" + uniqueString();
+        String empName = "emp1." + uniqueString();
         double origSalary = 50000.0;
         employee1.salary().setValue(origSalary);
         employee1.firstName().setValue(empName);
@@ -83,7 +83,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
         srv.persist(org);
 
         Employee employee2 = EntityFactory.create(Employee.class);
-        String empName2 = "emp" + uniqueString();
+        String empName2 = "emp2." + uniqueString();
         employee2.salary().setValue(60000.0);
         employee2.firstName().setValue(empName2);
         department.employees().add(employee2);
@@ -96,7 +96,7 @@ public abstract class SetPersistanceTestCase extends DatastoreTestBase {
             // OK
         }
         if (saved) {
-            fail("Should not save UnownedSetMemebr");
+            fail("Should not save UnownedSetMember department.employees");
         }
         department.employees().remove(employee2);
         employee1.salary().setValue(120000.0);

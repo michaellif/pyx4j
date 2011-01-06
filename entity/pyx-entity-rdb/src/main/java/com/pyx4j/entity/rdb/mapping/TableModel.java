@@ -466,10 +466,6 @@ public class TableModel {
     public boolean delete(Connection connection, long primaryKey) {
         PreparedStatement stmt = null;
         try {
-            for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
-                CollectionsTableModel.delete(connection, primaryKey, member);
-            }
-
             stmt = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?");
 
             stmt.setLong(1, primaryKey);
@@ -484,18 +480,43 @@ public class TableModel {
         }
     }
 
+    public int delete(Connection connection, Iterable<Long> primaryKeys) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?");
+            for (long primaryKey : primaryKeys) {
+                stmt.setLong(1, primaryKey);
+                stmt.addBatch();
+            }
+
+            int[] rc = stmt.executeBatch();
+            int count = 0;
+            for (int i = 0; i < rc.length; i++) {
+                switch (rc[i]) {
+                case Statement.EXECUTE_FAILED:
+                    throw new RuntimeException("SQL delete failed");
+                case Statement.SUCCESS_NO_INFO:
+                    count++;
+                    break;
+                default:
+                    count += rc[i];
+                }
+            }
+            return count;
+        } catch (SQLException e) {
+            log.error("{} SQL delete error", tableName, e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
+
     public <T extends IEntity> int delete(Connection connection, EntityQueryCriteria<T> criteria) {
         PreparedStatement stmt = null;
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(dialect, entityMeta, criteria);
             stmt = connection.prepareStatement("DELETE FROM " + tableName + qb.getWhere());
             qb.bindParameters(stmt);
-
-            // TODO ???
-            //            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
-            //                TableModelPrimitiveSet.delete(connection, primaryKey, member);
-            //            }
-
             return stmt.executeUpdate();
         } catch (SQLException e) {
             log.error("{} SQL delete error", tableName, e);

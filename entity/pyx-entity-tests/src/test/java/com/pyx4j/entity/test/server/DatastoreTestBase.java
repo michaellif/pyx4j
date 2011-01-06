@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.server;
 
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -61,5 +63,9 @@ public abstract class DatastoreTestBase extends TestCase {
 
     public static synchronized String uniqueString() {
         return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis());
+    }
+
+    public static Date getRoundedNow() {
+        return new Date(1000 * (new Date().getTime() / 1000));
     }
 }

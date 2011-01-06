@@ -51,7 +51,7 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         Assert.assertEquals("Class of Value", Date.class, emp.hiredate().getValueClass());
         // Round to seconds
         GregorianCalendar c = new GregorianCalendar();
-        Date today = new Date(1000 * (new Date().getTime() / 1000));
+        Date today = getRoundedNow();
         c.setTime(today);
         c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
         Date day = c.getTime();

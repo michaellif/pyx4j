@@ -60,7 +60,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         emp.firstName().setValue("Bob");
 
         Task task = EntityFactory.create(Task.class);
-        Date today = new Date();
+        Date today = getRoundedNow();
         task.deadLine().setValue(today);
         task.status().setValue(Status.DEACTIVATED);
 
@@ -129,7 +129,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         emp.firstName().setValue("Bob");
 
         Task task = EntityFactory.create(Task.class);
-        Date today = new Date();
+        Date today = getRoundedNow();
         task.deadLine().setValue(today);
         task.status().setValue(Status.DEACTIVATED);
 

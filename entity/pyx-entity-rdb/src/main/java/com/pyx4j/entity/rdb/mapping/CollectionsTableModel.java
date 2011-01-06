@@ -189,7 +189,7 @@ public class CollectionsTableModel {
         }
     }
 
-    static void delete(Connection connection, long primaryKey, MemberOperationsMeta member) {
+    public static void delete(Connection connection, long primaryKey, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
@@ -201,6 +201,22 @@ public class CollectionsTableModel {
         } finally {
             SQLUtils.closeQuietly(stmt);
         }
+    }
 
+    public static void delete(Connection connection, Iterable<Long> primaryKeys, MemberOperationsMeta member) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
+            for (long primaryKey : primaryKeys) {
+                stmt.setLong(1, primaryKey);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            log.error("{} SQL delete error", member.sqlName(), e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
     }
 }
