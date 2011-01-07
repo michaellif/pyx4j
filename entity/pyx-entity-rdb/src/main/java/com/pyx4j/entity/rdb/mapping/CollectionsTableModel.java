@@ -225,6 +225,22 @@ public class CollectionsTableModel {
         try {
             stmt = connection.prepareStatement("DELETE c1 FROM " + member.sqlName() + " c1, " + mainTable + " " + mainTableAlias
                     + qb.getWhere("c1.owner = " + mainTableAlias + ".id"));
+
+            //MySQL:            delete c1 from testemployee_tasks c1, testemployee m1 WHERE c1.owner = m1.id;
+
+            // TODO
+            //HSQL:            delete from testemployee_tasks c1 WHERE c1.owner IN (SELECT m1.id FROM testemployee m1);
+
+            //            String childTableAlias = "c1";
+            //
+            //            StringBuilder sql = new StringBuilder();
+            //            sql.append("DELETE FROM ").append(member.sqlName()).append(" ").append(childTableAlias);
+            //            sql.append(" WHERE ").append(childTableAlias).append(".owner =");
+            //
+            //            stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " " + childTableAlias + " WHERE " +
+            //
+            //            "" + mainTable + " " + mainTableAlias + qb.getWhere(childTableAlias + ".owner = " + mainTableAlias + ".id"));
+
             qb.bindParameters(stmt);
             stmt.executeUpdate();
         } catch (SQLException e) {
