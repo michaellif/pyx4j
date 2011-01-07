@@ -37,8 +37,6 @@ public class MemberMetaData {
 
     public boolean embedded;
 
-    public boolean entity;
-
     public boolean valueClassIsNumber;
 
     public Class<?> valueClass;

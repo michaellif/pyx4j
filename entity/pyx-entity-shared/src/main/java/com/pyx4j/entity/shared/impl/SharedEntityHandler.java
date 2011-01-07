@@ -78,14 +78,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     void attachToOwner(IObject<?> parent, String fieldName) {
         super.attachToOwner(parent, fieldName);
         delegateValue = (parent != null) && (getOwner() == parent);
-
-        //reset owner member
-        if (members != null) {
-            String ownerMemberName = getEntityMeta().getOwnerMemberName();
-            if (ownerMemberName != null) {
-                members.remove(ownerMemberName);
-            }
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -104,12 +96,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return new PrimitiveSetHandler<T>(this, memberName, primitiveValueClass);
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends IEntity> T lazyCreateMemberIEntity(String memberName, Class<T> valueClass) {
-        //        // Is Bidirectional Relationship ?
-        //        if ((getOwner() != null) && (getEntityMeta().getMemberMeta(memberName).isOwner())) {
-        //            return (T) getOwner();
-        //        }
         return EntityFactory.create(valueClass, this, memberName);
     }
 
@@ -172,9 +159,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
         if (delegateValue) {
             ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
+            // ensure @Owner value is set properly.
             String ownerMemberName = getEntityMeta().getOwnerMemberName();
             if ((ownerMemberName != null) && (value != null)) {
-                value.put(ownerMemberName, getOwner().getValue());
+                if (getEntityMeta().getMemberMeta(ownerMemberName).getObjectClass().equals(getOwner().getObjectClass())) {
+                    value.put(ownerMemberName, getOwner().getValue());
+                }
             }
         } else {
             this.data = value;
@@ -192,7 +182,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 // allow AbstractMember
                 value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
             }
-            if ((getOwner() != null) && getMeta().isOwnedRelationships()) {
+            if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
                 // attach incoming entity to new owner
                 ((SharedEntityHandler) entity).attachToOwner(this.getOwner(), this.getFieldName());
             }
@@ -508,7 +498,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         b.append(getObjectClass().getName()).append(" ");
         Map<String, Object> v = getValue();
         if (v != null) {
-            EntityValueMap.dumpMap(b, v, new HashSet<Map>());
+            EntityValueMap.dumpMap(b, v, new HashSet<Map<String, Object>>());
         } else {
             b.append("{null}");
         }

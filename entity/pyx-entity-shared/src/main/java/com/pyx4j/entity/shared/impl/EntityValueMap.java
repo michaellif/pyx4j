@@ -61,17 +61,21 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     public boolean isNull() {
-        return isNull(new HashSet<Map>());
+        return isNull(new HashSet<Map<String, Object>>());
     }
 
-    private boolean isNull(Set<Map> processed) {
+    private boolean isNull(Set<Map<String, Object>> processed) {
         processed.add(this);
         if (this.isEmpty()) {
             return true;
         }
         for (Map.Entry<String, Object> me : this.entrySet()) {
             if (me.getValue() instanceof EntityValueMap) {
-                if ((!processed.contains(me.getValue())) && (!((EntityValueMap) me.getValue()).isNull(processed))) {
+                if (processed.contains(me.getValue())) {
+                    // Owner/Owned binding is not empty!
+                    return false;
+                }
+                if (!((EntityValueMap) me.getValue()).isNull(processed)) {
                     return false;
                 }
             } else if (me.getValue() != null) {
@@ -92,7 +96,7 @@ public class EntityValueMap extends HashMap<String, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map> processed) {
+    public static void dumpMap(StringBuilder b, Map<String, Object> map, Set<Map<String, Object>> processed) {
         if (processed.contains(map)) {
             b.append("...");
             return;
@@ -129,7 +133,7 @@ public class EntityValueMap extends HashMap<String, Object> {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        EntityValueMap.dumpMap(b, this, new HashSet<Map>());
+        EntityValueMap.dumpMap(b, this, new HashSet<Map<String, Object>>());
         return b.toString();
     }
 

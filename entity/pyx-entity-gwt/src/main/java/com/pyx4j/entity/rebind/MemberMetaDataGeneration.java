@@ -54,8 +54,6 @@ public class MemberMetaDataGeneration extends MemberMetaData {
 
         && (valueClassIsNumber == other.valueClassIsNumber)
 
-        && (entity == other.entity)
-
         && (isSameClass(valueClassSourceName, other.valueClass)));
 
     }

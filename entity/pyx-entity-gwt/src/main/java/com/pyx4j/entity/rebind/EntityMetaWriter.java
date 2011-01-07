@@ -304,7 +304,6 @@ public class EntityMetaWriter {
                 valueClass = type;
 
                 data.valueClassSourceName = valueClass.getQualifiedSourceName();
-                data.entity = true;
                 data.objectClassType = ObjectClassType.Entity;
             } else {
                 logger.log(TreeLogger.Type.ERROR, "Unknown member type '" + type.getQualifiedSourceName() + "' of method '" + method.getName()
@@ -432,7 +431,6 @@ public class EntityMetaWriter {
         }
         writer.println(ObjectClassType.class.getSimpleName() + "." + data.objectClassType.name() + ", ");
 
-        writer.print(Boolean.valueOf(data.entity).toString() + ", ");
         writer.print(Boolean.valueOf(data.valueClassIsNumber).toString() + ", ");
         writer.print(Boolean.valueOf(data.persistenceTransient).toString() + ", ");
         writer.print(Boolean.valueOf(data.rpcTransient).toString() + ", ");

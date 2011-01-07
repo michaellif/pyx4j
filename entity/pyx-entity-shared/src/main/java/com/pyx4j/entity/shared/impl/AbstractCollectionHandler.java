@@ -56,6 +56,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return EntityFactory.create(getValueClass(), this, getFieldName());
     }
 
+    @SuppressWarnings("unchecked")
     protected TYPE createTypedEntity(Map<String, Object> entityValue) {
         TYPE entity;
         TYPE typeAttr = (TYPE) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
@@ -75,9 +76,12 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         }
         ((SharedEntityHandler) entity).attachToOwner(this, this.getFieldName());
 
+        // ensure @Owner value is set properly.
         String ownerMemberName = entity.getEntityMeta().getOwnerMemberName();
         if ((ownerMemberName != null) && (value != null)) {
-            value.put(ownerMemberName, getOwner().getValue());
+            if (entity.getEntityMeta().getMemberMeta(ownerMemberName).getObjectClass().equals(getOwner().getObjectClass())) {
+                value.put(ownerMemberName, getOwner().getValue());
+            }
         }
 
         return value;
@@ -139,7 +143,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         b.append(getObjectClass().getName()).append(" ");
         VALUE_TYPE value = getValue();
         if (value != null) {
-            Set<Map> processed = new HashSet<Map>();
+            Set<Map<String, Object>> processed = new HashSet<Map<String, Object>>();
             b.append('[');
             b.append(((Collection<?>) value).size());
             b.append(' ');

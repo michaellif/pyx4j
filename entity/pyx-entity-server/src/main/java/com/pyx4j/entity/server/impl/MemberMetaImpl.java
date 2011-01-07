@@ -70,8 +70,6 @@ public class MemberMetaImpl implements MemberMeta {
 
     private final boolean indexed;
 
-    private final boolean entity;
-
     private final Class<?> valueClass;
 
     private final Class<? extends IObject<?>> objectClass;
@@ -101,23 +99,18 @@ public class MemberMetaImpl implements MemberMeta {
         objectClass = (Class<? extends IObject<?>>) method.getReturnType();
         if (IPrimitive.class.equals(objectClass)) {
             valueClass = EntityImplReflectionHelper.primitiveValueClass(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0]);
-            entity = false;
             objectClassType = ObjectClassType.Primitive;
         } else if (IEntity.class.isAssignableFrom(objectClass)) {
             valueClass = objectClass;
-            entity = true;
             objectClassType = ObjectClassType.Entity;
         } else if (ISet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            entity = false;
             objectClassType = ObjectClassType.EntitySet;
         } else if (IList.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            entity = false;
             objectClassType = ObjectClassType.EntityList;
         } else if (IPrimitiveSet.class.equals(objectClass)) {
             valueClass = (Class<?>) ((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0];
-            entity = false;
             objectClassType = ObjectClassType.PrimitiveSet;
         } else {
             throw new RuntimeException("Unknown member type" + objectClass);
@@ -224,7 +217,7 @@ public class MemberMetaImpl implements MemberMeta {
 
     @Override
     public boolean isEntity() {
-        return entity;
+        return objectClassType == ObjectClassType.Entity;
     }
 
     @Override

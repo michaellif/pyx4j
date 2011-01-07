@@ -20,8 +20,11 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import junit.framework.Assert;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Department;
+import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
 import com.pyx4j.entity.test.shared.domain.bidir.Child;
 import com.pyx4j.entity.test.shared.domain.bidir.Master;
@@ -59,6 +62,17 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
         assertEquals("Value updated", c2Name, m.child().name().getValue());
     }
 
+    public void testOwnedEntityNonNull() {
+        Master m = EntityFactory.create(Master.class);
+        Child c = EntityFactory.create(Child.class);
+        Assert.assertTrue("Master is not null", m.isNull());
+        Assert.assertTrue("Child is not null", c.isNull());
+
+        m.child().set(c);
+        Assert.assertFalse("Master is null", m.isNull());
+        Assert.assertFalse("Child is null", c.isNull());
+    }
+
     public void testOwnedSetValue() {
         Organization org = EntityFactory.create(Organization.class);
         org.name().setValue("org");
@@ -84,6 +98,16 @@ public class BidirectionalRelationshipTest extends InitializerTestCase {
 
         // Test Recursive print
         System.out.println(orgDepartment.toString());
+    }
+
+    public void testOwnerChanges() {
+        Employee emp = EntityFactory.create(Employee.class);
+        emp.firstName().setValue("any");
+        Assert.assertTrue("Owner is not null", emp.department().organization().isNull());
+        Department department = EntityFactory.create(Department.class);
+        //department has @Owner  but it is not Employee!
+        emp.department().set(department);
+        Assert.assertTrue("Owner is not null after assignment", emp.department().organization().isNull());
     }
 
 }
