@@ -105,6 +105,10 @@ public class TableModel {
         }
     }
 
+    public String getTableName() {
+        return tableName;
+    }
+
     public EntityMeta entityMeta() {
         return entityMeta;
     }
@@ -296,10 +300,6 @@ public class TableModel {
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                 CollectionsTableModel.update(connection, dialect, entity, member);
             }
-
-            //TODO We have defaultAutoCommit = true in ConnectionProvider
-            //connection.commit();
-
             return (rc == 1);
         } catch (SQLException e) {
             log.error("{} SQL update error", tableName, e);

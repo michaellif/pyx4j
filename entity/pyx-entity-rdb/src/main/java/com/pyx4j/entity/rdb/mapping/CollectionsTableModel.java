@@ -219,4 +219,19 @@ public class CollectionsTableModel {
             SQLUtils.closeQuietly(stmt);
         }
     }
+
+    public static void delete(Connection connection, MemberOperationsMeta member, QueryBuilder<?> qb, String mainTable, String mainTableAlias) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("DELETE c1 FROM " + member.sqlName() + " c1, " + mainTable + " " + mainTableAlias
+                    + qb.getWhere("c1.owner = " + mainTableAlias + ".id"));
+            qb.bindParameters(stmt);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            log.error("{} SQL delete error", member.sqlName(), e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
 }

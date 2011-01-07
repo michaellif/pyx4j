@@ -46,6 +46,7 @@ import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
+import com.pyx4j.entity.rdb.mapping.QueryBuilder;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -517,10 +518,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             connection = connectionProvider.getConnection();
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
-            // TODO remove data from join tables
-            //            for (MemberOperationsMeta member : entityOperationsMeta.getPrimitiveSetMembers()) {
-            //                CollectionsTableModel.delete(connection, criteria, member);
-            //            }
+
+            // remove data from join tables first, No cascade delete
+            String mainTableAlias = "m1";
+            QueryBuilder<T> qb = new QueryBuilder<T>(connectionProvider.getDialect(), mainTableAlias, tm.entityMeta(), criteria);
+            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                CollectionsTableModel.delete(connection, member, qb, tm.getTableName(), mainTableAlias);
+            }
+
             return tm.delete(connection, criteria);
         } finally {
             SQLUtils.closeQuietly(connection);

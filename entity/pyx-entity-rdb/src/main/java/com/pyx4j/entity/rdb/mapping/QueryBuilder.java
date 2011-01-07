@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
-class QueryBuilder<T extends IEntity> {
+public class QueryBuilder<T extends IEntity> {
 
     private static final Logger log = LoggerFactory.getLogger(QueryBuilder.class);
 
@@ -43,9 +43,12 @@ class QueryBuilder<T extends IEntity> {
 
     private final List<Object> bindParams = new Vector<Object>();
 
-    QueryBuilder(Dialect dialect, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
+    public QueryBuilder(Dialect dialect, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
+        this(dialect, null, entityMeta, criteria);
+    }
+
+    public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
-            sql.append(" WHERE ");
             boolean firstCriteria = true;
             for (Criterion cr : criteria.getFilters()) {
                 if (firstCriteria) {
@@ -126,7 +129,19 @@ class QueryBuilder<T extends IEntity> {
     }
 
     String getWhere() {
-        return sql.toString();
+        if (sql.length() == 0) {
+            return "";
+        } else {
+            return " WHERE " + sql.toString();
+        }
+    }
+
+    String getWhere(String conditions) {
+        if (sql.length() == 0) {
+            return " WHERE " + conditions;
+        } else {
+            return " WHERE " + conditions + " AND " + sql.toString();
+        }
     }
 
     void bindParameters(PreparedStatement stmt) throws SQLException {
