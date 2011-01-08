@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 
@@ -151,5 +152,30 @@ public abstract class QueryTestBase extends DatastoreTestBase {
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
         Assert.assertEquals("Search Value", mrg, emp1.manager());
         Assert.assertEquals("Verify Value", empName, emp1.firstName().getValue());
+    }
+
+    public void testQueryBySetEntityMember() {
+        // Setup data
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("emp1" + uniqueString());
+        srv.persist(employee1);
+
+        Department department = EntityFactory.create(Department.class);
+        String deptName = "Dept " + uniqueString();
+        department.name().setValue(deptName);
+        department.employees().add(employee1);
+        srv.persist(department);
+
+        // test starts here
+        EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
+        criteria.add(PropertyCriterion.eq(department.employees(), employee1));
+        List<Department> departments2 = srv.query(criteria);
+        Assert.assertEquals("Retr All List size", 1, departments2.size());
+        Assert.assertEquals("Retr All department.name", deptName, departments2.get(0).name().getValue());
+
+        List<Long> departmentsIds = srv.queryKeys(criteria);
+        Assert.assertEquals("Retr Keys List size", 1, departmentsIds.size());
+        Assert.assertEquals("Retr All department.id", department.getPrimaryKey(), departmentsIds.get(0));
+
     }
 }

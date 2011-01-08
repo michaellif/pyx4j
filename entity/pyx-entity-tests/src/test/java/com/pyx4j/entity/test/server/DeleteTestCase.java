@@ -50,6 +50,7 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
 
         srv.delete(emp);
 
+        // Assert if all has been removed
         List<Employee> emps = srv.query(criteria1);
         Assert.assertEquals("result set size", 0, emps.size());
 
@@ -77,6 +78,29 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
         srv.delete(org);
 
         // Department is removed as well.
+        Department department2 = srv.retrieve(Department.class, department.getPrimaryKey());
+        assertNull("found by pk", department2);
+    }
+
+    public void testDeleteByQueryBySetEntityMember() {
+        // Setup data
+        Employee employee1 = EntityFactory.create(Employee.class);
+        employee1.firstName().setValue("emp1" + uniqueString());
+        srv.persist(employee1);
+
+        Department department = EntityFactory.create(Department.class);
+        String deptName = "Dept " + uniqueString();
+        department.name().setValue(deptName);
+        department.employees().add(employee1);
+        srv.persist(department);
+
+        // test starts here
+        EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
+        criteria.add(PropertyCriterion.eq(department.employees(), employee1));
+        Assert.assertEquals("Removed one row", 1, srv.delete(criteria));
+
+        // Assert if all has been removed
+        // Department is removed?
         Department department2 = srv.retrieve(Department.class, department.getPrimaryKey());
         assertNull("found by pk", department2);
     }
