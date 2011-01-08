@@ -58,6 +58,9 @@ public class QueryBuilder<T extends IEntity> {
                 }
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
+                    if (alias != null) {
+                        sql.append(alias).append('.');
+                    }
                     sql.append(dialect.sqlName(propertyCriterion.getPropertyName()));
                     if (valueIsNull(propertyCriterion.getValue())) {
                         switch (propertyCriterion.getRestriction()) {
@@ -110,6 +113,9 @@ public class QueryBuilder<T extends IEntity> {
                     firstOrderBy = false;
                 } else {
                     sql.append(", ");
+                }
+                if (alias != null) {
+                    sql.append(alias).append('.');
                 }
                 sql.append(sort.getPropertyName()).append(' ');
                 sql.append(sort.isDescending() ? "DESC" : "ASC");

@@ -223,24 +223,21 @@ public class CollectionsTableModel {
     public static void delete(Connection connection, MemberOperationsMeta member, QueryBuilder<?> qb, String mainTable, String mainTableAlias) {
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("DELETE c1 FROM " + member.sqlName() + " c1, " + mainTable + " " + mainTableAlias
-                    + qb.getWhere("c1.owner = " + mainTableAlias + ".id"));
+            //SQL:  DELETE FROM c WHERE owner IN (SELECT m1.id FROM m m1 ...)
+            StringBuilder sql = new StringBuilder();
+            sql.append("DELETE FROM ").append(member.sqlName());
+            sql.append(" WHERE ").append(" owner IN ( SELECT ");
+            if (mainTableAlias != null) {
+                sql.append(mainTableAlias).append('.');
+            }
+            sql.append("id FROM ").append(mainTable);
+            if (mainTableAlias != null) {
+                sql.append(' ').append(mainTableAlias);
+            }
+            sql.append(qb.getWhere());
+            sql.append(')');
 
-            //MySQL:            delete c1 from testemployee_tasks c1, testemployee m1 WHERE c1.owner = m1.id;
-
-            // TODO
-            //HSQL:            delete from testemployee_tasks c1 WHERE c1.owner IN (SELECT m1.id FROM testemployee m1);
-
-            //            String childTableAlias = "c1";
-            //
-            //            StringBuilder sql = new StringBuilder();
-            //            sql.append("DELETE FROM ").append(member.sqlName()).append(" ").append(childTableAlias);
-            //            sql.append(" WHERE ").append(childTableAlias).append(".owner =");
-            //
-            //            stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " " + childTableAlias + " WHERE " +
-            //
-            //            "" + mainTable + " " + mainTableAlias + qb.getWhere(childTableAlias + ".owner = " + mainTableAlias + ".id"));
-
+            stmt = connection.prepareStatement(sql.toString());
             qb.bindParameters(stmt);
             stmt.executeUpdate();
         } catch (SQLException e) {
