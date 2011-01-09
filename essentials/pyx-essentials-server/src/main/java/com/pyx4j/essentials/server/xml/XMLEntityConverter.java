@@ -24,8 +24,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Base64;
@@ -74,13 +76,25 @@ public class XMLEntityConverter {
     }
 
     public static void write(XMLStringWriter xml, IEntity entity, String name) {
+        write(xml, entity, name, new HashSet<Map<String, Object>>());
+    }
+
+    public static void write(XMLStringWriter xml, IEntity entity, String name, Set<Map<String, Object>> processed) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (entity.getPrimaryKey() != null) {
             entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
         }
         xml.startIdented(name, entityAttributes);
 
-        nextValue: for (Map.Entry<String, Object> me : entity.getValue().entrySet()) {
+        Map<String, Object> entityValue = entity.getValue();
+        if (processed.contains(entityValue)) {
+            xml.endIdented(name);
+            return;
+        }
+
+        processed.add(entityValue);
+
+        nextValue: for (Map.Entry<String, Object> me : entityValue.entrySet()) {
             String propertyName = me.getKey();
             if (propertyName.equals(IEntity.PRIMARY_KEY) || propertyName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
                 continue nextValue;
@@ -88,13 +102,13 @@ public class XMLEntityConverter {
             Object value = me.getValue();
 
             if (value instanceof Map<?, ?>) {
-                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName);
+                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName, processed);
             } else if (value instanceof Collection) {
                 xml.startIdented(propertyName);
                 IObject<?> member = entity.getMember(propertyName);
                 if (member instanceof ICollection<?, ?>) {
                     for (Object item : (ICollection<?, ?>) member) {
-                        XMLEntityConverter.write(xml, (IEntity) item, "item");
+                        XMLEntityConverter.write(xml, (IEntity) item, "item", processed);
                     }
                 } else {
                     for (Object item : (Collection<?>) value) {
