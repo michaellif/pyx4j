@@ -161,10 +161,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             ((SharedEntityHandler) getOwner()).ensureValue().put(getFieldName(), value);
             // ensure @Owner value is set properly.
             String ownerMemberName = getEntityMeta().getOwnerMemberName();
-            if ((ownerMemberName != null) && (value != null)) {
-                if (getEntityMeta().getMemberMeta(ownerMemberName).getObjectClass().equals(getOwner().getObjectClass())) {
-                    value.put(ownerMemberName, getOwner().getValue());
-                }
+            if ((ownerMemberName != null) && (value != null) && (getMeta().isOwnedRelationships())) {
+                value.put(ownerMemberName, getOwner().getValue());
             }
         } else {
             this.data = value;
