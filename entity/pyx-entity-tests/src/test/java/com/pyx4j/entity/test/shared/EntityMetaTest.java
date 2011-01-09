@@ -138,6 +138,9 @@ public class EntityMetaTest extends InitializerTestCase {
 
         ConcreteEntity ent2 = EntityFactory.create(ConcreteEntity.class);
 
+        Base1Entity memberEmpty = ent2.refference();
+        assertFalse("Right class " + memberEmpty.getClass(), memberEmpty instanceof ConcreteEntity);
+
         assertTrue("Has member name1", ent2.refference().getEntityMeta().getMemberNames().contains("name1"));
         assertFalse("Has member name2", ent2.refference().getEntityMeta().getMemberNames().contains("name2"));
         assertFalse("Has member name", ent2.refference().getEntityMeta().getMemberNames().contains("name"));
