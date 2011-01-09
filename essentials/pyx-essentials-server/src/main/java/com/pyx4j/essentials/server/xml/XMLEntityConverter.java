@@ -76,13 +76,16 @@ public class XMLEntityConverter {
     }
 
     public static void write(XMLStringWriter xml, IEntity entity, String name) {
-        write(xml, entity, name, new HashSet<Map<String, Object>>());
+        write(xml, entity, name, null, new HashSet<Map<String, Object>>());
     }
 
-    public static void write(XMLStringWriter xml, IEntity entity, String name, Set<Map<String, Object>> processed) {
+    public static void write(XMLStringWriter xml, IEntity entity, String name, Class<? extends IObject> declaredObjectClass, Set<Map<String, Object>> processed) {
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (entity.getPrimaryKey() != null) {
             entityAttributes.put("id", String.valueOf(entity.getPrimaryKey()));
+        }
+        if ((declaredObjectClass != null) && (!entity.getObjectClass().equals(declaredObjectClass))) {
+            entityAttributes.put("type", entity.getObjectClass().getName());
         }
         xml.startIdented(name, entityAttributes);
 
@@ -102,13 +105,14 @@ public class XMLEntityConverter {
             Object value = me.getValue();
 
             if (value instanceof Map<?, ?>) {
-                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName, processed);
+                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName, entity.getEntityMeta().getMemberMeta(propertyName)
+                        .getObjectClass(), processed);
             } else if (value instanceof Collection) {
                 xml.startIdented(propertyName);
                 IObject<?> member = entity.getMember(propertyName);
                 if (member instanceof ICollection<?, ?>) {
                     for (Object item : (ICollection<?, ?>) member) {
-                        XMLEntityConverter.write(xml, (IEntity) item, "item", processed);
+                        XMLEntityConverter.write(xml, (IEntity) item, "item", entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
                     }
                 } else {
                     for (Object item : (Collection<?>) value) {
@@ -125,7 +129,10 @@ public class XMLEntityConverter {
     }
 
     public static <T extends IEntity> T pars(Element node) {
-        String entityClassName = node.getNodeName();
+        String entityClassName = node.getAttribute("type");
+        if (!CommonsStringUtils.isStringSet(entityClassName)) {
+            entityClassName = node.getNodeName();
+        }
         Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
         return pars(node, entityClass);
     }
@@ -133,6 +140,16 @@ public class XMLEntityConverter {
     public static <T extends IEntity> T pars(Element node, Class<T> entityClass) {
         T entity = EntityFactory.create(entityClass);
         return pars(node, entity);
+    }
+
+    private static <T extends IEntity> T createInstance(Element node) {
+        String entityClassName = node.getAttribute("type");
+        if (!CommonsStringUtils.isStringSet(entityClassName)) {
+            return null;
+        } else {
+            Class<T> entityClass = ServerEntityFactory.entityClass(entityClassName);
+            return EntityFactory.create(entityClass);
+        }
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -150,13 +167,22 @@ public class XMLEntityConverter {
                 IObject<?> member = entity.getMember(memberName);
                 MemberMeta memberMeta = entity.getEntityMeta().getMemberMeta(memberName);
                 if (memberMeta.isEntity()) {
-                    pars((Element) valueNode, (IEntity) member);
+                    IEntity concreteInctance = createInstance((Element) valueNode);
+                    if (concreteInctance == null) {
+                        pars((Element) valueNode, (IEntity) member);
+                    } else {
+                        pars((Element) valueNode, concreteInctance);
+                        ((IEntity) member).set(concreteInctance);
+                    }
                 } else if (member instanceof ICollection<?, ?>) {
                     NodeList collectionNodeList = valueNode.getChildNodes();
                     for (int ci = 0; ci < collectionNodeList.getLength(); ci++) {
                         Node itemNode = collectionNodeList.item(ci);
                         if ((itemNode instanceof Element) && ("item".equals(itemNode.getNodeName()))) {
-                            IEntity item = ((ICollection<?, ?>) member).$();
+                            IEntity item = createInstance((Element) itemNode);
+                            if (item == null) {
+                                item = ((ICollection<?, ?>) member).$();
+                            }
                             pars((Element) itemNode, item);
                             ((ICollection) member).add(item);
                         }

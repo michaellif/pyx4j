@@ -34,6 +34,9 @@ public interface IObject<VALUE_TYPE> {
 
     public Class<?> getValueClass();
 
+    /**
+     * @return IList, ISet, IPrimitive, or extends IEntity
+     */
     public Class<? extends IObject> getObjectClass();
 
     //Owned by parent

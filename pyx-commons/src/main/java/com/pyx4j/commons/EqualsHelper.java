@@ -52,6 +52,14 @@ public abstract class EqualsHelper {
         }
     }
 
+    public static boolean classEquals(Object value1, Object value2) {
+        if ((value1 == null) || (value2 == null)) {
+            return (value1 == null) && (value2 == null);
+        } else {
+            return value1.getClass().equals(value2.getClass());
+        }
+    }
+
     public static <T> boolean iequals(IEqual<T> value1, T value2) {
         return ((value1 == value2) || ((value1 != null) && value1.iequals(value2)));
     }

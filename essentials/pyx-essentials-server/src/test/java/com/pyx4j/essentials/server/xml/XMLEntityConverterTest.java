@@ -21,6 +21,7 @@
 package com.pyx4j.essentials.server.xml;
 
 import java.io.StringReader;
+import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,10 +33,15 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
+import com.pyx4j.entity.test.shared.domain.inherit.RefferenceEntity;
 import com.pyx4j.essentials.server.report.XMLStringWriter;
 
 public class XMLEntityConverterTest extends TestCase {
@@ -107,4 +113,46 @@ public class XMLEntityConverterTest extends TestCase {
         assertEquals("Level 1 enum value", employee1.employmentStatus().getValue(), employee2.employmentStatus().getValue());
         assertEquals("Level 2 value", employee1.homeAddress().streetName().getValue(), employee2.homeAddress().streetName().getValue());
     }
+
+    public void testAbstractSetMember() throws Exception {
+        RefferenceEntity rootEntity = EntityFactory.create(RefferenceEntity.class);
+        rootEntity.setPrimaryKey(0L);
+
+        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        ent1.setPrimaryKey(1L);
+        ent1.name1().setValue("1");
+        ent1.name().setValue("1.00");
+        rootEntity.refferences().add(ent1);
+
+        Concrete1Entity ent2 = EntityFactory.create(Concrete1Entity.class);
+        ent2.setPrimaryKey(2L);
+        ent2.name1().setValue("2");
+        ent2.name11().setValue("2.11");
+        rootEntity.refferences().add(ent2);
+
+        String xml = getXML(rootEntity);
+        System.out.println(xml);
+        RefferenceEntity rootEntity2 = XMLEntityConverter.pars(getDom(xml).getDocumentElement());
+
+        Iterator<Base1Entity> it = rootEntity2.refferences().iterator();
+
+        Base1Entity item1 = it.next();
+        Base1Entity item2 = it.next();
+        if (item1.name1().getValue().equals("2")) {
+            // swap the order for tests
+            Base1Entity t = item1;
+            item1 = item2;
+            item2 = t;
+        }
+
+        assertTrue("item1 data type " + item1.getClass(), item1 instanceof ConcreteEntity);
+        assertTrue("item2 data type " + item2.getClass(), item2 instanceof Concrete1Entity);
+
+        assertEquals("item1 value", ent1, item1);
+        assertEquals("item2 value", ent2, item2);
+
+        assertTrue("item1 Not Same data\n" + ent1.toString() + "\n!=\n" + item1.toString(), EntityGraph.fullyEqual(ent1, item1));
+        assertTrue("item2 Not Same data\n" + ent2.toString() + "\n!=\n" + item2.toString(), EntityGraph.fullyEqual(ent2, item2));
+    }
+
 }

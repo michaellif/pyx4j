@@ -89,6 +89,10 @@ public class EntityGraph {
                 } else if (!fullyEqual(ent1Memeber, (IEntity) ent2.getMember(me.getKey()))) {
                     return false;
                 }
+            } else if (me.getKey().equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
+                if (!EqualsHelper.classEquals(me.getValue(), otherValue.get(me.getKey()))) {
+                    return false;
+                }
             } else if (!EqualsHelper.equals(me.getValue(), otherValue.get(me.getKey()))) {
                 //                System.out.println("--changes " + ent1.getEntityMeta().getCaption() + "." + me.getKey() + " " + me.getValue() + "!="
                 //                        + otherValue.get(me.getKey()));
