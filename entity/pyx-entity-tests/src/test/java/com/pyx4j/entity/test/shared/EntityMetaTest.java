@@ -144,6 +144,10 @@ public class EntityMetaTest extends InitializerTestCase {
 
         ent2.refference().set(ent1);
 
+        Base1Entity member = ent2.refference();
+        // TODO
+        //assertTrue("Right class " + member.getClass(), member instanceof ConcreteEntity);
+
         ConcreteEntity ent1x;
         // This does not work.
         //ent1x = (ConcreteEntity) ent2.refference();

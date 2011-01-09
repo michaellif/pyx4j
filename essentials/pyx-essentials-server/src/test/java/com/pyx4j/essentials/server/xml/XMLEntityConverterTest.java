@@ -83,7 +83,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         XMLEntityConverter.write(xml, employee);
 
-        System.out.println(xml.toString());
+        //System.out.println(xml.toString());
 
         assertTrue(xml.toString().contains("<firstName>First Name</firstName>"));
     }
@@ -114,6 +114,25 @@ public class XMLEntityConverterTest extends TestCase {
         assertEquals("Level 2 value", employee1.homeAddress().streetName().getValue(), employee2.homeAddress().streetName().getValue());
     }
 
+    public void TODO_testAbstractMember() throws Exception {
+        ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
+        ent1.setPrimaryKey(1L);
+        ent1.name1().setValue("1");
+        ent1.name().setValue("1.00");
+
+        Concrete1Entity ent11 = EntityFactory.create(Concrete1Entity.class);
+        ent11.setPrimaryKey(11L);
+        ent11.name1().setValue("1.1");
+
+        ent1.refference().set(ent11);
+
+        String xml = getXML(ent1);
+        System.out.println(xml);
+        ConcreteEntity ent2 = XMLEntityConverter.pars(getDom(xml).getDocumentElement());
+
+        assertTrue("item1 Not Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+    }
+
     public void testAbstractSetMember() throws Exception {
         RefferenceEntity rootEntity = EntityFactory.create(RefferenceEntity.class);
         rootEntity.setPrimaryKey(0L);
@@ -131,7 +150,7 @@ public class XMLEntityConverterTest extends TestCase {
         rootEntity.refferences().add(ent2);
 
         String xml = getXML(rootEntity);
-        System.out.println(xml);
+        //System.out.println(xml);
         RefferenceEntity rootEntity2 = XMLEntityConverter.pars(getDom(xml).getDocumentElement());
 
         Iterator<Base1Entity> it = rootEntity2.refferences().iterator();
