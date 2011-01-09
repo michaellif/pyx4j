@@ -29,10 +29,23 @@ public class ApplicationMode {
     private final static Mode impl;
 
     static {
-        if (GWT.isClient()) {
-            impl = GWT.create(Mode.class);
+        if (hasGWT()) {
+            if (GWT.isClient()) {
+                impl = GWT.create(Mode.class);
+            } else {
+                impl = ServerSideFactory.create(Mode.class);
+            }
         } else {
             impl = ServerSideFactory.create(Mode.class);
+        }
+    }
+
+    public static final boolean hasGWT() {
+        try {
+            GWT.isClient();
+            return true;
+        } catch (Throwable e) {
+            return false;
         }
     }
 

@@ -26,36 +26,24 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityFactory {
 
-    private static IEntityFactory impl;
+    private static final IEntityFactory impl;
 
     private static final Map<Class<?>, EntityMeta> entityMetaCache = new HashMap<Class<?>, EntityMeta>();
 
     static {
-        if (hasGWT()) {
-            initializeWithGWT();
+        if (ApplicationMode.hasGWT()) {
+            if (GWT.isClient()) {
+                impl = GWT.create(IEntityFactory.class);
+            } else {
+                impl = ServerSideFactory.create(IEntityFactory.class);
+            }
         } else {
             impl = ServerSideFactory.create(IEntityFactory.class);
-        }
-    }
-
-    private static void initializeWithGWT() {
-        if (GWT.isClient()) {
-            impl = GWT.create(IEntityFactory.class);
-        } else {
-            impl = ServerSideFactory.create(IEntityFactory.class);
-        }
-    }
-
-    private static boolean hasGWT() {
-        try {
-            GWT.isClient();
-            return true;
-        } catch (Throwable e) {
-            return false;
         }
     }
 

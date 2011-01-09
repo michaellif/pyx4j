@@ -60,8 +60,12 @@ public class ApplicationBackend {
     private final static ApplicationBackendConfig impl;
 
     static {
-        if (GWT.isClient()) {
-            impl = GWT.create(ApplicationBackendConfig.class);
+        if (ApplicationMode.hasGWT()) {
+            if (GWT.isClient()) {
+                impl = GWT.create(ApplicationBackendConfig.class);
+            } else {
+                impl = ServerSideFactory.create(ApplicationBackendConfig.class);
+            }
         } else {
             impl = ServerSideFactory.create(ApplicationBackendConfig.class);
         }
