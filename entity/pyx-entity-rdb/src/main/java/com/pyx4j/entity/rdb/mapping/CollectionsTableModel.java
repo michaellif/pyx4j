@@ -220,31 +220,4 @@ public class CollectionsTableModel {
         }
     }
 
-    public static void delete(Connection connection, MemberOperationsMeta member, QueryBuilder<?> qb, String mainTable, String mainTableAlias) {
-        PreparedStatement stmt = null;
-        try {
-            //SQL:  DELETE FROM c WHERE owner IN (SELECT m1.id FROM m m1 ...)
-            StringBuilder sql = new StringBuilder();
-            sql.append("DELETE FROM ").append(member.sqlName());
-            sql.append(" WHERE ").append(" owner IN ( SELECT ");
-            if (mainTableAlias != null) {
-                sql.append(mainTableAlias).append('.');
-            }
-            sql.append("id FROM ").append(mainTable);
-            if (mainTableAlias != null) {
-                sql.append(' ').append(mainTableAlias);
-            }
-            sql.append(qb.getWhere());
-            sql.append(')');
-
-            stmt = connection.prepareStatement(sql.toString());
-            qb.bindParameters(stmt);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            log.error("{} SQL delete error", member.sqlName(), e);
-            throw new RuntimeException(e);
-        } finally {
-            SQLUtils.closeQuietly(stmt);
-        }
-    }
 }

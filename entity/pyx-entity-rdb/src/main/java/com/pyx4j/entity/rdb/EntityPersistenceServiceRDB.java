@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,6 @@ import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
-import com.pyx4j.entity.rdb.mapping.QueryBuilder;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -512,6 +512,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
+    /**
+     * This does cascade delete and removes data from Cache so it runs Retrieve first
+     */
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
         Connection connection = null;
@@ -519,14 +522,33 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             connection = connectionProvider.getConnection();
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
 
-            // remove data from join tables first, No cascade delete
-            String mainTableAlias = "m1";
-            QueryBuilder<T> qb = new QueryBuilder<T>(connectionProvider.getDialect(), mainTableAlias, tm.entityMeta(), criteria);
-            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                CollectionsTableModel.delete(connection, member, qb, tm.getTableName(), mainTableAlias);
+            List<T> entities = tm.query(connection, criteria, -1);
+            List<Long> primaryKeys = new Vector<Long>();
+            for (T entity : entities) {
+                primaryKeys.add(entity.getPrimaryKey());
+                // TODO optimize
+                cascadeRetrieveMembers(connection, tm, entity);
             }
 
-            return tm.delete(connection, criteria);
+            // remove data from join tables first, No cascade delete
+            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
+                if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
+
+                    // TODO optimize
+                    for (T entity : entities) {
+                        for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
+                            cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                        }
+                    }
+                }
+
+                CollectionsTableModel.delete(connection, primaryKeys, member);
+            }
+
+            int count = tm.delete(connection, primaryKeys);
+            // TODO remove entities from Cache 
+            return count;
         } finally {
             SQLUtils.closeQuietly(connection);
         }

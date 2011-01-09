@@ -43,11 +43,10 @@ public class QueryBuilder<T extends IEntity> {
 
     private final List<Object> bindParams = new Vector<Object>();
 
-    public QueryBuilder(Dialect dialect, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
-        this(dialect, null, entityMeta, criteria);
-    }
+    private final String mainTableSqlAlias;
 
     public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
+        mainTableSqlAlias = alias;
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
             boolean firstCriteria = true;
             for (Criterion cr : criteria.getFilters()) {
@@ -58,9 +57,7 @@ public class QueryBuilder<T extends IEntity> {
                 }
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    if (alias != null) {
-                        sql.append(alias).append('.');
-                    }
+                    sql.append(alias).append('.');
                     sql.append(dialect.sqlName(propertyCriterion.getPropertyName()));
                     if (valueIsNull(propertyCriterion.getValue())) {
                         switch (propertyCriterion.getRestriction()) {
@@ -114,9 +111,7 @@ public class QueryBuilder<T extends IEntity> {
                 } else {
                     sql.append(", ");
                 }
-                if (alias != null) {
-                    sql.append(alias).append('.');
-                }
+                sql.append(alias).append('.');
                 sql.append(sort.getPropertyName()).append(' ');
                 sql.append(sort.isDescending() ? "DESC" : "ASC");
             }
@@ -132,6 +127,18 @@ public class QueryBuilder<T extends IEntity> {
         } else {
             return false;
         }
+    }
+
+    String getSQL(String mainTableSqlName) {
+        return getJoins(mainTableSqlName) + getWhere();
+    }
+
+    String getJoins(String mainTableSqlName) {
+        return mainTableSqlName + " " + mainTableSqlAlias;
+    }
+
+    public String getMainTableSqlAlias() {
+        return mainTableSqlAlias;
     }
 
     String getWhere() {

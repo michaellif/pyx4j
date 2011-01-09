@@ -381,8 +381,8 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, entityMeta, criteria);
-            stmt = connection.prepareStatement(sql = "SELECT * FROM " + tableName + qb.getWhere());
+            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, criteria);
+            stmt = connection.prepareStatement(sql = "SELECT m1.* FROM " + qb.getSQL(tableName));
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
@@ -418,8 +418,8 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT id FROM " + tableName + qb.getWhere());
+            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, criteria);
+            stmt = connection.prepareStatement("SELECT id FROM " + qb.getSQL(tableName));
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
@@ -445,8 +445,8 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + tableName + qb.getWhere());
+            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, criteria);
+            stmt = connection.prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + qb.getSQL(tableName));
             qb.bindParameters(stmt);
 
             rs = stmt.executeQuery();
@@ -512,18 +512,4 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> int delete(Connection connection, EntityQueryCriteria<T> criteria) {
-        PreparedStatement stmt = null;
-        try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, entityMeta, criteria);
-            stmt = connection.prepareStatement("DELETE FROM " + tableName + qb.getWhere());
-            qb.bindParameters(stmt);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            log.error("{} SQL delete error", tableName, e);
-            throw new RuntimeException(e);
-        } finally {
-            SQLUtils.closeQuietly(stmt);
-        }
-    }
 }

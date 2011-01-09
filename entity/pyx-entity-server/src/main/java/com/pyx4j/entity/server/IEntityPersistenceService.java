@@ -83,10 +83,14 @@ public interface IEntityPersistenceService {
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria);
 
     /**
-     * Only delete one row, does not affect Owned entities
+     * Only delete one row, does not affect Owned entities e.g. no Cascade delete
      */
     public <T extends IEntity> void delete(Class<T> entityClass, long primaryKey);
 
+    /**
+     * Only delete specified enties row, does not affect Owned entities e.g. no Cascade
+     * delete
+     */
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Long> primaryKeys);
 
     /**
