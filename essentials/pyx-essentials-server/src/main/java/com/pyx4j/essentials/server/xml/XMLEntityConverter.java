@@ -105,8 +105,11 @@ public class XMLEntityConverter {
             Object value = me.getValue();
 
             if (value instanceof Map<?, ?>) {
-                XMLEntityConverter.write(xml, (IEntity) entity.getMember(propertyName), propertyName, entity.getEntityMeta().getMemberMeta(propertyName)
-                        .getObjectClass(), processed);
+                IEntity member = (IEntity) entity.getMember(propertyName);
+                if (!member.isObjectClassSameAsDef()) {
+                    member = member.cast();
+                }
+                XMLEntityConverter.write(xml, member, propertyName, entity.getEntityMeta().getMemberMeta(propertyName).getObjectClass(), processed);
             } else if (value instanceof Collection) {
                 xml.startIdented(propertyName);
                 IObject<?> member = entity.getMember(propertyName);

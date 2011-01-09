@@ -86,7 +86,9 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public IEntity cloneEntity();
 
-    public <T extends IEntity> T cast(Class<T> clazz);
+    public <T extends IEntity> T cast();
+
+    public boolean isObjectClassSameAsDef();
 
     @Override
     public String getStringView();

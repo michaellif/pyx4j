@@ -114,7 +114,7 @@ public class XMLEntityConverterTest extends TestCase {
         assertEquals("Level 2 value", employee1.homeAddress().streetName().getValue(), employee2.homeAddress().streetName().getValue());
     }
 
-    public void TODO_testAbstractMember() throws Exception {
+    public void testAbstractMember() throws Exception {
         ConcreteEntity ent1 = EntityFactory.create(ConcreteEntity.class);
         ent1.setPrimaryKey(1L);
         ent1.name1().setValue("1");

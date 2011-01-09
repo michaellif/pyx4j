@@ -140,6 +140,7 @@ public class EntityMetaTest extends InitializerTestCase {
 
         Base1Entity memberEmpty = ent2.refference();
         assertFalse("Right class " + memberEmpty.getClass(), memberEmpty instanceof ConcreteEntity);
+        assertEquals("No cast required", true, memberEmpty.isObjectClassSameAsDef());
 
         assertTrue("Has member name1", ent2.refference().getEntityMeta().getMemberNames().contains("name1"));
         assertFalse("Has member name2", ent2.refference().getEntityMeta().getMemberNames().contains("name2"));
@@ -148,13 +149,14 @@ public class EntityMetaTest extends InitializerTestCase {
         ent2.refference().set(ent1);
 
         Base1Entity member = ent2.refference();
-        // TODO
-        //assertTrue("Right class " + member.getClass(), member instanceof ConcreteEntity);
+        assertTrue("Right class " + member.getClass(), member instanceof Base1Entity);
+        assertFalse("Right class " + member.getClass(), member instanceof ConcreteEntity);
+        assertEquals("Cast required", false, member.isObjectClassSameAsDef());
 
         ConcreteEntity ent1x;
         // This does not work.
         //ent1x = (ConcreteEntity) ent2.refference();
-        ent1x = ent2.refference().cast(ConcreteEntity.class);
+        ent1x = ent2.refference().cast();
 
         assertEquals("value of name1", "v-name1", ent1x.name1().getValue());
         assertEquals("value of name2", "v-name2", ent1x.name2().getValue());

@@ -442,15 +442,29 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return entity;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <T extends IEntity> T cast(Class<T> clazz) {
-        T entity = EntityFactory.create(clazz, getParent(), getFieldName());
-        // TODO add validations
-        // (entity instanceof this.class)
+    public <T extends IEntity> T cast() {
+        Map<String, Object> entityValue = getValue();
+        if ((entityValue == null) || (!entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR))) {
+            return (T) this;
+        } else {
+            T typeAttr = (T) entityValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+            Class<T> clazz = (Class<T>) typeAttr.getValueClass();
+            T entity = EntityFactory.create(clazz, getParent(), getFieldName());
+            entity.setValue(ensureValue());
+            return entity;
+        }
+    }
 
-        entity.setValue(ensureValue());
-
-        return entity;
+    @Override
+    public boolean isObjectClassSameAsDef() {
+        Map<String, Object> entityValue = getValue();
+        if (entityValue == null) {
+            return true;
+        } else {
+            return !entityValue.containsKey(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+        }
     }
 
     private void cloneMap(Map<String, Object> src, Map<String, Object> dst) {
