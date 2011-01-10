@@ -247,18 +247,24 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             else
                 newEntities.add(e);
         }
-        tm.insert(connection, newEntities);
-        Vector<T> notUpdated = new Vector<T>();
-        tm.persist(connection, updEntities, notUpdated);
-        if (notUpdated.size() > 0) {
-            for (T entity : notUpdated) {
-                //these entities have PKs assigned, that's how they selected to be updEntities. 
-                if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
-                    insert(connection, tm, entity, now);
-                } else {
-                    throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
-                }
+        if (newEntities.size() > 0) {
+            tm.insert(connection, newEntities);
+        }
 
+        Vector<T> notUpdated = new Vector<T>();
+        if (updEntities.size() > 0) {
+            tm.persist(connection, updEntities, notUpdated);
+            if (notUpdated.size() > 0) {
+                for (T entity : notUpdated) {
+                    //these entities have PKs assigned, that's how they selected to be updEntities. 
+                    if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
+                        insert(connection, tm, entity, now);
+                    } else {
+                        // in this case they can't be handled, throw
+                        throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                    }
+
+                }
             }
         }
 
