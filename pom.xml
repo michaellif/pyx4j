@@ -157,6 +157,28 @@
 
     <developers>
         <developer>
+            <name>Vlad Skarzhevskyy</name>
+            <id>vlads</id>
+            <email>skarzhevskyy@gmail.com</email>
+            <organization>Pyx Software Services Inc.</organization>
+            <organizationUrl>http://www.pyx4j.com</organizationUrl>
+            <roles>
+                <role>Project admin and developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Michael Lifshits</name>
+            <id>michaellif</id>
+            <email>michael.lifschitz@gmail.com</email>
+            <organization>Pyx Software Services Inc.</organization>
+            <organizationUrl>http://www.pyx4j.com</organizationUrl>
+            <roles>
+                <role>Developer, Architect</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
             <name>Pinchuk Vadym</name>
             <id>vadymp</id>
             <email>vadymp@gmail.com</email>
