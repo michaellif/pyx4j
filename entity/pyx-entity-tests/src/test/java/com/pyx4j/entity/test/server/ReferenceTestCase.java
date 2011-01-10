@@ -87,4 +87,24 @@ public abstract class ReferenceTestCase extends DatastoreTestBase {
         Assert.assertEquals("address.province Value", prov0.name().getValue(), address2.province().name().getValue());
         Assert.assertEquals("address.province Pk", prov0.getPrimaryKey(), address2.province().getPrimaryKey());
     }
+
+    public void testPersistCreateWithWrongKeys() {
+
+        Province prov = EntityFactory.create(Province.class);
+        prov.name().setValue("Ontario" + uniqueString());
+        prov.setPrimaryKey(new Long(1234567890));
+
+        boolean saved = false;
+        try {
+            srv.merge(prov);
+            saved = true;
+        } catch (Throwable e) {
+        }
+
+        if (saved) {
+            fail("Managed to update entity with incorrect PK property");
+        }
+
+    }
+
 }

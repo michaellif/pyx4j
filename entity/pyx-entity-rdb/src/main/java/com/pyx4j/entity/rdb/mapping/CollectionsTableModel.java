@@ -25,7 +25,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -216,6 +218,79 @@ public class CollectionsTableModel {
             log.error("{} SQL delete error", member.sqlName(), e);
             throw new RuntimeException(e);
         } finally {
+            SQLUtils.closeQuietly(stmt);
+        }
+    }
+
+    static <T extends IEntity> void retrieve(Connection connection, Map<Long, T> entities, MemberOperationsMeta member) {
+        ObjectClassType type = member.getMemberMeta().getObjectClassType();
+
+        List<Long> pkList = new Vector<Long>();
+        for (Long pk : entities.keySet()) {
+            pkList.add(pk);
+        }
+        Map<Long, Collection<Object>> dataSet = retrieveData(connection, pkList, member, type);
+
+        for (T entity : entities.values()) {
+            Collection<Object> entSet = dataSet.get(entity.getPrimaryKey());
+            if (type == ObjectClassType.PrimitiveSet) {
+                member.setMemberValue(entity, entSet);
+            } else {
+                ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                for (Object value : entSet) {
+                    iCollectionMember.add((IEntity) value);
+                }
+            }
+        }
+    }
+
+    private static Map<Long, Collection<Object>> retrieveData(Connection connection, List<Long> primaryKeys, MemberOperationsMeta member, ObjectClassType type) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean isList = (type == ObjectClassType.EntityList);
+        Map<Long, Collection<Object>> retMap = new HashMap<Long, Collection<Object>>();
+
+        try {
+            String queryStr = "SELECT owner, value FROM " + member.sqlName() + " WHERE owner IN (";
+            int count = 0;
+            for (long primaryKey : primaryKeys) {
+                queryStr = queryStr + (count == 0 ? "" : ",") + primaryKey;
+                count++;
+            }
+            queryStr = queryStr + ") ORDER BY owner " + (isList ? ", seq" : "");
+            stmt = connection.prepareStatement(queryStr);
+
+            rs = stmt.executeQuery();
+
+            Collection<Object> dataSet = isList ? new Vector<Object>() : new HashSet<Object>();
+            long currKey = -1, prevKey = -1;
+            while (rs.next()) {
+                currKey = rs.getLong("owner");
+                if (prevKey == -1) {
+                    prevKey = currKey;
+                }
+                Object value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
+
+                if (currKey != prevKey) { // if we roll to new owner, then add dataSet to the retMap
+                    retMap.put(prevKey, dataSet);
+                    dataSet = isList ? new Vector<Object>() : new HashSet<Object>(); // create object for next owner
+                    prevKey = currKey;
+                }
+                if (type == ObjectClassType.PrimitiveSet) {
+                    dataSet.add(value);
+                } else {
+                    // TODO get type
+                    IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
+                    childIEntity.setPrimaryKey((Long) value);
+                    dataSet.add(childIEntity);
+                }
+            }
+            return retMap;
+        } catch (SQLException e) {
+            log.error("{} SQL select error", member.sqlName(), e);
+            throw new RuntimeException(e);
+        } finally {
+            SQLUtils.closeQuietly(rs);
             SQLUtils.closeQuietly(stmt);
         }
     }

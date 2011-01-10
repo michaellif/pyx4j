@@ -23,6 +23,7 @@ package com.pyx4j.entity.rdb;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -204,7 +205,63 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
-        // TODO Auto-generated method stub
+
+        Connection connection = null;
+        try {
+            connection = connectionProvider.getConnection();
+            java.util.Iterator<T> it = entityIterable.iterator();
+
+            T entity = entityIterable.iterator().next();
+            persist(connection, tableModel(entity.getEntityMeta()), entityIterable, new Date());
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
+    private <T extends IEntity> void persist(Connection connection, TableModel tm, Iterable<T> entityIterable, Date now) {
+        //TODO  //for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) { ... }
+        /*
+         * for (MemberOperationsMeta member :
+         * tm.operationsMeta().getCascadePersistMembers()) { MemberMeta memberMeta =
+         * member.getMemberMeta(); for(T entity : entityIterable){ // this loop added by
+         * me IEntity childEntity = (IEntity) member.getMember(entity); if
+         * (memberMeta.isOwnedRelationships()) { persist(connection,
+         * tableModel(childEntity.getEntityMeta()), childEntity, now); } else if
+         * ((memberMeta.getAnnotation(Reference.class) != null) &&
+         * (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
+         * mergeReference(connection, memberMeta, childEntity, now); } } }
+         */
+        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
+        for (T entity : entityIterable) {
+            if (updatedTs != null) {
+                entity.setMemberValue(updatedTs, now);
+            }
+        }
+
+        Vector<T> newEntities = new Vector<T>();
+        Vector<T> updEntities = new Vector<T>();
+
+        for (T e : entityIterable) {
+            if (e.getPrimaryKey() != null)
+                updEntities.add(e);
+            else
+                newEntities.add(e);
+        }
+        tm.insert(connection, newEntities);
+        Vector<T> notUpdated = new Vector<T>();
+        tm.persist(connection, updEntities, notUpdated);
+        if (notUpdated.size() > 0) {
+            for (T entity : notUpdated) {
+                //these entities have PKs assigned, that's how they selected to be updEntities. 
+                if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
+                    insert(connection, tm, entity, now);
+                } else {
+                    throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+                }
+
+            }
+        }
+
     }
 
     @Override
@@ -389,8 +446,26 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys) {
-        // TODO Auto-generated method stub
-        return null;
+        Connection connection = null;
+        Map<Long, T> entities = new HashMap<Long, T>();
+        TableModel tm = null;
+        try {
+            connection = connectionProvider.getConnection();
+            int count = 0;
+            for (long pk : primaryKeys) {
+                final T entity = EntityFactory.create(entityClass);
+                entity.setPrimaryKey(pk);
+                if (count == 0) {
+                    tm = tableModel(entity.getEntityMeta());
+                }
+                entities.put(pk, entity);
+                count++;
+            }
+            tm.retrieve(connection, entities);
+            return entities;
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
     }
 
     @Override

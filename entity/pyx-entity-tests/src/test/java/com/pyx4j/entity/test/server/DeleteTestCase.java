@@ -81,7 +81,35 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
         Department department2 = srv.retrieve(Department.class, department.getPrimaryKey());
         assertNull("found by pk", department2);
     }
+      
+    public void testCriteriaDelete() {
+        Employee emp = EntityFactory.create(Employee.class);
+        String empName = "Bob " + uniqueString();
+        emp.firstName().setValue(empName);
+        srv.persist(emp);                                // save first employee
 
+        EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
+        criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName)); // use name as criteria
+        Employee empRet = srv.retrieve(criteria1);       //get employee back as a new entity
+        Assert.assertNotNull("verify retrieve", empRet);
+        Assert.assertEquals("PK Value", emp.getPrimaryKey(), empRet.getPrimaryKey());
+        Assert.assertEquals("Search Value", empName, empRet.firstName().getValue());
+        
+        Employee emp1 = EntityFactory.create(Employee.class);
+        emp.firstName().setValue(empName);
+        srv.persist(emp1);                               //save 2nd employee with the same name
+        
+        srv.delete(criteria1);                           // delete by criteria
+
+        List<Employee> emps = srv.query(criteria1);      // try to get them back
+        Assert.assertEquals("result set size", 0, emps.size());
+
+        EntityQueryCriteria<Employee> criteria2 = EntityQueryCriteria.create(Employee.class);
+        criteria2.add(PropertyCriterion.eq(IEntity.PRIMARY_KEY, emp1.getPrimaryKey()));
+        Employee emp2 = srv.retrieve(criteria1);
+        Assert.assertNull("retrieve by PK", emp2);
+    }
+    
     public void testDeleteByQueryBySetEntityMember() {
         // Setup data
         Employee employee1 = EntityFactory.create(Employee.class);
@@ -104,4 +132,6 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
         Department department2 = srv.retrieve(Department.class, department.getPrimaryKey());
         assertNull("found by pk", department2);
     }
+
 }
+
