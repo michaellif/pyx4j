@@ -163,7 +163,7 @@ public class EntityMetaImpl implements EntityMeta {
             try {
                 memberMeta = new MemberMetaImpl(entityClass.getMethod(memberName, (Class[]) null));
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException("Unknown member " + persistenceName + "." + memberName);
+                throw new RuntimeException("Unknown member " + memberName + " of " + persistenceName);
             }
             membersMeta.put(memberName, memberMeta);
         }
@@ -181,7 +181,7 @@ public class EntityMetaImpl implements EntityMeta {
             if (mm != null) {
                 Class<?> valueClass = mm.getValueClass();
                 if (!(IEntity.class.isAssignableFrom(valueClass))) {
-                    throw new RuntimeException("Invalid member in path " + persistenceName + "." + memberName);
+                    throw new RuntimeException("Invalid member in path " + memberName + " of " + persistenceName);
                 } else {
                     em = EntityFactory.getEntityMeta((Class<? extends IEntity>) valueClass);
                 }

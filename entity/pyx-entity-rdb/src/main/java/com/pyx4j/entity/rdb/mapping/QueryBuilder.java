@@ -22,18 +22,23 @@ package com.pyx4j.entity.rdb.mapping;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class QueryBuilder<T extends IEntity> {
 
@@ -45,8 +50,13 @@ public class QueryBuilder<T extends IEntity> {
 
     private final String mainTableSqlAlias;
 
-    public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityQueryCriteria<T> criteria) {
-        mainTableSqlAlias = alias;
+    private final Map<String, String> memberJoinAliases = new HashMap<String, String>();
+
+    private final EntityOperationsMeta operationsMeta;
+
+    public QueryBuilder(Dialect dialect, String alias, EntityMeta entityMeta, EntityOperationsMeta operationsMeta, EntityQueryCriteria<T> criteria) {
+        this.mainTableSqlAlias = alias;
+        this.operationsMeta = operationsMeta;
         if ((criteria.getFilters() != null) && (!criteria.getFilters().isEmpty())) {
             boolean firstCriteria = true;
             for (Criterion cr : criteria.getFilters()) {
@@ -57,8 +67,31 @@ public class QueryBuilder<T extends IEntity> {
                 }
                 if (cr instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                    sql.append(alias).append('.');
-                    sql.append(dialect.sqlName(propertyCriterion.getPropertyName()));
+
+                    ObjectClassType objectClassType = ObjectClassType.Primitive;
+                    MemberMeta memberMeta = null;
+                    if ((!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX))
+                            && (!IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName()))) {
+                        memberMeta = entityMeta.getMemberMeta(propertyCriterion.getPropertyName());
+                        objectClassType = memberMeta.getObjectClassType();
+                    }
+                    switch (objectClassType) {
+                    case EntityList:
+                    case EntitySet:
+                        String memberJoinAlias = memberJoinAliases.get(memberMeta.getFieldName());
+                        if (memberJoinAlias == null) {
+                            memberJoinAlias = "c" + String.valueOf(memberJoinAliases.size() + 1);
+                            memberJoinAliases.put(memberMeta.getFieldName(), memberJoinAlias);
+                            sql.append(alias).append(".id = ");
+                            sql.append(memberJoinAlias).append(".owner AND ");
+                        }
+                        sql.append(memberJoinAlias).append(".value ");
+                        break;
+                    default:
+                        sql.append(alias).append('.');
+                        sql.append(dialect.sqlName(propertyCriterion.getPropertyName()));
+                    }
+
                     if (valueIsNull(propertyCriterion.getValue())) {
                         switch (propertyCriterion.getRestriction()) {
                         case EQUAL:
@@ -134,7 +167,17 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     String getJoins(String mainTableSqlName) {
-        return mainTableSqlName + " " + mainTableSqlAlias;
+        StringBuilder sqlFrom = new StringBuilder();
+        sqlFrom.append(mainTableSqlName).append(' ').append(mainTableSqlAlias);
+        for (Map.Entry<String, String> me : memberJoinAliases.entrySet()) {
+            sqlFrom.append(", ");
+
+            sqlFrom.append(operationsMeta.getCollectionMember(me.getKey()).sqlName());
+            sqlFrom.append(" ");
+            // AS
+            sqlFrom.append(me.getValue());
+        }
+        return sqlFrom.toString();
     }
 
     public String getMainTableSqlAlias() {

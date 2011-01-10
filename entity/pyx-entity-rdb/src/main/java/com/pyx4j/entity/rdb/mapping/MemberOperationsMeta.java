@@ -50,6 +50,10 @@ public class MemberOperationsMeta {
         this.indexValueClass = indexValueClass;
     }
 
+    public String getMemberName() {
+        return memberName;
+    }
+
     public MemberMeta getMemberMeta() {
         return memberMeta;
     }

@@ -382,7 +382,7 @@ public class TableModel {
         ResultSet rs = null;
         String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             stmt = connection.prepareStatement(sql = "SELECT m1.* FROM " + qb.getSQL(tableName));
             if (limit > 0) {
                 stmt.setMaxRows(limit);
@@ -418,9 +418,10 @@ public class TableModel {
     public <T extends IEntity> List<Long> queryKeys(Connection connection, EntityQueryCriteria<T> criteria, int limit) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        String sql = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, criteria);
-            stmt = connection.prepareStatement("SELECT id FROM " + qb.getSQL(tableName));
+            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+            stmt = connection.prepareStatement(sql = "SELECT m1.id FROM " + qb.getSQL(tableName));
             if (limit > 0) {
                 stmt.setMaxRows(limit);
             }
@@ -434,6 +435,7 @@ public class TableModel {
             }
             return rc;
         } catch (SQLException e) {
+            log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL select error", tableName, e);
             throw new RuntimeException(e);
         } finally {
@@ -446,7 +448,7 @@ public class TableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, criteria);
+            QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
             stmt = connection.prepareStatement("SELECT " + dialect.sqlFunction(func, args) + " FROM " + qb.getSQL(tableName));
             qb.bindParameters(stmt);
 

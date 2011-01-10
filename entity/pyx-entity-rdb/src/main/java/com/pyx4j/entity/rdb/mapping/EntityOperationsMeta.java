@@ -180,6 +180,15 @@ public class EntityOperationsMeta {
         return collectionMembers;
     }
 
+    public MemberOperationsMeta getCollectionMember(String memeberName) {
+        for (MemberOperationsMeta m : collectionMembers) {
+            if (m.getMemberName().equals(memeberName)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
     public List<MemberOperationsMeta> getIndexMembers() {
         return indexMembers;
     }
