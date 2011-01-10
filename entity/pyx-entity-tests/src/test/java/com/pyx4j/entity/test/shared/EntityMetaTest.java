@@ -40,6 +40,7 @@ import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.AddressExt;
 import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.Concrete1Entity;
 import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
 
 public class EntityMetaTest extends InitializerTestCase {
@@ -164,6 +165,17 @@ public class EntityMetaTest extends InitializerTestCase {
 
         ent1x.name1().setValue("v-name1-mod");
         assertEquals("value of name1 change", "v-name1-mod", ent2.refference().name1().getValue());
+    }
+
+    public void testAbstractMemberEquals() {
+        ConcreteEntity root = EntityFactory.create(ConcreteEntity.class);
+
+        Concrete1Entity ent1 = EntityFactory.create(Concrete1Entity.class);
+        ent1.setPrimaryKey(11L);
+
+        root.refference().set(ent1);
+
+        assertTrue("Abstact member equals", ent1.equals(root.refference()));
     }
 
 }
