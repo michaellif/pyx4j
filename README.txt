@@ -79,6 +79,9 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
 1. Change Eclipse config
       Window->Preferences  Java\Compiler  Set: 1.6
 
+      Set proper Java Code Style see http://code.pyx4j.com/dev-env.html
+
+
 2.  To Server web applications start add "Program argumets:"
    --disable_update_check
  or run
