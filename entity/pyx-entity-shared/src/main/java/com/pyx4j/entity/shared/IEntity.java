@@ -76,6 +76,8 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     @Override
     public Class<? extends IEntity> getValueClass();
 
+    public Class<? extends IEntity> getInstanceValueClass();
+
     /**
      * A single instance of MemeberMeta is shared between all instances of the IEntity
      * inside EntityMeta.

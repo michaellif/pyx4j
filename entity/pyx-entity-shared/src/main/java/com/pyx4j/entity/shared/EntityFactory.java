@@ -68,7 +68,7 @@ public class EntityFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static synchronized <T extends IEntity> T getMetaEntity(Class<? extends IEntity> clazz) {
+    public static synchronized <T extends IEntity> T getEntityTemplate(Class<? extends IEntity> clazz) {
         assert (clazz != null) : "Get meta for null";
         T meta = (T) metaEntityCache.get(clazz);
         if (meta == null) {
