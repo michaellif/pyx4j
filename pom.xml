@@ -128,8 +128,8 @@
         <module>site/pyx-site-shared</module>
         <module>site/pyx-site-client</module>
         <module>site/pyx-site-server</module>
-        
-<!--        
+
+<!--
         <module>site/pyx-site-admin</module>
 -->
 
@@ -144,16 +144,28 @@
 
         <module>examples/examples-domain</module>
         <module>examples/examples-site</module>
-        
+
 <!--
         <module>examples/examples-ria</module>
--->     
-        
+-->
+
         <module>examples/examples-gae-server</module>
 
         <module>essentials/pyx-parent</module>
         <module>essentials/pyx-projects-parent</module>
     </modules>
+
+    <developers>
+        <developer>
+            <name>Pinchuk Vadym</name>
+            <id>vadymp</id>
+            <email>vadymp@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
 
     <build>
 
