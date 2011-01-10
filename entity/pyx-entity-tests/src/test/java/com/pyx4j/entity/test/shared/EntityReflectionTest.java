@@ -27,6 +27,9 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.inherit.Base1Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.Base2Entity;
+import com.pyx4j.entity.test.shared.domain.inherit.ConcreteEntity;
 
 public class EntityReflectionTest extends InitializerTestCase {
 
@@ -60,4 +63,25 @@ public class EntityReflectionTest extends InitializerTestCase {
         assertEquals("streetName is wrong", "Work  Street", address.getMember("streetName").getValue());
     }
 
+    public void testIsAssignableFrom() {
+        Base2Entity base2Entity = EntityFactory.create(Base2Entity.class);
+        assertTrue("Base2Entity instanceOf Base2Entity", base2Entity.isInstanceOf(Base2Entity.class));
+        assertTrue("Base2Entity isAssignableFrom Base2Entity", base2Entity.isAssignableFrom(Base2Entity.class));
+
+        assertTrue("Base2Entity instanceOf Base1Entity", base2Entity.isInstanceOf(Base1Entity.class));
+        assertFalse("Base2Entity isAssignableFrom Base1Entity", base2Entity.isAssignableFrom(Base1Entity.class));
+        assertFalse("Base2Entity instanceOf ConcreteEntity", base2Entity.isInstanceOf(ConcreteEntity.class));
+        assertTrue("Base2Entity isAssignableFrom ConcreteEntity", base2Entity.isAssignableFrom(ConcreteEntity.class));
+
+        ConcreteEntity concreteEntity = EntityFactory.create(ConcreteEntity.class);
+        assertTrue("ConcreteEntity instanceOf ConcreteEntity", concreteEntity.isInstanceOf(ConcreteEntity.class));
+        assertTrue("ConcreteEntity isAssignableFrom ConcreteEntity", concreteEntity.isAssignableFrom(ConcreteEntity.class));
+
+        assertTrue("ConcreteEntity instanceOf Base1Entity", concreteEntity.isInstanceOf(Base1Entity.class));
+        assertFalse("ConcreteEntity isAssignableFrom Base1Entity", concreteEntity.isAssignableFrom(Base1Entity.class));
+        assertTrue("ConcreteEntity instanceOf Base2Entity", concreteEntity.isInstanceOf(Base2Entity.class));
+        assertFalse("ConcreteEntity isAssignableFrom Base2Entity", concreteEntity.isAssignableFrom(Base2Entity.class));
+        assertFalse("ConcreteEntity instanceOf Address", concreteEntity.isInstanceOf(Address.class));
+        assertFalse("ConcreteEntity isAssignableFrom Address", concreteEntity.isAssignableFrom(Address.class));
+    }
 }

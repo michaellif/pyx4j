@@ -206,7 +206,7 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
 
     @Override
     public boolean remove(Object o) {
-        if ((o instanceof IEntity) && (getValueClass().equals(((IEntity) o).getObjectClass()))) {
+        if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
             Set<?> set = getValue();
             if (set != null) {
                 return set.remove(((IEntity) o).getValue());

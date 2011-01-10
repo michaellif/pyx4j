@@ -53,7 +53,9 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
         } else {
             this.owner = (IEntity) parent;
         }
-        this.fieldName = fieldName;
+        if (!".".equals(fieldName)) {
+            this.fieldName = fieldName;
+        }
     }
 
     @Override

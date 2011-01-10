@@ -35,6 +35,8 @@ public class EntityFactory {
 
     private static final Map<Class<?>, EntityMeta> entityMetaCache = new HashMap<Class<?>, EntityMeta>();
 
+    private static final Map<Class<?>, IEntity> metaEntityCache = new HashMap<Class<?>, IEntity>();
+
     static {
         if (ApplicationMode.hasGWT()) {
             if (GWT.isClient()) {
@@ -61,6 +63,17 @@ public class EntityFactory {
         if (meta == null) {
             meta = impl.createEntityMeta(clazz);
             entityMetaCache.put(clazz, meta);
+        }
+        return meta;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static synchronized <T extends IEntity> T getMetaEntity(Class<? extends IEntity> clazz) {
+        assert (clazz != null) : "Get meta for null";
+        T meta = (T) metaEntityCache.get(clazz);
+        if (meta == null) {
+            meta = (T) create(clazz, null, ".");
+            metaEntityCache.put(clazz, meta);
         }
         return meta;
     }

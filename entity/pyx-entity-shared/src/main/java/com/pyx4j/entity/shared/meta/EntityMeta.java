@@ -37,6 +37,8 @@ public interface EntityMeta {
 
     public Class<? extends IEntity> getEntityClass();
 
+    public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance);
+
     /**
      * See com.pyx4j.entity.annotations.Table
      */

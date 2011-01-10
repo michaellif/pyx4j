@@ -231,7 +231,7 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
 
     @Override
     public boolean remove(Object o) {
-        if ((o instanceof IEntity) && (getValueClass().equals(((IEntity) o).getObjectClass()))) {
+        if ((o instanceof IEntity) && (((IEntity) o).isInstanceOf(getValueClass()))) {
             List<?> value = getValue();
             if (value != null) {
                 return value.remove(((IEntity) o).getValue());

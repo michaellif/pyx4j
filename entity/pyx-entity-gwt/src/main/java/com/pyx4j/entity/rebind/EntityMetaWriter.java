@@ -74,6 +74,7 @@ public class EntityMetaWriter {
         ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
 
         composer.addImport(IObject.class.getName());
+        composer.addImport(IEntity.class.getName());
         composer.addImport(MemberMeta.class.getName());
         composer.addImport(ObjectClassType.class.getName());
         composer.addImport(ClientMemberMetaImpl.class.getName());
@@ -204,6 +205,16 @@ public class EntityMetaWriter {
         writer.print("}");
 
         writer.println(");");
+        writer.outdent();
+        writer.println("}");
+
+        // Other methods
+
+        writer.println();
+        writer.println("@Override");
+        writer.println("public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance) {");
+        writer.indent();
+        writer.println("return (targetInstance instanceof " + interfaceType.getName() + ");");
         writer.outdent();
         writer.println("}");
 

@@ -90,6 +90,19 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
 
     public boolean isObjectClassSameAsDef();
 
+    /**
+     * Determines if IEntity object is either the same class as, or is a superclass or
+     * superinterface of, the class or interface represented by the specified Class
+     * parameter.
+     */
+    public boolean isAssignableFrom(Class<? extends IEntity> targetType);
+
+    /**
+     * Determines if the specified class of IEntity is assignment-compatible with the
+     * entity represented by this Entity Class.
+     */
+    public boolean isInstanceOf(Class<? extends IEntity> targetType);
+
     @Override
     public String getStringView();
 }

@@ -108,8 +108,12 @@ public class CollectionsImplementationTest extends InitializerTestCase {
 
         ent2.refferences().add(ent1);
 
+        assertEquals("collection size", 1, ent2.refferences().size());
         Base1Entity item = ent2.refferences().iterator().next();
 
         assertTrue("item data type " + item.getClass(), item instanceof ConcreteEntity);
+
+        ent2.refferences().remove(ent1);
+        assertEquals("empty collection size", 0, ent2.refferences().size());
     }
 }

@@ -61,6 +61,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
      */
     private transient boolean delegateValue;
 
+    private transient final boolean isMetaEntity;
+
     /**
      * Creation of stand alone or member Entity
      * 
@@ -72,6 +74,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public SharedEntityHandler(Class<? extends IObject> clazz, IObject<?> parent, String fieldName) {
         super(clazz, parent, fieldName);
         delegateValue = (parent != null) && (getOwner() == parent);
+        isMetaEntity = ".".equals(fieldName);
     }
 
     @Override
@@ -84,6 +87,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @Override
     public Class<? extends IEntity> getValueClass() {
         return (Class<? extends IEntity>) getObjectClass();
+    }
+
+    @Override
+    public boolean isAssignableFrom(Class<? extends IEntity> targetType) {
+        return getEntityMeta().isEntityClassAssignableFrom(EntityFactory.getMetaEntity(targetType));
+    }
+
+    @Override
+    public boolean isInstanceOf(Class<? extends IEntity> targetType) {
+        return EntityFactory.getEntityMeta(targetType).isEntityClassAssignableFrom(this);
     }
 
     protected abstract IObject<?> lazyCreateMember(String name);
@@ -140,6 +153,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, Object> getValue() {
+        assert !isMetaEntity : "Meta Entity data manipulations disabled";
         if (delegateValue) {
             Map<String, Object> v = getOwner().getValue();
             if (v == null) {
@@ -154,6 +168,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public void setValue(Map<String, Object> value) {
+        assert !isMetaEntity : "Meta Entity data manipulations disabled";
         if ((value != null) && !(value instanceof EntityValueMap)) {
             throw new ClassCastException("Entity expects EntityValueMap as value");
         }
@@ -178,7 +193,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             //TODO Test type safety at runtime.
             if (!this.getObjectClass().equals(entity.getObjectClass())) {
                 // allow AbstractMember
-                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.create((Class<IEntity>) entity.getObjectClass()));
+                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getMetaEntity((Class<IEntity>) entity.getObjectClass()));
             }
             if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
                 // attach incoming entity to new owner
@@ -508,13 +523,18 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     public String debugString() {
         StringBuilder b = new StringBuilder();
         b.append(getObjectClass().getName()).append(" ");
-        Map<String, Object> v = getValue();
-        if (v != null) {
-            EntityValueMap.dumpMap(b, v, new HashSet<Map<String, Object>>());
+        if (isMetaEntity) {
+            b.append("{meta}");
+            return b.toString();
         } else {
-            b.append("{null}");
+            Map<String, Object> v = getValue();
+            if (v != null) {
+                EntityValueMap.dumpMap(b, v, new HashSet<Map<String, Object>>());
+            } else {
+                b.append("{null}");
+            }
+            return b.toString();
         }
-        return b.toString();
     }
 
     @Override

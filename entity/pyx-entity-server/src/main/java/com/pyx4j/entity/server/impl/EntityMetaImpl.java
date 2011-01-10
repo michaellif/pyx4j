@@ -111,6 +111,14 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
+    public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance) {
+        if (targetInstance == null) {
+            return false;
+        }
+        return entityClass.isAssignableFrom(targetInstance.getClass());
+    }
+
+    @Override
     public String getPersistenceName() {
         if (isTransient()) {
             throw new Error("Can't Persist/Retrieve Transient Entity");
