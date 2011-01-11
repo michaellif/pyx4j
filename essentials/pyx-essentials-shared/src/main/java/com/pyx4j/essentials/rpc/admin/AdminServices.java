@@ -47,6 +47,10 @@ public interface AdminServices {
 
     };
 
+    public interface EntityMemCacheTogle extends Service<VoidSerializable, VoidSerializable> {
+
+    };
+
     public interface NetworkSimulationSet extends EntityServices.Save, IsIgnoreNetworkSimulationService {
 
     };

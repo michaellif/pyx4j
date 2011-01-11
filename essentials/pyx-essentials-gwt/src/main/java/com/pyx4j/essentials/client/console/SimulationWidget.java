@@ -124,6 +124,28 @@ class SimulationWidget extends VerticalPanel implements InlineWidget {
                 RPCManager.execute(AdminServices.MemcacheClear.class, null, cb);
             }
         });
+
+        Anchor entityMemCacheTogle = new Anchor("Entity MemCache Togle");
+        memcacheGroup.add(entityMemCacheTogle);
+        entityMemCacheTogle.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                AsyncCallback cb = new AsyncCallback<VoidSerializable>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnrecoverableClientError(caught);
+                    }
+
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        refreshMemcacheStats();
+                    }
+                };
+                RPCManager.execute(AdminServices.EntityMemCacheTogle.class, null, cb);
+            }
+        });
     }
 
     @Override

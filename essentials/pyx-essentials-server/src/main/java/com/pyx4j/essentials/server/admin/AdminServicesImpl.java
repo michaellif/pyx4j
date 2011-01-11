@@ -91,13 +91,24 @@ public class AdminServicesImpl implements AdminServices {
 
     }
 
+    public static class EntityMemCacheTogleImpl implements AdminServices.EntityMemCacheTogle {
+
+        @Override
+        public VoidSerializable execute(VoidSerializable request) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+    }
+
     public static class MemcacheStatisticsImpl implements AdminServices.MemcacheStatistics {
 
         @Override
         public String execute(VoidSerializable request) {
+            // TODO  EntityCacheServiceGAE.isDisabled()
             Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
-            return MessageFormat.format("Alive items: {0}\nMemcache size: {1} Bytes\nHit Count: {2}\nMiss Count: {3}\n", stats.getItemCount(),
-                    stats.getTotalItemBytes(), stats.getHitCount(), stats.getMissCount());
+            return MessageFormat.format("Alive items: {0}\nMemcache size: {1} Bytes\nHit Count: {2}\nMiss Count: {3}\nEntity MemCache: {4}",
+                    stats.getItemCount(), stats.getTotalItemBytes(), stats.getHitCount(), stats.getMissCount(), "ON");
         }
     }
 
