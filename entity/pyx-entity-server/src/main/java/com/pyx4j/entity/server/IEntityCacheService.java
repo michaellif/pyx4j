@@ -26,6 +26,10 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IEntityCacheService {
 
+    public boolean isDisabled();
+
+    public void setDisabled(boolean disabled);
+
     public <T extends IEntity> T get(Class<T> entityClass, Long primaryKey);
 
     public <T extends IEntity> Map<Long, T> get(Class<T> entityClass, Iterable<Long> primaryKeys);

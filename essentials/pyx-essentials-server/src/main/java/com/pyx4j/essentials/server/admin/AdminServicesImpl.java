@@ -26,6 +26,8 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.memcache.Stats;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -95,7 +97,8 @@ public class AdminServicesImpl implements AdminServices {
 
         @Override
         public VoidSerializable execute(VoidSerializable request) {
-            // TODO Auto-generated method stub
+            IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
+            entityCacheService.setDisabled(!entityCacheService.isDisabled());
             return null;
         }
 
@@ -105,10 +108,10 @@ public class AdminServicesImpl implements AdminServices {
 
         @Override
         public String execute(VoidSerializable request) {
-            // TODO  EntityCacheServiceGAE.isDisabled()
+            IEntityCacheService entityCacheService = ServerSideFactory.create(IEntityCacheService.class);
             Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
             return MessageFormat.format("Alive items: {0}\nMemcache size: {1} Bytes\nHit Count: {2}\nMiss Count: {3}\nEntity MemCache: {4}",
-                    stats.getItemCount(), stats.getTotalItemBytes(), stats.getHitCount(), stats.getMissCount(), "ON");
+                    stats.getItemCount(), stats.getTotalItemBytes(), stats.getHitCount(), stats.getMissCount(), entityCacheService.isDisabled() ? "Off" : "On");
         }
     }
 

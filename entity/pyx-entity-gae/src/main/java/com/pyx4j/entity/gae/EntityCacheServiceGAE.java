@@ -48,11 +48,13 @@ public class EntityCacheServiceGAE implements IEntityCacheService {
     public EntityCacheServiceGAE() {
     }
 
-    public static boolean isDisabled() {
+    @Override
+    public boolean isDisabled() {
         return disabled;
     }
 
-    public static void setDisabled(boolean disabled) {
+    @Override
+    public void setDisabled(boolean disabled) {
         EntityCacheServiceGAE.disabled = disabled;
     }
 
