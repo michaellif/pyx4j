@@ -1,4 +1,4 @@
-========= Install Eclipse =========
+========= Install Eclipse ==========
 
 1. Get: Eclipse SDK  or  Eclipse IDE for Java EE Developers
        eclipse-SDK-3.6.1-win32.zip or eclipse-java-helios-SR1-win32.zip
