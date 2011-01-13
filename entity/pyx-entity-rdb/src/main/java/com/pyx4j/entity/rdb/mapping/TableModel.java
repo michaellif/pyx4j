@@ -488,11 +488,15 @@ public class TableModel {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?");
+            int pkSize = 0;
             for (long primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey);
                 stmt.addBatch();
+                pkSize++;
             }
-
+            if (pkSize == 0) {
+                return pkSize;
+            }
             int[] rc = stmt.executeBatch();
             int count = 0;
             for (int i = 0; i < rc.length; i++) {

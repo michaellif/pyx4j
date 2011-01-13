@@ -209,10 +209,16 @@ public class CollectionsTableModel {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("DELETE FROM " + member.sqlName() + " WHERE owner = ?");
+            int pkSize = 0;
             for (long primaryKey : primaryKeys) {
                 stmt.setLong(1, primaryKey);
                 stmt.addBatch();
+                pkSize++;
             }
+            if (pkSize == 0) { //nothing to delete
+                return;
+            }
+
             stmt.executeBatch();
         } catch (SQLException e) {
             log.error("{} SQL delete error", member.sqlName(), e);

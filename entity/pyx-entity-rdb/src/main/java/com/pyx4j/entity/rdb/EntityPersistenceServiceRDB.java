@@ -604,31 +604,35 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
 
             List<T> entities = tm.query(connection, criteria, -1);
-            List<Long> primaryKeys = new Vector<Long>();
-            for (T entity : entities) {
-                primaryKeys.add(entity.getPrimaryKey());
-                // TODO optimize
-                cascadeRetrieveMembers(connection, tm, entity);
-            }
 
-            // remove data from join tables first, No cascade delete
-            for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
-                //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
-                if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
-
+            int count = 0;
+            if (entities.size() > 0) {
+                List<Long> primaryKeys = new Vector<Long>();
+                for (T entity : entities) {
+                    primaryKeys.add(entity.getPrimaryKey());
                     // TODO optimize
-                    for (T entity : entities) {
-                        for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
-                            cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
-                        }
-                    }
+                    cascadeRetrieveMembers(connection, tm, entity);
                 }
 
-                CollectionsTableModel.delete(connection, primaryKeys, member);
-            }
+                // remove data from join tables first, No cascade delete
+                for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+                    //CollectionsTableModel.delete(connection, member, qb, tm.getTableName());
+                    if (member.getMemberMeta().isOwnedRelationships() && (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet)) {
 
-            int count = tm.delete(connection, primaryKeys);
-            // TODO remove entities from Cache 
+                        // TODO optimize
+                        for (T entity : entities) {
+                            for (IEntity childEntity : (ICollection<IEntity, ?>) member.getMember(entity)) {
+                                cascadeDelete(connection, childEntity.getEntityMeta(), childEntity.getPrimaryKey(), childEntity);
+                            }
+                        }
+                    }
+
+                    CollectionsTableModel.delete(connection, primaryKeys, member);
+                }
+
+                count = tm.delete(connection, primaryKeys);
+                // TODO remove entities from Cache
+            }
             return count;
         } finally {
             SQLUtils.closeQuietly(connection);
