@@ -139,6 +139,8 @@
         <module>essentials/pyx-essentials-server</module>
         <module>essentials/pyx-essentials-j2se</module>
 
+        <module>essentials/pyx-jetty-runtime</module>
+
         <module>incubator/tester/tester-client</module>
         <module>incubator/tester/tester-gae-server</module>
 
