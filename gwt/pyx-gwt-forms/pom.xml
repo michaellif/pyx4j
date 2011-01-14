@@ -51,4 +51,34 @@
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
     </properties>
 
+
+    <profiles>
+        <profile>
+            <id>deploy-test-gae</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.kindleit</groupId>
+	                    <artifactId>maven-gae-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>gae-deploy</id>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>gae-rollback</id>
+                                <goals>
+                                    <goal>rollback</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
 </project>

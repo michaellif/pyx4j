@@ -87,6 +87,8 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
  or run
    pyx\src\make.appcfg_no_nag.cmd
 
+   Set CORP_TOOLS=C:  (it asumes that you installed GAE SDK to C:\3p-libs\gae\)
+
  For mvn -P deploy-gae (mvn gae:deploy) to work add appengine.google.com-pyx to ./m2/settings.xml
     <settings>
         <servers>
