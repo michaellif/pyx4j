@@ -32,6 +32,10 @@ public class ServletContainerLoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect(request.getParameter("return"));
+        if (request.getRequestURI().endsWith("login")) {
+            response.sendRedirect(request.getParameter("return"));
+        } else if (request.getRequestURI().endsWith("logout")) {
+            response.sendRedirect(request.getParameter("return"));
+        }
     }
 }
