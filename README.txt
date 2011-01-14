@@ -106,7 +106,7 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
         </profiles>
     </settings>
 
-    Plase enure that your passwords are encrypted! Follow this guide http://maven.apache.org/guides/mini/guide-encryption.html
+    Please ensure that your passwords are encrypted! Follow this guide http://maven.apache.org/guides/mini/guide-encryption.html
     On linux don't worget ro run history -c or export HISTSIZE=0; mvn --encrypt-password <password>
 
 
