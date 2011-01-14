@@ -20,6 +20,10 @@
  */
 package com.pyx4j.security.server;
 
+import com.google.appengine.api.capabilities.CapabilitiesServiceFactory;
+import com.google.appengine.api.capabilities.Capability;
+import com.google.appengine.api.capabilities.CapabilityState;
+import com.google.appengine.api.capabilities.CapabilityStatus;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class AppengineContainerHelper implements IContainerHelper {
@@ -32,6 +36,16 @@ public class AppengineContainerHelper implements IContainerHelper {
     @Override
     public String createLogoutURL(String destinationURL) {
         return UserServiceFactory.getUserService().createLogoutURL(destinationURL);
+    }
+
+    /**
+     * Detects GAE Maintenance
+     */
+    @Override
+    public boolean isDBReadOnly() {
+        CapabilitiesServiceFactory.getCapabilitiesService();
+        CapabilityState state = CapabilitiesServiceFactory.getCapabilitiesService().getStatus(Capability.DATASTORE);
+        return (state.getStatus() != CapabilityStatus.ENABLED);
     }
 
 }

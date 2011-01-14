@@ -94,6 +94,15 @@ public class Context {
         }
     }
 
+    public static Object getSessionAttribute(String name) {
+        HttpSession s = getSession();
+        if (s == null) {
+            return null;
+        } else {
+            return s.getAttribute(name);
+        }
+    }
+
     static void beginRequest(HttpServletRequest request, HttpServletResponse response) {
         requestLocal.get().request = request;
         requestLocal.get().response = response;

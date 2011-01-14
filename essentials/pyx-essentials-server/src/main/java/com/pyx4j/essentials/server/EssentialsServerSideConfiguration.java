@@ -26,7 +26,7 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
 
     public DataPreloaderCollection getDataPreloaders() {
-        return null;
+        return new DataPreloaderCollection();
     }
 
     public AbstractAntiBot getAntiBot() {

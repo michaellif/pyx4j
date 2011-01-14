@@ -20,19 +20,12 @@
  */
 package com.pyx4j.security.server;
 
-import com.google.appengine.api.capabilities.CapabilitiesServiceFactory;
-import com.google.appengine.api.capabilities.Capability;
-import com.google.appengine.api.capabilities.CapabilityState;
-import com.google.appengine.api.capabilities.CapabilityStatus;
-
 public class AppengineHelper {
 
     /**
      * Detects GAE Maintenance
      */
     public static boolean isDBReadOnly() {
-        CapabilitiesServiceFactory.getCapabilitiesService();
-        CapabilityState state = CapabilitiesServiceFactory.getCapabilitiesService().getStatus(Capability.DATASTORE);
-        return (state.getStatus() != CapabilityStatus.ENABLED);
+        return ContainerHelper.isDBReadOnly();
     }
 }

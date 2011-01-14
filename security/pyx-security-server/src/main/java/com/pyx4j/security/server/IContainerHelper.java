@@ -26,4 +26,5 @@ public interface IContainerHelper {
 
     public String createLogoutURL(String destinationURL);
 
+    public boolean isDBReadOnly();
 }

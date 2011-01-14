@@ -45,4 +45,9 @@ public class ServletContainerHelper implements IContainerHelper {
         }
     }
 
+    @Override
+    public boolean isDBReadOnly() {
+        return false;
+    }
+
 }

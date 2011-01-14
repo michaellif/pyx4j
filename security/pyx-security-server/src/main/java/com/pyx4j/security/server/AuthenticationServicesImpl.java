@@ -48,22 +48,6 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
     private static Logger log = LoggerFactory.getLogger(AuthenticationServicesImpl.class);
 
-    protected static IContainerHelper containerHelper;
-
-    public static IContainerHelper getContainerHelper() {
-        if (containerHelper == null) {
-            switch (ServerSideConfiguration.instance().getEnvironmentType()) {
-            case LocalJVM:
-                containerHelper = new ServletContainerHelper();
-                break;
-            default:
-                containerHelper = new AppengineContainerHelper();
-                break;
-            }
-        }
-        return containerHelper;
-    }
-
     public static AuthenticationResponse createAuthenticationResponse(String logoutApplicationUrl) {
         AuthenticationResponse ar = new AuthenticationResponse();
         ar.setLogoutURL(logoutApplicationUrl);
@@ -145,7 +129,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         @Override
         public String execute(String request) {
-            return getContainerHelper().createLoginURL(request);
+            return ContainerHelper.getContainerHelper().createLoginURL(request);
         }
 
     }
@@ -154,7 +138,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         @Override
         public String execute(String request) {
-            return getContainerHelper().createLogoutURL(request);
+            return ContainerHelper.getContainerHelper().createLogoutURL(request);
         }
 
     }

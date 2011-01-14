@@ -26,16 +26,46 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.server.contexts.Context;
 
 @SuppressWarnings("serial")
 public class ServletContainerLoginServlet extends HttpServlet {
 
+    private static Logger log = LoggerFactory.getLogger(ServletContainerLoginServlet.class);
+
+    public static final String ROLE_SESSION_ATTRIBUTE = "com.pyx4j.keep." + "userRole";
+
+    public static final String ROLE_ADMIN = "admin";
+
+    public static final String ROLE_USER = "user";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getRequestURI().endsWith("login")) {
+            if (Context.getRequest().isUserInRole(ROLE_ADMIN)) {
+                createContainerSession(CoreBehavior.DEVELOPER);
+                log.info("login as admin");
+            } else if (Context.getRequest().isUserInRole(ROLE_USER)) {
+                createContainerSession(CoreBehavior.USER);
+                log.info("login as user");
+            } else {
+                log.info("login as other");
+            }
             response.sendRedirect(request.getParameter("return"));
         } else if (request.getRequestURI().endsWith("logout")) {
             response.sendRedirect(request.getParameter("return"));
         }
+    }
+
+    private void createContainerSession(Behavior behavior) {
+        HttpSession newSession = Context.getRequest().getSession(true);
+        newSession.setAttribute(ROLE_SESSION_ATTRIBUTE, behavior);
     }
 }
