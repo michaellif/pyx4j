@@ -48,6 +48,8 @@ public class ServerSideConfiguration {
 
     private static ServerSideConfiguration instance;
 
+    private EnvironmentType environmentType;
+
     public static enum EnvironmentType {
         LocalJVM, GAEDevelopment, GAESandbox
     }
@@ -135,16 +137,20 @@ public class ServerSideConfiguration {
     }
 
     public EnvironmentType getEnvironmentType() {
+        if (environmentType != null) {
+            return environmentType;
+        }
         SecurityManager sm = System.getSecurityManager();
         if (sm == null) {
-            return EnvironmentType.LocalJVM;
+            environmentType = EnvironmentType.LocalJVM;
         } else if (sm.getClass().getName().startsWith("com.google.appengine.tools.development")) {
-            return EnvironmentType.GAEDevelopment;
+            environmentType = EnvironmentType.GAEDevelopment;
         } else if (sm.getClass().getName().startsWith("com.google.apphosting.")) {
-            return EnvironmentType.GAESandbox;
+            environmentType = EnvironmentType.GAESandbox;
         } else {
-            return EnvironmentType.LocalJVM;
+            environmentType = EnvironmentType.LocalJVM;
         }
+        return environmentType;
     }
 
     public String getSessionCookieName() {

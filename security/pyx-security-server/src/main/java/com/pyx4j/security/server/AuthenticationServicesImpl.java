@@ -26,8 +26,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.appengine.api.users.UserServiceFactory;
-
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
@@ -49,6 +47,22 @@ import com.pyx4j.server.contexts.Visit;
 public class AuthenticationServicesImpl implements AuthenticationServices {
 
     private static Logger log = LoggerFactory.getLogger(AuthenticationServicesImpl.class);
+
+    protected static IContainerHelper containerHelper;
+
+    public static IContainerHelper getContainerHelper() {
+        if (containerHelper == null) {
+            switch (ServerSideConfiguration.instance().getEnvironmentType()) {
+            case LocalJVM:
+                containerHelper = new ServletContainerHelper();
+                break;
+            default:
+                containerHelper = new AppengineContainerHelper();
+                break;
+            }
+        }
+        return containerHelper;
+    }
 
     public static AuthenticationResponse createAuthenticationResponse(String logoutApplicationUrl) {
         AuthenticationResponse ar = new AuthenticationResponse();
@@ -131,7 +145,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         @Override
         public String execute(String request) {
-            return UserServiceFactory.getUserService().createLoginURL(request);
+            return getContainerHelper().createLoginURL(request);
         }
 
     }
@@ -140,7 +154,7 @@ public class AuthenticationServicesImpl implements AuthenticationServices {
 
         @Override
         public String execute(String request) {
-            return UserServiceFactory.getUserService().createLogoutURL(request);
+            return getContainerHelper().createLogoutURL(request);
         }
 
     }

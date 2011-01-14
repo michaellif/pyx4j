@@ -22,6 +22,7 @@ package com.pyx4j.jetty;
 
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
+import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -43,7 +44,7 @@ public abstract class JettyLaunch {
         rewrite.setRewriteRequestURI(false);
 
         RedirectPatternRule redirect = new RedirectPatternRule();
-        redirect.setPattern("*");
+        redirect.setPattern("/");
         redirect.setLocation(jettyLaunch.getContextPath());
         rewrite.addRule(redirect);
 
@@ -53,6 +54,8 @@ public abstract class JettyLaunch {
         webAppContext.setParentLoaderPriority(true);
 
         webAppContext.setResourceBase("war");
+
+        webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", "jetty-realm.properties"));
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { webAppContext, rewrite });
