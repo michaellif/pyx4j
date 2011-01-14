@@ -74,7 +74,7 @@ public class TableModel {
         if (tableAnnotation != null) {
             primaryKeyStrategy = tableAnnotation.primaryKeyStrategy();
         } else {
-            primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED;
+            primaryKeyStrategy = Table.PrimaryKeyStrategy.AUTO;
         }
         tableName = dialect.sqlName(entityMeta.getPersistenceName());
         entityOperationsMeta = new EntityOperationsMeta(dialect, entityMeta);
