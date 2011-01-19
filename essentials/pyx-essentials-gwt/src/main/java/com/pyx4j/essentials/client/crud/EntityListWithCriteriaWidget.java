@@ -148,7 +148,17 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        ReportDialog.start(getReportService(), searchCriteriaPanel.getEntityCriteria());
+                        searchCriteriaPanel.obtainEntitySearchCriteria(new AsyncCallback<EntitySearchCriteria<E>>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                throw new UnrecoverableClientError(caught);
+                            }
+
+                            @Override
+                            public void onSuccess(EntitySearchCriteria<E> criteria) {
+                                ReportDialog.start(getReportService(), criteria);
+                            }
+                        });
                     }
                 });
                 break;
@@ -189,12 +199,26 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         populate(pageNumber);
     }
 
-    protected void populate(int pageNumber) {
-        final long start = System.currentTimeMillis();
+    protected void populate(final int pageNumber) {
         log.debug("Show page " + pageNumber);
-        final EntitySearchCriteria<E> criteria = searchCriteriaPanel.getEntityCriteria();
-        criteria.setPageSize(searchResultsPanel.getPageSize());
-        criteria.setPageNumber(pageNumber);
+        searchCriteriaPanel.obtainEntitySearchCriteria(new AsyncCallback<EntitySearchCriteria<E>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+
+            @Override
+            public void onSuccess(EntitySearchCriteria<E> criteria) {
+                criteria.setPageSize(searchResultsPanel.getPageSize());
+                criteria.setPageNumber(pageNumber);
+                loadData(criteria);
+            }
+        });
+    }
+
+    private void loadData(final EntitySearchCriteria<E> criteria) {
+
+        final long start = System.currentTimeMillis();
 
         AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
 

@@ -40,6 +40,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
+import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
+import com.pyx4j.forms.client.events.HasAsyncValue;
+import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -47,8 +51,9 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
-public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
+public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityComboBox.class);
 
@@ -69,6 +74,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
     private boolean useNamesComparison = false;
 
     private EditableValueValidator<E> unavailableValidator;
+
+    private boolean hasAsyncValue = false;
 
     public CEntityComboBox() {
         this(null);
@@ -249,6 +256,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                 }
             }
         } else {
+            hasAsyncValue = true;
             retriveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
@@ -258,8 +266,36 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> {
                             break;
                         }
                     }
+                    hasAsyncValue = false;
+                    AsyncValueChangeEvent.fire(CEntityComboBox.this, getValue());
                 }
             });
+        }
+    }
+
+    @Override
+    public HandlerRegistration addAsyncValueChangeHandler(AsyncValueChangeHandler<E> handler) {
+        return addHandler(handler, AsyncValueChangeEvent.getType());
+    }
+
+    @Override
+    public boolean isAsyncValue() {
+        return hasAsyncValue;
+    }
+
+    @Override
+    public void obtainValue(final AsyncCallback<E> callback) {
+        if (isAsyncValue()) {
+            final HandlerRegistrationGC hrgc = new HandlerRegistrationGC();
+            hrgc.add(addAsyncValueChangeHandler(new AsyncValueChangeHandler<E>() {
+                @Override
+                public void onAsyncChange(AsyncValueChangeEvent<E> event) {
+                    callback.onSuccess(event.getValue());
+                    hrgc.removeHandlers();
+                }
+            }));
+        } else {
+            callback.onSuccess(getValue());
         }
     }
 

@@ -23,19 +23,23 @@ package com.pyx4j.entity.client.ui.crud;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.entity.client.ui.CEntitySuggestBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -57,12 +61,12 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     private final HashMap<CEditableComponent<?>, PathSearch> binding = new HashMap<CEditableComponent<?>, PathSearch>();
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valuePropagation;
 
     private final PropertyChangeHandler visibilityPropagation;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private class ValuePropagationHandler implements ValueChangeHandler {
 
         @Override
@@ -112,7 +116,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         return create(null, member, null);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public CEditableComponent<?> create(String name, IObject<?> member, String pathProperty) {
         MemberMeta mm = member.getMeta();
         CEditableComponent<?> comp;
@@ -169,7 +173,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         return get(member, null);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void populate(EntitySearchCriteria<E> entity) {
         if (entity != null) {
             // TODO use clone
@@ -195,6 +199,35 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         return editableCriteria;
     }
 
+    public void obtainEntitySearchCriteria(final AsyncCallback<EntitySearchCriteria<E>> callback) {
+        obtainEntitySearchCriteria(binding.keySet().iterator(), callback);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void obtainEntitySearchCriteria(final Iterator<CEditableComponent<?>> iterator, final AsyncCallback<EntitySearchCriteria<E>> callback) {
+        while (iterator.hasNext()) {
+            CEditableComponent<?> comp = iterator.next();
+            if (comp instanceof HasAsyncValue) {
+                if (((HasAsyncValue) comp).isAsyncValue()) {
+                    ((HasAsyncValue) comp).obtainValue(new AsyncCallback() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            callback.onFailure(caught);
+                        }
+
+                        @Override
+                        public void onSuccess(Object result) {
+                            obtainEntitySearchCriteria(iterator, callback);
+                        }
+                    });
+                    return;
+                }
+            }
+        }
+        callback.onSuccess(editableCriteria);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void populateHistory(Map<String, String> history) {
         for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
             CEditableComponent comp = me.getKey();
@@ -210,6 +243,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 comp.setValue(((CNumberField) comp).valueOf(value));
             } else if (comp instanceof CEntityComboBox) {
                 ((CEntityComboBox) comp).setValueByItemName(value);
+            } else if (comp instanceof CEntitySuggestBox) {
+                ((CEntitySuggestBox) comp).setValueByItemName(value);
             } else if (comp instanceof CComboBox) {
                 ((CComboBox) comp).setValueByItemName(value);
             } else if (comp instanceof CDatePicker) {
@@ -218,6 +253,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Map<String, String> getHistory() {
         Map<String, String> map = new HashMap<String, String>();
         for (Map.Entry<CEditableComponent<?>, PathSearch> me : binding.entrySet()) {
@@ -235,6 +271,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 historyValue = ((CEntityComboBox) comp).getItemName((IEntity) value);
             } else if (value == null) {
                 // By pass other cases
+            } else if (comp instanceof CEntitySuggestBox) {
+                historyValue = ((CEntitySuggestBox) comp).getOptionName((IEntity) value);
             } else if (comp instanceof CComboBox) {
                 if (value instanceof Enum) {
                     historyValue = ((Enum<?>) value).toString();

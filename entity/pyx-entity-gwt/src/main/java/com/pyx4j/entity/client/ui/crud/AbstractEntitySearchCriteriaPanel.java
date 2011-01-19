@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui.crud;
 
 import java.util.Map;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.EntityCSSClass;
@@ -38,8 +39,24 @@ public abstract class AbstractEntitySearchCriteriaPanel<E extends IEntity> exten
         setStyleName(EntityCSSClass.pyx4j_Entity_EntitySearchCriteria.name());
     }
 
-    public EntitySearchCriteria<E> getEntityCriteria() {
-        return form.getValue();
+    public void obtainEntitySearchCriteria(final AsyncCallback<EntitySearchCriteria<E>> callback) {
+        form.obtainEntitySearchCriteria(new AsyncCallback<EntitySearchCriteria<E>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+            @Override
+            public void onSuccess(EntitySearchCriteria<E> result) {
+                enhanceEntitySearchCriteria(result);
+                callback.onSuccess(result);
+            }
+        });
+    }
+
+    protected void enhanceEntitySearchCriteria(EntitySearchCriteria<E> criteria) {
+
     }
 
     public void populateEntityCriteria(EntitySearchCriteria<E> criteria) {

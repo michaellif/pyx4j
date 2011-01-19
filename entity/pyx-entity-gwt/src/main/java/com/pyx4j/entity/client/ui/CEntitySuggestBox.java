@@ -34,7 +34,6 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -42,14 +41,19 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
+import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
+import com.pyx4j.forms.client.events.HasAsyncValue;
+import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
-public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
+public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntitySuggestBox.class);
 
@@ -68,6 +72,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
     private boolean isLoading = false;
 
     private boolean isUnavailable = false;
+
+    private boolean hasAsyncValue = false;
 
     public CEntitySuggestBox(String title, Class<E> entityClass) {
         super(title);
@@ -140,10 +146,6 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
             retriveOptions(null);
         }
         return super.initNativeComponent();
-    }
-
-    public HandlerRegistration addOptionsChangeHandler(OptionsChangeHandler<List<E>> handler) {
-        return addHandler(handler, OptionsChangeEvent.getType());
     }
 
     private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {
@@ -234,6 +236,60 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
         stringViewMemberName = member.getFieldName();
     }
 
+    public void setValueByItemName(final String name) {
+        if (name == null && !isMandatory()) {
+            setValue(null);
+        } else if (isOptionsLoaded()) {
+            for (E o : getOptions()) {
+                if (getOptionName(o).equals(name)) {
+                    setValue(o);
+                    break;
+                }
+            }
+        } else {
+            hasAsyncValue = true;
+            retriveOptions(new AsyncOptionsReadyCallback<E>() {
+                @Override
+                public void onOptionsReady(List<E> opt) {
+                    for (E o : opt) {
+                        if (getOptionName(o).equals(name)) {
+                            setValue(o);
+                            break;
+                        }
+                    }
+                    hasAsyncValue = false;
+                    AsyncValueChangeEvent.fire(CEntitySuggestBox.this, getValue());
+                }
+            });
+        }
+    }
+
+    @Override
+    public HandlerRegistration addAsyncValueChangeHandler(AsyncValueChangeHandler<E> handler) {
+        return addHandler(handler, AsyncValueChangeEvent.getType());
+    }
+
+    @Override
+    public boolean isAsyncValue() {
+        return hasAsyncValue;
+    }
+
+    @Override
+    public void obtainValue(final AsyncCallback<E> callback) {
+        if (isAsyncValue()) {
+            final HandlerRegistrationGC hrgc = new HandlerRegistrationGC();
+            hrgc.add(addAsyncValueChangeHandler(new AsyncValueChangeHandler<E>() {
+                @Override
+                public void onAsyncChange(AsyncValueChangeEvent<E> event) {
+                    callback.onSuccess(event.getValue());
+                    hrgc.removeHandlers();
+                }
+            }));
+        } else {
+            callback.onSuccess(getValue());
+        }
+    }
+
     class EntitySuggestFormat implements IFormat<E> {
 
         @Override
@@ -257,6 +313,9 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> {
 
     @Override
     public boolean isValueEmpty() {
+        if (super.isValueEmpty() || getValue().isNull()) {
+            return true;
+        }
         String value = (String) getValue().getMemberValue(stringViewMemberName);
         return value == null || value.trim().equals("");
     }

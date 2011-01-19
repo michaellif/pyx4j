@@ -97,11 +97,9 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
     }
 
     @Override
-    public EntitySearchCriteria<Customer> getEntityCriteria() {
-        EntitySearchCriteria<Customer> ec = super.getEntityCriteria();
-        ec.setSorts(null);
-        ec.asc(form.meta().name());
-        return ec;
+    protected void enhanceEntitySearchCriteria(EntitySearchCriteria<Customer> criteria) {
+        criteria.setSorts(null);
+        criteria.asc(form.meta().name());
     }
 
     boolean hasDistanceCriteria() {

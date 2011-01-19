@@ -22,12 +22,18 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import com.google.gwt.event.shared.HandlerRegistration;
+
+import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
+import com.pyx4j.forms.client.events.OptionsChangeEvent;
+import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 
-public class CSuggestBox<E> extends CTextBox<E> {
+public class CSuggestBox<E> extends CTextBox<E> implements HasOptionsChangeHandlers<List<E>> {
 
-    private ArrayList<E> options = new ArrayList<E>();
+    private List<E> options = new ArrayList<E>();
 
     public CSuggestBox() {
         this(null);
@@ -49,24 +55,29 @@ public class CSuggestBox<E> extends CTextBox<E> {
         return nativeTextField;
     }
 
+    @Override
+    public HandlerRegistration addOptionsChangeHandler(OptionsChangeHandler<List<E>> handler) {
+        return addHandler(handler, OptionsChangeEvent.getType());
+    }
+
     public void setOptions(Collection<E> opt) {
         this.options = new ArrayList<E>();
         this.options.clear();
-        if (opt == null) {
-            return;
-        }
-        E currentSelection = getValue();
-        this.options.addAll(opt);
-        if (nativeTextField != null) {
-            ((NativeSuggestBox<E>) nativeTextField).removeAllItems();
-            for (E option : opt) {
-                ((NativeSuggestBox<E>) nativeTextField).addItem(getOptionName(option));
+        if (opt != null) {
+            E currentSelection = getValue();
+            this.options.addAll(opt);
+            if (nativeTextField != null) {
+                ((NativeSuggestBox<E>) nativeTextField).removeAllItems();
+                for (E option : opt) {
+                    ((NativeSuggestBox<E>) nativeTextField).addItem(getOptionName(option));
+                }
+                setValue(currentSelection);
             }
-            setValue(currentSelection);
         }
+        OptionsChangeEvent.fire(this, getOptions());
     }
 
-    public Collection<E> getOptions() {
+    public List<E> getOptions() {
         return options;
     }
 
