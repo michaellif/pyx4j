@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.geo.MapUtils;
 
 public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements HasAsyncValue<GeoCriteria> {
@@ -108,7 +109,7 @@ public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements
 
             @Override
             public void onFailure() {
-                callback.onFailure(new Error(i18n.tr("Can't find LatLng for distanceOverlay")));
+                callback.onFailure(new UnrecoverableClientWarning(i18n.tr("We are unable to find location.")));
             }
         });
 

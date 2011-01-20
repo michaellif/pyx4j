@@ -38,6 +38,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
@@ -110,7 +111,9 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
                 cause = cause.getCause();
             }
         }
-        if (cause instanceof IncompatibleRemoteServiceException) {
+        if (cause instanceof UnrecoverableClientWarning) {
+            showWarningDialog(cause.getMessage());
+        } else if (cause instanceof IncompatibleRemoteServiceException) {
             showReloadApplicationDialog();
         } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
             showReloadApplicationDialog();
@@ -141,6 +144,10 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
                 + "\n Do you want to refresh the page now?");
         MessageDialog.show(i18n.tr("System error"), message, Type.Error, optYesNo);
+    }
+
+    protected void showWarningDialog(String text) {
+        MessageDialog.show(i18n.tr("Warning"), text, Type.Warning, new ShowOnceDialogOptions());
     }
 
     protected void showThrottleDialog() {
