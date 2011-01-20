@@ -231,7 +231,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                     entities.add((E) entity);
                 }
                 long startPopulate = System.currentTimeMillis();
-                populateData(entities, criteria.getPageNumber(), result.hasMoreData());
+                populateData(entities, criteria, criteria.getPageNumber(), result.hasMoreData());
                 log.debug("Populated table in {} msec ", System.currentTimeMillis() - startPopulate);
             }
 
@@ -253,7 +253,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         return ReportServices.Search.class;
     }
 
-    protected void populateData(List<E> entities, int pageNumber, boolean hasMoreData) {
+    protected void populateData(List<E> entities, EntitySearchCriteria<E> criteria, int pageNumber, boolean hasMoreData) {
         searchResultsPanel.populateData(entities, pageNumber, hasMoreData);
     }
 

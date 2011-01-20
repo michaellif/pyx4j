@@ -32,14 +32,9 @@ import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CIntegerField;
-import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Customer> {
-
-    private CTextField fromLocationZipField;
-
-    private CIntegerField areaRadiusField;
 
     CustomerSearchCriteriaPanel() {
         super(Customer.class);
@@ -47,16 +42,11 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
 
     @Override
     protected CComponent<?>[][] getComponents() {
-        areaRadiusField = new CIntegerField("Area Radius (km)");
-
-        fromLocationZipField = new CTextField("From Location (Zip)");
 
         CComboBox<OrderStatus> orderStatus = new CComboBox<OrderStatus>("Order Status");
         orderStatus.setOptions(EnumSet.allOf(OrderStatus.class));
 
         form.bind(orderStatus, new PathSearch(form.meta().orderStatus(), null));
-        form.bind(areaRadiusField, new PathSearch(form.meta().location(), "radius"));
-        form.bind(fromLocationZipField, new PathSearch(form.meta().location(), "zip"));
 
         CComponent<?>[][] components = new CComponent[][] {
 
@@ -68,9 +58,9 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
 
         { form.create(form.meta().address().city()) },
 
-        { fromLocationZipField },
+        { form.create(form.meta().locationCriteria()) },
 
-        { areaRadiusField },
+        { form.create(form.meta().locationCriteria().radius()) },
 
         { orderStatus },
 
@@ -79,8 +69,12 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
         return components;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void enhanceComponents() {
+        final CEditableComponent<?> fromLocationZipField = form.get(form.meta().locationCriteria());
+        final CEditableComponent<?> areaRadiusField = form.get(form.meta().locationCriteria().radius());
+
         ValueChangeHandler locationMadabilityHandler = new ValueChangeHandler() {
 
             @Override
@@ -100,19 +94,6 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
     protected void enhanceEntitySearchCriteria(EntitySearchCriteria<Customer> criteria) {
         criteria.setSorts(null);
         criteria.asc(form.meta().name());
-    }
-
-    boolean hasDistanceCriteria() {
-        return fromLocationZipField.isEnabled() && fromLocationZipField.isVisible() && areaRadiusField.getValue() != null && areaRadiusField.getValue() > 0
-                && !fromLocationZipField.isValueEmpty();
-    }
-
-    String getFromLocationZip() {
-        return fromLocationZipField.getValue();
-    }
-
-    Integer getAreaRadius() {
-        return areaRadiusField.getValue();
     }
 
 }

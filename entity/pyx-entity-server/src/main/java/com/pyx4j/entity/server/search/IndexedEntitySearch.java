@@ -37,6 +37,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.IndexString;
@@ -111,6 +112,10 @@ public class IndexedEntitySearch {
                         }
                     }
                     mm = em.getMemberMeta(memberName);
+                    if (mm.isTransient()) {
+                        log.debug("transient path {}", path);
+                        continue nextFilter;
+                    }
                     count++;
                     if (pathLength == count) {
                         break;
@@ -221,6 +226,24 @@ public class IndexedEntitySearch {
                     inMemoryFilters.add(new PrimitiveInMemoryFilter(path, value));
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
+                }
+            } else if (GeoCriteria.class.isAssignableFrom(mm.getValueClass())) {
+                String pathWithGeoPointData = path.getPathString();
+                pathWithGeoPointData = pathWithGeoPointData.substring(0, pathWithGeoPointData.length() - ("Criteria".length() + 1)) + Path.PATH_SEPARATOR;
+                Path geoPath = new Path(pathWithGeoPointData);
+                Integer areaRadius = null;
+                GeoPoint geoPointFrom = null;
+                GeoCriteria value = (GeoCriteria) me.getValue();
+                if (value != null) {
+                    geoPointFrom = value.geoPoint().getValue();
+                    areaRadius = (Integer) searchCriteria.getValue(new PathSearch(mm, path.getPathString() + "radius" + Path.PATH_SEPARATOR, null));
+                }
+                if ((areaRadius != null) && (geoPointFrom != null)) {
+                    List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
+                    log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, geoPath), Restriction.IN, (Serializable) keys));
+                    inMemoryFilters.add(new GeoDistanceInMemoryFilter(geoPath, geoPointFrom, areaRadius.doubleValue()));
+                    hasInequalityFilter = true;
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();

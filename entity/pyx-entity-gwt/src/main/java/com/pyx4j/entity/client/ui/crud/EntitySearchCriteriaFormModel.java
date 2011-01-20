@@ -33,6 +33,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
+import com.pyx4j.entity.client.ui.CLocationCriteriaTextField;
+import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -121,7 +123,11 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         MemberMeta mm = member.getMeta();
         CEditableComponent<?> comp;
         if (mm.isEntity()) {
-            comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            if (mm.getObjectClass().equals(GeoCriteria.class)) {
+                comp = new CLocationCriteriaTextField(mm.getCaption());
+            } else {
+                comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            }
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
             ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
@@ -245,6 +251,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 ((CEntityComboBox) comp).setValueByItemName(value);
             } else if (comp instanceof CEntitySuggestBox) {
                 ((CEntitySuggestBox) comp).setValueByItemName(value);
+            } else if (comp instanceof CLocationCriteriaTextField) {
+                ((CLocationCriteriaTextField) comp).setValueByItemName(value);
             } else if (comp instanceof CComboBox) {
                 ((CComboBox) comp).setValueByItemName(value);
             } else if (comp instanceof CDatePicker) {
@@ -273,6 +281,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 // By pass other cases
             } else if (comp instanceof CEntitySuggestBox) {
                 historyValue = ((CEntitySuggestBox) comp).getOptionName((IEntity) value);
+            } else if (comp instanceof CLocationCriteriaTextField) {
+                historyValue = ((IEntity) value).getStringView();
             } else if (comp instanceof CComboBox) {
                 if (value instanceof Enum) {
                     historyValue = ((Enum<?>) value).toString();

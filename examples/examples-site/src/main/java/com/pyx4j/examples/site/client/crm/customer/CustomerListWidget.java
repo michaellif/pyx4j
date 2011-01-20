@@ -20,28 +20,17 @@
  */
 package com.pyx4j.examples.site.client.crm.customer;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.maps.client.geocode.LatLngCallback;
-import com.google.gwt.maps.client.geom.LatLng;
-
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptorFactory;
+import com.pyx4j.entity.rpc.GeoCriteria;
+import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
-import com.pyx4j.essentials.client.crud.EntityListPanel;
 import com.pyx4j.essentials.client.crud.EntityListWithCriteriaWidget;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
-import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 
 public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
-
-    private static Logger log = LoggerFactory.getLogger(CustomerListWidget.class);
 
     public CustomerListWidget() {
         super(Customer.class, ExamplesSiteMap.Crm.Customers.class, ExamplesSiteMap.Crm.Customers.Edit.class, new CustomerSearchCriteriaPanel(),
@@ -49,40 +38,17 @@ public class CustomerListWidget extends EntityListWithCriteriaWidget<Customer> {
     }
 
     @Override
-    protected void populate(final int pageNumber) {
-        final CustomerSearchCriteriaPanel searchCriteriaPanel = (CustomerSearchCriteriaPanel) getSearchCriteriaPanel();
-        final CustomerSearchResultsPanel searchResultsPanel = (CustomerSearchResultsPanel) getSearchResultsPanel();
-        if (searchCriteriaPanel.hasDistanceCriteria()) {
-            MapUtils.obtainLatLang(searchCriteriaPanel.getFromLocationZip(), new LatLngCallback() {
+    protected void populateData(List<Customer> entities, EntitySearchCriteria<Customer> criteria, int pageNumber, boolean hasMoreData) {
+        super.populateData(entities, criteria, pageNumber, hasMoreData);
 
-                @Override
-                public void onSuccess(LatLng fromCoordinates) {
-
-                    GeoPoint geoPoint = MapUtils.newGeoPointInstance(fromCoordinates);
-
-                    searchCriteriaPanel.getForm().setPropertyValue(new PathSearch(searchCriteriaPanel.getForm().meta().location(), "from"), geoPoint);
-                    CustomerListWidget.super.populate(pageNumber);
-
-                    //call Distance Overlay
-                    Integer areaRadius = searchCriteriaPanel.getAreaRadius();
-                    if (areaRadius != null) {
-                        searchResultsPanel.setDistanceOverlay(fromCoordinates, areaRadius);
-                    } else {
-                        searchResultsPanel.setDistanceOverlay(null, 0);
-                    }
-                }
-
-                @Override
-                public void onFailure() {
-                    log.warn("Can't find LatLng for distanceOverlay");
-                }
-            });
+        GeoCriteria geoCriteria = (GeoCriteria) criteria.getValue(new PathSearch(criteria.meta().locationCriteria()));
+        Integer areaRadius = (Integer) criteria.getValue(new PathSearch(criteria.meta().locationCriteria().radius()));
+        if ((areaRadius != null) && (geoCriteria != null) && (!geoCriteria.geoPoint().isNull())) {
+            ((CustomerSearchResultsPanel) getSearchResultsPanel()).setDistanceOverlay(MapUtils.newLatLngInstance(geoCriteria.geoPoint().getValue()),
+                    areaRadius.intValue());
         } else {
-            searchResultsPanel.setDistanceOverlay(null, 0);
-            searchCriteriaPanel.getForm().removePropertyValue(new PathSearch(searchCriteriaPanel.getForm().meta().location(), "from"));
-            super.populate(pageNumber);
+            ((CustomerSearchResultsPanel) getSearchResultsPanel()).setDistanceOverlay(null, 0);
         }
-
     }
 
 }
