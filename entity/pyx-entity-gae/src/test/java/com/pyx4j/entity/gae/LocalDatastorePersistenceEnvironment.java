@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.apphosting.api.ApiProxy;
 
@@ -42,6 +43,10 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
         return null;
     }
 
+    protected boolean useMemcacheService() {
+        return false;
+    }
+
     @Override
     @Before
     public void setupDatastore() {
@@ -51,8 +56,11 @@ public class LocalDatastorePersistenceEnvironment extends PersistenceEnvironment
             dsConfig.setNoStorage(false);
             dsConfig.setBackingStoreLocation(storageFileName());
         }
-
-        helper = new LocalServiceTestHelper(dsConfig);
+        if (useMemcacheService()) {
+            helper = new LocalServiceTestHelper(dsConfig, new LocalMemcacheServiceTestConfig());
+        } else {
+            helper = new LocalServiceTestHelper(dsConfig);
+        }
         helper.setUp();
     }
 

@@ -23,9 +23,11 @@ package com.pyx4j.entity.test.server;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -146,6 +148,70 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
 
         Assert.assertEquals("deadLine", today, task2.deadLine().getValue());
         Assert.assertEquals("Status", Status.DEACTIVATED, task2.status().getValue());
+    }
+
+    public void runtestOwnedListQuery(boolean agregate, boolean cursor) {
+        Employee emp = EntityFactory.create(Employee.class);
+        String empName = "Bob " + uniqueString();
+        emp.firstName().setValue(empName);
+
+        Task task = EntityFactory.create(Task.class);
+        Date today = getRoundedNow();
+        task.deadLine().setValue(today);
+        task.status().setValue(Status.DEACTIVATED);
+
+        emp.tasksSorted().add(task);
+
+        srv.persist(emp);
+
+        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+        criteria.add(PropertyCriterion.eq(criteria.meta().firstName(), empName));
+        if (agregate) {
+            srv.requestsAggregationStart();
+        }
+        List<Employee> emps;
+        if (!cursor) {
+            emps = srv.query(criteria);
+        } else {
+            emps = new Vector<Employee>();
+            ICursorIterator<Employee> empsC = srv.query(null, criteria);
+            while (empsC.hasNext()) {
+                emps.add(empsC.next());
+            }
+            empsC.completeRetrieval();
+        }
+
+        if (agregate) {
+            srv.requestsAggregationComplete();
+        }
+        Assert.assertEquals("query Retr. Set size", 1, emps.size());
+
+        Employee emp2 = emps.get(0);
+        Assert.assertEquals("Value", empName, emp2.firstName().getValue());
+
+        Assert.assertEquals("Retr. Set size", 1, emp2.tasksSorted().size());
+        Assert.assertTrue("Retr. contains", emp2.tasksSorted().contains(task));
+
+        Task task2 = emp2.tasksSorted().iterator().next();
+
+        Assert.assertEquals("deadLine", today, task2.deadLine().getValue());
+        Assert.assertEquals("Status", Status.DEACTIVATED, task2.status().getValue());
+    }
+
+    public void testOwnedListQuery() {
+        runtestOwnedListQuery(false, false);
+    }
+
+    public void testOwnedListQueryAggregation() {
+        runtestOwnedListQuery(true, false);
+    }
+
+    public void testOwnedListCursorQuery() {
+        runtestOwnedListQuery(false, true);
+    }
+
+    public void testOwnedListCursorQueryAggregation() {
+        runtestOwnedListQuery(true, true);
     }
 
     public void testEmbeddedEntity() {

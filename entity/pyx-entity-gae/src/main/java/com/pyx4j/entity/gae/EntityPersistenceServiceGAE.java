@@ -895,6 +895,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     // Make only one call to DB to get the list
     private void retrieveChildEntityCollection(final ICollection member, final List<Key> keys, final RetrieveRequestsAggregator aggregator) {
+        member.clear();
         if (member.getMeta().isDetached()) {
             for (Key childKey : keys) {
                 IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMeta().getValueClass());
@@ -918,7 +919,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         IEntity cachedEntity = aggregator.getEntity(key);
                         if (cachedEntity != null) {
                             childIEntity.set(cachedEntity);
-                            member.add(childIEntity);
                         } else {
                             Entity entity = aggregator.getRaw(key);
                             if (entity == null) {

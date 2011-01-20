@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @Table(prefix = "test")
+//@Cached
 public interface Task extends IEntity {
 
     IPrimitive<Boolean> finished();
