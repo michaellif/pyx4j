@@ -1183,7 +1183,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                 return KeyFactory.createKey(entityMeta.getPersistenceName(), (Long) value);
             } else {
                 MemberMeta mm = entityMeta.getMemberMeta(propertyName);
-                if (mm.isEntity()) {
+                if (mm.isEntity() || (ICollection.class.isAssignableFrom(mm.getObjectClass()))) {
                     return KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) mm.getValueClass()).getPersistenceName(), (Long) value);
                 } else {
                     return value;

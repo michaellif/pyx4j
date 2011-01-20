@@ -267,8 +267,11 @@ public class IndexedEntitySearch {
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, pk));
                 }
+            } else if ((ICollection.class.isAssignableFrom(mm.getObjectClass()))) {
+                Long pk = ((IEntity) me.getValue()).getPrimaryKey();
+                queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, pk));
             } else {
-                log.warn("Search by class {} not implemented", mm.getValueClass());
+                log.warn("Search by class {} {} not implemented", mm.getObjectClass(), mm.getValueClass());
             }
         }
         log.debug("will used {} inMemoryFilters", inMemoryFilters.size());
