@@ -20,49 +20,24 @@
  */
 package com.pyx4j.site.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class InlineWidgetRootPanel extends AbsolutePanel {
 
-    private static Map<String, InlineWidgetRootPanel> rootPanels = new HashMap<String, InlineWidgetRootPanel>();
+    InlineWidgetRootPanel(Element elem, InlineWidget inlineWidget) {
+        super(elem.<com.google.gwt.user.client.Element> cast());
 
-    private static InlineWidgetRootPanel get(String widgetId) {
-        InlineWidgetRootPanel rp = rootPanels.get(widgetId);
-
-        Element elem = null;
-        if (widgetId != null) {
-            if (null == (elem = Document.get().getElementById(widgetId))) {
-                return null;
-            }
+        // Remove existing context
+        Node child = elem.getFirstChild();
+        while (child != null) {
+            Node next = child.getNextSibling();
+            elem.removeChild(child);
+            child = next;
         }
 
-        if (rp != null) {
-            // If the element associated with an existing RootPanel has been replaced
-            // for any reason, return a new RootPanel rather than the existing one (
-            // see issue 1937).
-            if ((elem == null) || (rp.getElement() == elem)) {
-                // There's already an existing RootPanel for this element. Return it.
-                return rp;
-            }
-        }
-
-        rp = new InlineWidgetRootPanel(elem);
-
-        rootPanels.put(widgetId, rp);
-        return rp;
-    }
-
-    InlineWidgetRootPanel(Element elem) {
-        super(elem.<com.google.gwt.user.client.Element> cast());
-        onAttach();
-    }
-
-    InlineWidgetRootPanel(Element elem, boolean tmpTestHackVlads) {
-        super(elem.<com.google.gwt.user.client.Element> cast());
+        this.add((Widget) inlineWidget);
     }
 }

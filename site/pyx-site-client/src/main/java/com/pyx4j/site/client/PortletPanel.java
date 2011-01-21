@@ -11,8 +11,7 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,7 +20,6 @@ import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Portlet;
@@ -35,6 +33,8 @@ public class PortletPanel extends ContentPanel {
     private final VerticalPanel container;
 
     private final Portlet portlet;
+
+    private final DynamicHTML bodyPanel;
 
     public PortletPanel(SitePanel parent, final Portlet portlet, ClientBundleWithLookup bundle) {
         super(parent);
@@ -60,7 +60,7 @@ public class PortletPanel extends ContentPanel {
             headerPanel.setStyleName(styleName + "EmptyHeader");
         }
 
-        DynamicHTML bodyPanel = new DynamicHTML(portlet.html(), bundle, true);
+        bodyPanel = new DynamicHTML(portlet.html(), bundle, true);
         container.add(bodyPanel);
         bodyPanel.setStyleName(styleName + "Body");
 
@@ -87,16 +87,23 @@ public class PortletPanel extends ContentPanel {
 
     @Override
     protected void injectInlineWidget(String widgetId, InlineWidget inlineWidget) {
-        InlineWidgetRootPanel root = new InlineWidgetRootPanel(Document.get().getElementById(widgetId));
-        root.clear();
-
-        NodeList<Node> children = root.getElement().getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            children.getItem(i).removeFromParent();
+        NodeList<Element> htmlElements = bodyPanel.getElement().getElementsByTagName("div");
+        boolean replaced = false;
+        if (htmlElements != null) {
+            for (int i = 0; i < htmlElements.getLength(); i++) {
+                Element el = htmlElements.getItem(i);
+                if ((el.getId() != null) && (el.getId().startsWith(widgetId))) {
+                    InlineWidgetRootPanel div = new InlineWidgetRootPanel(el, inlineWidget);
+                    bodyPanel.adoptChild(div);
+                    addInlineWidget(inlineWidget);
+                    replaced = true;
+                    break;
+                }
+            }
         }
-
-        root.add((Widget) inlineWidget);
-        addInlineWidget(inlineWidget);
+        if (!replaced) {
+            log.warn("Failed to add inline widget {} to Portlet {}.", widgetId, portlet.portletId());
+        }
     }
 
 }

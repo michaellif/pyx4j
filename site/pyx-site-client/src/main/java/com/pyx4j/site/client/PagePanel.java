@@ -23,13 +23,11 @@ package com.pyx4j.site.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.themes.SiteCSSClass;
 import com.pyx4j.site.shared.domain.Page;
@@ -66,15 +64,16 @@ public class PagePanel extends ContentPanel {
         boolean replaced = false;
         if (htmlElements != null) {
             for (int i = 0; i < htmlElements.getLength(); i++) {
-                if (widgetId.endsWith(htmlElements.getItem(i).getId())) {
-                    DivElement el = DivElement.as(htmlElements.getItem(i));
-                    InlineWidgetRootPanel root = new InlineWidgetRootPanel(el, true);
-                    root.add((Widget) inlineWidget);
+                Element el = htmlElements.getItem(i);
+                if ((el.getId() != null) && (el.getId().startsWith(widgetId))) {
+
+                    InlineWidgetRootPanel div = new InlineWidgetRootPanel(el, inlineWidget);
+                    container.adoptChild(div);
+
                     addInlineWidget(inlineWidget);
                     if (inlineWidget instanceof PageLeavingHandler) {
                         container.addPageLeavingHandler((PageLeavingHandler) inlineWidget);
                     }
-                    container.addInlineWidget(root);
                     replaced = true;
                     break;
                 }
@@ -105,12 +104,6 @@ public class PagePanel extends ContentPanel {
 
         public PageContainer(String html, ClientBundleWithLookup bundle, boolean wordWrap) {
             super(html, bundle, wordWrap);
-        }
-
-        void addInlineWidget(InlineWidgetRootPanel widget) {
-            getChildren().add(widget);
-            adopt(widget);
-
         }
 
         public HandlerRegistration addPageLeavingHandler(PageLeavingHandler handler) {
