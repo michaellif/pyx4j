@@ -87,11 +87,16 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         if (unrecoverableErrorDialogShown) {
             return;
         }
+        unrecoverableErrorDialogShown = true;
         // Handle the case when 'stack size exceeded', show dialog later.
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                selectErrorDialog(caught, errorCode);
+                try {
+                    selectErrorDialog(caught, errorCode);
+                } catch (Throwable e) {
+                    unrecoverableErrorDialogShown = false;
+                }
             }
         });
 
