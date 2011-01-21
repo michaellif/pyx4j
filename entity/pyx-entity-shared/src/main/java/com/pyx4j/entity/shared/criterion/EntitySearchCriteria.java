@@ -146,7 +146,6 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     @Override
     public String getServiceCallMarker() {
-        String domainName = this.metaEntity.getEntityMeta().getCaption();
-        return domainName.substring(domainName.lastIndexOf(".") + 1);
+        return this.metaEntity.getEntityMeta().getCaption().replace(' ', '_');
     }
 }
