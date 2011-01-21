@@ -62,13 +62,6 @@
             <version>${project.version}</version>
         </dependency>
 
-		<dependency>
-			<groupId>com.google.gwt.google-apis</groupId>
-			<artifactId>gwt-maps</artifactId>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>

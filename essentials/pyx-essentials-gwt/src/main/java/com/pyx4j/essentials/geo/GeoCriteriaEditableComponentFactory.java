@@ -20,7 +20,6 @@
  */
 package com.pyx4j.essentials.geo;
 
-import com.pyx4j.entity.client.ui.CLocationCriteriaTextField;
 import com.pyx4j.entity.client.ui.crud.CriteriaEditableComponentFactory;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.IObject;
