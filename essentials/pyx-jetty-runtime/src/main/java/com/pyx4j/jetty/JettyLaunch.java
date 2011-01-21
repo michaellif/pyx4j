@@ -36,6 +36,14 @@ public abstract class JettyLaunch {
         return 8080;
     }
 
+    public String getWarResourceBase() {
+        return "war";
+    }
+
+    public String getHashLoginServiceConfig() {
+        return "jetty-realm.properties";
+    }
+
     public static void launch(JettyLaunch jettyLaunch) throws Exception {
 
         Server server = new Server(jettyLaunch.getServerPort());
@@ -49,13 +57,15 @@ public abstract class JettyLaunch {
         rewrite.addRule(redirect);
 
         WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setDescriptor("war/WEB-INF/web.xml");
+        webAppContext.setDescriptor(jettyLaunch.getWarResourceBase() + "/WEB-INF/web.xml");
         webAppContext.setContextPath(jettyLaunch.getContextPath());
         webAppContext.setParentLoaderPriority(true);
+        webAppContext.getInitParams().put("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
+        webAppContext.setResourceBase(jettyLaunch.getWarResourceBase());
 
-        webAppContext.setResourceBase("war");
-
-        webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", "jetty-realm.properties"));
+        if (jettyLaunch.getHashLoginServiceConfig() != null) {
+            webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", jettyLaunch.getHashLoginServiceConfig()));
+        }
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { webAppContext, rewrite });
