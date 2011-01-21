@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
  */
 public interface EditableValueValidator<E> {
 
-    public boolean isValid(CEditableComponent<E> component, E value);
+    public boolean isValid(CEditableComponent<E, ?> component, E value);
 
-    public String getValidationMessage(CEditableComponent<E> component, E value);
+    public String getValidationMessage(CEditableComponent<E, ?> component, E value);
 }

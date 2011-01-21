@@ -38,12 +38,12 @@ import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.gwt.ListSelectionPopup;
-import com.pyx4j.forms.client.gwt.NativeInLineListBox;
 import com.pyx4j.forms.client.gwt.NativeListBox;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
-public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
+//TODO add another CLIstBox impl for NativeInLineListBox (make CListBoxBase)
+public class CListBox<E> extends CEditableComponent<List<E>, NativeListBox<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
         HasRequiredValueValidationMessage<E> {
 
     public static enum Layout {
@@ -109,24 +109,14 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
     }
 
     @Override
-    public INativeListBox<E> getNativeComponent() {
-        return nativeListBox;
-    }
-
-    @Override
-    public INativeListBox<E> initNativeComponent() {
-        if (nativeListBox == null) {
-            if (layout == Layout.INLINE) {
-                nativeListBox = new NativeInLineListBox<E>(this, displayProperties);
-            } else {
-                nativeListBox = new NativeListBox<E>(this, displayProperties);
-                if (layout == Layout.PLAIN) {
-                    ((NativeListBox<E>) nativeListBox).setTrigger(false);
-                }
-            }
-            applyAccessibilityRules();
-            setNativeComponentValue(getValue());
+    public NativeListBox<E> initWidget() {
+        NativeListBox<E> nativeListBox = new NativeListBox<E>(this, displayProperties);
+        if (layout == Layout.PLAIN) {
+            (nativeListBox).setTrigger(false);
         }
+        applyAccessibilityRules();
+        setNativeComponentValue(getValue());
+
         return nativeListBox;
     }
 
@@ -241,12 +231,14 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
             return;
         }
         OkCancelOption callback = new OkCancelOption() {
+            @Override
             public boolean onClickOk() {
                 CListBox.this.setValue(pop.getSelectedItems());
                 pop = null;
                 return true;
             }
 
+            @Override
             public boolean onClickCancel() {
                 pop = null;
                 return true;
@@ -328,6 +320,7 @@ public class CListBox<E> extends CEditableComponent<List<E>> implements HasOptio
         this.requiredValues = requiredValues;
     }
 
+    @Override
     public String getValidationMessage(E value) {
         return "Required value \"" + getItemName(value) + "\" can't be removed";
     }

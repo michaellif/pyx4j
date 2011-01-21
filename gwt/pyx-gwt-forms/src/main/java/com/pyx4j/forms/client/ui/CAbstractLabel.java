@@ -22,9 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.gwt.NativeLabel;
 
-public class CAbstractLabel<E> extends CEditableComponent<E> {
-
-    private NativeLabel<E> nativeLabel;
+public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
 
     private boolean wordWrap = false;
 
@@ -40,8 +38,8 @@ public class CAbstractLabel<E> extends CEditableComponent<E> {
     }
 
     public void setWordWrap(boolean wrap) {
-        if (nativeLabel != null) {
-            nativeLabel.setWordWrap(wrap);
+        if (isWidgetInitiated()) {
+            asWidget().setWordWrap(wrap);
         }
         wordWrap = wrap;
     }
@@ -50,24 +48,17 @@ public class CAbstractLabel<E> extends CEditableComponent<E> {
         return wordWrap;
     }
 
-    @Override
-    public INativeEditableComponent<E> getNativeComponent() {
-        return nativeLabel;
-    }
-
     protected NativeLabel<E> createNativeLabel() {
         return new NativeLabel<E>(this);
     }
 
     @Override
-    public INativeEditableComponent<E> initNativeComponent() {
-        if (nativeLabel == null) {
-            nativeLabel = createNativeLabel();
-            nativeLabel.setWordWrap(this.isWordWrap());
-            nativeLabel.setWidth(this.getWidth());
-            setNativeComponentValue(getValue());
-            applyAccessibilityRules();
-        }
+    protected NativeLabel<E> initWidget() {
+        NativeLabel<E> nativeLabel = createNativeLabel();
+        nativeLabel.setWordWrap(this.isWordWrap());
+        nativeLabel.setWidth(this.getWidth());
+        setNativeComponentValue(getValue());
+        applyAccessibilityRules();
         return nativeLabel;
     }
 

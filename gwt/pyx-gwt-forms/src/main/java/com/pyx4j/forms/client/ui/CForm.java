@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.gwt.NativeForm;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
-public class CForm extends CContainer {
+public class CForm extends CContainer<NativeForm> {
 
     public enum LabelAlignment {
         LEFT, TOP;
@@ -38,8 +38,6 @@ public class CForm extends CContainer {
         BEFORE, AFTER, HIDDEN;
     }
 
-    private NativeForm nativeForm;
-
     private CComponent<?>[][] components;
 
     private final Collection<CComponent<?>> componentCollection = new ArrayList<CComponent<?>>();
@@ -48,7 +46,7 @@ public class CForm extends CContainer {
 
     private final InfoImageAlignment infoImageAlignment;
 
-    private CFormContainer<?> parentContainer;
+    private CFormContainer<?, ?> parentContainer;
 
     private boolean expended = true;
 
@@ -72,11 +70,11 @@ public class CForm extends CContainer {
         this.infoImageAlignment = infoImageAlignment;
     }
 
-    public void setParentContainer(CFormContainer<?> folder) {
+    public void setParentContainer(CFormContainer<?, ?> folder) {
         this.parentContainer = folder;
     }
 
-    public CFormContainer<?> getParentContainer() {
+    public CFormContainer<?, ?> getParentContainer() {
         return parentContainer;
     }
 
@@ -85,7 +83,7 @@ public class CForm extends CContainer {
     }
 
     public void setAllignment(LabelAlignment allignment) {
-        if (nativeForm != null) {
+        if (isWidgetInitiated()) {
             throw new IllegalStateException();
         }
         this.allignment = allignment;
@@ -96,8 +94,8 @@ public class CForm extends CContainer {
         if (expended) {
             //initInnerComponent();
         }
-        if (nativeForm != null && isCollapsible()) {
-            nativeForm.setExpanded(expended);
+        if (isWidgetInitiated() && isCollapsible()) {
+            asWidget().setExpanded(expended);
         }
     }
 
@@ -116,7 +114,7 @@ public class CForm extends CContainer {
     public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {
         CForm form = new CForm(allignment);
         form.setComponents(components);
-        return (Widget) form.initNativeComponent();
+        return form.asWidget();
     }
 
     public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption) {
@@ -159,17 +157,10 @@ public class CForm extends CContainer {
     }
 
     @Override
-    public NativeForm getNativeComponent() {
-        return nativeForm;
-    }
-
-    @Override
-    public INativeComponent initNativeComponent() {
-        if (nativeForm == null) {
-            nativeForm = new NativeForm(this, components, allignment, infoImageAlignment);
-            nativeForm.setExpanded(isExpended());
-            applyAccessibilityRules();
-        }
+    public NativeForm initWidget() {
+        NativeForm nativeForm = new NativeForm(this, components, allignment, infoImageAlignment);
+        nativeForm.setExpanded(isExpended());
+        applyAccessibilityRules();
         return nativeForm;
     }
 

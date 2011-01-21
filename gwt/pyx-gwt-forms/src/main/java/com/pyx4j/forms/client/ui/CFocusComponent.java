@@ -20,7 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public abstract class CFocusComponent<E extends INativeFocusComponent> extends CComponent<E> {
+import com.google.gwt.user.client.ui.Widget;
+
+public abstract class CFocusComponent<WIDGET_TYPE extends Widget & INativeFocusComponent> extends CComponent<WIDGET_TYPE> {
 
     private int tabIndex = 0;
 
@@ -38,14 +40,14 @@ public abstract class CFocusComponent<E extends INativeFocusComponent> extends C
 
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
-        if (getNativeComponent() != null) {
-            getNativeComponent().setTabIndex(tabIndex);
+        if (isWidgetInitiated()) {
+            asWidget().setTabIndex(tabIndex);
         }
     }
 
     public void setFocus(boolean focused) {
-        if (getNativeComponent() != null) {
-            getNativeComponent().setFocus(focused);
+        if (isWidgetInitiated()) {
+            asWidget().setFocus(focused);
         }
     }
 }

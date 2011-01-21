@@ -23,11 +23,8 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.gwt.NativeButton;
-import com.pyx4j.widgets.client.Tooltip;
 
-public class CButton extends CFocusComponent<INativeFocusComponent> {
-
-    private NativeButton nativeButton;
+public class CButton extends CFocusComponent<NativeButton> {
 
     private String label;
 
@@ -41,24 +38,17 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
     }
 
     @Override
-    public NativeButton getNativeComponent() {
-        return nativeButton;
-    }
-
-    @Override
-    public NativeButton initNativeComponent() {
-        if (nativeButton == null) {
-            nativeButton = new NativeButton(this, label, command);
-            applyAccessibilityRules();
-            nativeButton.setTitle(popupTooltipText);
-        }
+    public NativeButton initWidget() {
+        NativeButton nativeButton = new NativeButton(this, label, command);
+        applyAccessibilityRules();
+        nativeButton.setTitle(popupTooltipText);
         return nativeButton;
     }
 
     public void setLabel(String label) {
         this.label = label;
-        if (nativeButton != null) {
-            nativeButton.setText(label);
+        if (isWidgetInitiated()) {
+            asWidget().setText(label);
         }
     }
 
@@ -75,8 +65,8 @@ public class CButton extends CFocusComponent<INativeFocusComponent> {
     }
 
     public void setPopupTooltip(String popupTooltipText) {
-        if (nativeButton != null) {
-            nativeButton.setTitle(popupTooltipText);
+        if (isWidgetInitiated()) {
+            asWidget().setTitle(popupTooltipText);
         }
     }
 

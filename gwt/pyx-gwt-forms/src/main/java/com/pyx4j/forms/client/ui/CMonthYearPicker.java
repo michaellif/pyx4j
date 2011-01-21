@@ -24,9 +24,7 @@ import java.util.Date;
 
 import com.pyx4j.forms.client.gwt.NativeMonthYearPicker;
 
-public class CMonthYearPicker extends CEditableComponent<Date> {
-
-    private NativeMonthYearPicker nativePanel;
+public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPicker> {
 
     private final boolean yearOnly;
 
@@ -35,16 +33,8 @@ public class CMonthYearPicker extends CEditableComponent<Date> {
     }
 
     @Override
-    public INativeEditableComponent<Date> getNativeComponent() {
-        return nativePanel;
-    }
-
-    @Override
-    public INativeEditableComponent<Date> initNativeComponent() {
-        if (nativePanel == null) {
-            nativePanel = new NativeMonthYearPicker(this);
-        }
-        return nativePanel;
+    public NativeMonthYearPicker initWidget() {
+        return new NativeMonthYearPicker(this);
     }
 
     public boolean isYearOnly() {

@@ -23,9 +23,7 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.gwt.NativeTextArea;
 
-public class CTextArea extends CTextComponent<String> {
-
-    private NativeTextArea nativeTextArea;
+public class CTextArea extends CTextComponent<String, NativeTextArea> {
 
     private int rows = 4;
 
@@ -39,19 +37,12 @@ public class CTextArea extends CTextComponent<String> {
     }
 
     @Override
-    public NativeTextArea getNativeComponent() {
-        return nativeTextArea;
-    }
-
-    @Override
-    public NativeTextArea initNativeComponent() {
-        if (nativeTextArea == null) {
-            nativeTextArea = new NativeTextArea(this);
-            applyAccessibilityRules();
-            setRows(rows);
-            setNativeComponentValue(getValue());
-            nativeTextArea.setWatermark(getWatermark());
-        }
+    public NativeTextArea initWidget() {
+        NativeTextArea nativeTextArea = new NativeTextArea(this);
+        applyAccessibilityRules();
+        setRows(rows);
+        setNativeComponentValue(getValue());
+        nativeTextArea.setWatermark(getWatermark());
         return nativeTextArea;
     }
 
@@ -61,15 +52,15 @@ public class CTextArea extends CTextComponent<String> {
     }
 
     public void scrollToBottom() {
-        if (nativeTextArea != null) {
-            nativeTextArea.scrollToBottom();
+        if (isWidgetInitiated()) {
+            asWidget().scrollToBottom();
         }
     }
 
     public void setRows(int rows) {
         this.rows = rows;
-        if (nativeTextArea != null) {
-            nativeTextArea.setVisibleLines(rows);
+        if (isWidgetInitiated()) {
+            asWidget().setVisibleLines(rows);
         }
     }
 

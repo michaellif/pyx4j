@@ -28,9 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.gwt.NativeTextBox;
 
-public abstract class CTextBox<E> extends CTextComponent<E> implements IAcceptText {
-
-    INativeTextComponent<E> nativeTextField;
+public abstract class CTextBox<E> extends CTextComponent<E, NativeTextBox<E>> implements IAcceptText {
 
     private IFormat<E> format;
 
@@ -84,16 +82,9 @@ public abstract class CTextBox<E> extends CTextComponent<E> implements IAcceptTe
     }
 
     @Override
-    public INativeEditableComponent<E> getNativeComponent() {
-        return nativeTextField;
-    }
-
-    @Override
-    public INativeEditableComponent<E> initNativeComponent() {
-        if (nativeTextField == null) {
-            nativeTextField = new NativeTextBox<E>(this);
-            applyAccessibilityRules();
-        }
+    public NativeTextBox<E> initWidget() {
+        NativeTextBox<E> nativeTextField = new NativeTextBox<E>(this);
+        applyAccessibilityRules();
         return nativeTextField;
     }
 
@@ -101,7 +92,7 @@ public abstract class CTextBox<E> extends CTextComponent<E> implements IAcceptTe
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                INativeEditableComponent<E> impl = initNativeComponent();
+                INativeEditableComponent<E> impl = asWidget();
                 if (impl instanceof FocusWidget) {
                     ((FocusWidget) impl).setFocus(true);
                 }
@@ -111,8 +102,8 @@ public abstract class CTextBox<E> extends CTextComponent<E> implements IAcceptTe
 
     @Override
     public boolean isValueEmpty() {
-        if (nativeTextField != null) {
-            if (!CommonsStringUtils.isEmpty(nativeTextField.getNativeText())) {
+        if (isWidgetInitiated()) {
+            if (!CommonsStringUtils.isEmpty(asWidget().getNativeText())) {
                 return false;
             }
         }
@@ -120,8 +111,8 @@ public abstract class CTextBox<E> extends CTextComponent<E> implements IAcceptTe
     }
 
     public boolean isParsedSuccesfully() {
-        if (nativeTextField != null) {
-            String text = nativeTextField.getNativeText();
+        if (isWidgetInitiated()) {
+            String text = asWidget().getNativeText();
             if (text != null && !text.trim().equals("") && getValue() == null) {
                 return false;
             } else {

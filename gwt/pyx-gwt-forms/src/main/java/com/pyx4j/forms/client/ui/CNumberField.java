@@ -41,10 +41,12 @@ public abstract class CNumberField<E extends Number> extends CTextBox<E> {
 
     class DefaultNumberFormat implements IFormat<E> {
 
+        @Override
         public String format(E value) {
             return value.toString();
         }
 
+        @Override
         public E parse(String string) {
             try {
                 return valueOf(string);
@@ -68,7 +70,7 @@ public abstract class CNumberField<E extends Number> extends CTextBox<E> {
         }
 
         @Override
-        public boolean isValid(CEditableComponent<E> component, E value) {
+        public boolean isValid(CEditableComponent<E, ?> component, E value) {
             if (super.isValid(component, value)) {
                 if (value == null) {
                     return true;

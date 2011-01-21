@@ -20,12 +20,15 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class CTextComponent<E> extends CEditableComponent<E> {
+public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
+        CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
 
-    private TextComponentLengthValidator<E> validator;
+    private TextComponentLengthValidator<DATA_TYPE> validator;
 
     private String watermark;
 
@@ -43,7 +46,7 @@ public abstract class CTextComponent<E> extends CEditableComponent<E> {
         addValueValidator(validator);
     }
 
-    class TextComponentLengthValidator<E> implements EditableValueValidator<E> {
+    class TextComponentLengthValidator<DATA_TYPE> implements EditableValueValidator<DATA_TYPE> {
 
         private final String validationMessage;
 
@@ -54,11 +57,13 @@ public abstract class CTextComponent<E> extends CEditableComponent<E> {
             this.validationMessage = "Max length is " + length;
         }
 
-        public String getValidationMessage(CEditableComponent<E> component, E value) {
+        @Override
+        public String getValidationMessage(CEditableComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
             return validationMessage;
         }
 
-        public boolean isValid(CEditableComponent<E> component, E value) {
+        @Override
+        public boolean isValid(CEditableComponent<DATA_TYPE, ?> component, DATA_TYPE value) {
             if (value == null) {
                 return true;
             }
@@ -72,8 +77,8 @@ public abstract class CTextComponent<E> extends CEditableComponent<E> {
 
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (getNativeComponent() != null && getNativeComponent() instanceof WatermarkComponent) {
-            ((WatermarkComponent) getNativeComponent()).setWatermark(watermark);
+        if (isWidgetInitiated() && asWidget() instanceof WatermarkComponent) {
+            ((WatermarkComponent) asWidget()).setWatermark(watermark);
         }
     }
 

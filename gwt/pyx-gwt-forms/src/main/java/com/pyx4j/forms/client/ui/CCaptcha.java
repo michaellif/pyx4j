@@ -24,45 +24,35 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.forms.client.gwt.NativeCaptcha;
 
-public class CCaptcha extends CEditableComponent<Pair<String, String>> {
-
-    private NativeCaptcha nativeCaptcha;
+public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCaptcha> {
 
     public CCaptcha() {
 
     }
 
     public void retrieveValue() {
-        if ((nativeCaptcha != null) && (isVisible())) {
-            setValue(nativeCaptcha.getValue());
+        if (isWidgetInitiated() && isVisible()) {
+            setValue(asWidget().getValue());
         }
     }
 
     @Override
     public boolean isValueEmpty() {
-        if ((nativeCaptcha != null) && isVisible()) {
-            return CommonsStringUtils.isEmpty(nativeCaptcha.getValueResponse());
+        if (isWidgetInitiated() && isVisible()) {
+            return CommonsStringUtils.isEmpty(asWidget().getValueResponse());
         } else {
             return true;
         }
     }
 
     @Override
-    public INativeEditableComponent<Pair<String, String>> getNativeComponent() {
-        return nativeCaptcha;
-    }
-
-    @Override
-    public INativeEditableComponent<Pair<String, String>> initNativeComponent() {
-        if (nativeCaptcha == null) {
-            nativeCaptcha = new NativeCaptcha(this);
-        }
-        return nativeCaptcha;
+    public NativeCaptcha initWidget() {
+        return new NativeCaptcha(this);
     }
 
     public void createNewChallenge() {
-        if (nativeCaptcha != null) {
-            nativeCaptcha.createNewChallenge();
+        if (isWidgetInitiated()) {
+            asWidget().createNewChallenge();
         }
     }
 

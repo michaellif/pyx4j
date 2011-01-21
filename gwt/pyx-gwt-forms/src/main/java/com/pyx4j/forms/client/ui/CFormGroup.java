@@ -22,11 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.gwt.NativeFormGroup;
 
-public abstract class CFormGroup<E> extends CFormContainer<E> {
+public abstract class CFormGroup<E> extends CFormContainer<E, NativeFormGroup<E>> {
 
     private final CForm form;
-
-    private NativeFormGroup<E> nativeFormGroup;
 
     public CFormGroup(FormFactory factory) {
         super();
@@ -35,16 +33,9 @@ public abstract class CFormGroup<E> extends CFormContainer<E> {
     }
 
     @Override
-    public INativeEditableComponent<E> getNativeComponent() {
-        return nativeFormGroup;
-    }
-
-    @Override
-    public INativeEditableComponent<E> initNativeComponent() {
-        if (nativeFormGroup == null) {
-            nativeFormGroup = new NativeFormGroup<E>(this);
-            setNativeComponentValue(getValue());
-        }
+    public NativeFormGroup<E> initWidget() {
+        NativeFormGroup<E> nativeFormGroup = new NativeFormGroup<E>(this);
+        setNativeComponentValue(getValue());
         return nativeFormGroup;
     }
 

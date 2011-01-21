@@ -22,7 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Collection;
 
-public abstract class CContainer extends CComponent<INativeComponent> {
+import com.google.gwt.user.client.ui.Widget;
+
+public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> extends CComponent<WIDGET_TYPE> {
 
     private final IAccessAdapter aggregatingAccessAdapter;
 
@@ -44,7 +46,7 @@ public abstract class CContainer extends CComponent<INativeComponent> {
             return true;
         }
         for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?> && !((CEditableComponent<?>) ccomponent).isValid()) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
                 return false;
             } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
                 return false;
@@ -58,9 +60,9 @@ public abstract class CContainer extends CComponent<INativeComponent> {
         for (CComponent<?> ccomponent : getComponents()) {
             if (ccomponent instanceof CFormFolder && !((CFormFolder) ccomponent).isValid()) {
                 validationResults.appendValidationErrors(((CFormFolder) ccomponent).getValidationResults());
-            } else if (ccomponent instanceof CEditableComponent<?> && !((CEditableComponent<?>) ccomponent).isValid()) {
+            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
                 validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
-                        + ((CEditableComponent<?>) ccomponent).getValidationMessage());
+                        + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
             } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
                 validationResults.appendValidationErrors(((CContainer) ccomponent).getValidationResults());
             }
@@ -71,7 +73,7 @@ public abstract class CContainer extends CComponent<INativeComponent> {
     public boolean isValuesEmpty() {
         // Any component is not empty
         for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?> && (!((CEditableComponent<?>) ccomponent).isValueEmpty())) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && (!((CEditableComponent<?, ?>) ccomponent).isValueEmpty())) {
                 return false;
             }
             if (ccomponent instanceof CRangeDatePicker && (!((CRangeDatePicker) ccomponent).isValueEmpty())) {
@@ -125,8 +127,8 @@ public abstract class CContainer extends CComponent<INativeComponent> {
     protected void applyEditabilityRules() {
         if (getComponents() != null) {
             for (CComponent<?> component : getComponents()) {
-                if (component instanceof CEditableComponent<?>) {
-                    ((CEditableComponent<?>) component).applyEditabilityRules();
+                if (component instanceof CEditableComponent<?, ?>) {
+                    ((CEditableComponent<?, ?>) component).applyEditabilityRules();
                 } else if (component instanceof CContainer) {
                     ((CContainer) component).applyEditabilityRules();
                 }

@@ -29,13 +29,13 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
-import com.pyx4j.forms.client.ui.INativeComboBox;
+import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.ListBox;
 
 /**
  *
  */
-public class NativeComboBox<E> extends ListBox implements INativeComboBox<E> {
+public class NativeComboBox<E> extends ListBox implements INativeEditableComponent<E> {
 
     private final CComboBox<E> comboBox;
 
@@ -69,23 +69,19 @@ public class NativeComboBox<E> extends ListBox implements INativeComboBox<E> {
 
     }
 
-    @Override
     public void setOptions(List<E> opt) {
         this.options = opt;
         refreshOptions();
     }
 
-    @Override
     public void refreshOption(E opt) {
         setItemText(getNativeOptionIndex(opt), comboBox.getItemName(opt));
     }
 
-    @Override
     public void removeOption(E opt) {
         removeItem(getNativeOptionIndex(opt));
     }
 
-    @Override
     public void refreshOptions() {
         super.clear();
 

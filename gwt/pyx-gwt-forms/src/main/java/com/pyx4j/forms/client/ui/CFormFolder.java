@@ -23,17 +23,13 @@ package com.pyx4j.forms.client.ui;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.google.gwt.resources.client.ImageResource;
-
 import com.pyx4j.forms.client.gwt.NativeFormFolder;
 
-public abstract class CFormFolder<E> extends CFormContainer<List<E>> {
+public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormFolder<E>> {
 
     private final LinkedHashMap<E, CForm> formsMap;
 
     private final FormFactory factory;
-
-    private NativeFormFolder<E> nativeFormFolder;
 
     private String itemCaption;
 
@@ -62,16 +58,9 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>> {
     }
 
     @Override
-    public INativeEditableComponent<List<E>> getNativeComponent() {
-        return nativeFormFolder;
-    }
-
-    @Override
-    public INativeEditableComponent<List<E>> initNativeComponent() {
-        if (nativeFormFolder == null) {
-            nativeFormFolder = new NativeFormFolder<E>(this);
-            setNativeComponentValue(getValue());
-        }
+    public NativeFormFolder<E> initWidget() {
+        NativeFormFolder<E> nativeFormFolder = new NativeFormFolder<E>(this);
+        setNativeComponentValue(getValue());
         return nativeFormFolder;
     }
 

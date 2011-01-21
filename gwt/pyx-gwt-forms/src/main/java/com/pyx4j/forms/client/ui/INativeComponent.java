@@ -20,7 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public interface INativeComponent {
+import com.google.gwt.user.client.ui.IsWidget;
+
+public interface INativeComponent extends IsWidget {
 
     public void setEnabled(boolean enabled);
 

@@ -29,12 +29,14 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
-public abstract class CComponent<E extends INativeComponent> implements HasHandlers, HasPropertyChangeHandlers {
+public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> implements HasHandlers, HasPropertyChangeHandlers, IsWidget {
 
     private String name;
 
@@ -51,6 +53,10 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
     private final Collection<IAccessAdapter> accessAdapters = new ArrayList<IAccessAdapter>();
 
     ComponentAccessAdapter defaultAccessAdapter;
+
+    private boolean widgetInitiated = false;
+
+    private WIDGET_TYPE widget;
 
     private EventBus eventBus;
 
@@ -111,8 +117,8 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
 
     public void setWidth(String width) {
         this.width = width;
-        if (getNativeComponent() != null) {
-            getNativeComponent().setWidth(width);
+        if (isWidgetInitiated()) {
+            asWidget().setWidth(width);
         }
     }
 
@@ -122,8 +128,8 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
 
     public void setHeight(String height) {
         this.height = height;
-        if (getNativeComponent() != null) {
-            getNativeComponent().setHeight(height);
+        if (isWidgetInitiated()) {
+            asWidget().setHeight(height);
         }
     }
 
@@ -222,22 +228,33 @@ public abstract class CComponent<E extends INativeComponent> implements HasHandl
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
 
-    public abstract E getNativeComponent();
+    protected abstract WIDGET_TYPE initWidget();
 
-    public abstract E initNativeComponent();
+    public boolean isWidgetInitiated() {
+        return widgetInitiated;
+    }
+
+    @Override
+    public WIDGET_TYPE asWidget() {
+        if (!widgetInitiated) {
+            widget = initWidget();
+            widgetInitiated = true;
+        }
+        return widget;
+    }
 
     protected void applyVisibilityRules() {
         boolean visible = isVisible();
-        if (getNativeComponent() != null && getNativeComponent().isVisible() != visible) {
-            getNativeComponent().setVisible(visible);
+        if (isWidgetInitiated() && asWidget().isVisible() != visible) {
+            asWidget().setVisible(visible);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY);
         }
     }
 
     protected void applyEnablingRules() {
         boolean enabled = isEnabled();
-        if (getNativeComponent() != null && getNativeComponent().isEnabled() != enabled) {
-            getNativeComponent().setEnabled(enabled);
+        if (isWidgetInitiated() && asWidget().isEnabled() != enabled) {
+            asWidget().setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.ENABLED_PROPERTY);
         }
     }

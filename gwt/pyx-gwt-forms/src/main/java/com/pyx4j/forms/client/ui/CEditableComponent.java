@@ -27,21 +27,23 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.ICloneable;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
-public abstract class CEditableComponent<E> extends CFocusComponent<INativeEditableComponent<E>> implements HasValueChangeHandlers<E> {
+public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CFocusComponent<WIDGET_TYPE>
+        implements HasValueChangeHandlers<DATA_TYPE> {
 
     private boolean mandatory = false;
 
     private String mandatoryValidationMessage = "This field is Mandatory";
 
-    private E value = null;
+    private DATA_TYPE value = null;
 
-    private List<EditableValueValidator<E>> validators;
+    private List<EditableValueValidator<DATA_TYPE>> validators;
 
     public CEditableComponent() {
         this(null);
@@ -55,11 +57,11 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         return !isVisible() || !isEditable() || !isEnabled() || (isMandatoryConditionMet() && isValidationConditionMet());
     }
 
-    public E getValue() {
+    public DATA_TYPE getValue() {
         return value;
     }
 
-    public void setValue(E value) {
+    public void setValue(DATA_TYPE value) {
         if (isValuesEquals(getValue(), value)) {
             return;
         }
@@ -69,22 +71,22 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         ValueChangeEvent.fire(this, value);
     }
 
-    public void populate(E value) {
+    public void populate(DATA_TYPE value) {
         this.value = value;
         setNativeComponentValue(value);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
 
     @SuppressWarnings("unchecked")
-    public void populateMutable(ICloneable<E> value) {
-        populate((E) value);
+    public void populateMutable(ICloneable<DATA_TYPE> value) {
+        populate((DATA_TYPE) value);
     }
 
     public boolean isValueEmpty() {
         return (getValue() == null);
     }
 
-    public boolean isValuesEquals(E value1, E value2) {
+    public boolean isValuesEquals(DATA_TYPE value1, DATA_TYPE value2) {
         return EqualsHelper.equals(value1, value2);
     }
 
@@ -141,7 +143,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     private String getValidationMessageWithoutMandatoyCondition() {
         if (!isValid() && isMandatoryConditionMet()) {
             if (validators != null) {
-                for (EditableValueValidator<E> validator : validators) {
+                for (EditableValueValidator<DATA_TYPE> validator : validators) {
                     if (!validator.isValid(this, getValue())) {
                         return validator.getValidationMessage(this, getValue());
                     }
@@ -160,18 +162,18 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
     }
 
     @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<E> handler) {
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<DATA_TYPE> handler) {
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    public void addValueValidator(EditableValueValidator<E> validator) {
+    public void addValueValidator(EditableValueValidator<DATA_TYPE> validator) {
         if (validators == null) {
-            validators = new Vector<EditableValueValidator<E>>();
+            validators = new Vector<EditableValueValidator<DATA_TYPE>>();
         }
         validators.add(validator);
     }
 
-    public boolean removeValueValidator(EditableValueValidator<E> validator) {
+    public boolean removeValueValidator(EditableValueValidator<DATA_TYPE> validator) {
         if (validators != null) {
             return validators.remove(validator);
         } else {
@@ -189,7 +191,7 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
         if (validators == null) {
             return true;
         }
-        for (EditableValueValidator<E> validator : validators) {
+        for (EditableValueValidator<DATA_TYPE> validator : validators) {
             if (!validator.isValid(this, getValue())) {
                 return false;
             }
@@ -211,20 +213,16 @@ public abstract class CEditableComponent<E> extends CFocusComponent<INativeEdita
                 + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
-    protected void setNativeComponentValue(E value) {
-        if (getNativeComponent() == null) {
-            //do nothing
-        } else if (getNativeComponent() instanceof INativeEditableComponent) {
-            (getNativeComponent()).setNativeValue(value);
-        } else {
-            throw new Error("CEditableComponent should have native component of " + "type INativeEditableComponent but has " + getNativeComponent());
+    protected void setNativeComponentValue(DATA_TYPE value) {
+        if (isWidgetInitiated()) {
+            asWidget().setNativeValue(value);
         }
     }
 
     protected void applyEditabilityRules() {
         boolean editable = isEditable();
-        if (getNativeComponent() != null && getNativeComponent().isEditable() != editable) {
-            getNativeComponent().setEditable(editable);
+        if (isWidgetInitiated() && asWidget().isEditable() != editable) {
+            asWidget().setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.READONLY_PROPERTY);
         }
     }

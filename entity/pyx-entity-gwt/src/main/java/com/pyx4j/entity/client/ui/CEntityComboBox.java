@@ -46,11 +46,11 @@ import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
+import com.pyx4j.forms.client.gwt.NativeComboBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.IAcceptText;
-import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
@@ -154,11 +154,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
      * Should fire when component is displayed ?
      */
     @Override
-    public INativeComboBox<E> initNativeComponent() {
-        if ((getNativeComponent() == null) && (criteria != null)) {
+    public NativeComboBox<E> initWidget() {
+        if (isWidgetInitiated() && (criteria != null)) {
             retriveOptions(null);
         }
-        return super.initNativeComponent();
+        return super.initWidget();
     }
 
     private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {
@@ -217,12 +217,12 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                     if (unavailableValidator == null) {
                         unavailableValidator = new EditableValueValidator<E>() {
                             @Override
-                            public String getValidationMessage(CEditableComponent<E> component, E value) {
+                            public String getValidationMessage(CEditableComponent<E, ?> component, E value) {
                                 return "Reference data unavailable";
                             }
 
                             @Override
-                            public boolean isValid(CEditableComponent<E> component, E value) {
+                            public boolean isValid(CEditableComponent<E, ?> component, E value) {
                                 return !isUnavailable;
                             }
                         };

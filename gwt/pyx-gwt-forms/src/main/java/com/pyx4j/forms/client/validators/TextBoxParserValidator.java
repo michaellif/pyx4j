@@ -22,11 +22,13 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
         this.validationMessage = validationMessage;
     }
 
-    public String getValidationMessage(CEditableComponent<E> component, E value) {
+    @Override
+    public String getValidationMessage(CEditableComponent<E, ?> component, E value) {
         return validationMessage;
     }
 
-    public boolean isValid(CEditableComponent<E> component, E value) {
+    @Override
+    public boolean isValid(CEditableComponent<E, ?> component, E value) {
         if (component instanceof CTextBox) {
             return ((CTextBox<?>) component).isParsedSuccesfully();
         }

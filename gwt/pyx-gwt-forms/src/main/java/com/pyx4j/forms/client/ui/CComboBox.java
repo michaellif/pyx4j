@@ -32,9 +32,7 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
-public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
-
-    private INativeComboBox<E> nativeComboBox;
+public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
 
     private List<E> options;
 
@@ -70,18 +68,11 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
     }
 
     @Override
-    public INativeComboBox<E> getNativeComponent() {
-        return nativeComboBox;
-    }
-
-    @Override
-    public INativeComboBox<E> initNativeComponent() {
-        if (nativeComboBox == null) {
-            nativeComboBox = new NativeComboBox<E>(this);
-            applyAccessibilityRules();
-            setNativeComponentValue(getValue());
-            nativeComboBox.setOptions(options);
-        }
+    public NativeComboBox<E> initWidget() {
+        NativeComboBox<E> nativeComboBox = new NativeComboBox<E>(this);
+        applyAccessibilityRules();
+        setNativeComponentValue(getValue());
+        nativeComboBox.setOptions(options);
         return nativeComboBox;
     }
 
@@ -114,8 +105,8 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
         if (opt != null) {
             options.addAll(opt);
         }
-        if (nativeComboBox != null) {
-            nativeComboBox.setOptions(options);
+        if (isWidgetInitiated()) {
+            asWidget().setOptions(options);
         }
         OptionsChangeEvent.fire(this, getOptions());
     }
@@ -134,8 +125,8 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
     }
 
     public void removeOption(E opt) {
-        if ((nativeComboBox != null) && (options.contains(opt))) {
-            nativeComboBox.removeOption(opt);
+        if (isWidgetInitiated() && (options.contains(opt))) {
+            asWidget().removeOption(opt);
         }
         options.remove(opt);
         if (isValuesEquals(getValue(), opt)) {
@@ -148,20 +139,20 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
             options = createOptionsImpl();
         }
         if (options.contains(opt)) {
-            if (nativeComboBox != null) {
-                nativeComboBox.refreshOption(opt);
+            if (isWidgetInitiated()) {
+                asWidget().refreshOption(opt);
             }
         } else {
             options.add(opt);
-            if (nativeComboBox != null) {
-                nativeComboBox.setOptions(options);
+            if (isWidgetInitiated()) {
+                asWidget().setOptions(options);
             }
         }
     }
 
     public void refreshOption(E opt) {
-        if (nativeComboBox != null) {
-            nativeComboBox.refreshOption(opt);
+        if (isWidgetInitiated()) {
+            asWidget().refreshOption(opt);
         }
     }
 
@@ -177,8 +168,8 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
-            if (nativeComboBox != null) {
-                nativeComboBox.refreshOptions();
+            if (isWidgetInitiated()) {
+                asWidget().refreshOptions();
             }
         }
     }
@@ -189,8 +180,8 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
 
     public void setNoSelectionText(String noSelectionText) {
         this.noSelectionText = noSelectionText;
-        if (nativeComboBox != null) {
-            nativeComboBox.refreshOptions();
+        if (isWidgetInitiated()) {
+            asWidget().refreshOptions();
         }
     }
 

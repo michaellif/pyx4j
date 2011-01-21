@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.gwt.NativeGroupBoxPanel;
  * This is a border panel that has single CContainer as a child.
  * 
  */
-public class CGroupBoxPanel extends CContainer {
+public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
 
     public static enum Layout {
 
@@ -58,8 +58,6 @@ public class CGroupBoxPanel extends CContainer {
 
     private final Collection<CComponent<?>> componentCollection = new Vector<CComponent<?>>();
 
-    private NativeGroupBoxPanel nativePanel;
-
     private boolean expended = true;
 
     private boolean innerCommponentInitialized = false;
@@ -81,34 +79,27 @@ public class CGroupBoxPanel extends CContainer {
         return addHandler(handler, KeyUpEvent.getType());
     }
 
-    @Override
-    public INativeComponent getNativeComponent() {
-        return nativePanel;
-    }
-
     //TODO shouldn't be public. When all the components of UI will be CComponents - change visibility
     @Override
-    public INativeComponent initNativeComponent() {
-        if (nativePanel == null) {
-            nativePanel = new NativeGroupBoxPanel(this, layout);
-            if (isExpended()) {
-                initInnerComponent();
-            }
-            applyAccessibilityRules();
-
-            nativePanel.addKeyUpHandler(new KeyUpHandler() {
-                @Override
-                public void onKeyUp(KeyUpEvent event) {
-                    fireEvent(event);
-                }
-            });
+    public NativeGroupBoxPanel initWidget() {
+        NativeGroupBoxPanel nativePanel = new NativeGroupBoxPanel(this, layout);
+        if (isExpended()) {
+            initInnerComponent();
         }
+        applyAccessibilityRules();
+
+        nativePanel.addKeyUpHandler(new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                fireEvent(event);
+            }
+        });
         return nativePanel;
     }
 
     private void initInnerComponent() {
-        if (!innerCommponentInitialized && component != null && nativePanel != null) {
-            nativePanel.add(component.initNativeComponent(), null);
+        if (!innerCommponentInitialized && component != null && isWidgetInitiated()) {
+            asWidget().add((INativeComponent) component.asWidget(), null);
             innerCommponentInitialized = true;
         }
     }
@@ -152,8 +143,8 @@ public class CGroupBoxPanel extends CContainer {
         if (expended) {
             initInnerComponent();
         }
-        if (nativePanel != null && isCollapsible()) {
-            nativePanel.setExpanded(expended);
+        if (isWidgetInitiated() && isCollapsible()) {
+            asWidget().setExpanded(expended);
         } else if ((layout == Layout.CHECKBOX_TOGGLE) && (component != null)) {
             component.applyVisibilityRules();
         }

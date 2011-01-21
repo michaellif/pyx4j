@@ -27,8 +27,6 @@ import com.pyx4j.forms.client.gwt.NativeCaption;
 
 public class CCaption extends CComponent<NativeCaption> implements SelfManagedComponent {
 
-    private NativeCaption nativeCaption;
-
     private final String caption;
 
     public CCaption(String caption) {
@@ -37,22 +35,15 @@ public class CCaption extends CComponent<NativeCaption> implements SelfManagedCo
     }
 
     @Override
-    public NativeCaption getNativeComponent() {
-        return nativeCaption;
-    }
-
-    @Override
-    public NativeCaption initNativeComponent() {
-        if (nativeCaption == null) {
-            nativeCaption = new NativeCaption(this);
-            nativeCaption.setWordWrap(true);
-            nativeCaption.setWidth(this.getWidth());
-            nativeCaption.setText(caption);
-            nativeCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            nativeCaption.getElement().getStyle().setPaddingTop(10, Unit.PX);
-            nativeCaption.getElement().getStyle().setPaddingBottom(4, Unit.PX);
-            applyAccessibilityRules();
-        }
+    public NativeCaption initWidget() {
+        NativeCaption nativeCaption = new NativeCaption(this);
+        nativeCaption.setWordWrap(true);
+        nativeCaption.setWidth(this.getWidth());
+        nativeCaption.setText(caption);
+        nativeCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        nativeCaption.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        nativeCaption.getElement().getStyle().setPaddingBottom(4, Unit.PX);
+        applyAccessibilityRules();
         return nativeCaption;
     }
 

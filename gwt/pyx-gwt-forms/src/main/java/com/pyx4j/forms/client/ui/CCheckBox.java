@@ -22,9 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.gwt.NativeCheckBox;
 
-public class CCheckBox extends CEditableComponent<Boolean> {
-
-    private NativeCheckBox nativeCheckBox;
+public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
 
     public CCheckBox() {
         super();
@@ -37,18 +35,10 @@ public class CCheckBox extends CEditableComponent<Boolean> {
     }
 
     @Override
-    public NativeCheckBox getNativeComponent() {
-        return nativeCheckBox;
-    }
-
-    @Override
-    public NativeCheckBox initNativeComponent() {
-        if (nativeCheckBox == null) {
-            nativeCheckBox = new NativeCheckBox(this);
-            applyAccessibilityRules();
-
-            setNativeComponentValue(getValue());
-        }
+    public NativeCheckBox initWidget() {
+        NativeCheckBox nativeCheckBox = new NativeCheckBox(this);
+        applyAccessibilityRules();
+        setNativeComponentValue(getValue());
         return nativeCheckBox;
     }
 
