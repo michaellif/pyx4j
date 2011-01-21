@@ -31,13 +31,18 @@ import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.geo.MapUtils;
 
-public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements HasAsyncValue<GeoCriteria> {
+public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements HasAsyncValue<GeoCriteria>, IAcceptText {
 
     private static I18n i18n = I18nFactory.getI18n(CLocationCriteriaTextField.class);
+
+    public CLocationCriteriaTextField() {
+        this(null);
+    }
 
     public CLocationCriteriaTextField(String title) {
         super(title);
@@ -54,7 +59,8 @@ public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements
         super.setValue(value);
     }
 
-    public void setValueByItemName(String name) {
+    @Override
+    public void setValueByString(String name) {
         GeoCriteria value = getValue();
         if (value == null) {
             value = EntityFactory.create(GeoCriteria.class);

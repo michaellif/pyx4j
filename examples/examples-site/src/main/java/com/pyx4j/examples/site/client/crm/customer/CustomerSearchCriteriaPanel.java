@@ -28,6 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.entity.shared.criterion.PathSearch;
 import com.pyx4j.essentials.client.crud.EntitySearchCriteriaPanel;
+import com.pyx4j.essentials.geo.GeoCriteriaEditableComponentFactory;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -37,7 +38,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Customer> {
 
     CustomerSearchCriteriaPanel() {
-        super(Customer.class);
+        super(Customer.class, new GeoCriteriaEditableComponentFactory());
     }
 
     @Override

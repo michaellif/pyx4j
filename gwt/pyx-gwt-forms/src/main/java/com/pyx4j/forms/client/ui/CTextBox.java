@@ -28,7 +28,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.gwt.NativeTextBox;
 
-public abstract class CTextBox<E> extends CTextComponent<E> {
+public abstract class CTextBox<E> extends CTextComponent<E> implements IAcceptText {
 
     INativeTextComponent<E> nativeTextField;
 
@@ -76,6 +76,11 @@ public abstract class CTextBox<E> extends CTextComponent<E> {
         } else {
             super.setValue(value);
         }
+    }
+
+    @Override
+    public void setValueByString(String name) {
+        setValue(getFormat().parse(name));
     }
 
     @Override

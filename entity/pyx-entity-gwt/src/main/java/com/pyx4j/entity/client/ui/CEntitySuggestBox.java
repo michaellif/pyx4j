@@ -49,11 +49,12 @@ import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CSuggestBox;
+import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
-public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E> {
+public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
 
     private static final Logger log = LoggerFactory.getLogger(CEntitySuggestBox.class);
 
@@ -236,7 +237,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
         stringViewMemberName = member.getFieldName();
     }
 
-    public void setValueByItemName(final String name) {
+    @Override
+    public void setValueByString(final String name) {
         if (name == null && !isMandatory()) {
             setValue(null);
         } else if (isOptionsLoaded()) {

@@ -21,7 +21,6 @@
 package com.pyx4j.entity.client.ui.crud;
 
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,11 +29,9 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntitySuggestBox;
-import com.pyx4j.entity.client.ui.CLocationCriteriaTextField;
-import com.pyx4j.entity.rpc.GeoCriteria;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -46,18 +43,16 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CIntegerField;
-import com.pyx4j.forms.client.ui.CLongField;
-import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CTextBox;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.IAcceptText;
 
 public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     private final E metaEntity;
+
+    private final EditableComponentFactory editableComponentFactory;
 
     private EntitySearchCriteria<E> editableCriteria;
 
@@ -100,53 +95,32 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     }
 
-    public EntitySearchCriteriaFormModel(Class<E> clazz) {
+    public EntitySearchCriteriaFormModel(Class<E> clazz, EditableComponentFactory editableComponentFactory) {
         metaEntity = EntityFactory.create(clazz);
         valuePropagation = new ValuePropagationHandler();
         visibilityPropagation = new VisibilityPropagationHandler();
+        if (editableComponentFactory == null) {
+            this.editableComponentFactory = new CriteriaEditableComponentFactory();
+        } else {
+            this.editableComponentFactory = editableComponentFactory;
+        }
     }
 
     public E meta() {
         return metaEntity;
     }
 
-    public static <T extends IEntity> EntitySearchCriteriaFormModel<T> create(Class<T> clazz) {
-        return new EntitySearchCriteriaFormModel<T>(clazz);
+    public static <T extends IEntity> EntitySearchCriteriaFormModel<T> create(Class<T> clazz, EditableComponentFactory editableComponentFactory) {
+        return new EntitySearchCriteriaFormModel<T>(clazz, editableComponentFactory);
     }
 
     public CEditableComponent<?> create(IObject<?> member) {
         return create(null, member, null);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public CEditableComponent<?> create(String name, IObject<?> member, String pathProperty) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?> comp;
-        if (mm.isEntity()) {
-            if (mm.getObjectClass().equals(GeoCriteria.class)) {
-                comp = new CLocationCriteriaTextField(mm.getCaption());
-            } else {
-                comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
-            }
-        } else if (mm.getValueClass().isEnum()) {
-            comp = new CComboBox();
-            ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
-        } else if (mm.getValueClass().equals(Date.class) || mm.getValueClass().equals(java.sql.Date.class)) {
-            comp = new CDatePicker();
-        } else if (mm.getValueClass().equals(Integer.class)) {
-            comp = new CIntegerField();
-        } else if (mm.getValueClass().equals(Long.class)) {
-            comp = new CLongField();
-        } else if (mm.getValueClass().equals(Double.class)) {
-            comp = new CDoubleField();
-        } else {
-            if (EditorType.phone.equals(mm.getEditorType())) {
-                comp = new CPhoneField();
-                ((CPhoneField) comp).setFormat(new CPhoneField.PhoneSearchFormat());
-            } else {
-                comp = new CTextField();
-            }
-        }
+        CEditableComponent<?> comp = editableComponentFactory.create(member);
         comp.setTitle((name == null) ? mm.getCaption() : name);
         bind(comp, new PathSearch(member, pathProperty));
         return comp;
@@ -243,20 +217,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
             String value = history == null ? null : history.get(me.getValue().getHistoryKey());
             if (value == null) {
                 comp.setValue(null);
-            } else if (comp instanceof CTextField) {
-                comp.setValue(value);
-            } else if (comp instanceof CNumberField) {
-                comp.setValue(((CNumberField) comp).valueOf(value));
-            } else if (comp instanceof CEntityComboBox) {
-                ((CEntityComboBox) comp).setValueByItemName(value);
-            } else if (comp instanceof CEntitySuggestBox) {
-                ((CEntitySuggestBox) comp).setValueByItemName(value);
-            } else if (comp instanceof CLocationCriteriaTextField) {
-                ((CLocationCriteriaTextField) comp).setValueByItemName(value);
-            } else if (comp instanceof CComboBox) {
-                ((CComboBox) comp).setValueByItemName(value);
-            } else if (comp instanceof CDatePicker) {
-                comp.setValue(((CDatePicker) comp).getFormat().parse(value.replace('-', '/')));
+            } else if (comp instanceof IAcceptText) {
+                ((IAcceptText) comp).setValueByString(value);
             }
         }
     }
@@ -281,8 +243,6 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 // By pass other cases
             } else if (comp instanceof CEntitySuggestBox) {
                 historyValue = ((CEntitySuggestBox) comp).getOptionName((IEntity) value);
-            } else if (comp instanceof CLocationCriteriaTextField) {
-                historyValue = ((IEntity) value).getStringView();
             } else if (comp instanceof CComboBox) {
                 if (value instanceof Enum) {
                     historyValue = ((Enum<?>) value).toString();
@@ -291,6 +251,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 }
             } else if (comp instanceof CDatePicker) {
                 historyValue = ((CDatePicker) comp).getFormat().format((Date) value).replace('/', '-');
+            } else if (value instanceof IEntity) {
+                historyValue = ((IEntity) value).getStringView();
             } else if (comp instanceof CTextBox) {
                 historyValue = value.toString();
             }

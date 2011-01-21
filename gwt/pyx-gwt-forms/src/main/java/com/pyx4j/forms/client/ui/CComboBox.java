@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeComboBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
-public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsChangeHandlers<List<E>> {
+public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
 
     private INativeComboBox<E> nativeComboBox;
 
@@ -198,7 +198,13 @@ public class CComboBox<E> extends CEditableComponent<E> implements HasOptionsCha
         return this.policy;
     }
 
-    public void setValueByItemName(final String name) {
+    @Deprecated
+    public void setValueByItemName(String name) {
+        setValueByString(name);
+    }
+
+    @Override
+    public void setValueByString(final String name) {
         if (name == null && !isMandatory()) {
             setValue(null);
         } else {

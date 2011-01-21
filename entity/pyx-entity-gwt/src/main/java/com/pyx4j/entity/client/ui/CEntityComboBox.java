@@ -49,11 +49,12 @@ import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
+import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.INativeComboBox;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
-public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E> {
+public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityComboBox.class);
 
@@ -245,7 +246,13 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
+    @Deprecated
     public void setValueByItemName(final String name) {
+        setValueByString(name);
+    }
+
+    @Override
+    public void setValueByString(final String name) {
         if (name == null && !isMandatory()) {
             setValue(null);
         } else if (isOptionsLoaded()) {

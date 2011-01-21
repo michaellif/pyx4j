@@ -75,6 +75,7 @@ public class CDatePicker extends CTextBox<Date> {
 
     class PastDateSelectionAllowedValidator implements EditableValueValidator<Date> {
 
+        @Override
         public String getValidationMessage(CEditableComponent<Date> component, Date value) {
             if (dateConditionValidationMessage == null) {
                 return "Date must be future date or equal to today's date";
@@ -83,6 +84,7 @@ public class CDatePicker extends CTextBox<Date> {
             }
         }
 
+        @Override
         @SuppressWarnings("deprecation")
         public boolean isValid(CEditableComponent<Date> component, Date value) {
             Date selectedDate = getValue();
@@ -103,16 +105,18 @@ public class CDatePicker extends CTextBox<Date> {
 
         private static DateTimeFormat formatter = DateTimeFormat.getFormat("MM/dd/yyyy");
 
+        @Override
         public String format(Date value) {
             return formatter.format(value);
         }
 
+        @Override
         public Date parse(String string) {
             if (string == null || string.trim().equals("")) {
                 return null;
             }
             try {
-                return parser.parseStrict(string);
+                return parser.parseStrict(string.replace('-', '/'));
             } catch (IllegalArgumentException e) {
                 return null;
             }
