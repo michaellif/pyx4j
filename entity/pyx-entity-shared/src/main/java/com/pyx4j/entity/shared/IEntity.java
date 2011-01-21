@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.Printable;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 
@@ -39,6 +40,9 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public Long getPrimaryKey();
 
     public void setPrimaryKey(Long pk);
+
+    @Indexed
+    public IPrimitive<Long> id();
 
     public IObject<?> getMember(String memberName);
 

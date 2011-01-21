@@ -161,6 +161,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         ensureValue().put(PRIMARY_KEY, pk);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public IPrimitive<Long> id() {
+        return (IPrimitive<Long>) getMember(PRIMARY_KEY);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, Object> getValue() {
@@ -269,9 +275,13 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         }
         IObject<?> member = members.get(memberName);
         if (member == null) {
-            member = lazyCreateMember(memberName);
-            if (member == null) {
-                throw new RuntimeException("Unknown member " + memberName);
+            if (PRIMARY_KEY.equals(memberName)) {
+                return lazyCreateMemberIPrimitive(PRIMARY_KEY, Long.class);
+            } else {
+                member = lazyCreateMember(memberName);
+                if (member == null) {
+                    throw new RuntimeException("Unknown member " + memberName);
+                }
             }
             members.put(memberName, member);
         }

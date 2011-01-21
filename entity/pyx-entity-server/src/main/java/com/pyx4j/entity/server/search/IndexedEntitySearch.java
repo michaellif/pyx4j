@@ -227,6 +227,20 @@ public class IndexedEntitySearch {
                 } else {
                     queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
                 }
+            } else if (Long.class.isAssignableFrom(mm.getValueClass())) {
+                Serializable value = me.getValue();
+                if (value instanceof String) {
+                    value = Long.valueOf((String) value);
+                } else if (!(value instanceof Long)) {
+                    log.error("can't conver value to long {}", value);
+                }
+                Indexed index = mm.getAnnotation(Indexed.class);
+                if ((index != null) && (index.global() != 0)) {
+                    queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.EQUAL, String.valueOf(index.global()) + value));
+                    inMemoryFilters.add(new PrimitiveInMemoryFilter(path, value));
+                } else {
+                    queryCriteria.add(new PropertyCriterion(srv.getPropertyName(meta, path), Restriction.EQUAL, value));
+                }
             } else if (GeoCriteria.class.isAssignableFrom(mm.getValueClass())) {
                 String pathWithGeoPointData = path.getPathString();
                 pathWithGeoPointData = pathWithGeoPointData.substring(0, pathWithGeoPointData.length() - ("Criteria".length() + 1)) + Path.PATH_SEPARATOR;
