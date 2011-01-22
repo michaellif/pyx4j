@@ -52,9 +52,7 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, Nati
 
     @Override
     protected NativeTextBox<GeoCriteria> initWidget() {
-        NativeTextBox<GeoCriteria> nativeTextField = new NativeTextBox<GeoCriteria>(this);
-        applyAccessibilityRules();
-        return nativeTextField;
+        return new NativeTextBox<GeoCriteria>(this);
     }
 
     @Override

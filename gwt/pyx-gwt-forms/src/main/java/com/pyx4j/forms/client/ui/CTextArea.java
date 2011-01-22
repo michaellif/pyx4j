@@ -39,10 +39,8 @@ public class CTextArea extends CTextComponent<String, NativeTextArea> {
     @Override
     protected NativeTextArea initWidget() {
         NativeTextArea nativeTextArea = new NativeTextArea(this);
-        applyAccessibilityRules();
         setRows(rows);
         setNativeComponentValue(getValue());
-        nativeTextArea.setWatermark(getWatermark());
         return nativeTextArea;
     }
 

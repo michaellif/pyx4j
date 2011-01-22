@@ -230,6 +230,10 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     protected abstract WIDGET_TYPE initWidget();
 
+    protected void onWidgetCreated() {
+        applyAccessibilityRules();
+    }
+
     public boolean isWidgetCreated() {
         return widgetCreated;
     }
@@ -239,6 +243,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         if (!widgetCreated) {
             widget = initWidget();
             widgetCreated = true;
+            onWidgetCreated();
         }
         return widget;
     }

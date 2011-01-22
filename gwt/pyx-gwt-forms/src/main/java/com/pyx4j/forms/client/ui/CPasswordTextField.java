@@ -44,9 +44,7 @@ public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTex
 
     @Override
     protected NativePasswordTextBox initWidget() {
-        NativePasswordTextBox nativeTextField = new NativePasswordTextBox(this);
-        applyAccessibilityRules();
-        return nativeTextField;
+        return new NativePasswordTextBox(this);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

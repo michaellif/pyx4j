@@ -43,7 +43,6 @@ public class CCaption extends CComponent<NativeCaption> implements SelfManagedCo
         nativeCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         nativeCaption.getElement().getStyle().setPaddingTop(10, Unit.PX);
         nativeCaption.getElement().getStyle().setPaddingBottom(4, Unit.PX);
-        applyAccessibilityRules();
         return nativeCaption;
     }
 

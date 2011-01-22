@@ -27,9 +27,7 @@ public class CRichTextAreaPopup extends CRichTextAreaBase<NativeRichTextAreaPopu
     @Override
     protected NativeRichTextAreaPopup initWidget() {
         NativeRichTextAreaPopup nativeTextArea = new NativeRichTextAreaPopup(this);
-        applyAccessibilityRules();
         setNativeComponentValue(getValue());
-        nativeTextArea.setWatermark(getWatermark());
         return nativeTextArea;
     }
 

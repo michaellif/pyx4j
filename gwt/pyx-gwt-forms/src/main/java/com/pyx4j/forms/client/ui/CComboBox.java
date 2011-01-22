@@ -70,7 +70,6 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
     @Override
     protected NativeComboBox<E> initWidget() {
         NativeComboBox<E> nativeComboBox = new NativeComboBox<E>(this);
-        applyAccessibilityRules();
         setNativeComponentValue(getValue());
         nativeComboBox.setOptions(options);
         return nativeComboBox;

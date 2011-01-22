@@ -59,9 +59,7 @@ public class CEntityHyperlink extends CEditableComponent<IEntity, NativeEntityHy
 
     @Override
     protected NativeEntityHyperlink initWidget() {
-        NativeEntityHyperlink nativeLink = new NativeEntityHyperlink(this);
-        applyAccessibilityRules();
-        return nativeLink;
+        return new NativeEntityHyperlink(this);
     }
 
     @Override

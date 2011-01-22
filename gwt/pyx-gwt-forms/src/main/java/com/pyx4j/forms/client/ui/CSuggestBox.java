@@ -47,7 +47,6 @@ public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> imple
     @Override
     protected NativeSuggestBox<E> initWidget() {
         NativeSuggestBox<E> nativeTextField = new NativeSuggestBox<E>(this);
-        applyAccessibilityRules();
         setOptions(options);
         setNativeComponentValue(getValue());
         return nativeTextField;

@@ -47,9 +47,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     @Override
     protected NativeTextBox<String> initWidget() {
-        NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
-        applyAccessibilityRules();
-        return nativeTextField;
+        return new NativeTextBox<String>(this);
     }
 
     public static class EmailFormat implements IFormat<String> {

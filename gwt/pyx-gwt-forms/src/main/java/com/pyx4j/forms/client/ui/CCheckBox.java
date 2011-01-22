@@ -37,7 +37,6 @@ public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
     @Override
     protected NativeCheckBox initWidget() {
         NativeCheckBox nativeCheckBox = new NativeCheckBox(this);
-        applyAccessibilityRules();
         setNativeComponentValue(getValue());
         return nativeCheckBox;
     }

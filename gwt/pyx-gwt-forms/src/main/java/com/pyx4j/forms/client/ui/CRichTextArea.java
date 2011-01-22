@@ -27,9 +27,7 @@ public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
     @Override
     protected NativeRichTextArea initWidget() {
         NativeRichTextArea nativeTextArea = new NativeRichTextArea(this);
-        applyAccessibilityRules();
         setNativeComponentValue(getValue());
-        nativeTextArea.setWatermark(getWatermark());
         return nativeTextArea;
     }
 

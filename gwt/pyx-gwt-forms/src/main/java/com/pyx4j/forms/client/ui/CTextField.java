@@ -43,9 +43,7 @@ public class CTextField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     @Override
     protected NativeTextBox<String> initWidget() {
-        NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
-        applyAccessibilityRules();
-        return nativeTextField;
+        return new NativeTextBox<String>(this);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

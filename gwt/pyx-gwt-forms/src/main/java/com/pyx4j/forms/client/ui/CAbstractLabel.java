@@ -48,18 +48,17 @@ public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
         return wordWrap;
     }
 
-    protected NativeLabel<E> createNativeLabel() {
-        return new NativeLabel<E>(this);
-    }
-
     @Override
     protected NativeLabel<E> initWidget() {
         NativeLabel<E> nativeLabel = createNativeLabel();
         nativeLabel.setWordWrap(this.isWordWrap());
         nativeLabel.setWidth(this.getWidth());
         setNativeComponentValue(getValue());
-        applyAccessibilityRules();
         return nativeLabel;
+    }
+
+    protected NativeLabel<E> createNativeLabel() {
+        return new NativeLabel<E>(this);
     }
 
     public boolean isAllowHtml() {

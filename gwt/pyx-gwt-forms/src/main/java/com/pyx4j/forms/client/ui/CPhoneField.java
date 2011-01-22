@@ -37,9 +37,7 @@ public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     @Override
     protected NativeTextBox<String> initWidget() {
-        NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
-        applyAccessibilityRules();
-        return nativeTextField;
+        return new NativeTextBox<String>(this);
     }
 
     public static class PhoneFormat implements IFormat<String> {
