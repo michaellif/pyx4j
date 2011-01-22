@@ -142,7 +142,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
      * Should fire when component is displayed ?
      */
     @Override
-    public NativeSuggestBox<E> initWidget() {
+    protected NativeSuggestBox<E> initWidget() {
         if (isWidgetCreated() && (criteria != null)) {
             retriveOptions(null);
         }

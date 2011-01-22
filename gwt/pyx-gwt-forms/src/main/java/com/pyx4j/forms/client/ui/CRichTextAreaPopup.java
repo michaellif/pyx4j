@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.gwt.NativeRichTextAreaPopup;
 public class CRichTextAreaPopup extends CRichTextAreaBase<NativeRichTextAreaPopup> {
 
     @Override
-    public NativeRichTextAreaPopup initWidget() {
+    protected NativeRichTextAreaPopup initWidget() {
         NativeRichTextAreaPopup nativeTextArea = new NativeRichTextAreaPopup(this);
         applyAccessibilityRules();
         setNativeComponentValue(getValue());

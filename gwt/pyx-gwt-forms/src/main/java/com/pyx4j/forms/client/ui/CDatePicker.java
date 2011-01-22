@@ -47,7 +47,7 @@ public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
     }
 
     @Override
-    public NativeDatePicker initWidget() {
+    protected NativeDatePicker initWidget() {
         NativeDatePicker nativeTextField = new NativeDatePicker(this);
         applyAccessibilityRules();
         return nativeTextField;

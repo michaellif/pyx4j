@@ -154,7 +154,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
      * Should fire when component is displayed ?
      */
     @Override
-    public NativeComboBox<E> initWidget() {
+    protected NativeComboBox<E> initWidget() {
         if (isWidgetCreated() && (criteria != null)) {
             retriveOptions(null);
         }

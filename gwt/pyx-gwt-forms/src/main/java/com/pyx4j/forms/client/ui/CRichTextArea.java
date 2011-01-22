@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.gwt.NativeRichTextArea;
 public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
 
     @Override
-    public NativeRichTextArea initWidget() {
+    protected NativeRichTextArea initWidget() {
         NativeRichTextArea nativeTextArea = new NativeRichTextArea(this);
         applyAccessibilityRules();
         setNativeComponentValue(getValue());

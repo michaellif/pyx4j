@@ -58,7 +58,7 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
     }
 
     @Override
-    public NativeFormFolder<E> initWidget() {
+    protected NativeFormFolder<E> initWidget() {
         NativeFormFolder<E> nativeFormFolder = new NativeFormFolder<E>(this);
         setNativeComponentValue(getValue());
         return nativeFormFolder;

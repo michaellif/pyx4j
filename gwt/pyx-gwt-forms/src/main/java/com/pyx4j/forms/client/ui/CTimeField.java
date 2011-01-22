@@ -42,7 +42,7 @@ public class CTimeField extends CTextFieldBase<Integer, NativeTextBox<Integer>> 
     }
 
     @Override
-    public NativeTextBox<Integer> initWidget() {
+    protected NativeTextBox<Integer> initWidget() {
         NativeTextBox<Integer> nativeTextField = new NativeTextBox<Integer>(this);
         applyAccessibilityRules();
         return nativeTextField;

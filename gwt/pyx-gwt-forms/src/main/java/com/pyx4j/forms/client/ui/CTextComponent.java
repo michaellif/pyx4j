@@ -28,7 +28,7 @@ import com.pyx4j.widgets.client.WatermarkComponent;
 public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
         CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
 
-    private TextComponentLengthValidator<DATA_TYPE> validator;
+    private TextComponentLengthValidator validator;
 
     private String watermark;
 
@@ -46,7 +46,18 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         addValueValidator(validator);
     }
 
-    class TextComponentLengthValidator<DATA_TYPE> implements EditableValueValidator<DATA_TYPE> {
+    public void setWatermark(String watermark) {
+        this.watermark = watermark;
+        if (isWidgetCreated() && asWidget() instanceof WatermarkComponent) {
+            ((WatermarkComponent) asWidget()).setWatermark(watermark);
+        }
+    }
+
+    public String getWatermark() {
+        return watermark;
+    }
+
+    class TextComponentLengthValidator implements EditableValueValidator<DATA_TYPE> {
 
         private final String validationMessage;
 
@@ -73,17 +84,6 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
                 return true;
             }
         }
-    }
-
-    public void setWatermark(String watermark) {
-        this.watermark = watermark;
-        if (isWidgetCreated() && asWidget() instanceof WatermarkComponent) {
-            ((WatermarkComponent) asWidget()).setWatermark(watermark);
-        }
-    }
-
-    public String getWatermark() {
-        return watermark;
     }
 
 }

@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.gwt.NativeHorizontalPanel;
 public class CHorizontalPanel extends CPanelBase<NativeHorizontalPanel> {
 
     @Override
-    public NativeHorizontalPanel initWidget() {
+    protected NativeHorizontalPanel initWidget() {
 
         NativeHorizontalPanel nativePanel = new NativeHorizontalPanel(this);
 

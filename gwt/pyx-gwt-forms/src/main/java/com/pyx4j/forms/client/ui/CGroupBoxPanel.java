@@ -79,9 +79,8 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
         return addHandler(handler, KeyUpEvent.getType());
     }
 
-    //TODO shouldn't be public. When all the components of UI will be CComponents - change visibility
     @Override
-    public NativeGroupBoxPanel initWidget() {
+    protected NativeGroupBoxPanel initWidget() {
         NativeGroupBoxPanel nativePanel = new NativeGroupBoxPanel(this, layout);
         if (isExpended()) {
             initInnerComponent();

@@ -42,7 +42,7 @@ public class CTextField extends CTextFieldBase<String, NativeTextBox<String>> {
     }
 
     @Override
-    public NativeTextBox<String> initWidget() {
+    protected NativeTextBox<String> initWidget() {
         NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
         applyAccessibilityRules();
         return nativeTextField;

@@ -38,7 +38,7 @@ public class CButton extends CFocusComponent<NativeButton> {
     }
 
     @Override
-    public NativeButton initWidget() {
+    protected NativeButton initWidget() {
         NativeButton nativeButton = new NativeButton(this, label, command);
         applyAccessibilityRules();
         nativeButton.setTitle(popupTooltipText);

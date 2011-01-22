@@ -37,7 +37,7 @@ public class CTextArea extends CTextComponent<String, NativeTextArea> {
     }
 
     @Override
-    public NativeTextArea initWidget() {
+    protected NativeTextArea initWidget() {
         NativeTextArea nativeTextArea = new NativeTextArea(this);
         applyAccessibilityRules();
         setRows(rows);

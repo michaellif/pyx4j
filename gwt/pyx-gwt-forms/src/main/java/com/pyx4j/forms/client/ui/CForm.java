@@ -157,7 +157,7 @@ public class CForm extends CContainer<NativeForm> {
     }
 
     @Override
-    public NativeForm initWidget() {
+    protected NativeForm initWidget() {
         NativeForm nativeForm = new NativeForm(this, components, allignment, infoImageAlignment);
         nativeForm.setExpanded(isExpended());
         applyAccessibilityRules();

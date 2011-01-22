@@ -57,7 +57,7 @@ public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E, Native
     }
 
     @Override
-    public NativeRadioGroup<E> initWidget() {
+    protected NativeRadioGroup<E> initWidget() {
         return new NativeRadioGroup<E>(this);
     }
 

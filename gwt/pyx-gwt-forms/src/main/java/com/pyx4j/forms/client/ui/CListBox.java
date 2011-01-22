@@ -109,7 +109,7 @@ public class CListBox<E> extends CEditableComponent<List<E>, NativeListBox<E>> i
     }
 
     @Override
-    public NativeListBox<E> initWidget() {
+    protected NativeListBox<E> initWidget() {
         NativeListBox<E> nativeListBox = new NativeListBox<E>(this, displayProperties);
         if (layout == Layout.PLAIN) {
             (nativeListBox).setTrigger(false);

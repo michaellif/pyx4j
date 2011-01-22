@@ -35,7 +35,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
     }
 
     @Override
-    public NativeTextBox<E> initWidget() {
+    protected NativeTextBox<E> initWidget() {
         NativeTextBox<E> nativeTextField = new NativeTextBox<E>(this);
         applyAccessibilityRules();
         return nativeTextField;

@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.gwt.NativeVerticalPanel;
 public class CVerticalPanel extends CPanelBase<NativeVerticalPanel> {
 
     @Override
-    public NativeVerticalPanel initWidget() {
+    protected NativeVerticalPanel initWidget() {
 
         NativeVerticalPanel nativePanel = new NativeVerticalPanel(this);
 

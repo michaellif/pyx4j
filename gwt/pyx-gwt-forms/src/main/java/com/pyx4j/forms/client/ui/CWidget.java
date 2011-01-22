@@ -34,7 +34,7 @@ public class CWidget extends CComponent<NativeWidgetHolder> {
     }
 
     @Override
-    public NativeWidgetHolder initWidget() {
+    protected NativeWidgetHolder initWidget() {
         NativeWidgetHolder nativeWidget = new NativeWidgetHolder(widget);
         applyAccessibilityRules();
         return nativeWidget;
