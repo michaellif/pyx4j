@@ -550,7 +550,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return b.toString();
         } else {
             Map<String, Object> v = getValue();
-            if (v != null) {
+            if ((v != null) && (v.size() != 0)) {
                 EntityValueMap.dumpMap(b, v, new HashSet<Map<String, Object>>());
             } else {
                 b.append("{null}");

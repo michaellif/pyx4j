@@ -425,13 +425,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         value = mergeReference(meta, (IEntity) iEntity.getMember(me.getKey()));
                     }
                 } else {
-                    Long childKeyId = (Long) ((Map<String, Object>) value).get(IEntity.PRIMARY_KEY);
-                    if (childKeyId == null) {
-                        log.error("Saving non persisted reference {}", iEntity.getMember(me.getKey()));
-                        throw new Error("Saving non persisted reference " + iEntity.getValueClass() + "." + propertyName + "." + meta.getCaption());
+                    Map<String, Object> childValueMap = (Map<String, Object>) value;
+                    if (childValueMap.size() == 0) {
+                        value = null;
+                    } else {
+                        Long childKeyId = (Long) childValueMap.get(IEntity.PRIMARY_KEY);
+                        if (childKeyId == null) {
+                            log.error("Saving non persisted reference {}", iEntity.getMember(me.getKey()));
+                            throw new Error("Saving non persisted reference " + iEntity.getValueClass() + "." + propertyName + "." + meta.getCaption());
+                        }
+                        value = KeyFactory.createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(),
+                                childKeyId);
                     }
-                    value = KeyFactory
-                            .createKey(EntityFactory.getEntityMeta((Class<? extends IEntity>) meta.getObjectClass()).getPersistenceName(), childKeyId);
                 }
                 Indexed index = meta.getAnnotation(Indexed.class);
                 if ((index != null) && (index.global() != 0)) {
