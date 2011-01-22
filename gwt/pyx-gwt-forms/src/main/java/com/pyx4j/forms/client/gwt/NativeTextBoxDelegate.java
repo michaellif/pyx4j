@@ -31,15 +31,14 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.Timer;
 
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 
 public class NativeTextBoxDelegate<E> {
 
-    private final CTextBox<E> cTextBox;
+    private final CTextFieldBase<E, ?> cTextBox;
 
     private final INativeTextComponent<E> nativeTextBox;
 
@@ -52,7 +51,7 @@ public class NativeTextBoxDelegate<E> {
         }
     };
 
-    public NativeTextBoxDelegate(final INativeTextComponent<E> nativeTextBox, final CTextBox<E> cTextField) {
+    public NativeTextBoxDelegate(final INativeTextComponent<E> nativeTextBox, final CTextFieldBase<E, ?> cTextField) {
         super();
         this.nativeTextBox = nativeTextBox;
         this.cTextBox = cTextField;
@@ -138,7 +137,7 @@ public class NativeTextBoxDelegate<E> {
         }
     }
 
-    public CTextBox<E> getCComponent() {
+    public CTextFieldBase<E, ?> getCComponent() {
         return cTextBox;
     }
 

@@ -48,7 +48,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
 
     private E editableEntity;
 
-    private final HashMap<CEditableComponent<?>, Path> binding = new HashMap<CEditableComponent<?>, Path>();
+    private final HashMap<CEditableComponent<?, ?>, Path> binding = new HashMap<CEditableComponent<?, ?>, Path>();
 
     @SuppressWarnings("rawtypes")
     private final ValueChangeHandler valuePropagation;
@@ -84,16 +84,16 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends IEntity> CEditableComponent<T> get(T member) {
-        return (CEditableComponent<T>) get((IObject<?>) member);
+    public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
+        return (CEditableComponent<T, ?>) get((IObject<?>) member);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> CEditableComponent<T> get(IObject<T> member) {
+    public <T> CEditableComponent<T, ?> get(IObject<T> member) {
         Path memberPath = member.getPath();
-        for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
+        for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
-                return (CEditableComponent<T>) me.getKey();
+                return (CEditableComponent<T, ?>) me.getKey();
             }
         }
         throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
@@ -101,7 +101,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
 
     public boolean contains(IObject<?> member) {
         Path memberPath = member.getPath();
-        for (Map.Entry<CEditableComponent<?>, Path> me : binding.entrySet()) {
+        for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
                 return true;
             }
@@ -110,7 +110,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
     }
 
     @SuppressWarnings("unchecked")
-    public void bind(CEditableComponent<?> component, Path path) {
+    public void bind(CEditableComponent<?, ?> component, Path path) {
         binding.put(component, path);
         component.addValueChangeHandler(valuePropagation);
     }

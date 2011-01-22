@@ -22,14 +22,14 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
-public class CRangeDatePicker extends CPanel {
+public class CRangeDatePicker extends CHorizontalPanel {
 
     private final CDatePicker fromDate;
 
     private final CDatePicker toDate;
 
     public CRangeDatePicker(String title) {
-        super(CPanel.Layout.HORISONTAL);
+        super();
         super.setTitle(title);
 
         // Sum of Width should be 200px

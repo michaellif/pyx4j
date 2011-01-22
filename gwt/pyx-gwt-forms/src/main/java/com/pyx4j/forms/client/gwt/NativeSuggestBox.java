@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 
 import com.pyx4j.forms.client.ui.CSuggestBox;
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -78,18 +78,21 @@ public class NativeSuggestBox<E> extends SuggestBox implements INativeTextCompon
     }
 
     @Override
-    public CTextBox<E> getCComponent() {
+    public CTextFieldBase<E, ?> getCComponent() {
         return delegate.getCComponent();
     }
 
+    @Override
     public void setNativeValue(E value) {
         delegate.setValue(value);
     }
 
+    @Override
     public String getNativeText() {
         return ((TextBox) getWidget()).getText();
     }
 
+    @Override
     public void setNativeText(String newValue) {
         ((TextBox) getWidget()).setText(newValue);
     }

@@ -38,7 +38,7 @@ public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
     }
 
     public void setWordWrap(boolean wrap) {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setWordWrap(wrap);
         }
         wordWrap = wrap;

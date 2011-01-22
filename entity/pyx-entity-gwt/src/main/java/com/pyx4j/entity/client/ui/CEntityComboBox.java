@@ -155,7 +155,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
      */
     @Override
     public NativeComboBox<E> initWidget() {
-        if (isWidgetInitiated() && (criteria != null)) {
+        if (isWidgetCreated() && (criteria != null)) {
             retriveOptions(null);
         }
         return super.initWidget();

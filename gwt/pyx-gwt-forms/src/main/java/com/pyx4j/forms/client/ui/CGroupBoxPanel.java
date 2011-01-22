@@ -98,7 +98,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
     }
 
     private void initInnerComponent() {
-        if (!innerCommponentInitialized && component != null && isWidgetInitiated()) {
+        if (!innerCommponentInitialized && component != null && isWidgetCreated()) {
             asWidget().add((INativeComponent) component.asWidget(), null);
             innerCommponentInitialized = true;
         }
@@ -143,7 +143,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
         if (expended) {
             initInnerComponent();
         }
-        if (isWidgetInitiated() && isCollapsible()) {
+        if (isWidgetCreated() && isCollapsible()) {
             asWidget().setExpanded(expended);
         } else if ((layout == Layout.CHECKBOX_TOGGLE) && (component != null)) {
             component.applyVisibilityRules();

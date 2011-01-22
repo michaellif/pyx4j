@@ -52,14 +52,14 @@ public class CTextArea extends CTextComponent<String, NativeTextArea> {
     }
 
     public void scrollToBottom() {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().scrollToBottom();
         }
     }
 
     public void setRows(int rows) {
         this.rows = rows;
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setVisibleLines(rows);
         }
     }

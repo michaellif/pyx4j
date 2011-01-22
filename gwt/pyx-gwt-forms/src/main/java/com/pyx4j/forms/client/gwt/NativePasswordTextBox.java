@@ -20,7 +20,8 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.widgets.client.PasswordTextBox;
 
@@ -28,19 +29,22 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
 
     private final NativeTextBoxDelegate<String> delegate;
 
-    public NativePasswordTextBox(final CTextBox<String> cTextField) {
+    public NativePasswordTextBox(final CPasswordTextField cTextField) {
         super();
         delegate = new NativeTextBoxDelegate<String>(this, cTextField);
     }
 
+    @Override
     public String getNativeText() {
         return super.getText();
     }
 
+    @Override
     public void setNativeText(String newValue) {
         super.setText(newValue);
     }
 
+    @Override
     public void setNativeValue(String value) {
         delegate.setValue(value);
     }
@@ -60,7 +64,8 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
         return !super.isReadOnly();
     }
 
-    public CTextBox<String> getCComponent() {
+    @Override
+    public CTextFieldBase<String, ?> getCComponent() {
         return delegate.getCComponent();
     }
 

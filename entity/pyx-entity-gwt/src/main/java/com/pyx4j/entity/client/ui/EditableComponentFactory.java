@@ -25,6 +25,6 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public interface EditableComponentFactory {
 
-    CEditableComponent<?> create(IObject<?> member);
+    CEditableComponent<?, ?> create(IObject<?> member);
 
 }

@@ -41,9 +41,9 @@ public class CriteriaEditableComponentFactory implements EditableComponentFactor
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public CEditableComponent<?> create(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?> comp;
+        CEditableComponent<?, ?> comp;
         if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
         } else if (mm.getValueClass().isEnum()) {

@@ -25,27 +25,18 @@ import com.pyx4j.forms.client.gwt.NativeWidgetHolder;
 /**
  *
  */
-public class CWidget extends CComponent<INativeWidgetHolder> {
+public class CWidget extends CComponent<NativeWidgetHolder> {
 
     private final Object widget;
-
-    private INativeWidgetHolder nativeWidget;
 
     public CWidget(Object widget) {
         this.widget = widget;
     }
 
     @Override
-    public INativeWidgetHolder getNativeComponent() {
-        return nativeWidget;
-    }
-
-    @Override
-    public INativeWidgetHolder initNativeComponent() {
-        if (nativeWidget == null) {
-            nativeWidget = new NativeWidgetHolder(widget);
-            applyAccessibilityRules();
-        }
+    public NativeWidgetHolder initWidget() {
+        NativeWidgetHolder nativeWidget = new NativeWidgetHolder(widget);
+        applyAccessibilityRules();
         return nativeWidget;
     }
 

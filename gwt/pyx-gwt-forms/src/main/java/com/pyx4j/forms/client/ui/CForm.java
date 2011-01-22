@@ -83,7 +83,7 @@ public class CForm extends CContainer<NativeForm> {
     }
 
     public void setAllignment(LabelAlignment allignment) {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             throw new IllegalStateException();
         }
         this.allignment = allignment;
@@ -94,7 +94,7 @@ public class CForm extends CContainer<NativeForm> {
         if (expended) {
             //initInnerComponent();
         }
-        if (isWidgetInitiated() && isCollapsible()) {
+        if (isWidgetCreated() && isCollapsible()) {
             asWidget().setExpanded(expended);
         }
     }
@@ -128,7 +128,7 @@ public class CForm extends CContainer<NativeForm> {
         CForm form = new CForm(allignment);
         form.setComponents(components);
         group.addComponent(form);
-        return (Widget) group.initNativeComponent();
+        return group.asWidget();
     }
 
     public static Widget createToggleFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption, boolean expended) {
@@ -137,7 +137,7 @@ public class CForm extends CContainer<NativeForm> {
         CForm form = new CForm(allignment);
         form.setComponents(components);
         group.addComponent(form);
-        return (Widget) group.initNativeComponent();
+        return group.asWidget();
     }
 
     public void setComponents(CComponent<?>[][] components) {

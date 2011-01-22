@@ -9,7 +9,7 @@
 package com.pyx4j.forms.client.validators;
 
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 
 /**
  * This validator is used to check that text inside textBox was successfully parsed.
@@ -29,8 +29,8 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
 
     @Override
     public boolean isValid(CEditableComponent<E, ?> component, E value) {
-        if (component instanceof CTextBox) {
-            return ((CTextBox<?>) component).isParsedSuccesfully();
+        if (component instanceof CTextFieldBase) {
+            return ((CTextFieldBase<?, ?>) component).isParsedSuccesfully();
         }
         return false;
     }

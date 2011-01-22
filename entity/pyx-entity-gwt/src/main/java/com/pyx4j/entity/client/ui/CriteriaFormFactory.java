@@ -55,7 +55,7 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
 
     protected abstract IObject<?>[][] getFormMembers();
 
-    protected CEditableComponent<?> createComponent(IObject<?> member) {
+    protected CEditableComponent<?, ?> createComponent(IObject<?> member) {
         return editableComponentFactory.create(member);
     }
 
@@ -84,7 +84,7 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
                         ((CTextComponent) components[i][j]).setMaxLength(mm.getStringLength());
                     }
                     components[i][j].setTitle(mm.getCaption());
-                    form.bind((CEditableComponent<?>) components[i][j], member.getPath());
+                    form.bind((CEditableComponent<?, ?>) components[i][j], member.getPath());
                 }
             }
         }

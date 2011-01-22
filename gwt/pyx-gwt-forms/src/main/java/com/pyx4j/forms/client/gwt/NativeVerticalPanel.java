@@ -24,15 +24,15 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CLayoutConstraints;
-import com.pyx4j.forms.client.ui.CPanel;
+import com.pyx4j.forms.client.ui.CPanelBase;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.INativeSimplePanel;
 
 public class NativeVerticalPanel extends VerticalPanel implements INativeSimplePanel {
 
-    private final CPanel panel;
+    private final CPanelBase panel;
 
-    public NativeVerticalPanel(CPanel panel) {
+    public NativeVerticalPanel(CPanelBase panel) {
         super();
         this.panel = panel;
         setWidth(panel.getWidth());
@@ -59,7 +59,7 @@ public class NativeVerticalPanel extends VerticalPanel implements INativeSimpleP
         //        }
     }
 
-    public CPanel getCComponent() {
+    public CPanelBase getCComponent() {
         return panel;
     }
 

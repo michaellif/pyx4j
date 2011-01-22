@@ -20,9 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CPhoneField extends CTextBox<String> {
+public class CPhoneField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     public CPhoneField() {
         this(null);
@@ -32,6 +33,13 @@ public class CPhoneField extends CTextBox<String> {
         super(title);
         setFormat(new PhoneFormat());
         addValueValidator(new TextBoxParserValidator<String>("Not a valid phone number. Must be in the format 123-4567 or 123-456-7890 (dashes optional)"));
+    }
+
+    @Override
+    public NativeTextBox<String> initWidget() {
+        NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
+        applyAccessibilityRules();
+        return nativeTextField;
     }
 
     public static class PhoneFormat implements IFormat<String> {

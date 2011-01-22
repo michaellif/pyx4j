@@ -90,6 +90,6 @@ public class SearchCriteriaView extends AbstractView {
 
     public void setSearchCriteriaPart(EntitySearchCriteriaPart<?> part) {
         addPage(new Tab(new ScrollPanel(part.initNativeComponent()), "Criteria", null, false));
-        addPage(new Tab(new ScrollPanel((Widget) otherForm.initNativeComponent()), "Properties", null, false));
+        addPage(new Tab(new ScrollPanel(otherForm.asWidget()), "Properties", null, false));
     }
 }

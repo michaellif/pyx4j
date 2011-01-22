@@ -20,9 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.gwt.NativePasswordTextBox;
+import com.pyx4j.forms.client.gwt.NativeTextBox;
+import com.pyx4j.forms.client.ui.CTextField.StringFormat;
+import com.pyx4j.forms.client.validators.RegexValidator;
 
-public class CPasswordTextField extends CTextField {
+public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTextBox> {
 
     public CPasswordTextField() {
         super();
@@ -38,12 +42,15 @@ public class CPasswordTextField extends CTextField {
     }
 
     @Override
-    public INativeEditableComponent<String> initNativeComponent() {
-        if (nativeTextField == null) {
-            nativeTextField = new NativePasswordTextBox(this);
-            applyAccessibilityRules();
-        }
+    public NativePasswordTextBox initWidget() {
+        NativePasswordTextBox nativeTextField = new NativePasswordTextBox(this);
+        applyAccessibilityRules();
         return nativeTextField;
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
     }
 
 }

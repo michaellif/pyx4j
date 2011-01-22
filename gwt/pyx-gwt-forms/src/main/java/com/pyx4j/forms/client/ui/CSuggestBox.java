@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 
-public class CSuggestBox<E> extends CTextBox<E> implements HasOptionsChangeHandlers<List<E>> {
+public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 
     private List<E> options = new ArrayList<E>();
 
@@ -45,13 +45,11 @@ public class CSuggestBox<E> extends CTextBox<E> implements HasOptionsChangeHandl
     }
 
     @Override
-    public INativeEditableComponent<E> initNativeComponent() {
-        if (nativeTextField == null) {
-            nativeTextField = new NativeSuggestBox<E>(this);
-            applyAccessibilityRules();
-            setOptions(options);
-            setNativeComponentValue(getValue());
-        }
+    public NativeSuggestBox<E> initWidget() {
+        NativeSuggestBox<E> nativeTextField = new NativeSuggestBox<E>(this);
+        applyAccessibilityRules();
+        setOptions(options);
+        setNativeComponentValue(getValue());
         return nativeTextField;
     }
 
@@ -66,10 +64,10 @@ public class CSuggestBox<E> extends CTextBox<E> implements HasOptionsChangeHandl
         if (opt != null) {
             E currentSelection = getValue();
             this.options.addAll(opt);
-            if (nativeTextField != null) {
-                ((NativeSuggestBox<E>) nativeTextField).removeAllItems();
+            if (isWidgetCreated()) {
+                asWidget().removeAllItems();
                 for (E option : opt) {
-                    ((NativeSuggestBox<E>) nativeTextField).addItem(getOptionName(option));
+                    asWidget().addItem(getOptionName(option));
                 }
                 setValue(currentSelection);
             }

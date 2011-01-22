@@ -14,29 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 4, 2010
- * @author michaellif
+ * Created on Jan 11, 2010
+ * @author Michael
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.forms.client.gwt.NativeRichTextArea;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
+import com.google.gwt.user.client.ui.Widget;
 
-    @Override
-    public NativeRichTextArea initWidget() {
-        NativeRichTextArea nativeTextArea = new NativeRichTextArea(this);
-        applyAccessibilityRules();
-        setNativeComponentValue(getValue());
-        nativeTextArea.setWatermark(getWatermark());
-        return nativeTextArea;
+public abstract class CPanelBase<WIDGET_TYPE extends Widget & INativeComponent> extends CContainer<WIDGET_TYPE> {
+
+    private final Collection<CComponent<?>> components = new ArrayList<CComponent<?>>();
+
+    public CPanelBase() {
     }
 
-    public void scrollToBottom() {
-        if (isWidgetCreated()) {
-            asWidget().scrollToBottom();
-        }
+    @Override
+    public void addComponent(CComponent<?> component) {
+        components.add(component);
+        component.setParent(this);
+    }
+
+    @Override
+    public Collection<CComponent<?>> getComponents() {
+        return components;
     }
 
 }

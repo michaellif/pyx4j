@@ -20,9 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CEmailField extends CTextBox<String> {
+public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     /**
      * RFC 2822 complaint http://www.regular-expressions.info/email.html
@@ -44,15 +45,24 @@ public class CEmailField extends CTextBox<String> {
         addValueValidator(new TextBoxParserValidator<String>("Not a valid e-mail."));
     }
 
+    @Override
+    public NativeTextBox<String> initWidget() {
+        NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
+        applyAccessibilityRules();
+        return nativeTextField;
+    }
+
     public static class EmailFormat implements IFormat<String> {
 
         public EmailFormat() {
         }
 
+        @Override
         public String format(String value) {
             return value;
         }
 
+        @Override
         public String parse(String string) {
             if (string == null || !string.matches(EMAIL_REGEXPR)) {
                 return null;

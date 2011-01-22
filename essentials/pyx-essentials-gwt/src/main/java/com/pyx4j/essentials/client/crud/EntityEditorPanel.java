@@ -81,7 +81,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
     }
 
     public String toStringForPrint() {
-        return getForm().getNativeComponent().toStringForPrint();
+        return getForm().asWidget().toStringForPrint();
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.gwt.NativeDatePicker;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CDatePicker extends CTextBox<Date> {
+public class CDatePicker extends CTextFieldBase<Date, NativeDatePicker> {
 
     private boolean pastDateSelectionAllowed = true;
 
@@ -47,11 +47,9 @@ public class CDatePicker extends CTextBox<Date> {
     }
 
     @Override
-    public INativeEditableComponent<Date> initNativeComponent() {
-        if (nativeTextField == null) {
-            nativeTextField = new NativeDatePicker(this);
-            applyAccessibilityRules();
-        }
+    public NativeDatePicker initWidget() {
+        NativeDatePicker nativeTextField = new NativeDatePicker(this);
+        applyAccessibilityRules();
         return nativeTextField;
     }
 

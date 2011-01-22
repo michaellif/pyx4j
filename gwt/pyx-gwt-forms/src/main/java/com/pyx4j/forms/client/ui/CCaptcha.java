@@ -31,14 +31,14 @@ public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCap
     }
 
     public void retrieveValue() {
-        if (isWidgetInitiated() && isVisible()) {
+        if (isWidgetCreated() && isVisible()) {
             setValue(asWidget().getValue());
         }
     }
 
     @Override
     public boolean isValueEmpty() {
-        if (isWidgetInitiated() && isVisible()) {
+        if (isWidgetCreated() && isVisible()) {
             return CommonsStringUtils.isEmpty(asWidget().getValueResponse());
         } else {
             return true;
@@ -51,7 +51,7 @@ public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCap
     }
 
     public void createNewChallenge() {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().createNewChallenge();
         }
     }

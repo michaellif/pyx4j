@@ -92,7 +92,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         }
 
         @Override
-        protected CEditableComponent<?> createComponent(IObject<?> member) {
+        protected CEditableComponent<?, ?> createComponent(IObject<?> member) {
             return AbstractEntityEditorPanel.this.createComponent(member);
         }
 
@@ -101,7 +101,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
             return AbstractEntityEditorPanel.this.createDecoration(decorator);
         }
 
-        protected CEditableComponent<?> defaultCreateComponent(IObject<?> member) {
+        protected CEditableComponent<?, ?> defaultCreateComponent(IObject<?> member) {
             return super.createComponent(member);
         }
 
@@ -124,7 +124,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     protected abstract IObject<?>[][] getFormMembers();
 
-    protected CEditableComponent<?> createComponent(IObject<?> member) {
+    protected CEditableComponent<?, ?> createComponent(IObject<?> member) {
         return formFactory.defaultCreateComponent(member);
     }
 
@@ -194,17 +194,17 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         return entityClass;
     }
 
-    public <T extends IEntity> CEditableComponent<T> get(T member) {
+    public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
         return form.get(member);
     }
 
-    public <T> CEditableComponent<T> get(IObject<T> member) {
+    public <T> CEditableComponent<T, ?> get(IObject<T> member) {
         return form.get(member);
     }
 
     public Widget createFormWidget(LabelAlignment allignment) {
         form.setAllignment(allignment);
-        return (Widget) form.initNativeComponent();
+        return form.asWidget();
     }
 
     /**

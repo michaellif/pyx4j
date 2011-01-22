@@ -186,7 +186,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
     private void addComponent(CComponent<?> component, int row, int column) {
 
         if (component instanceof SelfManagedComponent) {
-            grid.setWidget(row, column, (Widget) component.initNativeComponent());
+            grid.setWidget(row, column, component.asWidget());
         } else {
             grid.setWidget(row, column, new WidgetContainer(component));
         }
@@ -283,9 +283,9 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                     widgetColumn = j;
                 }
                 if (components[i][j] == null) {
-                } else if (components[i][j] instanceof CEditableComponent<?>) {
+                } else if (components[i][j] instanceof CEditableComponent<?, ?>) {
                     table.setWidget(labelRow, labelColumn, new Label(components[i][j].getTitle() + ": "));
-                    Object value = ((CEditableComponent<?>) components[i][j]).getValue();
+                    Object value = ((CEditableComponent<?, ?>) components[i][j]).getValue();
                     if (value instanceof Printable) {
                         table.setWidget(widgetRow, widgetColumn, new Label(((Printable) value).getStringView()));
                     } else if (value instanceof Date) {
@@ -377,8 +377,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         for (int i = 0; i < components.length; i++) {
             for (int j = 0; j < components[i].length; j++) {
                 CComponent<?> component = components[i][j];
-                if (component != null && component.getNativeComponent() != null) {
-                    Element element = ((Widget) component.getNativeComponent()).getElement();
+                if (component != null && component.asWidget() != null) {
+                    Element element = ((Widget) component.asWidget()).getElement();
                     if (DOM.isOrHasChild(element, hItem)) {
                         return component;
                     }
@@ -539,7 +539,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             getElement().getStyle().setPadding(2, Unit.PX);
 
             this.component = component;
-            nativeComponent = (Widget) component.initNativeComponent();
+            nativeComponent = component.asWidget();
 
             label = new Label(component.getTitle() == null ? "" : component.getTitle());
 
@@ -637,8 +637,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                         imageInfoWarn = new Image();
                         tooltip = Tooltip.tooltip(imageInfoWarn, "");
                     }
-                    if (component instanceof CEditableComponent<?> && ((CEditableComponent<?>) component).isMandatoryConditionMet()
-                            && !((CEditableComponent<?>) component).isValid()) {
+                    if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
+                            && !((CEditableComponent<?, ?>) component).isValid()) {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
                     } else {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
@@ -651,8 +651,8 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         }
 
         private void renderMandatoryStar() {
-            if (component instanceof CEditableComponent<?>) {
-                if (!((CEditableComponent<?>) component).isMandatoryConditionMet()) {
+            if (component instanceof CEditableComponent<?, ?>) {
+                if (!((CEditableComponent<?, ?>) component).isMandatoryConditionMet()) {
                     if (imageMandatory == null) {
                         imageMandatory = new Image();
                         imageMandatory.setResource(ImageFactory.getImages().mandatory());

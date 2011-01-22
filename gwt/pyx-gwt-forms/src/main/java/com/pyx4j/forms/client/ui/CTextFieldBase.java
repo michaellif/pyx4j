@@ -23,31 +23,33 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.gwt.NativeTextBox;
 
-public abstract class CTextBox<E> extends CTextComponent<E, NativeTextBox<E>> implements IAcceptText {
+public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INativeTextComponent<DATA_TYPE>> extends CTextComponent<DATA_TYPE, WIDGET_TYPE>
+        implements IAcceptText {
 
-    private IFormat<E> format;
+    private IFormat<DATA_TYPE> format;
 
     private boolean isEditing = false;
 
-    public CTextBox(String title) {
+    public CTextFieldBase(String title) {
         super(title);
         setWidth("100%");
     }
 
-    public CTextBox() {
+    public CTextFieldBase() {
         this(null);
     }
 
-    public void setFormat(IFormat<E> format) {
+    public void setFormat(IFormat<DATA_TYPE> format) {
         this.format = format;
     }
 
-    public IFormat<E> getFormat() {
+    public IFormat<DATA_TYPE> getFormat() {
         return format;
     }
 
@@ -68,7 +70,7 @@ public abstract class CTextBox<E> extends CTextComponent<E, NativeTextBox<E>> im
     }
 
     @Override
-    public void setValue(E value) {
+    public void setValue(DATA_TYPE value) {
         if (getValue() == null && value == null) {
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         } else {
@@ -81,18 +83,11 @@ public abstract class CTextBox<E> extends CTextComponent<E, NativeTextBox<E>> im
         setValue(getFormat().parse(name));
     }
 
-    @Override
-    public NativeTextBox<E> initWidget() {
-        NativeTextBox<E> nativeTextField = new NativeTextBox<E>(this);
-        applyAccessibilityRules();
-        return nativeTextField;
-    }
-
     public void requestFocus() {
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                INativeEditableComponent<E> impl = asWidget();
+                INativeEditableComponent<DATA_TYPE> impl = asWidget();
                 if (impl instanceof FocusWidget) {
                     ((FocusWidget) impl).setFocus(true);
                 }
@@ -102,7 +97,7 @@ public abstract class CTextBox<E> extends CTextComponent<E, NativeTextBox<E>> im
 
     @Override
     public boolean isValueEmpty() {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             if (!CommonsStringUtils.isEmpty(asWidget().getNativeText())) {
                 return false;
             }
@@ -111,7 +106,7 @@ public abstract class CTextBox<E> extends CTextComponent<E, NativeTextBox<E>> im
     }
 
     public boolean isParsedSuccesfully() {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             String text = asWidget().getNativeText();
             if (text != null && !text.trim().equals("") && getValue() == null) {
                 return false;

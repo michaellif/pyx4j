@@ -24,7 +24,7 @@ import java.util.EnumSet;
 
 import com.pyx4j.forms.client.gwt.NativeRadioGroup;
 
-public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E> {
+public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E, NativeRadioGroup<E>> {
 
     public enum Layout {
         VERTICAL, HORISONTAL;
@@ -33,8 +33,6 @@ public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E> {
     private final Layout layout;
 
     private final Class<E> optionsClass;
-
-    private NativeRadioGroup<E> nativePanel;
 
     public CRadioGroup(String title, Class<E> optionsClass, Layout layout) {
         super(title);
@@ -59,16 +57,8 @@ public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E> {
     }
 
     @Override
-    public INativeEditableComponent<E> getNativeComponent() {
-        return nativePanel;
-    }
-
-    @Override
-    public INativeEditableComponent<E> initNativeComponent() {
-        if (nativePanel == null) {
-            nativePanel = new NativeRadioGroup<E>(this);
-        }
-        return nativePanel;
+    public NativeRadioGroup<E> initWidget() {
+        return new NativeRadioGroup<E>(this);
     }
 
 }

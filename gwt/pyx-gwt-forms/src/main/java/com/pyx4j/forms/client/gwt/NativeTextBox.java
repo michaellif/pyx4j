@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.gwt;
 
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -28,11 +28,12 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
 
     private final NativeTextBoxDelegate<E> delegate;
 
-    public NativeTextBox(final CTextBox<E> cTextField) {
+    public NativeTextBox(final CTextFieldBase<E, ?> cTextField) {
         super();
         delegate = new NativeTextBoxDelegate<E>(this, cTextField);
     }
 
+    @Override
     public String getNativeText() {
         if (delegate != null) {
             delegate.cancelScheduledUpdate();
@@ -40,10 +41,12 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
         return super.getText();
     }
 
+    @Override
     public void setNativeText(String newValue) {
         super.setText(newValue);
     }
 
+    @Override
     public void setNativeValue(E value) {
         delegate.setValue(value);
     }
@@ -63,7 +66,8 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
         return !super.isReadOnly();
     }
 
-    public CTextBox<E> getCComponent() {
+    @Override
+    public CTextFieldBase<E, ?> getCComponent() {
         return delegate.getCComponent();
     }
 

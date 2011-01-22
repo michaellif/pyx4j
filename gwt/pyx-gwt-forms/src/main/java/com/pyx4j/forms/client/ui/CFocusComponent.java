@@ -40,13 +40,13 @@ public abstract class CFocusComponent<WIDGET_TYPE extends Widget & INativeFocusC
 
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setTabIndex(tabIndex);
         }
     }
 
     public void setFocus(boolean focused) {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setFocus(focused);
         }
     }

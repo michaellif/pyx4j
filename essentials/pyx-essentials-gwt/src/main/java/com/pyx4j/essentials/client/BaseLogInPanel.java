@@ -122,9 +122,9 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         }
 
         form.setAllignment(LabelAlignment.TOP);
-        add((Widget) form.initNativeComponent());
+        add(form.asWidget());
 
-        add(forgotPassword.initNativeComponent());
+        add(forgotPassword.asWidget());
 
         googleLogin = new CHyperlink(null, new Command() {
 
@@ -137,7 +137,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         googleLogin.setValue(i18n.tr("or login using Google Accounts"));
         googleLogin.setVisible(false);
 
-        add(googleLogin.initNativeComponent());
+        add(googleLogin.asWidget());
 
     }
 

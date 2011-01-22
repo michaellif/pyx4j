@@ -47,7 +47,7 @@ public class CButton extends CFocusComponent<NativeButton> {
 
     public void setLabel(String label) {
         this.label = label;
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setText(label);
         }
     }
@@ -65,7 +65,7 @@ public class CButton extends CFocusComponent<NativeButton> {
     }
 
     public void setPopupTooltip(String popupTooltipText) {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setTitle(popupTooltipText);
         }
     }

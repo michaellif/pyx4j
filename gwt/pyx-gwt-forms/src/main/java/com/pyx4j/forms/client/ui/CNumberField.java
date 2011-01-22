@@ -20,9 +20,10 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public abstract class CNumberField<E extends Number> extends CTextBox<E> {
+public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
 
     private TextBoxParserValidator<E> validator;
 
@@ -31,6 +32,13 @@ public abstract class CNumberField<E extends Number> extends CTextBox<E> {
         setFormat(new DefaultNumberFormat());
         validator = new TextBoxParserValidator<E>(validationMessage);
         addValueValidator(validator);
+    }
+
+    @Override
+    public NativeTextBox<E> initWidget() {
+        NativeTextBox<E> nativeTextField = new NativeTextBox<E>(this);
+        applyAccessibilityRules();
+        return nativeTextField;
     }
 
     public void setRange(E from, E to) {

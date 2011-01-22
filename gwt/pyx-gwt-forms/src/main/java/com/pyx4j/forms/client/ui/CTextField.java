@@ -21,9 +21,10 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
-public class CTextField extends CTextBox<String> {
+public class CTextField extends CTextFieldBase<String, NativeTextBox<String>> {
 
     public CTextField() {
         this(null);
@@ -40,6 +41,13 @@ public class CTextField extends CTextBox<String> {
         this.setMandatory(mandatory);
     }
 
+    @Override
+    public NativeTextBox<String> initWidget() {
+        NativeTextBox<String> nativeTextField = new NativeTextBox<String>(this);
+        applyAccessibilityRules();
+        return nativeTextField;
+    }
+
     public void addRegexValidator(String regex, String regexValidationMessage) {
         this.addValueValidator(new RegexValidator<String>(regex, regexValidationMessage));
     }
@@ -51,6 +59,7 @@ public class CTextField extends CTextBox<String> {
 
     static class StringFormat implements IFormat<String> {
 
+        @Override
         public String format(String value) {
             if (value == null) {
                 value = "";
@@ -58,6 +67,7 @@ public class CTextField extends CTextBox<String> {
             return value;
         }
 
+        @Override
         public String parse(String string) {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null;

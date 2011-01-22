@@ -47,11 +47,11 @@ import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
+import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
 public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> implements HasAsyncValue<E>, HasAsyncValueChangeHandlers<E>, IAcceptText {
@@ -142,11 +142,11 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
      * Should fire when component is displayed ?
      */
     @Override
-    public INativeEditableComponent<E> initNativeComponent() {
-        if ((getNativeComponent() == null) && (criteria != null)) {
+    public NativeSuggestBox<E> initWidget() {
+        if (isWidgetCreated() && (criteria != null)) {
             retriveOptions(null);
         }
-        return super.initNativeComponent();
+        return super.initWidget();
     }
 
     private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {

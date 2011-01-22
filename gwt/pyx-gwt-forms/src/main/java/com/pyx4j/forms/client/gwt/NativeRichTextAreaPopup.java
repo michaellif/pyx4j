@@ -33,8 +33,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 
-import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.INativeEditableComponent;
+import com.pyx4j.forms.client.ui.CRichTextAreaPopup;
 import com.pyx4j.forms.client.ui.INativeRichTextComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.widgets.client.Anchor;
@@ -52,11 +51,11 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
 
     private final Anchor editAction;
 
-    private final CRichTextArea textArea;
+    private final CRichTextAreaPopup textArea;
 
     private final boolean nativeValueUpdate = false;
 
-    public NativeRichTextAreaPopup(CRichTextArea textArea) {
+    public NativeRichTextAreaPopup(CRichTextAreaPopup textArea) {
         super();
         this.textArea = textArea;
 
@@ -158,7 +157,7 @@ public class NativeRichTextAreaPopup extends DockPanel implements INativeRichTex
     }
 
     @Override
-    public CRichTextArea getCComponent() {
+    public CRichTextAreaPopup getCComponent() {
         return textArea;
     }
 

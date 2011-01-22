@@ -28,7 +28,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 
 public class NativeDatePicker extends NativeTriggerComponent<Date> implements INativeTextComponent<Date> {
@@ -43,6 +43,7 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
         setTabIndex(datePicker.getTabIndex());
 
         textBox.addClickHandler(new ClickHandler() {
+            @Override
             public void onClick(ClickEvent event) {
                 DatePickerDropDownPanel.hideDatePicker();
             }
@@ -52,20 +53,24 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
 
     }
 
+    @Override
     public void setNativeValue(Date value) {
         textBox.setNativeValue(value);
     }
 
+    @Override
     public String getNativeText() {
         return textBox.getNativeText();
 
     }
 
+    @Override
     public void setNativeText(String newValue) {
         textBox.setText(newValue);
     }
 
-    public CTextBox<Date> getCComponent() {
+    @Override
+    public CTextFieldBase<Date, ?> getCComponent() {
         return textBox.getCComponent();
     }
 
@@ -99,6 +104,7 @@ public class NativeDatePicker extends NativeTriggerComponent<Date> implements IN
         textBox.setEnabled(enabled);
     }
 
+    @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return textBox.addChangeHandler(handler);
     }

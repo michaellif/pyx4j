@@ -77,7 +77,7 @@ public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INa
 
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (isWidgetInitiated() && asWidget() instanceof WatermarkComponent) {
+        if (isWidgetCreated() && asWidget() instanceof WatermarkComponent) {
             ((WatermarkComponent) asWidget()).setWatermark(watermark);
         }
     }

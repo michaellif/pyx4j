@@ -73,8 +73,8 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void enhanceComponents() {
-        final CEditableComponent<?> fromLocationZipField = form.get(form.meta().locationCriteria());
-        final CEditableComponent<?> areaRadiusField = form.get(form.meta().locationCriteria().radius());
+        final CEditableComponent<?, ?> fromLocationZipField = form.get(form.meta().locationCriteria());
+        final CEditableComponent<?, ?> areaRadiusField = form.get(form.meta().locationCriteria().radius());
 
         ValueChangeHandler locationMadabilityHandler = new ValueChangeHandler() {
 

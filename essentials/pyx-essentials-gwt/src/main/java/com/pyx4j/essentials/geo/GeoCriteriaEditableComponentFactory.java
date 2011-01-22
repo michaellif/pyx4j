@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 public class GeoCriteriaEditableComponentFactory extends CriteriaEditableComponentFactory {
 
     @Override
-    public CEditableComponent<?> create(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getObjectClass().equals(GeoCriteria.class)) {
             return new CLocationCriteriaTextField();
         } else {

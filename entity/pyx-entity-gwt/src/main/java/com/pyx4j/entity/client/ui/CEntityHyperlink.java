@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class CEntityHyperlink extends CEditableComponent<IEntity> {
+public class CEntityHyperlink extends CEditableComponent<IEntity, NativeEntityHyperlink> {
 
     private NativeEntityHyperlink nativeLink;
 
@@ -58,16 +58,9 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
     }
 
     @Override
-    public NativeEntityHyperlink getNativeComponent() {
-        return nativeLink;
-    }
-
-    @Override
-    public NativeEntityHyperlink initNativeComponent() {
-        if (nativeLink == null) {
-            nativeLink = new NativeEntityHyperlink(this);
-            applyAccessibilityRules();
-        }
+    public NativeEntityHyperlink initWidget() {
+        NativeEntityHyperlink nativeLink = new NativeEntityHyperlink(this);
+        applyAccessibilityRules();
         return nativeLink;
     }
 
@@ -107,68 +100,69 @@ public class CEntityHyperlink extends CEditableComponent<IEntity> {
         return uriPrefix + value.getPrimaryKey();
     }
 
-    class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<IEntity> {
+}
 
-        private final Command comand;
+class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<IEntity> {
 
-        private final CEntityHyperlink cHyperlink;
+    private final Command comand;
 
-        public NativeEntityHyperlink(CEntityHyperlink hyperlink) {
-            super("&nbsp;", true);
-            this.cHyperlink = hyperlink;
-            setTabIndex(hyperlink.getTabIndex());
+    private final CEntityHyperlink cHyperlink;
 
-            comand = new Command() {
+    public NativeEntityHyperlink(final CEntityHyperlink hyperlink) {
+        super("&nbsp;", true);
+        this.cHyperlink = hyperlink;
+        setTabIndex(hyperlink.getTabIndex());
 
-                @Override
-                public void execute() {
-                    History.newItem(getEntityHistoryToken(cHyperlink.getValue()));
+        comand = new Command() {
+
+            @Override
+            public void execute() {
+                History.newItem(hyperlink.getEntityHistoryToken(cHyperlink.getValue()));
+            }
+        };
+
+        addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (isEnabled() && NativeEntityHyperlink.this.comand != null) {
+                    NativeEntityHyperlink.this.comand.execute();
                 }
-            };
+            }
 
-            addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    if (isEnabled() && NativeEntityHyperlink.this.comand != null) {
-                        NativeEntityHyperlink.this.comand.execute();
-                    }
+        });
+
+        addKeyUpHandler(new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && NativeEntityHyperlink.this.comand != null) {
+                    NativeEntityHyperlink.this.comand.execute();
                 }
-
-            });
-
-            addKeyUpHandler(new KeyUpHandler() {
-                @Override
-                public void onKeyUp(KeyUpEvent event) {
-                    if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && isEnabled() && NativeEntityHyperlink.this.comand != null) {
-                        NativeEntityHyperlink.this.comand.execute();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public CComponent<?> getCComponent() {
-            return cHyperlink;
-        }
-
-        @Override
-        public void setWordWrap(boolean wrap) {
-            getElement().getStyle().setProperty("whiteSpace", wrap ? "normal" : "nowrap");
-        }
-
-        @Override
-        public boolean isEditable() {
-            return false;
-        }
-
-        @Override
-        public void setEditable(boolean editable) {
-        }
-
-        @Override
-        public void setNativeValue(IEntity value) {
-            setHTML("&nbsp;" + cHyperlink.getItemName(value) + "&nbsp;");
-        }
-
+            }
+        });
     }
+
+    @Override
+    public CComponent<?> getCComponent() {
+        return cHyperlink;
+    }
+
+    @Override
+    public void setWordWrap(boolean wrap) {
+        getElement().getStyle().setProperty("whiteSpace", wrap ? "normal" : "nowrap");
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+    }
+
+    @Override
+    public void setNativeValue(IEntity value) {
+        setHTML("&nbsp;" + cHyperlink.getItemName(value) + "&nbsp;");
+    }
+
 }

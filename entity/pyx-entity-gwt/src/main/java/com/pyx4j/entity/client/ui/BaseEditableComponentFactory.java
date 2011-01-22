@@ -38,6 +38,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CRichTextArea;
+import com.pyx4j.forms.client.ui.CRichTextAreaPopup;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -45,9 +46,9 @@ import com.pyx4j.forms.client.ui.CTextField;
 public class BaseEditableComponentFactory implements EditableComponentFactory {
 
     @Override
-    public CEditableComponent<?> create(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?> comp;
+        CEditableComponent<?, ?> comp;
         EditorType editorType = mm.getEditorType();
 
         if (editorType != null) {
@@ -62,7 +63,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 comp = new CTextArea();
                 break;
             case richtextarea:
-                comp = new CRichTextArea(true);
+                comp = new CRichTextAreaPopup();
                 break;
             case combo:
                 if (mm.isEntity()) {

@@ -57,7 +57,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
 
     protected abstract IObject<?>[][] getFormMembers();
 
-    protected CEditableComponent<?> createComponent(IObject<?> member) {
+    protected CEditableComponent<?, ?> createComponent(IObject<?> member) {
         return editableComponentFactory.create(member);
     }
 
@@ -102,7 +102,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
                         components[i][j].setToolTip(mm.getDescription());
                     }
                     components[i][j].setTitle(mm.getCaption());
-                    form.bind((CEditableComponent<?>) components[i][j], member.getPath());
+                    form.bind((CEditableComponent<?, ?>) components[i][j], member.getPath());
                 }
             }
         }

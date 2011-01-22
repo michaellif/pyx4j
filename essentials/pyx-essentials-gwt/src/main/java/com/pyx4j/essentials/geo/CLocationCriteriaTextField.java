@@ -30,13 +30,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.HasAsyncValue;
-import com.pyx4j.forms.client.ui.CTextBox;
+import com.pyx4j.forms.client.gwt.NativeTextBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.geo.MapUtils;
 
-public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements HasAsyncValue<GeoCriteria>, IAcceptText {
+public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NativeTextBox<GeoCriteria>> implements HasAsyncValue<GeoCriteria>, IAcceptText {
 
     private static I18n i18n = I18nFactory.getI18n(CLocationCriteriaTextField.class);
 
@@ -47,6 +48,13 @@ public class CLocationCriteriaTextField extends CTextBox<GeoCriteria> implements
     public CLocationCriteriaTextField(String title) {
         super(title);
         setFormat(new GeoCriteriaFormat());
+    }
+
+    @Override
+    public NativeTextBox<GeoCriteria> initWidget() {
+        NativeTextBox<GeoCriteria> nativeTextField = new NativeTextBox<GeoCriteria>(this);
+        applyAccessibilityRules();
+        return nativeTextField;
     }
 
     @Override

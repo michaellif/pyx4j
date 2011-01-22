@@ -52,7 +52,7 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
     }
 
     @Override
-    public String getValidationMessage(CEditableComponent<String> component, String value) {
+    public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
         EmailAddress[] adr = parse(value);
         if (adr == null) {
             return null;
@@ -67,7 +67,7 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
     }
 
     @Override
-    public boolean isValid(CEditableComponent<String> component, String value) {
+    public boolean isValid(CEditableComponent<String, ?> component, String value) {
         EmailAddress[] adr = parse(value);
         if (adr == null) {
             return true;

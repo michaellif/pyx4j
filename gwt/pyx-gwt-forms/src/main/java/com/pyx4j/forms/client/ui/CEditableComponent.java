@@ -214,14 +214,14 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     protected void setNativeComponentValue(DATA_TYPE value) {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setNativeValue(value);
         }
     }
 
     protected void applyEditabilityRules() {
         boolean editable = isEditable();
-        if (isWidgetInitiated() && asWidget().isEditable() != editable) {
+        if (isWidgetCreated() && asWidget().isEditable() != editable) {
             asWidget().setEditable(editable);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.READONLY_PROPERTY);
         }

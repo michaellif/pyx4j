@@ -26,9 +26,10 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.TimeZone;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
-public class CTimeField extends CTextBox<Integer> {
+public class CTimeField extends CTextFieldBase<Integer, NativeTextBox<Integer>> {
 
     public CTimeField() {
         this(null);
@@ -38,6 +39,13 @@ public class CTimeField extends CTextBox<Integer> {
         super(title);
         setFormat(new TimeFormat());
         addValueValidator(new TextBoxParserValidator<Integer>("Not a valid time. Must be in the format 12:00 AM"));
+    }
+
+    @Override
+    public NativeTextBox<Integer> initWidget() {
+        NativeTextBox<Integer> nativeTextField = new NativeTextBox<Integer>(this);
+        applyAccessibilityRules();
+        return nativeTextField;
     }
 
     public static class TimeFormat implements IFormat<Integer> {
@@ -50,6 +58,7 @@ public class CTimeField extends CTextBox<Integer> {
 
         }
 
+        @Override
         public String format(Integer value) {
             if (value == null) {
                 return null;
@@ -57,6 +66,7 @@ public class CTimeField extends CTextBox<Integer> {
             return formatter.format(new Date(value * Consts.MIN2MSEC), TimeZone.createTimeZone(0));
         }
 
+        @Override
         public Integer parse(String string) {
             if (string == null) {
                 return null;

@@ -26,8 +26,6 @@ import com.pyx4j.forms.client.gwt.NativeHyperlink;
 
 public class CHyperlink extends CFocusComponent<NativeHyperlink> {
 
-    private NativeHyperlink nativeLink;
-
     private String value;
 
     private boolean wordWrap = false;
@@ -44,23 +42,16 @@ public class CHyperlink extends CFocusComponent<NativeHyperlink> {
     }
 
     @Override
-    public NativeHyperlink getNativeComponent() {
-        return nativeLink;
-    }
-
-    @Override
-    public NativeHyperlink initNativeComponent() {
-        if (nativeLink == null) {
-            nativeLink = new NativeHyperlink(this, command);
-            applyAccessibilityRules();
-        }
+    public NativeHyperlink initWidget() {
+        NativeHyperlink nativeLink = new NativeHyperlink(this, command);
+        applyAccessibilityRules();
         return nativeLink;
     }
 
     public void setValue(String value) {
         this.value = value;
-        if (nativeLink != null) {
-            nativeLink.setText(value);
+        if (isWidgetCreated()) {
+            asWidget().setText(value);
         }
     }
 
@@ -69,8 +60,8 @@ public class CHyperlink extends CFocusComponent<NativeHyperlink> {
     }
 
     public void setWordWrap(boolean wrap) {
-        if (nativeLink != null) {
-            nativeLink.setWordWrap(wrap);
+        if (isWidgetCreated()) {
+            asWidget().setWordWrap(wrap);
         }
         wordWrap = wrap;
     }

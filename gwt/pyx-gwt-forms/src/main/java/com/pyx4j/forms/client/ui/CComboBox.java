@@ -105,7 +105,7 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
         if (opt != null) {
             options.addAll(opt);
         }
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setOptions(options);
         }
         OptionsChangeEvent.fire(this, getOptions());
@@ -125,7 +125,7 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
     }
 
     public void removeOption(E opt) {
-        if (isWidgetInitiated() && (options.contains(opt))) {
+        if (isWidgetCreated() && (options.contains(opt))) {
             asWidget().removeOption(opt);
         }
         options.remove(opt);
@@ -139,19 +139,19 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
             options = createOptionsImpl();
         }
         if (options.contains(opt)) {
-            if (isWidgetInitiated()) {
+            if (isWidgetCreated()) {
                 asWidget().refreshOption(opt);
             }
         } else {
             options.add(opt);
-            if (isWidgetInitiated()) {
+            if (isWidgetCreated()) {
                 asWidget().setOptions(options);
             }
         }
     }
 
     public void refreshOption(E opt) {
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().refreshOption(opt);
         }
     }
@@ -168,7 +168,7 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
-            if (isWidgetInitiated()) {
+            if (isWidgetCreated()) {
                 asWidget().refreshOptions();
             }
         }
@@ -180,7 +180,7 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
 
     public void setNoSelectionText(String noSelectionText) {
         this.noSelectionText = noSelectionText;
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().refreshOptions();
         }
     }

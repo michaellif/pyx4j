@@ -30,11 +30,13 @@ public class RegexValidator<E> implements EditableValueValidator<E> {
         this(regex, null);
     }
 
-    public boolean isValid(CEditableComponent<E> component, E value) {
+    @Override
+    public boolean isValid(CEditableComponent<E, ?> component, E value) {
         return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex)));
     }
 
-    public String getValidationMessage(CEditableComponent<E> component, E value) {
+    @Override
+    public String getValidationMessage(CEditableComponent<E, ?> component, E value) {
         if (validationMessage == null) {
             return "This field should have the following format:" + regex;
         } else {

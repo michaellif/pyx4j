@@ -42,7 +42,7 @@ public abstract class ReportCriteriaPart<E extends IEntity> {
     }
 
     public Widget initNativeComponent() {
-        return (Widget) form.initNativeComponent();
+        return form.asWidget();
     }
 
 }

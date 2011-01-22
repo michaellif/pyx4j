@@ -78,7 +78,7 @@ public class NativeFormGroup<E> extends DockPanel implements INativeEditableComp
         container.getElement().getStyle().setPadding(10, Unit.PX);
         container.getElement().getStyle().setPaddingBottom(4, Unit.PX);
 
-        NativeForm nativeForm = (NativeForm) group.getForm().initNativeComponent();
+        NativeForm nativeForm = group.getForm().asWidget();
         nativeForm.getElement().getStyle().setMarginBottom(5, Unit.PX);
         nativeForm.setWidth("100%");
         container.add(nativeForm);

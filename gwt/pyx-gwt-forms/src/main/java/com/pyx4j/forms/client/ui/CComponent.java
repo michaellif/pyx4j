@@ -54,7 +54,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     ComponentAccessAdapter defaultAccessAdapter;
 
-    private boolean widgetInitiated = false;
+    private boolean widgetCreated = false;
 
     private WIDGET_TYPE widget;
 
@@ -117,7 +117,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void setWidth(String width) {
         this.width = width;
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setWidth(width);
         }
     }
@@ -128,7 +128,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void setHeight(String height) {
         this.height = height;
-        if (isWidgetInitiated()) {
+        if (isWidgetCreated()) {
             asWidget().setHeight(height);
         }
     }
@@ -230,22 +230,22 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     protected abstract WIDGET_TYPE initWidget();
 
-    public boolean isWidgetInitiated() {
-        return widgetInitiated;
+    public boolean isWidgetCreated() {
+        return widgetCreated;
     }
 
     @Override
     public WIDGET_TYPE asWidget() {
-        if (!widgetInitiated) {
+        if (!widgetCreated) {
             widget = initWidget();
-            widgetInitiated = true;
+            widgetCreated = true;
         }
         return widget;
     }
 
     protected void applyVisibilityRules() {
         boolean visible = isVisible();
-        if (isWidgetInitiated() && asWidget().isVisible() != visible) {
+        if (isWidgetCreated() && asWidget().isVisible() != visible) {
             asWidget().setVisible(visible);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY);
         }
@@ -253,7 +253,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     protected void applyEnablingRules() {
         boolean enabled = isEnabled();
-        if (isWidgetInitiated() && asWidget().isEnabled() != enabled) {
+        if (isWidgetCreated() && asWidget().isEnabled() != enabled) {
             asWidget().setEnabled(enabled);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.ENABLED_PROPERTY);
         }

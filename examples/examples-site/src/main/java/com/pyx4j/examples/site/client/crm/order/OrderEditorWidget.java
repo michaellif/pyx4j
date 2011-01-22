@@ -46,9 +46,9 @@ import com.pyx4j.essentials.client.crud.EntityEditorWidget;
 import com.pyx4j.examples.domain.crm.Customer;
 import com.pyx4j.examples.domain.crm.DomainUtils;
 import com.pyx4j.examples.domain.crm.Order;
+import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.examples.domain.crm.OrderPhoto;
 import com.pyx4j.examples.domain.crm.Resource;
-import com.pyx4j.examples.domain.crm.Order.OrderStatus;
 import com.pyx4j.examples.domain.crm.Resource.RepStatus;
 import com.pyx4j.examples.site.client.ExamplesSiteMap;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -57,7 +57,6 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.shared.meta.NavigUtils;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
@@ -95,7 +94,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             }
 
             @Override
-            protected CEditableComponent<?> createComponent(IObject<?> member) {
+            protected CEditableComponent<?, ?> createComponent(IObject<?> member) {
                 if (member == meta().customer()) {
                     return new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?" + NavigUtils.ENTITY_ID + "=");
                 } else {
@@ -175,6 +174,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
             AsyncCallback<IEntity> callback = new RecoverableAsyncCallback<IEntity>() {
 
+                @Override
                 public void onSuccess(IEntity result) {
                     if (result != null) {
                         Customer customer = (Customer) result;
@@ -187,6 +187,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
                     }
                 }
 
+                @Override
                 public void onFailure(Throwable caught) {
                     throw new UnrecoverableClientError(caught);
                 }
