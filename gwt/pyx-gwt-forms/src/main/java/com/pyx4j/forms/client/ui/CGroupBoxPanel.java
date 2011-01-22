@@ -20,8 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Vector;
 
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -54,9 +54,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
 
     private final Layout layout;
 
-    private CContainer component;
-
-    private final Collection<CComponent<?>> componentCollection = new Vector<CComponent<?>>();
+    private CContainer<?> component;
 
     private boolean expended = true;
 
@@ -82,11 +80,6 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
     @Override
     protected NativeGroupBoxPanel initWidget() {
         NativeGroupBoxPanel nativePanel = new NativeGroupBoxPanel(this, layout);
-        if (isExpended()) {
-            initInnerComponent();
-        }
-        applyAccessibilityRules();
-
         nativePanel.addKeyUpHandler(new KeyUpHandler() {
             @Override
             public void onKeyUp(KeyUpEvent event) {
@@ -97,10 +90,18 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
     }
 
     private void initInnerComponent() {
-        if (!innerCommponentInitialized && component != null && isWidgetCreated()) {
-            asWidget().add((INativeComponent) component.asWidget(), null);
+        if (!innerCommponentInitialized && component != null) {
+            asWidget().add(component.asWidget(), null);
             innerCommponentInitialized = true;
         }
+    }
+
+    @Override
+    protected void onWidgetCreated() {
+        if (isExpended()) {
+            initInnerComponent();
+        }
+        super.onWidgetCreated();
     }
 
     @Override
@@ -108,9 +109,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
         if (!(component instanceof CContainer)) {
             throw new RuntimeException("Can't add CComponent that is not a CContainer to CGroupBoxPanel");
         }
-        this.component = (CContainer) component;
-        componentCollection.clear();
-        componentCollection.add(this.component);
+        this.component = (CContainer<?>) component;
         component.setParent(this);
     }
 
@@ -134,12 +133,16 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
 
     @Override
     public Collection<CComponent<?>> getComponents() {
-        return this.componentCollection;
+        if (component != null) {
+            return Arrays.asList(new CComponent<?>[] { component });
+        } else {
+            return null;
+        }
     }
 
     public void setExpended(boolean expended) {
         this.expended = expended;
-        if (expended) {
+        if (expended && isWidgetCreated()) {
             initInnerComponent();
         }
         if (isWidgetCreated() && isCollapsible()) {
@@ -155,7 +158,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
 
     public void onExpended(boolean value) {
         expended = value;
-        if (expended) {
+        if (expended && isWidgetCreated()) {
             initInnerComponent();
         }
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.EXPENDED_PROPERTY);
