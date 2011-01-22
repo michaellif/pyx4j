@@ -29,11 +29,12 @@ import com.pyx4j.forms.client.validators.RegexValidator;
 public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTextBox> {
 
     public CPasswordTextField() {
-        super();
+        this(null);
     }
 
     public CPasswordTextField(String title) {
         super(title);
+        setFormat(new StringFormat());
     }
 
     public CPasswordTextField(String title, boolean mandatory) {
@@ -48,9 +49,32 @@ public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTex
         return nativeTextField;
     }
 
+    public void addRegexValidator(String regex, String regexValidationMessage) {
+        this.addValueValidator(new RegexValidator<String>(regex, regexValidationMessage));
+    }
+
     @Override
     public boolean isValueEmpty() {
         return super.isValueEmpty() || CommonsStringUtils.isEmpty(getValue());
     }
 
+    static class StringFormat implements IFormat<String> {
+
+        @Override
+        public String format(String value) {
+            if (value == null) {
+                value = "";
+            }
+            return value;
+        }
+
+        @Override
+        public String parse(String string) {
+            if (CommonsStringUtils.isEmpty(string)) {
+                return null;
+            }
+            return string;
+        }
+
+    }
 }
