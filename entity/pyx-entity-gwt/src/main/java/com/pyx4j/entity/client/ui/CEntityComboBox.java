@@ -78,21 +78,13 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     private boolean hasAsyncValue = false;
 
-    public CEntityComboBox() {
-        this(null);
-    }
-
-    public CEntityComboBox(String title) {
-        this(title, (NotInOptionsPolicy) null);
-    }
-
     public CEntityComboBox(String title, Class<E> entityClass) {
-        this(title, (NotInOptionsPolicy) null);
-        this.criteria = new EntityQueryCriteria<E>(entityClass);
+        this(title, entityClass, (NotInOptionsPolicy) null);
     }
 
-    public CEntityComboBox(String title, NotInOptionsPolicy policy) {
+    public CEntityComboBox(String title, Class<E> entityClass, NotInOptionsPolicy policy) {
         super(title, policy);
+        this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 
     public E meta() {
