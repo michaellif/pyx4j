@@ -44,8 +44,8 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptText;
 
 public class EntitySearchCriteriaFormModel<E extends IEntity> {
@@ -135,10 +135,15 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
     @SuppressWarnings("unchecked")
     public <T> CEditableComponent<T, ?> get(IObject<T> member, String pathProperty) {
+        return getRaw(member, pathProperty);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public <T> CEditableComponent getRaw(IObject<T> member, String pathProperty) {
         PathSearch memberPath = new PathSearch(member, pathProperty);
         for (Map.Entry<CEditableComponent<?, ?>, PathSearch> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
-                return (CEditableComponent<T, ?>) me.getKey();
+                return me.getKey();
             }
         }
         throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
