@@ -35,9 +35,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.adapters.index.GeoPointIndexAdapter;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.rpc.GeoCriteria;
+import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.IndexString;
@@ -254,9 +257,21 @@ public class IndexedEntitySearch {
                 }
                 if ((areaRadius != null) && (geoPointFrom != null)) {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
+                    GeoPointIndexAdapter indexAdapter = null;
+                    if (value.returnAnyLocation().isBooleanTrue()) {
+                        keys.add(GeoCell.GEOCELL_ANYLOCATION);
+                        MemberMeta geoMemberMeta = meta.getMemberMeta(geoPath);
+                        Indexed index = geoMemberMeta.getAnnotation(Indexed.class);
+                        for (Class<? extends IndexAdapter<?>> adapterClass : index.adapters()) {
+                            if (GeoPointIndexAdapter.class.isAssignableFrom(adapterClass)) {
+                                indexAdapter = (GeoPointIndexAdapter) AdapterFactory.getIndexAdapter(adapterClass);
+                                break;
+                            }
+                        }
+                    }
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, geoPath), Restriction.IN, (Serializable) keys));
-                    inMemoryFilters.add(new GeoDistanceInMemoryFilter(geoPath, geoPointFrom, areaRadius.doubleValue()));
+                    inMemoryFilters.add(new GeoDistanceInMemoryFilter(geoPath, geoPointFrom, areaRadius.doubleValue(), indexAdapter));
                     hasInequalityFilter = true;
                 }
             } else if (GeoPoint.class.isAssignableFrom(mm.getValueClass())) {
@@ -267,7 +282,7 @@ public class IndexedEntitySearch {
                     List<String> keys = GeoCell.getBestCoveringSet(new GeoCircle(geoPointFrom, areaRadius.intValue()));
                     log.debug("GEO search {}km; {} keys", areaRadius, keys.size());
                     queryCriteria.add(new PropertyCriterion(srv.getIndexedPropertyName(meta, path), Restriction.IN, (Serializable) keys));
-                    inMemoryFilters.add(new GeoDistanceInMemoryFilter(new Path(pathWithGeoPointData), geoPointFrom, areaRadius.doubleValue()));
+                    inMemoryFilters.add(new GeoDistanceInMemoryFilter(new Path(pathWithGeoPointData), geoPointFrom, areaRadius.doubleValue(), null));
                     hasInequalityFilter = true;
                 }
                 processed.add(mm);

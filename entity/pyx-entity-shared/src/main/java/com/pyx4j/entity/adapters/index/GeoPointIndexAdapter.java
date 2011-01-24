@@ -20,8 +20,12 @@
  */
 package com.pyx4j.entity.adapters.index;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.geo.GeoCell;
 import com.pyx4j.geo.GeoPoint;
 
 public class GeoPointIndexAdapter extends AbstractIndexAdapter<GeoPoint> {
@@ -31,11 +35,22 @@ public class GeoPointIndexAdapter extends AbstractIndexAdapter<GeoPoint> {
         if (value == null) {
             return null;
         }
-        return value.getCells();
+        if (allowAnyLocation(entity)) {
+            List<String> cells = new Vector<String>();
+            cells.add(GeoCell.GEOCELL_ANYLOCATION);
+            cells.addAll(value.getCells());
+            return cells;
+        } else {
+            return value.getCells();
+        }
     }
 
     @Override
     public Class<?> getIndexValueClass() {
         return String[].class;
+    }
+
+    public boolean allowAnyLocation(IEntity entity) {
+        return false;
     }
 }

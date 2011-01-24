@@ -36,4 +36,5 @@ public interface GeoCriteria extends IEntity {
     @Caption(name = "Area Radius (km)")
     IPrimitive<Integer> radius();
 
+    IPrimitive<Boolean> returnAnyLocation();
 }

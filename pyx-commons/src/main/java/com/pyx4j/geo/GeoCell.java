@@ -84,6 +84,8 @@ import java.util.List;
 
 public class GeoCell {
 
+    public final static String GEOCELL_ANYLOCATION = "Z";
+
     public final static int GEOCELL_GRID_SIZE = 4;
 
     private final static String GEOCELL_ALPHABET = "0123456789abcdef";

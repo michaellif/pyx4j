@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server.search;
 
+import com.pyx4j.entity.adapters.index.GeoPointIndexAdapter;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.geo.GeoPoint;
@@ -27,18 +28,24 @@ import com.pyx4j.geo.GeoUtils;
 
 public class GeoDistanceInMemoryFilter extends InMemoryFilter {
 
-    protected GeoPoint geoPointFrom;
+    protected final GeoPoint geoPointFrom;
 
-    protected double areaRadius;
+    protected final double areaRadius;
 
-    public GeoDistanceInMemoryFilter(Path propertyPath, GeoPoint geoPointFrom, double areaRadius) {
+    protected final GeoPointIndexAdapter indexAdapter;
+
+    public GeoDistanceInMemoryFilter(Path propertyPath, GeoPoint geoPointFrom, double areaRadius, GeoPointIndexAdapter indexAdapter) {
         super(propertyPath);
         this.geoPointFrom = geoPointFrom;
         this.areaRadius = areaRadius;
+        this.indexAdapter = indexAdapter;
     }
 
     @Override
     protected boolean accept(IEntity entity) {
+        if ((indexAdapter != null) && (indexAdapter.allowAnyLocation(entity))) {
+            return true;
+        }
         GeoPoint geoPoint = (GeoPoint) entity.getValue(propertyPath);
         if (geoPoint == null) {
             return false;
