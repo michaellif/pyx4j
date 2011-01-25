@@ -18,12 +18,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!--
         <module>vista-portal-domain</module>
         <module>vista-portal-rpc</module>
         <module>vista-portal-client</module>
         <module>vista-portal-domain-srv</module>
-        -->
         <module>vista-portal-server</module>
     </modules>
 

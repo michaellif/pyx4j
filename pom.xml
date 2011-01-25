@@ -102,6 +102,10 @@
     </repositories>
 
     <modules>
+        <module>vista-portal/vista-portal-domain</module>
+        <module>vista-portal/vista-portal-rpc</module>
+        <module>vista-portal/vista-portal-client</module>
+        <module>vista-portal/vista-portal-domain-srv</module>
         <module>vista-portal/vista-portal-server</module>
     </modules>
 
