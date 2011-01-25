@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app
+    version="2.5"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
+    <!--
+		@version $Revision$ ($Author$) $Date$
+
+		TEMPLATE Used: DEV
+	-->
+
+    <context-param>
+        <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
+        <param-value>com.propertyvista.portal.server.VistaServerSideConfiguration</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
+    </listener>
+
+    <!--PRODUCTION_TEMPLATE_REMOVE_START-->
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <!--PRODUCTION_TEMPLATE_REMOVE_END-->
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/internal/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!--PRODUCTION_TEMPLATE_REMOVE_START-->
+    <!--
+    <filter>
+        <filter-name>appstats</filter-name>
+        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+        <init-param>
+            <param-name>logMessage</param-name>
+            <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>appstats</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    -->
+    <!--PRODUCTION_TEMPLATE_REMOVE_END-->
+
+    <filter>
+        <filter-name>LifecycleFilter</filter-name>
+        <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LifecycleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Servlets -->
+<!--     
+    <servlet>
+        <servlet-name>CronServlet</servlet-name>
+        <servlet-class>com.propertyvista.server.admin.VistaCronServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CronServlet</servlet-name>
+        <url-pattern>/internal/cron/*</url-pattern>
+    </servlet-mapping>
+-->    
+
+    <!--PRODUCTION_TEMPLATE_REMOVE_START-->
+    <!--
+    <servlet>
+        <servlet-name>DebugServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/debug/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>appstats</servlet-name>
+        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>appstats</servlet-name>
+        <url-pattern>/internal/appstats/*</url-pattern>
+    </servlet-mapping>
+    -->
+    <!--PRODUCTION_TEMPLATE_REMOVE_END-->
+
+    <servlet>
+        <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
+        <url-pattern>/internal/worker/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <servlet-class>com.pyx4j.rpc.server.RemoteServiceServlet
+		</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/portal/srv/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
+        <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
+        <url-pattern>/internal/j2sesrv/*</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

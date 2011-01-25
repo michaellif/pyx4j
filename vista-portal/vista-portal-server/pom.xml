@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+         <groupId>com.propertyvista</groupId>
+        <artifactId>vista</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-portal-server</artifactId>
+    <name>vista-portal-server</name>
+    <packaging>war</packaging>
+
+    <dependencies>
+
+        <!--
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-portal-domain-srv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-entity-gae</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.tanesha.recaptcha4j</groupId>
+	        <artifactId>recaptcha4j</artifactId>
+	    </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- need for taskqueue and it is not automaticaly added during build -->
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-labs</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>**/appengine-web.xml</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+                <configuration>
+                    <packaging>war</packaging>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>net.kindleit</groupId>
+                <artifactId>maven-gae-plugin</artifactId>
+                <configuration>
+                    <appDir>${project.build.directory}/${project.build.finalName}</appDir>
+                    <port>8888</port>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+
+    <profiles>
+
+        <profile>
+            <id>prod</id>
+            <build>
+                <plugins>
+
+                    <!-- TODO this module should be war only - no code -->
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pre-integration-test.lib-copy</id>
+                                <phase>pre-integration-test</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <copy file="${project.build.directory}/${project.build.finalName}.jar" todir="${basedir}/war/WEB-INF/lib"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>IEntity-generate</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>com.pyx4j.entity.server.impl.EntityImplGenerator</mainClass>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>${project.build.directory}/classes</argument>
+                                   </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.servlet</groupId>
+                                <artifactId>servlet-api</artifactId>
+                                <version>2.5</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>deploy-gae</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.kindleit</groupId>
+	                    <artifactId>maven-gae-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>gae-deploy</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>gae-rollback</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>rollback</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
