@@ -208,9 +208,9 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
             adaptersReport.append("isEditable ").append(adapter.isEditable(this)).append(" ");
         }
 
-        return "Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled=" + isEnabled() + "; isEditable="
-                + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip() + "; size=" + getWidth() + ":"
-                + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
+        return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
+                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip()
+                + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
     protected void setNativeComponentValue(DATA_TYPE value) {

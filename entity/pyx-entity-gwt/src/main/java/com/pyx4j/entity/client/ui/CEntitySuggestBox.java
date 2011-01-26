@@ -143,7 +143,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
      */
     @Override
     protected NativeSuggestBox<E> initWidget() {
-        if (isWidgetCreated() && (criteria != null)) {
+        if (criteria != null) {
             retriveOptions(null);
         }
         return super.initWidget();
