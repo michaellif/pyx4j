@@ -34,7 +34,6 @@ import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
 import com.pyx4j.site.client.AbstractSiteDispatcher;
 import com.pyx4j.site.client.SitePanel;
-import com.pyx4j.widgets.client.util.BrowserType;
 
 public abstract class BaseSiteDispatcher extends AbstractSiteDispatcher implements EntryPoint {
 

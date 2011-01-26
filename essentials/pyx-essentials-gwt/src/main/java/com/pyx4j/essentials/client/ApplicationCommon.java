@@ -22,8 +22,8 @@ package com.pyx4j.essentials.client;
 
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent;
-import com.pyx4j.rpc.client.RPCStatusChangeHandler;
 import com.pyx4j.rpc.client.RPCStatusChangeEvent.When;
+import com.pyx4j.rpc.client.RPCStatusChangeHandler;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 

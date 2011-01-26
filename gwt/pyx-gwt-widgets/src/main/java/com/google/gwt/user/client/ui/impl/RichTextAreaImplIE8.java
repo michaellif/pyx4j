@@ -27,8 +27,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.widgets.client.dialog.Dialog;
-
 public class RichTextAreaImplIE8 extends RichTextAreaImplStandard {
 
     private static final Logger log = LoggerFactory.getLogger(RichTextAreaImplIE8.class);

@@ -27,8 +27,8 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ui.CListBox;
-import com.pyx4j.forms.client.ui.INativeListBox;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
+import com.pyx4j.forms.client.ui.INativeListBox;
 
 public class NativeListBox<E> extends NativeTriggerComponent<List<E>> implements INativeListBox<E> {
 

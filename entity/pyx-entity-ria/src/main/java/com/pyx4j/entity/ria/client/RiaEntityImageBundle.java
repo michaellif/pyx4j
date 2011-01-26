@@ -23,6 +23,7 @@ package com.pyx4j.entity.ria.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+
 import com.pyx4j.ria.client.RiaImageBundle;
 
 public interface RiaEntityImageBundle extends ClientBundle, RiaImageBundle {

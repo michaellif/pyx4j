@@ -27,8 +27,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntitySearchCriteria;
 import com.pyx4j.ria.client.view.AbstractView;
 import com.pyx4j.ria.client.view.ILayoutManager;
 import com.pyx4j.ria.client.view.IPosition;

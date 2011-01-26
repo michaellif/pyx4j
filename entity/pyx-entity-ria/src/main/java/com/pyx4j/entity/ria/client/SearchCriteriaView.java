@@ -25,7 +25,6 @@ import java.util.Arrays;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.ria.client.crud.EntitySearchCriteriaPart;
 import com.pyx4j.forms.client.ui.CComboBox;

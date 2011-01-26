@@ -79,9 +79,9 @@ public class StorageEvent extends GwtEvent<StorageEventHandler> {
         }-*/;
 
         /**
-         * Returns the {@link Storage} object that was affected.
+         * Returns the Storage object that was affected.
          * 
-         * @return the {@link Storage} object that was affected
+         * @return the Storage object that was affected
          * @see <a
          *      href="http://www.w3.org/TR/webstorage/#dom-storageevent-storagearea">W3C
          *      Web Storage - StorageEvent.storageArea</a>

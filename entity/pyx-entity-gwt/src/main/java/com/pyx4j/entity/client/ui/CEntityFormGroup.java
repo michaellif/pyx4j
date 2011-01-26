@@ -22,7 +22,6 @@ package com.pyx4j.entity.client.ui;
 
 import com.google.gwt.resources.client.ImageResource;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CFormGroup;
 

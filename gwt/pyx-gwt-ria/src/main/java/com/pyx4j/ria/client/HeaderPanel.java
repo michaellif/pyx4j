@@ -21,7 +21,6 @@
 package com.pyx4j.ria.client;
 
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -29,7 +28,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
-import com.pyx4j.ria.client.SectionPanel.StyleSuffix;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class HeaderPanel extends LayoutPanel {

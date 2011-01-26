@@ -20,7 +20,6 @@
  */
 package com.pyx4j.widgets.client.svg;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
 
 public class Group extends ContainerElement {
 

@@ -43,8 +43,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.forms.client.ui.INativeListBox;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
+import com.pyx4j.forms.client.ui.INativeListBox;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 
 public abstract class NativeListSelectionComposite<E> extends FlexTable implements INativeListBox<E> {

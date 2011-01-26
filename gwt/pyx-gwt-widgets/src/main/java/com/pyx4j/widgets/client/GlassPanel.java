@@ -35,7 +35,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.style.CSSClass;

@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.gwt.NativeTextBox;
 
 public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INativeTextComponent<DATA_TYPE>> extends CTextComponent<DATA_TYPE, WIDGET_TYPE>
         implements IAcceptText {

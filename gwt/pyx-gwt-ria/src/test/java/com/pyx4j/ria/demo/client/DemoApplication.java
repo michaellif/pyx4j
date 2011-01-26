@@ -32,8 +32,8 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.pyx4j.ria.client.HeaderPanel;
 import com.pyx4j.ria.client.IApplication;
 import com.pyx4j.ria.client.ImageFactory;
-import com.pyx4j.ria.client.Workbench;
 import com.pyx4j.ria.client.StatusBar;
+import com.pyx4j.ria.client.Workbench;
 import com.pyx4j.ria.client.view.AbstractView;
 
 public class DemoApplication implements IApplication {
