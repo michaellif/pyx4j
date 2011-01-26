@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 28, 2010
+ * Created on Jan 26, 2011
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.TextBoxBase;
+
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class TextBox extends com.google.gwt.user.client.ui.TextBox implements WatermarkComponent {
+public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox implements WatermarkComponent {
 
     private TextWatermark watermark;
 
-    public TextBox() {
+    public SuggestBox() {
         setStyleName(CSSClass.pyx4j_TextBox.name());
+    }
+
+    public SuggestBox(SuggestOracle oracle, TextBoxBase box) {
+        super(oracle, box);
     }
 
     @Override
@@ -37,12 +50,12 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
 
                 @Override
                 String getText() {
-                    return TextBox.super.getText();
+                    return SuggestBox.super.getText();
                 }
 
                 @Override
                 void setText(String text) {
-                    TextBox.super.setText(text);
+                    SuggestBox.super.setText(text);
                 }
             };
         }
@@ -64,6 +77,21 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements Wa
         } else {
             return super.getText();
         }
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler handler) {
+        return addDomHandler(handler, BlurEvent.getType());
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler handler) {
+        return addDomHandler(handler, FocusEvent.getType());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !DOM.getElementPropertyBoolean(getElement(), "disabled");
     }
 
 }
