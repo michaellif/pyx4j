@@ -3,8 +3,8 @@
     xmlns="http://appengine.google.com/ns/1.0">
     <!-- @version $Revision$ ($Author$) $Date$ -->
 
-    <application>pyx4j-tester</application>
-    <version>22</version>
+    <application>propertyvista-www22</application>
+    <version>1</version>
 
     <precompilation-enabled>true</precompilation-enabled>
     <sessions-enabled>true</sessions-enabled>
