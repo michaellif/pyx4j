@@ -24,3 +24,21 @@ TODO
    DONE - GWT side EntityMeta and MemberMeta
    DONE Persistence tests Commons for Maven/Server side * GAE/RDBMS. How to run the same abstract tests in GAE and in Hibernate.
    DONE - Module for UncaughtHandler -> pyx-gwt-commons
+
+----   idea for ICriteria -----
+
+public interface DateWithCriteria extends IPrimitiveICriteria<java.sql.Date> {
+
+    @Transient
+    IPrimitive<java.sql.Date> dateFrom();
+
+    @Transient
+    IPrimitive<java.sql.Date> dateTo();
+}
+
+public interface OrderCriteria extends Order, ICriteria<Order> {
+
+    @Override
+    DateWithCriteria completedDate();
+
+}
