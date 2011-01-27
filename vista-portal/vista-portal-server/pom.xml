@@ -148,6 +148,7 @@
                 <plugins>
 
                     <!-- TODO this module should be war only - no code -->
+                    <!--
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
@@ -163,6 +164,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
