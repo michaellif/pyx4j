@@ -123,6 +123,7 @@
                 <artifactId>maven-gae-plugin</artifactId>
                 <configuration>
                     <appDir>${project.build.directory}/${project.build.finalName}</appDir>
+                    <sdkDir>${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gaeVersion}/appengine-java-sdk-${gaeVersion}</sdkDir>
                     <port>8888</port>
                 </configuration>
             </plugin>
@@ -133,6 +134,13 @@
 
 
     <profiles>
+
+        <profile>
+            <id>build-env</id>
+            <properties>
+                <appengine.sdk.root>${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gaeVersion}/appengine-java-sdk-${gaeVersion}</appengine.sdk.root>
+            </properties>
+        </profile>
 
         <profile>
             <id>prod</id>
