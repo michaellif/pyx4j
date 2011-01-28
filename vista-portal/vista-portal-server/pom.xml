@@ -8,9 +8,9 @@
 
     <parent>
          <groupId>com.propertyvista</groupId>
-        <artifactId>vista</artifactId>
+        <artifactId>vista-portal</artifactId>
         <version>1.0.0-SNAPSHOT</version><!--vista-version-->
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>vista-portal-server</artifactId>

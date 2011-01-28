@@ -22,17 +22,31 @@
     <description>Property Vista</description>
 
     <organization>
-        <name>>Property Vista</name>
-        <url>http://www.propertyvista.com/</url>
+        <name>Property Vista Software Inc.</name>
+        <url>http://propertyvista.jira.com/</url>
     </organization>
     <inceptionYear>2010</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Proprietary Property Vista Software Inc.</name>
+            <distribution>manual</distribution>
+            <comments>This software is the confidential and proprietary information of Property Vista Software Inc.</comments>
+        </license>
+    </licenses>
 
     <url>http://propertyvista.jira.com/</url>
 
     <distributionManagement>
         <site>
-            <id>vista-secure-site</id>
-            <url>file:///${basedir}/target/tmp</url>
+            <id>vista-staging-site</id>
+            <!--
+                Bamboo Artifact:
+                    Artifact Label        : Maven Site
+                    Source Directory      : target/site-staging
+                    Artifact Copy Pattern : */.*
+            -->
+            <url>file:///${user.dir}/target/site-staging</url>
         </site>
         <!-- not public, no-deployment -->
         <repository>
@@ -102,11 +116,7 @@
     </repositories>
 
     <modules>
-        <module>vista-portal/vista-portal-domain</module>
-        <module>vista-portal/vista-portal-rpc</module>
-        <module>vista-portal/vista-portal-client</module>
-        <module>vista-portal/vista-portal-domain-srv</module>
-        <module>vista-portal/vista-portal-server</module>
+        <module>vista-portal</module>
     </modules>
 
     <properties>
@@ -203,5 +213,39 @@
         </profile>
 
     </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.0-beta-3</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.3.1</version>
+                            <configuration>
+                                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                            </configuration>
+                            <reports>
+                                <report>index</report>
+                                <report>dependencies</report>
+                                <report>modules</report>
+                                <report>license</report>
+                            </reports>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.7</version>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
