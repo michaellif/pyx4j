@@ -2,10 +2,17 @@
 <module rename-to='test'>
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.user.Debug"/>
+	<inherits name="com.google.gwt.activity.Activity"/>
+    <inherits name="com.google.gwt.place.Place"/>
 
 	<inherits name='com.pyx4j.site.Site' />
 
 	<entry-point class='com.pyx4j.client.demo.client.SiteDemo' />
 
+	<!-- Use ClientFactoryImpl by default -->
+  	<replace-with class="com.pyx4j.client.demo.client.ClientFactoryImpl">
+    	<when-type-is class="com.pyx4j.client.demo.client.ClientFactory"/>
+  	</replace-with>
+  
 	<source path='client' />
 </module>
