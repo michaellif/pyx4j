@@ -70,22 +70,6 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
         return validationResults;
     }
 
-    public boolean isValuesEmpty() {
-        // Any component is not empty
-        for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && (!((CEditableComponent<?, ?>) ccomponent).isValueEmpty())) {
-                return false;
-            }
-            if (ccomponent instanceof CRangeDatePicker && (!((CRangeDatePicker) ccomponent).isValueEmpty())) {
-                return false;
-            }
-            if (ccomponent instanceof CContainer && (!((CContainer) ccomponent).isValuesEmpty())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public IAccessAdapter getContainerAccessAdapter() {
         return aggregatingAccessAdapter;
     }
