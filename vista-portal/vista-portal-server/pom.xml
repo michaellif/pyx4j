@@ -173,7 +173,7 @@
                         <executions>
                             <execution>
                                 <id>IEntity-generate</id>
-                                <phase>process-classes</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>java</goal>
                                 </goals>
