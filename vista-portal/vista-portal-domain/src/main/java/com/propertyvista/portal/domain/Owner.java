@@ -13,8 +13,33 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IEntity;
+import java.util.Date;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+//It should be either company or person set at the same time
 public interface Owner extends IEntity {
+
+    /**
+     * Company that owns property
+     */
+    Company company();
+
+    /**
+     * Person that owns property
+     */
+    Person person();
+
+    Property property();
+
+    /**
+     * Percent of share
+     */
+    IPrimitive<Float> share();
+
+    IPrimitive<Date> startDate();
+
+    IPrimitive<Date> endDate();
 
 }

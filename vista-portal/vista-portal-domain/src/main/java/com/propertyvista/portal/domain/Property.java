@@ -21,11 +21,15 @@ public interface Property extends IEntity {
 
     IPrimitive<String> propertyCode();
 
+    /**
+     * Legal name of the property (max 120 char)
+     */
     IPrimitive<String> name();
 
+    /**
+     * Property name used for marketing purposes (max 120 char)
+     */
     IPrimitive<String> marketingName();
-
-    Owner owner();
 
     ISet<Picture> pictures();
 }
