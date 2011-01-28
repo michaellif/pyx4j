@@ -13,6 +13,11 @@
  */
 package com.propertyvista.portal.domain;
 
-public interface OrganizationContact {
+import com.pyx4j.entity.shared.IEntity;
 
+public interface OrganizationContact extends IEntity {
+
+    ContactRole contactRole();
+
+    Person person();
 }

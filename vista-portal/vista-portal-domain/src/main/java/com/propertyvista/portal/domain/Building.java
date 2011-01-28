@@ -13,6 +13,45 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+
 public interface Building extends Property {
 
+    public enum BuildingType {
+
+        agricultural,
+
+        commercial,
+
+        residential,
+
+        industrial,
+
+        military,
+
+        parking_storage,
+
+        other
+    }
+
+    /**
+     * (max 100 char)
+     */
+    Complex complex();
+
+    IPrimitive<BuildingType> buildingType();
+
+    /**
+     * (max 100 char)
+     */
+    IPrimitive<String> webSite();
+
+    Address address();
+
+    IList<Phone> phoneList();
+
+    Email email();
+
+    IList<OrganizationContacts> contactsList();
 }

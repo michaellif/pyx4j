@@ -13,6 +13,6 @@
  */
 package com.propertyvista.portal.domain;
 
-public interface Document {
+public interface Document extends File {
 
 }

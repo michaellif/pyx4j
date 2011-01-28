@@ -7,23 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2011
+ * Created on Jan 28, 2011
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Email extends IEntity {
+@EmbeddedEntity
+public interface Country extends IEntity {
 
-    public enum EmailType {
-        home, work, other
-    }
-
-    IPrimitive<EmailType> emailType();
-
-    IPrimitive<String> emailAddress();
+    @ToString
+    IPrimitive<String> name();
 
 }

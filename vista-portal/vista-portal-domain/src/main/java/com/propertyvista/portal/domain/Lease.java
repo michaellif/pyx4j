@@ -13,6 +13,44 @@
  */
 package com.propertyvista.portal.domain;
 
-public class Lease {
+import java.util.Date;
+
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+public interface Lease extends IEntity {
+
+    Money currentRent();
+
+    IPrimitive<Date> expectedMoveInDate();
+
+    IPrimitive<Date> expectedMoveOutDate();
+
+    IPrimitive<Date> leaseFromDate();
+
+    IPrimitive<Date> leaseToDate();
+
+    IPrimitive<Date> actualMoveIn();
+
+    IPrimitive<Date> actualMoveOut();
+
+    IPrimitive<Boolean> responsibleForLease();
+
+    IPrimitive<Date> leaseSignDate();
+
+    /**
+     * (max 50 char)
+     */
+    IPrimitive<String> specialStatus();
+
+    /**
+     * (max 50 char)
+     */
+    IPrimitive<String> paymentAccepted();
+
+    /**
+     * (max 50 char)
+     */
+    IPrimitive<String> accountNumber();
 
 }

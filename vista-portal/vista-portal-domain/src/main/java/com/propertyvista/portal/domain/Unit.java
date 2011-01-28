@@ -23,14 +23,27 @@ public interface Unit extends Property {
 
     Building building();
 
+    /**
+     * Square ft. size of unit
+     */
     IPrimitive<Integer> area();
 
+    /**
+     * Number of bedrooms in unit
+     */
     IPrimitive<Float> bedrooms();
 
+    /**
+     * Number of bathrooms in unit
+     */
     IPrimitive<Float> bathrooms();
 
     Money marketRent();
 
+    /**
+     * Unit used as part of a marketing campaign to demonstrate the design, structure, and
+     * appearance of unit.
+     */
     Unit modelUnit();
 
     Picture floorplan();

@@ -14,7 +14,24 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Phone extends IEntity {
+
+    public enum PhoneType {
+        mobile, work, home, work_fax, home_fax, other
+    }
+
+    IPrimitive<PhoneType> phoneType();
+
+    /**
+     * (max 20 char)
+     */
+    IPrimitive<String> phoneNumber();
+
+    /**
+     * (max 20 char)
+     */
+    IPrimitive<String> extension();
 
 }

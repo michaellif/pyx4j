@@ -23,6 +23,9 @@ public interface Company extends IEntity {
 
     ISet<Address> addressList();
 
+    /**
+     * (max 100 char)
+     */
     IPrimitive<String> webSite();
 
     IPrimitive<Picture> logo();

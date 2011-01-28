@@ -13,6 +13,21 @@
  */
 package com.propertyvista.portal.domain;
 
-public class Name {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+public interface Name extends IEntity {
+
+    IPrimitive<String> namePrefix();
+
+    IPrimitive<String> firstName();
+
+    IPrimitive<String> middleName();
+
+    IPrimitive<String> lastName();
+
+    IPrimitive<String> maidenName();
+
+    IPrimitive<String> nameSuffix();
 
 }

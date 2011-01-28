@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IEntity;
-
-public interface Picture extends IEntity {
+public interface Picture extends File {
 
 }
