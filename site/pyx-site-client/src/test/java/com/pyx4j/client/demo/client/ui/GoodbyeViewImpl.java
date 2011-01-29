@@ -1,32 +1,25 @@
 package com.pyx4j.client.demo.client.ui;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Singleton;
 
-import com.pyx4j.client.demo.client.activity.Presenter;
-
-public class GoodbyeViewImpl extends Composite implements GoodbyeView {
+@Singleton
+public class GoodbyeViewImpl extends SimplePanel implements GoodbyeView {
 
     SimplePanel viewPanel = new SimplePanel();
 
-    Element nameSpan = DOM.createSpan();
-
-    private Presenter listener;
+    Label text;
 
     public GoodbyeViewImpl() {
-        viewPanel.getElement().appendChild(nameSpan);
-        initWidget(viewPanel);
+        text = new Label();
+
+        add(text);
     }
 
     @Override
     public void setName(String name) {
-        nameSpan.setInnerText("Good-bye, " + name);
+        text.setText("Good-bye, " + name);
     }
 
-    @Override
-    public void setPresenter(Presenter listener) {
-        this.listener = listener;
-    }
 }

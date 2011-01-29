@@ -20,53 +20,22 @@
  */
 package com.pyx4j.client.demo.client;
 
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
-import com.pyx4j.client.demo.client.gin.SiteGinjector;
-import com.pyx4j.client.demo.client.mvp.AppActivityMapper;
-import com.pyx4j.client.demo.client.mvp.AppPlaceHistoryMapper;
-import com.pyx4j.client.demo.client.place.HelloPlace;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class SiteDemo implements EntryPoint {
-    private final Place defaultPlace = new HelloPlace("World!");
 
-    private final SimplePanel appWidget = new SimplePanel();
-
-    /**
-     * This is the entry point method.
-     */
     @Override
     public void onModuleLoad() {
+        SiteGinjector ginjector = GWT.create(SiteGinjector.class);
+        RootLayoutPanel.get().add(ginjector.getMainView());
+        ginjector.getPlaceHistoryHandler().handleCurrentHistory();
 
-        SiteGinjector injector = GWT.create(SiteGinjector.class);
-
-        EventBus eventBus = injector.getEventBus();
-        PlaceController placeController = injector.getPlaceController();
-
-        // Start ActivityManager for the main widget with our ActivityMapper
-        ActivityMapper activityMapper = injector.getActivityMapper();
-        ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        activityManager.setDisplay(appWidget);
-
-        // Start PlaceHistoryHandler with our PlaceHistoryMapper
-        AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
-        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, defaultPlace);
-
-        RootPanel.get().add(appWidget);
-        // Goes to place represented on URL or default place
-        historyHandler.handleCurrentHistory();
     }
+
 }

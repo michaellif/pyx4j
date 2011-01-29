@@ -18,21 +18,21 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.client.demo.client.gin;
+package com.pyx4j.client.demo.client;
 
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.inject.client.Ginjector;
-import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.inject.client.AbstractGinModule;
 
-@GinModules(SiteGinModule.class)
-public interface SiteGinjector extends Ginjector {
+import com.pyx4j.client.demo.client.activity.ActivityModule;
+import com.pyx4j.client.demo.client.mvp.MvpModule;
+import com.pyx4j.client.demo.client.ui.ViewModule;
 
-    ActivityMapper getActivityMapper();
+public class SiteGinModule extends AbstractGinModule {
 
-    PlaceController getPlaceController();
+    @Override
+    protected void configure() {
 
-    EventBus getEventBus();
-
+        install(new MvpModule());
+        install(new ViewModule());
+        install(new ActivityModule());
+    }
 }

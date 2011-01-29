@@ -18,32 +18,19 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.client.demo.client.mvp;
+package com.pyx4j.client.demo.client;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.inject.client.GinModules;
+import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 
-public abstract class ActivityPlace<T extends Activity> extends Place {
+import com.pyx4j.client.demo.client.ui.MainView;
 
-    protected T activity;
+@GinModules(SiteGinModule.class)
+public interface SiteGinjector extends Ginjector {
 
-    public ActivityPlace(T activity) {
-        this.activity = activity;
-        setPlaceName("");
-    }
+    PlaceHistoryHandler getPlaceHistoryHandler();
 
-    public T getActivity() {
-        return activity;
-    }
-
-    private String placeName;
-
-    public void setPlaceName(String token) {
-        this.placeName = token;
-    }
-
-    public String getPlaceName() {
-        return placeName;
-    }
+    MainView getMainView();
 
 }
