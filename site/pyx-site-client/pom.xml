@@ -76,6 +76,11 @@
             <scope>test</scope>
         </dependency>
 
+		<dependency>
+			<groupId>com.googlecode.gwt.inject</groupId>
+			<artifactId>gin</artifactId>
+		</dependency>
+
 	</dependencies>
 
     <properties>

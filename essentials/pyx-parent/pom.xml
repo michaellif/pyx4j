@@ -380,6 +380,12 @@
                 <version>8.0-branchJ5-r1118</version>
             </dependency>
 
+						<dependency>
+								<groupId>com.googlecode.gwt.inject</groupId>
+								<artifactId>gin</artifactId>
+								<version>1.0</version>
+						</dependency>
+
         </dependencies>
 
     </dependencyManagement>
