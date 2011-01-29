@@ -5,22 +5,28 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class GoodbyeViewImpl extends Composite implements GoodbyeView
-{
+import com.pyx4j.client.demo.client.activity.Presenter;
 
-	SimplePanel viewPanel = new SimplePanel(); 
-	Element nameSpan = DOM.createSpan();
+public class GoodbyeViewImpl extends Composite implements GoodbyeView {
 
-	public GoodbyeViewImpl()
-	{
-		viewPanel.getElement().appendChild(nameSpan);
-		initWidget(viewPanel);
-	}
+    SimplePanel viewPanel = new SimplePanel();
 
-	@Override
-	public void setName(String name)
-	{
-		nameSpan.setInnerText("Good-bye, " + name);
-	}
-	
+    Element nameSpan = DOM.createSpan();
+
+    private Presenter listener;
+
+    public GoodbyeViewImpl() {
+        viewPanel.getElement().appendChild(nameSpan);
+        initWidget(viewPanel);
+    }
+
+    @Override
+    public void setName(String name) {
+        nameSpan.setInnerText("Good-bye, " + name);
+    }
+
+    @Override
+    public void setPresenter(Presenter listener) {
+        this.listener = listener;
+    }
 }

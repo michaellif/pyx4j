@@ -3,26 +3,30 @@ package com.pyx4j.client.demo.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.inject.Inject;
 
-import com.pyx4j.client.demo.client.ClientFactory;
 import com.pyx4j.client.demo.client.place.GoodbyePlace;
 import com.pyx4j.client.demo.client.ui.GoodbyeView;
 
 public class GoodbyeActivity extends AbstractActivity {
-    private final ClientFactory clientFactory;
+    private String name;
 
-    // Name that will be appended to "Good-bye, "
-    private final String name;
+    private final GoodbyeView view;
 
-    public GoodbyeActivity(GoodbyePlace place, ClientFactory clientFactory) {
+    @Inject
+    public GoodbyeActivity(GoodbyeView view) {
+        this.view = view;
+    }
+
+    public GoodbyeActivity withPlace(GoodbyePlace place) {
         this.name = place.getGoodbyeName();
-        this.clientFactory = clientFactory;
+        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        GoodbyeView goodbyeView = clientFactory.getGoodbyeView();
-        goodbyeView.setName(name);
-        containerWidget.setWidget(goodbyeView.asWidget());
+        view.setName(name);
+        containerWidget.setWidget(view.asWidget());
     }
+
 }

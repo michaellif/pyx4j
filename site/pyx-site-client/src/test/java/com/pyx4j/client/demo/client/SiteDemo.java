@@ -31,6 +31,7 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.client.demo.client.gin.SiteGinjector;
 import com.pyx4j.client.demo.client.mvp.AppActivityMapper;
 import com.pyx4j.client.demo.client.mvp.AppPlaceHistoryMapper;
 import com.pyx4j.client.demo.client.place.HelloPlace;
@@ -48,14 +49,14 @@ public class SiteDemo implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
-        // Create ClientFactory using deferred binding so we can replace with different
-        // impls in gwt.xml
-        ClientFactory clientFactory = GWT.create(ClientFactory.class);
-        EventBus eventBus = clientFactory.getEventBus();
-        PlaceController placeController = clientFactory.getPlaceController();
+
+        SiteGinjector injector = GWT.create(SiteGinjector.class);
+
+        EventBus eventBus = injector.getEventBus();
+        PlaceController placeController = injector.getPlaceController();
 
         // Start ActivityManager for the main widget with our ActivityMapper
-        ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
+        ActivityMapper activityMapper = injector.getActivityMapper();
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
         activityManager.setDisplay(appWidget);
 

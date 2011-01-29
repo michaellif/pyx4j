@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.client.demo.client.activity.Presenter;
 import com.pyx4j.client.demo.client.place.GoodbyePlace;
 
 public class HelloViewImpl extends Composite implements HelloView {

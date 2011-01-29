@@ -3,23 +3,29 @@ package com.pyx4j.client.demo.client.activity;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.inject.Inject;
 
-import com.pyx4j.client.demo.client.ClientFactory;
 import com.pyx4j.client.demo.client.place.HelloPlace;
 import com.pyx4j.client.demo.client.ui.HelloView;
 
-public class HelloActivity extends AbstractActivity implements HelloView.Presenter {
-    // Used to obtain views, eventBus, placeController
-    // Alternatively, could be injected via GIN
-    private final ClientFactory clientFactory;
+public class HelloActivity extends AbstractActivity implements Presenter {
+    private String name;
 
-    // Name that will be appended to "Hello,"
-    private final String name;
+    private final HelloView view;
 
-    public HelloActivity(HelloPlace place, ClientFactory clientFactory) {
+    private final PlaceController placeController;
+
+    @Inject
+    public HelloActivity(HelloView view, PlaceController placeController) {
+        this.view = view;
+        this.placeController = placeController;
+    }
+
+    public HelloActivity withPlace(HelloPlace place) {
         this.name = place.getHelloName();
-        this.clientFactory = clientFactory;
+        return this;
     }
 
     /**
@@ -27,10 +33,9 @@ public class HelloActivity extends AbstractActivity implements HelloView.Present
      */
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        HelloView helloView = clientFactory.getHelloView();
-        helloView.setName(name);
-        helloView.setPresenter(this);
-        containerWidget.setWidget(helloView.asWidget());
+        view.setName(name);
+        view.setPresenter(this);
+        containerWidget.setWidget(view.asWidget());
     }
 
     /**
@@ -46,6 +51,6 @@ public class HelloActivity extends AbstractActivity implements HelloView.Present
      */
     @Override
     public void goTo(Place place) {
-        clientFactory.getPlaceController().goTo(place);
+        placeController.goTo(place);
     }
 }

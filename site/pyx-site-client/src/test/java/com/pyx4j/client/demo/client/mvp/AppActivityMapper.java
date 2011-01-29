@@ -3,8 +3,9 @@ package com.pyx4j.client.demo.client.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
-import com.pyx4j.client.demo.client.ClientFactory;
 import com.pyx4j.client.demo.client.activity.GoodbyeActivity;
 import com.pyx4j.client.demo.client.activity.HelloActivity;
 import com.pyx4j.client.demo.client.place.GoodbyePlace;
@@ -12,29 +13,23 @@ import com.pyx4j.client.demo.client.place.HelloPlace;
 
 public class AppActivityMapper implements ActivityMapper {
 
-    private final ClientFactory clientFactory;
+    Provider<HelloActivity> helloActivityProvider;
 
-    /**
-     * AppActivityMapper associates each Place with its corresponding {@link Activity}
-     * 
-     * @param clientFactory
-     *            Factory to be passed to activities
-     */
-    public AppActivityMapper(ClientFactory clientFactory) {
+    Provider<GoodbyeActivity> goodbyeActivityProvider;
+
+    @Inject
+    public AppActivityMapper(final Provider<HelloActivity> helloActivityProvider, final Provider<GoodbyeActivity> goodbyeActivityProvider) {
         super();
-        this.clientFactory = clientFactory;
+        this.helloActivityProvider = helloActivityProvider;
+        this.goodbyeActivityProvider = goodbyeActivityProvider;
     }
 
-    /**
-     * Map each Place to its corresponding Activity. This would be a great use for GIN.
-     */
     @Override
     public Activity getActivity(Place place) {
-        // This is begging for GIN
         if (place instanceof HelloPlace)
-            return new HelloActivity((HelloPlace) place, clientFactory);
+            return helloActivityProvider.get().withPlace((HelloPlace) place);
         else if (place instanceof GoodbyePlace)
-            return new GoodbyeActivity((GoodbyePlace) place, clientFactory);
+            return goodbyeActivityProvider.get().withPlace((GoodbyePlace) place);
 
         return null;
     }
