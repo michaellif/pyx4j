@@ -19,15 +19,19 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
+import com.pyx4j.commons.IDebugId;
+
 /**
  * Created on 26-Sep-06
  * 
  * Create Dialog with Custom button.
  */
-public interface Custom1Option extends DialogOptions {
+public interface Custom1Option extends DialogOptions, IDebugId {
 
     public String custom1Text();
 
     public boolean onClickCustom1();
+
+    public IDebugId getCustom1DebugID();
 
 }

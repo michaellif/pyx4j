@@ -13,5 +13,6 @@
  -->
 <module rename-to="g.site">
     <inherits name='com.pyx4j.examples.site.Site'/>
+    <inherits name='com.google.gwt.user.Debug'/>
     <set-property name="user.agent" value="safari,gecko1_8,ie8"/>
 </module>

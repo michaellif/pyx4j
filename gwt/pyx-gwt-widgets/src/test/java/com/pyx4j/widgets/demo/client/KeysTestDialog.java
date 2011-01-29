@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -44,6 +45,11 @@ public class KeysTestDialog {
             @Override
             public boolean onClickCustom1() {
                 return true;
+            }
+
+            @Override
+            public IDebugId getCustom1DebugID() {
+                return null;
             }
 
         });

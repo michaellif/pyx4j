@@ -64,6 +64,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
@@ -207,19 +208,23 @@ public class Dialog extends DialogPanelNew {
         }
 
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).custom1Text(), buttonsHandler, !hasDefaultButtons);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), ((Custom1Option) options).getCustom1DebugID(), buttonsHandler,
+                    !hasDefaultButtons);
             buttonsPanel.add(custom1Button);
         }
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).custom2Text(), buttonsHandler, !hasDefaultButtons);
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), ((Custom2Option) options).getCustom2DebugID(), buttonsHandler,
+                    !hasDefaultButtons);
             buttonsPanel.add(custom2Button);
         }
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).custom3Text(), buttonsHandler, !hasDefaultButtons);
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), ((Custom3Option) options).getCustom3DebugID(), buttonsHandler,
+                    !hasDefaultButtons);
             buttonsPanel.add(custom3Button);
         }
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).custom4Text(), buttonsHandler, !hasDefaultButtons);
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), ((Custom4Option) options).getCustom4DebugID(), buttonsHandler,
+                    !hasDefaultButtons);
             buttonsPanel.add(custom4Button);
         }
 
@@ -238,23 +243,23 @@ public class Dialog extends DialogPanelNew {
         }
 
         if (options instanceof YesOption) {
-            yesButton = createButton(i18n.tr("Yes"), buttonsHandler, true);
+            yesButton = createButton(i18n.tr("Yes"), DialogDebugId.Dialog_Yes, buttonsHandler, true);
             buttonsPanel.add(yesButton);
         }
         if (options instanceof NoOption) {
-            noButton = createButton(i18n.tr("No"), buttonsHandler, true);
+            noButton = createButton(i18n.tr("No"), DialogDebugId.Dialog_No, buttonsHandler, true);
             buttonsPanel.add(noButton);
         }
         if (options instanceof OkOption) {
-            okButton = createButton(optionTextOk(), buttonsHandler, true);
+            okButton = createButton(optionTextOk(), DialogDebugId.Dialog_Ok, buttonsHandler, true);
             buttonsPanel.add(okButton);
         }
         if (options instanceof CancelOption) {
-            cancelButton = createButton(optionTextCancel(), buttonsHandler, true);
+            cancelButton = createButton(optionTextCancel(), DialogDebugId.Dialog_Cancel, buttonsHandler, true);
             buttonsPanel.add(cancelButton);
         }
         if (options instanceof CloseOption) {
-            closeButton = createButton(optionTextClose(), buttonsHandler, true);
+            closeButton = createButton(optionTextClose(), DialogDebugId.Dialog_Close, buttonsHandler, true);
             buttonsPanel.add(closeButton);
         }
 
@@ -300,9 +305,13 @@ public class Dialog extends DialogPanelNew {
         return i18n.tr("Close");
     }
 
-    private Button createButton(String text, ClickHandler buttonListener, boolean canHaveFocus) {
+    private Button createButton(String text, IDebugId debugID, ClickHandler buttonListener, boolean canHaveFocus) {
         Button button = new Button(text);
-        button.ensureDebugId("Dialog." + text);
+        if (debugID == null) {
+            button.ensureDebugId("Dialog." + text);
+        } else {
+            button.ensureDebugId(debugID.toString());
+        }
         button.addClickHandler(buttonListener);
         DOM.setStyleAttribute(button.getElement(), "margin", "3px");
         DOM.setStyleAttribute(button.getElement(), "whiteSpace", "nowrap");

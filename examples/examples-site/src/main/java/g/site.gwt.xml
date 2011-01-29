@@ -3,4 +3,5 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.examples.site.Site'/>
+    <inherits name='com.google.gwt.user.Debug'/>
 </module>

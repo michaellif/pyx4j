@@ -22,6 +22,8 @@ package com.pyx4j.examples.site.client.pub.video;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.essentials.gwt2swf.YouTubePlayer;
 import com.pyx4j.essentials.gwt2swf.YouTubePlayerWidget;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -61,6 +63,11 @@ public class PlayVideoDialog extends VerticalPanel implements CancelOption, Cust
     }
 
     @Override
+    public IDebugId getCustom1DebugID() {
+        return new StringDebugId("Play");
+    }
+
+    @Override
     public boolean onClickCustom1() {
         if (player.isReady()) {
             player.getControl().play();
@@ -71,6 +78,11 @@ public class PlayVideoDialog extends VerticalPanel implements CancelOption, Cust
     @Override
     public String custom2Text() {
         return "Pause";
+    }
+
+    @Override
+    public IDebugId getCustom2DebugID() {
+        return new StringDebugId("Pause");
     }
 
     @Override

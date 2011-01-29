@@ -116,7 +116,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
         for (EditorAction action : actions) {
             switch (action) {
             case BACK:
-                actionsPanel.addItem(i18n.tr("Back"), new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Back"), CrudDebugId.Crud_Back, new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         boolean doubleBack = (backFromNewItem == 2);
@@ -135,7 +135,7 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
                 });
                 break;
             case PRINT:
-                actionsPanel.addItem(i18n.tr("Print"), new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Print"), CrudDebugId.Crud_Print, new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
                         Print.it(getEditorPanel().toStringForPrint());

@@ -32,6 +32,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -54,8 +55,6 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     ComponentAccessAdapter defaultAccessAdapter;
 
-    private boolean widgetCreated = false;
-
     private WIDGET_TYPE widget;
 
     private EventBus eventBus;
@@ -63,6 +62,8 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     private String width = "";
 
     private String height = "";
+
+    private IDebugId debugID;
 
     /**
      * Basic information would be available in server log
@@ -235,17 +236,30 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     }
 
     public boolean isWidgetCreated() {
-        return widgetCreated;
+        return widget != null;
     }
 
     @Override
     public WIDGET_TYPE asWidget() {
-        if (!widgetCreated) {
+        if (widget == null) {
             widget = initWidget();
-            widgetCreated = true;
+            if (getDebugID() != null) {
+                setDebugID(getDebugID());
+            }
             onWidgetCreated();
         }
         return widget;
+    }
+
+    public IDebugId getDebugID() {
+        return debugID;
+    }
+
+    public void setDebugID(IDebugId debugID) {
+        this.debugID = debugID;
+        if (widget != null) {
+            widget.ensureDebugId(debugID.toString());
+        }
     }
 
     protected void applyVisibilityRules() {

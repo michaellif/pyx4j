@@ -68,6 +68,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
                 }
             });
             saveButton.getElement().getStyle().setMargin(20, Unit.PX);
+            saveButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
 
             contentPanel.add(saveButton);
         } else {

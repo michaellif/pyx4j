@@ -65,6 +65,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
         contentPanel.add(actionsPanel);
 
         Button viewButton = new Button("View");
+        viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         viewButton.addClickHandler(new ClickHandler() {
 
             @Override
@@ -77,6 +78,7 @@ public abstract class EntitySearchCriteriaPanel<E extends IEntity> extends Abstr
         actionsPanel.add(viewButton);
 
         Anchor clearAction = new Anchor("<i>clear</i>", true);
+        clearAction.ensureDebugId(CrudDebugId.Criteria_Clear.toString());
 
         clearAction.addClickHandler(new ClickHandler() {
 

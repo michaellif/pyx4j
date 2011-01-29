@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 
 public class Path implements Serializable {
 
@@ -123,6 +125,10 @@ public class Path implements Serializable {
     @Override
     public int hashCode() {
         return this.path.hashCode();
+    }
+
+    public IDebugId getDebugID() {
+        return new StringDebugId(path.replace(PATH_SEPARATOR, '$'));
     }
 
     @Override

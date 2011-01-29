@@ -45,6 +45,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -73,6 +74,7 @@ public class WidgetsDemo implements EntryPoint {
 
     private static TestImages bundle = GWT.create(TestImages.class);
 
+    @Override
     public void onModuleLoad() {
 
         StyleManger.installTheme(new WindowsTheme());
@@ -373,6 +375,7 @@ public class WidgetsDemo implements EntryPoint {
             this.pageEditor = pageEditor;
         }
 
+        @Override
         public void onClick(ClickEvent event) {
             htmlViewer.setText(pageEditor.getHTML());
         }
@@ -380,6 +383,7 @@ public class WidgetsDemo implements EntryPoint {
 
     class DialogButtonHandler1 implements ClickHandler {
 
+        @Override
         public void onClick(ClickEvent event) {
             Dialog dialog = new Dialog("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
             dialog.show();
@@ -392,6 +396,7 @@ public class WidgetsDemo implements EntryPoint {
 
     class DialogButtonHandler2 implements ClickHandler {
 
+        @Override
         public void onClick(ClickEvent event) {
             Dialog dialog = new Dialog("Caption2", new Options2() {
 
@@ -436,6 +441,16 @@ public class WidgetsDemo implements EntryPoint {
                 public boolean onClickCustom2() {
                     log.info("onClickCustom2");
                     return false;
+                }
+
+                @Override
+                public IDebugId getCustom2DebugID() {
+                    return null;
+                }
+
+                @Override
+                public IDebugId getCustom1DebugID() {
+                    return null;
                 }
             });
 

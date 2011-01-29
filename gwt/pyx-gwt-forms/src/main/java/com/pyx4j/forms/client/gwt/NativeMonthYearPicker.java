@@ -56,6 +56,14 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
         setDate(cComponent.getValue());
     }
 
+    @Override
+    public void onEnsureDebugId(String debugID) {
+        yearSelector.ensureDebugId(debugID + "_yy");
+        if (monthSelector != null) {
+            monthSelector.ensureDebugId(debugID + "_mm");
+        }
+    }
+
     private void nativeValueUpdate() {
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;

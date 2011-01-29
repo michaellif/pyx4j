@@ -32,9 +32,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers {
 
-    private ListBox monthSelector;
+    protected final ListBox monthSelector;
 
-    private final ListBox yearSelector;
+    protected final ListBox yearSelector;
 
     private final int lastYear = new Date().getYear() + 7;
 
@@ -63,6 +63,8 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             }
             setCellWidth(monthSelector, "50%");
             monthSelector.addChangeHandler(changeHandler);
+        } else {
+            monthSelector = null;
         }
 
         yearSelector = new ListBox();
@@ -105,6 +107,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         return new Date(year, month, 1);
     }
 
+    @Override
     public HandlerRegistration addChangeHandler(ChangeHandler handler) {
         return addDomHandler(handler, ChangeEvent.getType());
     }

@@ -33,6 +33,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
+
 public class ActionsBoxPanel extends ActionsPanel {
 
     private final VerticalPanel contentPanel;
@@ -61,7 +63,13 @@ public class ActionsBoxPanel extends ActionsPanel {
         fieldSetPanel.add(contentPanel);
     }
 
+    @Deprecated
+    // use IDebugId
     public Anchor addItem(String name, ClickHandler handler) {
+        return addItem(name, null, handler);
+    }
+
+    public Anchor addItem(String name, IDebugId debugId, ClickHandler handler) {
         Anchor anchor = new Anchor(name);
         anchor.getElement().getStyle().setColor("#0066CC");
         anchor.getElement().getStyle().setFontWeight(FontWeight.BOLD);
@@ -71,6 +79,11 @@ public class ActionsBoxPanel extends ActionsPanel {
 
         if (handler != null) {
             anchor.addClickHandler(handler);
+        }
+        if (debugId != null) {
+            anchor.ensureDebugId(debugId.toString());
+        } else {
+            anchor.ensureDebugId(name);
         }
 
         contentPanel.add(anchor);

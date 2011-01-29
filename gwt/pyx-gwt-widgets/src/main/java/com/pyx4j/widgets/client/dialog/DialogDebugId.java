@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2006-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,6 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
+ * Created on 2011-01-28
  * @author vlads
  * @version $Id$
  */
@@ -21,16 +22,16 @@ package com.pyx4j.widgets.client.dialog;
 
 import com.pyx4j.commons.IDebugId;
 
-/**
- * Created on 26-Sep-06
- * 
- * Create Dialog with Custom button.
- */
-public interface Custom3Option extends DialogOptions {
+public enum DialogDebugId implements IDebugId {
 
-    public String custom3Text();
+    Dialog_Ok,
 
-    public boolean onClickCustom3();
+    Dialog_Cancel,
 
-    public IDebugId getCustom3DebugID();
+    Dialog_Yes,
+
+    Dialog_No,
+
+    Dialog_Close,
+
 }

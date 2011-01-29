@@ -135,7 +135,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         for (Action action : actions) {
             switch (action) {
             case NEW:
-                actionsPanel.addItem(i18n.tr("New") + " " + entityName, new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("New") + " " + entityName, CrudDebugId.Crud_New, new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {
@@ -144,7 +144,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 });
                 break;
             case REPORT:
-                actionsPanel.addItem(i18n.tr("Generate Report"), new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Generate Report"), CrudDebugId.Crud_Report, new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {

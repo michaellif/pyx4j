@@ -19,6 +19,8 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
+import com.pyx4j.commons.IDebugId;
+
 /**
  * Created on 26-Sep-06
  * 
@@ -30,4 +32,5 @@ public interface Custom4Option extends DialogOptions {
 
     public boolean onClickCustom4();
 
+    public IDebugId getCustom4DebugID();
 }
