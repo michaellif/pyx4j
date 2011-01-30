@@ -7,8 +7,6 @@ import com.google.inject.Singleton;
 @Singleton
 public class GoodbyeViewImpl extends SimplePanel implements GoodbyeView {
 
-    SimplePanel viewPanel = new SimplePanel();
-
     Label text;
 
     public GoodbyeViewImpl() {

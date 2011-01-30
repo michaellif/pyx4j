@@ -3,47 +3,29 @@ package com.pyx4j.client.demo.client.place;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
-//public class HelloPlace extends ActivityPlace<HelloActivity>
-public class HelloPlace extends Place
-{
-	private String helloName;
-	
-	public HelloPlace(String token)
-	{
-		this.helloName = token;
-	}
+public class HelloPlace extends Place {
+    private final String helloName;
 
-	public String getHelloName()
-	{
-		return helloName;
-	}
+    public HelloPlace(String token) {
+        this.helloName = token;
+    }
 
-	public static class Tokenizer implements PlaceTokenizer<HelloPlace>
-	{
+    public String getHelloName() {
+        return helloName;
+    }
 
-		@Override
-		public String getToken(HelloPlace place)
-		{
-			return place.getHelloName();
-		}
+    public static class Tokenizer implements PlaceTokenizer<HelloPlace> {
 
-		@Override
-		public HelloPlace getPlace(String token)
-		{
-			return new HelloPlace(token);
-		}
+        @Override
+        public String getToken(HelloPlace place) {
+            return place.getHelloName();
+        }
 
-	}
-	
-//	@Override
-//	protected Place getPlace(String token)
-//	{
-//		return new HelloPlace(token);
-//	}
-//
-//	@Override
-//	protected Activity getActivity()
-//	{
-//		return new HelloActivity("David");
-//	}
+        @Override
+        public HelloPlace getPlace(String token) {
+            return new HelloPlace(token);
+        }
+
+    }
+
 }

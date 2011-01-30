@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.Label;
 
 public class HelloViewImpl extends HorizontalPanel implements HelloView {
 
-    Label nameText;
+    private final Label nameText;
 
     public HelloViewImpl() {
         nameText = new Label();
