@@ -3,7 +3,7 @@ package com.pyx4j.dashboard.client;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
- * Class representing a single drag-and-drop example .
+ * Class representing a single drag-and-drop example.
  */
 public abstract class BasePanel extends SimplePanel {
 
