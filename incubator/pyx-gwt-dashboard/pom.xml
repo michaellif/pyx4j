@@ -81,6 +81,13 @@
 			<artifactId>gin</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.googlecode.gwt-dnd</groupId>
+			<artifactId>gwt-dnd</artifactId>
+		</dependency>
+		
+		
+  
     </dependencies>
 
     <properties>

@@ -386,6 +386,12 @@
 				<version>1.0</version>
 			</dependency>
 
+				<dependency>
+					<groupId>com.googlecode.gwt-dnd</groupId>
+					<artifactId>gwt-dnd</artifactId>
+					<version>3.0.1</version>
+				</dependency>
+
         </dependencies>
 
     </dependencyManagement>

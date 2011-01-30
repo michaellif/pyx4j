@@ -1,0 +1,74 @@
+/** Add css rules here for your application. */
+ 
+h1 {
+	color: gray;
+	font-size: 2em;
+	margin: 30px 0px 10px 0px;
+	text-align: center;
+}
+
+html, body {
+	height: 100%;
+}
+body {
+    margin: 10px;
+}
+
+div.dragdrop-dropTarget {
+    background-color: #CCCCCC;
+/*    border: 1px solid black;*/
+}
+div.dragdrop-dropTarget-engage {
+    background: none repeat scroll 0 0 #BCDEFF;
+/*    border: 1px dashed black;*/
+}
+
+.BasePanel {
+    margin: 1em;
+}
+.InsertPanel {
+	min-width: 600px;
+}
+.InsertPanel .InsertPanel-holder, .InsertPanel .InsertPanel-column-heading, .InsertPanel .InsertPanel-spacer {
+/*    margin: 0.1em;*/
+/*    padding: 0.1em;*/
+/*    width: 220px;*/
+}
+.InsertPanel .InsertPanel-column-container{
+/*    display: inline-block;*/
+/*    vertical-align: top;*/
+/*    padding: 0.4%;*/
+}
+.InsertPanel .InsertPanel-holder-menu {
+    border: 5px dotted red;
+}
+.InsertPanel .InsertPanel-column-heading {
+	background-color: #87B3FF;
+	font-weight: bold;
+  	text-align: center;
+/*    border: 2px solid maroon;*/
+/*    padding: 0.1em;*/
+/*    margin-left: 0.2em;*/
+/*    margin-right: 0.1em;*/
+}
+.InsertPanel .InsertPanel-column-composite {
+    float: left;
+/*    border: 1px solid fuchsia;*/
+/*    margin: 0.1em;*/
+/*    padding: 1em;*/
+}
+.InsertPanel .InsertPanel-holder {
+	background-color: #B3FF87;
+    border: 1px solid blue;
+}
+.InsertPanel .InsertPanel-spacer {
+    height: 3em;
+}
+.InsertPanel .InsertPanel-holder-caption {
+    background-color: #B387FF;
+    border-bottom: 1px solid blue;
+}
+.InsertPanel .InsertPanel-holder-menu-button {
+/*	float: right;*/
+    vertical-align: top;
+}

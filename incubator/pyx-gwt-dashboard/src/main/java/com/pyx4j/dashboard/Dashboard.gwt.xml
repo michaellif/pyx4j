@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision: 7171 $ ($Author: vlads $) $Date: 2010-10-07 17:49:34 -0400 (Thu, 07 Oct 2010) $ -->
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.pyx4j.Commons'/>
+    <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
+    <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
+     
+    
+    <source path="client"/>
+</module>
