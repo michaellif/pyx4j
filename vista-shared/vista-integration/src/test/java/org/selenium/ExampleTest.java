@@ -38,10 +38,10 @@ public class ExampleTest extends TestCase {
 
             selenium.click("link=Sign In");
 
-            SeleniumUtils.waitForId(driver, "gwt-debug-Email");
+            SeleniumUtils.waitForId(driver, "gwt-debug-AuthenticationRequest$email");
 
-            selenium.type("gwt-debug-Email", "emp001@pyx4j.com");
-            selenium.type("gwt-debug-Password", "emp001@pyx4j.com");
+            selenium.type("gwt-debug-AuthenticationRequest$email", "emp001@pyx4j.com");
+            selenium.type("gwt-debug-AuthenticationRequest$password", "emp001@pyx4j.com");
             selenium.click("gwt-debug-Dialog_Ok");
 
             SeleniumUtils.waitForId(driver, "gwt-debug-Crud_New");

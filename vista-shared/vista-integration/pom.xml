@@ -24,18 +24,19 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium</artifactId>
-            <version>2.0b1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.testng</groupId>
-                    <artifactId>testng</artifactId>
-                </exclusion>
-            </exclusions>
+		<dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-unit-selenium</artifactId>
+            <version>${pyxVersion}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+                
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
