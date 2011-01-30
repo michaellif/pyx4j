@@ -117,6 +117,7 @@
 
     <modules>
         <module>vista-portal</module>
+        <module>vista-shared</module>
     </modules>
 
     <properties>
