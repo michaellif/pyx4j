@@ -39,8 +39,6 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 
 public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> implements HasHandlers, HasPropertyChangeHandlers, IsWidget {
 
-    private String name;
-
     private String title;
 
     private String toolTip;
@@ -85,16 +83,6 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         addAccessAdapter(defaultAccessAdapter);
     }
 
-    @Deprecated
-    public String getName() {
-        return name;
-    }
-
-    @Deprecated
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -102,14 +90,6 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     public void setTitle(String title) {
         this.title = title;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TITLE_PROPERTY);
-    }
-
-    public String getComponentDebugID() {
-        if (getName() != null) {
-            return getName();
-        } else {
-            return getTitle();
-        }
     }
 
     public String getWidth() {

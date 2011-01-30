@@ -55,10 +55,7 @@ public class NativeRadioGroup<E extends Enum<E>> extends SimplePanel implements 
         }
         this.setWidget(panel);
 
-        String groupName = cComponent.getName();
-        if (groupName == null) {
-            groupName = cComponent.getOptionsClass().getName();
-        }
+        String groupName = cComponent.getOptionsClass().getName();
 
         for (final E option : cComponent.getOptions()) {
             RadioButton b = new RadioButton(groupName, option.toString());

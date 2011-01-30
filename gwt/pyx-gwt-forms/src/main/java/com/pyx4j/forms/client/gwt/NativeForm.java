@@ -549,15 +549,10 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             Cursor.setDefault(label.getElement());
 
             if (nativeComponent == null) {
-                throw new RuntimeException("initNativeComponent() method call on " + component.getName() + "[" + component.getClass() + "] returns null.");
+                throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
             }
             if (nativeComponent instanceof NativeCheckBox) {
                 ((NativeCheckBox) nativeComponent).setText(null);
-            }
-
-            // TODO move ensureDebugId GWT call to proper place e.g. NativeComponent creation
-            if (component.getComponentDebugID() != null) {
-                nativeComponent.ensureDebugId(component.getComponentDebugID());
             }
 
             if (nativeComponent instanceof Focusable) {

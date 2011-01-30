@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.gwt.NativeHorizontalPanel;
 
 public class CHorizontalPanel extends CPanelBase<NativeHorizontalPanel> {
@@ -32,13 +30,7 @@ public class CHorizontalPanel extends CPanelBase<NativeHorizontalPanel> {
         NativeHorizontalPanel nativePanel = new NativeHorizontalPanel(this);
 
         for (CComponent<?> component : getComponents()) {
-            INativeComponent nativeComponent = component.asWidget();
-            // TODO move ensureDebugId GWT call to proper place e.g. NativeComponent creation
-            if (component.getComponentDebugID() != null) {
-                ((Widget) nativeComponent).ensureDebugId(component.getComponentDebugID());
-            }
-
-            nativePanel.add(nativeComponent, component.getConstraints());
+            nativePanel.add(component.asWidget(), component.getConstraints());
         }
         applyAccessibilityRules();
 

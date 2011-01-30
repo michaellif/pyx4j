@@ -127,8 +127,8 @@ public class Path implements Serializable {
         return this.path.hashCode();
     }
 
-    public IDebugId getDebugID() {
-        return new StringDebugId(path.replace(PATH_SEPARATOR, '$'));
+    public IDebugId getDebugId() {
+        return new StringDebugId(path.substring(0, path.length() - 1).replace(PATH_SEPARATOR, '$'));
     }
 
     @Override

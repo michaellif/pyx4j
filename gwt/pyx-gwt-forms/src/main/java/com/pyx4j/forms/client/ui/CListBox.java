@@ -249,7 +249,9 @@ public class CListBox<E> extends CEditableComponent<List<E>, NativeListBox<E>> i
                 return CListBox.this.getItemName(item);
             }
         };
-        pop.ensureDebugId(this.getComponentDebugID());
+        if (this.getDebugID() != null) {
+            pop.ensureDebugId(this.getDebugID().toString());
+        }
         pop.setComparator(getComparator());
         pop.setRequiredValues(getRequiredValues());
         pop.setHasRequiredValueValidationMessage(this);

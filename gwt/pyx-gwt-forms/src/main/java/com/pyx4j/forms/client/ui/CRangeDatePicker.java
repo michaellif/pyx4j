@@ -22,6 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
+
 public class CRangeDatePicker extends CHorizontalPanel {
 
     private final CDatePicker fromDate;
@@ -34,7 +37,6 @@ public class CRangeDatePicker extends CHorizontalPanel {
 
         // Sum of Width should be 200px
         fromDate = new CDatePicker();
-        fromDate.setName(title + "-from");
         fromDate.setWidth("97px");
         CLayoutConstraints fromDateConstraints = new CLayoutConstraints();
         fromDateConstraints.padding = new CLayoutConstraints.Padding(0, 0, 0, 0);
@@ -60,12 +62,17 @@ public class CRangeDatePicker extends CHorizontalPanel {
         addComponent(dash);
 
         toDate = new CDatePicker();
-        toDate.setName(title + "-to");
         toDate.setWidth("97px");
         addComponent(toDate);
 
         setWidth("1px");
 
+    }
+
+    @Override
+    public void setDebugID(IDebugId debugID) {
+        fromDate.setDebugID(new StringDebugId(debugID.toString() + "-from"));
+        toDate.setDebugID(new StringDebugId(debugID.toString() + "-to"));
     }
 
     public void setValue(Date[] dates) {
