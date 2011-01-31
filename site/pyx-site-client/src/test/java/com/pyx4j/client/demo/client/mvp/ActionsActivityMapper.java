@@ -10,14 +10,14 @@ import com.pyx4j.client.demo.client.activity.SayGoodbyeActivity;
 import com.pyx4j.client.demo.client.activity.SayHelloActivity;
 import com.pyx4j.client.demo.client.place.GoodbyePlace;
 
-public class VerticalMasterActivityMapper implements ActivityMapper {
+public class ActionsActivityMapper implements ActivityMapper {
 
     Provider<SayHelloActivity> sayHelloActivityProvider;
 
     Provider<SayGoodbyeActivity> sayGoodbyeActivityProvider;
 
     @Inject
-    public VerticalMasterActivityMapper(Provider<SayHelloActivity> sayHelloActivityProvider, Provider<SayGoodbyeActivity> sayGoodbyeActivityProvider) {
+    public ActionsActivityMapper(Provider<SayHelloActivity> sayHelloActivityProvider, Provider<SayGoodbyeActivity> sayGoodbyeActivityProvider) {
         super();
         this.sayHelloActivityProvider = sayHelloActivityProvider;
         this.sayGoodbyeActivityProvider = sayGoodbyeActivityProvider;

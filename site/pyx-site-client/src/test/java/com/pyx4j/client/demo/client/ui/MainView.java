@@ -9,8 +9,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import com.pyx4j.client.demo.client.mvp.MainActivityMapper;
-import com.pyx4j.client.demo.client.mvp.VerticalMasterActivityMapper;
+import com.pyx4j.client.demo.client.mvp.MainNavigActivityMapper;
+import com.pyx4j.client.demo.client.mvp.ActionsActivityMapper;
 
 @Singleton
 public class MainView extends FlowPanel {
@@ -20,7 +20,7 @@ public class MainView extends FlowPanel {
     private final SimplePanel verticalMasterDisplayPanel;
 
     @Inject
-    public MainView(MainActivityMapper mainActivityMapper, VerticalMasterActivityMapper verticalMasterActivityMapper, EventBus eventBus) {
+    public MainView(MainNavigActivityMapper mainActivityMapper, ActionsActivityMapper verticalMasterActivityMapper, EventBus eventBus) {
 
         mainDisplayPanel = new SimplePanel();
         mainDisplayPanel.setHeight("200px");

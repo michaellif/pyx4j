@@ -21,8 +21,8 @@ public class MvpModule extends AbstractGinModule {
         // only need one of those for the entire app.
         bind(PlaceHistoryMapper.class).to(AppPlaceHistoryMapper.class).in(Singleton.class);
 
-        bind(MainActivityMapper.class);
-        bind(VerticalMasterActivityMapper.class);
+        bind(MainNavigActivityMapper.class);
+        bind(ActionsActivityMapper.class);
 
     }
 
