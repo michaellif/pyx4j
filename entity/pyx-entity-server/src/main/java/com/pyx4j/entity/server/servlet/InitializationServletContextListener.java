@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration.EnvironmentType;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 
 /**
@@ -64,6 +65,7 @@ public class InitializationServletContextListener implements ServletContextListe
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        PersistenceServicesFactory.deregister();
     }
 
 }
