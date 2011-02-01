@@ -63,7 +63,7 @@ public final class DashboardDemo implements EntryPoint {
         RootPanel mainPanel = RootPanel.get(MAIN_PANEL);
         DOM.setInnerHTML(mainPanel.getElement(), "");
 
-        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 2);
+        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 2, 3);
 
         // uncomment for captioned columns:     
         layout.useColumnWidths = true;

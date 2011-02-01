@@ -3,7 +3,6 @@ package com.pyx4j.dashboard.client;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -49,7 +48,9 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
         private int columns = 1; // at least one column exists by default...
 
         // geometry:
-        private int spacing = 0; // horizontal and vertical cell spacing value...
+        private int spacingH = 0; // horizontal and
+
+        private int spacingV = 0; // vertical cell spacing value...
 
         // column relative widths (in per-cents):
         private byte columnWidths[]; // should be filled with names if useColumnWidths set to true!..
@@ -74,21 +75,26 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
                 throw new ArrayIndexOutOfBoundsException();
         }
 
-        public Layout(int columns, int spacing) throws ArrayIndexOutOfBoundsException {
+        public Layout(int columns, int spacingH, int spacingV) throws ArrayIndexOutOfBoundsException {
             if (columns > 0)
                 this.columns = columns;
             else
                 throw new ArrayIndexOutOfBoundsException();
 
-            this.spacing = spacing;
+            this.spacingH = spacingH;
+            this.spacingV = spacingV;
         }
 
         public int getColumns() {
             return columns;
         }
 
-        public int getSpacing() {
-            return spacing;
+        public int getSpacingH() {
+            return spacingH;
+        }
+
+        public int getSpacingV() {
+            return spacingV;
         }
 
         public boolean setColumWidths(byte[] columnWidths) throws ArrayIndexOutOfBoundsException {
@@ -142,7 +148,10 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
     // internal data:	
     protected Layout layout;
 
-    //	protected PickupDragController columnDragController;
+    /*
+     * VladLL : column drag-g-drop functionality is commented till now!.. // protected
+     * PickupDragController columnDragController;
+     */
     protected PickupDragController widgetDragController;
 
     protected FlowPanel columnsContainerPanel; // holds columns (as vertical panels).
@@ -180,12 +189,11 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
         // initialize horizontal panel to hold our columns:
         columnsContainerPanel = new FlowPanel();
         columnsContainerPanel.addStyleName(CSS_INSERT_PANEL_COLUMN_CONTAINER);
-        //		columnsContainerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        //		columnsContainerPanel.setSpacing(layout.getSpacing());
         columnsContainerPanel.setWidth("100%");
 
         /*
-         * // initialize our column drag controller: columnDragController = new
+         * VladLL : column drag-g-drop functionality is commented till now!.. //
+         * initialize our column drag controller: columnDragController = new
          * PickupDragController(boundaryPanel, false);
          * columnDragController.setBehaviorMultipleSelection(false);
          * 
@@ -205,24 +213,23 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
     protected boolean initColumns() {
         columnsContainerPanel.clear();
         for (int col = 0; col < layout.getColumns(); ++col) {
-            // vertical panel to hold the heading and a second vertical panel:
+            // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
             columnCompositePanel.addStyleName(CSS_INSERT_PANEL_COLUMN_COMPOSITE);
-            columnCompositePanel.setWidth((layout.useColumnWidths ? layout.getCoumnWidth(col) : 100 / layout.getColumns()) - 0.6 + "%");
+            columnCompositePanel.setWidth((layout.useColumnWidths ? layout.getCoumnWidth(col) : 100 / layout.getColumns()) - 0.5 + "%");
 
             /*
              * byte pcWidth = 0; for(int j = 0; j < col; ++j) { pcWidth +=
              * (layout.useColumnWidths ? layout.getCoumnWidth(j) :
              * 100/layout.getColumns()); }
              */
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "margin", "0.2%");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0.2%");
+            DOM.setStyleAttribute(columnCompositePanel.getElement(), "margin", "0px " + layout.getSpacingH() + "px");
+            //          DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0.2%");
             //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "float", "left");
             //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "position", "relative");
             //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "position", "float");
             //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "top", "0");
             //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "left", pcWidth +"%");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "height", "50px");
 
             // put column name if necessary:
             if (layout.useColumnNames) {
@@ -233,21 +240,21 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
                 columnCompositePanel.add(heading);
 
                 /*
-                 * // make the column draggable by its heading:
+                 * VladLL : column drag-g-drop functionality is commented till now!.. //
+                 * make the column draggable by its heading:
                  * columnDragController.makeDraggable(columnCompositePanel,heading);
-                 */}
+                 */
+            }
 
             // inner vertical panel to hold individual widgets:
             VerticalPanelWithSpacer columnPanel = new VerticalPanelWithSpacer();
             columnPanel.addStyleName(CSS_INSERT_PANEL_COLUMN_CONTAINER);
-            //			columnPanel.setSpacing(layout.getSpacing());
             columnPanel.setWidth("100%");
 
             columnCompositePanel.add(columnPanel);
-            //			columnCompositePanel.setCellWidth(columnPanel, "100%");
 
             // widget drop controller for the current column:
-            FlowPanelDropController widgetDropController = new FlowPanelDropController(columnPanel);
+            CustomFlowPanelDropController widgetDropController = new CustomFlowPanelDropController(columnPanel);
             widgetDragController.registerDropController(widgetDropController);
 
             columnsContainerPanel.add(columnCompositePanel);
@@ -258,7 +265,7 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
 
     private boolean refresh() {
         // hold the current widgets for a while:
-        Vector<FlowPanel> columnWidgetsPanels = new Vector<FlowPanel>(columnsContainerPanel.getWidgetCount());
+        Vector<VerticalPanelWithSpacer> columnWidgetsPanels = new Vector<VerticalPanelWithSpacer>(columnsContainerPanel.getWidgetCount());
         for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
             columnWidgetsPanels.add(getColumnWidgetsPanel(i));
 
@@ -316,9 +323,9 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
     }
 
     // internals:	
-    protected FlowPanel getColumnWidgetsPanel(int column) {
+    protected VerticalPanelWithSpacer getColumnWidgetsPanel(int column) {
         FlowPanel columnCompositePanel = (FlowPanel) columnsContainerPanel.getWidget(column);
-        return (FlowPanel) columnCompositePanel.getWidget(columnCompositePanel.getWidgetCount() - 1);
+        return (VerticalPanelWithSpacer) columnCompositePanel.getWidget(columnCompositePanel.getWidgetCount() - 1);
         // note, that first element could be label with column name, so always get last one!..
     }
 
@@ -352,7 +359,6 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
 
             // create caption with title and menu:
             HorizontalPanel widgetHolderCaption = new HorizontalPanel();
-
             Label title = new Label(holdedWidget.getName());
 
             widgetHolderCaption.add(title);
@@ -368,7 +374,8 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
             addStyleName(CSS_INSERT_PANEL_HOLDER);
             setWidth("100%");
 
-            DOM.setStyleAttribute(getElement(), "margin", mainPanel.layout.getSpacing() + "px");
+            // don't forget about vertical spacing:
+            DOM.setStyleAttribute(getElement(), "margin", mainPanel.layout.getSpacingV() + "px" + " 0px");
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -428,7 +435,7 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
                         menu.addItem("Setup", cmdSetup);
                     }
 
-                    //					menu.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU);
+                    //                    menu.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU);
 
                     pp.setWidget(menu);
                     pp.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU);

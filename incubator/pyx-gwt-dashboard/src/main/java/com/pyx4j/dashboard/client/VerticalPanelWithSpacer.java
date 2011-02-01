@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
  * {@link VerticalPanel} which has a permanent spacer at the end to prevent CSS collapse
  * of the panel and its parent.
  */
-public class VerticalPanelWithSpacer extends FlowPanel {
+public class VerticalPanelWithSpacer extends FlowPanel /* VerticalPanel */{
     private static final String CSS_INSERT_PANEL_SPACER = "InsertPanel-spacer";
 
     public VerticalPanelWithSpacer() {
