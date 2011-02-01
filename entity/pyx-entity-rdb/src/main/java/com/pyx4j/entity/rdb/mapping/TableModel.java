@@ -415,6 +415,48 @@ public class TableModel {
         }
     }
 
+    public <T extends IEntity> ResultSetIterator<T> queryIterable(final Connection connection, EntityQueryCriteria<T> criteria, int limit) {
+        String sql = null;
+        QueryBuilder<T> qb = new QueryBuilder<T>(dialect, "m1", entityMeta, entityOperationsMeta, criteria);
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = connection.prepareStatement(sql = "SELECT m1.* FROM " + qb.getSQL(tableName));
+            if (limit > 0) {
+                stmt.setMaxRows(limit);
+            }
+            qb.bindParameters(stmt);
+
+            rs = stmt.executeQuery();
+        } catch (SQLException e) {
+            SQLUtils.closeQuietly(stmt);
+            log.error("{} SQL {}", tableName, sql);
+            log.error("{} SQL select error", tableName, e);
+            throw new RuntimeException(e);
+        }
+
+        return new ResultSetIterator<T>(stmt, rs) {
+
+            @Override
+            protected T retrieve() {
+                @SuppressWarnings("unchecked")
+                T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
+                try {
+                    entity.setPrimaryKey(rs.getLong("id"));
+                    retrieveValues(rs, entity);
+                } catch (SQLException e) {
+                    log.error("{} SQL select error", tableName, e);
+                    throw new RuntimeException(e);
+                }
+                for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
+                    CollectionsTableModel.retrieve(connection, entity, member);
+                }
+                return entity;
+            }
+        };
+
+    }
+
     public <T extends IEntity> List<Long> queryKeys(Connection connection, EntityQueryCriteria<T> criteria, int limit) {
         PreparedStatement stmt = null;
         ResultSet rs = null;

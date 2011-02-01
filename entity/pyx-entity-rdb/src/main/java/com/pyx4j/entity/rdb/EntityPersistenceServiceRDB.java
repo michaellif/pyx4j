@@ -48,6 +48,7 @@ import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.CollectionsTableModel;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberOperationsMeta;
+import com.pyx4j.entity.rdb.mapping.ResultSetIterator;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService;
@@ -504,8 +505,42 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
-        // TODO Auto-generated method stub
-        return null;
+        final Connection connection = connectionProvider.getConnection();
+        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        if (encodedCursorRefference != null) {
+            // TODO   
+        }
+        final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria, -1);
+
+        return new ICursorIterator<T>() {
+
+            @Override
+            public boolean hasNext() {
+                return iterable.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return iterable.next();
+            }
+
+            @Override
+            public void remove() {
+                iterable.remove();
+            }
+
+            @Override
+            public String encodedCursorRefference() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public void completeRetrieval() {
+                iterable.close();
+                SQLUtils.closeQuietly(connection);
+            }
+        };
     }
 
     @Override
