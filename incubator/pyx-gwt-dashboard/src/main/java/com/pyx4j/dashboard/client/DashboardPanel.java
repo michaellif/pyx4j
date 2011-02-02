@@ -49,7 +49,7 @@ public class DashboardPanel extends SimplePanel {
         public void onMinimize(boolean minimized_restored); // true for min-ed, false - restored
 
         public void onDelete();
-    }
+    } // Interface IWidget
 
     /**
      * Dashboard layout data type. Represents desirable layout for dashboard
@@ -58,82 +58,113 @@ public class DashboardPanel extends SimplePanel {
         private int columns = 1; // at least one column exists by default...
 
         // geometry:
-        private int spacingH = 0; // horizontal and
+        private double horizontalSpacing = 0; // horizontal (%-values!) and
 
-        private int spacingV = 0; // vertical cell spacing value...
+        private int verticalSpacing = 0; // vertical (pixels) cell spacing value...
 
         // column relative widths (in per-cents):
-        private byte columnWidths[]; // should be filled with names if useColumnWidths set to true!..
-
-        public boolean useColumnWidths = false;
+        private byte[] columnWidths = new byte[0]; // could be filled with widths...
 
         // decoration:
-        private String columnNames[]; // should be filled with names if useColumnNames set to true!..
-
-        public boolean useColumnNames = false;
+        private String[] columnNames = new String[0]; // could be filled with names...
 
         public Layout() {
         }
 
-        public Layout(int columns) throws ArrayIndexOutOfBoundsException {
+        public Layout(int columns) throws IllegalArgumentException {
             if (columns > 0)
                 this.columns = columns;
             else
-                throw new ArrayIndexOutOfBoundsException();
+                throw new IllegalArgumentException();
         }
 
-        public Layout(int columns, int spacingH, int spacingV) throws ArrayIndexOutOfBoundsException {
+        public Layout(int columns, double spacingH_PCT, int spacingV_PX) throws IllegalArgumentException {
             if (columns > 0)
                 this.columns = columns;
             else
-                throw new ArrayIndexOutOfBoundsException();
+                throw new IllegalArgumentException();
 
-            this.spacingH = spacingH;
-            this.spacingV = spacingV;
+            if (!setHorizontalSpacing(spacingH_PCT))
+                throw new IllegalArgumentException();
+
+            this.verticalSpacing = spacingV_PX;
         }
 
         public int getColumns() {
             return columns;
         }
 
-        public int getSpacingH() {
-            return spacingH;
+        public double getHorizontalSpacing() {
+            return horizontalSpacing;
         }
 
-        public int getSpacingV() {
-            return spacingV;
-        }
+        public boolean setHorizontalSpacing(double spacingH_PCT) {
+            if (getColumns() * spacingH_PCT * 2 < 100.0)
+                return false; // percentage looks strange!?.
 
-        public boolean setColumWidths(byte[] columnWidths) throws ArrayIndexOutOfBoundsException {
-            if (columnWidths.length < getColumns())
-                throw new ArrayIndexOutOfBoundsException();
-
-            short pcSum = 0;
+            double pcMin = 100.0 / getColumns();
             for (int i = 0; i < columnWidths.length; ++i)
-                pcSum += columnWidths[i];
+                pcMin = Math.min(pcMin, columnWidths[i]);
 
-            if (pcSum != 100)
-                return false; // ok, the widths percentage isn't correct!?.
+            if (pcMin <= spacingH_PCT * 2)
+                return false; // ok, smallest column should be wider than spacing...
+
+            horizontalSpacing = spacingH_PCT;
+            return true;
+        }
+
+        public int getVerticalSpacing() {
+            return verticalSpacing;
+        }
+
+        public void setverticalSpacing(int spacingV_PX) {
+            verticalSpacing = spacingV_PX;
+        }
+
+        public boolean isColumnWidths() {
+            return (columnWidths.length != 0);
+        }
+
+        public boolean setColumnWidths(byte[] columnWidths) throws IllegalArgumentException {
+            if (columnWidths.length < getColumns())
+                throw new IllegalArgumentException();
+
+            byte pcSum = 0;
+            byte pcMin = 0;
+            for (int i = 0; i < columnWidths.length; ++i) {
+                pcSum += columnWidths[i];
+                pcMin = (byte) Math.min(pcMin, columnWidths[i]);
+            }
+
+            if (pcSum > 100)
+                return false; // mmm, the widths percentage looks strange!?.
+
+            if (pcMin <= getHorizontalSpacing() * 2)
+                return false; // ok, smallest column should be wider than spacing...
 
             this.columnWidths = columnWidths;
             return true;
         }
 
-        public byte getCoumnWidth(int column) throws NullPointerException, ArrayIndexOutOfBoundsException {
+        public float getCoumnWidth(int column) throws ArrayIndexOutOfBoundsException {
             return columnWidths[column];
         }
 
-        public void setColumnNames(String[] columnNames) throws ArrayIndexOutOfBoundsException {
+        public boolean isColumnNames() {
+            return (columnNames.length != 0);
+        }
+
+        public void setColumnNames(String[] columnNames) throws IllegalArgumentException {
             if (columnNames.length < getColumns())
-                throw new ArrayIndexOutOfBoundsException();
+                throw new IllegalArgumentException();
 
             this.columnNames = columnNames;
         }
 
-        public String getCoumnName(int column) throws NullPointerException, ArrayIndexOutOfBoundsException {
+        public String getCoumnName(int column) throws ArrayIndexOutOfBoundsException {
             return columnNames[column];
         }
-    }
+    } // class Layout
 
     // CSS style names used: 
     private static final String CSS_DASHBOARD_PANEL = "DashboardPanel";
@@ -183,6 +214,30 @@ public class DashboardPanel extends SimplePanel {
         return refresh();
     }
 
+    public boolean refresh() {
+        // hold the current widgets for a while:
+        Vector<VerticalPanelWithSpacer> columnWidgetsPanels = new Vector<VerticalPanelWithSpacer>(columnsContainerPanel.getWidgetCount());
+        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
+            columnWidgetsPanels.add(getColumnWidgetsPanel(i));
+
+        initColumns(); // initialize new columns according to the (new) layout
+
+        // transfer current widgets to the new layout, 
+        // first - move intersected part of the columns:
+        int i;
+        int minCommonSize = Math.min(columnWidgetsPanels.size(), columnsContainerPanel.getWidgetCount());
+        for (i = 0; i < minCommonSize; ++i)
+            for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
+                getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(j));
+
+        // and then - move the rest in the last column of new layout (if present):
+        for (; i < columnWidgetsPanels.size(); ++i)
+            for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
+                getColumnWidgetsPanel(columnsContainerPanel.getWidgetCount() - 1).add(columnWidgetsPanels.get(i).getWidget(j));
+
+        return true;
+    }
+
     // initializing:
     protected boolean init() {
         addStyleName(CSS_DASHBOARD_PANEL);
@@ -221,23 +276,14 @@ public class DashboardPanel extends SimplePanel {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
             columnCompositePanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE);
-            columnCompositePanel.setWidth((layout.useColumnWidths ? layout.getCoumnWidth(col) : 100 / layout.getColumns()) - 0.5 + "%");
+            columnCompositePanel.setWidth((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing()
+                    * 2 + "%");
 
-            /*
-             * byte pcWidth = 0; for(int j = 0; j < col; ++j) { pcWidth +=
-             * (layout.useColumnWidths ? layout.getCoumnWidth(j) :
-             * 100/layout.getColumns()); }
-             */
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "margin", "0px " + layout.getSpacingH() + "px");
-            //          DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0.2%");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "float", "left");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "position", "relative");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "position", "float");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "top", "0");
-            //			DOM.setStyleAttribute(columnCompositePanel.getElement(), "left", pcWidth +"%");
+            DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
+            DOM.setStyleAttribute(columnCompositePanel.getElement(), "float", "left");
 
             // put column name if necessary:
-            if (layout.useColumnNames) {
+            if (layout.isColumnNames()) {
                 Label heading = new Label(layout.getCoumnName(col));
                 heading.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_HEADING);
                 heading.setWidth("100%");
@@ -262,30 +308,6 @@ public class DashboardPanel extends SimplePanel {
 
             columnsContainerPanel.add(columnCompositePanel);
         }
-
-        return true;
-    }
-
-    private boolean refresh() {
-        // hold the current widgets for a while:
-        Vector<VerticalPanelWithSpacer> columnWidgetsPanels = new Vector<VerticalPanelWithSpacer>(columnsContainerPanel.getWidgetCount());
-        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
-            columnWidgetsPanels.add(getColumnWidgetsPanel(i));
-
-        initColumns(); // initialize new columns according to the (new) layout
-
-        // transfer current widgets to the new layout, 
-        // first - move intersected part of the columns:
-        int i;
-        int minCommonSize = Math.min(columnWidgetsPanels.size(), columnsContainerPanel.getWidgetCount());
-        for (i = 0; i < minCommonSize; ++i)
-            for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
-                getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(j));
-
-        // and then - move the rest in the last column of new layout (if present):
-        for (; i < columnWidgetsPanels.size(); ++i)
-            for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
-                getColumnWidgetsPanel(columnsContainerPanel.getWidgetCount() - 1).add(columnWidgetsPanels.get(i).getWidget(j));
 
         return true;
     }
@@ -385,7 +407,7 @@ public class DashboardPanel extends SimplePanel {
             this.setWidth("100%");
 
             // don't forget about vertical spacing:
-            DOM.setStyleAttribute(this.getElement(), "padding", mainPanel.layout.getSpacingV() + "px" + " 0px");
+            DOM.setStyleAttribute(this.getElement(), "padding", mainPanel.layout.getVerticalSpacing() + "px" + " 0px");
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -486,7 +508,7 @@ public class DashboardPanel extends SimplePanel {
                 mainPanel.setWidget(maximizeData.boundaryPanel);
                 maximizeData.clear();
 
-                this.setWidth("100%");
+                //                this.setWidth("100%");
                 widgetDragController.makeDraggable(this, title);
                 holdedWidget.onMaximize(false);
             } else { // maximize:
@@ -494,7 +516,7 @@ public class DashboardPanel extends SimplePanel {
                 maximizeData.boundaryPanel = mainPanel.getWidget();
                 mainPanel.setWidget(this);
 
-                this.setSize("100%", "100%");
+                //                this.setSize("100%", "100%");
                 widgetDragController.makeNotDraggable(this);
                 holdedWidget.onMaximize(true);
             }
