@@ -46,7 +46,7 @@ import org.jasypt.properties.PropertyValueEncryptionUtils;
  * Write credentials file base on settings.xml.
  * 
  * @goal write
- * @phase post-integration-test
+ * @phase pre-integration-test
  * @threadSafe
  */
 public class WriteCredentialsMojo extends CredentialsAbstractMojo implements Contextualizable {
@@ -116,7 +116,7 @@ public class WriteCredentialsMojo extends CredentialsAbstractMojo implements Con
         Writer writer = null;
         try {
             credentials.store(writer = new FileWriter(file), null);
-            getLog().debug("Password file " + file.getAbsolutePath() + " created");
+            getLog().info("Password file " + file.getAbsolutePath() + " created");
         } catch (IOException e) {
             getLog().error("write error", e);
             throw new MojoExecutionException("Can't write to file " + file.getAbsolutePath());
