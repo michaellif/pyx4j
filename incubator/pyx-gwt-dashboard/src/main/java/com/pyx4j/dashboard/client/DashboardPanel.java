@@ -36,10 +36,19 @@ public class DashboardPanel extends SimplePanel {
         // flags:	
         public boolean isMaximizable();
 
+        public boolean isMinimizable();
+
         public boolean isSetupable();
 
         // verbs:
         public void showSetup();
+
+        // notifications:
+        public void onMaximize(boolean maximized_restored); // true for max-ed, false - restored
+
+        public void onMinimize(boolean minimized_restored); // true for min-ed, false - restored
+
+        public void onDelete();
     }
 
     /**
@@ -130,21 +139,21 @@ public class DashboardPanel extends SimplePanel {
     }
 
     // CSS style names used: 
-    private static final String CSS_INSERT_PANEL = "InsertPanel";
+    private static final String CSS_DASHBOARD_PANEL = "DashboardPanel";
 
-    private static final String CSS_INSERT_PANEL_COLUMN_COMPOSITE = "InsertPanel-column-composite";
+    private static final String CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE = "DashboardPanel-column-composite";
 
-    private static final String CSS_INSERT_PANEL_COLUMN_HEADING = "InsertPanel-column-heading";
+    private static final String CSS_DASHBOARD_PANEL_COLUMN_HEADING = "DashboardPanel-column-heading";
 
-    private static final String CSS_INSERT_PANEL_COLUMN_CONTAINER = "InsertPanel-column-container";
+    private static final String CSS_DASHBOARD_PANEL_COLUMN_CONTAINER = "DashboardPanel-column-container";
 
-    private static final String CSS_INSERT_PANEL_HOLDER = "InsertPanel-holder";
+    private static final String CSS_DASHBOARD_PANEL_HOLDER = "DashboardPanel-holder";
 
-    private static final String CSS_INSERT_PANEL_HOLDER_CAPTION = "InsertPanel-holder-caption";
+    private static final String CSS_DASHBOARD_PANEL_HOLDER_CAPTION = "DashboardPanel-holder-caption";
 
-    private static final String CSS_INSERT_PANEL_HOLDER_MENU = "InsertPanel-holder-menu";
+    private static final String CSS_DASHBOARD_PANEL_HOLDER_MENU = "DashboardPanel-holder-menu";
 
-    private static final String CSS_INSERT_PANEL_HOLDER_MENU_BUTTON = "InsertPanel-holder-menu-button";
+    private static final String CSS_DASHBOARD_PANEL_HOLDER_MENU_BUTTON = "DashboardPanel-holder-menu-button";
 
     // internal data:	
     protected Layout layout;
@@ -180,7 +189,7 @@ public class DashboardPanel extends SimplePanel {
 
     // initializing:
     protected boolean init() {
-        addStyleName(CSS_INSERT_PANEL);
+        addStyleName(CSS_DASHBOARD_PANEL);
 
         // use the boundary panel as this composite's widget:
         AbsolutePanel boundaryPanel = new AbsolutePanel();
@@ -189,7 +198,7 @@ public class DashboardPanel extends SimplePanel {
 
         // initialize horizontal panel to hold our columns:
         columnsContainerPanel = new FlowPanel();
-        columnsContainerPanel.addStyleName(CSS_INSERT_PANEL_COLUMN_CONTAINER);
+        columnsContainerPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
         columnsContainerPanel.setWidth("100%");
 
         /*
@@ -216,7 +225,7 @@ public class DashboardPanel extends SimplePanel {
         for (int col = 0; col < layout.getColumns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
-            columnCompositePanel.addStyleName(CSS_INSERT_PANEL_COLUMN_COMPOSITE);
+            columnCompositePanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE);
             columnCompositePanel.setWidth((layout.useColumnWidths ? layout.getCoumnWidth(col) : 100 / layout.getColumns()) - 0.5 + "%");
 
             /*
@@ -235,7 +244,7 @@ public class DashboardPanel extends SimplePanel {
             // put column name if necessary:
             if (layout.useColumnNames) {
                 Label heading = new Label(layout.getCoumnName(col));
-                heading.addStyleName(CSS_INSERT_PANEL_COLUMN_HEADING);
+                heading.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_HEADING);
                 heading.setWidth("100%");
 
                 columnCompositePanel.add(heading);
@@ -249,7 +258,7 @@ public class DashboardPanel extends SimplePanel {
 
             // inner vertical panel to hold individual widgets:
             VerticalPanelWithSpacer columnPanel = new VerticalPanelWithSpacer();
-            columnPanel.addStyleName(CSS_INSERT_PANEL_COLUMN_CONTAINER);
+            columnPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
             columnPanel.setWidth("100%");
 
             columnCompositePanel.add(columnPanel);
@@ -370,13 +379,13 @@ public class DashboardPanel extends SimplePanel {
             widgetHolderCaption.setCellWidth(title, "100%");
             widgetHolderCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
             widgetHolderCaption.add(createWidgetMenu());
-            widgetHolderCaption.addStyleName(CSS_INSERT_PANEL_HOLDER_CAPTION);
+            widgetHolderCaption.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_CAPTION);
             widgetHolderCaption.setWidth("100%");
 
             // put it together:
             holder.add(widgetHolderCaption);
             holder.add(holdedWidget.getWidget());
-            holder.addStyleName(CSS_INSERT_PANEL_HOLDER);
+            holder.addStyleName(CSS_DASHBOARD_PANEL_HOLDER);
             holder.setWidth("100%");
 
             this.setWidget(holder);
@@ -431,7 +440,8 @@ public class DashboardPanel extends SimplePanel {
 
                     // create the menu:
                     MenuBar menu = new MenuBar(true);
-                    menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
+                    if (holdedWidget.isMinimizable())
+                        menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
 
                     if (holdedWidget.isMaximizable())
                         menu.addItem((isMaximized() ? "Restore" : "Maximize"), cmdMaximize);
@@ -443,16 +453,16 @@ public class DashboardPanel extends SimplePanel {
                         menu.addItem("Setup", cmdSetup);
                     }
 
-                    //                    menu.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU);
+                    //                    menu.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
 
                     pp.setWidget(menu);
-                    pp.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU);
+                    pp.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
                     pp.setPopupPosition(event.getClientX() - 40, event.getClientY());
                     pp.show();
                 } // onClick button event handler...
             }); // ClickHandler class...
 
-            btn.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU_BUTTON);
+            btn.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU_BUTTON);
             btn.setHeight("1.5em");
             return btn;
         }
@@ -462,9 +472,11 @@ public class DashboardPanel extends SimplePanel {
             if (isMinimized()) {
                 holder.add(minimizedWidget);
                 minimizedWidget = null;
+                holdedWidget.onMinimize(false);
             } else { // minimize:
                 minimizedWidget = holdedWidget.getWidget();
                 holder.remove(minimizedWidget);
+                holdedWidget.onMinimize(true);
             }
         }
 
@@ -483,6 +495,7 @@ public class DashboardPanel extends SimplePanel {
 
                 this.setWidth("100%");
                 widgetDragController.makeDraggable(this, title);
+                holdedWidget.onMaximize(false);
             } else { // maximize:
                 maximizeData.saveWidgetPosition((FlowPanel) getParent(), this);
                 maximizeData.boundaryPanel = mainPanel.getWidget();
@@ -490,6 +503,7 @@ public class DashboardPanel extends SimplePanel {
 
                 this.setSize("100%", "100%");
                 widgetDragController.makeNotDraggable(this);
+                holdedWidget.onMaximize(true);
             }
         }
 
@@ -523,6 +537,7 @@ public class DashboardPanel extends SimplePanel {
 
         // --------------------------------------------------------------
         private void delete() {
+            holdedWidget.onDelete();
             ((FlowPanel) getParent()).remove(this);
         }
     } // WidgetHolder
