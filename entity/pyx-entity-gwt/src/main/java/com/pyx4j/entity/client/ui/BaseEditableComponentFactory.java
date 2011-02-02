@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui;
 
 import java.util.Date;
+import java.util.EnumSet;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IObject;
@@ -72,6 +73,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                     }
                 } else {
                     comp = new CComboBox();
+                    if (mm.getValueClass().isEnum()) {
+                        ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+                    }
                 }
                 break;
             case suggest:
@@ -108,6 +112,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             }
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();
+            ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
             comp = new CDatePicker();
         } else if (mm.getValueClass().equals(Boolean.class)) {
