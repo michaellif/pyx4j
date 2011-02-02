@@ -134,6 +134,8 @@
         <module>site/pyx-site-admin</module>
 -->
 
+        <module>maven/maven-password-plugin</module>
+
         <module>essentials/pyx-essentials-shared</module>
         <module>essentials/pyx-essentials-gwt</module>
         <module>essentials/pyx-essentials-data</module>

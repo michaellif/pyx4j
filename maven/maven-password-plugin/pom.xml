@@ -17,19 +17,13 @@
     <name>maven-password-plugin</name>
     <packaging>maven-plugin</packaging>
 
-    <description>maven-password-plugin</description>
+    <description>Write Credentials files for integration tests base on maven settings.xml</description>
 
 	<properties>
-		<mavenVersion>2.1.0</mavenVersion>
+		<maven.plugin.version>2.1.0</maven.plugin.version>
 	</properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-essentials-server</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.jasypt</groupId>
@@ -39,8 +33,14 @@
         <dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>${mavenVersion}</version>
+			<version>${maven.plugin.version}</version>
 		</dependency>
+
+		<dependency>
+      		<groupId>org.apache.maven</groupId>
+      		<artifactId>maven-settings</artifactId>
+      		<version>${maven.plugin.version}</version>
+    	</dependency>
 
     </dependencies>
 
