@@ -30,13 +30,13 @@
             <version>${project.version}</version>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-unit-selenium</artifactId>
             <version>${pyxVersion}</version>
         </dependency>
-        
-		<dependency>
+
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
             <version>${pyxVersion}</version>
@@ -105,12 +105,28 @@
                 <plugins>
                     <plugin>
                         <groupId>com.pyx4j</groupId>
-	                    <artifactId>maven-password-plugin</artifactId>
-	                    <version>${pyxVersion}</version>
-	                     <configuration>
+                        <artifactId>maven-password-plugin</artifactId>
+                        <version>${pyxVersion}</version>
+                        <configuration>
                             <serverId>google-app.birchwoodsoftwaregroup.com</serverId>
                             <locationDir>${basedir}</locationDir>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <id>create-pwd</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>write</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>remove-pwd</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                      </plugin>
                 </plugins>
             </build>

@@ -32,7 +32,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
     }
 
     public void testLogin() throws Exception {
-        Credentials credentials = J2SEServiceConnector.getCredentials("credentials.properties");
+        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
 
         // TODO Use this  credentials  to login to Google Apps
 
