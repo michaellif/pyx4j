@@ -99,7 +99,7 @@ public class DashboardPanel extends SimplePanel {
         }
 
         public boolean setHorizontalSpacing(double spacingH_PCT) {
-            if (getColumns() * spacingH_PCT * 2 < 100.0)
+            if (getColumns() * spacingH_PCT * 2 >= 100.0)
                 return false; // percentage looks strange!?.
 
             double pcMin = 100.0 / getColumns();
