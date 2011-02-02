@@ -21,6 +21,7 @@
 package com.pyx4j.client.demo.client.ui;
 
 import com.pyx4j.client.demo.client.theme.SiteTheme;
+import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 
 public class DefaultTheme extends SiteTheme {
@@ -36,9 +37,53 @@ public class DefaultTheme extends SiteTheme {
     @Override
     protected void initSiteViewStyles() {
         String prefix = SiteView.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(prefix);
-        style.addProperty("margin", "0");
-        style.addProperty("border", "none");
+
+        int minWidth = 760;
+        int maxWidth = 960;
+        int leftColumnWidth = 230;
+        int rightColumnWidth = 200;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", "#fff");
+        style.addProperty("width", "95%");
+        style.addProperty("min-width", minWidth + "px");
+        style.addProperty("max-width", maxWidth + "px");
+        style.addProperty("margin", "0 auto");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
+        style.addProperty("height", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
+        style.addProperty("width", "100%");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
+        style.addProperty("width", "100%");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Main));
+        style.addProperty("height", "100%");
+        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
+        style.addProperty("float", "left");
+        style.addProperty("width", leftColumnWidth + "px");
+        style.addProperty("margin-left", "-100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Right));
+        style.addProperty("float", "left");
+        style.addProperty("width", rightColumnWidth + "px");
+        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
+        style.addProperty("clear", "left");
         addStyle(style);
 
     }

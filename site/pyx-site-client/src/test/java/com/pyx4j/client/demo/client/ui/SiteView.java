@@ -23,7 +23,7 @@ public class SiteView extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        LeftSection, RightSection, ContentWrapper, ContentSection, FooterSection
+        Header, MainNavig, Center, Main, Left, Right, ContentWrapper, Content, Footer
     }
 
     @Inject
@@ -31,30 +31,28 @@ public class SiteView extends FlowPanel {
 
         StyleManger.installTheme(theme);
 
-        getElement().getStyle().setBackgroundColor("#fff");
-        getElement().getStyle().setWidth(90, Unit.PCT);
-        getElement().getStyle().setProperty("minWidth", "760px");
-        getElement().getStyle().setProperty("margin", "0 auto");
+        String prefix = SiteView.DEFAULT_STYLE_PREFIX;
+
+        setStyleName(prefix);
 
         //============ Top Panel ============
 
-        FlowPanel topWrapper = new FlowPanel();
-        topWrapper.setHeight("100%");
-        add(topWrapper);
+        FlowPanel headerWrapper = new FlowPanel();
+        headerWrapper.setStyleName(prefix + StyleSuffix.Header);
+        add(headerWrapper);
 
-        SimplePanel logoDisplayPanel = new DisplayPanel("Logo");
+        SimplePanel logoDisplayPanel = new DisplayPanel("Logo Logo Logo");
         logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-        topWrapper.add(logoDisplayPanel);
+        headerWrapper.add(logoDisplayPanel);
 
         SimplePanel actionsDisplayPanel = new DisplayPanel("Actions|Actions|Actions|Actions");
         actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        topWrapper.add(actionsDisplayPanel);
+        headerWrapper.add(actionsDisplayPanel);
 
         //============ Main Navig ============
 
         FlowPanel mainNavigWrapper = new FlowPanel();
-        mainNavigWrapper.setWidth("100%");
-        mainNavigWrapper.getElement().getStyle().setFloat(Style.Float.LEFT);
+        mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
         add(mainNavigWrapper);
 
         SimplePanel mainNavigDisplayPanel = new DisplayPanel("Main Navig");
@@ -63,26 +61,23 @@ public class SiteView extends FlowPanel {
         //============ Main ============
 
         SimplePanel centerWrapper = new SimplePanel();
-        centerWrapper.getElement().getStyle().setProperty("width", "100%");
-        centerWrapper.getElement().getStyle().setFloat(Style.Float.LEFT);
+        centerWrapper.setStyleName(prefix + StyleSuffix.Center);
         add(centerWrapper);
 
         FlowPanel mainWrapper = new FlowPanel();
-        mainWrapper.setHeight("100%");
-        mainWrapper.getElement().getStyle().setProperty("margin", "0 200px 0 230px");
+        mainWrapper.setStyleName(prefix + StyleSuffix.Main);
         centerWrapper.add(mainWrapper);
 
-        SimplePanel centerDisplayPanel1 = new DisplayPanel("Center1");
+        SimplePanel centerDisplayPanel1 = new DisplayPanel(
+                "Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 ");
         mainWrapper.add(centerDisplayPanel1);
 
-        SimplePanel centerDisplayPanel2 = new DisplayPanel("Center2");
+        SimplePanel centerDisplayPanel2 = new DisplayPanel(
+                "Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 ");
         mainWrapper.add(centerDisplayPanel2);
 
         FlowPanel leftWrapper = new FlowPanel();
-        leftWrapper.getElement().getStyle().setFloat(Style.Float.LEFT);
-        leftWrapper.getElement().getStyle().setProperty("width", "230px");
-        leftWrapper.getElement().getStyle().setProperty("marginLeft", "-100%");
-        leftWrapper.setWidth("230px");
+        leftWrapper.setStyleName(prefix + StyleSuffix.Left);
         add(leftWrapper);
 
         SimplePanel leftDisplayPanel1 = new DisplayPanel("Left1");
@@ -91,10 +86,7 @@ public class SiteView extends FlowPanel {
         leftWrapper.add(leftDisplayPanel2);
 
         FlowPanel rightWrapper = new FlowPanel();
-        rightWrapper.getElement().getStyle().setFloat(Style.Float.LEFT);
-        rightWrapper.getElement().getStyle().setProperty("width", "200px");
-        rightWrapper.getElement().getStyle().setProperty("marginLeft", "-200px");
-        rightWrapper.setWidth("200px");
+        rightWrapper.setStyleName(prefix + StyleSuffix.Right);
         add(rightWrapper);
 
         SimplePanel rightDisplayPanel1 = new DisplayPanel("Right1");
@@ -104,9 +96,13 @@ public class SiteView extends FlowPanel {
 
         //============ Footer ============
 
+        FlowPanel footerWrapper = new FlowPanel();
+        footerWrapper.setStyleName(prefix + StyleSuffix.Footer);
+        footerWrapper.getElement().getStyle().setProperty("clear", "left");
+        add(footerWrapper);
+
         SimplePanel bottomDisplayPanel = new DisplayPanel("Footer");
-        bottomDisplayPanel.getElement().getStyle().setProperty("clear", "left");
-        add(bottomDisplayPanel);
+        footerWrapper.add(bottomDisplayPanel);
 
         ActivityManager mainActivityManager = new ActivityManager(mainNavigActivityMapper, eventBus);
         //mainActivityManager.setDisplay(mainNavigDisplayPanel);
@@ -120,7 +116,7 @@ public class SiteView extends FlowPanel {
         DisplayPanel(String title) {
 
             HTML inner = new HTML(title);
-            inner.setSize("100%", "100px");
+            inner.setWidth("100%");
             setWidget(inner);
 
             getElement().getStyle().setBackgroundColor("#ddd");
