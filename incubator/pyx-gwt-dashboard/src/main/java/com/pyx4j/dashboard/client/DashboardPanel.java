@@ -98,6 +98,12 @@ public class DashboardPanel extends SimplePanel {
             return horizontalSpacing;
         }
 
+        /*
+         * Horizontal spacing set by %, so their sum (doubled value multiplied by column
+         * number) may not exceed 100%, at least (in reality we want to leave space for
+         * the columns itself!). Then, the spacing is formed by means of column padding,
+         * so its doubled value may not exceed the size of the smallest column also...
+         */
         public boolean setHorizontalSpacing(double spacingH_PCT) {
             if (getColumns() * spacingH_PCT * 2 >= 100.0)
                 return false; // percentage looks strange!?.
@@ -125,6 +131,11 @@ public class DashboardPanel extends SimplePanel {
             return (columnWidths.length != 0);
         }
 
+        /*
+         * The column widths set by %, so their sum shouldn't exceed 100%. But there is
+         * horizontal spacing also, and spacing formed by column padding, so the smallest
+         * column width should be greater that doubled spacing value...
+         */
         public boolean setColumnWidths(byte[] columnWidths) throws IllegalArgumentException {
             if (columnWidths.length < getColumns())
                 throw new IllegalArgumentException();
