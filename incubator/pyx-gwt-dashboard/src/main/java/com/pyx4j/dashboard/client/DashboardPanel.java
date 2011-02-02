@@ -141,10 +141,10 @@ public class DashboardPanel extends SimplePanel {
                 throw new IllegalArgumentException();
 
             byte pcSum = 0;
-            byte pcMin = 0;
+            double pcMin = 100.0 / getColumns();
             for (int i = 0; i < columnWidths.length; ++i) {
                 pcSum += columnWidths[i];
-                pcMin = (byte) Math.min(pcMin, columnWidths[i]);
+                pcMin = Math.min(pcMin, columnWidths[i]);
             }
 
             if (pcSum > 100)
