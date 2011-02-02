@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>pyx</artifactId>
+        <version>2.0.2-SNAPSHOT</version><!--pyx-version-->
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>maven-password-plugin</artifactId>
+    <name>maven-password-plugin</name>
+    <packaging>maven-plugin</packaging>
+
+    <description>maven-password-plugin</description>
+
+	<properties>
+		<mavenVersion>2.1.0</mavenVersion>
+	</properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+        </dependency>
+
+        <dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+
+    </dependencies>
+
+</project>
