@@ -22,23 +22,18 @@ package com.pyx4j.maven.password;
 
 import java.io.File;
 
-import org.apache.maven.plugin.MojoExecutionException;
+public abstract class CredentialsFileAbstractMojo extends CredentialsAbstractMojo {
 
-/**
- * Remove created credentials file.
- * 
- * @goal clean
- * @phase post-integration-test
- * @threadSafe
- */
-public class CleanCredentialsMojo extends CredentialsFileAbstractMojo {
+    /**
+     * Where the credentials is located.
+     * 
+     * @parameter expression="${user.dir}"
+     * @required
+     */
+    protected File locationDir;
 
-    @Override
-    public void execute() throws MojoExecutionException {
-        File file = new File(locationDir, credentialsName);
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
+    /**
+     * @parameter default-value="credentials.properties";
+     */
+    protected String credentialsName;
 }

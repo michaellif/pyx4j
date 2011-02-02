@@ -26,14 +26,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.Method;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.settings.Server;
-import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.context.Context;
@@ -49,13 +47,10 @@ import org.jasypt.properties.PropertyValueEncryptionUtils;
  * @phase pre-integration-test
  * @threadSafe
  */
-public class WriteCredentialsMojo extends CredentialsAbstractMojo implements Contextualizable {
-
-    private static final String SECURITY_DISPATCHER_CLASS_NAME = "org.sonatype.plexus.components.sec.dispatcher.SecDispatcher";
+public class WriteCredentialsMojo extends CredentialsFileAbstractMojo implements Contextualizable {
 
     /**
-     * The server id in maven settings.xml to use for email(username) and password when
-     * connecting to GAE.
+     * The server id in maven settings.xml to use for email(username) and password.
      * 
      * @parameter
      * @required
@@ -63,21 +58,11 @@ public class WriteCredentialsMojo extends CredentialsAbstractMojo implements Con
     protected String serverId;
 
     /**
-     * The Maven settings reference.
+     * Encrypt values in created file
      * 
-     * @parameter expression="${settings}"
-     * @required
-     * @readonly
+     * @parameter default-value="true"
      */
-    protected Settings settings;
-
-    /**
-     * Plexus container, needed to manually lookup components.
-     * 
-     * To be able to use Password Encryption
-     * http://maven.apache.org/guides/mini/guide-encryption.html
-     */
-    protected PlexusContainer container;
+    protected boolean encrypt;
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -103,8 +88,8 @@ public class WriteCredentialsMojo extends CredentialsAbstractMojo implements Con
         }
 
         String password = decryptPassword(srv.getPassword());
-        String encrypt = credentials.getProperty("encrypt");
-        if (!"false".equalsIgnoreCase(encrypt)) {
+        String encryptProperty = credentials.getProperty("encrypt");
+        if (encrypt && !"false".equalsIgnoreCase(encryptProperty)) {
             StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
             encryptor.setPassword(getHardwareAddress());
             password = PropertyValueEncryptionUtils.encrypt(password, encryptor);
@@ -129,21 +114,6 @@ public class WriteCredentialsMojo extends CredentialsAbstractMojo implements Con
     @Override
     public void contextualize(Context context) throws ContextException {
         this.container = (PlexusContainer) context.get(PlexusConstants.PLEXUS_KEY);
-    }
-
-    private String decryptPassword(String password) {
-        if (password != null) {
-            try {
-                final Class<?> securityDispatcherClass = container.getClass().getClassLoader().loadClass(SECURITY_DISPATCHER_CLASS_NAME);
-                final Object securityDispatcher = container.lookup(SECURITY_DISPATCHER_CLASS_NAME, "maven");
-                final Method decrypt = securityDispatcherClass.getMethod("decrypt", String.class);
-                return (String) decrypt.invoke(securityDispatcher, password);
-            } catch (Exception e) {
-                getLog().warn("security features are disabled. Cannot find plexus security dispatcher", e);
-            }
-        }
-        getLog().warn("password could not be decrypted");
-        return password;
     }
 
     public static String getHardwareAddress() {

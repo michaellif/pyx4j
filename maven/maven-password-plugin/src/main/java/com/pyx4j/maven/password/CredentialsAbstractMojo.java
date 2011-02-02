@@ -20,27 +20,35 @@
  */
 package com.pyx4j.maven.password;
 
-import java.io.File;
+import java.lang.reflect.Method;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.settings.Settings;
+import org.codehaus.plexus.PlexusContainer;
 
 /**
  * 
  */
 public abstract class CredentialsAbstractMojo extends AbstractMojo {
 
-    /**
-     * Where the credentials is located.
-     * 
-     * @parameter expression="${user.dir}"
-     * @required
-     */
-    protected File locationDir;
+    static final String SECURITY_DISPATCHER_CLASS_NAME = "org.sonatype.plexus.components.sec.dispatcher.SecDispatcher";
 
     /**
-     * @parameter default-value="credentials.properties";
+     * The Maven settings reference.
+     * 
+     * @parameter expression="${settings}"
+     * @required
+     * @readonly
      */
-    protected String credentialsName;
+    protected Settings settings;
+
+    /**
+     * Plexus container, needed to manually lookup components.
+     * 
+     * To be able to use Password Encryption
+     * http://maven.apache.org/guides/mini/guide-encryption.html
+     */
+    protected PlexusContainer container;
 
     /**
      * @parameter default-value="email";
@@ -51,4 +59,19 @@ public abstract class CredentialsAbstractMojo extends AbstractMojo {
      * @parameter default-value="password";
      */
     protected String passwordName;
+
+    protected String decryptPassword(String password) {
+        if (password != null) {
+            try {
+                final Class<?> securityDispatcherClass = container.getClass().getClassLoader().loadClass(SECURITY_DISPATCHER_CLASS_NAME);
+                final Object securityDispatcher = container.lookup(SECURITY_DISPATCHER_CLASS_NAME, "maven");
+                final Method decrypt = securityDispatcherClass.getMethod("decrypt", String.class);
+                return (String) decrypt.invoke(securityDispatcher, password);
+            } catch (Exception e) {
+                getLog().warn("security features are disabled. Cannot find plexus security dispatcher", e);
+            }
+        }
+        getLog().warn("password could not be decrypted");
+        return password;
+    }
 }
