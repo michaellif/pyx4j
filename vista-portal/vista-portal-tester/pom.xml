@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+         <groupId>com.propertyvista</groupId>
+        <artifactId>vista-portal</artifactId>
+        <version>1.0.0-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-portal-tester</artifactId>
+    <name>vista-portal-tester</name>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-gwt</artifactId>
+        </dependency>
+
+	</dependencies>
+
+    <properties>
+        <gwtModule>tester</gwtModule>
+        <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean.app-gwt-generated</id>
+                        <phase>clean</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <delete quiet="true" includeemptydirs="true">
+                                    <fileset dir="${basedir}/../vista-portal-server/target/vista-portal-server/${gwtModule}"/>
+                                </delete>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+	</build>
+
+    <profiles>
+        <profile>
+            <id>gwtc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>maven-gwt-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>${gwtModuleCompile}</module>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                            </sourceDirectories>
+                            <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <target>${basedir}/../vista-portal-server/target/vista-portal-server</target>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <compileReport>${gwtCompileReport}</compileReport>
+                            <!-- disableCastChecking>true</disableCastChecking -->
+                            <!-- disableClassMetadata>true</disableClassMetadata -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
