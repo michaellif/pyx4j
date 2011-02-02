@@ -14,9 +14,11 @@
 package com.propertyvista.portal.tester;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.UIObject;
 
 public class VistaTesterDispatcher implements EntryPoint {
 
@@ -25,7 +27,22 @@ public class VistaTesterDispatcher implements EntryPoint {
         SimplePanel contentPanel = new SimplePanel();
         RootPanel.get().add(contentPanel);
 
-        contentPanel.add(new HTML("The Property Vista portal would be here!"));
+        HTML html = new HTML("Tester me!");
+        html.ensureDebugId("testMe");
+        contentPanel.add(html);
+
+        hideLoadingIndicator();
     }
 
+    public void hideLoadingIndicator() {
+        // Remove the loading icon
+        RootPanel loading = RootPanel.get("loading");
+        if (loading != null) {
+            com.google.gwt.user.client.Element elem = loading.getElement();
+            UIObject.setVisible(elem, false);
+            DOM.setInnerHTML(elem, "");
+            loading.removeFromParent();
+            elem.getParentElement().removeChild(elem);
+        }
+    }
 }
