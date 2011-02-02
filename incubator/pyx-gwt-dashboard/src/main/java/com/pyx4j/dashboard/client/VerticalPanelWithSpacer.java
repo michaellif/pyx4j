@@ -10,11 +10,11 @@ import com.google.gwt.user.client.ui.Widget;
  * of the panel and its parent.
  */
 public class VerticalPanelWithSpacer extends FlowPanel /* VerticalPanel */{
-    private static final String CSS_INSERT_PANEL_SPACER = "InsertPanel-spacer";
+    private static final String CSS_DASHBOARD_PANEL_SPACER = "DashboardPanel-spacer";
 
     public VerticalPanelWithSpacer() {
         Label spacerLabel = new Label("");
-        spacerLabel.setStylePrimaryName(CSS_INSERT_PANEL_SPACER);
+        spacerLabel.setStylePrimaryName(CSS_DASHBOARD_PANEL_SPACER);
         super.add(spacerLabel);
     }
 

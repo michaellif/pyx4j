@@ -70,10 +70,11 @@ public final class DashboardDemo implements EntryPoint {
         byte colWidths[] = { 20, 30, 50 };
         layout.setColumWidths(colWidths);
 
-        /*
-         * // uncomment for captioned columns: layout.useColumnNames = true; String
-         * colNames[] = {"one","two","three"}; layout.setColumnNames(colNames);
-         */
+        //        // uncomment for captioned columns: layout.useColumnNames = true; String
+        //        layout.useColumnNames = true;
+        //        String colNames[] = { "one", "two", "three" };
+        //        layout.setColumnNames(colNames);
+
         DashboardPanel dashboardPanel = new DashboardPanel(layout);
         dashboardPanel.setWidth("99%");
         mainPanel.add(dashboardPanel);
@@ -84,20 +85,26 @@ public final class DashboardDemo implements EntryPoint {
                 super(s);
             }
 
+            // info:
+
             @Override
             public Widget getWidget() {
                 return this;
             }
 
             @Override
+            public String getName() {
+                return "MyHTML Title";
+            }
+
+            // verbs:
+
+            @Override
             public void showSetup() {
                 Window.alert("IWidget::ShowSetup() has beed called!..");
             }
 
-            @Override
-            public String getName() {
-                return "MyHTML";
-            }
+            // flags:   
 
             @Override
             public boolean isMaximizable() {
@@ -105,8 +112,33 @@ public final class DashboardDemo implements EntryPoint {
             }
 
             @Override
+            public boolean isMinimizable() {
+                return true;
+            }
+
+            @Override
             public boolean isSetupable() {
                 return true;
+            }
+
+            // notifications:
+
+            @Override
+            public void onMaximize(boolean maximized_restored) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onMinimize(boolean minimized_restored) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onDelete() {
+                // TODO Auto-generated method stub
+
             }
         }
 

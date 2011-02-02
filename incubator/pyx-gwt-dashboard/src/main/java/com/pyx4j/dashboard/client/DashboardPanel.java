@@ -29,7 +29,7 @@ public class DashboardPanel extends SimplePanel {
      */
     public interface IWidget {
         // info:
-        public Widget getWidget();
+        public Widget getWidget(); // should be implemented meaningful!
 
         public String getName();
 
@@ -52,7 +52,7 @@ public class DashboardPanel extends SimplePanel {
     }
 
     /**
-     * Dashboard layout data type.
+     * Dashboard layout data type. Represents desirable layout for dashboard
      */
     public static class Layout {
         private int columns = 1; // at least one column exists by default...
@@ -72,9 +72,6 @@ public class DashboardPanel extends SimplePanel {
 
         public boolean useColumnNames = false;
 
-        /*
-         * Represents desirable layout for dashboard
-         */
         public Layout() {
         }
 
@@ -158,10 +155,9 @@ public class DashboardPanel extends SimplePanel {
     // internal data:	
     protected Layout layout;
 
-    /*
-     * VladLL : column drag-g-drop functionality is commented till now!.. // protected
-     * protected PickupDragController columnDragController;
-     */
+    //    // VladLL : column drag-g-drop functionality is commented till now!..
+    //    protected PickupDragController columnDragController;
+
     protected PickupDragController widgetDragController;
 
     protected FlowPanel columnsContainerPanel; // holds columns (as vertical panels).
@@ -201,16 +197,15 @@ public class DashboardPanel extends SimplePanel {
         columnsContainerPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
         columnsContainerPanel.setWidth("100%");
 
-        /*
-         * VladLL : column drag-g-drop functionality is commented till now!.. //
-         * initialize our column drag controller: columnDragController = new
-         * PickupDragController(boundaryPanel, false);
-         * columnDragController.setBehaviorMultipleSelection(false);
-         * 
-         * // initialize our column drop controller: FlowPanelDropController
-         * columnDropController = new FlowPanelDropController(columnsContainerPanel);
-         * columnDragController.registerDropController(columnDropController);
-         */
+        //        // VladLL : column drag-g-drop functionality is commented till now!..
+        //        //initialize our column drag controller: 
+        //        columnDragController = new PickupDragController(boundaryPanel, false);
+        //        columnDragController.setBehaviorMultipleSelection(false);
+        //
+        //        // initialize our column drop controller:
+        //        CustomFlowPanelDropController columnDropController = new CustomFlowPanelDropController(columnsContainerPanel);
+        //        columnDragController.registerDropController(columnDropController);
+
         boundaryPanel.add(columnsContainerPanel);
 
         // initialize our widget drag controller:
@@ -249,11 +244,9 @@ public class DashboardPanel extends SimplePanel {
 
                 columnCompositePanel.add(heading);
 
-                /*
-                 * VladLL : column drag-g-drop functionality is commented till now!.. //
-                 * make the column draggable by its heading:
-                 * columnDragController.makeDraggable(columnCompositePanel,heading);
-                 */
+                //                // VladLL : column drag-g-drop functionality is commented till now!..
+                //                // make the column draggable by its heading:
+                //                columnDragController.makeDraggable(columnCompositePanel, heading);
             }
 
             // inner vertical panel to hold individual widgets:

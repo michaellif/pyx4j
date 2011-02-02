@@ -17,38 +17,39 @@ div.dragdrop-dropTarget-engage {
 }
 
 
-.InsertPanel {
+.DashboardPanel {
 	min-width: 600px;
 }
-.InsertPanel .InsertPanel-holder, .InsertPanel .InsertPanel-column-heading, .InsertPanel .InsertPanel-spacer {
+.DashboardPanel .DashboardPanel-holder, .DashboardPanel .DashboardPanel-column-heading, .DashboardPanel .DashboardPanel-spacer {
 
 }
-.InsertPanel .InsertPanel-column-container {
+.DashboardPanel .DashboardPanel-column-container {
 
 }
-.InsertPanel .InsertPanel-column-heading {
+.DashboardPanel .DashboardPanel-column-heading {
 	background-color: #87B3FF;
 	font-weight: bold;
   	text-align: center;
+    border: 1px solid maroon;
 }
-.InsertPanel .InsertPanel-column-composite {
+.DashboardPanel .DashboardPanel-column-composite {
     float: left;
 }
-.InsertPanel .InsertPanel-holder {
+.DashboardPanel .DashboardPanel-holder {
 	background-color: #B3FF87;
     border: 1px solid blue;
 }
-.InsertPanel .InsertPanel-spacer {
+.DashboardPanel .DashboardPanel-spacer {
     height: 4em;
 }
-.InsertPanel .InsertPanel-holder-caption {
+.DashboardPanel .DashboardPanel-holder-caption {
     background-color: #B387FF;
     border-bottom: 1px solid blue;
 }
-.InsertPanel .InsertPanel-holder-menu-button {
+.DashboardPanel .DashboardPanel-holder-menu-button {
     vertical-align: top;
 }
-.InsertPanel-holder-menu {
+.DashboardPanel-holder-menu {
     background-color: silver;
 	border: 1px solid navy;
 }
