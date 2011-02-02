@@ -523,7 +523,7 @@ public class DashboardPanel extends SimplePanel {
 
         // --------------------------------------------------------------
         private void delete() {
-            ((VerticalPanel) getParent()).remove(this);
+            ((FlowPanel) getParent()).remove(this);
         }
     } // WidgetHolder
 } // DashboardPanel class...
