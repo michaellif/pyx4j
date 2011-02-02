@@ -23,11 +23,17 @@ package com.pyx4j.i18n.shared;
 import org.xnap.commons.i18n.I18n;
 
 /**
- * This one for server side. Replaced on the client using super-source.
+ * This one for GWT client side. Replaced on the client using super-source.
  */
 public class I18nFactory {
 
+    public static I18n getI18n(Class<?> clazz) {
+        return org.xnap.commons.i18n.I18nFactory.getI18n(clazz);
+    }
+    
     public static I18n getI18n() {
         return org.xnap.commons.i18n.I18nFactory.getI18n(I18nFactory.class);
     }
+    
+
 }
