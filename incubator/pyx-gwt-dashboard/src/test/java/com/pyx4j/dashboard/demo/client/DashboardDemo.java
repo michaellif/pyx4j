@@ -63,20 +63,18 @@ public final class DashboardDemo implements EntryPoint {
         RootPanel mainPanel = RootPanel.get(MAIN_PANEL);
         DOM.setInnerHTML(mainPanel.getElement(), "");
 
-        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 2, 3);
+        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 8, 4);
 
         // uncomment for captioned columns:     
-        layout.useColumnWidths = true;
         byte colWidths[] = { 20, 30, 50 };
-        layout.setColumWidths(colWidths);
+        layout.setColumnWidths(colWidths);
 
         //        // uncomment for captioned columns: layout.useColumnNames = true; String
-        //        layout.useColumnNames = true;
         //        String colNames[] = { "one", "two", "three" };
         //        layout.setColumnNames(colNames);
 
         DashboardPanel dashboardPanel = new DashboardPanel(layout);
-        dashboardPanel.setWidth("99%");
+        dashboardPanel.setWidth("100%");
         mainPanel.add(dashboardPanel);
 
         // fill the dashboard with demo widgets: 
