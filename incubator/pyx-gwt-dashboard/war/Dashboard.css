@@ -7,25 +7,16 @@ h1 {
 	text-align: center;
 }
 
-html, body {
-	height: 100%;
-}
-body {
-    margin: 10px;
-}
+
 
 div.dragdrop-dropTarget {
-    background-color: #CCCCCC;
-/*    border: 1px solid black;*/
+    background-color: silver;
 }
 div.dragdrop-dropTarget-engage {
-    background: none repeat scroll 0 0 #BCDEFF;
-/*    border: 1px dashed black;*/
+/*    background: none repeat scroll 0 0 #BCDEFF;*/
 }
 
-.BasePanel {
-/*    margin: 1em;*/
-}
+
 .InsertPanel {
 	min-width: 600px;
 }
@@ -55,10 +46,9 @@ div.dragdrop-dropTarget-engage {
     border-bottom: 1px solid blue;
 }
 .InsertPanel .InsertPanel-holder-menu-button {
-/*	float: right;*/
     vertical-align: top;
 }
 .InsertPanel-holder-menu {
-    background-color: white;
-	border: 1px solid black;
+    background-color: silver;
+	border: 1px solid navy;
 }

@@ -10,6 +10,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -21,7 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Dashboard panel.
  */
-public class DashboardPanel extends /* BasePanel */SimplePanel {
+public class DashboardPanel extends SimplePanel {
     /**
      * Dashboard Widget interface. User-defined widgets should extend GWT Widget and
      * implement this interface.
@@ -150,7 +151,7 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
 
     /*
      * VladLL : column drag-g-drop functionality is commented till now!.. // protected
-     * PickupDragController columnDragController;
+     * protected PickupDragController columnDragController;
      */
     protected PickupDragController widgetDragController;
 
@@ -342,10 +343,14 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
         return true;
     }
 
-    protected final class WidgetHolder extends VerticalPanel {
+    protected final class WidgetHolder extends SimplePanel {
         private final IWidget holdedWidget;
 
         private final DashboardPanel mainPanel;
+
+        private final VerticalPanel holder = new VerticalPanel();
+
+        private final Label title = new Label();
 
         // public interface:
         public IWidget getIWidget() {
@@ -359,23 +364,26 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
 
             // create caption with title and menu:
             HorizontalPanel widgetHolderCaption = new HorizontalPanel();
-            Label title = new Label(holdedWidget.getName());
+            title.setText(holdedWidget.getName());
 
             widgetHolderCaption.add(title);
             widgetHolderCaption.setCellWidth(title, "100%");
-            widgetHolderCaption.setHorizontalAlignment(ALIGN_RIGHT);
+            widgetHolderCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
             widgetHolderCaption.add(createWidgetMenu());
             widgetHolderCaption.addStyleName(CSS_INSERT_PANEL_HOLDER_CAPTION);
             widgetHolderCaption.setWidth("100%");
 
             // put it together:
-            add(widgetHolderCaption);
-            add(holdedWidget.getWidget());
-            addStyleName(CSS_INSERT_PANEL_HOLDER);
-            setWidth("100%");
+            holder.add(widgetHolderCaption);
+            holder.add(holdedWidget.getWidget());
+            holder.addStyleName(CSS_INSERT_PANEL_HOLDER);
+            holder.setWidth("100%");
+
+            this.setWidget(holder);
+            this.setWidth("100%");
 
             // don't forget about vertical spacing:
-            DOM.setStyleAttribute(getElement(), "margin", mainPanel.layout.getSpacingV() + "px" + " 0px");
+            DOM.setStyleAttribute(this.getElement(), "padding", mainPanel.layout.getSpacingV() + "px" + " 0px");
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -445,18 +453,18 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
             }); // ClickHandler class...
 
             btn.addStyleName(CSS_INSERT_PANEL_HOLDER_MENU_BUTTON);
-            btn.setHeight("1.2em");
+            btn.setHeight("1.5em");
             return btn;
         }
 
         // --------------------------------------------------------------
         private void minimize() {
             if (isMinimized()) {
-                add(minimizedWidget);
+                holder.add(minimizedWidget);
                 minimizedWidget = null;
             } else { // minimize:
                 minimizedWidget = holdedWidget.getWidget();
-                remove(minimizedWidget);
+                holder.remove(minimizedWidget);
             }
         }
 
@@ -472,12 +480,16 @@ public class DashboardPanel extends /* BasePanel */SimplePanel {
                 maximizeData.restoreWidgetPosition(this);
                 mainPanel.setWidget(maximizeData.boundaryPanel);
                 maximizeData.clear();
+
                 this.setWidth("100%");
+                widgetDragController.makeDraggable(this, title);
             } else { // maximize:
                 maximizeData.saveWidgetPosition((FlowPanel) getParent(), this);
                 maximizeData.boundaryPanel = mainPanel.getWidget();
                 mainPanel.setWidget(this);
+
                 this.setSize("100%", "100%");
+                widgetDragController.makeNotDraggable(this);
             }
         }
 
