@@ -22,8 +22,7 @@ package com.pyx4j.client.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -33,7 +32,7 @@ public class SiteDemo implements EntryPoint {
     @Override
     public void onModuleLoad() {
         SiteGinjector ginjector = GWT.create(SiteGinjector.class);
-        RootLayoutPanel.get().add(ginjector.getMainView());
+        RootPanel.get().add(ginjector.getMainView());
         ginjector.getPlaceHistoryHandler().handleCurrentHistory();
 
     }

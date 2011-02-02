@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,23 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 29, 2011
- * @author Misha
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * Created on Jan 7, 2010
+ * @author michaellif
+ * @version $Id: SiteCSSClass.java 6879 2010-08-26 17:48:05Z michaellif $
  */
-package com.pyx4j.client.demo.client;
+package com.pyx4j.client.demo.client.theme;
 
-import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.inject.client.Ginjector;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
-
-import com.pyx4j.client.demo.client.ui.SiteView;
-
-@GinModules(SiteGinModule.class)
-public interface SiteGinjector extends Ginjector {
-
-    PlaceHistoryHandler getPlaceHistoryHandler();
-
-    SiteView getMainView();
+public enum SiteCSSClass {
 
 }

@@ -14,23 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 29, 2011
+ * Created on Feb 1, 2011
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.client.demo.client;
+package com.pyx4j.client.demo.client.ui;
 
-import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.inject.client.Ginjector;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.pyx4j.client.demo.client.theme.SiteTheme;
+import com.pyx4j.widgets.client.style.Style;
 
-import com.pyx4j.client.demo.client.ui.SiteView;
+public class DefaultTheme extends SiteTheme {
 
-@GinModules(SiteGinModule.class)
-public interface SiteGinjector extends Ginjector {
+    @Override
+    protected void initBodyStyles() {
+        super.initBodyStyles();
+        Style style = new Style("body");
+        style.addProperty("background-color", "#eee");
+        addStyle(style);
+    }
 
-    PlaceHistoryHandler getPlaceHistoryHandler();
+    @Override
+    protected void initSiteViewStyles() {
+        String prefix = SiteView.DEFAULT_STYLE_PREFIX;
+        Style style = new Style(prefix);
+        style.addProperty("margin", "0");
+        style.addProperty("border", "none");
+        addStyle(style);
 
-    SiteView getMainView();
+    }
 
 }
