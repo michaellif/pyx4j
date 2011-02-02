@@ -40,6 +40,10 @@ public class I18nFactory {
         return org.xnap.commons.i18n.I18nFactory.getI18n(I18nFactory.class, threadLocale.get(), org.xnap.commons.i18n.I18nFactory.FALLBACK);
     }
 
+    public static I18n getI18n(Class<?> clazz) {
+        return org.xnap.commons.i18n.I18nFactory.getI18n(clazz, threadLocale.get(), org.xnap.commons.i18n.I18nFactory.FALLBACK);
+    }
+
     public static void setThreadLocale(final Locale locale) {
         threadLocale.set(locale);
     }
