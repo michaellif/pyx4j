@@ -62,6 +62,9 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     protected void captureScreenshot(String sufix) {
+        if (selenium == null) {
+            return;
+        }
         if (!(selenium.driver instanceof TakesScreenshot)) {
             return;
         }
