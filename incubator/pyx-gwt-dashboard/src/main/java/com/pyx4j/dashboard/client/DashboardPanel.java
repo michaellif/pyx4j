@@ -249,6 +249,41 @@ public class DashboardPanel extends SimplePanel {
         return true;
     }
 
+    // Widget manipulation:	
+    public boolean addWidget(IWidget widget) {
+        return insertWidget(widget, 0, 0);
+    }
+
+    public boolean addWidget(IWidget widget, int column) {
+        return insertWidget(widget, column, -1);
+    }
+
+    public boolean insertWidget(IWidget widget, int column, int row) {
+        if (checkIndexes(column, row, true)) {
+            // create holder for supplied widget and insert it into specified column,row:
+            WidgetHolder wh = new WidgetHolder(widget, this);
+
+            if (row > 0)
+                getColumnWidgetsPanel(column).insert(wh, row);
+            else
+                // if row is negative - just add at the end:
+                getColumnWidgetsPanel(column).add(wh);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean removeWidget(int column, int row) {
+        return (checkIndexes(column, row, false) && getColumnWidgetsPanel(column).remove(row));
+    }
+
+    public void removeAllWidgets() {
+        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
+            getColumnWidgetsPanel(i).clear();
+    }
+
     // initializing:
     protected boolean init() {
         addStyleName(CSS_DASHBOARD_PANEL);
@@ -323,41 +358,6 @@ public class DashboardPanel extends SimplePanel {
         return true;
     }
 
-    // Widget manipulation:	
-    public boolean addWidget(IWidget widget) {
-        return insertWidget(widget, 0, 0);
-    }
-
-    public boolean addWidget(IWidget widget, int column) {
-        return insertWidget(widget, column, -1);
-    }
-
-    public boolean insertWidget(IWidget widget, int column, int row) {
-        if (checkIndexes(column, row, true)) {
-            // create holder for supplied widget and insert it into specified column,row:
-            WidgetHolder wh = new WidgetHolder(widget, this);
-
-            if (row > 0)
-                getColumnWidgetsPanel(column).insert(wh, row);
-            else
-                // if row is negative - just add at the end:
-                getColumnWidgetsPanel(column).add(wh);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean removeWidget(int column, int row) {
-        return (checkIndexes(column, row, false) && getColumnWidgetsPanel(column).remove(row));
-    }
-
-    public void removeAllWidgets() {
-        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
-            getColumnWidgetsPanel(i).clear();
-    }
-
     // internals:	
     protected VerticalPanelWithSpacer getColumnWidgetsPanel(int column) {
         FlowPanel columnCompositePanel = (FlowPanel) columnsContainerPanel.getWidget(column);
@@ -381,7 +381,7 @@ public class DashboardPanel extends SimplePanel {
     protected final class WidgetHolder extends SimplePanel {
         private final IWidget holdedWidget;
 
-        private final DashboardPanel mainPanel;
+        private final DashboardPanel dashboardPanel;
 
         private final VerticalPanel holder = new VerticalPanel();
 
@@ -395,7 +395,7 @@ public class DashboardPanel extends SimplePanel {
         // internals:
         protected WidgetHolder(IWidget widget, DashboardPanel mainPanel) {
             this.holdedWidget = widget;
-            this.mainPanel = mainPanel;
+            this.dashboardPanel = mainPanel;
 
             // create caption with title and menu:
             HorizontalPanel widgetHolderCaption = new HorizontalPanel();
@@ -418,7 +418,7 @@ public class DashboardPanel extends SimplePanel {
             this.setWidth("100%");
 
             // don't forget about vertical spacing:
-            DOM.setStyleAttribute(this.getElement(), "padding", mainPanel.layout.getVerticalSpacing() + "px" + " 0px");
+            DOM.setStyleAttribute(this.getElement(), "padding", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -516,7 +516,7 @@ public class DashboardPanel extends SimplePanel {
         private void maximize() {
             if (isMaximized()) {
                 maximizeData.restoreWidgetPosition(this);
-                mainPanel.setWidget(maximizeData.boundaryPanel);
+                dashboardPanel.setWidget(maximizeData.boundaryPanel);
                 maximizeData.clear();
 
                 //                this.setWidth("100%");
@@ -524,8 +524,8 @@ public class DashboardPanel extends SimplePanel {
                 holdedWidget.onMaximize(false);
             } else { // maximize:
                 maximizeData.saveWidgetPosition((FlowPanel) getParent(), this);
-                maximizeData.boundaryPanel = mainPanel.getWidget();
-                mainPanel.setWidget(this);
+                maximizeData.boundaryPanel = dashboardPanel.getWidget();
+                dashboardPanel.setWidget(this);
 
                 //                this.setSize("100%", "100%");
                 widgetDragController.makeNotDraggable(this);
