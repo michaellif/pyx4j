@@ -9,7 +9,7 @@ import com.google.inject.Provider;
 import com.pyx4j.client.demo.client.activity.GoodbyeActivity;
 import com.pyx4j.client.demo.client.activity.HelloActivity;
 import com.pyx4j.client.demo.client.place.GoodbyePlace;
-import com.pyx4j.client.demo.client.place.HelloPlace;
+import com.pyx4j.client.demo.client.place.LandingPlace;
 
 public class MainNavigActivityMapper implements ActivityMapper {
 
@@ -29,7 +29,7 @@ public class MainNavigActivityMapper implements ActivityMapper {
         if (place instanceof GoodbyePlace) {
             return goodbyeActivityProvider.get().withPlace((GoodbyePlace) place);
         } else {
-            return helloActivityProvider.get().withPlace((HelloPlace) place);
+            return helloActivityProvider.get().withPlace((LandingPlace) place);
         }
     }
 

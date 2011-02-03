@@ -1,18 +1,27 @@
 package com.pyx4j.client.demo.client.ui;
 
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import com.pyx4j.client.demo.client.mvp.ActionsActivityMapper;
+import com.pyx4j.client.demo.client.mvp.BottomActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Center1ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Center2ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Center3ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Left1ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Left2ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.LogoActivityMapper;
 import com.pyx4j.client.demo.client.mvp.MainNavigActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Right1ActivityMapper;
+import com.pyx4j.client.demo.client.mvp.Right2ActivityMapper;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 import com.pyx4j.widgets.client.style.StyleManger;
 import com.pyx4j.widgets.client.style.Theme;
@@ -23,11 +32,35 @@ public class SiteView extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Header, MainNavig, Center, Main, Left, Right, ContentWrapper, Content, Footer
+        Header, MainNavig, Center, Main, Left, Right, Footer
     }
 
     @Inject
-    public SiteView(MainNavigActivityMapper mainNavigActivityMapper, ActionsActivityMapper actionsActivityMapper, EventBus eventBus, Theme theme) {
+    public SiteView(LogoActivityMapper logoActivityMapper,
+
+    ActionsActivityMapper actionsActivityMapper,
+
+    MainNavigActivityMapper mainNavigActivityMapper,
+
+    Center1ActivityMapper center1ActivityMapper,
+
+    Center2ActivityMapper center2ActivityMapper,
+
+    Center3ActivityMapper center3ActivityMapper,
+
+    Left1ActivityMapper left1ActivityMapper,
+
+    Left2ActivityMapper left2ActivityMapper,
+
+    Right1ActivityMapper right1ActivityMapper,
+
+    Right2ActivityMapper right2ActivityMapper,
+
+    BottomActivityMapper bottomActivityMapper,
+
+    EventBus eventBus,
+
+    Theme theme) {
 
         StyleManger.installTheme(theme);
 
@@ -41,11 +74,11 @@ public class SiteView extends FlowPanel {
         headerWrapper.setStyleName(prefix + StyleSuffix.Header);
         add(headerWrapper);
 
-        SimplePanel logoDisplayPanel = new DisplayPanel("Logo Logo Logo");
+        DisplayPanel logoDisplayPanel = new DisplayPanel();
         logoDisplayPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
         headerWrapper.add(logoDisplayPanel);
 
-        SimplePanel actionsDisplayPanel = new DisplayPanel("Actions|Actions|Actions|Actions");
+        DisplayPanel actionsDisplayPanel = new DisplayPanel();
         actionsDisplayPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
         headerWrapper.add(actionsDisplayPanel);
 
@@ -55,7 +88,7 @@ public class SiteView extends FlowPanel {
         mainNavigWrapper.setStyleName(prefix + StyleSuffix.MainNavig);
         add(mainNavigWrapper);
 
-        SimplePanel mainNavigDisplayPanel = new DisplayPanel("Main Navig");
+        DisplayPanel mainNavigDisplayPanel = new DisplayPanel();
         mainNavigWrapper.add(mainNavigDisplayPanel);
 
         //============ Main ============
@@ -68,31 +101,32 @@ public class SiteView extends FlowPanel {
         mainWrapper.setStyleName(prefix + StyleSuffix.Main);
         centerWrapper.add(mainWrapper);
 
-        SimplePanel centerDisplayPanel1 = new DisplayPanel(
-                "Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 Center1 ");
-        mainWrapper.add(centerDisplayPanel1);
+        DisplayPanel center1DisplayPanel = new DisplayPanel();
+        mainWrapper.add(center1DisplayPanel);
 
-        SimplePanel centerDisplayPanel2 = new DisplayPanel(
-                "Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 Center2 ");
-        mainWrapper.add(centerDisplayPanel2);
+        DisplayPanel center2DisplayPanel = new DisplayPanel();
+        mainWrapper.add(center2DisplayPanel);
+
+        DisplayPanel center3DisplayPanel = new DisplayPanel();
+        mainWrapper.add(center3DisplayPanel);
 
         FlowPanel leftWrapper = new FlowPanel();
         leftWrapper.setStyleName(prefix + StyleSuffix.Left);
         add(leftWrapper);
 
-        SimplePanel leftDisplayPanel1 = new DisplayPanel("Left1");
-        leftWrapper.add(leftDisplayPanel1);
-        SimplePanel leftDisplayPanel2 = new DisplayPanel("Left2");
-        leftWrapper.add(leftDisplayPanel2);
+        DisplayPanel left1DisplayPanel = new DisplayPanel();
+        leftWrapper.add(left1DisplayPanel);
+        DisplayPanel left2DisplayPanel = new DisplayPanel();
+        leftWrapper.add(left2DisplayPanel);
 
         FlowPanel rightWrapper = new FlowPanel();
         rightWrapper.setStyleName(prefix + StyleSuffix.Right);
         add(rightWrapper);
 
-        SimplePanel rightDisplayPanel1 = new DisplayPanel("Right1");
-        rightWrapper.add(rightDisplayPanel1);
-        SimplePanel rightDisplayPanel2 = new DisplayPanel("Right2");
-        rightWrapper.add(rightDisplayPanel2);
+        DisplayPanel right1DisplayPanel = new DisplayPanel();
+        rightWrapper.add(right1DisplayPanel);
+        DisplayPanel right2DisplayPanel = new DisplayPanel();
+        rightWrapper.add(right2DisplayPanel);
 
         //============ Footer ============
 
@@ -101,24 +135,35 @@ public class SiteView extends FlowPanel {
         footerWrapper.getElement().getStyle().setProperty("clear", "left");
         add(footerWrapper);
 
-        SimplePanel bottomDisplayPanel = new DisplayPanel("Footer");
+        DisplayPanel bottomDisplayPanel = new DisplayPanel();
         footerWrapper.add(bottomDisplayPanel);
 
-        ActivityManager mainActivityManager = new ActivityManager(mainNavigActivityMapper, eventBus);
-        //mainActivityManager.setDisplay(mainNavigDisplayPanel);
+        bind(logoActivityMapper, logoDisplayPanel, eventBus);
+        bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
+        bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
 
-        ActivityManager verticalMasterActivityManager = new ActivityManager(actionsActivityMapper, eventBus);
-        //verticalMasterActivityManager.setDisplay(actionsDisplayPanel);
+        //        bind(center1ActivityMapper, center1DisplayPanel, eventBus);
+        //        bind(center2ActivityMapper, center2DisplayPanel, eventBus);
+        //        bind(center3ActivityMapper, center3DisplayPanel, eventBus);
+        //
+        //        bind(left1ActivityMapper, left1DisplayPanel, eventBus);
+        //        bind(left2ActivityMapper, left2DisplayPanel, eventBus);
+        //
+        //        bind(right1ActivityMapper, right1DisplayPanel, eventBus);
+        //        bind(right2ActivityMapper, right2DisplayPanel, eventBus);
+
+        bind(bottomActivityMapper, bottomDisplayPanel, eventBus);
+
+    }
+
+    private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
+        ActivityManager logoActivityManager = new ActivityManager(mapper, eventBus);
+        logoActivityManager.setDisplay(widget);
 
     }
 
     class DisplayPanel extends SimplePanel {
-        DisplayPanel(String title) {
-
-            HTML inner = new HTML(title);
-            inner.setWidth("100%");
-            setWidget(inner);
-
+        DisplayPanel() {
             getElement().getStyle().setBackgroundColor("#ddd");
             getElement().getStyle().setMarginBottom(10, Unit.PX);
             getElement().getStyle().setMarginLeft(10, Unit.PX);

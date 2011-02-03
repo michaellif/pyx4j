@@ -9,12 +9,14 @@ public class ViewModule extends AbstractGinModule {
     @Override
     protected void configure() {
         bind(SiteView.class);
+
         bind(GoodbyeView.class).to(GoodbyeViewImpl.class);
         bind(HelloView.class).to(HelloViewImpl.class);
         bind(SayHelloView.class).to(SayHelloViewImpl.class);
         bind(SayGoodbyeView.class).to(SayGoodbyeViewImpl.class);
 
         bind(LogoView.class).to(LogoViewImpl.class);
+        bind(FooterView.class).to(FooterViewImpl.class);
 
         bind(Theme.class).to(DefaultTheme.class);
 

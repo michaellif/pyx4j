@@ -5,10 +5,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
 
 @Singleton
-public class LogoViewImpl extends SimplePanel implements LogoView {
+public class FooterViewImpl extends SimplePanel implements FooterView {
 
-    public LogoViewImpl() {
-        Label labael = new Label("Logo is here");
+    public FooterViewImpl() {
+        Label labael = new Label("Footer is here");
         labael.setSize("300px", "100px");
         setWidget(labael);
     }

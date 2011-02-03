@@ -6,7 +6,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.client.demo.client.place.HelloPlace;
+import com.pyx4j.client.demo.client.place.LandingPlace;
 import com.pyx4j.client.demo.client.ui.SayGoodbyeView;
 
 public class SayGoodbyeActivity extends AbstractActivity implements SayGoodbyeView.Presenter {
@@ -31,7 +31,7 @@ public class SayGoodbyeActivity extends AbstractActivity implements SayGoodbyeVi
 
     @Override
     public void sayHello() {
-        placeController.goTo(new HelloPlace("User"));
+        placeController.goTo(new LandingPlace());
     }
 
 }

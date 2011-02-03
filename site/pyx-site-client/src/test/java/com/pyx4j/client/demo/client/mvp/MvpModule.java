@@ -10,53 +10,42 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import com.pyx4j.client.demo.client.place.AppPlaceHistoryMapper;
-import com.pyx4j.client.demo.client.place.HelloPlace;
+import com.pyx4j.client.demo.client.place.LandingPlace;
 
 public class MvpModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
         bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-        // PlaceHistoryMapper instantiate new places based on the browser URL. You
-        // only need one of those for the entire app.
         bind(PlaceHistoryMapper.class).to(AppPlaceHistoryMapper.class).in(Singleton.class);
 
-        bind(MainNavigActivityMapper.class);
+        bind(LogoActivityMapper.class);
         bind(ActionsActivityMapper.class);
+        bind(MainNavigActivityMapper.class);
+
+        bind(Center1ActivityMapper.class);
+        bind(Center2ActivityMapper.class);
+        bind(Center3ActivityMapper.class);
+
+        bind(Left1ActivityMapper.class);
+        bind(Left2ActivityMapper.class);
+
+        bind(Right1ActivityMapper.class);
+        bind(Right2ActivityMapper.class);
+
+        bind(BottomActivityMapper.class);
 
     }
 
-    /**
-     * Creates a new PlaceHistoryHandler. This object is responsible handling navigation
-     * based on the browser URL. You only need one of those for the entire app.
-     * 
-     * @param placeController
-     *            the place controller.
-     * @param historyMapper
-     *            This is used to map the URL to a Place object and vice versa.
-     * @param eventBus
-     *            the event bus.
-     * @return
-     */
     @Provides
     @Singleton
     public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, PlaceHistoryMapper historyMapper, EventBus eventBus) {
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, new HelloPlace("User!"));
+        historyHandler.register(placeController, eventBus, new LandingPlace());
 
         return historyHandler;
     }
 
-    /**
-     * Creates a new PlaceController. The place controller is used by the
-     * PlaceHistoryHandler and activities to tell the app to navigate to a different
-     * place. You only need one for the entire app. However, it is essential for it to get
-     * instantiated in order for the application navigation to work.
-     * 
-     * @param eventBus
-     *            the event bus.
-     * @return
-     */
     @Provides
     @Singleton
     public PlaceController getPlaceController(EventBus eventBus) {
