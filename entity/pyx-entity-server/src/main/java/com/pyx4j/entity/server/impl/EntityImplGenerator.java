@@ -32,6 +32,7 @@ import java.util.Vector;
 
 import javassist.CannotCompileException;
 import javassist.ClassClassPath;
+import javassist.ClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
@@ -62,6 +63,8 @@ public class EntityImplGenerator {
 
     private ClassPool pool;
 
+    private final List<ClassPath> pathToClose = new Vector<ClassPath>();
+
     private final boolean webapp;
 
     private CtClass ctClassObject;
@@ -89,6 +92,16 @@ public class EntityImplGenerator {
             return createInstance(true);
         } else {
             return instance;
+        }
+    }
+
+    public static void release() {
+        if (instance != null) {
+            for (ClassPath classPath : instance.pathToClose) {
+                classPath.close();
+            }
+            instance.pool = null;
+            instance = null;
         }
     }
 
@@ -181,7 +194,7 @@ public class EntityImplGenerator {
             pathname = pathname.substring(prefix.length());
             try {
                 log.trace("ClassPool append path {}", pathname);
-                pool.appendClassPath(pathname);
+                pathToClose.add(pool.appendClassPath(pathname));
                 jarCount++;
             } catch (NotFoundException e) {
                 log.error("Can't append path", e);
@@ -190,7 +203,7 @@ public class EntityImplGenerator {
         if (jarCount == 0) {
             log.warn("No jars found in ContextClassLoader webapp={}", webapp);
             // Allow to work as eclipse plugin.
-            pool.appendClassPath(new ClassClassPath(IEntity.class));
+            pathToClose.add(pool.appendClassPath(new ClassClassPath(IEntity.class)));
         }
     }
 

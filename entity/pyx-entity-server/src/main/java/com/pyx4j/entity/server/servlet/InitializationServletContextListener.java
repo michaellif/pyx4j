@@ -66,6 +66,7 @@ public class InitializationServletContextListener implements ServletContextListe
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         PersistenceServicesFactory.deregister();
+        EntityImplGenerator.release();
     }
 
 }
