@@ -1,8 +1,21 @@
 package com.pyx4j.client.demo.client.place;
 
-public class ContactUsPlace extends BasicPlace {
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceTokenizer;
 
-    public ContactUsPlace() {
+public class ContactUsPlace extends Place {
+
+    public static class Tokenizer implements PlaceTokenizer<ContactUsPlace> {
+
+        @Override
+        public ContactUsPlace getPlace(String token) {
+            return new ContactUsPlace();
+        }
+
+        @Override
+        public String getToken(ContactUsPlace place) {
+            return "";
+        }
     }
 
 }

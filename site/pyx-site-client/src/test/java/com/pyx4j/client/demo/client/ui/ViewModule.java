@@ -17,6 +17,8 @@ public class ViewModule extends AbstractGinModule {
 
         bind(LogoView.class).to(LogoViewImpl.class);
         bind(FooterView.class).to(FooterViewImpl.class);
+        bind(MainNavigView.class).to(MainNavigViewImpl.class);
+        bind(MainContentView.class).to(MainContentViewImpl.class);
 
         bind(Theme.class).to(DefaultTheme.class);
 

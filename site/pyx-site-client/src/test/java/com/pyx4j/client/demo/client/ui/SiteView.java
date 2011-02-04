@@ -142,7 +142,7 @@ public class SiteView extends FlowPanel {
         bind(actionsActivityMapper, actionsDisplayPanel, eventBus);
         bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
 
-        //        bind(center1ActivityMapper, center1DisplayPanel, eventBus);
+        bind(center1ActivityMapper, center1DisplayPanel, eventBus);
         //        bind(center2ActivityMapper, center2DisplayPanel, eventBus);
         //        bind(center3ActivityMapper, center3DisplayPanel, eventBus);
         //

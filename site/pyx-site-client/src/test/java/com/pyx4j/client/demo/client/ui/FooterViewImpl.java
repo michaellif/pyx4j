@@ -8,8 +8,8 @@ import com.google.inject.Singleton;
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {
-        Label labael = new Label("Footer is here");
-        labael.setSize("300px", "100px");
+        Label labael = new Label("Footer");
+        labael.setSize("300px", "40px");
         setWidget(labael);
     }
 

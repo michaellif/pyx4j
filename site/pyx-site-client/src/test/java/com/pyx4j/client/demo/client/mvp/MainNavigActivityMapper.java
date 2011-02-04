@@ -6,31 +6,21 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import com.pyx4j.client.demo.client.activity.GoodbyeActivity;
-import com.pyx4j.client.demo.client.activity.HelloActivity;
-import com.pyx4j.client.demo.client.place.GoodbyePlace;
-import com.pyx4j.client.demo.client.place.LandingPlace;
+import com.pyx4j.client.demo.client.activity.MainNavigActivity;
 
 public class MainNavigActivityMapper implements ActivityMapper {
 
-    Provider<HelloActivity> helloActivityProvider;
-
-    Provider<GoodbyeActivity> goodbyeActivityProvider;
+    Provider<MainNavigActivity> mainNavigActivityProvider;
 
     @Inject
-    public MainNavigActivityMapper(final Provider<HelloActivity> helloActivityProvider, final Provider<GoodbyeActivity> goodbyeActivityProvider) {
+    public MainNavigActivityMapper(final Provider<MainNavigActivity> mainNavigActivityProvider) {
         super();
-        this.helloActivityProvider = helloActivityProvider;
-        this.goodbyeActivityProvider = goodbyeActivityProvider;
+        this.mainNavigActivityProvider = mainNavigActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof GoodbyePlace) {
-            return goodbyeActivityProvider.get().withPlace((GoodbyePlace) place);
-        } else {
-            return helloActivityProvider.get().withPlace((LandingPlace) place);
-        }
+        return mainNavigActivityProvider.get().withPlace(place);
     }
 
 }
