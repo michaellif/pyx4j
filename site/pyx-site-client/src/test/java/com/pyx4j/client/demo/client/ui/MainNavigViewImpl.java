@@ -7,9 +7,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-import com.pyx4j.client.demo.client.place.AboutUsPlace;
-import com.pyx4j.client.demo.client.place.ContactUsPlace;
-import com.pyx4j.client.demo.client.place.HomePlace;
+import com.pyx4j.client.demo.client.place.SiteMap;
 
 public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView {
 
@@ -19,9 +17,9 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
 
         setHeight("40px");
 
-        NavigTab homeNavig = new NavigTab("Home", new HomePlace());
-        NavigTab aboutUsNavig = new NavigTab("AboutUs", new AboutUsPlace());
-        NavigTab contactUsNavig = new NavigTab("ContactUs", new ContactUsPlace());
+        NavigTab homeNavig = new NavigTab("Home", new SiteMap.Home());
+        NavigTab aboutUsNavig = new NavigTab("AboutUs", new SiteMap.AboutUs());
+        NavigTab contactUsNavig = new NavigTab("ContactUs", new SiteMap.ContactUs());
 
         add(homeNavig);
         add(aboutUsNavig);

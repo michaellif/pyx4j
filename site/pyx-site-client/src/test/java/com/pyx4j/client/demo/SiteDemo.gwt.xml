@@ -11,9 +11,13 @@
 	<entry-point class='com.pyx4j.client.demo.client.SiteDemo' />
 
 	<!-- Use ClientFactoryImpl by default -->
-  	<replace-with class="com.pyx4j.client.demo.client.ClientFactoryImpl">
-    	<when-type-is class="com.pyx4j.client.demo.client.ClientFactory"/>
+  	<replace-with class="com.pyx4j.client.demo.client.place.AppPlaceHistoryMapper">
+    	<when-type-is class="com.google.gwt.place.shared.PlaceHistoryMapper"/>
   	</replace-with>
+  
+      <generate-with class="com.pyx4j.client.demo.rebind.AppPlaceListingGenerator">
+        <when-type-assignable class="com.pyx4j.client.demo.client.place.AppPlaceListing"/>
+    </generate-with>
   
 	<source path='client' />
 </module>

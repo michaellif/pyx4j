@@ -8,8 +8,6 @@ public class ActivityModule extends AbstractGinModule {
     protected void configure() {
         bind(HelloActivity.class);
         bind(GoodbyeActivity.class);
-        bind(SayHelloActivity.class);
-        bind(SayGoodbyeActivity.class);
 
         bind(MainNavigActivity.class);
         bind(MainContentActivity.class);

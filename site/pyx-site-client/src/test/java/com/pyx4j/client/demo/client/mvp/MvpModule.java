@@ -1,5 +1,6 @@
 package com.pyx4j.client.demo.client.mvp;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
@@ -9,15 +10,13 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-import com.pyx4j.client.demo.client.place.AppPlaceHistoryMapper;
-import com.pyx4j.client.demo.client.place.LandingPlace;
+import com.pyx4j.client.demo.client.place.SiteMap;
 
 public class MvpModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
         bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-        bind(PlaceHistoryMapper.class).to(AppPlaceHistoryMapper.class).in(Singleton.class);
 
         bind(LogoActivityMapper.class);
         bind(ActionsActivityMapper.class);
@@ -39,9 +38,10 @@ public class MvpModule extends AbstractGinModule {
 
     @Provides
     @Singleton
-    public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, PlaceHistoryMapper historyMapper, EventBus eventBus) {
+    public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, EventBus eventBus) {
+        PlaceHistoryMapper historyMapper = GWT.create(PlaceHistoryMapper.class);
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, new LandingPlace());
+        historyHandler.register(placeController, eventBus, new SiteMap.Landing());
 
         return historyHandler;
     }
