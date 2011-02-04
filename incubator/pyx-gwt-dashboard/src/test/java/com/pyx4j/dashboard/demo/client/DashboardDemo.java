@@ -4,11 +4,21 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -20,6 +30,12 @@ import com.pyx4j.dashboard.client.DashboardPanel;
 public final class DashboardDemo implements EntryPoint {
 
     private static final String MAIN_PANEL = "main-panel";
+
+    private static final String CSS_DASHBOARD_WRAPPER = "Dashboard-wrapper";
+
+    protected static final String CSS_DASHBOARD_MENU = "Dashboard-menu";
+
+    private static final String CSS_DASHBOARD_CAPTION = "Dashboard-caption";
 
     @Override
     public void onModuleLoad() {
@@ -63,10 +79,15 @@ public final class DashboardDemo implements EntryPoint {
         RootPanel mainPanel = RootPanel.get(MAIN_PANEL);
         DOM.setInnerHTML(mainPanel.getElement(), "");
 
-        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 2, 8);
+        FlowPanel dashboardWrapper = new FlowPanel();
+        dashboardWrapper.addStyleName(CSS_DASHBOARD_WRAPPER);
+        dashboardWrapper.setWidth("100%");
+        mainPanel.add(dashboardWrapper);
+
+        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 8);
 
         // uncomment for captioned columns:     
-        byte colWidths[] = { 20, 30, 50 };
+        byte colWidths[] = { 30, 50, 20 };
         layout.setColumnWidths(colWidths);
 
         //        // uncomment for captioned columns: layout.useColumnNames = true; String
@@ -74,10 +95,21 @@ public final class DashboardDemo implements EntryPoint {
         //        layout.setColumnNames(colNames);
 
         DashboardPanel dashboardPanel = new DashboardPanel(layout);
-        dashboardPanel.setWidth("100%");
-        mainPanel.add(dashboardPanel);
 
-        // fill the dashboard with demo widgets: 
+        HorizontalPanel dashboardCaption = new HorizontalPanel();
+        dashboardCaption.add(new Label("Demo Dashboard"));
+        dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "90%");
+        dashboardCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        dashboardCaption.add(createDashboardMenu(dashboardPanel));
+        dashboardCaption.setCellWidth(dashboardCaption.getWidget(dashboardCaption.getWidgetCount() - 1), "10%");
+        dashboardCaption.addStyleName(CSS_DASHBOARD_CAPTION);
+        dashboardCaption.setWidth("100%");
+        dashboardWrapper.add(dashboardCaption);
+
+        dashboardPanel.setWidth("100%");
+        dashboardWrapper.add(dashboardPanel);
+
+        // define demo widget class: 
         class MyHTML extends HTML implements DashboardPanel.IWidget {
             MyHTML(String s) {
                 super(s);
@@ -140,6 +172,8 @@ public final class DashboardDemo implements EntryPoint {
             }
         }
 
+        // fill the dashboard with demo widgets: 
+
         int count = 0;
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 3; ++row) {
@@ -149,5 +183,91 @@ public final class DashboardDemo implements EntryPoint {
                 //			dashboardPanel.insertWidget(widget, col, row);
                 dashboardPanel.addWidget(widget, col);
             }
+    }
+
+    private Widget createDashboardMenu(final DashboardPanel dashboardPanel) {
+        final Button btn = new Button("Layout...");
+        btn.addClickHandler(new ClickHandler() {
+            private final PopupPanel pp = new PopupPanel(true);
+
+            @Override
+            public void onClick(ClickEvent event) {
+                // menu items command processors go here:
+                Command cmdL1 = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(1, 4, 8);
+                        dashboardPanel.setLayout(layout);
+                    }
+                };
+
+                Command cmdL2 = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 3, 8);
+                        byte colWidths[] = { 70, 30 };
+                        layout.setColumnWidths(colWidths);
+                        dashboardPanel.setLayout(layout);
+                    }
+                };
+
+                Command cmdL3 = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 2, 8);
+                        byte colWidths[] = { 70, 20, 10 };
+                        layout.setColumnWidths(colWidths);
+                        dashboardPanel.setLayout(layout);
+                    }
+                };
+
+                Command cmdL4 = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(4, 1, 8);
+                        byte colWidths[] = { 20, 20, 50, 10 };
+                        layout.setColumnWidths(colWidths);
+                        dashboardPanel.setLayout(layout);
+                    }
+                };
+
+                Command cmdLr = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        dashboardPanel.getLayout().setColumnWidths(new byte[0]);
+                        dashboardPanel.refresh();
+                    }
+                };
+
+                // create the menu:
+                MenuBar menu = new MenuBar(true);
+                menu.addItem("One", cmdL1);
+                menu.addItem("Two", cmdL2);
+                menu.addItem("Three", cmdL3);
+                menu.addItem("Four", cmdL4);
+                menu.addSeparator();
+                menu.addItem("Reset widths", cmdLr);
+
+                menu.addStyleName(CSS_DASHBOARD_MENU);
+
+                pp.setWidget(menu);
+                //                pp.addStyleName(CSS_DASHBOARD_MENU);
+                pp.setPopupPosition(btn.getAbsoluteLeft(), btn.getAbsoluteTop() + btn.getOffsetHeight());
+                pp.show();
+            } // onClick button event handler...
+        }); // ClickHandler class...
+
+        //        btn.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU_BUTTON);
+        return btn;
     }
 }

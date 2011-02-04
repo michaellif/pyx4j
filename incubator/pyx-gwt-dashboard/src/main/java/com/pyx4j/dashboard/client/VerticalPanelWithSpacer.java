@@ -13,22 +13,33 @@ public class VerticalPanelWithSpacer extends FlowPanel /* VerticalPanel */{
     private static final String CSS_DASHBOARD_PANEL_SPACER = "DashboardPanel-spacer";
 
     public VerticalPanelWithSpacer() {
-        Label spacerLabel = new Label("");
-        spacerLabel.setStylePrimaryName(CSS_DASHBOARD_PANEL_SPACER);
-        super.add(spacerLabel);
+        clear();
     }
 
     @Override
     public void add(Widget w) {
-        super.insert(w, getWidgetCount() - 1);
+        super.insert(w, getWidgetCount());
     }
 
     @Override
     public void insert(Widget w, int beforeIndex) {
-        if (beforeIndex == getWidgetCount()) {
+        if (beforeIndex == super.getWidgetCount()) {
             beforeIndex--;
         }
 
         super.insert(w, beforeIndex);
+    }
+
+    @Override
+    public int getWidgetCount() {
+        return (super.getWidgetCount() - 1);
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        Label spacerLabel = new Label("");
+        spacerLabel.setStylePrimaryName(CSS_DASHBOARD_PANEL_SPACER);
+        super.add(spacerLabel);
     }
 }

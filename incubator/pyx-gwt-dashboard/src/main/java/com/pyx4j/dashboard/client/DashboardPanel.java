@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -137,21 +138,23 @@ public class DashboardPanel extends SimplePanel {
          * column width should be greater that doubled spacing value...
          */
         public boolean setColumnWidths(byte[] columnWidths) throws IllegalArgumentException {
-            if (columnWidths.length < getColumns())
-                throw new IllegalArgumentException();
+            if (columnWidths.length > 0) { // note: zero lenth array is 'reset to default' case!..
+                if (columnWidths.length < getColumns())
+                    throw new IllegalArgumentException();
 
-            byte pcSum = 0;
-            double pcMin = 100.0 / getColumns();
-            for (int i = 0; i < columnWidths.length; ++i) {
-                pcSum += columnWidths[i];
-                pcMin = Math.min(pcMin, columnWidths[i]);
+                byte pcSum = 0;
+                double pcMin = 100.0 / getColumns();
+                for (int i = 0; i < columnWidths.length; ++i) {
+                    pcSum += columnWidths[i];
+                    pcMin = Math.min(pcMin, columnWidths[i]);
+                }
+
+                if (pcSum > 100)
+                    return false; // mmm, the widths percentage looks strange!?.
+
+                if (pcMin <= getHorizontalSpacing() * 2)
+                    return false; // ok, smallest column should be wider than spacing...
             }
-
-            if (pcSum > 100)
-                return false; // mmm, the widths percentage looks strange!?.
-
-            if (pcMin <= getHorizontalSpacing() * 2)
-                return false; // ok, smallest column should be wider than spacing...
 
             this.columnWidths = columnWidths;
             return true;
@@ -237,14 +240,18 @@ public class DashboardPanel extends SimplePanel {
         // first - move intersected part of the columns:
         int i;
         int minCommonSize = Math.min(columnWidgetsPanels.size(), columnsContainerPanel.getWidgetCount());
-        for (i = 0; i < minCommonSize; ++i)
-            for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
-                getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(j));
+        for (i = 0; i < minCommonSize; ++i) {
+            int initialSize = columnWidgetsPanels.get(i).getWidgetCount();
+            for (int j = 0; j < initialSize; ++j)
+                getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(0));
+        }
 
         // and then - move the rest in the last column of new layout (if present):
-        for (; i < columnWidgetsPanels.size(); ++i)
-            for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
-                getColumnWidgetsPanel(columnsContainerPanel.getWidgetCount() - 1).add(columnWidgetsPanels.get(i).getWidget(j));
+        for (; i < columnWidgetsPanels.size(); ++i) {
+            int initialSize = columnWidgetsPanels.get(i).getWidgetCount();
+            for (int j = 0; j < initialSize; ++j)
+                getColumnWidgetsPanel(columnsContainerPanel.getWidgetCount() - 1).add(columnWidgetsPanels.get(i).getWidget(0));
+        }
 
         return true;
     }
@@ -318,6 +325,8 @@ public class DashboardPanel extends SimplePanel {
 
     protected boolean initColumns() {
         columnsContainerPanel.clear();
+        widgetDragController.unregisterDropControllers();
+
         for (int col = 0; col < layout.getColumns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
@@ -346,12 +355,11 @@ public class DashboardPanel extends SimplePanel {
             columnPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
             columnPanel.setWidth("100%");
 
-            columnCompositePanel.add(columnPanel);
-
             // widget drop controller for the current column:
             CustomFlowPanelDropController widgetDropController = new CustomFlowPanelDropController(columnPanel);
             widgetDragController.registerDropController(widgetDropController);
 
+            columnCompositePanel.add(columnPanel);
             columnsContainerPanel.add(columnCompositePanel);
         }
 
@@ -360,7 +368,7 @@ public class DashboardPanel extends SimplePanel {
 
     // internals:	
     protected VerticalPanelWithSpacer getColumnWidgetsPanel(int column) {
-        FlowPanel columnCompositePanel = (FlowPanel) columnsContainerPanel.getWidget(column);
+        ComplexPanel columnCompositePanel = (ComplexPanel) columnsContainerPanel.getWidget(column);
         return (VerticalPanelWithSpacer) columnCompositePanel.getWidget(columnCompositePanel.getWidgetCount() - 1);
         // note, that first element could be label with column name, so always get last one!..
     }
@@ -393,18 +401,18 @@ public class DashboardPanel extends SimplePanel {
         }
 
         // internals:
-        protected WidgetHolder(IWidget widget, DashboardPanel mainPanel) {
+        public WidgetHolder(IWidget widget, DashboardPanel mainPanel) {
             this.holdedWidget = widget;
             this.dashboardPanel = mainPanel;
 
             // create caption with title and menu:
-            HorizontalPanel widgetHolderCaption = new HorizontalPanel();
             title.setText(holdedWidget.getName());
-
+            HorizontalPanel widgetHolderCaption = new HorizontalPanel();
             widgetHolderCaption.add(title);
-            widgetHolderCaption.setCellWidth(title, "100%");
+            widgetHolderCaption.setCellWidth(widgetHolderCaption.getWidget(widgetHolderCaption.getWidgetCount() - 1), "90%");
             widgetHolderCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
             widgetHolderCaption.add(createWidgetMenu());
+            widgetHolderCaption.setCellWidth(widgetHolderCaption.getWidget(widgetHolderCaption.getWidgetCount() - 1), "10%");
             widgetHolderCaption.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_CAPTION);
             widgetHolderCaption.setWidth("100%");
 
@@ -479,17 +487,16 @@ public class DashboardPanel extends SimplePanel {
                         menu.addItem("Setup", cmdSetup);
                     }
 
-                    //                    menu.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
+                    menu.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
 
                     pp.setWidget(menu);
-                    pp.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
-                    pp.setPopupPosition(event.getClientX() - 40, event.getClientY());
+                    //                    pp.addStyleName(CSS_DASHBOARD_PANEL_HOLDER/_MENU);
+                    pp.setPopupPosition(btn.getAbsoluteLeft(), btn.getAbsoluteTop() + btn.getOffsetHeight());
                     pp.show();
                 } // onClick button event handler...
             }); // ClickHandler class...
 
             btn.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU_BUTTON);
-            btn.setHeight("1.5em");
             return btn;
         }
 
@@ -507,7 +514,7 @@ public class DashboardPanel extends SimplePanel {
         }
 
         private boolean isMinimized() {
-            return minimizedWidget != null;
+            return (minimizedWidget != null);
         }
 
         private Widget minimizedWidget;
@@ -534,7 +541,7 @@ public class DashboardPanel extends SimplePanel {
         }
 
         private boolean isMaximized() {
-            return maximizeData.boundaryPanel != null;
+            return (maximizeData.boundaryPanel != null);
         }
 
         private class MaximizeData {

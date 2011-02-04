@@ -2,8 +2,8 @@
  
 h1 {
 	color: gray;
-	font-size: 2em;
-	margin: 30px 0px 10px 0px;
+/*	font-size: 2em;*/
+	margin: 10px 0px;
 	text-align: center;
 }
 
@@ -16,9 +16,27 @@ div.dragdrop-dropTarget-engage {
 /*    background: none repeat scroll 0 0 aqua;*/
 }
 
+.Dashboard-wrapper {
+	min-width: 600px;
+    border: 1px solid navy;
+}
+.Dashboard-caption {
+	font-weight: bold;
+  	text-align: center;
+	color: navy;
+  	background-color: yellow;
+  	border-bottom: 1px solid black;
+	margin-bottom: 3px ;
+}
+    
+.Dashboard-menu {
+	font: menu;	
+    background-color: white;
+	border: 1px solid navy;
+}
 
 .DashboardPanel {
-	min-width: 600px;
+/*	min-width: 600px;*/
 }
 .DashboardPanel .DashboardPanel-holder, .DashboardPanel .DashboardPanel-column-heading, .DashboardPanel .DashboardPanel-spacer {
 
@@ -30,26 +48,30 @@ div.dragdrop-dropTarget-engage {
 	background-color: #87B3FF;
 	font-weight: bold;
   	text-align: center;
-    border: 1px solid maroon;
+/*    border: 5px solid maroon;*/
 }
 .DashboardPanel .DashboardPanel-column-composite {
     float: left;
 }
 .DashboardPanel .DashboardPanel-holder {
 	background-color: #B3FF87;
-    border: 1px solid blue;
+    border: 2px solid blue;
 }
 .DashboardPanel .DashboardPanel-spacer {
     height: 4em;
 }
 .DashboardPanel .DashboardPanel-holder-caption {
-    background-color: #B387FF;
+    font: caption;	
+	text-align: center;
+	background-color: #B387FF;
     border-bottom: 1px solid blue;
 }
 .DashboardPanel .DashboardPanel-holder-menu-button {
-    vertical-align: top;
+    height: 1.4em;
+	font: small-caption;
 }
 .DashboardPanel-holder-menu {
-    background-color: silver;
+    font: menu;	
+    background-color: white;
 	border: 1px solid navy;
 }
