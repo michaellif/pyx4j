@@ -35,4 +35,8 @@ public interface Configuration extends IPersistenceConfiguration {
     public abstract String userName();
 
     public abstract String password();
+
+    public abstract String connectionValidationQuery();
+
+    public abstract boolean readOnly();
 }

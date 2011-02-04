@@ -36,4 +36,13 @@ public abstract class ConfigurationMySQL implements Configuration {
         return "jdbc:mysql://" + dbHost() + ":" + dbPort() + "/" + dbName();
     }
 
+    @Override
+    public String connectionValidationQuery() {
+        return "SELECT 1";
+    }
+
+    @Override
+    public boolean readOnly() {
+        return false;
+    }
 }

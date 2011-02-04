@@ -41,4 +41,14 @@ public abstract class ConfigurationHSQL implements Configuration {
     public String password() {
         return "";
     }
+
+    @Override
+    public String connectionValidationQuery() {
+        return null;
+    }
+
+    @Override
+    public boolean readOnly() {
+        return false;
+    }
 }

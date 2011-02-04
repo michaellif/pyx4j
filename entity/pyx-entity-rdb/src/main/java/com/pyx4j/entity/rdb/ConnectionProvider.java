@@ -65,10 +65,13 @@ public class ConnectionProvider {
         }
 
         connectionPool = new GenericObjectPool(null);
+        connectionPool.setTestWhileIdle(true);
 
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
 
-        new PoolableConnectionFactory(connectionFactory, connectionPool, null, null, false, true);
+        PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
+                cfg.readOnly(), true);
+        poolable.setValidationQueryTimeout(1);
 
         dataSource = new PoolingDataSource(connectionPool);
 
