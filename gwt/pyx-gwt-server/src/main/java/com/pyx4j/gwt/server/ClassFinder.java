@@ -21,6 +21,7 @@
 package com.pyx4j.gwt.server;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -97,13 +98,20 @@ public class ClassFinder {
             log.error("JarFile is not avalable");
             return;
         }
-        Enumeration<JarEntry> iter = jar.entries();
-        while (iter.hasMoreElements()) {
-            JarEntry entry = iter.nextElement();
-            if (entry.isDirectory() || (!entry.getName().endsWith(".class"))) {
-                continue;
+        try {
+            Enumeration<JarEntry> iter = jar.entries();
+            while (iter.hasMoreElements()) {
+                JarEntry entry = iter.nextElement();
+                if (entry.isDirectory() || (!entry.getName().endsWith(".class"))) {
+                    continue;
+                }
+                processEntry(entry.getName());
             }
-            processEntry(entry.getName());
+        } finally {
+            try {
+                jar.close();
+            } catch (IOException ignore) {
+            }
         }
     }
 
