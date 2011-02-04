@@ -104,7 +104,7 @@ public class ConnectionProvider {
         }
         for (Driver d : drvCopy) {
             if (d.getClass().getClassLoader() != ConnectionProvider.class.getClassLoader()) {
-                log.debug("do not deregister", d.getClass().getName());
+                log.debug("do not deregister {}", d.getClass().getName());
                 continue;
             }
             try {
