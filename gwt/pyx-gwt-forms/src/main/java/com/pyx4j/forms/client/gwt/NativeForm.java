@@ -691,10 +691,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
         }
     }
 
-    public void setToolbarMode(ToolbarMode mode) {
+    public void setToolbarMode(ToolbarMode mode, boolean removable) {
         if (toolbar == null || toolbar.actionsPanel == null) {
             return;
         }
+        toolbar.actionsPanel.removeCommand.setVisible(removable);
         switch (mode) {
         case First:
             toolbar.actionsPanel.upCommand.setVisible(false);

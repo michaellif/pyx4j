@@ -57,6 +57,10 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
     private final VerticalPanel container;
 
+    private boolean editable = true;
+
+    private boolean enabled = true;
+
     public NativeFormFolder(final CFormFolder<?> folder) {
         setWidth("100%");
 
@@ -83,6 +87,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
                 folder.addItem();
             }
         });
+        addCommand.setVisible(editable && folder.isAddable());
 
         label.setVisible(folder.isVisible());
         setVisible(folder.isVisible());
@@ -115,11 +120,16 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
     @Override
     public boolean isEditable() {
-        return true;
+        return editable;
     }
 
     @Override
     public void setEditable(boolean editable) {
+        this.editable = editable;
+        addCommand.setVisible(editable && folder.isAddable());
+        for (CForm forms : folder.getFormsMap().values()) {
+            forms.setEditable(editable);
+        }
     }
 
     @Override
@@ -136,14 +146,18 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
                 nativeForm.setWidth("100%");
                 container.add(nativeForm);
                 container.setCellWidth(nativeForm, "100%");
-                if (i == 0 && value.size() == 1) {
-                    nativeForm.setToolbarMode(ToolbarMode.Only);
-                } else if (i == 0) {
-                    nativeForm.setToolbarMode(ToolbarMode.First);
-                } else if (i == value.size() - 1) {
-                    nativeForm.setToolbarMode(ToolbarMode.Last);
+                if (this.editable && folder.isMovable()) {
+                    if (i == 0 && value.size() == 1) {
+                        nativeForm.setToolbarMode(ToolbarMode.Only, folder.isRemovable());
+                    } else if (i == 0) {
+                        nativeForm.setToolbarMode(ToolbarMode.First, folder.isRemovable());
+                    } else if (i == value.size() - 1) {
+                        nativeForm.setToolbarMode(ToolbarMode.Last, folder.isRemovable());
+                    } else {
+                        nativeForm.setToolbarMode(ToolbarMode.Inner, folder.isRemovable());
+                    }
                 } else {
-                    nativeForm.setToolbarMode(ToolbarMode.Inner);
+                    nativeForm.setToolbarMode(ToolbarMode.Only, this.editable && folder.isRemovable());
                 }
 
             }
@@ -165,11 +179,13 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        addCommand.setEnabled(enabled);
     }
 
 }

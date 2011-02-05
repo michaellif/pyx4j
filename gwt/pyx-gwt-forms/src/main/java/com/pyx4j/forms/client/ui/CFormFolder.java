@@ -33,6 +33,12 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
 
     private String itemCaption;
 
+    private boolean addable = true;
+
+    private boolean removable = true;
+
+    private boolean movable = true;
+
     public CFormFolder(FormFactory factory) {
         super();
         this.factory = factory;
@@ -60,6 +66,36 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
     @Override
     protected NativeFormFolder<E> initWidget() {
         return new NativeFormFolder<E>(this);
+    }
+
+    public boolean isAddable() {
+        return addable;
+    }
+
+    public void setAddable(boolean addable) {
+        this.addable = addable;
+    }
+
+    public boolean isRemovable() {
+        return removable;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+    }
+
+    public boolean isMovable() {
+        return movable;
+    }
+
+    public void setMovable(boolean movable) {
+        this.movable = movable;
+    }
+
+    public void makeUnchangeable() {
+        setAddable(false);
+        setRemovable(false);
+        setMovable(false);
     }
 
     public abstract void addItem();
