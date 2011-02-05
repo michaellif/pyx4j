@@ -38,4 +38,7 @@ public class SiteMap {
     public static class AboutUs extends AppPlace {
     }
 
+    public static class Registration extends AppPlace {
+    }
+
 }

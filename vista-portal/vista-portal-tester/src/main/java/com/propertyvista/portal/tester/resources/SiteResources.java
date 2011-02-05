@@ -10,31 +10,26 @@
  * Created on Feb 1, 2011
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
- */
-package com.propertyvista.portal.tester.ui;
+ */package com.propertyvista.portal.tester.resources;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.TextResource;
 
-public class MainContentViewImpl extends HorizontalPanel implements MainContentView {
+public interface SiteResources extends ClientBundleWithLookup {
 
-    private final HTML contentHTML;
+    SiteResources INSTANCE = GWT.create(SiteResources.class);
 
-    private Presenter presenter;
+    @Source("landing.html")
+    TextResource landing();
 
-    public MainContentViewImpl() {
+    @Source("home.html")
+    TextResource home();
 
-        contentHTML = new HTML();
-        add(contentHTML);
-    }
+    @Source("aboutUs.html")
+    TextResource aboutUs();
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
+    @Source("contactUs.html")
+    TextResource contactUs();
 
-    @Override
-    public void setContent(String content) {
-        contentHTML.setHTML(content);
-    }
 }

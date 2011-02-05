@@ -15,9 +15,13 @@ package com.propertyvista.portal.tester.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.tester.SiteMap.AboutUs;
+import com.propertyvista.portal.tester.SiteMap.ContactUs;
+import com.propertyvista.portal.tester.SiteMap.Home;
+import com.propertyvista.portal.tester.SiteMap.Landing;
+import com.propertyvista.portal.tester.resources.SiteResources;
 import com.propertyvista.portal.tester.ui.MainContentView;
 
 import com.pyx4j.site.client.place.AppPlace;
@@ -34,8 +38,18 @@ public class MainContentActivity extends AbstractActivity implements MainContent
         view.setPresenter(this);
     }
 
-    public MainContentActivity withPlace(Place place) {
-        setContent(place.toString() + ((AppPlace) place).getArgs());
+    public MainContentActivity withPlace(AppPlace place) {
+        if (Landing.class.equals(place.getClass())) {
+            setContent(SiteResources.INSTANCE.landing().getText());
+        } else if (Home.class.equals(place.getClass())) {
+            setContent(SiteResources.INSTANCE.home().getText());
+        } else if (AboutUs.class.equals(place.getClass())) {
+            setContent(SiteResources.INSTANCE.aboutUs().getText());
+        } else if (ContactUs.class.equals(place.getClass())) {
+            setContent(SiteResources.INSTANCE.contactUs().getText());
+        } else {
+            setContent(place.toString() + (place).getArgs());
+        }
         return this;
     }
 

@@ -20,6 +20,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.tester.activity.MainContentActivity;
 
+import com.pyx4j.site.client.place.AppPlace;
+
 public class Center1ActivityMapper implements ActivityMapper {
 
     Provider<MainContentActivity> mainContentActivityProvider;
@@ -32,7 +34,7 @@ public class Center1ActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return mainContentActivityProvider.get().withPlace(place);
+        return mainContentActivityProvider.get().withPlace((AppPlace) place);
     }
 
 }
