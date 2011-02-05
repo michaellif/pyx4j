@@ -62,6 +62,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-server</artifactId>
             <version>${project.version}</version>
