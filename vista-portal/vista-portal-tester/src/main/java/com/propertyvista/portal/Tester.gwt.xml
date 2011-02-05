@@ -5,10 +5,13 @@
 	
 	<inherits name='com.google.gwt.user.User'/>
     <inherits name='com.pyx4j.essentials.Essentials' />
+	<inherits name="com.google.gwt.inject.Inject"/>
+	<inherits name='com.pyx4j.site.GwtSite' />
+
     
     <source path="tester"/>
 
-    <entry-point class='com.propertyvista.portal.tester.VistaTesterDispatcher'/>
+    <entry-point class='com.propertyvista.portal.tester.VistaTesterSite'/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.tester.*" />
     
