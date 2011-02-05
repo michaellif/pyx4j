@@ -76,6 +76,21 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- TODO remove -->
+        <dependency>
+			<groupId>com.googlecode.gwt.inject</groupId>
+			<artifactId>gin</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+        <!-- TODO remove -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
 	</dependencies>
 
     <properties>
