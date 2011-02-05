@@ -24,25 +24,25 @@ import com.google.gwt.place.shared.Place;
 
 public class SiteMap {
 
-    public static class Landing extends Place {
+    public static class Landing extends AppPlace {
     }
 
-    public static class Home extends Place {
+    public static class Home extends AppPlace {
 
-        public static class Products extends Place {
+        public static class Products extends AppPlace {
 
         }
 
-        public static class Services extends Place {
+        public static class Services extends AppPlace {
 
         }
 
     }
 
-    public static class ContactUs extends Place {
+    public static class ContactUs extends AppPlace {
     }
 
-    public static class AboutUs extends Place {
+    public static class AboutUs extends AppPlace {
     }
 
 }

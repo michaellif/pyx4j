@@ -20,8 +20,23 @@
  */
 package com.pyx4j.client.demo.client.place;
 
-public interface AppPlaceListing {
+import java.util.Map;
 
-    AppPlace getPlace(String token);
+import com.google.gwt.place.shared.Place;
+
+public class AppPlace extends Place {
+
+    private Map<String, String> args;
+
+    public AppPlace() {
+    }
+
+    public void setArgs(Map<String, String> args) {
+        this.args = args;
+    }
+
+    public Map<String, String> getArgs() {
+        return args;
+    }
 
 }

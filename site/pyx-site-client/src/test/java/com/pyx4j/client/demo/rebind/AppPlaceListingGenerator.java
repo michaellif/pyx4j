@@ -35,10 +35,10 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.client.demo.client.place.AppPlace;
 import com.pyx4j.client.demo.client.place.AppPlaceHistoryMapper;
 
 public class AppPlaceListingGenerator extends Generator {
@@ -56,8 +56,8 @@ public class AppPlaceListingGenerator extends Generator {
             composer.addImport(HashMap.class.getName());
             composer.addImport(JsArrayString.class.getName());
             composer.addImport(GWT.class.getName());
-            composer.addImport(Place.class.getName());
             composer.addImport(AppPlaceHistoryMapper.class.getName());
+            composer.addImport(AppPlace.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -65,13 +65,13 @@ public class AppPlaceListingGenerator extends Generator {
                 return packageName + "." + simpleName;
             }
 
-            JClassType placeType = oracle.getType(Place.class.getName());
+            JClassType placeType = oracle.getType(AppPlace.class.getName());
             List<JClassType> serviceClasses = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
                 if ((type.isClass() != null) && type.isAssignableTo(placeType) && (placeType != type)) {
                     serviceClasses.add(type);
-                    logger.log(TreeLogger.Type.WARN, "Place class: " + type.getName());
+                    logger.log(TreeLogger.Type.DEBUG, "Place class: " + type.getName());
                 }
             }
 
@@ -88,12 +88,12 @@ public class AppPlaceListingGenerator extends Generator {
         writer.println();
 
         writer.println("@Override");
-        writer.println("public Place getPlace(String token) {");
+        writer.println("public AppPlace getPlace(String token) {");
         writer.indent();
 
         for (JClassType jClassType : serviceClasses) {
             String type = jClassType.getPackage().getName() + "." + jClassType.getName();
-            writer.println("if (token.startsWith(AppPlaceHistoryMapper.getToken(" + type + ".class))) {");
+            writer.println("if (token.equals(AppPlaceHistoryMapper.getPlaceId(" + type + ".class))) {");
             writer.indent();
             writer.println("return new " + type + "();");
             writer.outdent();
