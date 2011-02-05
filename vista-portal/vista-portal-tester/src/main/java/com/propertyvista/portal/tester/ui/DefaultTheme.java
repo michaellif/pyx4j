@@ -33,8 +33,8 @@ public class DefaultTheme extends AppSiteTheme {
 
         int minWidth = 760;
         int maxWidth = 960;
-        int leftColumnWidth = 230;
-        int rightColumnWidth = 200;
+        int leftColumnWidth = 200;
+        int rightColumnWidth = 260;
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", "#fff");

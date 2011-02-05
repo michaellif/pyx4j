@@ -11,30 +11,33 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.tester.mvp;
+package com.propertyvista.portal.tester.activity;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.propertyvista.portal.tester.activity.LeftPortletsActivity;
+import com.propertyvista.portal.tester.ui.SignInView;
 
 import com.pyx4j.site.client.place.AppPlace;
 
-public class Left2ActivityMapper implements ActivityMapper {
+public class SignInActivity extends AbstractActivity implements SignInView.Presenter {
 
-    Provider<LeftPortletsActivity> leftPortletsActivityProvider;
+    private final SignInView view;
 
     @Inject
-    public Left2ActivityMapper(final Provider<LeftPortletsActivity> leftPortletsActivityProvider) {
-        super();
-        this.leftPortletsActivityProvider = leftPortletsActivityProvider;
+    public SignInActivity(SignInView view) {
+        this.view = view;
+        view.setPresenter(this);
+    }
+
+    public SignInActivity withPlace(AppPlace place) {
+        return this;
     }
 
     @Override
-    public Activity getActivity(Place place) {
-        return leftPortletsActivityProvider.get().withPlace((AppPlace) place);
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
     }
 
 }

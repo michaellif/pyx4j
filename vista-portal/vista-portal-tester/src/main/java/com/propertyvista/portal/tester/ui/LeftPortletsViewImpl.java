@@ -11,21 +11,30 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.tester.activity;
+package com.propertyvista.portal.tester.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class ActivityModule extends AbstractGinModule {
+public class LeftPortletsViewImpl extends HorizontalPanel implements LeftPortletsView {
 
-    @Override
-    protected void configure() {
-        bind(HelloActivity.class);
-        bind(GoodbyeActivity.class);
+    private final HTML contentHTML;
 
-        bind(MainNavigActivity.class);
-        bind(MainContentActivity.class);
-        bind(LeftPortletsActivity.class);
+    private Presenter presenter;
 
+    public LeftPortletsViewImpl() {
+
+        contentHTML = new HTML();
+        add(contentHTML);
     }
 
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void setContent(String content) {
+        contentHTML.setHTML(content);
+    }
 }

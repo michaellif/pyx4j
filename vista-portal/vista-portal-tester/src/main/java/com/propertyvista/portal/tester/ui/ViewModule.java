@@ -14,6 +14,7 @@
 package com.propertyvista.portal.tester.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Singleton;
 
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -23,17 +24,19 @@ public class ViewModule extends AbstractGinModule {
     protected void configure() {
         bind(SiteView.class);
 
-        bind(GoodbyeView.class).to(GoodbyeViewImpl.class);
-        bind(HelloView.class).to(HelloViewImpl.class);
-        bind(SayHelloView.class).to(SayHelloViewImpl.class);
-        bind(SayGoodbyeView.class).to(SayGoodbyeViewImpl.class);
+        bind(GoodbyeView.class).to(GoodbyeViewImpl.class).in(Singleton.class);
+        bind(HelloView.class).to(HelloViewImpl.class).in(Singleton.class);
+        bind(SayHelloView.class).to(SayHelloViewImpl.class).in(Singleton.class);
+        bind(SayGoodbyeView.class).to(SayGoodbyeViewImpl.class).in(Singleton.class);
 
-        bind(LogoView.class).to(LogoViewImpl.class);
-        bind(FooterView.class).to(FooterViewImpl.class);
-        bind(MainNavigView.class).to(MainNavigViewImpl.class);
-        bind(MainContentView.class).to(MainContentViewImpl.class);
+        bind(LogoView.class).to(LogoViewImpl.class).in(Singleton.class);
+        bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
+        bind(MainNavigView.class).to(MainNavigViewImpl.class).in(Singleton.class);
+        bind(MainContentView.class).to(MainContentViewImpl.class).in(Singleton.class);
+        bind(LeftPortletsView.class).to(LeftPortletsViewImpl.class).in(Singleton.class);
+        bind(SignInView.class).to(SignInViewImpl.class).in(Singleton.class);
 
-        bind(Theme.class).to(DefaultTheme.class);
+        bind(Theme.class).to(DefaultTheme.class).in(Singleton.class);
 
     }
 

@@ -16,13 +16,25 @@ package com.propertyvista.portal.tester.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.propertyvista.portal.tester.activity.SignInActivity;
+
+import com.pyx4j.site.client.place.AppPlace;
 
 public class Right1ActivityMapper implements ActivityMapper {
 
+    Provider<SignInActivity> signInActivityProvider;
+
+    @Inject
+    public Right1ActivityMapper(final Provider<SignInActivity> signInActivityProvider) {
+        super();
+        this.signInActivityProvider = signInActivityProvider;
+    }
+
     @Override
     public Activity getActivity(Place place) {
-        // TODO Auto-generated method stub
-        return null;
+        return signInActivityProvider.get().withPlace((AppPlace) place);
     }
 
 }

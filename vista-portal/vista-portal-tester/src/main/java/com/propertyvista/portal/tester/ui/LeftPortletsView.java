@@ -11,21 +11,18 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.tester.activity;
+package com.propertyvista.portal.tester.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class ActivityModule extends AbstractGinModule {
+public interface LeftPortletsView extends IsWidget {
 
-    @Override
-    protected void configure() {
-        bind(HelloActivity.class);
-        bind(GoodbyeActivity.class);
+    public void setContent(String content);
 
-        bind(MainNavigActivity.class);
-        bind(MainContentActivity.class);
-        bind(LeftPortletsActivity.class);
+    public void setPresenter(Presenter presenter);
 
+    public interface Presenter {
+        public String getContent();
     }
 
 }
