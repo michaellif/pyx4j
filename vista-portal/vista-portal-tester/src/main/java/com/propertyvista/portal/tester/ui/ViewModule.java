@@ -24,11 +24,6 @@ public class ViewModule extends AbstractGinModule {
     protected void configure() {
         bind(SiteView.class);
 
-        bind(GoodbyeView.class).to(GoodbyeViewImpl.class).in(Singleton.class);
-        bind(HelloView.class).to(HelloViewImpl.class).in(Singleton.class);
-        bind(SayHelloView.class).to(SayHelloViewImpl.class).in(Singleton.class);
-        bind(SayGoodbyeView.class).to(SayGoodbyeViewImpl.class).in(Singleton.class);
-
         bind(LogoView.class).to(LogoViewImpl.class).in(Singleton.class);
         bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
         bind(MainNavigView.class).to(MainNavigViewImpl.class).in(Singleton.class);
