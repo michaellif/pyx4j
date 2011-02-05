@@ -128,14 +128,14 @@ public class AppSiteView extends FlowPanel {
         bind(mainNavigActivityMapper, mainNavigDisplayPanel, eventBus);
 
         bind(center1ActivityMapper, center1DisplayPanel, eventBus);
-        //        bind(center2ActivityMapper, center2DisplayPanel, eventBus);
-        //        bind(center3ActivityMapper, center3DisplayPanel, eventBus);
-        //
-        //        bind(left1ActivityMapper, left1DisplayPanel, eventBus);
-        //        bind(left2ActivityMapper, left2DisplayPanel, eventBus);
-        //
-        //        bind(right1ActivityMapper, right1DisplayPanel, eventBus);
-        //        bind(right2ActivityMapper, right2DisplayPanel, eventBus);
+        bind(center2ActivityMapper, center2DisplayPanel, eventBus);
+        bind(center3ActivityMapper, center3DisplayPanel, eventBus);
+
+        bind(left1ActivityMapper, left1DisplayPanel, eventBus);
+        bind(left2ActivityMapper, left2DisplayPanel, eventBus);
+
+        bind(right1ActivityMapper, right1DisplayPanel, eventBus);
+        bind(right2ActivityMapper, right2DisplayPanel, eventBus);
 
         bind(bottomActivityMapper, bottomDisplayPanel, eventBus);
 
