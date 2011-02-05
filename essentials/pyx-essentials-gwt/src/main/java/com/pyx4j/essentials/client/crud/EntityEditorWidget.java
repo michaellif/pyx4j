@@ -197,15 +197,37 @@ public abstract class EntityEditorWidget<E extends IEntity> extends DockPanel im
 
     protected void populateForm(E entity) {
         if (entity == null) {
-            getEditorPanel().populateForm(createNewEntity());
+            createNewEntity(new AsyncCallback<E>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnrecoverableClientError(caught);
+                }
+
+                @Override
+                public void onSuccess(E result) {
+                    getEditorPanel().populateForm(result);
+                }
+
+            });
         } else {
             getEditorPanel().populateForm(entity);
             updateHistoryToken(entity);
         }
     }
 
+    /**
+     * @deprecated use Async version of this function
+     * @return
+     */
+    @Deprecated
     protected E createNewEntity() {
         return EntityFactory.create(clazz);
+    }
+
+    @SuppressWarnings("deprecation")
+    protected void createNewEntity(AsyncCallback<E> callback) {
+        callback.onSuccess(createNewEntity());
     }
 
     @Override
