@@ -28,6 +28,9 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.log4gwt.client.ClientLogger;
@@ -65,5 +68,17 @@ public abstract class AppSite implements EntryPoint {
         }
         log.debug("{}", BrowserType.getCompiledType());
         onSiteLoad();
+    }
+
+    public void hideLoadingIndicator() {
+        // Remove the loading icon
+        RootPanel loading = RootPanel.get("loading");
+        if (loading != null) {
+            com.google.gwt.user.client.Element elem = loading.getElement();
+            UIObject.setVisible(elem, false);
+            DOM.setInnerHTML(elem, "");
+            loading.removeFromParent();
+            elem.getParentElement().removeChild(elem);
+        }
     }
 }
