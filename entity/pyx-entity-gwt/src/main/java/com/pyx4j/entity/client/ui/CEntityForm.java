@@ -134,6 +134,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
         populateComponents();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected void populateComponents() {
         for (CEditableComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);

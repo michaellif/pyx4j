@@ -34,17 +34,21 @@ public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> 
         this.cComponent = cComponent;
     }
 
+    @Override
     public CComponent<?> getCComponent() {
         return cComponent;
     }
 
+    @Override
     public boolean isEnabled() {
         return false;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
     }
 
+    @Override
     public boolean isEditable() {
         return false;
     }
@@ -53,6 +57,7 @@ public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> 
     public void setEditable(boolean editable) {
     }
 
+    @Override
     public void setNativeValue(E value) {
         String text = "";
         if (value != null) {
@@ -68,9 +73,11 @@ public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> 
     public void setReadOnly(boolean readOnly) {
     }
 
+    @Override
     public void setFocus(boolean focused) {
     }
 
+    @Override
     public void setTabIndex(int tabIndex) {
     }
 
