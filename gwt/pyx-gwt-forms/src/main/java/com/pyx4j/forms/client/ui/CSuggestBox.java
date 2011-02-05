@@ -48,7 +48,6 @@ public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> imple
     protected NativeSuggestBox<E> initWidget() {
         NativeSuggestBox<E> nativeTextField = new NativeSuggestBox<E>(this);
         setOptions(options);
-        setNativeComponentValue(getValue());
         return nativeTextField;
     }
 

@@ -34,9 +34,7 @@ public abstract class CFormGroup<E> extends CFormContainer<E, NativeFormGroup<E>
 
     @Override
     protected NativeFormGroup<E> initWidget() {
-        NativeFormGroup<E> nativeFormGroup = new NativeFormGroup<E>(this);
-        setNativeComponentValue(getValue());
-        return nativeFormGroup;
+        return new NativeFormGroup<E>(this);
     }
 
     @Override

@@ -26,9 +26,7 @@ public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
 
     @Override
     protected NativeRichTextArea initWidget() {
-        NativeRichTextArea nativeTextArea = new NativeRichTextArea(this);
-        setNativeComponentValue(getValue());
-        return nativeTextArea;
+        return new NativeRichTextArea(this);
     }
 
     public void scrollToBottom() {

@@ -39,8 +39,7 @@ public class CTextArea extends CTextComponent<String, NativeTextArea> {
     @Override
     protected NativeTextArea initWidget() {
         NativeTextArea nativeTextArea = new NativeTextArea(this);
-        setRows(rows);
-        setNativeComponentValue(getValue());
+        nativeTextArea.setVisibleLines(getRows());
         return nativeTextArea;
     }
 

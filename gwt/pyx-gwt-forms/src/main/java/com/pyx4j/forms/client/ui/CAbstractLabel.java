@@ -53,7 +53,6 @@ public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
         NativeLabel<E> nativeLabel = createNativeLabel();
         nativeLabel.setWordWrap(this.isWordWrap());
         nativeLabel.setWidth(this.getWidth());
-        setNativeComponentValue(getValue());
         return nativeLabel;
     }
 

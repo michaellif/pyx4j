@@ -114,7 +114,6 @@ public class CListBox<E> extends CEditableComponent<List<E>, NativeListBox<E>> i
         if (layout == Layout.PLAIN) {
             (nativeListBox).setTrigger(false);
         }
-        setNativeComponentValue(getValue());
         return nativeListBox;
     }
 

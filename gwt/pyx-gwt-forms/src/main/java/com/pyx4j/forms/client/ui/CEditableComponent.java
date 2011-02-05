@@ -213,6 +213,12 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
                 + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
+    @Override
+    protected void onWidgetCreated() {
+        super.onWidgetCreated();
+        setNativeComponentValue(getValue());
+    }
+
     protected void setNativeComponentValue(DATA_TYPE value) {
         if (isWidgetCreated()) {
             asWidget().setNativeValue(value);
