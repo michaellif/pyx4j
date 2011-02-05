@@ -26,6 +26,12 @@
 		</dependency>
 
         <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-gwt</artifactId>
             <version>${project.version}</version>
@@ -59,13 +65,6 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-gwt-serialization</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <optional>true</optional>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
