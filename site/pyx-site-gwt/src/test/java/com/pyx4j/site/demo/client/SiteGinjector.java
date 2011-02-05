@@ -31,6 +31,6 @@ public interface SiteGinjector extends Ginjector {
 
     PlaceHistoryHandler getPlaceHistoryHandler();
 
-    SiteView getMainView();
+    SiteView getSiteView();
 
 }

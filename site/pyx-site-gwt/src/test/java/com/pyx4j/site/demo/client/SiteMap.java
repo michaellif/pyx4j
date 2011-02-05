@@ -20,8 +20,6 @@
  */
 package com.pyx4j.site.demo.client;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.site.client.place.AppPlace;
 
 public class SiteMap {

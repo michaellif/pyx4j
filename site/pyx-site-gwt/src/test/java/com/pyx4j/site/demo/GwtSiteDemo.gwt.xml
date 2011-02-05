@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='test'>
 	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.inject.Inject"/>
 	<inherits name='com.pyx4j.site.GwtSite' />
 
 	<entry-point class='com.pyx4j.site.demo.client.SiteDemo' />
