@@ -4,6 +4,7 @@
 <module>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.pyx4j.site.Site' />
+    <inherits name='com.pyx4j.site.GwtSite' />
 	<inherits name='com.pyx4j.security.Security' />
     <inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
     <inherits name='com.pyx4j.essentials.EssentialsShared' />
