@@ -90,10 +90,15 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
 
     @SuppressWarnings("unchecked")
     public <T> CEditableComponent<T, ?> get(IObject<T> member) {
+        return getRaw(member);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public <T> CEditableComponent getRaw(IObject<T> member) {
         Path memberPath = member.getPath();
         for (Map.Entry<CEditableComponent<?, ?>, Path> me : binding.entrySet()) {
             if (me.getValue().equals(memberPath)) {
-                return (CEditableComponent<T, ?>) me.getKey();
+                return me.getKey();
             }
         }
         throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
