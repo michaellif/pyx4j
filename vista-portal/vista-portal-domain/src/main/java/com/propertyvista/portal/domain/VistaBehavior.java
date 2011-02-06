@@ -7,21 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on Feb 5, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.security.shared.Behavior;
 
-@EmbeddedEntity
-public interface Currency extends IEntity {
+public enum VistaBehavior implements Behavior {
 
-    @ToString
-    IPrimitive<String> name();
+    // TODO 
+
+    EMPLOYEE,
+
+    PRODUCTION_SUPPORT,
+
+    ADMIN,
 
 }

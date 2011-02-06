@@ -7,21 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on Feb 5, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.admin.rpc;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
+import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.VistaBehavior;
+
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@EmbeddedEntity
-public interface Currency extends IEntity {
+@Transient
+public interface EditableUser extends IEntity {
 
-    @ToString
-    IPrimitive<String> name();
+    User user();
+
+    IPrimitive<Boolean> enabled();
+
+    IPrimitive<VistaBehavior> behavior();
 
 }

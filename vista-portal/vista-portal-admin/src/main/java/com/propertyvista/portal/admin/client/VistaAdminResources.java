@@ -7,21 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on Feb 5, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.admin.client;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.ImageResource;
 
-@EmbeddedEntity
-public interface Currency extends IEntity {
+public interface VistaAdminResources extends ClientBundleWithLookup {
 
-    @ToString
-    IPrimitive<String> name();
+    @Source("logo.png")
+    ImageResource logo();
 
 }

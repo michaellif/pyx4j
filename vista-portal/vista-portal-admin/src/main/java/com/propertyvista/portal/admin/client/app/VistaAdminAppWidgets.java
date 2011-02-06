@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2011
- * @author michaellif
+ * Created on Feb 5, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.admin.client.app;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+public enum VistaAdminAppWidgets {
 
-@EmbeddedEntity
-public interface Currency extends IEntity {
+    app$dashboardWidget,
 
-    @ToString
-    IPrimitive<String> name();
+    app$userListWidget, app$userEditorWidget,
 
 }
