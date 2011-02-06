@@ -19,7 +19,18 @@
         <listener-class>com.pyx4j.entity.server.servlet.InitializationServletContextListener</listener-class>
     </listener>
 
+    <security-constraint>
+        <web-resource-collection>
+        	<web-resource-name>Admin Pages</web-resource-name>
+            <url-pattern>/_aj/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
     <!--PRODUCTION_TEMPLATE_REMOVE_START-->
+    <!-- 
     <security-constraint>
         <web-resource-collection>
             <url-pattern>/*</url-pattern>
@@ -28,6 +39,7 @@
             <role-name>*</role-name>
         </auth-constraint>
     </security-constraint>
+    -->
     <!--PRODUCTION_TEMPLATE_REMOVE_END-->
 
     <security-constraint>
@@ -39,23 +51,15 @@
         </auth-constraint>
     </security-constraint>
 
-    <!--PRODUCTION_TEMPLATE_REMOVE_START-->
-    <!--
-    <filter>
-        <filter-name>appstats</filter-name>
-        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
-        <init-param>
-            <param-name>logMessage</param-name>
-            <param-value>Appstats available: /appstats/details?time={ID}</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>appstats</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    -->
-    <!--PRODUCTION_TEMPLATE_REMOVE_END-->
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>MCO Manager Application</realm-name>
+    </login-config>
 
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+    
     <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
@@ -79,8 +83,6 @@
     </servlet-mapping>
 -->    
 
-    <!--PRODUCTION_TEMPLATE_REMOVE_START-->
-    <!--
     <servlet>
         <servlet-name>DebugServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
@@ -90,18 +92,6 @@
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/debug/*</url-pattern>
     </servlet-mapping>
-
-    <servlet>
-        <servlet-name>appstats</servlet-name>
-        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>appstats</servlet-name>
-        <url-pattern>/internal/appstats/*</url-pattern>
-    </servlet-mapping>
-    -->
-    <!--PRODUCTION_TEMPLATE_REMOVE_END-->
 
     <servlet>
         <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
@@ -124,6 +114,16 @@
         <url-pattern>/portal/srv/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/tester/srv/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/admin/srv/*</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
@@ -134,6 +134,26 @@
         <url-pattern>/internal/j2sesrv/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.download.DownloadServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ServletContainerLoginServlet</servlet-name>
+        <servlet-class>com.pyx4j.security.server.ServletContainerLoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ServletContainerLoginServlet</servlet-name>
+        <url-pattern>/_aj/*</url-pattern>
+    </servlet-mapping>
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

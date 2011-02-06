@@ -19,7 +19,5 @@
 	<natures>
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
-		<nature>com.google.gdt.eclipse.core.webAppNature</nature>
 	</natures>
 </projectDescription>

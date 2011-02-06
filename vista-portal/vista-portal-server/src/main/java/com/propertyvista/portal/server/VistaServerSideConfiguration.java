@@ -13,8 +13,51 @@
  */
 package com.propertyvista.portal.server;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
+import com.propertyvista.portal.server.access.VistaAccessControlList;
+import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
-public class VistaServerSideConfiguration extends ServerSideConfiguration {
+import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.security.server.ThrottleConfig;
+import com.pyx4j.security.shared.AclCreator;
 
+public class VistaServerSideConfiguration extends EssentialsServerSideConfiguration {
+
+    @Override
+    public AclCreator getAclCreator() {
+        return new VistaAccessControlList();
+    }
+
+    @Override
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        return new VistaConfigurationMySQL();
+    }
+
+    @Override
+    public IServiceFactory getRPCServiceFactory() {
+        return new VistaRPCServiceFactory();
+    }
+
+    @Override
+    public DataPreloaderCollection getDataPreloaders() {
+        return new VistaDataPreloaders();
+    }
+
+    @Override
+    public ThrottleConfig getThrottleConfig() {
+        return new ThrottleConfig() {
+            @Override
+            public long getInterval() {
+                return Consts.SEC2MSEC;
+            }
+
+            @Override
+            public long getMaxRequests() {
+                return 60000;
+            }
+        };
+    }
 }

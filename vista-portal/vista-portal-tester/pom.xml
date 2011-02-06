@@ -50,7 +50,7 @@
                         <configuration>
                             <target>
                                 <delete quiet="true" includeemptydirs="true">
-                                    <fileset dir="${basedir}/../vista-portal-server/target/vista-portal-server/${gwtModule}"/>
+                                    <fileset dir="${basedir}/../vista-portal-server/src/main/webapp/${gwtModule}"/>
                                 </delete>
                             </target>
                         </configuration>
@@ -86,7 +86,7 @@
                             <!-- ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL -->
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
-                            <target>${basedir}/../vista-portal-server/target/vista-portal-server</target>
+                            <target>${basedir}/../vista-portal-server/src/main/webapp</target>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <compilerClass>com.google.gwt.dev.Compiler</compilerClass>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>

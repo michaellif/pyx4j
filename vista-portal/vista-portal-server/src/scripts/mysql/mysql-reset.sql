@@ -1,0 +1,5 @@
+
+DROP DATABASE vista;
+
+CREATE DATABASE vista;
+

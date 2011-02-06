@@ -34,34 +34,53 @@
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-api-stubs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-api-1.0-sdk</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-api-stubs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-testing</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-api-stubs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-api-labs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-api-labs</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-gae</artifactId>
+            <artifactId>pyx-entity-rdb</artifactId>
+            <version>${pyxVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
         </dependency>
 
         <dependency>
             <groupId>net.tanesha.recaptcha4j</groupId>
 	        <artifactId>recaptcha4j</artifactId>
 	    </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-sdk</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- need for taskqueue and it is not automaticaly added during build -->
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-labs</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -85,23 +104,77 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.14</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-jetty-runtime</artifactId>
+            <version>${pyxVersion}</version>
+            <optional>true</optional>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
+    <properties>
+        <deployableName>vista</deployableName>
+    </properties>
+
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${deployableName}</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources-generated</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/webapp</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>WEB-INF/web.xml</include>
+                </includes>
+            </resource>
+        </resources>
 
         <plugins>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
                 <configuration>
+                    <archive>
+                        <compress>${compressJars}</compress>
+                        <manifestEntries>
+                            <Version>${label}</Version>
+                            <Revision>${scm.revision}</Revision>
+                            <Build-Time>${cctimestamp}</Build-Time>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                    <archiveClasses>true</archiveClasses>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                     <!-- Processed by maven -->
+                    <webXml>${project.build.directory}/classes/WEB-INF/web.xml</webXml>
                     <webResources>
                         <resource>
-                            <directory>${basedir}/src/main/webapp</directory>
-                            <filtering>true</filtering>
+                            <directory>${basedir}/src/main/webapp/</directory>
                             <includes>
-                                <include>**/appengine-web.xml</include>
+                                <include>*.html</include>
+                                <include>favicon.ico</include>
+                                <include>admin/**</include>
+                                <include>portal/**</include>
+                                <include>tester/**</include>
+                                <include>images/**</include>
                             </includes>
                         </resource>
                     </webResources>
@@ -113,58 +186,22 @@
                 <artifactId>jrebel-maven-plugin</artifactId>
                 <configuration>
                     <packaging>war</packaging>
-                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
-                    <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory>
+                    <classesDirectory>target/classes</classesDirectory>
+                    <war>
+                        <path>${basedir}/src/main/webapp/</path>
+                    </war>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>net.kindleit</groupId>
-                <artifactId>maven-gae-plugin</artifactId>
-                <configuration>
-                    <appDir>${project.build.directory}/${project.build.finalName}</appDir>
-                    <sdkDir>${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gaeVersion}/appengine-java-sdk-${gaeVersion}</sdkDir>
-                    <port>8888</port>
-                </configuration>
-            </plugin>
-
         </plugins>
-
     </build>
 
 
     <profiles>
 
         <profile>
-            <id>build-env</id>
-            <properties>
-                <appengine.sdk.root>${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gaeVersion}/appengine-java-sdk-${gaeVersion}</appengine.sdk.root>
-            </properties>
-        </profile>
-
-        <profile>
             <id>prod</id>
             <build>
                 <plugins>
-
-                    <!-- TODO this module should be war only - no code -->
-                    <!--
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>pre-integration-test.lib-copy</id>
-                                <phase>pre-integration-test</phase>
-                                <goals><goal>run</goal></goals>
-                                <configuration>
-                                    <target>
-                                        <copy file="${project.build.directory}/${project.build.finalName}.jar" todir="${basedir}/war/WEB-INF/lib"/>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    -->
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -200,29 +237,64 @@
         </profile>
 
         <profile>
-            <id>deploy-gae</id>
+            <id>deploy</id>
             <build>
                 <plugins>
+
+                    <!-- See http://cargo.codehaus.org/Maven2+plugin -->
                     <plugin>
-                        <groupId>net.kindleit</groupId>
-	                    <artifactId>maven-gae-plugin</artifactId>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+
                         <executions>
                             <execution>
-                                <id>gae-deploy</id>
-                                <phase>integration-test</phase>
+                                <id>verify-deploy</id>
+                                <phase>install</phase>
                                 <goals>
-                                    <goal>deploy</goal>
+                                    <goal>deployer-deploy</goal>
                                 </goals>
                             </execution>
                             <execution>
-                                <id>gae-rollback</id>
-                                <phase>pre-integration-test</phase>
+                                <id>clean-undeploy</id>
+                                <phase>package</phase>
                                 <goals>
-                                    <goal>rollback</goal>
+                                    <goal>deployer-undeploy</goal>
                                 </goals>
                             </execution>
                         </executions>
+
+                        <configuration>
+                            <container>
+                                <containerId>tomcat6x</containerId>
+                                <type>remote</type>
+                            </container>
+                            <configuration>
+                                <type>runtime</type>
+                                <properties>
+                                    <cargo.tomcat.manager.url>${vista-tomcat-url}/manager</cargo.tomcat.manager.url>
+                                    <cargo.remote.username>${tomcat-username}</cargo.remote.username>
+                                    <cargo.remote.password>${tomcat-pwd}</cargo.remote.password>
+                                </properties>
+                            </configuration>
+                            <deployer>
+                                <type>remote</type>
+                                <deployables>
+                                    <deployable>
+                                        <groupId>${project.groupId}</groupId>
+                                        <artifactId>${project.artifactId}</artifactId>
+                                        <type>war</type>
+                                        <pingURL>${vista-tomcat-url}/${deployableName}/index.html</pingURL>
+                                        <pingTimeout>180000</pingTimeout>
+                                        <properties>
+                                            <context>${deployableName}</context>
+                                        </properties>
+                                    </deployable>
+                                </deployables>
+                            </deployer>
+
+                        </configuration>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>
