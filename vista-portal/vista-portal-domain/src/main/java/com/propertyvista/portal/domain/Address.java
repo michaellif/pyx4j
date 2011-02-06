@@ -84,7 +84,7 @@ public interface Address extends IEntity {
 
     IPrimitive<String> countyName();
 
-    IPrimitive<GeoPoint> location();
+//    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
 
     IPrimitive<AddressType> addressType();
 
