@@ -28,28 +28,28 @@ public class DashboardPanel extends SimplePanel {
      * Dashboard Widget interface. User-defined widgets should extend GWT Widget and
      * implement this interface.
      */
-    public interface IWidget {
+    public interface IGadget {
         // info:
-        public Widget getWidget(); // should be implemented meaningful!
+        Widget getWidget(); // should be implemented meaningful!
 
-        public String getName();
+        String getName();
 
         // flags:	
-        public boolean isMaximizable();
+        boolean isMaximizable();
 
-        public boolean isMinimizable();
+        boolean isMinimizable();
 
-        public boolean isSetupable();
+        boolean isSetupable();
 
         // verbs:
-        public void showSetup();
+        void showSetup();
 
         // notifications:
-        public void onMaximize(boolean maximized_restored); // true for max-ed, false - restored
+        void onMaximize(boolean maximized_restored); // true for max-ed, false - restored
 
-        public void onMinimize(boolean minimized_restored); // true for min-ed, false - restored
+        void onMinimize(boolean minimized_restored); // true for min-ed, false - restored
 
-        public void onDelete();
+        void onDelete();
     } // Interface IWidget
 
     /**
@@ -257,18 +257,18 @@ public class DashboardPanel extends SimplePanel {
     }
 
     // Widget manipulation:	
-    public boolean addWidget(IWidget widget) {
+    public boolean addWidget(IGadget widget) {
         return insertWidget(widget, 0, 0);
     }
 
-    public boolean addWidget(IWidget widget, int column) {
+    public boolean addWidget(IGadget widget, int column) {
         return insertWidget(widget, column, -1);
     }
 
-    public boolean insertWidget(IWidget widget, int column, int row) {
+    public boolean insertWidget(IGadget widget, int column, int row) {
         if (checkIndexes(column, row, true)) {
             // create holder for supplied widget and insert it into specified column,row:
-            WidgetHolder wh = new WidgetHolder(widget, this);
+            GadgetHolder wh = new GadgetHolder(widget, this);
 
             if (row > 0)
                 getColumnWidgetsPanel(column).insert(wh, row);
@@ -335,11 +335,12 @@ public class DashboardPanel extends SimplePanel {
                     * 2 + "%");
 
             DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "float", "left");
+            DOM.setStyleAttribute(columnCompositePanel.getElement(), "cssFloat", "left");
 
             // put column name if necessary:
             if (layout.isColumnNames()) {
                 Label heading = new Label(layout.getCoumnName(col));
+                heading.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 heading.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_HEADING);
                 heading.setWidth("100%");
 
@@ -386,8 +387,8 @@ public class DashboardPanel extends SimplePanel {
         return true;
     }
 
-    protected final class WidgetHolder extends SimplePanel {
-        private final IWidget holdedWidget;
+    protected final class GadgetHolder extends SimplePanel {
+        private final IGadget holdedGadget;
 
         private final DashboardPanel dashboardPanel;
 
@@ -396,17 +397,18 @@ public class DashboardPanel extends SimplePanel {
         private final Label title = new Label();
 
         // public interface:
-        public IWidget getIWidget() {
-            return holdedWidget;
+        public IGadget getIWidget() {
+            return holdedGadget;
         }
 
         // internals:
-        public WidgetHolder(IWidget widget, DashboardPanel mainPanel) {
-            this.holdedWidget = widget;
+        public GadgetHolder(IGadget widget, DashboardPanel mainPanel) {
+            this.holdedGadget = widget;
             this.dashboardPanel = mainPanel;
 
             // create caption with title and menu:
-            title.setText(holdedWidget.getName());
+            title.setText(holdedGadget.getName());
+            title.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
             HorizontalPanel widgetHolderCaption = new HorizontalPanel();
             widgetHolderCaption.add(title);
             widgetHolderCaption.setCellWidth(widgetHolderCaption.getWidget(widgetHolderCaption.getWidgetCount() - 1), "90%");
@@ -418,7 +420,7 @@ public class DashboardPanel extends SimplePanel {
 
             // put it together:
             holder.add(widgetHolderCaption);
-            holder.add(holdedWidget.getWidget());
+            holder.add(holdedGadget.getWidget());
             holder.addStyleName(CSS_DASHBOARD_PANEL_HOLDER);
             holder.setWidth("100%");
 
@@ -426,7 +428,8 @@ public class DashboardPanel extends SimplePanel {
             this.setWidth("100%");
 
             // don't forget about vertical spacing:
-            DOM.setStyleAttribute(this.getElement(), "padding", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
+            //            DOM.setStyleAttribute(this.getElement(), "padding", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
+            DOM.setStyleAttribute(this.getElement(), "margin", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -474,15 +477,15 @@ public class DashboardPanel extends SimplePanel {
 
                     // create the menu:
                     MenuBar menu = new MenuBar(true);
-                    if (holdedWidget.isMinimizable())
+                    if (holdedGadget.isMinimizable())
                         menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
 
-                    if (holdedWidget.isMaximizable())
+                    if (holdedGadget.isMaximizable())
                         menu.addItem((isMaximized() ? "Restore" : "Maximize"), cmdMaximize);
 
                     menu.addItem("Delete", cmdDelete);
 
-                    if (holdedWidget.isSetupable()) {
+                    if (holdedGadget.isSetupable()) {
                         menu.addSeparator();
                         menu.addItem("Setup", cmdSetup);
                     }
@@ -505,11 +508,11 @@ public class DashboardPanel extends SimplePanel {
             if (isMinimized()) {
                 holder.add(minimizedWidget);
                 minimizedWidget = null;
-                holdedWidget.onMinimize(false);
+                holdedGadget.onMinimize(false);
             } else { // minimize:
-                minimizedWidget = holdedWidget.getWidget();
+                minimizedWidget = holdedGadget.getWidget();
                 holder.remove(minimizedWidget);
-                holdedWidget.onMinimize(true);
+                holdedGadget.onMinimize(true);
             }
         }
 
@@ -528,7 +531,7 @@ public class DashboardPanel extends SimplePanel {
 
                 //                this.setWidth("100%");
                 widgetDragController.makeDraggable(this, title);
-                holdedWidget.onMaximize(false);
+                holdedGadget.onMaximize(false);
             } else { // maximize:
                 maximizeData.saveWidgetPosition((FlowPanel) getParent(), this);
                 maximizeData.boundaryPanel = dashboardPanel.getWidget();
@@ -536,7 +539,7 @@ public class DashboardPanel extends SimplePanel {
 
                 //                this.setSize("100%", "100%");
                 widgetDragController.makeNotDraggable(this);
-                holdedWidget.onMaximize(true);
+                holdedGadget.onMaximize(true);
             }
         }
 
@@ -551,12 +554,12 @@ public class DashboardPanel extends SimplePanel {
 
             public Widget boundaryPanel;
 
-            public void saveWidgetPosition(FlowPanel currentColumn, WidgetHolder widget) {
+            public void saveWidgetPosition(FlowPanel currentColumn, GadgetHolder widget) {
                 columnPanel = currentColumn;
                 widgetIndex = maximizeData.columnPanel.getWidgetIndex(widget);
             }
 
-            public void restoreWidgetPosition(WidgetHolder widget) {
+            public void restoreWidgetPosition(GadgetHolder widget) {
                 columnPanel.insert(widget, widgetIndex);
             }
 
@@ -570,7 +573,7 @@ public class DashboardPanel extends SimplePanel {
 
         // --------------------------------------------------------------
         private void delete() {
-            holdedWidget.onDelete();
+            holdedGadget.onDelete();
             ((FlowPanel) getParent()).remove(this);
         }
     } // WidgetHolder

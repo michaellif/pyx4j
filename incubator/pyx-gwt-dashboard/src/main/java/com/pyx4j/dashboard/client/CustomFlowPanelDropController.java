@@ -22,8 +22,10 @@ package com.pyx4j.dashboard.client;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
+import com.allen_sauer.gwt.dnd.client.util.Area;
 import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
 import com.allen_sauer.gwt.dnd.client.util.DragClientBundle;
+import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -52,7 +54,13 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
 
     @Override
     protected LocationWidgetComparator getLocationWidgetComparator() {
-        return LocationWidgetComparator.BOTTOM_RIGHT_COMPARATOR;
+        return LocationWidgetComparator.BOTTOM_HALF_COMPARATOR;
+        //        return new LocationWidgetComparator() {
+        //            @Override
+        //            public boolean locationIndicatesIndexFollowingWidget(Area widgetArea, Location location) {
+        //                return (location.getTop() > widgetArea.getTop() || location.getTop() < widgetArea.getBottom());
+        //            }
+        //        };
     }
 
     @Override
@@ -80,7 +88,6 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
         inner.setPixelSize(width - DOMUtil.getHorizontalBorders(outer), height - DOMUtil.getVerticalBorders(outer));
 
         outer.setWidget(inner);
-
         return outer;
     }
 }
