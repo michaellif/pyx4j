@@ -28,4 +28,8 @@ public class DemoData {
     public static String CRM_EMPLOYEE_USER_PREFIX = "emp";
 
     public static String USERS_DOMAIN = "@propertyvista.com";
+
+    public static int NUM_RESIDENTIAL_BUILDINGS = 3;
+
+    public static int NUM_UNITS = 10;
 }

@@ -13,9 +13,14 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("{0} {1}")
 public interface Building extends Property {
 
     public enum BuildingType {
@@ -35,11 +40,10 @@ public interface Building extends Property {
         other
     }
 
-    /**
-     * (max 100 char)
-     */
     Complex complex();
 
+    @Caption(name = "Type")
+    @ToString(index = 0)
     IPrimitive<BuildingType> buildingType();
 
     /**
@@ -47,8 +51,11 @@ public interface Building extends Property {
      */
     IPrimitive<String> webSite();
 
+    @Caption(name = "Address")
+    @ToString(index = 1)
     Address address();
 
+    @Owned
     IList<Phone> phoneList();
 
     Email email();
