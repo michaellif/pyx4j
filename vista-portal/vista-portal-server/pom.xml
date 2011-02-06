@@ -122,6 +122,9 @@
 
     <properties>
         <deployableName>vista</deployableName>
+        <vista-tomcat-url>crm22.birchwoodsoftwaregroup.com</vista-tomcat-url>
+        <tomcat-username>vista</tomcat-username>
+        <tomcat-pwd>Vista1102</tomcat-pwd>
     </properties>
 
     <build>
