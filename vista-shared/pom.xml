@@ -18,6 +18,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>vista-callfire</module>
         <module>vista-integration</module>
     </modules>
 
