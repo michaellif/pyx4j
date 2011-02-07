@@ -38,7 +38,15 @@ public class SiteMap {
     public static class AboutUs extends AppPlace {
     }
 
-    public static class Registration extends AppPlace {
+    //TODO: antonk: various annotations for generator
+    //    @DoNotShowOnNavig
+    //    @StaticPage()
+    public static class TopRightActions extends AppPlace {
     }
 
+    public static class SignUp extends AppPlace {
+    }
+
+    public static class SignUpResult extends AppPlace {
+    }
 }

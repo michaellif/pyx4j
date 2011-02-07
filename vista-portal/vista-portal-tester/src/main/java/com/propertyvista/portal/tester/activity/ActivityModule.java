@@ -23,6 +23,10 @@ public class ActivityModule extends AbstractGinModule {
         bind(MainNavigActivity.class);
         bind(MainContentActivity.class);
         bind(LeftPortletsActivity.class);
+        bind(SignInActivity.class);
+        bind(TopRightActionsActivity.class);
+        bind(SignUpActivity.class);
+        bind(SignUpResultActivity.class);
 
     }
 

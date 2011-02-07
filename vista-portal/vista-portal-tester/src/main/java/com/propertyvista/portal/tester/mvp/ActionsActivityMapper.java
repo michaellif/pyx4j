@@ -17,18 +17,24 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.propertyvista.portal.tester.activity.TopRightActionsActivity;
+
+import com.pyx4j.site.client.place.AppPlace;
 
 public class ActionsActivityMapper implements ActivityMapper {
 
+    Provider<TopRightActionsActivity> topRightActionActivityProvider;
+
     @Inject
-    public ActionsActivityMapper() {
+    public ActionsActivityMapper(Provider<TopRightActionsActivity> topRightActionActivityProvider) {
         super();
+        this.topRightActionActivityProvider = topRightActionActivityProvider;
     }
 
     @Override
     public Activity getActivity(Place place) {
-
-        return null;
+        return topRightActionActivityProvider.get().withPlace((AppPlace) place);
     }
 
 }
