@@ -268,13 +268,13 @@ public class DashboardPanel extends SimplePanel {
     public boolean insertGadget(IGadget widget, int column, int row) {
         if (checkIndexes(column, row, true)) {
             // create holder for supplied widget and insert it into specified column,row:
-            GadgetHolder wh = new GadgetHolder(widget, this);
+            GadgetHolder gh = new GadgetHolder(widget, this);
 
             if (row > 0)
-                getColumnWidgetsPanel(column).insert(wh, row);
+                getColumnWidgetsPanel(column).insert(gh, row);
             else
                 // if row is negative - just add at the end:
-                getColumnWidgetsPanel(column).add(wh);
+                getColumnWidgetsPanel(column).add(gh);
 
             return true;
         }
@@ -331,13 +331,13 @@ public class DashboardPanel extends SimplePanel {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
             columnCompositePanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE);
-            columnCompositePanel.setWidth((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing()
-                    * 2 + "%");
+            columnCompositePanel
+                    .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) * 0.995
+                            + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely that leads to last column 
+                                    // is being dropped to the left-bottom of the panel, so we leave an additional space (make columns narrower)...
 
-            //            DOM.setStyleAttribute(columnCompositePanel.getElement(), "display", "run-in");
-            //            DOM.setStyleAttribute(columnCompositePanel.getElement(), "position", "float");
             DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "cssFloat", "left");
+            DOM.setStyleAttribute(columnCompositePanel.getElement(), "cssFloat", "left"); // this doesn't work for IE - we leave 'float: left' in css!.. 
 
             // put column name if necessary:
             if (layout.isColumnNames()) {
@@ -430,8 +430,8 @@ public class DashboardPanel extends SimplePanel {
             this.setWidth("100%");
 
             // don't forget about vertical spacing:
-            //            DOM.setStyleAttribute(this.getElement(), "padding", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
             DOM.setStyleAttribute(this.getElement(), "margin", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
+            //            DOM.setStyleAttribute(this.getElement(), "padding", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -576,7 +576,7 @@ public class DashboardPanel extends SimplePanel {
         // --------------------------------------------------------------
         private void delete() {
             holdedGadget.onDelete();
-            ((FlowPanel) getParent()).remove(this);
+            ((ComplexPanel) getParent()).remove(this);
         }
     } // WidgetHolder
 } // DashboardPanel class...
