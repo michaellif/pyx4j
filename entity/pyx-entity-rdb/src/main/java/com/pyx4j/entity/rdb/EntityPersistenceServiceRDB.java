@@ -77,8 +77,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public EntityPersistenceServiceRDB() {
         try {
             IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
-            if (cfg == null)
+            if (cfg == null) {
             	throw new RuntimeException("Persistence Configuration is not defined (is null)");
+            }
             if (!(cfg instanceof Configuration)) {
                 throw new RuntimeException("Invalid RDB configuration class " + cfg);
             }
