@@ -1,12 +1,5 @@
 /** Add css rules here for your application. */
  
-html, body {
-	height: 100%;
-}
-body {
-    margin: 10px;
-}
-
 
 h1 {
 	color: gray;
@@ -14,7 +7,6 @@ h1 {
 	margin: 10px 0px;
 	text-align: center;
 }
-
 
 
 div.dragdrop-dropTarget {
@@ -51,7 +43,7 @@ div.dragdrop-dropTarget-engage {
 .DashboardPanel .DashboardPanel-column-container {
 }
 .DashboardPanel .DashboardPanel-column-composite {
-	position: float;
+    float: left;
 }
 .DashboardPanel .DashboardPanel-column-heading {
 	background-color: #87B3FF;
