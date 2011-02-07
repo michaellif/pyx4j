@@ -1,5 +1,13 @@
 /** Add css rules here for your application. */
  
+html, body {
+	height: 100%;
+}
+body {
+    margin: 10px;
+}
+
+
 h1 {
 	color: gray;
 /*	font-size: 2em;*/
@@ -41,15 +49,15 @@ div.dragdrop-dropTarget-engage {
 
 }
 .DashboardPanel .DashboardPanel-column-container {
-
+}
+.DashboardPanel .DashboardPanel-column-composite {
+	position: float;
 }
 .DashboardPanel .DashboardPanel-column-heading {
 	background-color: #87B3FF;
 	font-weight: bold;
   	text-align: center;
 /*    border: 5px solid maroon;*/
-}
-.DashboardPanel .DashboardPanel-column-composite {
 }
 .DashboardPanel .DashboardPanel-holder {
 	background-color: #B3FF87;

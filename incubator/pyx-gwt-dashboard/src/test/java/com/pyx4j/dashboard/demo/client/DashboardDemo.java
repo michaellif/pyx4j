@@ -183,7 +183,7 @@ public final class DashboardDemo implements EntryPoint {
                 MyHTML widget = new MyHTML("Widget&nbsp;#" + ++count);
                 widget.setHeight(Random.nextInt(8) + 2 + "em");
                 //			dashboardPanel.insertWidget(widget, col, row);
-                dashboardPanel.addWidget(widget, col);
+                dashboardPanel.addGadget(widget, col);
             }
     }
 
@@ -205,13 +205,37 @@ public final class DashboardDemo implements EntryPoint {
                     }
                 };
 
-                Command cmdL2 = new Command() {
+                Command cmdL21 = new Command() {
                     @Override
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 3, 8);
-                        byte colWidths[] = { 70, 30 };
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 8);
+                        byte colWidths[] = { 33, 66 };
+                        layout.setColumnWidths(colWidths);
+                        dashboardPanel.setLayout(layout);
+                    }
+                };
+
+                Command cmdL22 = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 8);
+                        byte colWidths[] = { 66, 33 };
+                        layout.setColumnWidths(colWidths);
+                        dashboardPanel.setLayout(layout);
+                    }
+                };
+
+                Command cmdL23 = new Command() {
+                    @Override
+                    public void execute() {
+                        pp.hide();
+
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 8);
+                        byte colWidths[] = { 50, 50 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
                     }
@@ -222,43 +246,30 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 2, 8);
-                        byte colWidths[] = { 70, 20, 10 };
-                        layout.setColumnWidths(colWidths);
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 8);
                         dashboardPanel.setLayout(layout);
                     }
                 };
 
-                Command cmdL4 = new Command() {
-                    @Override
-                    public void execute() {
-                        pp.hide();
-
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(4, 1, 8);
-                        byte colWidths[] = { 20, 20, 50, 10 };
-                        layout.setColumnWidths(colWidths);
-                        dashboardPanel.setLayout(layout);
-                    }
-                };
-
-                Command cmdLr = new Command() {
-                    @Override
-                    public void execute() {
-                        pp.hide();
-
-                        dashboardPanel.getLayout().setColumnWidths(new byte[0]);
-                        dashboardPanel.refresh();
-                    }
-                };
+                //                Command cmdLr = new Command() {
+                //                    @Override
+                //                    public void execute() {
+                //                        pp.hide();
+                //
+                //                        dashboardPanel.getLayout().setColumnWidths(new byte[0]);
+                //                        dashboardPanel.refresh();
+                //                    }
+                //                };
 
                 // create the menu:
                 MenuBar menu = new MenuBar(true);
                 menu.addItem("One", cmdL1);
-                menu.addItem("Two", cmdL2);
-                menu.addItem("Three", cmdL3);
-                menu.addItem("Four", cmdL4);
-                menu.addSeparator();
-                menu.addItem("Reset widths", cmdLr);
+                menu.addItem("Two (33/66)", cmdL21);
+                menu.addItem("Two (66/33)", cmdL22);
+                menu.addItem("Two (50/50)", cmdL23);
+                menu.addItem("Three (33x3)", cmdL3);
+                //                menu.addSeparator();
+                //                menu.addItem("Reset widths", cmdLr);
 
                 menu.addStyleName(CSS_DASHBOARD_MENU);
 

@@ -257,15 +257,15 @@ public class DashboardPanel extends SimplePanel {
     }
 
     // Widget manipulation:	
-    public boolean addWidget(IGadget widget) {
-        return insertWidget(widget, 0, 0);
+    public boolean addGadget(IGadget widget) {
+        return insertGadget(widget, 0, 0);
     }
 
-    public boolean addWidget(IGadget widget, int column) {
-        return insertWidget(widget, column, -1);
+    public boolean addGadget(IGadget widget, int column) {
+        return insertGadget(widget, column, -1);
     }
 
-    public boolean insertWidget(IGadget widget, int column, int row) {
+    public boolean insertGadget(IGadget widget, int column, int row) {
         if (checkIndexes(column, row, true)) {
             // create holder for supplied widget and insert it into specified column,row:
             GadgetHolder wh = new GadgetHolder(widget, this);
@@ -282,11 +282,11 @@ public class DashboardPanel extends SimplePanel {
         return false;
     }
 
-    public boolean removeWidget(int column, int row) {
+    public boolean removeGadget(int column, int row) {
         return (checkIndexes(column, row, false) && getColumnWidgetsPanel(column).remove(row));
     }
 
-    public void removeAllWidgets() {
+    public void removeAllGadgets() {
         for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
             getColumnWidgetsPanel(i).clear();
     }
@@ -334,6 +334,8 @@ public class DashboardPanel extends SimplePanel {
             columnCompositePanel.setWidth((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing()
                     * 2 + "%");
 
+            //            DOM.setStyleAttribute(columnCompositePanel.getElement(), "display", "run-in");
+            //            DOM.setStyleAttribute(columnCompositePanel.getElement(), "position", "float");
             DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
             DOM.setStyleAttribute(columnCompositePanel.getElement(), "cssFloat", "left");
 
