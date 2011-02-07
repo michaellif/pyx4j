@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain;
 
+import java.util.Date;
+
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Unit extends Property {
@@ -30,23 +32,36 @@ public interface Unit extends Property {
 
     /**
      * Number of bedrooms in unit
+     * 
+     * TODO Artur: Can we move this to floorplan?
      */
     IPrimitive<Float> bedrooms();
 
     /**
      * Number of bathrooms in unit
+     * 
+     * TODO Artur: Can we move this to floorplan?
+     * 
+     * TODO Are the units with the same number of b*rooms have the same plan.
      */
     IPrimitive<Float> bathrooms();
 
+    /**
+     * Used for DB Denormalization
+     */
+    Lease currentLease();
+
     Money marketRent();
 
-    /**
-     * Unit used as part of a marketing campaign to demonstrate the design, structure, and
-     * appearance of unit.
-     */
-    Unit modelUnit();
+    IPrimitive<Date> moveOut();
 
-    Picture floorplan();
+    IPrimitive<Date> avalableForRent();
+
+    /**
+     * Object used as part of a marketing campaign to demonstrate the design, structure,
+     * and appearance of unit.
+     */
+    Floorplan floorplan();
 
     IPrimitive<String> unitLeaseStatus();
 
