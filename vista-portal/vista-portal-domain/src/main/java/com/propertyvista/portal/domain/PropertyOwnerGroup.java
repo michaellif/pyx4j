@@ -16,10 +16,10 @@ package com.propertyvista.portal.domain;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-public interface OwnerGroup extends Owner {
+public interface PropertyOwnerGroup extends PropertyOwner {
 
     IPrimitive<String> name();
 
-    ISet<Owner> ownerList();
+    ISet<PropertyOwner> ownerList();
 
 }

@@ -32,4 +32,5 @@ public interface Property extends IEntity {
     IPrimitive<String> marketingName();
 
     ISet<Picture> pictures();
+
 }

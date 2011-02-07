@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 //It should be either company or person set at the same time
-public interface Owner extends IEntity {
+public interface PropertyOwner extends IEntity {
 
     /**
      * Company that owns property

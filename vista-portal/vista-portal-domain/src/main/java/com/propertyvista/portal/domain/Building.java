@@ -14,7 +14,6 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -43,6 +42,10 @@ public interface Building extends Property {
 
     Complex complex();
 
+    @Override
+    @Caption(name = "Building Code")
+    IPrimitive<String> propertyCode();
+
     @Caption(name = "Type")
     @ToString(index = 0)
     IPrimitive<BuildingType> buildingType();
@@ -62,4 +65,5 @@ public interface Building extends Property {
     Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     IList<OrganizationContacts> contactsList();
+
 }
