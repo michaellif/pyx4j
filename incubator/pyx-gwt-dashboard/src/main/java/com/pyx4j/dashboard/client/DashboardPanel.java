@@ -1,5 +1,6 @@
 package com.pyx4j.dashboard.client;
 
+import java.util.LinkedList;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -229,28 +230,35 @@ public class DashboardPanel extends SimplePanel {
     }
 
     public boolean refresh() {
+        int gadgetsCount = 0;
         // hold the current widgets for a while:
         Vector<VerticalPanelWithSpacer> columnWidgetsPanels = new Vector<VerticalPanelWithSpacer>(columnsContainerPanel.getWidgetCount());
-        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i)
-            columnWidgetsPanels.add(getColumnWidgetsPanel(i));
+        for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i) {
+            VerticalPanelWithSpacer cwp = getColumnWidgetsPanel(i);
+            gadgetsCount += cwp.getWidgetCount();
+            columnWidgetsPanels.add(cwp);
+        }
 
         initColumns(); // initialize new columns according to the (new) layout
 
-        // transfer current widgets to the new layout, 
-        // first - move intersected part of the columns:
-        int i;
-        int minCommonSize = Math.min(columnWidgetsPanels.size(), columnsContainerPanel.getWidgetCount());
-        for (i = 0; i < minCommonSize; ++i) {
-            int initialSize = columnWidgetsPanels.get(i).getWidgetCount();
-            for (int j = 0; j < initialSize; ++j)
-                getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(0));
-        }
+        // if new columns count the same as previous one - just move gadgets one to one:
+        if (columnsContainerPanel.getWidgetCount() == columnWidgetsPanels.size()) {
+            for (int i = 0; i < columnWidgetsPanels.size(); ++i) {
+                while (columnWidgetsPanels.get(i).getWidgetCount() > 0)
+                    getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(0));
+            }
+        } else { // 'equalize' gadgets per columns:
+            LinkedList<Widget> allGadgets = new LinkedList<Widget>();
+            for (int i = 0; i < columnWidgetsPanels.size(); ++i)
+                for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
+                    allGadgets.add(columnWidgetsPanels.get(i).getWidget(j));
 
-        // and then - move the rest in the last column of new layout (if present):
-        for (; i < columnWidgetsPanels.size(); ++i) {
-            int initialSize = columnWidgetsPanels.get(i).getWidgetCount();
-            for (int j = 0; j < initialSize; ++j)
-                getColumnWidgetsPanel(columnsContainerPanel.getWidgetCount() - 1).add(columnWidgetsPanels.get(i).getWidget(0));
+            int gadgetsPerColumn = gadgetsCount / columnsContainerPanel.getWidgetCount();
+            for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i) {
+                int size = (i == columnsContainerPanel.getWidgetCount() - 1 ? allGadgets.size() : Math.min(gadgetsPerColumn, allGadgets.size()));
+                for (int j = 0; j < size; ++j)
+                    getColumnWidgetsPanel(i).add(allGadgets.poll());
+            }
         }
 
         return true;
