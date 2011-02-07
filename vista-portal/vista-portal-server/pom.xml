@@ -122,9 +122,11 @@
 
     <properties>
         <deployableName>vista</deployableName>
-        <vista-tomcat-url>http://crm22.birchwoodsoftwaregroup.com</vista-tomcat-url>
+        <vista-tomcat-url>http://ve.kvrmmdsf.vesrv.com</vista-tomcat-url>
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
+
+        <vista-app-ping-url>http://${vista-tomcat-username}:${vista-tomcat-pwd}@crm22.birchwoodsoftwaregroup.com</vista-app-ping-url>
 
         <!--vista-tomcat-url>http://localhost:9000</vista-tomcat-url>
         <vista-tomcat-username>admin</vista-tomcat-username>
@@ -290,8 +292,8 @@
                                         <groupId>${project.groupId}</groupId>
                                         <artifactId>${project.artifactId}</artifactId>
                                         <type>war</type>
-                                        <!--pingURL>${vista-tomcat-url}/${deployableName}/index.html</pingURL>
-                                        <pingTimeout>180000</pingTimeout-->
+                                        <pingURL>${vista-app-ping-url}/${deployableName}/index.html</pingURL>
+                                        <pingTimeout>180000</pingTimeout>
                                         <properties>
                                             <context>${deployableName}</context>
                                         </properties>
