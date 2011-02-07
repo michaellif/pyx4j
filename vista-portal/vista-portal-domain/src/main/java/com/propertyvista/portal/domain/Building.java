@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -58,7 +59,7 @@ public interface Building extends Property {
     @Owned
     IList<Phone> phoneList();
 
-    Email email();
+    Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     IList<OrganizationContacts> contactsList();
 }

@@ -31,5 +31,5 @@ public class DemoData {
 
     public static int NUM_RESIDENTIAL_BUILDINGS = 3;
 
-    public static int NUM_UNITS = 10;
+    //    public static int NUM_UNITS = 10;
 }

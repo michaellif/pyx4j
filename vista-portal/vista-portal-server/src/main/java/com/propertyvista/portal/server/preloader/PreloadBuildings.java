@@ -35,6 +35,8 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 public class PreloadBuildings extends AbstractDataPreloader {
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
@@ -56,19 +58,22 @@ public class PreloadBuildings extends AbstractDataPreloader {
         Phone phone = EntityFactory.create(Phone.class);
 
         phone.phoneType().setValue(PhoneType.work);
-        phone.phoneNumber().setValue("(416) 555-1812");
+        String code = RandomUtil.randomBoolean() ? "416" : "905";
+        int digits = RandomUtil.randomInt(10) * 1000 + RandomUtil.randomInt(10) * 100 + RandomUtil.randomInt(10) * 10 + RandomUtil.randomInt(10);
+        phone.phoneNumber().setValue("(" + code + ") 555-" + digits);
 
         return phone;
     }
 
-    private Address createAddress(String line1) {
+    private Address createAddress(String line1, String zip) {
         Address address = EntityFactory.create(Address.class);
 
         address.addressType().setValue(AddressType.property);
         address.addressLine1().setValue(line1);
         address.city().setValue("Toronto");
         address.state().setValue("ON");
-        address.country().name().setValue("Canada"); // not sure if this will crash or not, will check later
+        address.country().name().setValue("Canada");
+        address.zip().setValue(zip);
 
         return address;
     }
@@ -95,35 +100,15 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         building.address().set(address);
 
-        PersistenceServicesFactory.getPersistenceService().persist(building);
-
-        //		email.setPrimaryKey(building.getPrimaryKey());
-        building.email().set(email);
-        PersistenceServicesFactory.getPersistenceService().persist(email);
-
-        //		address.setPrimaryKey(building.getPrimaryKey());
-        //        PersistenceServicesFactory.getPersistenceService().persist(address);
-
         for (Phone phone : phones) {
-            //			phone.setPrimaryKey(building.getPrimaryKey());
+            //          phone.setPrimaryKey(building.getPrimaryKey());
             building.phoneList().add(phone);
             PersistenceServicesFactory.getPersistenceService().persist(phone);
         }
-        //		building.phoneList().addAll(phones);
 
-        //		UserCredential credential = EntityFactory.create(UserCredential.class);
-        //
-        //		user.email().setValue(email);
-        //		user.name().setValue(name);
-        //
-        //		credential.user().set(user);
-        //		credential.credential().setValue(email);
-        //
-        //		credential.enabled().setValue(Boolean.TRUE);
-        //		credential.behavior().setValue(behavior);
+        PersistenceServicesFactory.getPersistenceService().persist(building);
 
-        //		credential.setPrimaryKey(user.getPrimaryKey());
-        //		PersistenceServicesFactory.getPersistenceService().persist(credential);
+        building.email().set(email); // not sure yet what to do about the email and its type
 
         buildingCount++;
         return building;
@@ -159,6 +144,10 @@ public class PreloadBuildings extends AbstractDataPreloader {
     public String create() {
 
         for (int i = 0; i < DemoData.NUM_RESIDENTIAL_BUILDINGS; i++) {
+
+            // building type
+            BuildingType buildingType = RandomUtil.random(BuildingType.values());
+
             Complex complex = null;
             if (i % 3 == 0) {
                 complex = createComplex(2);
@@ -167,7 +156,9 @@ public class PreloadBuildings extends AbstractDataPreloader {
             String website = "www.property" + (i + 1) + ".com";
 
             // address
-            Address address = createAddress((i + 1) + (10 * i) + (100 * i) + " Yonge St");
+            String street = RandomUtil.randomInt(10000) + " Yonge St";
+            String zip = "L" + (i + 1 % 10) + "C " + (i + 5 % 10) + "M" + (i + 7 % 10);
+            Address address = createAddress(street, zip);
 
             // phones
             List<Phone> phones = new ArrayList<Phone>();
@@ -179,21 +170,23 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
             // organization contacts - not many fields there at the moment, will do this later
 
-            Building building = createBuilding(BuildingType.residential, complex, website, address, phones, email);
+            Building building = createBuilding(buildingType, complex, website, address, phones, email);
             //			log.info("Created: " + building);
 
             // now create units for the building
-            for (int j = 0; j < DemoData.NUM_UNITS; j++) {
-                int floor = (j + 1) / 10;
+            int numFloors = RandomUtil.randomInt(5);
+            int numUnits = RandomUtil.randomInt(5);
+            for (int floor = 1; floor < numFloors; floor++) {
 
-                int area = (j + 1) * 500;
+                // for each floor we want to create the same number of units
+                for (int j = 1; j < numUnits; j++) {
+                    int area = RandomUtil.randomInt(1500);
 
-                float bedrooms = 2.0f;
-                float bathrooms = 2.0f;
+                    float bedrooms = 2.0f;
+                    float bathrooms = 2.0f;
 
-                //				Unit unit = 
-                createUnit(building, floor, area, bedrooms, bathrooms);
-                //				log.info("Created: " + unit);
+                    createUnit(building, floor, area, bedrooms, bathrooms);
+                }
             }
         }
 
@@ -208,14 +201,44 @@ public class PreloadBuildings extends AbstractDataPreloader {
     public void load() {
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
         StringBuilder b = new StringBuilder();
-        b.append("\nLoaded " + buildings.size() + " buildings\n");
+        b.append("\n\nLoaded " + buildings.size() + " buildings\n\n");
         for (Building building : buildings) {
-            //b.append(building.getStringView());
+            //            b.append(building.getStringView());
             b.append(building.buildingType().getStringView());
-            b.append(" ");
-            b.append(building.address().getStringView());
+            b.append("\t");
+            b.append(building.address().addressLine1().getStringView()).append(", ");
+            b.append(building.address().city().getStringView()).append(" ").append(building.address().state().getStringView()).append(", ");
+            b.append(building.address().zip().getStringView()).append(", ").append(building.address().country().getStringView());
+
+            // phones
+            b.append("\t");
+
+            for (Phone phone : building.phoneList()) {
+                b.append(phone.phoneNumber().getStringView());
+                b.append("/").append(phone.phoneType().getStringView());
+            }
+
+            //            // email
+            //            b.append("\t");
+            //            b.append(building.email().getStringView());
+
             b.append("\n");
+
+            // get the units
+            EntityQueryCriteria<Unit> criteria = new EntityQueryCriteria<Unit>(Unit.class);
+            criteria.add(new PropertyCriterion("building", Restriction.EQUAL, building.getPrimaryKey()));
+            List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            b.append("\tBuilding has " + units.size() + " units\n");
+
+            for (Unit unit : units) {
+                b.append("\t");
+                b.append(unit.floor().getStringView()).append(" floor");
+                b.append(" ");
+                b.append(unit.area().getStringView()).append(" sq. ft.");
+                b.append("\n");
+            }
         }
+        b.append("\n");
         log.info(b.toString());
     }
 }

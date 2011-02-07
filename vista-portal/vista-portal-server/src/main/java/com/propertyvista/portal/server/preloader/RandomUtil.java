@@ -17,13 +17,21 @@ import java.util.Random;
 
 public class RandomUtil {
 
-	private static Random random = new Random(System.currentTimeMillis());
-	
-	public static <T> T random(T[] array)
-	{
-		if (array.length == 0)
-			return null;
-		int index = random.nextInt(array.length);
-		return array[index];
-	}
+    //	private static Random random = new Random(System.currentTimeMillis());
+    private static Random random = new Random(100); // we want pseudo-randomness, same results each time
+
+    public static boolean randomBoolean() {
+        return random.nextBoolean();
+    }
+
+    public static int randomInt(int max) {
+        return random.nextInt(max);
+    }
+
+    public static <T> T random(T[] array) {
+        if (array.length == 0)
+            return null;
+        int index = random.nextInt(array.length);
+        return array[index];
+    }
 }
