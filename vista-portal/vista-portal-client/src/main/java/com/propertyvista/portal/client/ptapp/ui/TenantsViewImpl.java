@@ -13,19 +13,20 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Singleton;
 
-public class LeftPortletsViewImpl extends HorizontalPanel implements LeftPortletsView {
-
-    private final HTML contentHTML;
+@Singleton
+public class TenantsViewImpl extends SimplePanel implements TenantsView {
 
     private Presenter presenter;
 
-    public LeftPortletsViewImpl() {
+    public TenantsViewImpl() {
+        Label labael = new Label("TenantsView");
+        labael.setSize("300px", "40px");
+        setWidget(labael);
 
-        contentHTML = new HTML();
-        add(contentHTML);
     }
 
     @Override
@@ -33,8 +34,4 @@ public class LeftPortletsViewImpl extends HorizontalPanel implements LeftPortlet
         this.presenter = presenter;
     }
 
-    @Override
-    public void setContent(String content) {
-        contentHTML.setHTML(content);
-    }
 }

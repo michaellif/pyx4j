@@ -13,16 +13,25 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.inject.Singleton;
 
-public interface LeftPortletsView extends IsWidget {
+@Singleton
+public class PaymentViewImpl extends SimplePanel implements PaymentView {
 
-    public void setContent(String content);
+    private Presenter presenter;
 
-    public void setPresenter(Presenter presenter);
+    public PaymentViewImpl() {
+        Label labael = new Label("PaymentView");
+        labael.setSize("300px", "40px");
+        setWidget(labael);
 
-    public interface Presenter {
-        public String getContent();
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
 }
