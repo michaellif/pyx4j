@@ -25,6 +25,7 @@ import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.Complex;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.Email;
+import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Email.EmailType;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
@@ -91,6 +92,17 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return complex;
     }
 
+    private Floorplan createFloorplan() {
+        Floorplan floorplan = EntityFactory.create(Floorplan.class);
+
+        floorplan.area().setValue(1200);
+        floorplan.name().setValue("Luxury 2-bedroom");
+        // TODO Vlad - need to know how to deal with binaries in the file. did not see the right information
+        //        floorplan.picture().
+
+        return floorplan;
+    }
+
     private Building createBuilding(BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones, Email email) {
         Building building = EntityFactory.create(Building.class);
 
@@ -114,7 +126,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return building;
     }
 
-    public Unit createUnit(Building building, int floor, int area, float bedrooms, float bathrooms) {
+    public Unit createUnit(Building building, int floor, int area, float bedrooms, float bathrooms, Floorplan floorplan) {
         Unit unit = EntityFactory.create(Unit.class);
 
         unit.building().set(building);
@@ -123,6 +135,9 @@ public class PreloadBuildings extends AbstractDataPreloader {
         unit.area().setValue(area);
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
+
+        // for now will not be saving this, until I will figure out a way to save pictures
+        //        unit.floorplan().set(floorplan);
 
         PersistenceServicesFactory.getPersistenceService().persist(unit);
 
@@ -185,7 +200,10 @@ public class PreloadBuildings extends AbstractDataPreloader {
                     float bedrooms = 2.0f;
                     float bathrooms = 2.0f;
 
-                    createUnit(building, floor, area, bedrooms, bathrooms);
+                    // later floor plans should be more elaborate
+                    Floorplan floorplan = createFloorplan();
+
+                    createUnit(building, floor, area, bedrooms, bathrooms, floorplan);
                 }
             }
         }
