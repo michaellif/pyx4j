@@ -25,17 +25,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target( { ElementType.TYPE })
+import com.pyx4j.entity.shared.IEntity;
+
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Table {
 
-	public static enum PrimaryKeyStrategy {
-		
-		ASSIGNED,
-		
-		AUTO
-	}
-	
+    public static enum PrimaryKeyStrategy {
+
+        ASSIGNED,
+
+        AUTO
+    }
+
     /**
      * The name of the table or Entity kind for GAE.
      * 
@@ -52,6 +54,8 @@ public @interface Table {
      * Disable the use of ServerSideConfiguration.persistenceNamePrefix()
      */
     boolean disableGlobalPrefix() default false;
-    
-    PrimaryKeyStrategy  primaryKeyStrategy() default PrimaryKeyStrategy.AUTO; 
+
+    PrimaryKeyStrategy primaryKeyStrategy() default PrimaryKeyStrategy.AUTO;
+
+    Class<? extends IEntity> expands() default IEntity.class;
 }
