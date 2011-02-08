@@ -27,9 +27,8 @@ import java.util.Vector;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.StringDebugId;
 
-public class Path implements Serializable {
+public class Path implements Serializable, IDebugId {
 
     private static final long serialVersionUID = -1723967141846287126L;
 
@@ -127,13 +126,14 @@ public class Path implements Serializable {
         return this.path.hashCode();
     }
 
-    public IDebugId getDebugId() {
-        return new StringDebugId(path.substring(0, path.length() - 1).replace(PATH_SEPARATOR, '$'));
-    }
-
     @Override
     public String toString() {
         return path;
+    }
+
+    @Override
+    public String getDebugIdString() {
+        return path.substring(0, path.length() - 1).replace(PATH_SEPARATOR, '$');
     }
 
 }
