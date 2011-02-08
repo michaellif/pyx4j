@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.SiteMap;
-import com.propertyvista.portal.client.ptapp.activity.SignInActivity;
+import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 
 import com.pyx4j.site.client.place.AppPlace;
 
 public class Center2ActivityMapper implements ActivityMapper {
 
-    Provider<SignInActivity> signInActivityProvider;
+    Provider<CreateAccountActivity> signInActivityProvider;
 
     @Inject
-    public Center2ActivityMapper(final Provider<SignInActivity> signInActivityProvider) {
+    public Center2ActivityMapper(final Provider<CreateAccountActivity> signInActivityProvider) {
         super();
         this.signInActivityProvider = signInActivityProvider;
     }

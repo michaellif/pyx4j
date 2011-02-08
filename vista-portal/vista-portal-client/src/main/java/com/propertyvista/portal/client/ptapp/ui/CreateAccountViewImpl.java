@@ -23,39 +23,28 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.essentials.client.BaseLogInPanel;
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
 
-public class SignInViewImpl extends VerticalPanel implements SignInView {
+public class CreateAccountViewImpl extends VerticalPanel implements CreateAccountView {
 
-    private static I18n i18n = I18nFactory.getI18n(SignInViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(CreateAccountViewImpl.class);
 
     private Presenter presenter;
 
-    public SignInViewImpl() {
+    public CreateAccountViewImpl() {
 
-        CTextField username = new CTextField("Username");
+        CTextField username = new CTextField("Email");
 
         CPasswordTextField password = new CPasswordTextField("Password");
-
-        CCheckBox keepMeSigned = new CCheckBox("Keep me logged in");
-
-        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
-
-            @Override
-            public void execute() {
-                // TODO Auto-generated method stub
-
-            }
-        });
-        forgotPassword.setValue(i18n.tr("Did you forget your password?"));
 
         CComponent<?>[][] components = new CComponent[][] {
 
@@ -63,16 +52,12 @@ public class SignInViewImpl extends VerticalPanel implements SignInView {
 
         { password },
 
-        { keepMeSigned },
-
-        { forgotPassword },
-
         };
 
-        Widget searchForm = CForm.createDecoratedFormWidget(LabelAlignment.TOP, components, "Sign-in");
+        Widget searchForm = CForm.createFormWidget(LabelAlignment.TOP, components, new StringDebugId(GWTJava5Helper.getSimpleName(CreateAccountView.class)));
         add(searchForm);
 
-        Button viewButton = new Button("Sign-in");
+        Button viewButton = new Button("Let's Start");
         viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         viewButton.addClickHandler(new ClickHandler() {
 

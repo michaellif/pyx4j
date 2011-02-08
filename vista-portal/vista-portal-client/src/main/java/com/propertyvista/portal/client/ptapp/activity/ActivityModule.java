@@ -22,7 +22,7 @@ public class ActivityModule extends AbstractGinModule {
 
         bind(LogoActivity.class);
         bind(MainNavigActivity.class);
-        bind(SignInActivity.class);
+        bind(CreateAccountActivity.class);
         bind(TopRightActionsActivity.class);
         bind(FooterActivity.class);
 

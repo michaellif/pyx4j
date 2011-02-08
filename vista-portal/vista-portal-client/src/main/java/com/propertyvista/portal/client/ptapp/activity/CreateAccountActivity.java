@@ -17,21 +17,21 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.ui.SignInView;
+import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 
 import com.pyx4j.site.client.place.AppPlace;
 
-public class SignInActivity extends AbstractActivity implements SignInView.Presenter {
+public class CreateAccountActivity extends AbstractActivity implements CreateAccountView.Presenter {
 
-    private final SignInView view;
+    private final CreateAccountView view;
 
     @Inject
-    public SignInActivity(SignInView view) {
+    public CreateAccountActivity(CreateAccountView view) {
         this.view = view;
         view.setPresenter(this);
     }
 
-    public SignInActivity withPlace(AppPlace place) {
+    public CreateAccountActivity withPlace(AppPlace place) {
         return this;
     }
 
