@@ -32,7 +32,7 @@ public class CompositeDebugId implements IDebugId {
 
     @Override
     public String getDebugIdString() {
-        return (parent.getDebugIdString() != null ? parent.getDebugIdString() + "_" : "") + child.getDebugIdString();
+        return (parent != null ? parent.getDebugIdString() + "_" : "") + (child != null ? child.getDebugIdString() : "unknown");
     }
 
 }
