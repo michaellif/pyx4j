@@ -7,6 +7,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.tester.ui.SignUpView.Fields;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.StringDebugId;
@@ -33,17 +34,17 @@ public class SignUpResultViewImpl extends VerticalPanel implements SignUpResultV
 
         //TODO: make sure i18n parses SignUpView.USERNAME_TITLE
 
-        username = new CLabel(SignUpView.USERNAME_TITLE);
-        username.setDebugId(SignUpView.FIELDS.userName);
+        username = new CLabel(Fields.userName.getTitle());
+        username.setDebugId(SignUpView.Fields.userName);
 
-        password = new CLabel(SignUpView.PASSWORD_TITLE);
-        password.setDebugId(SignUpView.FIELDS.password);
+        password = new CLabel(Fields.password.getTitle());
+        password.setDebugId(SignUpView.Fields.password);
 
-        accountType = new CLabel(SignUpView.ACCOUNT_TYPE_TITLE);
-        accountType.setDebugId(SignUpView.FIELDS.accountType);
+        accountType = new CLabel(Fields.accountType.getTitle());
+        accountType.setDebugId(SignUpView.Fields.accountType);
 
-        internalCustomer = new CLabel(SignUpView.INTERNAL_CUSTOMER_TITLE);
-        internalCustomer.setDebugId(SignUpView.FIELDS.internalCustomer);
+        internalCustomer = new CLabel(Fields.internalCustomer.getTitle());
+        internalCustomer.setDebugId(SignUpView.Fields.internalCustomer);
 
         CComponent<?>[][] components = new CComponent[][] {
 
@@ -67,10 +68,10 @@ public class SignUpResultViewImpl extends VerticalPanel implements SignUpResultV
         this.presenter = presenter;
         Map<String, String> params = presenter.getParams();
 
-        username.setValue(params.get(SignUpView.FIELDS.userName.name()));
-        password.setValue(params.get(SignUpView.FIELDS.password.name()).replaceAll(".", "*"));
-        accountType.setValue(params.get(SignUpView.FIELDS.accountType.name()));
-        internalCustomer.setValue(params.get(SignUpView.FIELDS.internalCustomer.name()));
+        username.setValue(params.get(SignUpView.Fields.userName.name()));
+        password.setValue(params.get(SignUpView.Fields.password.name()).replaceAll(".", "*"));
+        accountType.setValue(params.get(SignUpView.Fields.accountType.name()));
+        internalCustomer.setValue(params.get(SignUpView.Fields.internalCustomer.name()));
     }
 
 }
