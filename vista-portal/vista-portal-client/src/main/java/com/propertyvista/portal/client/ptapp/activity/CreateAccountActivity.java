@@ -17,6 +17,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 
 import com.pyx4j.site.client.place.AppPlace;
@@ -26,7 +27,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
     private final CreateAccountView view;
 
     @Inject
-    public CreateAccountActivity(CreateAccountView view) {
+    public CreateAccountActivity(CreateAccountView view, PtAppWizardManager manager) {
         this.view = view;
         view.setPresenter(this);
     }

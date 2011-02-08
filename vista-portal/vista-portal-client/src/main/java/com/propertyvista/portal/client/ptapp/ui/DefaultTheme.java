@@ -24,6 +24,8 @@ public class DefaultTheme extends AppSiteTheme {
         super.initBodyStyles();
         Style style = new Style("body");
         style.addProperty("background-color", "#f6f6f6");
+        style.addProperty("font-family", "Arial,Helvetica,Tahoma,Verdana,sans-serif");
+        style.addProperty("font-size", "0.9em");
         addStyle(style);
     }
 

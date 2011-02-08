@@ -11,12 +11,8 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.client.ptapp;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
-public interface CaptionView extends IsWidget {
-
-    public void setCaption(String caption);
+public class PtAppWizardManager {
 
 }

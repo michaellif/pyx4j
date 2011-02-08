@@ -20,6 +20,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.activity.CaptionActivity;
 
+import com.pyx4j.site.client.place.AppPlace;
+
 public class Center1ActivityMapper implements ActivityMapper {
 
     Provider<CaptionActivity> captionActivityProvider;
@@ -32,7 +34,7 @@ public class Center1ActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return captionActivityProvider.get().withPlace(place);
+        return captionActivityProvider.get().withPlace((AppPlace) place);
     }
 
 }

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.tester.ui;
 
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.site.client.theme.AppSiteTheme;
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
@@ -26,6 +24,8 @@ public class DefaultTheme extends AppSiteTheme {
         super.initBodyStyles();
         Style style = new Style("body");
         style.addProperty("background-color", "#eee");
+        style.addProperty("font-family", "Arial,Helvetica,Tahoma,Verdana,sans-serif");
+        style.addProperty("font-size", "0.9em");
         addStyle(style);
     }
 
