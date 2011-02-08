@@ -32,6 +32,10 @@ public enum DialogDebugId implements IDebugId {
 
     Dialog_No,
 
-    Dialog_Close,
+    Dialog_Close;
 
+    @Override
+    public String getDebugIdString() {
+        return this.name();
+    }
 }

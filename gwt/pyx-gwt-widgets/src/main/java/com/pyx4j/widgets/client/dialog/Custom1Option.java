@@ -26,7 +26,7 @@ import com.pyx4j.commons.IDebugId;
  * 
  * Create Dialog with Custom button.
  */
-public interface Custom1Option extends DialogOptions, IDebugId {
+public interface Custom1Option extends DialogOptions {
 
     public String custom1Text();
 

@@ -70,9 +70,10 @@ public class CRangeDatePicker extends CHorizontalPanel {
     }
 
     @Override
-    public void setDebugID(IDebugId debugID) {
-        fromDate.setDebugID(new StringDebugId(debugID.toString() + "-from"));
-        toDate.setDebugID(new StringDebugId(debugID.toString() + "-to"));
+    public void setDebugId(IDebugId debugID) {
+        //TODO: use CompositeDebugId here
+        fromDate.setDebugId(new StringDebugId(debugID.getDebugIdString() + "-from"));
+        toDate.setDebugId(new StringDebugId(debugID.getDebugIdString() + "-to"));
     }
 
     public void setValue(Date[] dates) {

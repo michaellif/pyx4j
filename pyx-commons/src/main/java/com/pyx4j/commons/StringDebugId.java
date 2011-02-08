@@ -29,7 +29,7 @@ public class StringDebugId implements IDebugId {
     }
 
     @Override
-    public String toString() {
+    public String getDebugIdString() {
         return value;
     }
 }

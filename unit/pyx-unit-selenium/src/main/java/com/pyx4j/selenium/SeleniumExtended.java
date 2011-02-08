@@ -84,7 +84,7 @@ public class SeleniumExtended extends WebDriverWrapper {
     }
 
     public By by(IDebugId debugId) {
-        return By.id(gwtLocator(debugId.toString()));
+        return By.id(gwtLocator(debugId.getDebugIdString()));
     }
 
     public By by(IObject<?> member) {

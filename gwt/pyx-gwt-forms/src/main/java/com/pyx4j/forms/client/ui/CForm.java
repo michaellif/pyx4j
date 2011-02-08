@@ -25,6 +25,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.gwt.NativeForm;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
@@ -112,20 +113,30 @@ public class CForm extends CContainer<NativeForm> {
     }
 
     public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components) {
+        return createFormWidget(allignment, components, null);
+    }
+
+    public static Widget createFormWidget(LabelAlignment allignment, CComponent<?>[][] components, IDebugId debugId) {
         CForm form = new CForm(allignment);
+        form.setDebugId(debugId);
         form.setComponents(components);
         return form.asWidget();
     }
 
     public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption) {
-        return createDecoratedFormWidget(allignment, components, caption, false, true);
+        return createDecoratedFormWidget(allignment, components, caption, false, true, null);
+    }
+
+    public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption, IDebugId debugId) {
+        return createDecoratedFormWidget(allignment, components, caption, false, true, debugId);
     }
 
     public static Widget createDecoratedFormWidget(LabelAlignment allignment, CComponent<?>[][] components, String caption, boolean collapsible,
-            boolean expended) {
+            boolean expended, IDebugId debugId) {
         CGroupBoxPanel group = new CGroupBoxPanel(caption, collapsible);
         group.setExpended(expended);
         CForm form = new CForm(allignment);
+        form.setDebugId(debugId);
         form.setComponents(components);
         group.addComponent(form);
         return group.asWidget();

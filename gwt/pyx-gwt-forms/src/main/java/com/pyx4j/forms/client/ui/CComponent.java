@@ -32,6 +32,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -61,7 +62,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     private String height = "";
 
-    private IDebugId debugID;
+    private IDebugId debugId;
 
     /**
      * Basic information would be available in server log
@@ -116,6 +117,7 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void setParent(CContainer parent) {
         this.parent = parent;
+        setDebugId(new CompositeDebugId(parent.getDebugId(), getDebugId()));
         if (inheritContainerAccessRules) {
             addAccessAdapter(parent.getContainerAccessAdapter());
         }
@@ -223,22 +225,22 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     public WIDGET_TYPE asWidget() {
         if (widget == null) {
             widget = initWidget();
-            if (getDebugID() != null) {
-                setDebugID(getDebugID());
+            if (getDebugId() != null) {
+                setDebugId(getDebugId());
             }
             onWidgetCreated();
         }
         return widget;
     }
 
-    public IDebugId getDebugID() {
-        return debugID;
+    public IDebugId getDebugId() {
+        return debugId;
     }
 
-    public void setDebugID(IDebugId debugID) {
-        this.debugID = debugID;
+    public void setDebugId(IDebugId debugId) {
+        this.debugId = debugId;
         if (widget != null) {
-            widget.ensureDebugId(debugID.toString());
+            widget.ensureDebugId(debugId.getDebugIdString());
         }
     }
 
