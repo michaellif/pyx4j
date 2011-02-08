@@ -21,27 +21,29 @@ public class SignUpResultViewImpl extends VerticalPanel implements SignUpResultV
 
     private Presenter presenter;
 
-    public SignUpResultViewImpl() {
+    private final CLabel username;
 
-        Map<String, String> params = presenter.getParams();
+    private final CLabel password;
+
+    private final CLabel accountType;
+
+    private final CLabel internalCustomer;
+
+    public SignUpResultViewImpl() {
 
         //TODO: make sure i18n parses SignUpView.USERNAME_TITLE
 
-        CLabel username = new CLabel(SignUpView.USERNAME_TITLE);
+        username = new CLabel(SignUpView.USERNAME_TITLE);
         username.setDebugId(SignUpView.FIELDS.userName);
-        username.setValue(params.get(SignUpView.FIELDS.userName.name()));
 
-        CLabel password = new CLabel(SignUpView.PASSWORD_TITLE);
+        password = new CLabel(SignUpView.PASSWORD_TITLE);
         password.setDebugId(SignUpView.FIELDS.password);
-        password.setValue(params.get(SignUpView.FIELDS.password.name()).replaceAll(".", "*"));
 
-        CLabel accountType = new CLabel(SignUpView.ACCOUNT_TYPE_TITLE);
+        accountType = new CLabel(SignUpView.ACCOUNT_TYPE_TITLE);
         accountType.setDebugId(SignUpView.FIELDS.accountType);
-        accountType.setValue(params.get(SignUpView.FIELDS.accountType.name()));
 
-        CLabel internalCustomer = new CLabel(SignUpView.INTERNAL_CUSTOMER_TITLE);
+        internalCustomer = new CLabel(SignUpView.INTERNAL_CUSTOMER_TITLE);
         internalCustomer.setDebugId(SignUpView.FIELDS.internalCustomer);
-        internalCustomer.setValue(params.get(SignUpView.FIELDS.internalCustomer.name()));
 
         CComponent<?>[][] components = new CComponent[][] {
 
@@ -63,6 +65,12 @@ public class SignUpResultViewImpl extends VerticalPanel implements SignUpResultV
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        Map<String, String> params = presenter.getParams();
+
+        username.setValue(params.get(SignUpView.FIELDS.userName.name()));
+        password.setValue(params.get(SignUpView.FIELDS.password.name()).replaceAll(".", "*"));
+        accountType.setValue(params.get(SignUpView.FIELDS.accountType.name()));
+        internalCustomer.setValue(params.get(SignUpView.FIELDS.internalCustomer.name()));
     }
 
 }
