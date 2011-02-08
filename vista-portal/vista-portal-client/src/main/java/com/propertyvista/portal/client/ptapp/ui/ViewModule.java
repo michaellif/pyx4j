@@ -31,6 +31,7 @@ public class ViewModule extends AbstractGinModule {
         bind(LeftPortletsView.class).to(LeftPortletsViewImpl.class).in(Singleton.class);
         bind(SignInView.class).to(SignInViewImpl.class).in(Singleton.class);
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
+        bind(CaptionView.class).to(CaptionViewImpl.class).in(Singleton.class);
 
         bind(Theme.class).to(DefaultTheme.class).in(Singleton.class);
 

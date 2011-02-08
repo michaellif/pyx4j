@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
 
 @Singleton
-public class CaptionViewImpl extends SimplePanel implements FooterView {
+public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
     public CaptionViewImpl() {
     }
