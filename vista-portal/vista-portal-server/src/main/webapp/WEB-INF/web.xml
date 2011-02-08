@@ -84,6 +84,16 @@
 -->    
 
     <servlet>
+        <servlet-name>StatusServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.VistaStatusServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StatusServlet</servlet-name>
+        <url-pattern>/status</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>DebugServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
     </servlet>
