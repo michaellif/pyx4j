@@ -40,6 +40,7 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-server</artifactId>
             <version>${project.version}</version>
+            <type>jar</type>
         </dependency>
 
         <dependency>
