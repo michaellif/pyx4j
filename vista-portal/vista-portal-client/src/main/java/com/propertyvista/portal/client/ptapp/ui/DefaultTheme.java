@@ -11,9 +11,7 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.tester.ui;
-
-import com.google.gwt.dom.client.Style.Unit;
+package com.propertyvista.portal.client.ptapp.ui;
 
 import com.pyx4j.site.client.theme.AppSiteTheme;
 import com.pyx4j.widgets.client.style.Selector;
@@ -25,7 +23,7 @@ public class DefaultTheme extends AppSiteTheme {
     protected void initBodyStyles() {
         super.initBodyStyles();
         Style style = new Style("body");
-        style.addProperty("background-color", "#eee");
+        style.addProperty("background-color", "#f6f6f6");
         addStyle(style);
     }
 
@@ -33,10 +31,10 @@ public class DefaultTheme extends AppSiteTheme {
     protected void initSiteViewStyles() {
         String prefix = SiteView.DEFAULT_STYLE_PREFIX;
 
-        int minWidth = 760;
+        int minWidth = 960;
         int maxWidth = 960;
-        int leftColumnWidth = 200;
-        int rightColumnWidth = 260;
+        int leftColumnWidth = 0;
+        int rightColumnWidth = 0;
 
         Style style = new Style(Selector.valueOf(prefix));
         style.addProperty("background-color", "#fff");
@@ -47,12 +45,14 @@ public class DefaultTheme extends AppSiteTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
-        style.addProperty("height", "100%");
+        style.addProperty("height", "100px");
+        style.addProperty("background", "#ccc");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
         style.addProperty("width", "100%");
         style.addProperty("float", "left");
+        style.addProperty("background-color", "#eee");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
@@ -82,10 +82,6 @@ public class DefaultTheme extends AppSiteTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
-        style.addProperty("background", "#ddd");
-        style.addProperty("margin-bottom", "10px");
-        style.addProperty("margin-left", "10px");
-        style.addProperty("margin-right", "10px");
         addStyle(style);
 
     }

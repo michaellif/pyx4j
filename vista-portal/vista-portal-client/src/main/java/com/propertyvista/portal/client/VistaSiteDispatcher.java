@@ -13,33 +13,8 @@
  */
 package com.propertyvista.portal.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.propertyvista.portal.client.ptapp.VistaPtApplicationSite;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-
-import com.pyx4j.log4gwt.client.ClientLogger;
-import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.theme.WindowsTheme;
-
-public class VistaSiteDispatcher implements EntryPoint {
-
-    final Logger log = LoggerFactory.getLogger(VistaSiteDispatcher.class);
-
-    @Override
-    public void onModuleLoad() {
-        ClientLogger.setDebugOn(true);
-        StyleManger.installTheme(new WindowsTheme());
-
-        SimplePanel contentPanel = new SimplePanel();
-        RootPanel.get().add(contentPanel);
-
-        contentPanel.add(new HTML("The Property Vista portal would be here!"));
-
-        log.debug("Log should work; But This app is empty");
-    }
+public class VistaSiteDispatcher extends VistaPtApplicationSite {
 
 }

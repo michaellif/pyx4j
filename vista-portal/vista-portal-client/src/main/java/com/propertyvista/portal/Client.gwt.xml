@@ -9,6 +9,10 @@
     <inherits name='com.propertyvista.portal.Rpc' />
     <inherits name='com.propertyvista.portal.Domain' />
 
+    <inherits name='com.pyx4j.Commons' />
+	<inherits name="com.google.gwt.inject.Inject"/>
+	<inherits name='com.pyx4j.site.GwtSite' />
+
     <source path="client"/>
 
     <entry-point class='com.propertyvista.portal.client.VistaSiteDispatcher'/>
