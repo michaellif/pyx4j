@@ -26,9 +26,18 @@ import com.google.gwt.place.shared.Place;
 
 public class AppPlace extends Place {
 
+    private String navigLabel = "";
+
+    private String caption = "";
+
     private Map<String, String> args;
 
     public AppPlace() {
+    }
+
+    public AppPlace(String navigLabel, String caption) {
+        this.navigLabel = navigLabel;
+        this.caption = caption;
     }
 
     public void setArgs(Map<String, String> args) {
@@ -37,6 +46,14 @@ public class AppPlace extends Place {
 
     public Map<String, String> getArgs() {
         return args;
+    }
+
+    public String getNavigLabel() {
+        return navigLabel;
+    }
+
+    public String getCaption() {
+        return caption;
     }
 
 }
