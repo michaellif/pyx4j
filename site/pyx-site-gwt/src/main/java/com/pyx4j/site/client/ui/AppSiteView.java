@@ -18,7 +18,7 @@ public class AppSiteView extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Header, MainNavig, Center, Main, Left, Right, Footer
+        Header, MainNavig, Center, Main, Left, Right, Footer, Display
     }
 
     public AppSiteView(ActivityMapper logoActivityMapper,
@@ -149,10 +149,9 @@ public class AppSiteView extends FlowPanel {
 
     class DisplayPanel extends SimplePanel {
         DisplayPanel() {
-            getElement().getStyle().setBackgroundColor("#ddd");
-            getElement().getStyle().setMarginBottom(10, Unit.PX);
-            getElement().getStyle().setMarginLeft(10, Unit.PX);
-            getElement().getStyle().setMarginRight(10, Unit.PX);
+            String prefix = AppSiteView.DEFAULT_STYLE_PREFIX;
+
+            setStyleName(prefix + StyleSuffix.Display);
 
         }
     }
