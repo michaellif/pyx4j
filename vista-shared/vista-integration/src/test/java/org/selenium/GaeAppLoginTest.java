@@ -13,6 +13,7 @@
  */
 package org.selenium;
 
+import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.selenium.BaseSeleniumTestCase;
@@ -34,9 +35,13 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
     public void testLogin() throws Exception {
         Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
 
-        // TODO Use this  credentials  to login to Google Apps
+        selenium.type("id=Email", credentials.email);
+        selenium.type("id=Passwd", credentials.password);
+        captureScreenshot("Login-test");
+        selenium.click("id=signIn"); //( DialogDebugId.Dialog_Sign)???
 
-        selenium.waitFor("testMe");
+        selenium.waitFor(CrudDebugId.Criteria_Submit);
+
     }
 
 }
