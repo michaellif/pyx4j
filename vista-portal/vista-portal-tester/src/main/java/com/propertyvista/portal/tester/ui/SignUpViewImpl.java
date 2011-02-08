@@ -32,14 +32,21 @@ public class SignUpViewImpl extends VerticalPanel implements SignUpView {
 
     public SignUpViewImpl() {
 
-        //TODO: debug IDS
+        final CTextField username = new CTextField(SignUpView.USERNAME_TITLE);
+        username.setDebugId(SignUpView.FIELDS.userName);
 
-        final CTextField username = new CTextField("Username");
-        final CPasswordTextField password = new CPasswordTextField("Password");
-        final CPasswordTextField passwordVerify = new CPasswordTextField("Verify password");
-        final CComboBox<String> accountType = new CComboBox<String>("Account type");
+        final CPasswordTextField password = new CPasswordTextField(SignUpView.PASSWORD_TITLE);
+        password.setDebugId(SignUpView.FIELDS.password);
+
+        final CPasswordTextField passwordVerify = new CPasswordTextField(SignUpView.VERIFY_PASSWORD_TITLE);
+        passwordVerify.setDebugId(SignUpView.FIELDS.verifyPassword);
+
+        final CComboBox<String> accountType = new CComboBox<String>(SignUpView.ACCOUNT_TYPE_TITLE);
         accountType.setOptions(Arrays.asList(new String[] { "Corporate", "Personal" }));
-        final CCheckBox internalCustomer = new CCheckBox("Internal customer");
+        accountType.setDebugId(SignUpView.FIELDS.accountType);
+
+        final CCheckBox internalCustomer = new CCheckBox(SignUpView.INTERNAL_CUSTOMER_TITLE);
+        internalCustomer.setDebugId(SignUpView.FIELDS.internalCustomer);
 
         CHyperlink terms = new CHyperlink(null, new Command() {
 
@@ -77,10 +84,10 @@ public class SignUpViewImpl extends VerticalPanel implements SignUpView {
             @Override
             public void onClick(ClickEvent event) {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put(username.getTitle(), username.getValue());
-                params.put(password.getTitle(), username.getValue());
-                params.put(accountType.getTitle(), accountType.getValue());
-                params.put(internalCustomer.getTitle(), internalCustomer.getValue() + "");
+                params.put(SignUpView.FIELDS.userName.name(), username.getValue());
+                params.put(SignUpView.FIELDS.password.name(), username.getValue());
+                params.put(SignUpView.FIELDS.accountType.name(), accountType.getValue());
+                params.put(SignUpView.FIELDS.internalCustomer.name(), internalCustomer.getValue() + "");
                 presenter.goToSignUpResult(params);
             }
 

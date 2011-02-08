@@ -7,6 +7,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
@@ -20,13 +22,14 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     public TopRightActionsViewImpl() {
 
-        //TODO: debug IDS
         CHyperlink signUp = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
                 presenter.goToSignUp();
             }
         });
+        signUp.setDebugId(new StringDebugId("signup"));
+
         signUp.setValue(i18n.tr("Sign Up"));
         CHyperlink whatever = new CHyperlink(null, new Command() {
             @Override
@@ -42,7 +45,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
         };
 
-        Widget form = CForm.createDecoratedFormWidget(LabelAlignment.TOP, components, "");
+        Widget form = CForm.createFormWidget(LabelAlignment.TOP, components, new StringDebugId(GWTJava5Helper.getSimpleName(TopRightActionsView.class)));
         add(form);
     }
 
