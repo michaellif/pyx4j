@@ -39,6 +39,10 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
 
     private boolean expended;
 
+    public CEntityFormFolder(Class<E> entityClass, EntityFormFactory<E> factory) {
+        this(null, entityClass, factory, true, null);
+    }
+
     public CEntityFormFolder(String title, Class<E> entityClass, EntityFormFactory<E> factory, ImageResource image) {
         this(title, entityClass, factory, true, image);
     }

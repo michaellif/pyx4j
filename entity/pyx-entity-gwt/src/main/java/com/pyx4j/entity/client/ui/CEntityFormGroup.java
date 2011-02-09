@@ -31,6 +31,10 @@ public class CEntityFormGroup<E extends IEntity> extends CFormGroup<E> implement
 
     private boolean expended;
 
+    public CEntityFormGroup(Class<E> entityClass, EntityFormFactory<E> factory) {
+        this(null, entityClass, factory, true, null);
+    }
+
     public CEntityFormGroup(String title, Class<E> entityClass, EntityFormFactory<E> factory, ImageResource image) {
         this(title, entityClass, factory, true, image);
     }

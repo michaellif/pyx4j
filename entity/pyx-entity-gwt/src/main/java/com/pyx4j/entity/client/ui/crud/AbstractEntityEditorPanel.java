@@ -41,6 +41,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.client.DomainManager;
 import com.pyx4j.entity.client.EntityCSSClass;
 import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.ICollection;
@@ -78,8 +79,8 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
 
     private class DelegatingEntityFormFactory<T extends IEntity> extends EntityFormFactory<T> {
 
-        public DelegatingEntityFormFactory(Class<T> entityClass) {
-            super(entityClass);
+        public DelegatingEntityFormFactory(Class<T> entityClass, EditableComponentFactory editableComponentFactory) {
+            super(entityClass, editableComponentFactory);
         }
 
         @Override
@@ -109,9 +110,13 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
     }
 
     public AbstractEntityEditorPanel(Class<E> entityClass) {
+        this(entityClass, null);
+    }
+
+    public AbstractEntityEditorPanel(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
         super();
         this.entityClass = entityClass;
-        formFactory = new DelegatingEntityFormFactory<E>(entityClass);
+        formFactory = new DelegatingEntityFormFactory<E>(entityClass, editableComponentFactory);
         form = formFactory.createForm();
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
         requresFocus = true;

@@ -43,12 +43,16 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
     private final EditableComponentFactory editableComponentFactory;
 
     public EntityFormFactory(Class<E> entityClass) {
-        this(entityClass, new BaseEditableComponentFactory());
+        this(entityClass, null);
     }
 
     public EntityFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
         entityPrototype = EntityFactory.getEntityPrototype(entityClass);
-        this.editableComponentFactory = editableComponentFactory;
+        if (editableComponentFactory == null) {
+            this.editableComponentFactory = new BaseEditableComponentFactory();
+        } else {
+            this.editableComponentFactory = editableComponentFactory;
+        }
     }
 
     public E proto() {

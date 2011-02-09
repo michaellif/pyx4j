@@ -24,7 +24,9 @@ import java.util.Date;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -103,6 +105,10 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             default:
                 throw new Error("Unknown ");
             }
+        } else if (mm.getObjectClassType() == ObjectClassType.EntityList) {
+            comp = new CEntityFormFolder(mm.getValueClass(), createEntityFormFactory(member));
+        } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
+            comp = new CEntityFormGroup(mm.getValueClass(), createEntityFormFactory(member));
         } else if (mm.getValueClass().equals(String.class)) {
             comp = new CTextField();
         } else if (mm.isEntity()) {
@@ -130,5 +136,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             comp = new CTextField();
         }
         return comp;
+    }
+
+    protected EntityFormFactory<? extends IEntity> createEntityFormFactory(IObject<?> member) {
+        throw new Error("No factory for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
     }
 }

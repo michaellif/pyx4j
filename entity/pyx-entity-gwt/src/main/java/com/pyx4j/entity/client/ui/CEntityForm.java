@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -86,6 +88,10 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
     @SuppressWarnings("unchecked")
     public <T extends IEntity> CEditableComponent<T, ?> get(T member) {
         return (CEditableComponent<T, ?>) get((IObject<?>) member);
+    }
+
+    public <T extends IEntity> CEditableComponent<List<T>, ?> get(IList<T> member) {
+        return getRaw(member);
     }
 
     @SuppressWarnings("unchecked")
