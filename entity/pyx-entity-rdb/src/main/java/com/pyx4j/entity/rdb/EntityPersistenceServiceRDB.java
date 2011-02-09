@@ -78,7 +78,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
             if (cfg == null) {
-            	throw new RuntimeException("Persistence Configuration is not defined (is null)");
+                throw new RuntimeException("Persistence Configuration is not defined (is null)");
             }
             if (!(cfg instanceof Configuration)) {
                 throw new RuntimeException("Invalid RDB configuration class " + cfg);
@@ -509,7 +509,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         final Connection connection = connectionProvider.getConnection();
-        TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
+        final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorRefference != null) {
             // TODO   
         }
@@ -524,7 +524,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
             @Override
             public T next() {
-                return iterable.next();
+                return cascadeRetrieveMembers(connection, tm, iterable.next());
             }
 
             @Override
