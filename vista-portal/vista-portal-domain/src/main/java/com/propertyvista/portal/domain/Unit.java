@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain;
 
 import java.util.Date;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Unit extends Property {
@@ -51,7 +52,7 @@ public interface Unit extends Property {
      */
     Lease currentLease();
 
-    Money marketRent();
+    IList<MarketRent> marketRent();
 
     IPrimitive<Date> moveOut();
 

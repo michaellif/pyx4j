@@ -7,24 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on 2011-02-09
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.security.shared.Behavior;
+import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.User;
 
-public enum VistaBehavior implements Behavior {
+import com.pyx4j.entity.shared.IEntity;
 
-    // TODO 
+public interface Application extends IEntity {
 
-    POTENCIAL_TENANT,
+    User user();
 
-    EMPLOYEE,
-
-    PRODUCTION_SUPPORT,
-
-    ADMIN,
-
+    Money rent();
 }

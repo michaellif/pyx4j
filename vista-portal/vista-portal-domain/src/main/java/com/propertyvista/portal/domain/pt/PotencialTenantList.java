@@ -7,24 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 5, 2011
+ * Created on 2011-02-09
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-public enum VistaBehavior implements Behavior {
+public interface PotencialTenantList extends IEntity {
 
-    // TODO 
+    Application application();
 
-    POTENCIAL_TENANT,
-
-    EMPLOYEE,
-
-    PRODUCTION_SUPPORT,
-
-    ADMIN,
+    IList<PotencialTenant> tenants();
 
 }
