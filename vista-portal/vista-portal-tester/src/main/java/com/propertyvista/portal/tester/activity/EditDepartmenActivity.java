@@ -13,16 +13,24 @@
  */
 package com.propertyvista.portal.tester.activity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.tester.domain.Department;
+import com.propertyvista.portal.tester.domain.Employee;
 import com.propertyvista.portal.tester.ui.EditDepartmentView;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class EditDepartmenActivity extends AbstractActivity implements EditDepartmentView.Presenter {
+
+    private static final Logger log = LoggerFactory.getLogger(EditDepartmenActivity.class);
 
     private final EditDepartmentView view;
 
@@ -42,11 +50,29 @@ public class EditDepartmenActivity extends AbstractActivity implements EditDepar
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+
+        //TODO make this in EventBus
+        {
+            Department department = EntityFactory.create(Department.class);
+            department.name().setValue("R&D");
+            {
+                Employee emp = department.employees().$();
+                emp.firstName().setValue("John");
+                department.employees().add(emp);
+            }
+            {
+                Employee emp = department.employees().$();
+                emp.firstName().setValue("Peter");
+                department.employees().add(emp);
+            }
+
+            view.populate(department);
+        }
     }
 
     @Override
-    public void save() {
-        System.out.println("SAVED");
+    public void save(Department entity) {
+        log.info("SAVED {}", entity);
     }
 
 }
