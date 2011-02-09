@@ -26,12 +26,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CTextComponent;
 
 public class EntityPresenter<E extends IEntity> {
 
@@ -92,13 +95,33 @@ public class EntityPresenter<E extends IEntity> {
     }
 
     public <T> CEditableComponent<T, ?> create(IObject<T> member) {
+        @SuppressWarnings("unchecked")
         CEditableComponent<T, ?> component = (CEditableComponent<T, ?>) factory.create(member);
         bind(component, member);
         return component;
     }
 
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+        applyAttributes(component, member);
         binding.put(component, member.getPath());
+    }
+
+    protected void applyAttributes(CEditableComponent<?, ?> component, IObject<?> member) {
+        MemberMeta mm = member.getMeta();
+        if (mm.isValidatorAnnotationPresent(NotNull.class)) {
+            component.setMandatory(true);
+        }
+        if (String.class == mm.getValueClass()) {
+            ((CTextComponent<?, ?>) component).setMaxLength(mm.getStringLength());
+            if (mm.getDescription() != null) {
+                ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
+            }
+        }
+        if (mm.getDescription() != null) {
+            component.setToolTip(mm.getDescription());
+        }
+        component.setTitle(mm.getCaption());
+        component.setDebugId(member.getPath());
     }
 
     @SuppressWarnings("unchecked")
