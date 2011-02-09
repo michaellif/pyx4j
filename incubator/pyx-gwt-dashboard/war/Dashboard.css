@@ -58,6 +58,7 @@ div.dragdrop-dropTarget-engage {
 .DashboardPanel .DashboardPanel-spacer {
     height: 4em;
 }
+
 .DashboardPanel .DashboardPanel-holder-caption {
     font: caption;	
 	background-color: #B387FF;
@@ -67,8 +68,15 @@ div.dragdrop-dropTarget-engage {
     height: 1.4em;
 	font: small-caption;
 }
+
+
 .DashboardPanel-holder-menu {
     font: menu;	
     background-color: white;
 	border: 1px solid navy;
+}
+
+.DashboardPanel-drag-n-drop-positioner {
+  	border: 1px dashed blue;
+	z-index: 100;
 }

@@ -24,7 +24,7 @@ public class VerticalPanelWithSpacer extends FlowPanel /* VerticalPanel */{
     @Override
     public void insert(Widget w, int beforeIndex) {
         if (beforeIndex == super.getWidgetCount()) {
-            beforeIndex--;
+            --beforeIndex;
         }
 
         super.insert(w, beforeIndex);

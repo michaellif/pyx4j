@@ -42,8 +42,12 @@ public class DashboardPanel extends SimplePanel {
 
         boolean isSetupable();
 
-        // verbs:
-        void showSetup();
+        // setup:
+        Widget getSetup(); // should be implemented meaningful if isSetupable!
+
+        boolean onSave();
+
+        void onCancel();
 
         // notifications:
         void onMaximize(boolean maximized_restored); // true for max-ed, false - restored
@@ -344,7 +348,8 @@ public class DashboardPanel extends SimplePanel {
                             + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely that leads to last column 
                                     // is being dropped to the left-bottom of the panel, so we leave an additional space (make columns narrower)...
 
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
+            DOM.setStyleAttribute(columnCompositePanel.getElement(), "margin", "0px " + layout.getHorizontalSpacing() + "%");
+            //            DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
             DOM.setStyleAttribute(columnCompositePanel.getElement(), "cssFloat", "left"); // this doesn't work for IE - we leave 'float: left' in css!.. 
 
             // put column name if necessary:
@@ -367,7 +372,7 @@ public class DashboardPanel extends SimplePanel {
             columnPanel.setWidth("100%");
 
             // widget drop controller for the current column:
-            CustomFlowPanelDropController widgetDropController = new CustomFlowPanelDropController(columnPanel);
+            CustomFlowPanelDropController widgetDropController = new CustomFlowPanelDropController(columnPanel, layout.getVerticalSpacing());
             widgetDragController.registerDropController(widgetDropController);
 
             columnCompositePanel.add(columnPanel);
@@ -473,7 +478,7 @@ public class DashboardPanel extends SimplePanel {
                         @Override
                         public void execute() {
                             pp.hide();
-                            getIWidget().showSetup();
+                            setup();
                         }
                     };
 
@@ -585,6 +590,10 @@ public class DashboardPanel extends SimplePanel {
         private void delete() {
             holdedGadget.onDelete();
             ((ComplexPanel) getParent()).remove(this);
+        }
+
+        private void setup() {
+            // TODO : implementation does here ;)
         }
     } // WidgetHolder
 } // DashboardPanel class...

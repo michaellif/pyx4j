@@ -22,10 +22,7 @@ package com.pyx4j.dashboard.client;
 
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.drop.FlowPanelDropController;
-import com.allen_sauer.gwt.dnd.client.util.Area;
 import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
-import com.allen_sauer.gwt.dnd.client.util.DragClientBundle;
-import com.allen_sauer.gwt.dnd.client.util.Location;
 import com.allen_sauer.gwt.dnd.client.util.LocationWidgetComparator;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -45,11 +42,16 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
      */
     private static final Label DUMMY_LABEL_IE_QUIRKS_MODE_OFFSET_HEIGHT = new Label("x");
 
+    private static final String CSS_DASHBOARD_PANEL_DRAGNDROP_POSITIONER = "DashboardPanel-drag-n-drop-positioner";
+
+    private final int verticalSpacing;
+
     /**
      * @param dropTarget
      */
-    public CustomFlowPanelDropController(FlowPanel dropTarget) {
+    public CustomFlowPanelDropController(FlowPanel dropTarget, int verticalSpacing) {
         super(dropTarget);
+        this.verticalSpacing = verticalSpacing;
     }
 
     @Override
@@ -58,7 +60,8 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
         //        return new LocationWidgetComparator() {
         //            @Override
         //            public boolean locationIndicatesIndexFollowingWidget(Area widgetArea, Location location) {
-        //                return (location.getTop() > widgetArea.getTop() || location.getTop() < widgetArea.getBottom());
+        //                //                return (location.getTop() > widgetArea.getBottom());// || location.getTop() < widgetArea.getBottom());
+        //                return widgetArea.intersects(location);
         //            }
         //        };
     }
@@ -68,7 +71,8 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
         // Use two widgets so that setPixelSize() consistently affects dimensions
         // excluding positioner border in quirks and strict modes
         SimplePanel outer = new SimplePanel();
-        outer.addStyleName(DragClientBundle.INSTANCE.css().positioner());
+        //        outer.addStyleName(DragClientBundle.INSTANCE.css().positioner());
+        outer.addStyleName(CSS_DASHBOARD_PANEL_DRAGNDROP_POSITIONER); // standard dnd styles set margin: 0 !important - so we replace them!!!! 
 
         // place off screen for border calculation
         RootPanel.get().add(outer, -500, -500);
@@ -86,8 +90,12 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
 
         SimplePanel inner = new SimplePanel();
         inner.setPixelSize(width - DOMUtil.getHorizontalBorders(outer), height - DOMUtil.getVerticalBorders(outer));
-
         outer.setWidget(inner);
+
+        // some must have styles:
+        outer.getElement().getStyle().setProperty("margin", verticalSpacing + "px" + " 0px");
+        outer.getElement().getStyle().setProperty("zoom", "1"); /* IE gain hasLayout */
+        //        outer.getElement().getStyle().setProperty("z-index", "100"); // if set not from css - assert in dnd code!?!
         return outer;
     }
 }

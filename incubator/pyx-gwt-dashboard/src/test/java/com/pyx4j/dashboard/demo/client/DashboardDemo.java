@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Random;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -84,7 +83,7 @@ public final class DashboardDemo implements EntryPoint {
         dashboardWrapper.setWidth("100%");
         mainPanel.add(dashboardWrapper);
 
-        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 8);
+        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 12);
 
         // uncomment for captioned columns:     
         byte colWidths[] = { 30, 50, 20 };
@@ -129,14 +128,7 @@ public final class DashboardDemo implements EntryPoint {
                 return "MyHTML Title";
             }
 
-            // verbs:
-
-            @Override
-            public void showSetup() {
-                Window.alert("IWidget::ShowSetup() has beed called!..");
-            }
-
-            // flags:   
+            // flags:
 
             @Override
             public boolean isMaximizable() {
@@ -151,6 +143,26 @@ public final class DashboardDemo implements EntryPoint {
             @Override
             public boolean isSetupable() {
                 return true;
+            }
+
+            // setup:
+
+            @Override
+            public Widget getSetup() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public boolean onSave() {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public void onCancel() {
+                // TODO Auto-generated method stub
+
             }
 
             // notifications:
@@ -200,7 +212,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(1, 4, 8);
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(1, 4, 12);
                         dashboardPanel.setLayout(layout);
                     }
                 };
@@ -210,7 +222,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 8);
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 12);
                         byte colWidths[] = { 33, 66 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
@@ -222,7 +234,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 8);
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 12);
                         byte colWidths[] = { 66, 33 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
@@ -234,7 +246,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 8);
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(2, 2, 12);
                         byte colWidths[] = { 50, 50 };
                         layout.setColumnWidths(colWidths);
                         dashboardPanel.setLayout(layout);
@@ -246,7 +258,7 @@ public final class DashboardDemo implements EntryPoint {
                     public void execute() {
                         pp.hide();
 
-                        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 8);
+                        DashboardPanel.Layout layout = new DashboardPanel.Layout(3, 1, 12);
                         dashboardPanel.setLayout(layout);
                     }
                 };
