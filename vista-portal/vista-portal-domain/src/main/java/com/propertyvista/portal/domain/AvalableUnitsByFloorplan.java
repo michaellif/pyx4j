@@ -14,13 +14,14 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.commons.Pair;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 /*
  * This is cache of units for Rent
  */
-public interface AvalableUnitsByFloorplan {
+public interface AvalableUnitsByFloorplan extends IEntity {
 
     Floorplan floorplan();
 
