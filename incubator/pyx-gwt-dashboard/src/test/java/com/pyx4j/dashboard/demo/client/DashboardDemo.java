@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.dashboard.client.DashboardPanel;
@@ -148,21 +149,36 @@ public final class DashboardDemo implements EntryPoint {
             // setup:
 
             @Override
-            public Widget getSetup() {
-                // TODO Auto-generated method stub
-                return null;
-            }
+            public ISetup getSetup() {
+                class MySetup implements ISetup {
+                    private final TextArea content = new TextArea();
 
-            @Override
-            public boolean onSave() {
-                // TODO Auto-generated method stub
-                return false;
-            }
+                    @Override
+                    public Widget getWidget() {
+                        FlowPanel setupPanel = new FlowPanel();
+                        setupPanel.add(new Label("Enter new gadget content:"));
 
-            @Override
-            public void onCancel() {
-                // TODO Auto-generated method stub
+                        content.setText(getHTML());
+                        //                        content.setWidth("100%");
+                        setupPanel.add(content);
 
+                        return setupPanel;
+                    }
+
+                    @Override
+                    public boolean onOk() {
+                        setHTML(content.getText());
+                        return true;
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // TODO Auto-generated method stub
+
+                    }
+                }
+
+                return new MySetup();
             }
 
             // notifications:

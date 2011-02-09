@@ -59,6 +59,10 @@ div.dragdrop-dropTarget-engage {
     height: 4em;
 }
 
+.DashboardPanel .DashboardPanel-holder-setup {
+	background-color: fuchsia;
+}
+
 .DashboardPanel .DashboardPanel-holder-caption {
     font: caption;	
 	background-color: #B387FF;

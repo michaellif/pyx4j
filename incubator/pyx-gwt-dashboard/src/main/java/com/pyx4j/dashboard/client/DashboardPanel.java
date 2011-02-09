@@ -21,13 +21,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.dashboard.client.DashboardPanel.IGadget.ISetup;
+
 /**
  * Dashboard panel.
  */
 public class DashboardPanel extends SimplePanel {
     /**
-     * Dashboard Widget interface. User-defined widgets should extend GWT Widget and
-     * implement this interface.
+     * Dashboard Gadget interface. User-defined dashboard gadgets should extend GWT Widget
+     * and implement this interface.
      */
     public interface IGadget {
         // info:
@@ -42,12 +44,21 @@ public class DashboardPanel extends SimplePanel {
 
         boolean isSetupable();
 
+        /**
+         * Dashboard Gadget Setup interface. User-defined gadgets may implement this
+         * interface in order to get gadget setup functionality.
+         */
+        interface ISetup {
+            Widget getWidget(); // should be implemented meaningful!
+
+            // notifications:
+            boolean onOk();
+
+            void onCancel();
+        }
+
         // setup:
-        Widget getSetup(); // should be implemented meaningful if isSetupable!
-
-        boolean onSave();
-
-        void onCancel();
+        ISetup getSetup(); // should be implemented meaningful if isSetupable!
 
         // notifications:
         void onMaximize(boolean maximized_restored); // true for max-ed, false - restored
@@ -195,6 +206,8 @@ public class DashboardPanel extends SimplePanel {
     private static final String CSS_DASHBOARD_PANEL_COLUMN_CONTAINER = "DashboardPanel-column-container";
 
     private static final String CSS_DASHBOARD_PANEL_HOLDER = "DashboardPanel-holder";
+
+    private static final String CSS_DASHBOARD_PANEL_HOLDER_SETUP = "DashboardPanel-holder-setup";
 
     private static final String CSS_DASHBOARD_PANEL_HOLDER_CAPTION = "DashboardPanel-holder-caption";
 
@@ -519,13 +532,14 @@ public class DashboardPanel extends SimplePanel {
         }
 
         // --------------------------------------------------------------
+
         private void minimize() {
             if (isMinimized()) {
                 holder.add(minimizedWidget);
                 minimizedWidget = null;
                 holdedGadget.onMinimize(false);
             } else { // minimize:
-                minimizedWidget = holdedGadget.getWidget();
+                minimizedWidget = holder.getWidget(holder.getWidgetCount() - 1);
                 holder.remove(minimizedWidget);
                 holdedGadget.onMinimize(true);
             }
@@ -538,6 +552,7 @@ public class DashboardPanel extends SimplePanel {
         private Widget minimizedWidget;
 
         // --------------------------------------------------------------
+
         private void maximize() {
             if (isMaximized()) {
                 maximizeData.restoreWidgetPosition(this);
@@ -587,13 +602,53 @@ public class DashboardPanel extends SimplePanel {
         private final MaximizeData maximizeData = new MaximizeData();
 
         // --------------------------------------------------------------
+
         private void delete() {
             holdedGadget.onDelete();
             ((ComplexPanel) getParent()).remove(this);
         }
 
+        // --------------------------------------------------------------
+
         private void setup() {
-            // TODO : implementation does here ;)
+            final ISetup gadgetSetup = holdedGadget.getSetup();
+
+            // create main gadget setup panel: 
+            final FlowPanel setupPanel = new FlowPanel();
+            setupPanel.add(gadgetSetup.getWidget());
+
+            // create panel with Ok/Cancel buttons:
+            HorizontalPanel bp = new HorizontalPanel();
+            bp.add(new Button("Ok", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    gadgetSetup.onOk();
+                    switchViewToNormal();
+                }
+            }));
+            bp.add(new Button("Cancel", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    gadgetSetup.onCancel();
+                    switchViewToNormal();
+                }
+            }));
+
+            setupPanel.add(bp);
+
+            // switch displayed widget with setup one:
+            switchViewToSetup(setupPanel);
+        }
+
+        private void switchViewToSetup(Widget setup) {
+            holder.remove(holder.getWidgetCount() - 1);
+            setup.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_SETUP);
+            holder.add(setup);
+        }
+
+        private void switchViewToNormal() {
+            holder.remove(holder.getWidgetCount() - 1);
+            holder.add(holdedGadget.getWidget());
         }
     } // WidgetHolder
 } // DashboardPanel class...
