@@ -38,6 +38,7 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.site.client.NavigationItem;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 
@@ -87,6 +88,7 @@ public class AppPlaceListingGenerator extends Generator {
     private void writeImpl(SourceWriter writer, List<JClassType> serviceClasses) {
         writer.println();
 
+        //getPlace
         writer.println("@Override");
         writer.println("public AppPlace getPlace(String token) {");
         writer.indent();
@@ -104,5 +106,64 @@ public class AppPlaceListingGenerator extends Generator {
         writer.outdent();
         writer.println("}");
 
+        writer.println();
+
+        //getNavigLabel
+        writer.println("@Override");
+        writer.println("public String getNavigLabel(AppPlace place) {");
+        writer.indent();
+
+        for (JClassType jClassType : serviceClasses) {
+            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
+            writer.println("if (place.getClass() == " + type + ".class) {");
+            writer.indent();
+            writer.println("return \"" + jClassType.getAnnotation(NavigationItem.class).navigLabel() + "\";");
+            writer.outdent();
+            writer.println("}");
+        }
+
+        writer.println("return null;");
+        writer.outdent();
+        writer.println("}");
+
+        writer.println();
+
+        //getCaption
+        writer.println("@Override");
+        writer.println("public String getCaption(AppPlace place) {");
+        writer.indent();
+
+        for (JClassType jClassType : serviceClasses) {
+            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
+            writer.println("if (place.getClass() == " + type + ".class) {");
+            writer.indent();
+            writer.println("return \"" + jClassType.getAnnotation(NavigationItem.class).caption() + "\";");
+            writer.outdent();
+            writer.println("}");
+        }
+
+        writer.println("return null;");
+        writer.outdent();
+        writer.println("}");
+
+        writer.println();
+
+        //getTopLevelPlaces
+        writer.println("@Override");
+        writer.println("public AppPlace[] getTopLevelPlaces() {");
+        writer.indent();
+        writer.println("return new AppPlace[] { ");
+        writer.indent();
+
+        for (JClassType jClassType : serviceClasses) {
+            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
+            if (jClassType.getAnnotation(NavigationItem.class).topLevel())
+                writer.println("new " + type + "(), ");
+        }
+
+        writer.outdent();
+        writer.println("};");
+        writer.outdent();
+        writer.println("}");
     }
 }
