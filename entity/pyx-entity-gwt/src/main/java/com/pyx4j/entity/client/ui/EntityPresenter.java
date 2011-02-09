@@ -39,7 +39,7 @@ public class EntityPresenter<E extends IEntity> {
 
     private final E metaEntity;
 
-    private EditableComponentFactory factory;
+    private final EditableComponentFactory factory;
 
     private E origEntity;
 
@@ -52,6 +52,7 @@ public class EntityPresenter<E extends IEntity> {
     }
 
     public EntityPresenter(EditableComponentFactory factory, Class<E> clazz) {
+        this.factory = factory;
         metaEntity = EntityFactory.create(clazz);
     }
 
