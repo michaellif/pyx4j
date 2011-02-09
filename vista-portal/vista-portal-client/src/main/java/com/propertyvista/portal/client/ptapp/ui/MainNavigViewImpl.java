@@ -61,6 +61,8 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
 
+        clear();
+
         for (AppPlace place : presenter.getTopLevelPlaces()) {
             new NavigTab(place, this);
         }

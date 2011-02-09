@@ -28,6 +28,7 @@ public class TopRightActionsViewImpl extends SimplePanel implements TopRightActi
 
     @Override
     public void setPresenter(final Presenter presenter) {
+        linksPanel.clear();
         for (final AppPlaceInfo action : presenter.getActionsPlacesInfo()) {
             CHyperlink link = new CHyperlink(null, new Command() {
                 @Override
