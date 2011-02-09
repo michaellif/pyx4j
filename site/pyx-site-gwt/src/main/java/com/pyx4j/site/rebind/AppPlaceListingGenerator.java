@@ -121,9 +121,13 @@ public class AppPlaceListingGenerator extends Generator {
             String type = jClassType.getPackage().getName() + "." + jClassType.getName();
             writer.println("if (place.getClass() == " + type + ".class) {");
             writer.indent();
-            writer.println("return new AppPlaceInfo(\"" + jClassType.getAnnotation(NavigationItem.class).navigLabel() + "\", \""
-                    + jClassType.getAnnotation(NavigationItem.class).caption() + "\", \"" + jClassType.getAnnotation(NavigationItem.class).type() + "\", \""
-                    + jClassType.getAnnotation(NavigationItem.class).resource() + "\");");
+            NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
+            if (navigationItem != null) {
+                writer.println("return new AppPlaceInfo(\"" + navigationItem.navigLabel() + "\", \"" + navigationItem.caption() + "\", \""
+                        + navigationItem.type() + "\", \"" + navigationItem.resource() + "\");");
+            } else {
+                writer.println("return null;");
+            }
             writer.outdent();
             writer.println("}");
         }
@@ -137,7 +141,11 @@ public class AppPlaceListingGenerator extends Generator {
         //getPlacesByType()
         Map<String, List<String>> classByType = new HashMap<String, List<String>>();
         for (JClassType jClassType : serviceClasses) {
-            String type = jClassType.getAnnotation(NavigationItem.class).type();
+            NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
+            if (navigationItem == null) {
+                continue;
+            }
+            String type = navigationItem.type();
             List<String> typeClasses = classByType.get(type);
             if (typeClasses == null) {
                 typeClasses = new ArrayList<String>();
