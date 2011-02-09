@@ -38,7 +38,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
 
     private static final Logger log = LoggerFactory.getLogger(EntityFormFactory.class);
 
-    protected final E metaEntity;
+    protected final E entityPrototype;
 
     private final EditableComponentFactory editableComponentFactory;
 
@@ -47,12 +47,12 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
     }
 
     public EntityFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
-        metaEntity = EntityFactory.create(entityClass);
+        entityPrototype = EntityFactory.getEntityPrototype(entityClass);
         this.editableComponentFactory = editableComponentFactory;
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     protected abstract IObject<?>[][] getFormMembers();
@@ -71,7 +71,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
 
     @Override
     public CEntityForm<E> createForm() {
-        log.debug("createFormInstance of {}", metaEntity.getObjectClass());
+        log.debug("createFormInstance of {}", entityPrototype.getObjectClass());
         CEntityForm<E> form = createFormInstance();
         IObject<?>[][] members = getFormMembers();
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
@@ -108,14 +108,14 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
             }
         }
         form.setComponents(components);
-        log.debug("enhanceComponents of {}", metaEntity.getObjectClass());
+        log.debug("enhanceComponents of {}", entityPrototype.getObjectClass());
         enhanceComponents(form);
         return form;
     }
 
     @SuppressWarnings("unchecked")
     protected CEntityForm<E> createFormInstance() {
-        return new CEntityForm(metaEntity.getObjectClass());
+        return new CEntityForm(entityPrototype.getObjectClass());
     }
 
 }

@@ -63,9 +63,9 @@ class SimulationWidget extends VerticalPanel implements InlineWidget {
 
                 return new IObject[][] {
 
-                { meta().enabled(), },
+                { proto().enabled(), },
 
-                { meta().delay(), },
+                { proto().delay(), },
 
                 };
             }

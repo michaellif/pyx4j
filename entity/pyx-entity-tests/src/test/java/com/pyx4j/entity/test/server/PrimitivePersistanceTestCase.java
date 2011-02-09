@@ -27,9 +27,11 @@ import java.util.GregorianCalendar;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Employee.EmploymentStatus;
 import com.pyx4j.entity.test.shared.domain.Status;
+import com.pyx4j.geo.GeoPoint;
 
 public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
 
@@ -149,4 +151,17 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
         }
     }
 
+    public void testGeoPoint() {
+        Address address = EntityFactory.create(Address.class);
+        GeoPoint value = new GeoPoint(23, 45);
+        //address.location().setValue(value);
+        srv.persist(address);
+        Address address2 = srv.retrieve(Address.class, address.getPrimaryKey());
+
+        //Assert.assertEquals("Class of Value", GeoPoint.class, address2.location().getValue().getClass());
+        //Assert.assertEquals("Value", value, address2.location().getValue());
+    }
+
+    // TODO
+    // IPrimitive<Pair<Double, Double>> range();
 }

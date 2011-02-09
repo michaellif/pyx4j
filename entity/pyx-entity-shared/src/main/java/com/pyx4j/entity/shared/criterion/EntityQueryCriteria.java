@@ -42,7 +42,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     private Vector<Sort> sorts;
 
-    private E metaEntity;
+    private E entityPrototype;
 
     public static class Sort implements Serializable {
 
@@ -76,20 +76,20 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     }
 
     public EntityQueryCriteria(Class<E> entityClass) {
-        this.metaEntity = EntityFactory.create(entityClass);
+        this.entityPrototype = EntityFactory.getEntityPrototype(entityClass);
     }
 
     public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass) {
         return new EntityQueryCriteria<T>(entityClass);
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     @SuppressWarnings("unchecked")
     public Class<E> getEntityClass() {
-        return (Class<E>) metaEntity.getObjectClass();
+        return (Class<E>) entityPrototype.getObjectClass();
     }
 
     public EntityQueryCriteria<E> add(Criterion criterion) {
@@ -159,7 +159,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
         if (t == this) {
             return true;
         }
-        if (this.metaEntity.getEntityMeta() != t.metaEntity.getEntityMeta()) {
+        if (this.entityPrototype.getEntityMeta() != t.entityPrototype.getEntityMeta()) {
             return false;
         }
         if (!EqualsHelper.equals(filters, t.filters)) {
@@ -174,7 +174,7 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
     @Override
     public int hashCode() {
         int hashCode = 0;
-        hashCode += this.metaEntity.getEntityMeta().hashCode();
+        hashCode += this.entityPrototype.getEntityMeta().hashCode();
         hashCode *= 0x1F;
         if (filters != null) {
             hashCode += filters.hashCode();
@@ -188,6 +188,6 @@ public class EntityQueryCriteria<E extends IEntity> implements Serializable, IHa
 
     @Override
     public String getServiceCallMarker() {
-        return this.metaEntity.getEntityMeta().getCaption().replace(' ', '_');
+        return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
     }
 }

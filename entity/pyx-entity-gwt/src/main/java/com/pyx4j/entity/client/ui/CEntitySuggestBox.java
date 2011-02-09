@@ -90,8 +90,8 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
         return this.criteria.add(criterion);
     }
 
-    public E meta() {
-        return this.criteria.meta();
+    public E proto() {
+        return this.criteria.proto();
     }
 
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {

@@ -52,7 +52,7 @@ public abstract class QueryTestBase extends DatastoreTestBase {
         srv.persist(emp);
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName));
+        criteria1.add(PropertyCriterion.eq(criteria1.proto().firstName(), empName));
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
@@ -81,7 +81,7 @@ public abstract class QueryTestBase extends DatastoreTestBase {
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
         criteria1.add(PropertyCriterion.eq(member, value));
         if (addAndName) {
-            criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName));
+            criteria1.add(PropertyCriterion.eq(criteria1.proto().firstName(), empName));
         }
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);
@@ -138,7 +138,7 @@ public abstract class QueryTestBase extends DatastoreTestBase {
         srv.persist(emp);
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(criteria1.meta().manager(), mrg));
+        criteria1.add(PropertyCriterion.eq(criteria1.proto().manager(), mrg));
 
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("retrieve", emp1);

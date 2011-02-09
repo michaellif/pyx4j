@@ -42,21 +42,21 @@ public class ResourceEditorWidget extends EntityEditorWidget<Resource> {
             protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
-                { meta().name(), meta().status() },
+                { proto().name(), proto().status() },
 
-                { meta().phone(), null },
+                { proto().phone(), null },
 
-                { meta().address().street(), meta().address().city() },
+                { proto().address().street(), proto().address().city() },
 
-                { meta().address().province(), meta().address().zip() },
+                { proto().address().province(), proto().address().zip() },
 
                 };
             }
 
             @Override
             protected void enhanceComponents(CEntityForm<Resource> form) {
-                ((CComboBox<RepStatus>) form.get(meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
-                ((CComboBox<Province>) form.get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
+                ((CComboBox<RepStatus>) form.get(proto().status())).setOptions(EnumSet.allOf(RepStatus.class));
+                ((CComboBox<Province>) form.get(proto().address().province())).setOptions(EnumSet.allOf(Province.class));
             }
 
         });

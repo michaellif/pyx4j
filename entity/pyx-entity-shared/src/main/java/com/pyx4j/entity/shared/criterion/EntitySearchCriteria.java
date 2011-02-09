@@ -35,7 +35,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     private static final long serialVersionUID = 7483364285263499506L;
 
-    private E metaEntity;
+    private E entityPrototype;
 
     private int pageNumber;
 
@@ -50,20 +50,20 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
     }
 
     public EntitySearchCriteria(Class<E> entityClass) {
-        this.metaEntity = EntityFactory.create(entityClass);
+        this.entityPrototype = EntityFactory.getEntityPrototype(entityClass);
     }
 
     public static <T extends IEntity> EntitySearchCriteria<T> create(Class<T> entityClass) {
         return new EntitySearchCriteria<T>(entityClass);
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     @SuppressWarnings("unchecked")
     public Class<E> getEntityClass() {
-        return (Class<E>) metaEntity.getObjectClass();
+        return (Class<E>) entityPrototype.getObjectClass();
     }
 
     public Map<PathSearch, Serializable> getFilters() {
@@ -137,7 +137,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("domainName=").append(this.metaEntity.getEntityMeta().getCaption());
+        builder.append("domainName=").append(this.entityPrototype.getEntityMeta().getCaption());
         builder.append(" pageSize=").append(getPageSize());
         builder.append(" pageNumber=").append(getPageNumber());
         builder.append(" filters=").append(getFilters());
@@ -146,6 +146,6 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     @Override
     public String getServiceCallMarker() {
-        return this.metaEntity.getEntityMeta().getCaption().replace(' ', '_');
+        return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
     }
 }

@@ -59,7 +59,7 @@ public class AdminServicesImpl implements AdminServices {
         public String execute(VoidSerializable request) {
             EntityQueryCriteria<GaeStoredSession> criteria = EntityQueryCriteria.create(GaeStoredSession.class);
             int countAll = PersistenceServicesFactory.getPersistenceService().count(criteria);
-            criteria.add(new PropertyCriterion(criteria.meta()._expires(), Restriction.LESS_THAN, inactiveTime()));
+            criteria.add(new PropertyCriterion(criteria.proto()._expires(), Restriction.LESS_THAN, inactiveTime()));
             int countExpired = PersistenceServicesFactory.getPersistenceService().count(criteria);
             return MessageFormat.format("Total sessions: {0}\nExpired sessions: {1}\n", countAll, countExpired);
         }

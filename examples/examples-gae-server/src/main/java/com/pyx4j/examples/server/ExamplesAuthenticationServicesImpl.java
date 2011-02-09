@@ -76,7 +76,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServicesIm
             AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
 
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-            criteria.add(PropertyCriterion.eq(criteria.meta().email(), request.email().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue()));
             List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
             if (users.size() != 1) {
                 if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {

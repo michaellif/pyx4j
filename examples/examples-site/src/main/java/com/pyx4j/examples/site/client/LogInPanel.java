@@ -121,8 +121,8 @@ public abstract class LogInPanel extends BaseLogInPanel {
                         devKey = event.getNativeKeyCode();
                         String devLogin = devLoginUserPrefix + CommonsStringUtils.d000(devCount) + DemoData.USERS_DOMAIN;
                         event.preventDefault();
-                        getForm().get(getForm().meta().email()).setValue(devLogin);
-                        getForm().get(getForm().meta().password()).setValue(devLogin);
+                        getForm().get(getForm().proto().email()).setValue(devLogin);
+                        getForm().get(getForm().proto().password()).setValue(devLogin);
                     }
 
                 }

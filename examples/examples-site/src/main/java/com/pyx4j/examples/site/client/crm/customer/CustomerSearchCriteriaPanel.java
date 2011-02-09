@@ -47,21 +47,21 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
         CComboBox<OrderStatus> orderStatus = new CComboBox<OrderStatus>("Order Status");
         orderStatus.setOptions(EnumSet.allOf(OrderStatus.class));
 
-        form.bind(orderStatus, new PathSearch(form.meta().orderStatus(), null));
+        form.bind(orderStatus, new PathSearch(form.proto().orderStatus(), null));
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { form.create(form.meta().name()) },
+        { form.create(form.proto().name()) },
 
-        { form.create(form.meta().phone()) },
+        { form.create(form.proto().phone()) },
 
-        { form.create(form.meta().address().street()) },
+        { form.create(form.proto().address().street()) },
 
-        { form.create(form.meta().address().city()) },
+        { form.create(form.proto().address().city()) },
 
-        { form.create(form.meta().locationCriteria()) },
+        { form.create(form.proto().locationCriteria()) },
 
-        { form.create(form.meta().locationCriteria().radius()) },
+        { form.create(form.proto().locationCriteria().radius()) },
 
         { orderStatus },
 
@@ -73,8 +73,8 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void enhanceComponents() {
-        final CEditableComponent<?, ?> fromLocationZipField = form.get(form.meta().locationCriteria());
-        final CEditableComponent<?, ?> areaRadiusField = form.get(form.meta().locationCriteria().radius());
+        final CEditableComponent<?, ?> fromLocationZipField = form.get(form.proto().locationCriteria());
+        final CEditableComponent<?, ?> areaRadiusField = form.get(form.proto().locationCriteria().radius());
 
         ValueChangeHandler locationMadabilityHandler = new ValueChangeHandler() {
 
@@ -94,7 +94,7 @@ public class CustomerSearchCriteriaPanel extends EntitySearchCriteriaPanel<Custo
     @Override
     protected void enhanceEntitySearchCriteria(EntitySearchCriteria<Customer> criteria) {
         criteria.setSorts(null);
-        criteria.asc(form.meta().name());
+        criteria.asc(form.proto().name());
     }
 
 }

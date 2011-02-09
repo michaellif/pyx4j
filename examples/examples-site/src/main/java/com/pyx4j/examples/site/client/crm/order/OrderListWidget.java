@@ -46,30 +46,30 @@ public class OrderListWidget extends EntityListWithCriteriaWidget<Order> {
             protected CComponent<?>[][] getComponents() {
                 return new CComponent[][] {
 
-                { form.create(form.meta().customerName()) },
+                { form.create(form.proto().customerName()) },
 
-                { form.create(form.meta().customerPhone()) },
+                { form.create(form.proto().customerPhone()) },
 
-                { form.create(form.meta().orderNumber()) },
+                { form.create(form.proto().orderNumber()) },
 
-                { form.create(form.meta().description()) },
+                { form.create(form.proto().description()) },
 
-                { form.create(form.meta().resource()) },
+                { form.create(form.proto().resource()) },
 
-                { form.create(form.meta().status()) },
+                { form.create(form.proto().status()) },
 
                 };
             }
 
             @Override
             protected void enhanceComponents() {
-                ((CComboBox<Order.OrderStatus>) form.get(form.meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
+                ((CComboBox<Order.OrderStatus>) form.get(form.proto().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
             }
 
             @Override
             public void onDetach() {
                 // HACK
-                ((CEntityComboBox<Resource>) form.get(form.meta().resource())).resetOptions();
+                ((CEntityComboBox<Resource>) form.get(form.proto().resource())).resetOptions();
                 super.onDetach();
             }
 

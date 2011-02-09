@@ -42,7 +42,7 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
         srv.persist(emp);
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName));
+        criteria1.add(PropertyCriterion.eq(criteria1.proto().firstName(), empName));
         Employee emp1 = srv.retrieve(criteria1);
         Assert.assertNotNull("verify retrieve", emp1);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), emp1.getPrimaryKey());
@@ -89,7 +89,7 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
         srv.persist(emp);                                // save first employee
 
         EntityQueryCriteria<Employee> criteria1 = EntityQueryCriteria.create(Employee.class);
-        criteria1.add(PropertyCriterion.eq(criteria1.meta().firstName(), empName)); // use name as criteria
+        criteria1.add(PropertyCriterion.eq(criteria1.proto().firstName(), empName)); // use name as criteria
         Employee empRet = srv.retrieve(criteria1);       //get employee back as a new entity
         Assert.assertNotNull("verify retrieve", empRet);
         Assert.assertEquals("PK Value", emp.getPrimaryKey(), empRet.getPrimaryKey());

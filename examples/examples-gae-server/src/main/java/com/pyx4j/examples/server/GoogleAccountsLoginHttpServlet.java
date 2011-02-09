@@ -69,7 +69,7 @@ public class GoogleAccountsLoginHttpServlet extends com.pyx4j.security.server.Go
         }
         email = email.toLowerCase(Locale.ENGLISH);
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-        criteria.add(PropertyCriterion.eq(criteria.meta().email(), email));
+        criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
         List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
         if (users.size() != 1) {
             return;

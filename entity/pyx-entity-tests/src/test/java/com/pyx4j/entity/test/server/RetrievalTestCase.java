@@ -165,7 +165,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
         srv.persist(emp);
 
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.add(PropertyCriterion.eq(criteria.meta().firstName(), empName));
+        criteria.add(PropertyCriterion.eq(criteria.proto().firstName(), empName));
         if (agregate) {
             srv.requestsAggregationStart();
         }

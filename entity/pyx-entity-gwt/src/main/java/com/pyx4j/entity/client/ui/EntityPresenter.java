@@ -40,7 +40,7 @@ public class EntityPresenter<E extends IEntity> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
-    private final E metaEntity;
+    private final E entityPrototype;
 
     private final EditableComponentFactory factory;
 
@@ -56,11 +56,11 @@ public class EntityPresenter<E extends IEntity> {
 
     public EntityPresenter(EditableComponentFactory factory, Class<E> clazz) {
         this.factory = factory;
-        metaEntity = EntityFactory.create(clazz);
+        entityPrototype = EntityFactory.getEntityPrototype(clazz);
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     @SuppressWarnings("unchecked")
@@ -131,7 +131,7 @@ public class EntityPresenter<E extends IEntity> {
             log.debug("populate {}", entity);
             this.editableEntity = (E) entity.cloneEntity();
         } else {
-            this.editableEntity = EntityFactory.create((Class<E>) meta().getObjectClass());
+            this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
         }
         populateComponents();
     }

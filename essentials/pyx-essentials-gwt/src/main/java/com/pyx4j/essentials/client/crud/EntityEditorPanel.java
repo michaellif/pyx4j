@@ -92,6 +92,6 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
 
     @Override
     protected void onAfterSave() {
-        parentWidget.setMessage(i18n.tr("{0} is saved.", meta().getEntityMeta().getCaption()));
+        parentWidget.setMessage(i18n.tr("{0} is saved.", proto().getEntityMeta().getCaption()));
     }
 }

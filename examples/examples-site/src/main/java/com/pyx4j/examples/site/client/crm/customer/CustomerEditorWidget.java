@@ -68,21 +68,21 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
             protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
-                { meta().name(), meta().phone() },
+                { proto().name(), proto().phone() },
 
-                { meta().address().street(), meta().address().city() },
+                { proto().address().street(), proto().address().city() },
 
-                { meta().address().province(), meta().address().zip() },
+                { proto().address().province(), proto().address().zip() },
 
-                { meta().note(), meta().note() },
+                { proto().note(), proto().note() },
 
                 };
             }
 
             @Override
             protected void enhanceComponents(CEntityForm<Customer> form) {
-                form.get(meta().note()).setWidth("100%");
-                ((CComboBox<Province>) form.get(meta().address().province())).setOptions(EnumSet.allOf(Province.class));
+                form.get(proto().note()).setWidth("100%");
+                ((CComboBox<Province>) form.get(proto().address().province())).setOptions(EnumSet.allOf(Province.class));
             }
 
         });
@@ -189,7 +189,7 @@ public class CustomerEditorWidget extends EntityEditorWidget<Customer> {
         };
 
         EntitySearchCriteria<Order> criteria = new EntitySearchCriteria<Order>(Order.class);
-        criteria.setValue(new PathSearch(criteria.meta().customer()), customer);
+        criteria.setValue(new PathSearch(criteria.proto().customer()), customer);
         RPCManager.execute(EntityServices.Search.class, criteria, callback);
     }
 }

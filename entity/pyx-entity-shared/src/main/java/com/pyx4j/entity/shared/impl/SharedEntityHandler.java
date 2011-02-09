@@ -102,7 +102,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
 
     @Override
     public boolean isAssignableFrom(Class<? extends IEntity> targetType) {
-        return getEntityMeta().isEntityClassAssignableFrom(EntityFactory.getEntityTemplate(targetType));
+        return getEntityMeta().isEntityClassAssignableFrom(EntityFactory.getEntityPrototype(targetType));
     }
 
     @Override
@@ -210,7 +210,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             //TODO Test type safety at runtime.
             if (!this.getObjectClass().equals(entity.getObjectClass())) {
                 // allow AbstractMember
-                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityTemplate((Class<IEntity>) entity.getObjectClass()));
+                value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype((Class<IEntity>) entity.getObjectClass()));
             }
             if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
                 // attach incoming entity to new owner

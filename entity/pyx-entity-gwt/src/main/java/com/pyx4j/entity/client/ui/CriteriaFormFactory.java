@@ -36,7 +36,7 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
 
     private static final Logger log = LoggerFactory.getLogger(CriteriaFormFactory.class);
 
-    protected final E metaEntity;
+    protected final E entityPrototype;
 
     private final EditableComponentFactory editableComponentFactory;
 
@@ -45,12 +45,12 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
     }
 
     public CriteriaFormFactory(Class<E> entityClass, EditableComponentFactory editableComponentFactory) {
-        metaEntity = EntityFactory.create(entityClass);
+        entityPrototype = EntityFactory.getEntityPrototype(entityClass);
         this.editableComponentFactory = editableComponentFactory;
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     protected abstract IObject<?>[][] getFormMembers();
@@ -65,7 +65,7 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
 
     @Override
     public CEntityForm<E> createForm() {
-        log.debug("createFormInstance of {}", metaEntity.getObjectClass());
+        log.debug("createFormInstance of {}", entityPrototype.getObjectClass());
         CEntityForm<E> form = createFormInstance();
         IObject<?>[][] members = getFormMembers();
         CComponent<?>[][] components = new CComponent<?>[members.length][members[0].length];
@@ -89,14 +89,14 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
             }
         }
         form.setComponents(components);
-        log.debug("enhanceComponents of {}", metaEntity.getObjectClass());
+        log.debug("enhanceComponents of {}", entityPrototype.getObjectClass());
         enhanceComponents(form);
         return form;
     }
 
     @SuppressWarnings("unchecked")
     protected CEntityForm<E> createFormInstance() {
-        return new CEntityForm(metaEntity.getObjectClass());
+        return new CEntityForm(entityPrototype.getObjectClass());
     }
 
 }

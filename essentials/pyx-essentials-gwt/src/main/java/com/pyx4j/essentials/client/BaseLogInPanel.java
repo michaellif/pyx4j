@@ -79,20 +79,20 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
                 return new IObject[][] {
 
-                { meta().email() },
+                { proto().email() },
 
-                { meta().password() },
+                { proto().password() },
 
-                { meta().rememberID() },
+                { proto().rememberID() },
 
-                { meta().captcha() },
+                { proto().captcha() },
 
                 };
             }
 
             @Override
             protected void enhanceComponents(CEntityForm<AuthenticationRequest> form) {
-                form.get(meta().captcha()).setVisible(false);
+                form.get(proto().captcha()).setVisible(false);
             }
         };
         form = formFactory.createForm();
@@ -108,12 +108,12 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
         });
         forgotPassword.setValue(i18n.tr("Did you forget your password?"));
 
-        rememberID = (CCheckBox) form.get(form.meta().rememberID());
+        rememberID = (CCheckBox) form.get(form.proto().rememberID());
 
         if (HTML5Storage.isSupported()) {
             String userId = HTML5Storage.getLocalStorage().getItem(BaseLogInPanel.HTML5_KEY);
             if (CommonsStringUtils.isStringSet(userId)) {
-                form.get(form.meta().email()).setValue(userId);
+                form.get(form.proto().email()).setValue(userId);
                 rememberID.setValue(true);
             }
         } else {
@@ -183,7 +183,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
     @Override
     public boolean onClickOk() {
-        CCaptcha captcha = ((CCaptcha) form.get(form.meta().captcha()));
+        CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
         if (captcha.isVisible()) {
             if (captcha.isValueEmpty()) {
                 MessageDialog.warn(i18n.tr("Validation failed."), i18n.tr("Captcha code is required"));
@@ -192,7 +192,7 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
             captcha.retrieveValue();
         }
 
-        ValidationResults validationResults = form.get(form.meta().email()).getParent().getValidationResults();
+        ValidationResults validationResults = form.get(form.proto().email()).getParent().getValidationResults();
         if (!validationResults.isValid()) {
             MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
             return false;
@@ -202,27 +202,27 @@ public abstract class BaseLogInPanel extends VerticalPanel implements OkCancelOp
 
             @Override
             public void onFailure(Throwable caught) {
-                form.get(form.meta().password()).setValue(null);
+                form.get(form.proto().password()).setValue(null);
                 log.debug("Login Failed", caught);
                 // TODO handle all types of error including problems with Internet connection and site reload.
                 // also caught.getMessage() can be null
                 MessageDialog.error(i18n.tr("Login Failed"), caught.getMessage());
                 if (caught instanceof ChallengeVerificationRequired) {
-                    form.get(form.meta().captcha()).setVisible(true);
-                    form.get(form.meta().captcha()).setMandatory(true);
-                } else if (form.get(form.meta().captcha()).isVisible()) {
-                    ((CCaptcha) form.get(form.meta().captcha())).createNewChallenge();
+                    form.get(form.proto().captcha()).setVisible(true);
+                    form.get(form.proto().captcha()).setMandatory(true);
+                } else if (form.get(form.proto().captcha()).isVisible()) {
+                    ((CCaptcha) form.get(form.proto().captcha())).createNewChallenge();
                 }
             }
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                form.get(form.meta().password()).setValue(null);
-                form.get(form.meta().captcha()).setMandatory(false);
+                form.get(form.proto().password()).setValue(null);
+                form.get(form.proto().captcha()).setMandatory(false);
                 ClientContext.authenticated(result);
                 if (HTML5Storage.isSupported()) {
                     if (rememberID.getValue()) {
-                        HTML5Storage.getLocalStorage().setItem(BaseLogInPanel.HTML5_KEY, form.get(form.meta().email()).getValue());
+                        HTML5Storage.getLocalStorage().setItem(BaseLogInPanel.HTML5_KEY, form.get(form.proto().email()).getValue());
                     } else {
                         HTML5Storage.getLocalStorage().removeItem(BaseLogInPanel.HTML5_KEY);
                     }

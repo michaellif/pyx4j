@@ -136,8 +136,8 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         }
     }
 
-    public E meta() {
-        return formFactory.meta();
+    public E proto() {
+        return formFactory.proto();
     }
 
     public CEntityForm<E> getForm() {
@@ -329,9 +329,9 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         if (isChanged()) {
             String entityName = getEntity().getStringView();
             if (CommonsStringUtils.isEmpty(entityName)) {
-                event.addMessage(i18n.tr("Changes to {0} were not saved", meta().getEntityMeta().getCaption()));
+                event.addMessage(i18n.tr("Changes to {0} were not saved", proto().getEntityMeta().getCaption()));
             } else {
-                event.addMessage(i18n.tr("Changes to {0} ''{1}'' were not saved", meta().getEntityMeta().getCaption(), entityName));
+                event.addMessage(i18n.tr("Changes to {0} ''{1}'' were not saved", proto().getEntityMeta().getCaption(), entityName));
             }
         }
     }

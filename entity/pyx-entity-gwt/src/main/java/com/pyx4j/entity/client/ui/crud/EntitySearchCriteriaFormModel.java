@@ -50,7 +50,7 @@ import com.pyx4j.forms.client.ui.IAcceptText;
 
 public class EntitySearchCriteriaFormModel<E extends IEntity> {
 
-    private final E metaEntity;
+    private final E entityPrototype;
 
     private final EditableComponentFactory editableComponentFactory;
 
@@ -96,7 +96,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     }
 
     public EntitySearchCriteriaFormModel(Class<E> clazz, EditableComponentFactory editableComponentFactory) {
-        metaEntity = EntityFactory.create(clazz);
+        entityPrototype = EntityFactory.getEntityPrototype(clazz);
         valuePropagation = new ValuePropagationHandler();
         visibilityPropagation = new VisibilityPropagationHandler();
         if (editableComponentFactory == null) {
@@ -106,8 +106,8 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
         }
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     public static <T extends IEntity> EntitySearchCriteriaFormModel<T> create(Class<T> clazz, EditableComponentFactory editableComponentFactory) {
@@ -162,9 +162,9 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
     public void populate(EntitySearchCriteria<E> entity) {
         if (entity != null) {
             // TODO use clone
-            this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) metaEntity.getValueClass());
+            this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) entityPrototype.getValueClass());
         } else {
-            this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) metaEntity.getValueClass());
+            this.editableCriteria = new EntitySearchCriteria<E>((Class<E>) entityPrototype.getValueClass());
         }
 
         for (Map.Entry<CEditableComponent<?, ?>, PathSearch> me : binding.entrySet()) {

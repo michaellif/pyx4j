@@ -35,7 +35,7 @@ public class EntityFactory {
 
     private static final Map<Class<?>, EntityMeta> entityMetaCache = new HashMap<Class<?>, EntityMeta>();
 
-    private static final Map<Class<?>, IEntity> metaEntityCache = new HashMap<Class<?>, IEntity>();
+    private static final Map<Class<?>, IEntity> entityPrototypeCache = new HashMap<Class<?>, IEntity>();
 
     static {
         if (ApplicationMode.hasGWT()) {
@@ -58,7 +58,7 @@ public class EntityFactory {
     }
 
     public static synchronized EntityMeta getEntityMeta(Class<? extends IEntity> clazz) {
-        assert (clazz != null) : "Get meta for null";
+        assert (clazz != null) : "Get EntityMeta for null";
         EntityMeta meta = entityMetaCache.get(clazz);
         if (meta == null) {
             meta = impl.createEntityMeta(clazz);
@@ -68,12 +68,12 @@ public class EntityFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static synchronized <T extends IEntity> T getEntityTemplate(Class<T> clazz) {
-        assert (clazz != null) : "Get meta for null";
-        T meta = (T) metaEntityCache.get(clazz);
+    public static synchronized <T extends IEntity> T getEntityPrototype(Class<T> clazz) {
+        assert (clazz != null) : "Get EntityPrototype for null";
+        T meta = (T) entityPrototypeCache.get(clazz);
         if (meta == null) {
             meta = create(clazz, null, ".");
-            metaEntityCache.put(clazz, meta);
+            entityPrototypeCache.put(clazz, meta);
         }
         return meta;
     }

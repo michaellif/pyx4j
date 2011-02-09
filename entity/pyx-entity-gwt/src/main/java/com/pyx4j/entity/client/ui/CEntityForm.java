@@ -42,7 +42,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
 
     private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
-    private final E metaEntity;
+    private final E entityPrototype;
 
     private E origEntity;
 
@@ -75,12 +75,12 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
     }
 
     public CEntityForm(Class<E> clazz) {
-        metaEntity = EntityFactory.create(clazz);
+        entityPrototype = EntityFactory.getEntityPrototype(clazz);
         valuePropagation = new ValuePropagation();
     }
 
-    public E meta() {
-        return metaEntity;
+    public E proto() {
+        return entityPrototype;
     }
 
     @SuppressWarnings("unchecked")
@@ -127,7 +127,7 @@ public class CEntityForm<E extends IEntity> extends CForm implements DelegatingE
             log.debug("populate {}", entity);
             this.editableEntity = (E) entity.cloneEntity();
         } else {
-            this.editableEntity = EntityFactory.create((Class<E>) meta().getObjectClass());
+            this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
         }
         populateComponents();
     }

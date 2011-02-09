@@ -45,9 +45,9 @@ public class ResourceListWidget extends EntityListWithCriteriaWidget<Resource> {
             protected CComponent<?>[][] getComponents() {
                 CComponent<?>[][] components = new CComponent[][] {
 
-                { form.create(form.meta().name()) },
+                { form.create(form.proto().name()) },
 
-                { form.create(form.meta().status()) },
+                { form.create(form.proto().status()) },
 
                 };
 
@@ -56,7 +56,7 @@ public class ResourceListWidget extends EntityListWithCriteriaWidget<Resource> {
 
             @Override
             protected void enhanceComponents() {
-                ((CComboBox<RepStatus>) form.get(form.meta().status())).setOptions(EnumSet.allOf(RepStatus.class));
+                ((CComboBox<RepStatus>) form.get(form.proto().status())).setOptions(EnumSet.allOf(RepStatus.class));
             }
 
         }, new EntityListPanel<Resource>(Resource.class) {

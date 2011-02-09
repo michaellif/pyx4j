@@ -46,7 +46,7 @@ public abstract class BidirectionalPersistenceTestCase extends DatastoreTestBase
 
         //retrieve department by Organization
         EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
-        criteria.add(PropertyCriterion.eq(criteria.meta().organization(), org));
+        criteria.add(PropertyCriterion.eq(criteria.proto().organization(), org));
         Department department2 = srv.retrieve(criteria);
         assertNotNull("found by owner", department2);
         // see if data really in DB

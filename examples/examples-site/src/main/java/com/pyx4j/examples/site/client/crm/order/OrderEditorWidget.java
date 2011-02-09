@@ -78,24 +78,24 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
 
                 return new IObject[][] {
 
-                { meta().customer(), null },
+                { proto().customer(), null },
 
-                { meta().orderNumber(), meta().description() },
+                { proto().orderNumber(), proto().description() },
 
-                { meta().resource(), meta().cost() },
+                { proto().resource(), proto().cost() },
 
-                { meta().receivedDate(), meta().completedDate() },
+                { proto().receivedDate(), proto().completedDate() },
 
-                { meta().dueDate(), meta().status() },
+                { proto().dueDate(), proto().status() },
 
-                { meta().notes(), meta().notes() },
+                { proto().notes(), proto().notes() },
 
                 };
             }
 
             @Override
             protected CEditableComponent<?, ?> createComponent(IObject<?> member) {
-                if (member == meta().customer()) {
+                if (member == proto().customer()) {
                     return new CEntityHyperlink("Customer", NavigUtils.getPageUri(ExamplesSiteMap.Crm.Customers.Edit.class) + "?" + NavigUtils.ENTITY_ID + "=");
                 } else {
                     return super.createComponent(member);
@@ -105,10 +105,10 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             @Override
             protected void enhanceComponents(CEntityForm<Order> form) {
 
-                ((CComboBox<Order.OrderStatus>) form.get(meta().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
-                form.get(meta().notes()).setWidth("100%");
+                ((CComboBox<Order.OrderStatus>) form.get(proto().status())).setOptions(EnumSet.allOf(Order.OrderStatus.class));
+                form.get(proto().notes()).setWidth("100%");
 
-                ((CEntityComboBox<Resource>) form.get(meta().resource())).setOptionsFilter(new OptionsFilter<Resource>() {
+                ((CEntityComboBox<Resource>) form.get(proto().resource())).setOptionsFilter(new OptionsFilter<Resource>() {
 
                     @Override
                     public boolean acceptOption(Resource entity) {
@@ -120,7 +120,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             @Override
             public void onDetach() {
                 // HACK
-                ((CEntityComboBox<Resource>) get(meta().resource())).resetOptions();
+                ((CEntityComboBox<Resource>) get(proto().resource())).resetOptions();
                 super.onDetach();
             }
 
@@ -180,7 +180,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
                         Customer customer = (Customer) result;
                         finalOrder.customer().set(customer);
                         DomainUtils.denormalizationOrder(finalOrder, customer);
-                        getEditorPanel().get(getEditorPanel().meta().orderNumber()).setEditable(true);
+                        getEditorPanel().get(getEditorPanel().proto().orderNumber()).setEditable(true);
                         getEditorPanel().populateForm(finalOrder);
                     } else {
                         log.warn(" not found");
@@ -196,7 +196,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             RPCManager.execute(EntityServices.Retrieve.class, EntityCriteriaByPK.create(Customer.class, Long.parseLong(entityIdStr)), callback);
         } else {
             getEditorPanel().populateForm(order);
-            getEditorPanel().get(getEditorPanel().meta().orderNumber()).setEditable(false);
+            getEditorPanel().get(getEditorPanel().proto().orderNumber()).setEditable(false);
             updateHistoryToken(order);
 
             populatePhotoList();
@@ -227,7 +227,7 @@ public class OrderEditorWidget extends EntityEditorWidget<Order> {
             }
         };
         EntityQueryCriteria<OrderPhoto> criteria = EntityQueryCriteria.create(OrderPhoto.class);
-        criteria.add(PropertyCriterion.eq(criteria.meta().order(), getEditorPanel().getEntity().getPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().order(), getEditorPanel().getEntity().getPrimaryKey()));
         RPCManager.execute(EntityServices.Query.class, criteria, callback);
     }
 

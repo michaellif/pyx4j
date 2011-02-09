@@ -87,8 +87,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 
-    public E meta() {
-        return this.criteria.meta();
+    public E proto() {
+        return this.criteria.proto();
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {

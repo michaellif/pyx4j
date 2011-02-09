@@ -43,11 +43,11 @@ public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
             protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
-                { meta().enabled(), null },
+                { proto().enabled(), null },
 
-                { meta().user().name(), meta().user().email() },
+                { proto().user().name(), proto().user().email() },
 
-                { meta().behavior(), null },
+                { proto().behavior(), null },
 
                 };
             }
@@ -59,7 +59,7 @@ public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
 
             @Override
             protected void enhanceComponents(CEntityForm<EditableUser> form) {
-                ((CComboBox<ExamplesBehavior>) form.get(meta().behavior())).setOptions(EnumSet.of(ExamplesBehavior.CRM_EMPLOYEE, ExamplesBehavior.CRM_ADMIN));
+                ((CComboBox<ExamplesBehavior>) form.get(proto().behavior())).setOptions(EnumSet.of(ExamplesBehavior.CRM_EMPLOYEE, ExamplesBehavior.CRM_ADMIN));
             }
 
         });

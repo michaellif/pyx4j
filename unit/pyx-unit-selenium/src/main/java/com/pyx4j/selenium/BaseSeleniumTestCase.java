@@ -58,7 +58,7 @@ public class BaseSeleniumTestCase extends TestCase {
     }
 
     public <T extends IEntity> T meta(Class<T> clazz) {
-        return EntityFactory.getEntityTemplate(clazz);
+        return EntityFactory.getEntityPrototype(clazz);
     }
 
     protected void captureScreenshot(String sufix) {

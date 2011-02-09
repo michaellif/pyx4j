@@ -81,7 +81,7 @@ public class ExampleTest extends BaseSeleniumTestCase {
         selenium.waitForLinkText("Sign In");
 
         selenium.click("link=Sign In");
-        AuthenticationRequest meta = EntityFactory.getEntityTemplate(AuthenticationRequest.class);
+        AuthenticationRequest meta = EntityFactory.getEntityPrototype(AuthenticationRequest.class);
 
         selenium.waitFor(meta.email());
         captureScreenshot("example");
