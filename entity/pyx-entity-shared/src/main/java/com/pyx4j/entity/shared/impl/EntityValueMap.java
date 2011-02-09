@@ -116,7 +116,13 @@ public class EntityValueMap extends HashMap<String, Object> {
                 b.append('}');
             } else if (me.getValue() instanceof Collection<?>) {
                 b.append('[');
+                boolean collectionFirst = true;
                 for (Object o : (Collection<?>) me.getValue()) {
+                    if (collectionFirst) {
+                        collectionFirst = false;
+                    } else {
+                        b.append(", ");
+                    }
                     if (o instanceof Map<?, ?>) {
                         dumpMap(b, (Map<String, Object>) o, processed);
                     } else {
