@@ -20,18 +20,22 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.CaptionView;
 
 import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.client.place.AppPlaceListing;
 
 public class CaptionActivity extends AbstractActivity {
 
     private final CaptionView view;
 
+    private final AppPlaceListing appPlaceListing;
+
     @Inject
-    public CaptionActivity(CaptionView view) {
+    public CaptionActivity(CaptionView view, AppPlaceListing appPlaceListing) {
         this.view = view;
+        this.appPlaceListing = appPlaceListing;
     }
 
     public CaptionActivity withPlace(AppPlace place) {
-        view.setCaption(place.getCaption());
+        view.setCaption(appPlaceListing.getCaption(place));
         return this;
     }
 

@@ -18,7 +18,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 
 import com.pyx4j.site.client.place.AppPlace;
 
@@ -27,23 +26,20 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
     private Presenter presenter;
 
     public MainNavigViewImpl() {
-
         setHeight("40px");
-
-        NavigTab apartmentNavig = new NavigTab(new SiteMap.Apartment(), this);
-        NavigTab tenantsNavig = new NavigTab(new SiteMap.Tenants(), this);
-        NavigTab infoNavig = new NavigTab(new SiteMap.Info(), this);
-        NavigTab financialNavig = new NavigTab(new SiteMap.Financial(), this);
-        NavigTab petsNavig = new NavigTab(new SiteMap.Pets(), this);
-        NavigTab paymentsNavig = new NavigTab(new SiteMap.Payments(), this);
-        NavigTab summaryNavig = new NavigTab(new SiteMap.Summary(), this);
-
     }
 
     class NavigTab extends Anchor {
 
+        private final AppPlace place;
+
+        public AppPlace getPlace() {
+            return place;
+        }
+
         NavigTab(final AppPlace place, MainNavigViewImpl parent) {
-            super(place.getNavigLabel());
+            super(presenter.getNavigLabel(place));
+            this.place = place;
             getElement().getStyle().setMargin(40, Unit.PX);
             getElement().getStyle().setProperty("textDecoration", "none");
             getElement().getStyle().setProperty("color", "#333");
@@ -64,6 +60,9 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-    }
 
+        for (AppPlace place : presenter.getTopLevelPlaces()) {
+            new NavigTab(place, this);
+        }
+    }
 }

@@ -21,16 +21,22 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 
+import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.client.place.AppPlaceListing;
+
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.Presenter {
 
     private final MainNavigView view;
 
     private final PlaceController placeController;
 
+    private final AppPlaceListing appPlaceListing;
+
     @Inject
-    public MainNavigActivity(MainNavigView view, PlaceController placeController) {
+    public MainNavigActivity(MainNavigView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
         this.view = view;
         this.placeController = placeController;
+        this.appPlaceListing = appPlaceListing;
         view.setPresenter(this);
     }
 
@@ -46,6 +52,16 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public void navigTo(Place place) {
         placeController.goTo(place);
+    }
+
+    @Override
+    public String getNavigLabel(AppPlace place) {
+        return appPlaceListing.getNavigLabel(place);
+    }
+
+    @Override
+    public AppPlace[] getTopLevelPlaces() {
+        return appPlaceListing.getTopLevelPlaces();
     }
 
 }

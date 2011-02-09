@@ -13,57 +13,41 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import com.pyx4j.site.client.NavigationItem;
 import com.pyx4j.site.client.place.AppPlace;
 
-//TODO Use annotations and generator instead of constructor
 public class SiteMap {
 
+    @NavigationItem(caption = "Application Form")
     public static class SignIn extends AppPlace {
-        public SignIn() {
-            super("", "Application Form");
-        }
     }
 
+    @NavigationItem(navigLabel = "Apartment", caption = "Apartment Info", topLevel = true)
     public static class Apartment extends AppPlace {
-        public Apartment() {
-            super("Apartment", "Apartment Info");
-        }
     }
 
+    @NavigationItem(navigLabel = "Tenants", caption = "Tenants", topLevel = true)
     public static class Tenants extends AppPlace {
-        public Tenants() {
-            super("Tenants", "Tenants");
-        }
     }
 
+    @NavigationItem(navigLabel = "Info", caption = "Info", topLevel = true)
     public static class Info extends AppPlace {
-        public Info() {
-            super("Info", "Info");
-        }
     }
 
+    @NavigationItem(navigLabel = "Financial", caption = "Financial", topLevel = true)
     public static class Financial extends AppPlace {
-        public Financial() {
-            super("Financial", "Financial");
-        }
     }
 
+    @NavigationItem(navigLabel = "Pets", caption = "Pets", topLevel = true)
     public static class Pets extends AppPlace {
-        public Pets() {
-            super("Pets", "Pets");
-        }
     }
 
+    @NavigationItem(navigLabel = "Payments", caption = "Payments", topLevel = true)
     public static class Payments extends AppPlace {
-        public Payments() {
-            super("Payments", "Payments");
-        }
     }
 
+    @NavigationItem(navigLabel = "Summary", caption = "Summary", topLevel = true)
     public static class Summary extends AppPlace {
-        public Summary() {
-            super("Summary", "Summary");
-        }
     }
 
 }
