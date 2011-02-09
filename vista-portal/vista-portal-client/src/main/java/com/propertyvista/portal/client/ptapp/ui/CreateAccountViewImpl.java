@@ -18,21 +18,20 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.rpc.AccountCreationRequest;
 
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.StringDebugId;
+import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
+import com.pyx4j.entity.client.ui.EntityPresenter;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextField;
 
 public class CreateAccountViewImpl extends VerticalPanel implements CreateAccountView {
 
@@ -42,13 +41,16 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     public CreateAccountViewImpl() {
 
-        CTextField username = new CTextField("Email");
+        EntityPresenter<AccountCreationRequest> ep = EntityPresenter.create(new BaseEditableComponentFactory(), AccountCreationRequest.class);
+
+        ep.create(ep.meta().email());
 
         CPasswordTextField password = new CPasswordTextField("Password");
+        ep.bind(password, ep.meta().password());
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { username },
+        { ep.get(ep.meta().email()) },
 
         { password },
 
