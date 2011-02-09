@@ -22,32 +22,45 @@ public class SiteMap {
     public static class SignIn extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Apartment", caption = "Apartment Info", topLevel = true)
+    @NavigationItem(navigLabel = "Apartment", caption = "Apartment Info", type = NavigationItem.TOP)
     public static class Apartment extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Tenants", caption = "Tenants", topLevel = true)
+    @NavigationItem(navigLabel = "Tenants", caption = "Tenants", type = NavigationItem.TOP)
     public static class Tenants extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Info", caption = "Info", topLevel = true)
+    @NavigationItem(navigLabel = "Info", caption = "Info", type = NavigationItem.TOP)
     public static class Info extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Financial", caption = "Financial", topLevel = true)
+    @NavigationItem(navigLabel = "Financial", caption = "Financial", type = NavigationItem.TOP)
     public static class Financial extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Pets", caption = "Pets", topLevel = true)
+    @NavigationItem(navigLabel = "Pets", caption = "Pets", type = NavigationItem.TOP)
     public static class Pets extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Payments", caption = "Payments", topLevel = true)
+    @NavigationItem(navigLabel = "Payments", caption = "Payments", type = NavigationItem.TOP)
     public static class Payments extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Summary", caption = "Summary", topLevel = true)
+    @NavigationItem(navigLabel = "Summary", caption = "Summary", type = NavigationItem.TOP)
     public static class Summary extends AppPlace {
+    }
+
+    @NavigationItem(caption = "Privacy policy", type = NavigationItem.ACTIONS, resource = "privacyPolicy.html")
+    public static class PrivacyPolicy extends AppPlace {
+    }
+
+    @NavigationItem(caption = "Terms and conditions", type = NavigationItem.ACTIONS, resource = "termsAndConditions.html")
+    public static class TermsAndConditions extends AppPlace {
+    }
+
+    //note - logout is special case, handled manually
+    @NavigationItem(caption = "LogOut")
+    public static class LogOut extends AppPlace {
     }
 
 }

@@ -13,15 +13,20 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
 
+import com.pyx4j.site.client.NavigationItem;
 import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.client.place.AppPlaceInfo;
+import com.pyx4j.site.client.place.AppPlaceListing;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -29,10 +34,13 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     private final PlaceController placeController;
 
+    private final AppPlaceListing appPlaceListing;
+
     @Inject
-    public TopRightActionsActivity(TopRightActionsView view, PlaceController placeController) {
+    public TopRightActionsActivity(TopRightActionsView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
         this.view = view;
         this.placeController = placeController;
+        this.appPlaceListing = appPlaceListing;
         view.setPresenter(this);
     }
 
@@ -45,4 +53,13 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         panel.setWidget(view);
     }
 
+    @Override
+    public AppPlaceInfo[] getActionsPlacesInfo() {
+        List<AppPlaceInfo> res = new ArrayList<AppPlaceInfo>();
+        for (AppPlace place : appPlaceListing.getPlacesByType(NavigationItem.ACTIONS)) {
+            res.add(appPlaceListing.getPlaceInfo(place));
+        }
+
+        return res.toArray(new AppPlaceInfo[] {});
+    }
 }

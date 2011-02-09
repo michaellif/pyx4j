@@ -35,7 +35,7 @@ public class CaptionActivity extends AbstractActivity {
     }
 
     public CaptionActivity withPlace(AppPlace place) {
-        view.setCaption(appPlaceListing.getCaption(place));
+        view.setCaption(appPlaceListing.getPlaceInfo(place).getCaption());
         return this;
     }
 

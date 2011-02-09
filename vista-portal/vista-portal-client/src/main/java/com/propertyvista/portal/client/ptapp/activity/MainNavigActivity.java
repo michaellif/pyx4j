@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 
+import com.pyx4j.site.client.NavigationItem;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
 
@@ -56,12 +57,12 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public String getNavigLabel(AppPlace place) {
-        return appPlaceListing.getNavigLabel(place);
+        return appPlaceListing.getPlaceInfo(place).getNavigLabel();
     }
 
     @Override
     public AppPlace[] getTopLevelPlaces() {
-        return appPlaceListing.getTopLevelPlaces();
+        return appPlaceListing.getPlacesByType(NavigationItem.TOP);
     }
 
 }
