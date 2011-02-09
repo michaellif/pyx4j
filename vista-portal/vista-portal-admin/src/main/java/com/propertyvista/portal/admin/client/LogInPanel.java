@@ -83,7 +83,7 @@ public abstract class LogInPanel extends BaseLogInPanel {
                         if (!((event.getNativeKeyCode() == KeyCodes.KEY_ENTER) || (event.getNativeKeyCode() == 10))) {
                             return;
                         }
-                        String em = ((TextBox) getForm().get(getForm().meta().email()).asWidget()).getValue();
+                        String em = ((TextBox) getForm().get(getForm().proto().email()).asWidget()).getValue();
                         if (em.length() != 1) {
                             return;
                         }
@@ -94,8 +94,8 @@ public abstract class LogInPanel extends BaseLogInPanel {
 
             // Set Default values
             String devLogin = DemoData.CRM_ADMIN_USER_PREFIX + CommonsStringUtils.d000(1) + DemoData.USERS_DOMAIN;
-            getForm().get(getForm().meta().email()).setValue(devLogin);
-            getForm().get(getForm().meta().password()).setValue(devLogin);
+            getForm().get(getForm().proto().email()).setValue(devLogin);
+            getForm().get(getForm().proto().password()).setValue(devLogin);
         }
 
     }
@@ -142,8 +142,8 @@ public abstract class LogInPanel extends BaseLogInPanel {
             devKey = nativeKeyCode;
             String devLogin = devLoginUserPrefix + CommonsStringUtils.d000(devCount) + DemoData.USERS_DOMAIN;
             event.preventDefault();
-            getForm().get(getForm().meta().email()).setValue(devLogin);
-            getForm().get(getForm().meta().password()).setValue(devLogin);
+            getForm().get(getForm().proto().email()).setValue(devLogin);
+            getForm().get(getForm().proto().password()).setValue(devLogin);
         }
 
     }

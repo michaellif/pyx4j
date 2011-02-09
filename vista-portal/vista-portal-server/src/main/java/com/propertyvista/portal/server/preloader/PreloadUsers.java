@@ -42,7 +42,7 @@ public class PreloadUsers extends AbstractDataPreloader {
     private User createUser(String email, VistaBehavior behavior) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-            criteria.add(PropertyCriterion.eq(criteria.meta().email(), email));
+            criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
             List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
             if (users.size() != 0) {
                 log.debug("User alredy exists");

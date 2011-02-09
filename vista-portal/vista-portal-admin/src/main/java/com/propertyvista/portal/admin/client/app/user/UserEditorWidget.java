@@ -31,11 +31,11 @@ public class UserEditorWidget extends EntityEditorWidget<EditableUser> {
             protected IObject<?>[][] getFormMembers() {
                 return new IObject[][] {
 
-                { meta().enabled(), null },
+                { proto().enabled(), null },
 
-                { meta().user().name(), meta().user().email() },
+                { proto().user().name(), proto().user().email() },
 
-                { meta().behavior(), null },
+                { proto().behavior(), null },
 
                 };
             }

@@ -43,14 +43,14 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
         EntityPresenter<AccountCreationRequest> ep = EntityPresenter.create(new BaseEditableComponentFactory(), AccountCreationRequest.class);
 
-        ep.create(ep.meta().email());
+        ep.create(ep.proto().email());
 
         CPasswordTextField password = new CPasswordTextField();
-        ep.bind(password, ep.meta().password());
+        ep.bind(password, ep.proto().password());
 
         CComponent<?>[][] components = new CComponent[][] {
 
-        { ep.get(ep.meta().email()) },
+        { ep.get(ep.proto().email()) },
 
         { password },
 

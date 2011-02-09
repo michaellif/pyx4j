@@ -35,9 +35,9 @@ public class UserListWidget extends EntityListWithCriteriaWidget<User> {
             protected CComponent<?>[][] getComponents() {
                 CComponent<?>[][] components = new CComponent[][] {
 
-                { form.create(form.meta().name()) },
+                { form.create(form.proto().name()) },
 
-                { form.create(form.meta().email()) },
+                { form.create(form.proto().email()) },
 
                 };
 

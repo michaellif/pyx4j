@@ -61,7 +61,7 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
             AbstractAntiBot.assertLogin(email, request.captcha().getValue());
 
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-            criteria.add(PropertyCriterion.eq(criteria.meta().email(), email));
+            criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
             List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
             if (users.size() != 1) {
                 log.debug("Invalid log-in attempt {} rs {}", email, users.size());

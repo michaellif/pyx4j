@@ -16,13 +16,25 @@ package com.propertyvista.portal.tester.mvp;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.propertyvista.portal.tester.activity.EditDepartmenActivity;
+
+import com.pyx4j.site.client.place.AppPlace;
 
 public class Center3ActivityMapper implements ActivityMapper {
 
-    @Override
-    public Activity getActivity(Place place) {
-        // TODO Auto-generated method stub
-        return null;
+    Provider<EditDepartmenActivity> editDepartmentActivityProvider;
+
+    @Inject
+    public Center3ActivityMapper(final Provider<EditDepartmenActivity> editDepartmentActivityProvider) {
+        super();
+        this.editDepartmentActivityProvider = editDepartmentActivityProvider;
     }
 
+    @Override
+    public Activity getActivity(Place place) {
+
+        return editDepartmentActivityProvider.get().withPlace((AppPlace) place);
+    }
 }

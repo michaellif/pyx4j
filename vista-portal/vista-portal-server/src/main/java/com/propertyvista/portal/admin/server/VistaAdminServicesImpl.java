@@ -46,7 +46,7 @@ public class VistaAdminServicesImpl implements VistaAdminServices {
             user.email().setValue(user.email().getValue().toLowerCase(Locale.ENGLISH));
 
             EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
-            criteria.add(PropertyCriterion.eq(criteria.meta().email(), user.email().getValue()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().email(), user.email().getValue()));
             List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
             for (User existsUser : users) {
                 if (!existsUser.getPrimaryKey().equals(user.getPrimaryKey())) {
