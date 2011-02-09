@@ -45,7 +45,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
         ep.create(ep.meta().email());
 
-        CPasswordTextField password = new CPasswordTextField("Password");
+        CPasswordTextField password = new CPasswordTextField();
         ep.bind(password, ep.meta().password());
 
         CComponent<?>[][] components = new CComponent[][] {
