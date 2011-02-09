@@ -39,13 +39,19 @@ public class EntityPresenter<E extends IEntity> {
 
     private final E metaEntity;
 
+    private EditableComponentFactory factory;
+
     private E origEntity;
 
     private E editableEntity;
 
     private final HashMap<CEditableComponent<?, ?>, Path> binding = new HashMap<CEditableComponent<?, ?>, Path>();
 
-    public EntityPresenter(Class<E> clazz) {
+    public static <T extends IEntity> EntityPresenter<T> create(EditableComponentFactory factory, Class<T> clazz) {
+        return new EntityPresenter<T>(factory, clazz);
+    }
+
+    public EntityPresenter(EditableComponentFactory factory, Class<E> clazz) {
         metaEntity = EntityFactory.create(clazz);
     }
 
@@ -84,8 +90,14 @@ public class EntityPresenter<E extends IEntity> {
         return false;
     }
 
-    public void bind(CEditableComponent<?, ?> component, Path path) {
-        binding.put(component, path);
+    public <T> CEditableComponent<T, ?> create(IObject<T> member) {
+        CEditableComponent<T, ?> component = (CEditableComponent<T, ?>) factory.create(member);
+        bind(component, member);
+        return component;
+    }
+
+    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+        binding.put(component, member.getPath());
     }
 
     @SuppressWarnings("unchecked")
@@ -132,4 +144,5 @@ public class EntityPresenter<E extends IEntity> {
     public String getTitle() {
         return editableEntity.getStringView();
     }
+
 }
