@@ -126,6 +126,9 @@ public class QueryBuilder<T extends IEntity> {
                         case IN:
                             sql.append(" IN ? ");
                             break;
+                        case RDB_LIKE:
+                            sql.append(" LIKE ? ");
+                            break;
                         default:
                             throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
                         }

@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.index.GeoPointIndexAdapter;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -177,6 +179,9 @@ public class IndexedEntitySearch {
                     if (inMemoryFilterOnly || (hasInequalityFilter && limitToOneIndex)) {
                         // Add to in memory filters
                         inMemoryFilters.add(new StringInMemoryFilter(path, str));
+                    } else if (ApplicationBackend.getBackendType() == ApplicationBackendType.RDB) {
+                        String propertyName = srv.getPropertyName(meta, path);
+                        queryCriteria.add(new PropertyCriterion(propertyName, Restriction.RDB_LIKE, str));
                     } else {
                         // Database value should be capitalized for this to work.
                         char firstChar = str.charAt(0);
