@@ -19,10 +19,16 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.CLASS)
 public @interface NavigationItem {
 
+    public static final String TOP = "top";
+
+    public static final String ACTIONS = "actions";
+
     String navigLabel() default "";
 
     String caption() default "";
 
-    boolean topLevel() default false;
+    String type() default "";
+
+    String resource() default "";
 
 }

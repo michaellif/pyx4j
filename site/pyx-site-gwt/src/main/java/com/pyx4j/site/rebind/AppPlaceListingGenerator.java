@@ -21,6 +21,7 @@
 package com.pyx4j.site.rebind;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.site.client.NavigationItem;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
+import com.pyx4j.site.client.place.AppPlaceInfo;
 
 public class AppPlaceListingGenerator extends Generator {
 
@@ -59,6 +61,8 @@ public class AppPlaceListingGenerator extends Generator {
             composer.addImport(GWT.class.getName());
             composer.addImport(AppPlaceHistoryMapper.class.getName());
             composer.addImport(AppPlace.class.getName());
+            composer.addImport(NavigationItem.class.getName());
+            composer.addImport(AppPlaceInfo.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -88,7 +92,7 @@ public class AppPlaceListingGenerator extends Generator {
     private void writeImpl(SourceWriter writer, List<JClassType> serviceClasses) {
         writer.println();
 
-        //getPlace
+        //getPlace()
         writer.println("@Override");
         writer.println("public AppPlace getPlace(String token) {");
         writer.indent();
@@ -108,16 +112,18 @@ public class AppPlaceListingGenerator extends Generator {
 
         writer.println();
 
-        //getNavigLabel
+        //getPlaceInfo()
         writer.println("@Override");
-        writer.println("public String getNavigLabel(AppPlace place) {");
+        writer.println("public AppPlaceInfo getPlaceInfo(AppPlace place) {");
         writer.indent();
 
         for (JClassType jClassType : serviceClasses) {
             String type = jClassType.getPackage().getName() + "." + jClassType.getName();
             writer.println("if (place.getClass() == " + type + ".class) {");
             writer.indent();
-            writer.println("return \"" + jClassType.getAnnotation(NavigationItem.class).navigLabel() + "\";");
+            writer.println("return new AppPlaceInfo(\"" + jClassType.getAnnotation(NavigationItem.class).navigLabel() + "\", \""
+                    + jClassType.getAnnotation(NavigationItem.class).caption() + "\", \"" + jClassType.getAnnotation(NavigationItem.class).type() + "\", \""
+                    + jClassType.getAnnotation(NavigationItem.class).resource() + "\");");
             writer.outdent();
             writer.println("}");
         }
@@ -128,41 +134,37 @@ public class AppPlaceListingGenerator extends Generator {
 
         writer.println();
 
-        //getCaption
+        //getPlacesByType()
+        Map<String, List<String>> classByType = new HashMap<String, List<String>>();
+        for (JClassType jClassType : serviceClasses) {
+            String type = jClassType.getAnnotation(NavigationItem.class).type();
+            List<String> typeClasses = classByType.get(type);
+            if (typeClasses == null) {
+                typeClasses = new ArrayList<String>();
+                classByType.put(type, typeClasses);
+            }
+            typeClasses.add(jClassType.getPackage().getName() + "." + jClassType.getName());
+        }
+
         writer.println("@Override");
-        writer.println("public String getCaption(AppPlace place) {");
+        writer.println("public AppPlace[] getPlacesByType(String type) {");
         writer.indent();
 
-        for (JClassType jClassType : serviceClasses) {
-            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
-            writer.println("if (place.getClass() == " + type + ".class) {");
+        for (String type : classByType.keySet()) {
+            writer.println("if (type.equals(\"" + type + "\")) {");
             writer.indent();
-            writer.println("return \"" + jClassType.getAnnotation(NavigationItem.class).caption() + "\";");
+            writer.println("return new AppPlace[] { ");
+            writer.indent();
+            for (String clazz : classByType.get(type)) {
+                writer.println("new " + clazz + "(),");
+            }
+            writer.outdent();
+            writer.println("};");
             writer.outdent();
             writer.println("}");
         }
 
         writer.println("return null;");
-        writer.outdent();
-        writer.println("}");
-
-        writer.println();
-
-        //getTopLevelPlaces
-        writer.println("@Override");
-        writer.println("public AppPlace[] getTopLevelPlaces() {");
-        writer.indent();
-        writer.println("return new AppPlace[] { ");
-        writer.indent();
-
-        for (JClassType jClassType : serviceClasses) {
-            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
-            if (jClassType.getAnnotation(NavigationItem.class).topLevel())
-                writer.println("new " + type + "(), ");
-        }
-
-        writer.outdent();
-        writer.println("};");
         writer.outdent();
         writer.println("}");
     }

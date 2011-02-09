@@ -24,11 +24,7 @@ public interface AppPlaceListing {
 
     AppPlace getPlace(String token);
 
-    String getNavigLabel(AppPlace place);
+    AppPlaceInfo getPlaceInfo(AppPlace place);
 
-    String getCaption(AppPlace place);
-
-    AppPlace[] getTopLevelPlaces();
-
-    //TODO: List<AppPlace> getSiblings(AppPlace place)
+    AppPlace[] getPlacesByType(String type);
 }
