@@ -22,6 +22,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 
 import com.pyx4j.site.client.place.AppPlace;
@@ -64,7 +65,15 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public List<AppPlace> getTopLevelPlaces() {
-        return new ArrayList<AppPlace>();
+        List<AppPlace> places = new ArrayList<AppPlace>();
+        places.add(new SiteMap.Apartment());
+        places.add(new SiteMap.Tenants());
+        places.add(new SiteMap.Info());
+        places.add(new SiteMap.Financial());
+        places.add(new SiteMap.Pets());
+        places.add(new SiteMap.Payments());
+        places.add(new SiteMap.Summary());
+        return places;
     }
 
 }
