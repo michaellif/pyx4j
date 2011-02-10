@@ -12,6 +12,7 @@ import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.EntityChangeManager;
 import com.pyx4j.entity.client.ui.flex.FlexEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
@@ -22,6 +23,8 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
     private static I18n i18n = I18nFactory.getI18n(EditDepartmentViewImpl.class);
 
     private Presenter presenter;
+
+    private final EntityChangeManager<Department> changeManager;
 
     private final CEntityEditableComponent<Department, VerticalPanel> editor;
 
@@ -68,6 +71,8 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
         };
 
+        changeManager = new EntityChangeManager<Department>(Department.class);
+
         add(editor);
 
         Button signUpButton = new Button(i18n.tr("Save"));
@@ -92,6 +97,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     @Override
     public void populate(Department entity) {
-        editor.populate(entity);
+        changeManager.populate(entity);
+        editor.populate(changeManager.getValue());
     }
 }
