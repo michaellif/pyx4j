@@ -39,7 +39,8 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
-import com.pyx4j.site.client.NavigationItem;
+import com.pyx4j.site.client.annotations.NavigationItem;
+import com.pyx4j.site.client.annotations.PlaceProperties;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.client.place.AppPlaceInfo;
@@ -71,17 +72,17 @@ public class AppPlaceListingGenerator extends Generator {
             }
 
             JClassType placeType = oracle.getType(AppPlace.class.getName());
-            List<JClassType> serviceClasses = new Vector<JClassType>();
+            List<JClassType> placeClasses = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
                 if ((type.isClass() != null) && type.isAssignableTo(placeType) && (placeType != type)) {
-                    serviceClasses.add(type);
+                    placeClasses.add(type);
                     logger.log(TreeLogger.Type.DEBUG, "Place class: " + type.getName());
                 }
             }
 
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
-            writeImpl(writer, serviceClasses);
+            writeImpl(writer, placeClasses);
             writer.commit(logger);
             return composer.getCreatedClassName();
         } catch (NotFoundException e) {
@@ -89,7 +90,7 @@ public class AppPlaceListingGenerator extends Generator {
         }
     }
 
-    private void writeImpl(SourceWriter writer, List<JClassType> serviceClasses) {
+    private void writeImpl(SourceWriter writer, List<JClassType> placeClasses) {
         writer.println();
 
         //getPlace()
@@ -97,7 +98,7 @@ public class AppPlaceListingGenerator extends Generator {
         writer.println("public AppPlace getPlace(String token) {");
         writer.indent();
 
-        for (JClassType jClassType : serviceClasses) {
+        for (JClassType jClassType : placeClasses) {
             String type = jClassType.getPackage().getName() + "." + jClassType.getName();
             writer.println("if (token.equals(AppPlaceHistoryMapper.getPlaceId(" + type + ".class))) {");
             writer.indent();
@@ -117,17 +118,16 @@ public class AppPlaceListingGenerator extends Generator {
         writer.println("public AppPlaceInfo getPlaceInfo(AppPlace place) {");
         writer.indent();
 
-        for (JClassType jClassType : serviceClasses) {
+        for (JClassType jClassType : placeClasses) {
             String type = jClassType.getPackage().getName() + "." + jClassType.getName();
             writer.println("if (place.getClass() == " + type + ".class) {");
             writer.indent();
             NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-            if (navigationItem != null) {
-                writer.println("return new AppPlaceInfo(\"" + navigationItem.navigLabel() + "\", \"" + navigationItem.caption() + "\", \""
-                        + navigationItem.type() + "\", \"" + navigationItem.resource() + "\");");
-            } else {
-                writer.println("return null;");
-            }
+            PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
+            String navigLabel = navigationItem == null ? "" : navigationItem.navigLabel();
+            String caption = placeProperties == null ? "" : placeProperties.caption();
+            String staticContent = placeProperties == null ? null : placeProperties.staticContent();
+            writer.println("return new AppPlaceInfo(\"" + navigLabel + "\", \"" + caption + "\", \"" + staticContent + "\");");
             writer.outdent();
             writer.println("}");
         }
@@ -138,42 +138,5 @@ public class AppPlaceListingGenerator extends Generator {
 
         writer.println();
 
-        //getPlacesByType()
-        Map<String, List<String>> classByType = new HashMap<String, List<String>>();
-        for (JClassType jClassType : serviceClasses) {
-            NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
-            if (navigationItem == null) {
-                continue;
-            }
-            String type = navigationItem.type();
-            List<String> typeClasses = classByType.get(type);
-            if (typeClasses == null) {
-                typeClasses = new ArrayList<String>();
-                classByType.put(type, typeClasses);
-            }
-            typeClasses.add(jClassType.getPackage().getName() + "." + jClassType.getName());
-        }
-
-        writer.println("@Override");
-        writer.println("public AppPlace[] getPlacesByType(String type) {");
-        writer.indent();
-
-        for (String type : classByType.keySet()) {
-            writer.println("if (type.equals(\"" + type + "\")) {");
-            writer.indent();
-            writer.println("return new AppPlace[] { ");
-            writer.indent();
-            for (String clazz : classByType.get(type)) {
-                writer.println("new " + clazz + "(),");
-            }
-            writer.outdent();
-            writer.println("};");
-            writer.outdent();
-            writer.println("}");
-        }
-
-        writer.println("return null;");
-        writer.outdent();
-        writer.println("}");
     }
 }

@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.site.client;
+package com.pyx4j.site.client.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,16 +19,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.CLASS)
 public @interface NavigationItem {
 
-    public static final String TOP = "top";
-
-    public static final String ACTIONS = "actions";
-
     String navigLabel() default "";
-
-    String caption() default "";
-
-    String type() default "";
-
-    String resource() default "";
 
 }

@@ -21,14 +21,12 @@
 package com.pyx4j.site.client.place;
 
 public class AppPlaceInfo {
+
     private final String navigLabel;
 
     private final String caption;
 
-    private final String type;
-
-    private final String resource;
-
+    private final String staticContent;
 
     public String getNavigLabel() {
         return navigLabel;
@@ -38,18 +36,13 @@ public class AppPlaceInfo {
         return caption;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public String getResource() {
-        return resource;
+        return staticContent;
     }
 
-    public AppPlaceInfo(String navigLabel, String caption, String type, String resource) {
+    public AppPlaceInfo(String navigLabel, String caption, String staticContent) {
         this.navigLabel = navigLabel != null && !navigLabel.equals("") ? navigLabel : null;
         this.caption = caption != null && !caption.equals("") ? caption : null;
-        this.type = type != null && !type.equals("") ? type : null;
-        this.resource = resource != null && !resource.equals("") ? resource : null;
+        this.staticContent = staticContent != null && !staticContent.equals("") ? staticContent : null;
     }
 }
