@@ -38,7 +38,6 @@ import com.pyx4j.forms.client.gwt.Cursor;
 import com.pyx4j.forms.client.gwt.NativeCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.widgets.client.Tooltip;
 
 public class WidgetDecorator extends DockPanel {
@@ -76,7 +75,7 @@ public class WidgetDecorator extends DockPanel {
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
 
-        if (labelPlacement.equals(LabelAlignment.LEFT)) {
+        if (labelPlacement.equals(LabelPlacement.LEFT)) {
             label.getElement().getStyle().setProperty("textAlign", "right");
         }
 
@@ -127,7 +126,7 @@ public class WidgetDecorator extends DockPanel {
         HorizontalPanel labelHolder = new HorizontalPanel();
         labelHolder.getElement().getStyle().setPaddingRight(10, Unit.PX);
 
-        if (labelPlacement.equals(LabelAlignment.LEFT)) {
+        if (labelPlacement.equals(LabelPlacement.LEFT)) {
             labelHolder.add(label);
             labelHolder.add(imageMandatoryHolder);
             add(labelHolder, WEST);
