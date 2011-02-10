@@ -351,7 +351,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
             }
             if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
-                log.debug("Timestamp change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
+                log.debug("Timestamp " + updatedTs + " change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
                 throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
             }
             updated = applyModifications(tm, baseEntity, entity);
