@@ -64,6 +64,7 @@ import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CFormFolder;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.SelfManagedComponent;
+import com.pyx4j.forms.client.ui.decorators.ImageHolder;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -661,34 +662,6 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             }
         }
 
-    }
-
-    class ImageHolder extends SimplePanel {
-
-        private final String width;
-
-        private HTML spaceHolder;
-
-        ImageHolder(String width) {
-            this.width = width;
-            clear();
-        }
-
-        @Override
-        public void setWidget(Widget w) {
-            super.setWidget(w);
-            w.setWidth(width);
-        }
-
-        @Override
-        public void clear() {
-            super.clear();
-            if (spaceHolder == null) {
-                spaceHolder = new HTML("&nbsp;");
-
-            }
-            setWidget(spaceHolder);
-        }
     }
 
     public void setToolbarMode(ToolbarMode mode, boolean removable) {
