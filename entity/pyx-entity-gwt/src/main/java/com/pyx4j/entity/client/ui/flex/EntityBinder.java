@@ -20,14 +20,17 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.client.ui.CEntityForm;
 import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -41,17 +44,39 @@ import com.pyx4j.forms.client.ui.CTextComponent;
 
 public class EntityBinder<E extends IEntity> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
+    private static final Logger log = LoggerFactory.getLogger(EntityBinder.class);
 
     private final E entityPrototype;
 
     private final EditableComponentFactory factory;
 
-    private E origEntity;
-
     private E editableEntity;
 
     private final HashMap<CEditableComponent<?, ?>, Path> binding = new HashMap<CEditableComponent<?, ?>, Path>();
+
+    @SuppressWarnings("rawtypes")
+    private final ValueChangeHandler valuePropagation;
+
+    @SuppressWarnings("rawtypes")
+    private class ValuePropagation implements ValueChangeHandler {
+
+        @Override
+        public void onValueChange(ValueChangeEvent event) {
+            Path memberPath = binding.get(event.getSource());
+            if ((memberPath != null) && (editableEntity != null)) {
+                Object value = event.getValue();
+                if (value instanceof IEntity) {
+                    value = ((IEntity) value).getValue();
+                } else if ((value instanceof Date)) {
+                    Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    if (cls.equals(java.sql.Date.class)) {
+                        value = new java.sql.Date(((Date) value).getTime());
+                    }
+                }
+                editableEntity.setValue(memberPath, value);
+            }
+        }
+    }
 
     public static <T extends IEntity> EntityBinder<T> create(Class<T> clazz, EditableComponentFactory factory) {
         return new EntityBinder<T>(clazz, factory);
@@ -60,6 +85,7 @@ public class EntityBinder<E extends IEntity> {
     public EntityBinder(Class<E> clazz, EditableComponentFactory factory) {
         this.factory = factory;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
+        valuePropagation = new ValuePropagation();
     }
 
     public E proto() {
@@ -104,7 +130,9 @@ public class EntityBinder<E extends IEntity> {
         return component;
     }
 
+    @SuppressWarnings("unchecked")
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+        component.addValueChangeHandler(valuePropagation);
         applyAttributes(component, member);
         binding.put(component, member.getPath());
     }
@@ -129,19 +157,11 @@ public class EntityBinder<E extends IEntity> {
 
     @SuppressWarnings("unchecked")
     public void populate(E entity) {
-        this.origEntity = entity;
         if (entity != null) {
-            log.debug("populate {}", entity);
-            this.editableEntity = (E) entity.cloneEntity();
+            this.editableEntity = entity;
         } else {
             this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
         }
-        populateComponents();
-    }
-
-    public void populateModel(E entity) {
-        this.origEntity = entity;
-        this.editableEntity = entity;
         populateComponents();
     }
 
@@ -168,10 +188,6 @@ public class EntityBinder<E extends IEntity> {
 
     public E getValue() {
         return editableEntity;
-    }
-
-    public E getOrigValue() {
-        return origEntity;
     }
 
     public String getTitle() {

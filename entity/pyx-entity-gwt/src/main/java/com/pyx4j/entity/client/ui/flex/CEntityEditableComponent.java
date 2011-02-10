@@ -22,14 +22,12 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public class CEntityEditableComponent<E extends IEntity, T extends Widget> extends CEditableComponent<E, NativeEntityEditor<E, T>> implements
-        DelegatingEntityEditableComponent<E> {
+public class CEntityEditableComponent<E extends IEntity, T extends Widget> extends CEditableComponent<E, NativeEntityEditor<E, T>> {
 
     private final EntityBinder<E> binder;
 
@@ -59,11 +57,6 @@ public class CEntityEditableComponent<E extends IEntity, T extends Widget> exten
     public void populate(E value) {
         binder.populate(value);
         super.populate(binder.getValue());
-    }
-
-    @Override
-    public void populateModel(E orig, E value) {
-        binder.populateModel(value);
     }
 
     public <Y> CEditableComponent<Y, ?> create(IObject<Y> member) {
