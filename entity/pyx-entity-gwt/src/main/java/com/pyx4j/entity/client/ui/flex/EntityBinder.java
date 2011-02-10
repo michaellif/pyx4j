@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.entity.client.ui;
+package com.pyx4j.entity.client.ui.flex;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.client.ui.CEntityForm;
+import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -36,7 +39,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
 
-public class EntityPresenter<E extends IEntity> {
+public class EntityBinder<E extends IEntity> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
@@ -50,11 +53,11 @@ public class EntityPresenter<E extends IEntity> {
 
     private final HashMap<CEditableComponent<?, ?>, Path> binding = new HashMap<CEditableComponent<?, ?>, Path>();
 
-    public static <T extends IEntity> EntityPresenter<T> create(EditableComponentFactory factory, Class<T> clazz) {
-        return new EntityPresenter<T>(factory, clazz);
+    public static <T extends IEntity> EntityBinder<T> create(Class<T> clazz, EditableComponentFactory factory) {
+        return new EntityBinder<T>(clazz, factory);
     }
 
-    public EntityPresenter(EditableComponentFactory factory, Class<E> clazz) {
+    public EntityBinder(Class<E> clazz, EditableComponentFactory factory) {
         this.factory = factory;
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
     }
@@ -133,6 +136,12 @@ public class EntityPresenter<E extends IEntity> {
         } else {
             this.editableEntity = EntityFactory.create((Class<E>) proto().getObjectClass());
         }
+        populateComponents();
+    }
+
+    public void populateModel(E entity) {
+        this.origEntity = entity;
+        this.editableEntity = entity;
         populateComponents();
     }
 
