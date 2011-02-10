@@ -20,7 +20,10 @@ public interface Floorplan extends IEntity {
 
     IPrimitive<String> name();
 
-    Picture picture();
+    /**
+     * Contains the picture of the floorplan / model unit
+     */
+    IPrimitive<byte[]> picture();
 
     /**
      * Approximate value of square ft. size of unit
