@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.AccountCreationRequest;
 import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
-import com.pyx4j.entity.client.ui.EntityPresenter;
+import com.pyx4j.entity.client.ui.flex.EntityBinder;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
@@ -41,7 +41,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     public CreateAccountViewImpl() {
 
-        EntityPresenter<AccountCreationRequest> ep = EntityPresenter.create(new BaseEditableComponentFactory(), AccountCreationRequest.class);
+        EntityBinder<AccountCreationRequest> ep = EntityBinder.create(AccountCreationRequest.class, new BaseEditableComponentFactory());
 
         ep.create(ep.proto().email());
 

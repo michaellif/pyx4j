@@ -9,10 +9,13 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.tester.domain.Department;
+import com.propertyvista.portal.tester.domain.Employee;
 
-import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
-import com.pyx4j.entity.client.ui.EntityPresenter;
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.FlexEditableComponentFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartmentView {
 
@@ -20,16 +23,52 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     private Presenter presenter;
 
-    private final EntityPresenter<Department> ep;
+    private final CEntityEditableComponent<Department, VerticalPanel> editor;
+
+    private static class EmployeeEditableComponentFactory extends FlexEditableComponentFactory {
+
+        @Override
+        protected CEditableComponent<?, ?> createEntityEditor(IObject<?> member) {
+            if (member.getValueClass().equals(Employee.class)) {
+                return createEmployeeEditor(member);
+            } else {
+                return super.createEntityEditor(member);
+            }
+        }
+
+        public CEditableComponent<?, ?> createEmployeeEditor(IObject<?> member) {
+            return new CEntityEditableComponent<Employee, VerticalPanel>(Employee.class, new VerticalPanel(), this) {
+
+                @Override
+                public void createLayout() {
+                    content().add(create(proto().firstName()));
+                }
+
+            };
+        }
+    }
 
     public EditDepartmentViewImpl() {
         Label labael = new Label("DepartmentView");
         labael.setSize("300px", "100px");
         add(labael);
 
-        ep = EntityPresenter.create(new BaseEditableComponentFactory(), Department.class);
+        //editor = CEntityEditableComponent.create(Department.class, new VerticalPanel(), new EmployeeEditableComponentFactory());
+        //editor.content().add(editor.binder().create(editor.proto().name()));
+        //editor.content().add(editor.binder().create(editor.proto().employees()));
 
-        add(ep.create(ep.proto().name()));
+        editor = new CEntityEditableComponent<Department, VerticalPanel>(Department.class, new VerticalPanel(), new EmployeeEditableComponentFactory()) {
+
+            @Override
+            public void createLayout() {
+                content().add(create(proto().name()));
+                content().add(create(proto().manager()));
+                //content().add(create(proto().employees()));
+            }
+
+        };
+
+        add(editor);
 
         Button signUpButton = new Button(i18n.tr("Save"));
         signUpButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
@@ -37,7 +76,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.save(ep.getValue());
+                presenter.save(editor.binder().getValue());
             }
 
         });
@@ -53,6 +92,6 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     @Override
     public void populate(Department entity) {
-        ep.populate(entity);
+        editor.populate(entity);
     }
 }

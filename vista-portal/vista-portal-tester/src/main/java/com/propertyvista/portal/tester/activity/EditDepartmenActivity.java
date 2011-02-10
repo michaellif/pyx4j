@@ -55,6 +55,7 @@ public class EditDepartmenActivity extends AbstractActivity implements EditDepar
         {
             Department department = EntityFactory.create(Department.class);
             department.name().setValue("R&D");
+            department.manager().firstName().setValue("The manager");
             {
                 Employee emp = department.employees().$();
                 emp.firstName().setValue("John");
