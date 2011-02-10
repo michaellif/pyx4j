@@ -13,10 +13,14 @@
  */
 package com.propertyvista.portal.tester.domain;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Employee extends IEntity {
 
+    @Caption(name = "First Name", description = "Specify First Name")
+    @NotNull
     IPrimitive<String> firstName();
 }

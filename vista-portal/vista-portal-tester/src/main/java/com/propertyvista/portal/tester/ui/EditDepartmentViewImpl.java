@@ -17,6 +17,7 @@ import com.pyx4j.entity.client.ui.flex.FlexEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartmentView {
 
@@ -44,7 +45,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
                 @Override
                 public void createLayout() {
-                    content().add(create(proto().firstName()));
+                    content().add(new WidgetDecorator(create(proto().firstName())));
                 }
 
             };
@@ -64,7 +65,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
             @Override
             public void createLayout() {
-                content().add(create(proto().name()));
+                content().add(new WidgetDecorator(create(proto().name())));
                 content().add(create(proto().manager()));
                 //content().add(create(proto().employees()));
             }
