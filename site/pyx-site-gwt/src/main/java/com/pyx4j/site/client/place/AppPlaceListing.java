@@ -20,11 +20,13 @@
  */
 package com.pyx4j.site.client.place;
 
+import java.util.List;
+
 public interface AppPlaceListing {
 
     AppPlace getPlace(String token);
 
     AppPlaceInfo getPlaceInfo(AppPlace place);
 
-    AppPlace[] getPlacesByType(String type);
+    public List<AppPlace> getTopNavigation();
 }

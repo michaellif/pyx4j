@@ -47,6 +47,8 @@ import com.pyx4j.site.client.place.AppPlaceInfo;
 
 public class AppPlaceListingGenerator extends Generator {
 
+    private JClassType placeType;
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         TypeOracle oracle = context.getTypeOracle();
@@ -57,13 +59,16 @@ public class AppPlaceListingGenerator extends Generator {
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
             composer.addImplementedInterface(typeName);
             composer.addImport(Map.class.getName());
+            composer.addImport(List.class.getName());
+            composer.addImport(ArrayList.class.getName());
             composer.addImport(HashMap.class.getName());
             composer.addImport(JsArrayString.class.getName());
             composer.addImport(GWT.class.getName());
             composer.addImport(AppPlaceHistoryMapper.class.getName());
             composer.addImport(AppPlace.class.getName());
-            composer.addImport(NavigationItem.class.getName());
             composer.addImport(AppPlaceInfo.class.getName());
+            composer.addImport(NavigationItem.class.getName());
+            composer.addImport(PlaceProperties.class.getName());
 
             PrintWriter printWriter = context.tryCreate(logger, composer.getCreatedPackage(), composer.getCreatedClassShortName());
             if (printWriter == null) {
@@ -71,7 +76,7 @@ public class AppPlaceListingGenerator extends Generator {
                 return packageName + "." + simpleName;
             }
 
-            JClassType placeType = oracle.getType(AppPlace.class.getName());
+            placeType = oracle.getType(AppPlace.class.getName());
             List<JClassType> placeClasses = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
@@ -99,7 +104,7 @@ public class AppPlaceListingGenerator extends Generator {
         writer.indent();
 
         for (JClassType jClassType : placeClasses) {
-            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
+            String type = jClassType.getQualifiedSourceName();
             writer.println("if (token.equals(AppPlaceHistoryMapper.getPlaceId(" + type + ".class))) {");
             writer.indent();
             writer.println("return new " + type + "();");
@@ -119,8 +124,7 @@ public class AppPlaceListingGenerator extends Generator {
         writer.indent();
 
         for (JClassType jClassType : placeClasses) {
-            String type = jClassType.getPackage().getName() + "." + jClassType.getName();
-            writer.println("if (place.getClass() == " + type + ".class) {");
+            writer.println("if (place.getClass() == " + jClassType.getQualifiedSourceName() + ".class) {");
             writer.indent();
             NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
             PlaceProperties placeProperties = jClassType.getAnnotation(PlaceProperties.class);
@@ -133,6 +137,26 @@ public class AppPlaceListingGenerator extends Generator {
         }
 
         writer.println("return null;");
+        writer.outdent();
+        writer.println("}");
+
+        writer.println();
+
+        //getPlaceInfo()
+        writer.println("@Override");
+        writer.println("public List<AppPlace> getTopNavigation() {");
+        writer.indent();
+        writer.println("List<AppPlace> places = new ArrayList<AppPlace>();");
+
+        for (JClassType jClassType : placeClasses) {
+            String type = jClassType.getQualifiedSourceName();
+            NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
+            if (!jClassType.getEnclosingType().isAssignableFrom(placeType) && navigationItem != null) {
+                writer.println("places.add(new " + type + "());");
+            }
+        }
+
+        writer.println("return places;");
         writer.outdent();
         writer.println("}");
 
