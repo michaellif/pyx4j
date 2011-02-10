@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.rpc.pt;
 
-import com.propertyvista.portal.rpc.AccountCreationRequest;
 
 import com.pyx4j.rpc.shared.Service;
 import com.pyx4j.security.rpc.AuthenticationResponse;

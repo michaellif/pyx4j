@@ -11,10 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.pt;
 
 import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.rpc.PotencialTenantServices;
+import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
 public class PotencialTenantServicesImpl implements PotencialTenantServices {
 

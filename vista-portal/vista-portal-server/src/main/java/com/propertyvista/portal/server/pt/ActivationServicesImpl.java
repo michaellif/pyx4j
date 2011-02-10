@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.User;
-import com.propertyvista.portal.rpc.AccountCreationRequest;
+import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.server.access.AntiBot;
 import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
