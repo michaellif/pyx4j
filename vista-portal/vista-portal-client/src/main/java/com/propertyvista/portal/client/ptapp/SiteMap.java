@@ -13,53 +13,60 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
-import com.pyx4j.site.client.NavigationItem;
+import com.pyx4j.site.client.annotations.NavigationItem;
+import com.pyx4j.site.client.annotations.PlaceProperties;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class SiteMap {
 
-    @NavigationItem(caption = "Application Form")
+    @PlaceProperties(caption = "Application Form")
     public static class SignIn extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Apartment", caption = "Apartment Info", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Apartment")
+    @PlaceProperties(caption = "Apartment Info")
     public static class Apartment extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Tenants", caption = "Tenants", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Tenants")
+    @PlaceProperties(caption = "Tenants")
     public static class Tenants extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Info", caption = "Info", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Info")
+    @PlaceProperties(caption = "Info")
     public static class Info extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Financial", caption = "Financial", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Financial")
+    @PlaceProperties(caption = "Financial")
     public static class Financial extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Pets", caption = "Pets", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Pets")
+    @PlaceProperties(caption = "Pets")
     public static class Pets extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Payments", caption = "Payments", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Payments")
+    @PlaceProperties(caption = "Payments")
     public static class Payments extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Summary", caption = "Summary", type = NavigationItem.TOP)
+    @NavigationItem(navigLabel = "Summary")
+    @PlaceProperties(caption = "Summary")
     public static class Summary extends AppPlace {
     }
 
-    @NavigationItem(caption = "Privacy policy", type = NavigationItem.ACTIONS, resource = "privacyPolicy.html")
+    @PlaceProperties(caption = "Privacy policy", staticContent = "privacyPolicy")
     public static class PrivacyPolicy extends AppPlace {
     }
 
-    @NavigationItem(caption = "Terms and conditions", type = NavigationItem.ACTIONS, resource = "termsAndConditions.html")
+    @PlaceProperties(caption = "Terms and conditions", staticContent = "termsAndConditions")
     public static class TermsAndConditions extends AppPlace {
     }
 
-    //note - logout is special case, handled manually
-    @NavigationItem(caption = "LogOut")
+    @PlaceProperties(caption = "LogOut")
     public static class LogOut extends AppPlace {
     }
 

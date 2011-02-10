@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -21,7 +24,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 
-import com.pyx4j.site.client.NavigationItem;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
 
@@ -61,8 +63,8 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     }
 
     @Override
-    public AppPlace[] getTopLevelPlaces() {
-        return appPlaceListing.getPlacesByType(NavigationItem.TOP);
+    public List<AppPlace> getTopLevelPlaces() {
+        return new ArrayList<AppPlace>();
     }
 
 }

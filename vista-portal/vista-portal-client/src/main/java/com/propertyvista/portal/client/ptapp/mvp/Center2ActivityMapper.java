@@ -25,6 +25,7 @@ import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
 import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
 import com.propertyvista.portal.client.ptapp.activity.PaymentActivity;
 import com.propertyvista.portal.client.ptapp.activity.PetsActivity;
+import com.propertyvista.portal.client.ptapp.activity.StaticContentActivity;
 import com.propertyvista.portal.client.ptapp.activity.SummaryActivity;
 import com.propertyvista.portal.client.ptapp.activity.TenantsActivity;
 
@@ -48,6 +49,8 @@ public class Center2ActivityMapper implements ActivityMapper {
 
     Provider<SummaryActivity> summaryActivityProvider;
 
+    Provider<StaticContentActivity> staticContentActivity;
+
     @Inject
     public Center2ActivityMapper(final Provider<CreateAccountActivity> signInActivityProvider,
 
@@ -63,7 +66,9 @@ public class Center2ActivityMapper implements ActivityMapper {
 
     final Provider<PaymentActivity> paymentActivityProvider,
 
-    final Provider<SummaryActivity> summaryActivityProvider) {
+    final Provider<SummaryActivity> summaryActivityProvider,
+
+    final Provider<StaticContentActivity> staticContentActivity) {
 
         super();
         this.signInActivityProvider = signInActivityProvider;
@@ -74,6 +79,7 @@ public class Center2ActivityMapper implements ActivityMapper {
         this.petsActivityProvider = petsActivityProvider;
         this.paymentActivityProvider = paymentActivityProvider;
         this.summaryActivityProvider = summaryActivityProvider;
+        this.staticContentActivity = staticContentActivity;
 
     }
 
@@ -95,6 +101,10 @@ public class Center2ActivityMapper implements ActivityMapper {
             return paymentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Summary) {
             return summaryActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.TermsAndConditions) {
+            return staticContentActivity.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.PrivacyPolicy) {
+            return staticContentActivity.get().withPlace((AppPlace) place);
         }
         //TODO what to do on other place
         return null;

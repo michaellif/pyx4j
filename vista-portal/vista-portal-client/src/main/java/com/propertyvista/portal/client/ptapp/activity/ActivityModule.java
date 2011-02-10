@@ -25,6 +25,7 @@ public class ActivityModule extends AbstractGinModule {
         bind(CreateAccountActivity.class);
         bind(TopRightActionsActivity.class);
         bind(FooterActivity.class);
+        bind(StaticContentActivity.class);
 
     }
 

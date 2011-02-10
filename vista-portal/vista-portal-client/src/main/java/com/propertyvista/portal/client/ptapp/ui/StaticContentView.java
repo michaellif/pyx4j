@@ -13,28 +13,16 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class MainContentViewImpl extends HorizontalPanel implements MainContentView {
+public interface StaticContentView extends IsWidget {
 
-    private final HTML contentHTML;
+    public void setContent(String content);
 
-    private Presenter presenter;
+    public void setPresenter(Presenter presenter);
 
-    public MainContentViewImpl() {
-
-        contentHTML = new HTML();
-        add(contentHTML);
+    public interface Presenter {
+        public String getContent();
     }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void setContent(String content) {
-        contentHTML.setHTML(content);
-    }
 }

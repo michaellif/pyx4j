@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.List;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -27,6 +29,6 @@ public interface MainNavigView extends IsWidget {
 
         public String getNavigLabel(AppPlace place);
 
-        public AppPlace[] getTopLevelPlaces();
+        public List<AppPlace> getTopLevelPlaces();
     }
 }

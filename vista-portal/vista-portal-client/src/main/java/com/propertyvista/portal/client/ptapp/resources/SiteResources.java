@@ -14,9 +14,16 @@
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.TextResource;
 
 public interface SiteResources extends ClientBundleWithLookup {
 
     SiteResources INSTANCE = GWT.create(SiteResources.class);
+
+    @Source("privacyPolicy.html")
+    TextResource privacyPolicy();
+
+    @Source("termsAndConditions.html")
+    TextResource termsAndConditions();
 
 }

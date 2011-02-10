@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.CaptionView;
 
 import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.client.place.AppPlaceInfo;
 import com.pyx4j.site.client.place.AppPlaceListing;
 
 public class CaptionActivity extends AbstractActivity {
@@ -35,7 +36,10 @@ public class CaptionActivity extends AbstractActivity {
     }
 
     public CaptionActivity withPlace(AppPlace place) {
-        view.setCaption(appPlaceListing.getPlaceInfo(place).getCaption());
+        AppPlaceInfo info = appPlaceListing.getPlaceInfo(place);
+        if (info != null) {
+            view.setCaption(info.getCaption());
+        }
         return this;
     }
 

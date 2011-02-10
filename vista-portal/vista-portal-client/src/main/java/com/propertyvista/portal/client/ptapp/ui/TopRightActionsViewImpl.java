@@ -8,16 +8,21 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.propertyvista.portal.client.ptapp.SiteMap;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceInfo;
+import com.pyx4j.site.client.place.AppPlaceListing;
 
 public class TopRightActionsViewImpl extends SimplePanel implements TopRightActionsView {
 
     private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
 
     private final HorizontalPanel linksPanel;
+
+    private Presenter presenter;
 
     public TopRightActionsViewImpl() {
         linksPanel = new HorizontalPanel();
@@ -28,21 +33,19 @@ public class TopRightActionsViewImpl extends SimplePanel implements TopRightActi
 
     @Override
     public void setPresenter(final Presenter presenter) {
-        linksPanel.clear();
-        for (final AppPlaceInfo action : presenter.getActionsPlacesInfo()) {
-            CHyperlink link = new CHyperlink(null, new Command() {
-                @Override
-                public void execute() {
-                    String resource = action.getResource();
-                    //TODO: display resource!!!
-                }
-            });
-            link.setDebugId(new StringDebugId(action.getResource()));
-            link.setValue(i18n.tr(action.getNavigLabel()));
-            linksPanel.add(link);
+        this.presenter = presenter;
 
-            linksPanel.add(new HTML("&nbsp;-&nbsp;"));
-        }
+        linksPanel.clear();
+
+        NavigLink link = new NavigLink(new SiteMap.PrivacyPolicy());
+        linksPanel.add(link);
+
+        linksPanel.add(new HTML("&nbsp;-&nbsp;"));
+
+        link = new NavigLink(new SiteMap.TermsAndConditions());
+        linksPanel.add(link);
+
+        linksPanel.add(new HTML("&nbsp;-&nbsp;"));
 
         CHyperlink logout = new CHyperlink(null, new Command() {
             @Override
@@ -52,5 +55,22 @@ public class TopRightActionsViewImpl extends SimplePanel implements TopRightActi
         logout.setDebugId(new StringDebugId("logout"));
         logout.setValue(i18n.tr("LogOut"));
         linksPanel.add(logout);
+    }
+
+    private class NavigLink extends CHyperlink {
+
+        public NavigLink(final AppPlace place) {
+            super(null, new Command() {
+                @Override
+                public void execute() {
+                    presenter.getPlaceController().goTo(place);
+                }
+            });
+            AppPlaceListing listing = presenter.getAppPlaceListing();
+            AppPlaceInfo info = listing.getPlaceInfo(place);
+            setDebugId(new StringDebugId(info.getCaption()));
+            setValue(i18n.tr(info.getCaption()));
+        }
+
     }
 }
