@@ -40,11 +40,11 @@ import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.pyx4j.forms.client.ui.CLayoutConstraints;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.INativeSimplePanel;
-import com.pyx4j.widgets.client.NativeFieldSetPanel;
+import com.pyx4j.widgets.client.FieldSetPanel;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.CSSClass;
 
-public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeSimplePanel {
+public class NativeGroupBoxPanel extends FieldSetPanel implements INativeSimplePanel {
 
     private final CGroupBoxPanel panel;
 
@@ -93,6 +93,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         case COLLAPSIBLE:
             collapseImage = new Image();
             ClickHandler expandClickHandler = new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     setExpanded(!panel.isExpended());
                 }
@@ -115,6 +116,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         case CHECKBOX_TOGGLE:
             collapseCheckBox = new PlainCheckBox();
             ClickHandler expandClickHandlerCheckBox = new ClickHandler() {
+                @Override
                 public void onClick(ClickEvent event) {
                     setExpanded(!panel.isExpended());
                 }
@@ -142,6 +144,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         setCaption(panel.getTitle());
 
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
                 if (PropertyChangeEvent.PropertyName.TITLE_PROPERTY == propertyChangeEvent.getPropertyName()) {
                     setCaption(panel.getTitle());
@@ -170,6 +173,7 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         return caption.getText();
     }
 
+    @Override
     public void add(INativeComponent nativeWidget, CLayoutConstraints layoutConstraints) {
         Widget w = (Widget) nativeWidget;
         if (container == null) {
@@ -183,13 +187,16 @@ public class NativeGroupBoxPanel extends NativeFieldSetPanel implements INativeS
         w.setWidth("100%");
     }
 
+    @Override
     public CGroupBoxPanel getCComponent() {
         return panel;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
