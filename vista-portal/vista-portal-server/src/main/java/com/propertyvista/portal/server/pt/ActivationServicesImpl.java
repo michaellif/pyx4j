@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
 import com.propertyvista.portal.server.access.AntiBot;
@@ -83,6 +84,7 @@ public class ActivationServicesImpl implements ActivationServices {
             user.name().setValue(request.email().getValue());
 
             credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword(request.password().getValue()));
+            credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
 
             PersistenceServicesFactory.getPersistenceService().persist(user);
             credential.setPrimaryKey(user.getPrimaryKey());
