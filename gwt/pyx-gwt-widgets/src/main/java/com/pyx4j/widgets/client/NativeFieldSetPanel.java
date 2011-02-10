@@ -18,7 +18,7 @@
  * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.gwt;
+package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.KeyUpEvent;

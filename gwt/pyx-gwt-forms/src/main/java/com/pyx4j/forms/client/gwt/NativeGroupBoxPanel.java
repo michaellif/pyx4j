@@ -40,6 +40,7 @@ import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 import com.pyx4j.forms.client.ui.CLayoutConstraints;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.INativeSimplePanel;
+import com.pyx4j.widgets.client.NativeFieldSetPanel;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.CSSClass;
 
