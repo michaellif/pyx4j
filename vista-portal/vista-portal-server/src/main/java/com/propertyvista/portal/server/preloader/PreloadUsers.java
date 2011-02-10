@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -60,7 +61,7 @@ public class PreloadUsers extends AbstractDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(email);
+        credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
         credential.behavior().setValue(behavior);
 

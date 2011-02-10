@@ -26,6 +26,10 @@ import com.pyx4j.security.shared.AclCreator;
 
 public class VistaServerSideConfiguration extends EssentialsServerSideConfiguration {
 
+    static final String recaptchaPrivateKey = "6LfVZMESAAAAANrD2Ln5t4yWg3czLMBjQRuKosGx";
+
+    static final String recaptchaPublicKey = "6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth";
+
     @Override
     public AclCreator getAclCreator() {
         return new VistaAccessControlList();
@@ -60,4 +64,18 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
             }
         };
     }
+
+    @Override
+    public boolean isDevelopmentBehavior() {
+        return true;
+    }
+
+    public String getReCaptchaPrivateKey() {
+        return recaptchaPrivateKey;
+    }
+
+    public String getReCaptchaPublicKey() {
+        return recaptchaPublicKey;
+    }
+
 }

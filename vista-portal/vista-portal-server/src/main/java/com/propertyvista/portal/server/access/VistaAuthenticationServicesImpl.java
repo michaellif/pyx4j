@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.server.domain.UserCredential;
@@ -31,6 +33,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -46,6 +49,8 @@ import com.pyx4j.server.contexts.Lifecycle;
 public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl {
 
     private final static Logger log = LoggerFactory.getLogger(VistaAuthenticationServicesImpl.class);
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     public static class AuthenticateImpl implements AuthenticationServices.Authenticate, IsIgnoreSessionTokenService {
 
@@ -66,7 +71,7 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
             if (users.size() != 1) {
                 log.debug("Invalid log-in attempt {} rs {}", email, users.size());
                 if (AbstractAntiBot.authenticationFailed(email)) {
-                    throw new ChallengeVerificationRequired("Too many failed log-in attempts");
+                    throw new ChallengeVerificationRequired(i18n.tr("Too many failed log-in attempts"));
                 } else {
                     throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
@@ -75,15 +80,15 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
 
             UserCredential cr = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
             if (cr == null) {
-                throw new RuntimeException("Invalid user account, contact support");
+                throw new RuntimeException(i18n.tr("Invalid user account, contact support"));
             }
             if (!cr.enabled().isBooleanTrue()) {
                 throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
-            if (!request.password().getValue().equals(cr.credential().getValue())) {
+            if (!checkPassword(request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(email)) {
-                    throw new ChallengeVerificationRequired("Too many failed log-in attempts");
+                    throw new ChallengeVerificationRequired(i18n.tr("Too many failed log-in attempts"));
                 } else {
                     throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
@@ -95,11 +100,21 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
         }
     }
 
-    static void beginSession(User user, UserCredential userCredential) {
+    public static void beginSession(User user, UserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         Lifecycle.beginSession(visit, behaviors);
+    }
+
+    public static String encryptPassword(String userPassword) {
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        return passwordEncryptor.encryptPassword(userPassword);
+    }
+
+    public static boolean checkPassword(String inputPassword, String encryptedPassword) {
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        return passwordEncryptor.checkPassword(inputPassword, encryptedPassword);
     }
 }
