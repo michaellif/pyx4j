@@ -12,6 +12,9 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +28,8 @@ import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.Complex;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.Email;
-import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Email.EmailType;
+import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Unit;
@@ -38,6 +41,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.gwt.server.IOUtils;
 
 public class PreloadBuildings extends AbstractDataPreloader {
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
@@ -97,8 +101,21 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         floorplan.area().setValue(1200);
         floorplan.name().setValue("Luxury 2-bedroom");
-        // TODO Vlad - need to know how to deal with binaries in the file. did not see the right information
-        //        floorplan.picture().
+
+        // for now save just one picture
+        int imageIndex = RandomUtil.randomInt(3) + 1;
+        String filename = "com/propertyvista/portal/server/preloader/apartment" + imageIndex + ".jpg";
+        try {
+            byte[] picture = IOUtils.getResource(filename);
+            if (picture == null) {
+                log.info("Could not find picture [" + filename + "] in classpath");
+            } else {
+                //            log.info("Picture size is: " + picture.length);
+                floorplan.picture().setValue(picture);
+            }
+        } catch (Exception e) {
+            log.error("Failed to read the file [" + filename + "]", e);
+        }
 
         return floorplan;
     }
@@ -126,7 +143,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return building;
     }
 
-    public Unit createUnit(Building building, int floor, int area, float bedrooms, float bathrooms, Floorplan floorplan) {
+    private Unit createUnit(Building building, int floor, int area, float bedrooms, float bathrooms, Floorplan floorplan) {
         Unit unit = EntityFactory.create(Unit.class);
 
         unit.building().set(building);
@@ -136,8 +153,8 @@ public class PreloadBuildings extends AbstractDataPreloader {
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
 
-        // for now will not be saving this, until I will figure out a way to save pictures
-        //        unit.floorplan().set(floorplan);
+        PersistenceServicesFactory.getPersistenceService().persist(floorplan);
+        unit.floorplan().set(floorplan);
 
         PersistenceServicesFactory.getPersistenceService().persist(unit);
 
@@ -253,6 +270,8 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 b.append(unit.floor().getStringView()).append(" floor");
                 b.append(" ");
                 b.append(unit.area().getStringView()).append(" sq. ft.");
+                b.append(" ");
+                b.append(unit.floorplan().name()).append(" ").append(unit.floorplan().picture());
                 b.append("\n");
             }
         }
