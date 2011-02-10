@@ -47,9 +47,11 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -365,8 +367,10 @@ public class EntityMetaWriter {
 
             String useDefaultData = selectDefaultData(data);
 
-            boolean requireAdditionalData = (method.isAnnotationPresent(Editor.class)) || (method.isAnnotationPresent(NotNull.class))
-                    || (method.isAnnotationPresent(Pattern.class));
+            boolean requireAdditionalData = (method.isAnnotationPresent(Editor.class))
+                    || (method.isAnnotationPresent(NotNull.class))
+                    || (method.isAnnotationPresent(Pattern.class) || (method.isAnnotationPresent(ReadOnly.class)) || (method
+                            .isAnnotationPresent(Timestamp.class)));
 
             /// Write implementation
             //writer.println("if (\"" + method.getName() + "\".equals(memberName)) {");
@@ -415,6 +419,8 @@ public class EntityMetaWriter {
 
                 addValidatorAnnotation(writer, method, NotNull.class);
                 addValidatorAnnotation(writer, method, Pattern.class);
+                addValidatorAnnotation(writer, method, ReadOnly.class);
+                addValidatorAnnotation(writer, method, Timestamp.class);
 
                 writer.println("return mm;");
             }
