@@ -11,8 +11,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.Currency;
+import com.propertyvista.portal.domain.Floorplan;
+import com.propertyvista.portal.domain.Unit;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;

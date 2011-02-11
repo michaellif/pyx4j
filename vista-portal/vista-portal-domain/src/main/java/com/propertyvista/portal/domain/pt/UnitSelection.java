@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.AvalableUnitsByFloorplan;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Unit;
 
