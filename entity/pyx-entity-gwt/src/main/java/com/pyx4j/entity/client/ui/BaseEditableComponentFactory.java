@@ -48,6 +48,7 @@ import com.pyx4j.forms.client.ui.CTimeField;
 
 public class BaseEditableComponentFactory implements EditableComponentFactory {
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
@@ -64,13 +65,13 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 return new CRichTextAreaPopup();
             case combo:
                 if (mm.isEntity()) {
-                    CEntityComboBox<?> comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+                    CEntityComboBox comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
                     if (mm.isEmbedded()) {
                         comp.setUseNamesComparison(true);
                     }
                     return comp;
                 } else {
-                    CComboBox<?> comp = new CComboBox();
+                    CComboBox comp = new CComboBox();
                     if (mm.getValueClass().isEnum()) {
                         comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
                     }
@@ -110,7 +111,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             }
             return comp;
         } else if (mm.getValueClass().isEnum()) {
-            CComboBox<?> comp = new CComboBox();
+            CComboBox comp = new CComboBox();
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             return comp;
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
