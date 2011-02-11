@@ -12,11 +12,9 @@ import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.EntityChangeManager;
 import com.pyx4j.entity.client.ui.flex.FlexEditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartmentView {
@@ -25,31 +23,44 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     private Presenter presenter;
 
-    private final EntityChangeManager<Department> changeManager;
+    private final DepartmentComponentFactory factory;
 
-    private final CEntityEditableComponent<Department, VerticalPanel> editor;
+    private static class DepartmentComponentFactory extends FlexEditableComponentFactory<Department> {
 
-    private static class EmployeeEditableComponentFactory extends FlexEditableComponentFactory {
+        public DepartmentComponentFactory() {
+            super(Department.class);
+        }
 
         @Override
-        protected CEditableComponent<?, ?> createEntityEditor(IObject<?> member) {
+        public void createEntityLayout() {
+            VerticalPanel main = new VerticalPanel();
+            setWidget(main);
+            main.add(new WidgetDecorator(create(proto().name())));
+            main.add(create(proto().manager()));
+            //content().add(create(proto().employees()));
+        }
+
+        @Override
+        protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
             if (member.getValueClass().equals(Employee.class)) {
                 return createEmployeeEditor(member);
             } else {
-                return super.createEntityEditor(member);
+                return super.createMemberEditor(member);
             }
         }
 
-        public CEditableComponent<?, ?> createEmployeeEditor(IObject<?> member) {
-            return new CEntityEditableComponent<Employee, VerticalPanel>(Employee.class, new VerticalPanel(), this) {
+        public CEntityEditableComponent<?> createEmployeeEditor(IObject<?> member) {
+            return new CEntityEditableComponent<Employee>(Employee.class, this) {
 
                 @Override
                 public void createLayout() {
-                    content().add(new WidgetDecorator(create(proto().firstName())));
+                    VerticalPanel main = new VerticalPanel();
+                    setWidget(main);
+                    main.add(new WidgetDecorator(create(proto().firstName())));
                 }
-
             };
         }
+
     }
 
     public EditDepartmentViewImpl() {
@@ -61,18 +72,9 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
         //editor.content().add(editor.binder().create(editor.proto().name()));
         //editor.content().add(editor.binder().create(editor.proto().employees()));
 
-        editor = new CEntityEditableComponent<Department, VerticalPanel>(Department.class, new VerticalPanel(), new EmployeeEditableComponentFactory()) {
+        factory = new DepartmentComponentFactory();
 
-            @Override
-            public void createLayout() {
-                content().add(new WidgetDecorator(create(proto().name())));
-                content().add(create(proto().manager()));
-                //content().add(create(proto().employees()));
-            }
-
-        };
-
-        changeManager = new EntityChangeManager<Department>(Department.class);
+        final CEntityEditableComponent<Department> editor = factory.getEntityEditor();
 
         add(editor);
 
@@ -98,7 +100,6 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     @Override
     public void populate(Department entity) {
-        changeManager.populate(entity);
-        editor.populate(changeManager.getValue());
+        factory.populate(entity);
     }
 }
