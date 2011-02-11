@@ -144,7 +144,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 });
                 break;
             case REPORT:
-                actionsPanel.addItem(i18n.tr("Generate Report"), CrudDebugId.Crud_Report, new ClickHandler() {
+                actionsPanel.addItem(i18n.tr("Download"), CrudDebugId.Crud_Download, new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {

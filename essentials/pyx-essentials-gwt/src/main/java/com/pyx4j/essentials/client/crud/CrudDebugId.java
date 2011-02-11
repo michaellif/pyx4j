@@ -32,7 +32,7 @@ public enum CrudDebugId implements IDebugId {
 
     Crud_New,
 
-    Crud_Report,
+    Crud_Download,
 
     Criteria_Clear,
 
