@@ -1,6 +1,5 @@
 package com.pyx4j.dashboard.client;
 
-import java.util.LinkedList;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -265,7 +264,7 @@ public class DashboardPanel extends SimplePanel {
                     getColumnWidgetsPanel(i).add(columnWidgetsPanels.get(i).getWidget(0));
             }
         } else { // 'equalize' gadgets per columns:
-            LinkedList<Widget> allGadgets = new LinkedList<Widget>();
+            Vector<Widget> allGadgets = new Vector<Widget>(gadgetsCount);
             for (int i = 0; i < columnWidgetsPanels.size(); ++i)
                 for (int j = 0; j < columnWidgetsPanels.get(i).getWidgetCount(); ++j)
                     allGadgets.add(columnWidgetsPanels.get(i).getWidget(j));
@@ -273,8 +272,10 @@ public class DashboardPanel extends SimplePanel {
             int gadgetsPerColumn = gadgetsCount / columnsContainerPanel.getWidgetCount();
             for (int i = 0; i < columnsContainerPanel.getWidgetCount(); ++i) {
                 int size = (i == columnsContainerPanel.getWidgetCount() - 1 ? allGadgets.size() : Math.min(gadgetsPerColumn, allGadgets.size()));
-                for (int j = 0; j < size; ++j)
-                    getColumnWidgetsPanel(i).add(allGadgets.poll());
+                for (int j = 0; j < size; ++j) {
+                    getColumnWidgetsPanel(i).add(allGadgets.firstElement());
+                    allGadgets.remove(0);
+                }
             }
         }
 
@@ -559,15 +560,13 @@ public class DashboardPanel extends SimplePanel {
                 dashboardPanel.setWidget(maximizeData.boundaryPanel);
                 maximizeData.clear();
 
-                //                this.setWidth("100%");
                 widgetDragController.makeDraggable(this, title);
                 holdedGadget.onMaximize(false);
             } else { // maximize:
-                maximizeData.saveWidgetPosition((FlowPanel) getParent(), this);
+                maximizeData.saveWidgetPosition(this);
                 maximizeData.boundaryPanel = dashboardPanel.getWidget();
                 dashboardPanel.setWidget(this);
 
-                //                this.setSize("100%", "100%");
                 widgetDragController.makeNotDraggable(this);
                 holdedGadget.onMaximize(true);
             }
@@ -584,8 +583,8 @@ public class DashboardPanel extends SimplePanel {
 
             public Widget boundaryPanel;
 
-            public void saveWidgetPosition(FlowPanel currentColumn, GadgetHolder widget) {
-                columnPanel = currentColumn;
+            public void saveWidgetPosition(GadgetHolder widget) {
+                columnPanel = (FlowPanel) getParent();
                 widgetIndex = maximizeData.columnPanel.getWidgetIndex(widget);
             }
 
@@ -605,7 +604,7 @@ public class DashboardPanel extends SimplePanel {
 
         private void delete() {
             holdedGadget.onDelete();
-            ((ComplexPanel) getParent()).remove(this);
+            ((FlowPanel) getParent()).remove(this);
         }
 
         // --------------------------------------------------------------

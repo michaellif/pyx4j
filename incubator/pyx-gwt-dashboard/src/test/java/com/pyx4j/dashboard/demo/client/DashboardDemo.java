@@ -208,7 +208,7 @@ public final class DashboardDemo implements EntryPoint {
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 3; ++row) {
                 // initialize a widget
-                MyHTML widget = new MyHTML("Widget&nbsp;#" + ++count);
+                MyHTML widget = new MyHTML("Widget #" + ++count);
                 widget.setHeight(Random.nextInt(8) + 2 + "em");
                 //			dashboardPanel.insertWidget(widget, col, row);
                 dashboardPanel.addGadget(widget, col);
