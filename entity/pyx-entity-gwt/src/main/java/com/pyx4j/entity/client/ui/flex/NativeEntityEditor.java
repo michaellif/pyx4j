@@ -26,11 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeEntityEditor<E, T extends Widget> extends SimplePanel implements INativeEditableComponent<E> {
-
-    public T content() {
-        return (T) this.getWidget();
-    }
+public class NativeEntityEditor<E> extends SimplePanel implements INativeEditableComponent<E> {
 
     @Override
     public void setTabIndex(int tabIndex) {

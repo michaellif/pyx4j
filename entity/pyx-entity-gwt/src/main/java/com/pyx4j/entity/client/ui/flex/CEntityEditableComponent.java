@@ -27,18 +27,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public class CEntityEditableComponent<E extends IEntity, T extends Widget> extends CEditableComponent<E, NativeEntityEditor<E, T>> {
+public class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> {
 
     private final EntityBinder<E> binder;
 
-    public static <T extends IEntity, Y extends Widget> CEntityEditableComponent<T, Y> create(Class<T> clazz, Y content, EditableComponentFactory factory) {
-        return new CEntityEditableComponent<T, Y>(clazz, content, factory);
+    public static <T extends IEntity, Y extends Widget> CEntityEditableComponent<T> create(Class<T> clazz, EditableComponentFactory factory) {
+        return new CEntityEditableComponent<T>(clazz, factory);
     }
 
-    public CEntityEditableComponent(Class<E> clazz, T content, EditableComponentFactory factory) {
+    public CEntityEditableComponent(Class<E> clazz, EditableComponentFactory factory) {
         binder = new EntityBinder<E>(clazz, factory);
-        asWidget().setWidget(content);
-        createLayout();
     }
 
     public void createLayout() {
@@ -64,12 +62,12 @@ public class CEntityEditableComponent<E extends IEntity, T extends Widget> exten
     }
 
     @Override
-    protected NativeEntityEditor<E, T> initWidget() {
-        return new NativeEntityEditor<E, T>();
+    protected NativeEntityEditor<E> initWidget() {
+        return new NativeEntityEditor<E>();
     }
 
-    public T content() {
-        return asWidget().content();
+    public void setWidget(Widget widget) {
+        asWidget().setWidget(widget);
     }
 
 }

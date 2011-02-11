@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.EntityFormFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -28,26 +30,70 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public class FlexEditableComponentFactory extends BaseEditableComponentFactory {
+public class FlexEditableComponentFactory<E extends IEntity> extends BaseEditableComponentFactory {
+
+    private final Class<E> rootClass;
+
+    private final CEntityEditableComponent<E> entityEditor;
+
+    private final EntityChangeManager<E> changeManager;
+
+    public FlexEditableComponentFactory(Class<E> rootClass) {
+        this.rootClass = rootClass;
+        entityEditor = new CEntityEditableComponent<E>(rootClass, this) {
+
+            @Override
+            public void createLayout() {
+                createEntityLayout();
+            }
+        };
+        changeManager = new EntityChangeManager<E>(rootClass);
+        entityEditor.createLayout();
+    }
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getObjectClassType() == ObjectClassType.EntityList) {
-            return createEntityListEditor(member);
+            CEntityEditableComponent<?> comp = createMemberListEditor(member);
+            comp.createLayout();
+            return comp;
         } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
-            return createEntityEditor(member);
+            CEntityEditableComponent<?> comp = createMemberEditor(member);
+            comp.createLayout();
+            return comp;
         } else {
             return super.create(member);
         }
+
     }
 
-    protected CEditableComponent<?, ?> createEntityListEditor(IObject<?> member) {
+    protected CEntityEditableComponent<?> createMemberListEditor(IObject<?> member) {
         throw new Error("No EntityListEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
     }
 
-    protected CEditableComponent<?, ?> createEntityEditor(IObject<?> member) {
+    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
         throw new Error("No EntityEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
+    }
+
+    public CEntityEditableComponent<E> getEntityEditor() {
+        return entityEditor;
+    }
+
+    public void createEntityLayout() {
+    }
+
+    protected E proto() {
+        return entityEditor.proto();
+    }
+
+    protected void setWidget(VerticalPanel main) {
+        entityEditor.setWidget(main);
+    }
+
+    public void populate(E entity) {
+        changeManager.populate(entity);
+        entityEditor.populate(changeManager.getValue());
     }
 
     @Override
