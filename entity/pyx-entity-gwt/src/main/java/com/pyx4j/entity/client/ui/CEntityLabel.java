@@ -21,8 +21,8 @@
 package com.pyx4j.entity.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.gwt.NativeLabel;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
+import com.pyx4j.forms.client.ui.IFormat;
 
 public class CEntityLabel extends CAbstractLabel<IEntity> {
 
@@ -32,24 +32,22 @@ public class CEntityLabel extends CAbstractLabel<IEntity> {
 
     public CEntityLabel(String title) {
         super(title);
-    }
+        this.setFormat(new IFormat<IEntity>() {
 
-    @Override
-    protected NativeLabel<IEntity> createNativeLabel() {
-        return new NativeLabel<IEntity>(this) {
             @Override
-            public void setNativeValue(IEntity value) {
-                String text = "";
+            public String format(IEntity value) {
                 if (value != null) {
-                    text = value.getStringView();
-                }
-                if (isAllowHtml()) {
-                    setHTML(text);
+                    return value.getStringView();
                 } else {
-                    setText(text);
+                    return null;
                 }
             }
-        };
+
+            @Override
+            public IEntity parse(String string) {
+                return null;
+            }
+        });
     }
 
 }

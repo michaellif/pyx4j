@@ -28,6 +28,8 @@ public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
 
     private boolean allowHtml = false;
 
+    private IFormat<E> format;
+
     public CAbstractLabel() {
         this(null);
     }
@@ -35,6 +37,14 @@ public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
     public CAbstractLabel(String title) {
         super(title);
         setWidth("100%");
+    }
+
+    public void setFormat(IFormat<E> format) {
+        this.format = format;
+    }
+
+    public IFormat<E> getFormat() {
+        return format;
     }
 
     public void setWordWrap(boolean wrap) {

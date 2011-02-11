@@ -61,7 +61,11 @@ public class NativeLabel<E> extends HTML implements INativeEditableComponent<E> 
     public void setNativeValue(E value) {
         String text = "";
         if (value != null) {
-            text = value.toString();
+            if (cComponent.getFormat() != null) {
+                text = cComponent.getFormat().format(value);
+            } else {
+                text = value.toString();
+            }
         }
         if (cComponent.isAllowHtml()) {
             setHTML(text);
