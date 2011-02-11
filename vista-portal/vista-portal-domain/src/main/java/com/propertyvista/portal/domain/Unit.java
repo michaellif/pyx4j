@@ -63,6 +63,13 @@ public interface Unit extends Property {
      * and appearance of unit.
      */
     Floorplan floorplan();
+    
+    /**
+     * How much does the user need to put down
+     */
+    IPrimitive<Float> requiredDeposit();
+    
+    // need a lease-terms object
 
     IPrimitive<String> unitLeaseStatus();
 
