@@ -44,98 +44,92 @@ import com.pyx4j.forms.client.ui.CRichTextAreaPopup;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.CTimeField;
 
 public class BaseEditableComponentFactory implements EditableComponentFactory {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?, ?> comp;
         EditorType editorType = mm.getEditorType();
-
         if (editorType != null) {
             switch (editorType) {
             case text:
-                comp = new CTextField();
-                break;
+                return new CTextField();
             case password:
-                comp = new CPasswordTextField();
-                break;
+                return new CPasswordTextField();
             case textarea:
-                comp = new CTextArea();
-                break;
+                return new CTextArea();
             case richtextarea:
-                comp = new CRichTextAreaPopup();
-                break;
+                return new CRichTextAreaPopup();
             case combo:
                 if (mm.isEntity()) {
-                    comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+                    CEntityComboBox<?> comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
                     if (mm.isEmbedded()) {
-                        ((CEntityComboBox) comp).setUseNamesComparison(true);
+                        comp.setUseNamesComparison(true);
                     }
+                    return comp;
                 } else {
-                    comp = new CComboBox();
+                    CComboBox<?> comp = new CComboBox();
                     if (mm.getValueClass().isEnum()) {
-                        ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+                        comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
                     }
+                    return comp;
                 }
-                break;
             case suggest:
                 if (mm.isEntity()) {
-                    comp = new CEntitySuggestBox(mm.getCaption(), mm.getObjectClass());
+                    return new CEntitySuggestBox(mm.getCaption(), mm.getObjectClass());
                 } else {
-                    comp = new CSuggestBox();
+                    return new CSuggestBox();
                 }
-                break;
             case captcha:
-                comp = new CCaptcha();
-                break;
+                return new CCaptcha();
             case monthyearpicker:
-                comp = new CMonthYearPicker(false);
-                break;
+                return new CMonthYearPicker(false);
             case yearpicker:
-                comp = new CMonthYearPicker(true);
-                break;
+                return new CMonthYearPicker(true);
+            case timepicker:
+                return new CTimeField();
             case email:
-                comp = new CEmailField();
-                break;
+                return new CEmailField();
             case phone:
-                comp = new CPhoneField();
-                break;
+                return new CPhoneField();
             default:
                 throw new Error("Unknown ");
             }
         } else if (mm.getObjectClassType() == ObjectClassType.EntityList) {
-            comp = new CEntityFormFolder(mm.getValueClass(), createEntityFormFactory(member));
+            return new CEntityFormFolder(mm.getValueClass(), createEntityFormFactory(member));
         } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
-            comp = new CEntityFormGroup(mm.getValueClass(), createEntityFormFactory(member));
+            return new CEntityFormGroup(mm.getValueClass(), createEntityFormFactory(member));
         } else if (mm.getValueClass().equals(String.class)) {
-            comp = new CTextField();
+            return new CTextField();
         } else if (mm.isEntity()) {
-            comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            CEntityComboBox comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
             if (mm.isEmbedded()) {
-                ((CEntityComboBox) comp).setUseNamesComparison(true);
+                (comp).setUseNamesComparison(true);
             }
+            return comp;
         } else if (mm.getValueClass().isEnum()) {
-            comp = new CComboBox();
-            ((CComboBox) comp).setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+            CComboBox<?> comp = new CComboBox();
+            comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
+            return comp;
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-            comp = new CDatePicker();
+            return new CDatePicker();
         } else if (mm.getValueClass().equals(Boolean.class)) {
-            comp = new CCheckBox();
+            return new CCheckBox();
         } else if (mm.getValueClass().equals(Integer.class)) {
-            comp = new CIntegerField();
+            return new CIntegerField();
         } else if (mm.getValueClass().equals(Long.class)) {
-            comp = new CLongField();
+            return new CLongField();
         } else if (mm.getValueClass().equals(Double.class)) {
-            comp = new CDoubleField();
+            CDoubleField comp = new CDoubleField();
             if (mm.getFormat() != null) {
-                ((CDoubleField) comp).setNumberFormat(mm.getFormat());
+                (comp).setNumberFormat(mm.getFormat());
             }
+            return comp;
         } else {
-            comp = new CTextField();
+            return new CTextField();
         }
-        return comp;
     }
 
     protected EntityFormFactory<? extends IEntity> createEntityFormFactory(IObject<?> member) {
