@@ -125,7 +125,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         building.buildingType().setValue(buildingType);
         //		building.complex().
-        building.webSite().setValue(website);
+        building.website().setValue(website);
 
         building.address().set(address);
 

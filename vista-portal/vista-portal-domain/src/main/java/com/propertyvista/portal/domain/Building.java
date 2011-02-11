@@ -52,7 +52,7 @@ public interface Building extends Property {
     IPrimitive<BuildingType> buildingType();
 
     @StringLength(100)
-    IPrimitive<String> webSite();
+    IPrimitive<String> website();
 
     @Caption(name = "Address")
     @ToString(index = 1)
