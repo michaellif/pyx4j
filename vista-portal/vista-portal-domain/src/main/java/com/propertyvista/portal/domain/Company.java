@@ -26,7 +26,7 @@ public interface Company extends IEntity {
     /**
      * (max 100 char)
      */
-    IPrimitive<String> webSite();
+    IPrimitive<String> website();
 
     IPrimitive<Picture> logo();
 
