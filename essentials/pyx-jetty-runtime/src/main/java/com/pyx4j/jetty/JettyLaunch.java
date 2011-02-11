@@ -37,7 +37,7 @@ public abstract class JettyLaunch {
     }
 
     public String getWarResourceBase() {
-        return "war";
+        return "src/main/webapp";
     }
 
     public String getHashLoginServiceConfig() {
