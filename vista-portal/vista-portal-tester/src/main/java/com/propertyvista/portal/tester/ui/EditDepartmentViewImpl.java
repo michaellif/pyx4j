@@ -6,32 +6,27 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
+import com.propertyvista.portal.tester.resources.SiteImages;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityFormComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
-public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartmentView {
+public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentView {
 
     private static I18n i18n = I18nFactory.getI18n(EditDepartmentViewImpl.class);
 
@@ -39,7 +34,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     private final CEntityEditableComponent<Department> editor;
 
-    private static class DepartmentComponent extends CEntityFormComponent<Department> {
+    private static class DepartmentComponent extends CEntityForm<Department> {
 
         public DepartmentComponent() {
             super(Department.class);
@@ -47,7 +42,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
         @Override
         public void createContent() {
-            VerticalPanel main = new VerticalPanel();
+            FlowPanel main = new FlowPanel();
             main.add(new WidgetDecorator(create(proto().name(), this)));
             main.add(create(proto().manager(), this));
             main.add(create(proto().employees(), this));
@@ -64,7 +59,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
         }
 
         @Override
-        protected CEntityFolderComponent<?> createMemberFolderEditor(IObject<?> member) {
+        protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
             if (member.equals(proto().employees())) {
                 return createEmployeeFolderEditor();
             } else {
@@ -76,7 +71,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
             return new CEntityEditableComponent<Employee>(Employee.class) {
                 @Override
                 public void createContent() {
-                    VerticalPanel main = new VerticalPanel();
+                    FlowPanel main = new FlowPanel();
                     main.add(new WidgetDecorator(create(proto().firstName(), this)));
                     main.add(new WidgetDecorator(create(proto().lastName(), this)));
                     main.add(new WidgetDecorator(create(proto().phone(), this)));
@@ -85,80 +80,36 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
             };
         }
 
-        private CEntityFolderComponent<Employee> createEmployeeFolderEditor() {
-            return new CEntityFolderComponent<Employee>() {
+        private CEntityFolder<Employee> createEmployeeFolderEditor() {
+            return new CEntityFolder<Employee>() {
+
+                private List<EntityFolderColumnDescriptor> columns;
+
+                {
+                    Employee proto = EntityFactory.getEntityPrototype(Employee.class);
+                    columns = new ArrayList<EntityFolderColumnDescriptor>();
+                    columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "120px"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "120px"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.phone(), "100px"));
+                }
 
                 @Override
                 public void createContent() {
-                    setFolderDecorator(new EmployeeFolder());
+                    setFolderDecorator(new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow()));
                 }
 
                 @Override
                 protected CEntityEditableComponent<Employee> createItem() {
-                    return createEmployeeRowEditor();
+                    return createEmployeeRowEditor(columns);
                 }
 
+                private CEntityEditableComponent<Employee> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                    return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentComponent.this, SiteImages.INSTANCE.removeRow());
+                }
             };
-        }
-
-        private CEntityEditableComponent<Employee> createEmployeeRowEditor() {
-            return new CEntityEditableComponent<Employee>(Employee.class) {
-                @Override
-                public void createContent() {
-                    FlowPanel main = new FlowPanel();
-                    main.setWidth("100%");
-                    for (EntityFolderColumnDescriptor column : EmployeeFolder.columns) {
-                        CComponent<?> component = create(column.getObject(), this);
-                        component.setWidth(column.getWidth());
-                        component.asWidget().getElement().getStyle().setProperty("cssFloat", "left");
-                        main.add(component);
-                    }
-                    setWidget(main);
-                }
-
-            };
-        }
-
-        static class EmployeeFolder extends VerticalPanel implements FolderDecorator {
-
-            public static List<EntityFolderColumnDescriptor> columns;
-
-            static Employee proto = EntityFactory.getEntityPrototype(Employee.class);
-
-            static {
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.phone(), "100px"));
-            }
-
-            private final SimplePanel content;
-
-            EmployeeFolder() {
-
-                FlowPanel header = new FlowPanel();
-                header.setWidth("100%");
-                for (EntityFolderColumnDescriptor column : columns) {
-                    Label label = new Label(column.getObject().getMeta().getCaption());
-                    label.setWidth(column.getWidth());
-                    label.asWidget().getElement().getStyle().setProperty("cssFloat", "left");
-                    label.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-                    header.add(label);
-                }
-
-                add(header);
-
-                content = new SimplePanel();
-                add(content);
-
-            }
-
-            @Override
-            public void setWidget(IsWidget w) {
-                content.setWidget(w);
-            }
 
         }
+
     }
 
     public EditDepartmentViewImpl() {
