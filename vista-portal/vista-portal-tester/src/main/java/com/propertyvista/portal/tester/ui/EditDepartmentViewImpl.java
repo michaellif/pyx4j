@@ -34,9 +34,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
     private final CEntityEditableComponent<Department> editor;
 
-    private static class DepartmentComponent extends CEntityForm<Department> {
+    private static class DepartmentForm extends CEntityForm<Department> {
 
-        public DepartmentComponent() {
+        public DepartmentForm() {
             super(Department.class);
         }
 
@@ -104,7 +104,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 private CEntityEditableComponent<Employee> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                    return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentComponent.this, SiteImages.INSTANCE.removeRow());
+                    return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentForm.this, SiteImages.INSTANCE.removeRow());
                 }
             };
 
@@ -117,7 +117,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         labael.setSize("300px", "100px");
         add(labael);
 
-        editor = new DepartmentComponent();
+        editor = new DepartmentForm();
 
         add(editor);
 
@@ -127,7 +127,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.save(editor.binder().getValue());
+                presenter.save(editor.getValue());
             }
 
         });
