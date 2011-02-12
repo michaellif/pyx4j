@@ -20,12 +20,13 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 
-public class NativeEntityFolder extends SimplePanel implements INativeComponent {
+public class NativeEntityFolder extends SimplePanel implements INativeComponent, AcceptsOneWidget {
 
     @Override
     public void setEnabled(boolean enabled) {

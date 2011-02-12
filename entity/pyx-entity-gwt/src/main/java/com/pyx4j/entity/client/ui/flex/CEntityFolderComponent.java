@@ -31,6 +31,8 @@ public class CEntityFolderComponent<E extends IEntity> extends CComponent<Native
 
     private final EntityFolderBinder<E> binder;
 
+    private FolderDecorator folderDecorator;
+
     public CEntityFolderComponent(EntityFolderBinder<E> binder) {
         this.binder = binder;
     }
@@ -39,8 +41,12 @@ public class CEntityFolderComponent<E extends IEntity> extends CComponent<Native
         binder = new EntityFolderBinder<E>(clazz);
     }
 
-    public void createLayout() {
+    public void createContent() {
+    }
 
+    public void setFolderDecorator(FolderDecorator folderDecorator) {
+        this.folderDecorator = folderDecorator;
+        asWidget().setWidget(folderDecorator);
     }
 
     public EntityFolderBinder<E> binder() {
@@ -61,7 +67,7 @@ public class CEntityFolderComponent<E extends IEntity> extends CComponent<Native
     }
 
     public void setWidget(Widget widget) {
-        asWidget().setWidget(widget);
+        folderDecorator.setWidget(widget);
     }
 
 }

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -38,8 +39,7 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         binder = new EntityBinder<E>(clazz);
     }
 
-    public void createLayout() {
-
+    public void createContent() {
     }
 
     public EntityBinder<E> binder() {
@@ -60,12 +60,16 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         binder.bind(component, member);
     }
 
+    public void bindCollection(CEntityFolderComponent<?> component, IObject<?> member) {
+        //TODO
+    }
+
     @Override
     protected NativeEntityEditor<E> initWidget() {
         return new NativeEntityEditor<E>();
     }
 
-    public void setWidget(Widget widget) {
+    public void setWidget(IsWidget widget) {
         asWidget().setWidget(widget);
     }
 

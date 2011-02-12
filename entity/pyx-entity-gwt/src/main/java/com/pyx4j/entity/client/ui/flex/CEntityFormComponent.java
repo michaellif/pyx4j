@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public abstract class CEntityFormComponent<E extends IEntity> extends CEntityEditableComponent<E> {
@@ -34,23 +35,25 @@ public abstract class CEntityFormComponent<E extends IEntity> extends CEntityEdi
     public CEntityFormComponent(Class<E> rootClass) {
         super(new EntityFormBinder<E>(rootClass));
         factory = new BaseEditableComponentFactory();
-        createLayout();
+        createContent();
+
     }
 
-    public CEditableComponent<?, ?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
+    public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
         MemberMeta mm = member.getMeta();
-        CEditableComponent<?, ?> comp = null;
+        CComponent<?> comp = null;
         if (mm.getObjectClassType() == ObjectClassType.EntityList) {
-            comp = null;
-            //comp = createMemberFolderEditor(member);
-            ((CEntityEditableComponent<?>) comp).createLayout();
+            comp = createMemberFolderEditor(member);
+            ((CEntityFolderComponent<?>) comp).createContent();
+            parent.bindCollection((CEntityFolderComponent<?>) comp, member);
         } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
             comp = createMemberEditor(member);
-            ((CEntityEditableComponent<?>) comp).createLayout();
+            ((CEntityEditableComponent<?>) comp).createContent();
+            parent.bind((CEntityEditableComponent<?>) comp, member);
         } else {
             comp = factory.create(member);
+            parent.bind((CEditableComponent<?, ?>) comp, member);
         }
-        parent.bind(comp, member);
         return comp;
     }
 
