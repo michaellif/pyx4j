@@ -112,7 +112,7 @@ public abstract class AbstractEntityEditorPanel<E extends IEntity> extends Simpl
         form = formFactory.createForm();
         setStyleName(EntityCSSClass.pyx4j_Entity_EntityEditor.name());
         requresFocus = true;
-
+        this.setWidth("100%");
     }
 
     protected abstract IObject<?>[][] getFormMembers();

@@ -54,6 +54,7 @@ public abstract class EntityEditorPanel<E extends IEntity> extends AbstractEntit
         populateForm(null);
 
         VerticalPanel contentPanel = new VerticalPanel();
+        contentPanel.setWidth("100%");
         add(contentPanel);
 
         contentPanel.add(createFormWidget(LabelAlignment.LEFT));
