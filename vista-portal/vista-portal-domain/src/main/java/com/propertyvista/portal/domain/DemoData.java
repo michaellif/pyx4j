@@ -14,15 +14,15 @@
 package com.propertyvista.portal.domain;
 
 public class DemoData {
-	
-	/*
-	 * TODO vlads Why do we use two different notations for static members
-	 * Technically they are of the same kind, just different type
-	 */
+
+    /*
+     * TODO vlads Why do we use two different notations for static members Technically
+     * they are of the same kind, just different type
+     */
 
     public static int maxCustomers = 4;
 
-    public static int maxEmployee = 3;
+    public static int maxEmployee = 300;
 
     public static int maxAdmin = 2;
 
