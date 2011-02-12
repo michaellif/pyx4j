@@ -24,9 +24,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.INativeComponent;
+import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeEntityFolder extends SimplePanel implements INativeComponent, AcceptsOneWidget {
+public class NativeEntityFolder<E> extends SimplePanel implements INativeEditableComponent<E>, AcceptsOneWidget {
 
     @Override
     public void setEnabled(boolean enabled) {
@@ -44,6 +44,36 @@ public class NativeEntityFolder extends SimplePanel implements INativeComponent,
     public CComponent<?> getCComponent() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void setTabIndex(int tabIndex) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setFocus(boolean focused) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isEditable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setNativeValue(E value) {
+        // TODO Auto-generated method stub
+
     }
 
 }

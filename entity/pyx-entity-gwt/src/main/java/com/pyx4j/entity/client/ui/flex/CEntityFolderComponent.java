@@ -20,45 +20,48 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public class CEntityFolderComponent<E extends IEntity> extends CComponent<NativeEntityFolder> {
-
-    private final EntityFolderBinder<E> binder;
+public abstract class CEntityFolderComponent<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> {
 
     private FolderDecorator folderDecorator;
 
-    public CEntityFolderComponent(EntityFolderBinder<E> binder) {
-        this.binder = binder;
+    private VerticalPanel content;
+
+    public CEntityFolderComponent() {
     }
 
-    public CEntityFolderComponent(Class<E> clazz) {
-        binder = new EntityFolderBinder<E>(clazz);
-    }
+    public abstract void createContent();
 
-    public void createContent() {
-    }
+    protected abstract CEntityEditableComponent<E> createItem();
 
     public void setFolderDecorator(FolderDecorator folderDecorator) {
         this.folderDecorator = folderDecorator;
         asWidget().setWidget(folderDecorator);
+
+        content = new VerticalPanel();
+        folderDecorator.setWidget(content);
     }
 
-    public EntityFolderBinder<E> binder() {
-        return binder;
-    }
+    @Override
+    public void populate(IList<E> value) {
+        super.populate(value);
 
-    public E proto() {
-        return binder.proto();
-    }
+        //TODO reuse existing  CEntityEditableComponent.  See  CEntityFormFolder
 
-    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
-        binder.bind(component, member);
+        content.clear();
+        for (E item : value) {
+            CEntityEditableComponent<E> comp = createItem();
+            comp.createContent();
+            content.add(comp);
+            comp.populate(item);
+
+        }
     }
 
     @Override

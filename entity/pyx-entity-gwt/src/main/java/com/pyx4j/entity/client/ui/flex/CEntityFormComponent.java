@@ -45,7 +45,7 @@ public abstract class CEntityFormComponent<E extends IEntity> extends CEntityEdi
         if (mm.getObjectClassType() == ObjectClassType.EntityList) {
             comp = createMemberFolderEditor(member);
             ((CEntityFolderComponent<?>) comp).createContent();
-            parent.bindCollection((CEntityFolderComponent<?>) comp, member);
+            parent.bind((CEntityFolderComponent<?>) comp, member);
         } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
             comp = createMemberEditor(member);
             ((CEntityEditableComponent<?>) comp).createContent();

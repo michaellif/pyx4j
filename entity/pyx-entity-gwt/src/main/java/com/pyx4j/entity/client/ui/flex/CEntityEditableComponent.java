@@ -21,7 +21,6 @@
 package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -58,10 +57,6 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
 
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
-    }
-
-    public void bindCollection(CEntityFolderComponent<?> component, IObject<?> member) {
-        //TODO
     }
 
     @Override
