@@ -3,6 +3,8 @@ package com.pyx4j.dashboard.client;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -217,7 +219,7 @@ public class DashboardPanel extends SimplePanel {
     // internal data:	
     protected Layout layout;
 
-    //    // VladLL : column drag-g-drop functionality is commented till now!..
+    //    // VladLL : column drag-n-drop functionality is commented till now!..
     //    protected PickupDragController columnDragController;
 
     protected PickupDragController widgetDragController;
@@ -331,7 +333,7 @@ public class DashboardPanel extends SimplePanel {
         columnsContainerPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
         columnsContainerPanel.setWidth("100%");
 
-        //        // VladLL : column drag-g-drop functionality is commented till now!..
+        //        // VladLL : column drag-n-drop functionality is commented till now!..
         //        //initialize our column drag controller: 
         //        columnDragController = new PickupDragController(boundaryPanel, false);
         //        columnDragController.setBehaviorMultipleSelection(false);
@@ -359,12 +361,13 @@ public class DashboardPanel extends SimplePanel {
             columnCompositePanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE);
             columnCompositePanel
                     .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) * 0.995
-                            + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely that leads to last column 
-                                    // is being dropped to the left-bottom of the panel, so we leave an additional space (make columns narrower)...
+                            + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely tham Mozilla, that leads to last  
+                                    //  column is being dropped to the left-bottom corner of the panel, so we leave an additional space (make columns narrower)...
 
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "margin", "0px " + layout.getHorizontalSpacing() + "%");
-            //            DOM.setStyleAttribute(columnCompositePanel.getElement(), "padding", "0px " + layout.getHorizontalSpacing() + "%");
-            DOM.setStyleAttribute(columnCompositePanel.getElement(), "cssFloat", "left"); // this doesn't work for IE - we leave 'float: left' in css!.. 
+            // set specific formatting styles:
+            columnCompositePanel.getElement().getStyle().setMarginLeft(layout.getHorizontalSpacing(), Unit.PCT);
+            columnCompositePanel.getElement().getStyle().setMarginRight(layout.getHorizontalSpacing(), Unit.PCT);
+            columnCompositePanel.getElement().getStyle().setFloat(Float.LEFT);
 
             // put column name if necessary:
             if (layout.isColumnNames()) {
@@ -375,7 +378,7 @@ public class DashboardPanel extends SimplePanel {
 
                 columnCompositePanel.add(heading);
 
-                //                // VladLL : column drag-g-drop functionality is commented till now!..
+                //                // VladLL : column drag-n-drop functionality is commented till now!..
                 //                // make the column draggable by its heading:
                 //                columnDragController.makeDraggable(columnCompositePanel, heading);
             }
