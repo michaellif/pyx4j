@@ -5,14 +5,12 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
 
@@ -20,7 +18,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFormComponent;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -51,7 +48,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
         @Override
         protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
             if (member.getValueClass().equals(Employee.class)) {
-                return createEmployeeEditor(member);
+                return createEmployeeEditor();
             } else {
                 return super.createMemberEditor(member);
             }
@@ -59,15 +56,22 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
         @Override
         protected CEntityFolderComponent<?> createMemberFolderEditor(IObject<?> member) {
-            return new CEntityFolderComponent<Employee>(Employee.class) {
+            return new CEntityFolderComponent<Employee>() {
+
                 @Override
                 public void createContent() {
                     setFolderDecorator(new DepartmentFolder());
                 }
+
+                @Override
+                protected CEntityEditableComponent<Employee> createItem() {
+                    return createEmployeeEditor();
+                }
+
             };
         }
 
-        private CEntityEditableComponent<?> createEmployeeEditor(IObject<?> member) {
+        private CEntityEditableComponent<Employee> createEmployeeEditor() {
             return new CEntityEditableComponent<Employee>(Employee.class) {
                 @Override
                 public void createContent() {
