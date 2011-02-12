@@ -1,8 +1,7 @@
 package com.propertyvista.portal.domain.pt;
 
-import java.util.List;
-
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
@@ -28,7 +27,7 @@ public interface ApplicantInfo extends IEntity {
 
     Address previousAddress();
 
-    List<Vehicle> vehicles();
+    IList<Vehicle> vehicles();
 
     ToughQuestions questions();
 
