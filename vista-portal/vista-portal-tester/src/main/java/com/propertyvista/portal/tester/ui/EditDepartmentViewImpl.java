@@ -5,16 +5,21 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFormComponent;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
@@ -35,12 +40,12 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
         }
 
         @Override
-        public void createLayout() {
+        public void createContent() {
             VerticalPanel main = new VerticalPanel();
-            setWidget(main);
             main.add(new WidgetDecorator(create(proto().name(), this)));
             main.add(create(proto().manager(), this));
-            //main.add(create(proto().employees(), this));
+            main.add(create(proto().employees(), this));
+            setWidget(main);
         }
 
         @Override
@@ -54,20 +59,10 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
         @Override
         protected CEntityFolderComponent<?> createMemberFolderEditor(IObject<?> member) {
-            if (proto().employees().equals(member)) {
-                return createEmployeeListEditor(member);
-            } else {
-                return super.createMemberFolderEditor(member);
-            }
-        }
-
-        private CEntityFolderComponent<?> createEmployeeListEditor(IObject<?> member) {
             return new CEntityFolderComponent<Employee>(Employee.class) {
                 @Override
-                public void createLayout() {
-                    VerticalPanel main = new VerticalPanel();
-                    setWidget(main);
-                    main.add(new HTML("+++++++++++++"));
+                public void createContent() {
+                    setFolderDecorator(new DepartmentFolder());
                 }
             };
         }
@@ -75,14 +70,32 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
         private CEntityEditableComponent<?> createEmployeeEditor(IObject<?> member) {
             return new CEntityEditableComponent<Employee>(Employee.class) {
                 @Override
-                public void createLayout() {
+                public void createContent() {
                     VerticalPanel main = new VerticalPanel();
-                    setWidget(main);
                     main.add(new WidgetDecorator(create(proto().firstName(), this)));
+                    setWidget(main);
                 }
             };
         }
 
+        class DepartmentFolder extends VerticalPanel implements FolderDecorator {
+
+            private final SimplePanel content;
+
+            DepartmentFolder() {
+                content = new SimplePanel();
+                add(new HTML("+++++++++++++"));
+                add(content);
+                add(new HTML("+++++++++++++"));
+
+            }
+
+            @Override
+            public void setWidget(IsWidget w) {
+                content.setWidget(w);
+            }
+
+        }
     }
 
     public EditDepartmentViewImpl() {
