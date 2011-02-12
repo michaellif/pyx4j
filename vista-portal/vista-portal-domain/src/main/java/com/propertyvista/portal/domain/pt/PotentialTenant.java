@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Email;
-import com.propertyvista.portal.domain.Phone;
+import java.util.Date;
+
+import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,14 +28,23 @@ public interface PotentialTenant extends IEntity {
 
     IPrimitive<String> lastName();
 
-    Phone homePhone();
+    IPrimitive<Date> birthDate();
 
-    Phone mobilePhone();
+    IPrimitive<String> homePhone();
 
-    Email email();
+    IPrimitive<String> mobilePhone();
 
-    // TODO
+    IPrimitive<String> email();
+
+    IPrimitive<String> relationship();
+
+    Money payment();
+
+    IPrimitive<Boolean> dependant();
 
     IPrimitive<Boolean> takeOwnership();
 
+    PotentialTenantInfo tenantInfo();
+
+    PotentialTenantFinancial tenantFinancial();
 }

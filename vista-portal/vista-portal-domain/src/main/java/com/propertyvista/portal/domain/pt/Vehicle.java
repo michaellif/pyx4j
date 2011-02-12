@@ -14,7 +14,17 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Vehicle extends IEntity {
 
+    IPrimitive<String> plateNumber();
+
+    IPrimitive<Integer> year();
+
+    IPrimitive<String> make();
+
+    IPrimitive<String> model();
+
+    IPrimitive<String> province();
 }
