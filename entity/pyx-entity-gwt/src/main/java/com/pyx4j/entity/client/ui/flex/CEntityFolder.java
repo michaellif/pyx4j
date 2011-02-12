@@ -21,20 +21,22 @@
 package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
-public abstract class CEntityFolderComponent<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> {
+/**
+ * This component represents list of IEntities
+ */
+public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> {
 
     private FolderDecorator folderDecorator;
 
     private FlowPanel content;
 
-    public CEntityFolderComponent() {
+    public CEntityFolder() {
     }
 
     public abstract void createContent();
