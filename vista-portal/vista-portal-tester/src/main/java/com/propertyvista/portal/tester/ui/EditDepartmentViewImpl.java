@@ -1,11 +1,16 @@
 package com.propertyvista.portal.tester.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -18,9 +23,12 @@ import com.propertyvista.portal.tester.domain.Employee;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFormComponent;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartmentView {
@@ -82,7 +90,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
                 @Override
                 public void createContent() {
-                    setFolderDecorator(new DepartmentFolder());
+                    setFolderDecorator(new EmployeeFolder());
                 }
 
                 @Override
@@ -97,33 +105,51 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
             return new CEntityEditableComponent<Employee>(Employee.class) {
                 @Override
                 public void createContent() {
-                    HorizontalPanel main = new HorizontalPanel();
-                    main.add(create(proto().firstName(), this));
-                    main.add(create(proto().lastName(), this));
-                    main.add(create(proto().phone(), this));
-                    setWidget(main);
-                }
-
-                public void createHeader() {
-                    HorizontalPanel main = new HorizontalPanel();
-                    main.add(new Label(proto().firstName().getMeta().getCaption()));
-                    main.add(new Label(proto().lastName().getMeta().getCaption()));
-                    main.add(new Label(proto().phone().getMeta().getCaption()));
+                    FlowPanel main = new FlowPanel();
+                    main.setWidth("100%");
+                    for (EntityFolderColumnDescriptor column : EmployeeFolder.columns) {
+                        CComponent<?> component = create(column.getObject(), this);
+                        component.setWidth(column.getWidth());
+                        component.asWidget().getElement().getStyle().setProperty("cssFloat", "left");
+                        main.add(component);
+                    }
                     setWidget(main);
                 }
 
             };
         }
 
-        class DepartmentFolder extends VerticalPanel implements FolderDecorator {
+        static class EmployeeFolder extends VerticalPanel implements FolderDecorator {
+
+            public static List<EntityFolderColumnDescriptor> columns;
+
+            static Employee proto = EntityFactory.getEntityPrototype(Employee.class);
+
+            static {
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.phone(), "100px"));
+            }
 
             private final SimplePanel content;
 
-            DepartmentFolder() {
+            EmployeeFolder() {
+
+                FlowPanel header = new FlowPanel();
+                header.setWidth("100%");
+                for (EntityFolderColumnDescriptor column : columns) {
+                    Label label = new Label(column.getObject().getMeta().getCaption());
+                    label.setWidth(column.getWidth());
+                    label.asWidget().getElement().getStyle().setProperty("cssFloat", "left");
+                    label.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+                    header.add(label);
+                }
+
+                add(header);
+
                 content = new SimplePanel();
-                add(new HTML("+++++++++++++"));
                 add(content);
-                add(new HTML("+++++++++++++"));
 
             }
 
