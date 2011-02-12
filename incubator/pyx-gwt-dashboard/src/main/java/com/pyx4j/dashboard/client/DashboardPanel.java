@@ -8,7 +8,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -460,8 +459,8 @@ public class DashboardPanel extends SimplePanel {
             this.setWidth("100%");
 
             // don't forget about vertical spacing:
-            DOM.setStyleAttribute(this.getElement(), "margin", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
-            //            DOM.setStyleAttribute(this.getElement(), "padding", dashboardPanel.layout.getVerticalSpacing() + "px" + " 0px");
+            this.getElement().getStyle().setMarginTop(layout.getVerticalSpacing(), Unit.PX);
+            this.getElement().getStyle().setMarginBottom(layout.getVerticalSpacing(), Unit.PX);
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
