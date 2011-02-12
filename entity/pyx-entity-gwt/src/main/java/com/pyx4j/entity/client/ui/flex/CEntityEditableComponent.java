@@ -22,7 +22,6 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -31,12 +30,12 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
 
     private final EntityBinder<E> binder;
 
-    public static <T extends IEntity, Y extends Widget> CEntityEditableComponent<T> create(Class<T> clazz, EditableComponentFactory factory) {
-        return new CEntityEditableComponent<T>(clazz, factory);
+    public CEntityEditableComponent(EntityBinder<E> binder) {
+        this.binder = binder;
     }
 
-    public CEntityEditableComponent(Class<E> clazz, EditableComponentFactory factory) {
-        binder = new EntityBinder<E>(clazz, factory);
+    public CEntityEditableComponent(Class<E> clazz) {
+        binder = new EntityBinder<E>(clazz);
     }
 
     public void createLayout() {
@@ -57,8 +56,8 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         super.populate(binder.getValue());
     }
 
-    public <Y> CEditableComponent<Y, ?> create(IObject<Y> member) {
-        return binder.create(member);
+    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+        binder.bind(component, member);
     }
 
     @Override

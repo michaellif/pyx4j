@@ -38,35 +38,29 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 //TODO we need Cleanup unused / invisible data in generic way
-public class EntityChangeManager<E extends IEntity> {
+public class EntityFormBinder<E extends IEntity> extends EntityBinder<E> {
 
-    private static final Logger log = LoggerFactory.getLogger(EntityChangeManager.class);
-
-    private final Class<E> clazz;
+    private static final Logger log = LoggerFactory.getLogger(EntityFormBinder.class);
 
     private E origEntity;
 
-    private E editableEntity;
-
-    public EntityChangeManager(Class<E> clazz) {
-        this.clazz = clazz;
-    }
-
-    public E getValue() {
-        return editableEntity;
+    public EntityFormBinder(Class<E> clazz) {
+        super(clazz);
     }
 
     public E getOrigValue() {
         return origEntity;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void populate(E entity) {
+
         this.origEntity = entity;
         if (entity != null) {
-            this.editableEntity = (E) entity.cloneEntity();
+            super.populate((E) entity.cloneEntity());
         } else {
-            this.editableEntity = EntityFactory.create(clazz);
+            super.populate((E) EntityFactory.create(proto().getValueClass()));
         }
     }
 

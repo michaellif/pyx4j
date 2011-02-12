@@ -32,7 +32,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.client.ui.DelegatingEntityEditableComponent;
-import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -47,8 +46,6 @@ public class EntityBinder<E extends IEntity> {
     private static final Logger log = LoggerFactory.getLogger(EntityBinder.class);
 
     private final E entityPrototype;
-
-    private final EditableComponentFactory factory;
 
     private E editableEntity;
 
@@ -78,12 +75,7 @@ public class EntityBinder<E extends IEntity> {
         }
     }
 
-    public static <T extends IEntity> EntityBinder<T> create(Class<T> clazz, EditableComponentFactory factory) {
-        return new EntityBinder<T>(clazz, factory);
-    }
-
-    public EntityBinder(Class<E> clazz, EditableComponentFactory factory) {
-        this.factory = factory;
+    public EntityBinder(Class<E> clazz) {
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
         valuePropagation = new ValuePropagation();
     }
@@ -121,13 +113,6 @@ public class EntityBinder<E extends IEntity> {
             }
         }
         return false;
-    }
-
-    public <T> CEditableComponent<T, ?> create(IObject<T> member) {
-        @SuppressWarnings("unchecked")
-        CEditableComponent<T, ?> component = (CEditableComponent<T, ?>) factory.create(member);
-        bind(component, member);
-        return component;
     }
 
     @SuppressWarnings("unchecked")
@@ -188,10 +173,6 @@ public class EntityBinder<E extends IEntity> {
 
     public E getValue() {
         return editableEntity;
-    }
-
-    public String getTitle() {
-        return editableEntity.getStringView();
     }
 
 }
