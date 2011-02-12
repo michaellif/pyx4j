@@ -6,13 +6,16 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.FlexEditableComponentFactory;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityFormComponent;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -23,21 +26,21 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     private Presenter presenter;
 
-    private final DepartmentComponentFactory factory;
+    private final CEntityEditableComponent<Department> editor;
 
-    private static class DepartmentComponentFactory extends FlexEditableComponentFactory<Department> {
+    private static class DepartmentComponent extends CEntityFormComponent<Department> {
 
-        public DepartmentComponentFactory() {
+        public DepartmentComponent() {
             super(Department.class);
         }
 
         @Override
-        public void createEntityLayout() {
+        public void createLayout() {
             VerticalPanel main = new VerticalPanel();
             setWidget(main);
-            main.add(new WidgetDecorator(create(proto().name())));
-            main.add(create(proto().manager()));
-            //content().add(create(proto().employees()));
+            main.add(new WidgetDecorator(create(proto().name(), this)));
+            main.add(create(proto().manager(), this));
+            //main.add(create(proto().employees(), this));
         }
 
         @Override
@@ -49,14 +52,33 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
             }
         }
 
-        public CEntityEditableComponent<?> createEmployeeEditor(IObject<?> member) {
-            return new CEntityEditableComponent<Employee>(Employee.class, this) {
+        @Override
+        protected CEntityFolderComponent<?> createMemberFolderEditor(IObject<?> member) {
+            if (proto().employees().equals(member)) {
+                return createEmployeeListEditor(member);
+            } else {
+                return super.createMemberFolderEditor(member);
+            }
+        }
 
+        private CEntityFolderComponent<?> createEmployeeListEditor(IObject<?> member) {
+            return new CEntityFolderComponent<Employee>(Employee.class) {
                 @Override
                 public void createLayout() {
                     VerticalPanel main = new VerticalPanel();
                     setWidget(main);
-                    main.add(new WidgetDecorator(create(proto().firstName())));
+                    main.add(new HTML("+++++++++++++"));
+                }
+            };
+        }
+
+        private CEntityEditableComponent<?> createEmployeeEditor(IObject<?> member) {
+            return new CEntityEditableComponent<Employee>(Employee.class) {
+                @Override
+                public void createLayout() {
+                    VerticalPanel main = new VerticalPanel();
+                    setWidget(main);
+                    main.add(new WidgetDecorator(create(proto().firstName(), this)));
                 }
             };
         }
@@ -68,13 +90,7 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
         labael.setSize("300px", "100px");
         add(labael);
 
-        //editor = CEntityEditableComponent.create(Department.class, new VerticalPanel(), new EmployeeEditableComponentFactory());
-        //editor.content().add(editor.binder().create(editor.proto().name()));
-        //editor.content().add(editor.binder().create(editor.proto().employees()));
-
-        factory = new DepartmentComponentFactory();
-
-        final CEntityEditableComponent<Department> editor = factory.getEntityEditor();
+        editor = new DepartmentComponent();
 
         add(editor);
 
@@ -100,6 +116,6 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
     @Override
     public void populate(Department entity) {
-        factory.populate(entity);
+        editor.populate(entity);
     }
 }

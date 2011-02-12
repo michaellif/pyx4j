@@ -41,23 +41,23 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     public CreateAccountViewImpl() {
 
-        EntityBinder<AccountCreationRequest> ep = EntityBinder.create(AccountCreationRequest.class, new BaseEditableComponentFactory());
-
-        ep.create(ep.proto().email());
-
-        CPasswordTextField password = new CPasswordTextField();
-        ep.bind(password, ep.proto().password());
-
-        CComponent<?>[][] components = new CComponent[][] {
-
-        { ep.get(ep.proto().email()) },
-
-        { password },
-
-        };
-
-        Widget searchForm = CForm.createFormWidget(LabelAlignment.TOP, components, new StringDebugId(GWTJava5Helper.getSimpleName(CreateAccountView.class)));
-        add(searchForm);
+        //        EntityBinder<AccountCreationRequest> ep = EntityBinder.create(AccountCreationRequest.class, new BaseEditableComponentFactory());
+        //
+        //        ep.create(ep.proto().email());
+        //
+        //        CPasswordTextField password = new CPasswordTextField();
+        //        ep.bind(password, ep.proto().password());
+        //
+        //        CComponent<?>[][] components = new CComponent[][] {
+        //
+        //        { ep.get(ep.proto().email()) },
+        //
+        //        { password },
+        //
+        //        };
+        //
+        //        Widget searchForm = CForm.createFormWidget(LabelAlignment.TOP, components, new StringDebugId(GWTJava5Helper.getSimpleName(CreateAccountView.class)));
+        //        add(searchForm);
 
         Button viewButton = new Button("Let's Start");
         viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
