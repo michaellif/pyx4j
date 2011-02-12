@@ -23,4 +23,13 @@ public interface Employee extends IEntity {
     @Caption(name = "First Name", description = "Specify First Name")
     @NotNull
     IPrimitive<String> firstName();
+
+    @Caption(name = "Last Name", description = "Specify Last Name")
+    @NotNull
+    IPrimitive<String> lastName();
+
+    @Caption(name = "Phone", description = "Specify Phone")
+    @NotNull
+    IPrimitive<String> phone();
+
 }

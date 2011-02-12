@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -56,6 +57,27 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
         @Override
         protected CEntityFolderComponent<?> createMemberFolderEditor(IObject<?> member) {
+            if (member.equals(proto().employees())) {
+                return createEmployeeFolderEditor();
+            } else {
+                return super.createMemberFolderEditor(member);
+            }
+        }
+
+        private CEntityEditableComponent<Employee> createEmployeeEditor() {
+            return new CEntityEditableComponent<Employee>(Employee.class) {
+                @Override
+                public void createContent() {
+                    VerticalPanel main = new VerticalPanel();
+                    main.add(new WidgetDecorator(create(proto().firstName(), this)));
+                    main.add(new WidgetDecorator(create(proto().lastName(), this)));
+                    main.add(new WidgetDecorator(create(proto().phone(), this)));
+                    setWidget(main);
+                }
+            };
+        }
+
+        private CEntityFolderComponent<Employee> createEmployeeFolderEditor() {
             return new CEntityFolderComponent<Employee>() {
 
                 @Override
@@ -65,20 +87,31 @@ public class EditDepartmentViewImpl extends VerticalPanel implements EditDepartm
 
                 @Override
                 protected CEntityEditableComponent<Employee> createItem() {
-                    return createEmployeeEditor();
+                    return createEmployeeRowEditor();
                 }
 
             };
         }
 
-        private CEntityEditableComponent<Employee> createEmployeeEditor() {
+        private CEntityEditableComponent<Employee> createEmployeeRowEditor() {
             return new CEntityEditableComponent<Employee>(Employee.class) {
                 @Override
                 public void createContent() {
-                    VerticalPanel main = new VerticalPanel();
-                    main.add(new WidgetDecorator(create(proto().firstName(), this)));
+                    HorizontalPanel main = new HorizontalPanel();
+                    main.add(create(proto().firstName(), this));
+                    main.add(create(proto().lastName(), this));
+                    main.add(create(proto().phone(), this));
                     setWidget(main);
                 }
+
+                public void createHeader() {
+                    HorizontalPanel main = new HorizontalPanel();
+                    main.add(new Label(proto().firstName().getMeta().getCaption()));
+                    main.add(new Label(proto().lastName().getMeta().getCaption()));
+                    main.add(new Label(proto().phone().getMeta().getCaption()));
+                    setWidget(main);
+                }
+
             };
         }
 

@@ -59,11 +59,15 @@ public class EditDepartmenActivity extends AbstractActivity implements EditDepar
             {
                 Employee emp = department.employees().$();
                 emp.firstName().setValue("John");
+                emp.lastName().setValue("Dow");
+                emp.phone().setValue("444-4444");
                 department.employees().add(emp);
             }
             {
                 Employee emp = department.employees().$();
                 emp.firstName().setValue("Peter");
+                emp.lastName().setValue("Pen");
+                emp.phone().setValue("555-4444");
                 department.employees().add(emp);
             }
 
