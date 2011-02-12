@@ -55,6 +55,11 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         super.populate(binder.getValue());
     }
 
+    @Override
+    public E getValue() {
+        return binder.getValue();
+    }
+
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
     }
