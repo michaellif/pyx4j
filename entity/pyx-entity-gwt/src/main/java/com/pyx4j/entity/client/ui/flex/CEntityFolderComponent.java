@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,7 +32,7 @@ public abstract class CEntityFolderComponent<E extends IEntity> extends CEditabl
 
     private FolderDecorator folderDecorator;
 
-    private VerticalPanel content;
+    private FlowPanel content;
 
     public CEntityFolderComponent() {
     }
@@ -44,7 +45,7 @@ public abstract class CEntityFolderComponent<E extends IEntity> extends CEditabl
         this.folderDecorator = folderDecorator;
         asWidget().setWidget(folderDecorator);
 
-        content = new VerticalPanel();
+        content = new FlowPanel();
         folderDecorator.setWidget(content);
     }
 
