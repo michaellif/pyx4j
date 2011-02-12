@@ -1379,7 +1379,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             @Override
-            public String encodedCursorRefference() {
+            public String encodedCursorReference() {
                 return iterator.getCursor().toWebSafeString();
             }
         };
@@ -1464,7 +1464,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             @Override
-            public String encodedCursorRefference() {
+            public String encodedCursorReference() {
                 return iterator.getCursor().toWebSafeString();
             }
         };

@@ -21,6 +21,7 @@
 package com.pyx4j.essentials.client.crud;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,8 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
 
     private final String entityName;
 
+    private final Map<Integer, String> encodedCursorReferences;
+
     private final Class<? extends NavigNode> serachPage;
 
     private final Class<? extends NavigNode> editorPage;
@@ -84,6 +87,9 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
         this.serachPage = serachPage;
         this.editorPage = editorPage;
         String[] path = clazz.getName().split("\\.");
+
+        this.encodedCursorReferences = new HashMap<Integer, String>();
+
         entityName = path[path.length - 1];
         this.searchCriteriaPanel = searchCriteriaPanel;
         searchCriteriaPanel.setListWidget(this);
@@ -196,10 +202,12 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 }
             }
         }
-        populate(pageNumber);
+        String encodedCursorReference = encodedCursorReferences.get(pageNumber);
+        log.info("Got encodedCursorReference:" + encodedCursorReference + " from the map");
+        populate(pageNumber, encodedCursorReference);
     }
 
-    protected void populate(final int pageNumber) {
+    protected void populate(final int pageNumber, final String encodedCursorReference) {
         log.debug("Show page " + pageNumber);
         searchCriteriaPanel.obtainEntitySearchCriteria(new AsyncCallback<EntitySearchCriteria<E>>() {
             @Override
@@ -211,6 +219,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
             public void onSuccess(EntitySearchCriteria<E> criteria) {
                 criteria.setPageSize(searchResultsPanel.getPageSize());
                 criteria.setPageNumber(pageNumber);
+                criteria.setEncodedCursorReference(encodedCursorReference);
                 loadData(criteria);
             }
         });
@@ -225,7 +234,9 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
             @Override
             @SuppressWarnings("unchecked")
             public void onSuccess(EntitySearchResult<? extends IEntity> result) {
-                log.debug("Loaded " + result.getData().size() + " " + entityName + "('s) in {} msec ", System.currentTimeMillis() - start);
+                log.info("Loaded " + result.getData().size() + " " + entityName + "('s) in {} msec ", System.currentTimeMillis() - start);
+                log.info("Registering encodedCursorReference:" + result.getEncodedCursorReference() + " for page:" + criteria.getPageNumber());
+                encodedCursorReferences.put(criteria.getPageNumber(), result.getEncodedCursorReference());
                 List<E> entities = new ArrayList<E>();
                 for (IEntity entity : result.getData()) {
                     entities.add((E) entity);

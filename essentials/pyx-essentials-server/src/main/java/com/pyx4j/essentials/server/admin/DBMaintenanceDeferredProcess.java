@@ -102,7 +102,7 @@ public class DBMaintenanceDeferredProcess implements IDeferredProcess {
             if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > request.getBatchSize())) {
                 log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
                 log.debug("fetch will continue rows {}", fetchCount);
-                encodedCursorRefference = it.encodedCursorRefference();
+                encodedCursorRefference = it.encodedCursorReference();
                 return;
             }
             if (canceled) {

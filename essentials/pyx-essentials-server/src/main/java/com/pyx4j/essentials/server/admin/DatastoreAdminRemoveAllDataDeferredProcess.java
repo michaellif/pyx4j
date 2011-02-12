@@ -88,7 +88,7 @@ public class DatastoreAdminRemoveAllDataDeferredProcess implements IDeferredProc
                     primaryKeys.clear();
                 }
                 if (quotaExceeded) {
-                    encodedCursorRefference = ci.encodedCursorRefference();
+                    encodedCursorRefference = ci.encodedCursorReference();
                     return;
                 }
             }

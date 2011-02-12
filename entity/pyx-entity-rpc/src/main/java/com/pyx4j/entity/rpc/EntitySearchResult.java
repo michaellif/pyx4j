@@ -34,8 +34,10 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     private boolean quotaExceeded;
 
+    private String encodedCursorReference;
+
     public EntitySearchResult() {
-        data = new Vector<E>();
+        data = new Vector<E>(); // TODO vlads - Why are we using Vector here and not a List?
     }
 
     public Vector<E> getData() {
@@ -64,5 +66,13 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
 
     public void setQuotaExceeded(boolean quotaExceeded) {
         this.quotaExceeded = quotaExceeded;
+    }
+
+    public String getEncodedCursorReference() {
+        return encodedCursorReference;
+    }
+
+    public void setEncodedCursorReference(String encodedCursorReference) {
+        this.encodedCursorReference = encodedCursorReference;
     }
 }

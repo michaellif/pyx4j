@@ -41,6 +41,8 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     private int pageSize = -1;
 
+    private String encodedCursorReference;
+
     private TreeMap<PathSearch, Serializable> filters = new TreeMap<PathSearch, Serializable>();
 
     private Vector<Sort> sorts;
@@ -147,5 +149,13 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
     @Override
     public String getServiceCallMarker() {
         return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
+    }
+
+    public String getEncodedCursorReference() {
+        return encodedCursorReference;
+    }
+
+    public void setEncodedCursorReference(String encodedCursorReference) {
+        this.encodedCursorReference = encodedCursorReference;
     }
 }

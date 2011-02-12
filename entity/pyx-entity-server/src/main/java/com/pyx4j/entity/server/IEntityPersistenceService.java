@@ -37,7 +37,7 @@ public interface IEntityPersistenceService {
          * @see com.google.appengine.api.datastore.Cursor.toWebSafeString()
          * @return
          */
-        public String encodedCursorRefference();
+        public String encodedCursorReference();
 
         public void completeRetrieval();
 

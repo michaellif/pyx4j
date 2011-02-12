@@ -531,10 +531,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public <T extends IEntity> ICursorIterator<T> query(String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
+    public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorRefference, EntityQueryCriteria<T> criteria) {
         final Connection connection = connectionProvider.getConnection();
         final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorRefference != null) {
+            log.info("Received encodedCursorReference:" + encodedCursorRefference + ", will use it");
             // TODO   
         }
         final ResultSetIterator<T> iterable = tm.queryIterable(connection, criteria, -1);
@@ -557,9 +558,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             @Override
-            public String encodedCursorRefference() {
-                // TODO Auto-generated method stub
-                return null;
+            public String encodedCursorReference() {
+                // TODO proper encoded cursor reference has to be passed, this is just temporary
+                return "" + encodedCursorRefference + "a";
             }
 
             @Override

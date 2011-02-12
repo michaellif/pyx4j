@@ -331,16 +331,17 @@ public class IndexedEntitySearch {
                 log.warn("Search by class {} {} not implemented", mm.getObjectClass(), mm.getValueClass());
             }
         }
-        log.debug("will used {} inMemoryFilters", inMemoryFilters.size());
+        log.debug("will have used {} inMemoryFilters", inMemoryFilters.size());
     }
 
-    public SearchResultIterator<IEntity> getResult(String encodedCursorRefference) {
-        final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorRefference, queryCriteria);
+    public SearchResultIterator<IEntity> getResult(String encodedCursorReference) {
+        final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorReference, queryCriteria);
         final int maxResults;
         final int firstResult;
         if (searchCriteria.getPageSize() > 0) {
             firstResult = searchCriteria.getPageSize() * (searchCriteria.getPageNumber());
             maxResults = firstResult + searchCriteria.getPageSize();
+//            log.info("Using firstResult:" + firstResult + " maxResults:" + maxResults + " encodedCursorReference:" + encodedCursorReference);
         } else {
             maxResults = Integer.MAX_VALUE;
             firstResult = -1;
@@ -365,12 +366,14 @@ public class IndexedEntitySearch {
                     return false;
                 }
 
-                // TODO This loop should be avoided using Cursor from previous query.
-                while ((count < firstResult) && unfiltered.hasNext()) {
-                    if (accept(unfiltered.next())) {
-                        count++;
-                    }
-                }
+                // we no longer need this, since we are passing the cursor reference
+                //                // TODO This loop should be avoided using Cursor from previous query.
+                //                while ((count < firstResult) && unfiltered.hasNext()) {
+                //                    log.info("Count [" + count + "] firstResult [" + firstResult + "] hasNext");
+                //                    if (accept(unfiltered.next())) {
+                //                        count++;
+                //                    }
+                //                }
 
                 while (unfiltered.hasNext()) {
                     IEntity ent = unfiltered.next();
@@ -400,8 +403,8 @@ public class IndexedEntitySearch {
             }
 
             @Override
-            public String encodedCursorRefference() {
-                return unfiltered.encodedCursorRefference();
+            public String encodedCursorReference() {
+                return unfiltered.encodedCursorReference();
             }
 
             @Override

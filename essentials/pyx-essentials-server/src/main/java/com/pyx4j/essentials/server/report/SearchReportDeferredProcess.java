@@ -110,7 +110,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
                     if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
                         log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
                         log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
-                        encodedCursorRefference = it.encodedCursorRefference();
+                        encodedCursorRefference = it.encodedCursorReference();
                         return;
                     }
                     if (canceled) {
