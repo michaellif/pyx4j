@@ -14,16 +14,10 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PotentialTenantFinancial extends IEntity {
+public interface TenantIncome extends IEntity {
+    IPrimitive<String> description();
 
-    IPrimitive<String> occupation();
-
-    IList<Employer> employers();
-
-    IList<TenantIncome> incomes();
-
-    IList<TenantAsset> assets();
+    IPrimitive<Float> monthlyAmount();
 }

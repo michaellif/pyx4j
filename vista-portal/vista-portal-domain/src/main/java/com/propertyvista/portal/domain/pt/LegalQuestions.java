@@ -16,18 +16,16 @@ package com.propertyvista.portal.domain.pt;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ToughQuestions extends IEntity {
+public interface LegalQuestions extends IEntity {
     IPrimitive<Boolean> suedForRent();
 
     IPrimitive<Boolean> suedForDamages();
 
-    IPrimitive<Boolean> evicted();
+    IPrimitive<Boolean> everEvicted();
 
-    IPrimitive<Boolean> defaulted();
+    IPrimitive<Boolean> defaultedOnLease();
 
-    IPrimitive<Boolean> convicted();
+    IPrimitive<Boolean> convictedOfFelony();
 
-    IPrimitive<Boolean> publicRecord();
-
-    IPrimitive<Boolean> bankruptcy();
+    IPrimitive<Boolean> legalTroubles();
 }

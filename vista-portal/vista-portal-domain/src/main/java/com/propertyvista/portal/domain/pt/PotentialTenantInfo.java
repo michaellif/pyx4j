@@ -42,7 +42,7 @@ public interface PotentialTenantInfo extends IEntity {
 
     IList<Vehicle> vehicles();
 
-    PotentialTenantQuestions tenantQuestions();
+    LegalQuestions legalQuestions();
 
     IList<EmergencyContact> emergencyContacts();
 }

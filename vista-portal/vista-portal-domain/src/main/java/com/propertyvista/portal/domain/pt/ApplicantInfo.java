@@ -29,7 +29,7 @@ public interface ApplicantInfo extends IEntity {
 
     IList<Vehicle> vehicles();
 
-    ToughQuestions questions();
+    LegalQuestions questions();
 
     ContactDetails emergencyContact1();
 

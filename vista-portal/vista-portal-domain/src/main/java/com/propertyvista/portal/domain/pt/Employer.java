@@ -13,20 +13,26 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import java.util.Date;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PotentialTenantQuestions extends IEntity {
+public interface Employer extends IEntity {
 
-    IPrimitive<Boolean> suedForRent();
+    IPrimitive<String> name();
 
-    IPrimitive<Boolean> suedForDamages();
+    Address address();
 
-    IPrimitive<Boolean> everEvicted();
+    IPrimitive<String> supervisorName();
 
-    IPrimitive<Boolean> defaultedOnLease();
+    IPrimitive<String> supervisorPhone();
 
-    IPrimitive<Boolean> convictedOfFelony();
+    IPrimitive<Float> monthlySalary();
 
-    IPrimitive<Boolean> legalTroubles();
+    IPrimitive<String> position();
+
+    IPrimitive<Date> jobStart();
+
+    IPrimitive<Date> jobEnd();
 }
