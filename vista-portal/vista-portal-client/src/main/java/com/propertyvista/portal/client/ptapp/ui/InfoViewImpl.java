@@ -39,9 +39,9 @@ public class InfoViewImpl extends FlowPanel implements InfoView {
         form = new InfoViewForm();
         add(form);
 
-        Button signUpButton = new Button(i18n.tr("Save and Continue"));
-        signUpButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
-        signUpButton.addClickHandler(new ClickHandler() {
+        Button saveButton = new Button(i18n.tr("Save and Continue"));
+        saveButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
+        saveButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -49,8 +49,8 @@ public class InfoViewImpl extends FlowPanel implements InfoView {
             }
 
         });
-        signUpButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
-        add(signUpButton);
+        saveButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
+        add(saveButton);
 
     }
 
