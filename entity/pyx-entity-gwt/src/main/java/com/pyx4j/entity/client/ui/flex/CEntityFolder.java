@@ -118,7 +118,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
     }
 
-    private void adoptFolderItem(CEntityFolderItem<E> comp) {
+    private void adoptFolderItem(final CEntityFolderItem<E> comp) {
         final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
         folderItemDecorator.setWidget(comp);
         content.add(folderItemDecorator);
@@ -126,9 +126,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
             @Override
             public void onClick(ClickEvent event) {
-                content.remove(folderItemDecorator);
+                removeRow(comp, folderItemDecorator);
             }
         });
+    }
+
+    //TODO add remove handlers
+    protected void removeRow(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
+        content.remove(folderItemDecorator);
     }
 
     @Override
