@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -37,16 +38,20 @@ public interface PotentialTenantInfo extends PotentialTenant {
      * TODO I think that it is better to have a list here since some forms may ask for
      * more than one previous address
      */
+    @Owned
     Address currentAddress();
 
+    @Owned
     Address previousAddress();
 
     IList<Vehicle> vehicles();
 
     LegalQuestions legalQuestions();
 
+    @Owned
     EmergencyContact emergencyContact1();
 
+    @Owned
     EmergencyContact emergencyContact2();
 
 }

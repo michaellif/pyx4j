@@ -72,9 +72,11 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new BasicWidgetDecorator(create(proto().secureIdentifier(), this)));
         main.add(new HTML());
 
-        addAddressSection("Current Address", proto().currentAddress(), this, main);
+        main.add(new HTML("<p/><h4>Current Address</h4>"));
+        main.add(create(proto().currentAddress(), this));
 
-        addAddressSection("Previous Address", proto().previousAddress(), this, main);
+        main.add(new HTML("<p/><h4>Previous Address</h4>"));
+        main.add(create(proto().previousAddress(), this));
 
         main.add(new HTML("<p/><h4>Vehicles</h4>"));
         main.add(create(proto().vehicles(), this));
@@ -95,66 +97,86 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new HTML("<p/><h4>Emergency Contacts</h4>"));
 
-        addContactSection("Contact 1", proto().emergencyContact1(), this, main);
+        main.add(new HTML("<p/><h6>Contact1</h6>"));
+        main.add(create(proto().emergencyContact1(), this));
 
-        addContactSection("Contact 2", proto().emergencyContact2(), this, main);
+        main.add(new HTML("<p/><h6>Contact2</h6>"));
+        main.add(create(proto().emergencyContact2(), this));
 
         setWidget(main);
     }
 
-    private void addAddressSection(String label, Address address, InfoViewForm form, FlowPanel main) {
-        main.add(new HTML("<p/><h4>" + label + "</h4>"));
-        main.add(new BasicWidgetDecorator(create(address.street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.street2(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.city(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.province(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.postalCode(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.moveInDate(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.moveOutDate(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.payment(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.phone(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.rented(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(address.managerName(), this)));
-        main.add(new HTML());
-    }
-
-    private void addContactSection(String label, EmergencyContact contact, InfoViewForm form, FlowPanel main) {
-        main.add(new HTML("<p/><h5>" + label + "</h5>"));
-        main.add(new BasicWidgetDecorator(create(contact.firstName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.middleName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.lastName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.home(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.mobile(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.address().street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.address().street2(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.address().city(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.address().province(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(contact.address().postalCode(), this)));
-        main.add(new HTML());
-    }
-
     @Override
     protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
-        return super.createMemberEditor(member);
+        if (member.getValueClass().equals(Address.class)) {
+            return createAddressEditor();
+        } else if (member.getValueClass().equals(EmergencyContact.class)) {
+            return createEmergencyContactEditor();
+        } else {
+            return super.createMemberEditor(member);
+        }
+    }
+
+    private CEntityEditableComponent<Address> createAddressEditor() {
+        return new CEntityEditableComponent<Address>(Address.class) {
+            @Override
+            public void createContent() {
+                FlowPanel main = new FlowPanel();
+                main.add(new BasicWidgetDecorator(create(proto().street1(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().street2(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().city(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().province(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().postalCode(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().moveInDate(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().moveOutDate(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().payment(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().rented(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().managerName(), this)));
+                main.add(new HTML());
+                setWidget(main);
+            }
+        };
+    }
+
+    private CEntityEditableComponent<EmergencyContact> createEmergencyContactEditor() {
+        return new CEntityEditableComponent<EmergencyContact>(EmergencyContact.class) {
+            @Override
+            public void createContent() {
+                FlowPanel main = new FlowPanel();
+                main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().middleName(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().home(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().mobile(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().street1(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().street2(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().city(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().province(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().postalCode(), this)));
+                main.add(new HTML());
+                setWidget(main);
+            }
+        };
     }
 
     @Override
