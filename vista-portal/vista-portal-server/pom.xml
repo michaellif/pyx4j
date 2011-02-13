@@ -32,6 +32,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-payment</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-callfire</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-server</artifactId>
             <exclusions>
@@ -97,7 +109,7 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>

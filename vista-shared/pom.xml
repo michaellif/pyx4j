@@ -19,6 +19,7 @@
 
     <modules>
         <module>vista-callfire</module>
+        <module>vista-payment</module>
         <module>vista-integration</module>
     </modules>
 
