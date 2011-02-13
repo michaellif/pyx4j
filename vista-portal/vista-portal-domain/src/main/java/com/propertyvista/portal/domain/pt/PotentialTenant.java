@@ -15,8 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.Money;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -38,7 +36,7 @@ public interface PotentialTenant extends IEntity {
 
     IPrimitive<String> relationship();
 
-    Money payment();
+    IPrimitive<Float> payment();
 
     IPrimitive<Boolean> dependant();
 

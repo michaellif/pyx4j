@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -24,10 +24,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 @Singleton
-public class InfoViewForm extends CEntityForm<PotentialTenant> {
+public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     public InfoViewForm() {
-        super(PotentialTenant.class);
+        super(PotentialTenantInfo.class);
     }
 
     @Override

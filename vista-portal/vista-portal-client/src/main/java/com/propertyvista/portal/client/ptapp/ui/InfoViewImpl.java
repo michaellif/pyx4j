@@ -21,7 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
@@ -33,7 +33,7 @@ public class InfoViewImpl extends FlowPanel implements InfoView {
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<PotentialTenant> form;
+    private final CEntityEditableComponent<PotentialTenantInfo> form;
 
     public InfoViewImpl() {
         form = new InfoViewForm();
