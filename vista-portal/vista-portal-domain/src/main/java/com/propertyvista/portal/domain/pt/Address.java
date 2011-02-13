@@ -15,9 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.Phone;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -32,13 +29,13 @@ public interface Address extends IEntity {
 
     IPrimitive<String> postalCode();
 
-    IPrimitive<Date> start();
+    IPrimitive<Date> moveInDate();
 
-    IPrimitive<Date> end();
+    IPrimitive<Date> moveOutDate();
 
-    Money payment();
+    IPrimitive<Float> payment();
 
-    Phone phone();
+    IPrimitive<String> phone();
 
     IPrimitive<Boolean> rented();
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -27,6 +28,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
      * This can be SSN or Tax No. Since the form does not ask to indicate the type we will
      * not store the type here
      */
+    @Caption(name = "SSN Or Tax No.")
     IPrimitive<String> secureIdentifier();
 
     IPrimitive<Boolean> canadianCitizen();
@@ -43,5 +45,8 @@ public interface PotentialTenantInfo extends PotentialTenant {
 
     LegalQuestions legalQuestions();
 
-    IList<EmergencyContact> emergencyContacts();
+    EmergencyContact emergencyContact1();
+
+    EmergencyContact emergencyContact2();
+
 }

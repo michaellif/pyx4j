@@ -49,7 +49,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         @Override
         public void createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new BasicWidgetDecorator(create(proto().name(), this)));
+            main.add(new BasicWidgetDecorator(create(proto().name(), this), 140, 180));
             main.add(new Label("Manager:"));
             main.add(create(proto().manager(), this));
             main.add(new Label("Employees:"));
@@ -84,8 +84,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 @Override
                 public void createContent() {
                     FlowPanel main = new FlowPanel();
-                    main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
-                    main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+                    main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
+                    main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
                     main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
                     setWidget(main);
                 }
@@ -147,8 +147,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                         @Override
                         public void createContent() {
                             FlowPanel main = new FlowPanel();
-                            main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
-                            main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+                            main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
+                            main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
                             main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
                             setWidget(main);
                         }

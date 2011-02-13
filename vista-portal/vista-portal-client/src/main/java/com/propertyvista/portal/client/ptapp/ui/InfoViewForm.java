@@ -13,13 +13,27 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
+import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
@@ -33,12 +47,140 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
+        main.add(new HTML("<h4>Contact Details</h4>"));
         main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
+        main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().middleName(), this)));
+        main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+        main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().homePhone(), this)));
+        main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().mobilePhone(), this)));
+        main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().email(), this)));
+
+        main.add(new HTML("<p/><h4>Secure Information</h4>"));
+        main.add(new BasicWidgetDecorator(create(proto().driversLicense(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().driversLicenseState(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().birthDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().secureIdentifier(), this)));
+        main.add(new HTML());
+
+        main.add(new HTML("<p/><h4>Current Address</h4>"));
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().street1(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().street2(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().city(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().province(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().postalCode(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().moveInDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().moveOutDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().payment(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().phone(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().rented(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().currentAddress().managerName(), this)));
+        main.add(new HTML());
+
+        main.add(new HTML("<p/><h4>Previous Address</h4>"));
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().street1(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().street2(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().city(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().province(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().postalCode(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().moveInDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().moveOutDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().payment(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().phone(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().rented(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().previousAddress().managerName(), this)));
+        main.add(new HTML());
+
+        main.add(new HTML("<p/><h4>Vehicles</h4>"));
+        main.add(create(proto().vehicles(), this));
+
+        main.add(new HTML("<p/><h4>General Questions</h4>"));
+        main.add(create(proto().legalQuestions().suedForRent(), this));
+        main.add(new HTML());
+        main.add(create(proto().legalQuestions().suedForDamages(), this));
+        main.add(new HTML());
+        main.add(create(proto().legalQuestions().everEvicted(), this));
+        main.add(new HTML());
+        main.add(create(proto().legalQuestions().defaultedOnLease(), this));
+        main.add(new HTML());
+        main.add(create(proto().legalQuestions().convictedOfFelony(), this));
+        main.add(new HTML());
+        main.add(create(proto().legalQuestions().legalTroubles(), this));
+        main.add(new HTML());
+
+        main.add(new HTML("<p/><h4>Emergency Contacts</h4>"));
+
+        main.add(new HTML("<p/><h5>Contact 1</h5>"));
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().firstName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().middleName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().lastName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().home(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().mobile(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().street1(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().street2(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().city(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().province(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().postalCode(), this)));
+        main.add(new HTML());
+
+        main.add(new HTML("<p/><h5>Contact 2</h5>"));
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().firstName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().middleName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().lastName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().home(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().mobile(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().street1(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().street2(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().city(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().province(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().postalCode(), this)));
+        main.add(new HTML());
+
         setWidget(main);
     }
 
@@ -49,7 +191,50 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
     @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        return super.createMemberFolderEditor(member);
+        if (member.equals(proto().vehicles())) {
+            return createVehicleFolderEditorColumns();
+        } else {
+            return super.createMemberFolderEditor(member);
+        }
     }
 
+    private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
+        return new CEntityFolder<Vehicle>() {
+
+            private List<EntityFolderColumnDescriptor> columns;
+
+            {
+                Vehicle proto = EntityFactory.getEntityPrototype(Vehicle.class);
+                columns = new ArrayList<EntityFolderColumnDescriptor>();
+                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.year(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.make(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.model(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.province(), "100px"));
+            }
+
+            @Override
+            protected FolderDecorator createFolderDecorator() {
+                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow());
+            }
+
+            @Override
+            protected CEntityFolderItem<Vehicle> createItem() {
+                return createEmployeeRowEditor(columns);
+            }
+
+            private CEntityFolderItem<Vehicle> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRow<Vehicle>(Vehicle.class, columns, InfoViewForm.this) {
+
+                    @Override
+                    public FolderItemDecorator createFolderItemDecorator() {
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+                    }
+
+                };
+            }
+
+        };
+
+    }
 }

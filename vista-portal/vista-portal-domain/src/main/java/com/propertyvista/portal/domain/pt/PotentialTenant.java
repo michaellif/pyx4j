@@ -15,23 +15,31 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PotentialTenant extends IEntity {
 
+    @Caption(name = "First")
     IPrimitive<String> firstName();
 
+    @Caption(name = "Middle")
     IPrimitive<String> middleName();
 
+    @Caption(name = "Last")
     IPrimitive<String> lastName();
 
+    @Caption(name = "Birth Date")
     IPrimitive<Date> birthDate();
 
+    @Caption(name = "Home")
     IPrimitive<String> homePhone();
 
+    @Caption(name = "Mobile")
     IPrimitive<String> mobilePhone();
 
+    @Caption(name = "Email")
     IPrimitive<String> email();
 
     IPrimitive<String> relationship();
