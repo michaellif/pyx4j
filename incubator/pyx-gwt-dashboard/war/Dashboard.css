@@ -43,7 +43,7 @@ div.dragdrop-dropTarget-engage {
 .DashboardPanel .DashboardPanel-column-container {
 }
 .DashboardPanel .DashboardPanel-column-composite {
-    float: left;
+/*    float: left;*/
 }
 .DashboardPanel .DashboardPanel-column-heading {
 	background-color: #87B3FF;
