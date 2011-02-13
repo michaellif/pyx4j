@@ -20,6 +20,9 @@
  */
 package com.pyx4j.widgets.client.style.theme;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
+
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -520,6 +523,9 @@ public class WindowsTheme extends Theme {
     protected void initCheckBoxStyle() {
         Style style = new Style(CSSClass.pyx4j_CheckBox);
         style.addProperty("border-color", ThemeColor.BORDER);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+
         addStyle(style);
     }
 

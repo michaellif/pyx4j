@@ -137,8 +137,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     @Override
-    protected NativeEntityFolder initWidget() {
-        return new NativeEntityFolder();
+    protected NativeEntityFolder<IList<E>> initWidget() {
+        return new NativeEntityFolder<IList<E>>();
     }
 
     public void setWidget(Widget widget) {

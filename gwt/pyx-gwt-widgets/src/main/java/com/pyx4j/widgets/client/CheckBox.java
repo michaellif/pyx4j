@@ -20,9 +20,6 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
@@ -30,8 +27,5 @@ public class CheckBox extends com.google.gwt.user.client.ui.CheckBox {
     public CheckBox() {
         super();
         setStyleName(CSSClass.pyx4j_CheckBox.name());
-        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        getElement().getStyle().setBorderWidth(1, Unit.PX);
-
     }
 }

@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,7 +28,6 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 public class NativeEntityEditor<E> extends SimplePanel implements INativeEditableComponent<E> {
 
     public NativeEntityEditor() {
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
     }
 
     @Override
