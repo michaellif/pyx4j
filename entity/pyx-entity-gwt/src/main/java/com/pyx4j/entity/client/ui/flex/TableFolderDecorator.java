@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public class TableFolderDecorator extends FlowPanel implements FolderDecorator {
 
-    final Image image;
+    private final Image image;
 
     private final SimplePanel content;
 

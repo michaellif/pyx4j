@@ -44,9 +44,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public CEntityFolder() {
     }
 
-    public abstract void createContent();
+    public void createContent() {
+        setFolderDecorator(createFolderDecorator());
+    }
 
     protected abstract CEntityEditableComponent<E> createItem();
+
+    protected abstract FolderDecorator createFolderDecorator();
 
     public void setFolderDecorator(FolderDecorator folderDecorator) {
         this.folderDecorator = folderDecorator;
