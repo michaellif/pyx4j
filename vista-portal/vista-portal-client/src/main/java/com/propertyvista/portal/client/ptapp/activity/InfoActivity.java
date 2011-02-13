@@ -13,15 +13,21 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.InfoView;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
 
 import com.pyx4j.site.client.place.AppPlace;
 
 public class InfoActivity extends AbstractActivity implements InfoView.Presenter {
+
+    private static final Logger log = LoggerFactory.getLogger(InfoActivity.class);
 
     private final InfoView view;
 
@@ -38,6 +44,11 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+    }
+
+    @Override
+    public void save(PotentialTenant entity) {
+        log.info("SAVED {}", entity);
     }
 
 }

@@ -13,19 +13,44 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
+
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.essentials.client.crud.CrudDebugId;
 
 @Singleton
-public class InfoViewImpl extends SimplePanel implements InfoView {
+public class InfoViewImpl extends FlowPanel implements InfoView {
+
+    private static I18n i18n = I18nFactory.getI18n(InfoViewImpl.class);
 
     private Presenter presenter;
 
+    private final CEntityEditableComponent<PotentialTenant> form;
+
     public InfoViewImpl() {
-        Label labael = new Label("InfoView");
-        labael.setSize("300px", "40px");
-        setWidget(labael);
+        form = new InfoViewForm();
+        add(form);
+
+        Button signUpButton = new Button(i18n.tr("Save and Continue"));
+        signUpButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
+        signUpButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.save(form.getValue());
+            }
+
+        });
+        signUpButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
+        add(signUpButton);
 
     }
 

@@ -14,12 +14,14 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
 
 public interface InfoView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
+        public void save(PotentialTenant entity);
     }
 
 }

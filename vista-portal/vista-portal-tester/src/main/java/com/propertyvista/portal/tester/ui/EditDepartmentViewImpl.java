@@ -24,7 +24,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentView {
 
@@ -32,7 +32,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<Department> editor;
+    private final CEntityEditableComponent<Department> form;
 
     private static class DepartmentForm extends CEntityForm<Department> {
 
@@ -43,7 +43,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         @Override
         public void createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new WidgetDecorator(create(proto().name(), this)));
+            main.add(new BasicWidgetDecorator(create(proto().name(), this)));
             main.add(create(proto().manager(), this));
             main.add(create(proto().employees(), this));
             setWidget(main);
@@ -72,9 +72,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 @Override
                 public void createContent() {
                     FlowPanel main = new FlowPanel();
-                    main.add(new WidgetDecorator(create(proto().firstName(), this)));
-                    main.add(new WidgetDecorator(create(proto().lastName(), this)));
-                    main.add(new WidgetDecorator(create(proto().phone(), this)));
+                    main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
+                    main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+                    main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
                     setWidget(main);
                 }
             };
@@ -117,9 +117,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         labael.setSize("300px", "100px");
         add(labael);
 
-        editor = new DepartmentForm();
+        form = new DepartmentForm();
 
-        add(editor);
+        add(form);
 
         Button signUpButton = new Button(i18n.tr("Save"));
         signUpButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
@@ -127,7 +127,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.save(editor.getValue());
+                presenter.save(form.getValue());
             }
 
         });
@@ -143,6 +143,6 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
     @Override
     public void populate(Department entity) {
-        editor.populate(entity);
+        form.populate(entity);
     }
 }

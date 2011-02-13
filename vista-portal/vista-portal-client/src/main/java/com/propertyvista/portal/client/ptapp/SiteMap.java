@@ -34,7 +34,7 @@ public class SiteMap {
     }
 
     @NavigationItem(navigLabel = "Info")
-    @PlaceProperties(caption = "Info")
+    @PlaceProperties(caption = "Applicant Info")
     public static class Info extends AppPlace {
     }
 
