@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
@@ -70,53 +72,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new BasicWidgetDecorator(create(proto().secureIdentifier(), this)));
         main.add(new HTML());
 
-        main.add(new HTML("<p/><h4>Current Address</h4>"));
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().street2(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().city(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().province(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().postalCode(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().moveInDate(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().moveOutDate(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().payment(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().phone(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().rented(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().currentAddress().managerName(), this)));
-        main.add(new HTML());
+        addAddressSection("Current Address", proto().currentAddress(), this, main);
 
-        main.add(new HTML("<p/><h4>Previous Address</h4>"));
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().street2(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().city(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().province(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().postalCode(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().moveInDate(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().moveOutDate(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().payment(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().phone(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().rented(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().previousAddress().managerName(), this)));
-        main.add(new HTML());
+        addAddressSection("Previous Address", proto().previousAddress(), this, main);
 
         main.add(new HTML("<p/><h4>Vehicles</h4>"));
         main.add(create(proto().vehicles(), this));
@@ -137,51 +95,61 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new HTML("<p/><h4>Emergency Contacts</h4>"));
 
-        main.add(new HTML("<p/><h5>Contact 1</h5>"));
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().firstName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().middleName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().lastName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().home(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().mobile(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().street2(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().city(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().province(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact1().address().postalCode(), this)));
-        main.add(new HTML());
+        addContactSection("Contact 1", proto().emergencyContact1(), this, main);
 
-        main.add(new HTML("<p/><h5>Contact 2</h5>"));
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().firstName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().middleName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().lastName(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().home(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().mobile(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().street2(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().city(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().province(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().emergencyContact2().address().postalCode(), this)));
-        main.add(new HTML());
+        addContactSection("Contact 2", proto().emergencyContact2(), this, main);
 
         setWidget(main);
+    }
+
+    private void addAddressSection(String label, Address address, InfoViewForm form, FlowPanel main) {
+        main.add(new HTML("<p/><h4>" + label + "</h4>"));
+        main.add(new BasicWidgetDecorator(create(address.street1(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.street2(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.city(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.province(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.postalCode(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.moveInDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.moveOutDate(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.payment(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.phone(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.rented(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(address.managerName(), this)));
+        main.add(new HTML());
+    }
+
+    private void addContactSection(String label, EmergencyContact contact, InfoViewForm form, FlowPanel main) {
+        main.add(new HTML("<p/><h5>" + label + "</h5>"));
+        main.add(new BasicWidgetDecorator(create(contact.firstName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.middleName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.lastName(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.home(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.mobile(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.address().street1(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.address().street2(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.address().city(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.address().province(), this)));
+        main.add(new HTML());
+        main.add(new BasicWidgetDecorator(create(contact.address().postalCode(), this)));
+        main.add(new HTML());
     }
 
     @Override
