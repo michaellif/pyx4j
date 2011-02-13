@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class WidgetDecorator extends DockPanel {
+public class BasicWidgetDecorator extends DockPanel {
 
     public enum LabelPlacement {
         LEFT, TOP, HIDDEN;
@@ -62,11 +62,11 @@ public class WidgetDecorator extends DockPanel {
 
     private Tooltip tooltip;
 
-    public WidgetDecorator(final CComponent<?> component) {
+    public BasicWidgetDecorator(final CComponent<?> component) {
         this(component, LabelPlacement.LEFT, 140);
     }
 
-    public WidgetDecorator(final CComponent<?> component, LabelPlacement labelPlacement, int labelWidth) {
+    public BasicWidgetDecorator(final CComponent<?> component, LabelPlacement labelPlacement, int labelWidth) {
 
         getElement().getStyle().setPadding(2, Unit.PX);
 
