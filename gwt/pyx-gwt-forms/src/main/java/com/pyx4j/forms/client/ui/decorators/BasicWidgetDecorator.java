@@ -20,13 +20,14 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -40,11 +41,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class BasicWidgetDecorator extends DockPanel {
-
-    public enum LabelPlacement {
-        LEFT, TOP, HIDDEN;
-    }
+public class BasicWidgetDecorator extends FlowPanel {
 
     private final CComponent<?> component;
 
@@ -63,21 +60,20 @@ public class BasicWidgetDecorator extends DockPanel {
     private Tooltip tooltip;
 
     public BasicWidgetDecorator(final CComponent<?> component) {
-        this(component, LabelPlacement.LEFT, 140);
+        this(component, 140, 140);
     }
 
-    public BasicWidgetDecorator(final CComponent<?> component, LabelPlacement labelPlacement, int labelWidth) {
-
-        getElement().getStyle().setPadding(2, Unit.PX);
+    public BasicWidgetDecorator(final CComponent<?> component, int labelWidth, int componentWidth) {
 
         this.component = component;
         nativeComponent = component.asWidget();
+        nativeComponent.getElement().getStyle().setWidth(componentWidth, Unit.PX);
+        nativeComponent.getElement().getStyle().setFloat(Float.LEFT);
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
+        label.getElement().getStyle().setFloat(Float.LEFT);
 
-        if (labelPlacement.equals(LabelPlacement.LEFT)) {
-            label.getElement().getStyle().setProperty("textAlign", "right");
-        }
+        label.getElement().getStyle().setProperty("textAlign", "right");
 
         Cursor.setDefault(label.getElement());
 
@@ -98,10 +94,12 @@ public class BasicWidgetDecorator extends DockPanel {
         }
 
         imageInfoWarnHolder = new ImageHolder("18px");
+        imageInfoWarnHolder.getElement().getStyle().setFloat(Float.LEFT);
         imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
         imageMandatoryHolder = new ImageHolder("7px");
+        imageMandatoryHolder.getElement().getStyle().setFloat(Float.LEFT);
 
         renderToolTip();
         renderMandatoryStar();
@@ -123,35 +121,19 @@ public class BasicWidgetDecorator extends DockPanel {
             }
         });
 
-        HorizontalPanel labelHolder = new HorizontalPanel();
-        labelHolder.getElement().getStyle().setPaddingRight(10, Unit.PX);
+        add(label);
+        add(imageMandatoryHolder);
 
-        if (labelPlacement.equals(LabelPlacement.LEFT)) {
-            labelHolder.add(label);
-            labelHolder.add(imageMandatoryHolder);
-            add(labelHolder, WEST);
-            setCellVerticalAlignment(labelHolder, ALIGN_MIDDLE);
-        } else {
-            labelHolder.add(imageMandatoryHolder);
-            labelHolder.add(label);
-            add(labelHolder, NORTH);
-            nativeComponent.getElement().getStyle().setMarginLeft(7, Unit.PX);
-        }
+        add(nativeComponent);
+        add(imageInfoWarnHolder);
 
-        HorizontalPanel nativeComponentHolder = new HorizontalPanel();
-        nativeComponentHolder.setWidth("100%");
-        nativeComponentHolder.add(nativeComponent);
-        nativeComponentHolder.setCellWidth(nativeComponent, "100%");
-        nativeComponentHolder.add(imageInfoWarnHolder);
-
-        add(nativeComponentHolder, CENTER);
-        setCellWidth(nativeComponentHolder, "100%");
-
-        setWidth("100%");
         label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
         label.getElement().getStyle().setFontSize(0.8, Unit.EM);
         label.getElement().getStyle().setColor("#888888");
         label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getElement().getStyle().setPadding(2, Unit.PX);
 
     }
 
