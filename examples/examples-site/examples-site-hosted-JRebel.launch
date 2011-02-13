@@ -18,5 +18,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.DevMode"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://localhost:8888/index.html -logLevel INFO -noserver -extra &quot;${workspace_loc:examples-site}/target/hosted-extra&quot; -gen &quot;${workspace_loc:examples-site}/target/hosted-gen&quot; -war &quot;${workspace_loc:examples-gae-server}/war&quot; g.siteDeveloper"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="examples-site"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-xstartOnFirstThread -Xmx512m -noverify -javaagent:C:\3p-libs\jrebel\jrebel.jar"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -noverify -javaagent:C:\3p-libs\jrebel\jrebel.jar"/>
 </launchConfiguration>

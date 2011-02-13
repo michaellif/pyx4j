@@ -14,5 +14,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.appengine.tools.development.DevAppServerMain"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--port=8888 --address=0.0.0.0 &quot;${workspace_loc:examples-gae-server}/war&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="examples-gae-server"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-xstartOnFirstThread -Xmx512m -javaagent:C:\3p-libs\gae\appengine-java-sdk-1.4.0\lib\agent\appengine-agent.jar"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -javaagent:C:\3p-libs\gae\appengine-java-sdk-1.4.0\lib\agent\appengine-agent.jar"/>
 </launchConfiguration>
