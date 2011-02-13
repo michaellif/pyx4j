@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IEntity;
 @SuppressWarnings("serial")
 public class EntitySearchResult<E extends IEntity> implements Serializable {
 
+    // In GWT RPC we use Concrete types.
     private Vector<E> data;
 
     private boolean hasMoreData;
@@ -37,7 +38,7 @@ public class EntitySearchResult<E extends IEntity> implements Serializable {
     private String encodedCursorReference;
 
     public EntitySearchResult() {
-        data = new Vector<E>(); // TODO vlads - Why are we using Vector here and not a List?
+        data = new Vector<E>();
     }
 
     public Vector<E> getData() {

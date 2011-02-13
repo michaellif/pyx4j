@@ -150,9 +150,10 @@ public class EntityServicesImpl {
                     break;
                 }
             }
+            // The position is important, hasMoreData may retrieve one more row. 
+            r.setEncodedCursorReference(it.encodedCursorReference());
             r.hasMoreData(it.hasMoreData());
             it.completeRetrieval();
-            r.setEncodedCursorReference(it.encodedCursorReference());
 
             if (r.getData().size() != 0) {
                 log.debug("got {} ", r.getData().get(0));

@@ -334,14 +334,16 @@ public class IndexedEntitySearch {
         log.debug("will have used {} inMemoryFilters", inMemoryFilters.size());
     }
 
-    public SearchResultIterator<IEntity> getResult(String encodedCursorReference) {
+    public SearchResultIterator<IEntity> getResult(final String encodedCursorReference) {
         final ICursorIterator<? extends IEntity> unfiltered = PersistenceServicesFactory.getPersistenceService().query(encodedCursorReference, queryCriteria);
         final int maxResults;
         final int firstResult;
-        if (searchCriteria.getPageSize() > 0) {
+        if ((searchCriteria.getPageSize() > 0) && (encodedCursorReference == null)) {
             firstResult = searchCriteria.getPageSize() * (searchCriteria.getPageNumber());
             maxResults = firstResult + searchCriteria.getPageSize();
-//            log.info("Using firstResult:" + firstResult + " maxResults:" + maxResults + " encodedCursorReference:" + encodedCursorReference);
+            if (searchCriteria.getPageNumber() > 0) {
+                log.warn("CursorReference is missing. Scroll to firstResult:", firstResult);
+            }
         } else {
             maxResults = Integer.MAX_VALUE;
             firstResult = -1;
@@ -366,14 +368,15 @@ public class IndexedEntitySearch {
                     return false;
                 }
 
-                // we no longer need this, since we are passing the cursor reference
-                //                // TODO This loop should be avoided using Cursor from previous query.
-                //                while ((count < firstResult) && unfiltered.hasNext()) {
-                //                    log.info("Count [" + count + "] firstResult [" + firstResult + "] hasNext");
-                //                    if (accept(unfiltered.next())) {
-                //                        count++;
-                //                    }
-                //                }
+                // we do not need to scroll to first result if we are passing the cursor reference
+                if (encodedCursorReference == null) {
+                    while ((count < firstResult) && unfiltered.hasNext()) {
+                        log.info("Count {} firstResult {}", count, firstResult);
+                        if (accept(unfiltered.next())) {
+                            count++;
+                        }
+                    }
+                }
 
                 while (unfiltered.hasNext()) {
                     IEntity ent = unfiltered.next();
