@@ -202,12 +202,10 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 }
             }
         }
-        String encodedCursorReference = encodedCursorReferences.get(pageNumber);
-        log.info("Got encodedCursorReference:" + encodedCursorReference + " from the map");
-        populate(pageNumber, encodedCursorReference);
+        populate(pageNumber);
     }
 
-    protected void populate(final int pageNumber, final String encodedCursorReference) {
+    protected void populate(final int pageNumber) {
         log.debug("Show page " + pageNumber);
         searchCriteriaPanel.obtainEntitySearchCriteria(new AsyncCallback<EntitySearchCriteria<E>>() {
             @Override
@@ -219,7 +217,6 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
             public void onSuccess(EntitySearchCriteria<E> criteria) {
                 criteria.setPageSize(searchResultsPanel.getPageSize());
                 criteria.setPageNumber(pageNumber);
-                criteria.setEncodedCursorReference(encodedCursorReference);
                 loadData(criteria);
             }
         });
@@ -251,6 +248,9 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 throw new UnrecoverableClientError(caught);
             }
         };
+
+        String encodedCursorReference = encodedCursorReferences.get(criteria.getPageNumber());
+        log.info("page {} encodedCursorReference {} ", criteria.getPageNumber(), encodedCursorReference);
 
         log.debug("criteria:" + criteria.toString());
         RPCManager.execute(getSearchService(), criteria, callback);
