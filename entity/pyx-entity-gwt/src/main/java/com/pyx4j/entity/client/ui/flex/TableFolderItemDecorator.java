@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
@@ -35,6 +36,8 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
     private final SimplePanel content;
 
     public TableFolderItemDecorator(ImageResource removeButton) {
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
         image = new Image(removeButton);
         image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         add(image);
