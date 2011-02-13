@@ -14,12 +14,15 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 
 public interface FinancialView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
+
+        void save(PotentialTenantFinancial value);
     }
 
 }

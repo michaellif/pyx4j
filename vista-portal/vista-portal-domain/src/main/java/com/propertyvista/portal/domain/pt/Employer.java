@@ -26,6 +26,8 @@ public interface Employer extends IEntity {
 
     IPrimitive<String> supervisorName();
 
+    IPrimitive<Integer> employedForYears();
+
     IPrimitive<String> supervisorPhone();
 
     IPrimitive<Float> monthlySalary();

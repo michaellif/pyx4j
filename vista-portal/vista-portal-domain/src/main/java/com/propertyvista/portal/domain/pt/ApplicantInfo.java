@@ -31,7 +31,7 @@ public interface ApplicantInfo extends IEntity {
 
     LegalQuestions questions();
 
-    ContactDetails emergencyContact1();
+    EmergencyContact emergencyContact1();
 
-    ContactDetails emergencyContact2();
+    EmergencyContact emergencyContact2();
 }

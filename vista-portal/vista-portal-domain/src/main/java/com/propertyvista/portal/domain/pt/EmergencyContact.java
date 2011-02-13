@@ -13,21 +13,6 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-
-public interface EmergencyContact extends IEntity {
-    IPrimitive<String> firstName();
-
-    IPrimitive<String> middleName();
-
-    IPrimitive<String> lastName();
-
-    IPrimitive<String> home();
-
-    IPrimitive<String> mobile();
-
-    IPrimitive<String> email();
-
+public interface EmergencyContact extends ContactDetails {
     Address address();
 }

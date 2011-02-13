@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantAsset extends IEntity {
 
+    @Caption(name = "Name")
     IPrimitive<String> name();
 
+    @Caption(name = "Value")
     IPrimitive<Float> assetValue();
 }

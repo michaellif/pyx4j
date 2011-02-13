@@ -21,7 +21,9 @@ public interface PotentialTenantFinancial extends IEntity {
 
     IPrimitive<String> occupation();
 
-    IList<Employer> employers();
+    Employer currentEmployer();
+
+    Employer previousEmployer();
 
     IList<TenantIncome> incomes();
 

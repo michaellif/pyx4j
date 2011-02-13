@@ -15,18 +15,24 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Address extends IEntity {
+    @Caption(name = "Address 1")
     IPrimitive<String> street1();
 
+    @Caption(name = "Address 2")
     IPrimitive<String> street2();
 
+    @Caption(name = "City")
     IPrimitive<String> city();
 
+    @Caption(name = "Province")
     IPrimitive<String> province();
 
+    @Caption(name = "Postal code")
     IPrimitive<String> postalCode();
 
     IPrimitive<Date> moveInDate();
