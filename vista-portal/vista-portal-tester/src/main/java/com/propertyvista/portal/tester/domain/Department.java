@@ -28,4 +28,6 @@ public interface Department extends IEntity {
     Employee manager();
 
     IList<Employee> employees();
+
+    IList<Employee> contractors();
 }

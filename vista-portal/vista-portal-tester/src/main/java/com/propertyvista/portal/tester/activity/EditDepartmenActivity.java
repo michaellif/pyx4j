@@ -71,6 +71,15 @@ public class EditDepartmenActivity extends AbstractActivity implements EditDepar
                 department.employees().add(emp);
             }
 
+            //contractors
+            {
+                Employee emp = department.contractors().$();
+                emp.firstName().setValue("Vlad");
+                emp.lastName().setValue("S");
+                emp.phone().setValue("100-8523");
+                department.contractors().add(emp);
+            }
+
             view.populate(department);
         }
     }

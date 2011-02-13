@@ -20,6 +20,8 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.FormsFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -44,8 +46,12 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         public void createContent() {
             FlowPanel main = new FlowPanel();
             main.add(new BasicWidgetDecorator(create(proto().name(), this)));
+            main.add(new Label("Manager:"));
             main.add(create(proto().manager(), this));
+            main.add(new Label("Employees:"));
             main.add(create(proto().employees(), this));
+            main.add(new Label("Contractors:"));
+            main.add(create(proto().contractors(), this));
             setWidget(main);
         }
 
@@ -61,7 +67,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         @Override
         protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
             if (member.equals(proto().employees())) {
-                return createEmployeeFolderEditor();
+                return createEmployeeFolderEditorColumns();
+            } else if (member.equals(proto().contractors())) {
+                return createEmployeeFolderEditorForms();
             } else {
                 return super.createMemberFolderEditor(member);
             }
@@ -80,7 +88,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
             };
         }
 
-        private CEntityFolder<Employee> createEmployeeFolderEditor() {
+        private CEntityFolder<Employee> createEmployeeFolderEditorColumns() {
             return new CEntityFolder<Employee>() {
 
                 private List<EntityFolderColumnDescriptor> columns;
@@ -94,8 +102,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 @Override
-                public void createContent() {
-                    setFolderDecorator(new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow()));
+                protected FolderDecorator createFolderDecorator() {
+                    return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow());
                 }
 
                 @Override
@@ -106,10 +114,27 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 private CEntityEditableComponent<Employee> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                     return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentForm.this, SiteImages.INSTANCE.removeRow());
                 }
+
             };
 
         }
 
+        private CEntityFolder<Employee> createEmployeeFolderEditorForms() {
+            return new CEntityFolder<Employee>() {
+
+                @Override
+                protected FolderDecorator createFolderDecorator() {
+                    return new FormsFolderDecorator(SiteImages.INSTANCE.addRow());
+
+                }
+
+                @Override
+                protected CEntityEditableComponent<Employee> createItem() {
+                    return createEmployeeEditor();
+                }
+
+            };
+        }
     }
 
     public EditDepartmentViewImpl() {
