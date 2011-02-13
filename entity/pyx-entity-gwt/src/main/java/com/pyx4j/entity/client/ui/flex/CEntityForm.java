@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.dom.client.Style.Display;
+
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,7 +46,6 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
         super(new EntityFormBinder<E>(rootClass));
         factory = editableComponentFactory;
         createContent();
-
     }
 
     public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
