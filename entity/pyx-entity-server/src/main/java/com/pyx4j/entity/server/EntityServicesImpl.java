@@ -141,7 +141,6 @@ public class EntityServicesImpl {
             search.buildQueryCriteria();
             EntitySearchResult<IEntity> r = new EntitySearchResult<IEntity>();
             SearchResultIterator<IEntity> it = search.getResult(request.getEncodedCursorReference());
-            r.setEncodedCursorReference(it.encodedCursorReference());
             while (it.hasNext()) {
                 IEntity ent = it.next();
                 SecurityController.assertPermission(EntityPermission.permissionRead(ent));
@@ -153,6 +152,7 @@ public class EntityServicesImpl {
             }
             r.hasMoreData(it.hasMoreData());
             it.completeRetrieval();
+            r.setEncodedCursorReference(it.encodedCursorReference());
 
             if (r.getData().size() != 0) {
                 log.debug("got {} ", r.getData().get(0));
