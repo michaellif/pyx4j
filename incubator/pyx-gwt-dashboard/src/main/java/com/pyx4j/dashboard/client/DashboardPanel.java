@@ -524,7 +524,6 @@ public class DashboardPanel extends SimplePanel {
                     menu.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
 
                     pp.setWidget(menu);
-                    //                    pp.addStyleName(CSS_DASHBOARD_PANEL_HOLDER/_MENU);
                     pp.setPopupPosition(btn.getAbsoluteLeft(), btn.getAbsoluteTop() + btn.getOffsetHeight());
                     pp.show();
                 } // onClick button event handler...
