@@ -24,37 +24,28 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class CEntityFolderRow<E extends IEntity> extends CEntityEditableComponent<E> {
+public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderItem<E> {
 
     private final List<EntityFolderColumnDescriptor> columns;
 
     private final CEntityForm<?> form;
 
-    private final ImageResource removeButton;
-
-    public CEntityFolderRow(Class<E> clazz, List<EntityFolderColumnDescriptor> columns, CEntityForm<?> form, ImageResource removeButton) {
+    public CEntityFolderRow(Class<E> clazz, List<EntityFolderColumnDescriptor> columns, CEntityForm<?> form) {
         super(clazz);
         this.columns = columns;
         this.form = form;
-        this.removeButton = removeButton;
     }
 
     @Override
     public void createContent() {
-
         FlowPanel main = new FlowPanel();
         main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.setWidth("100%");
-        Image image = new Image(removeButton);
-        image.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-        main.add(image);
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?> component = form.create(column.getObject(), this);
             component.setWidth(column.getWidth());

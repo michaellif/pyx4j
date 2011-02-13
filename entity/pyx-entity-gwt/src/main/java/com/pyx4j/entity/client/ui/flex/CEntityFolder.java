@@ -48,7 +48,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         setFolderDecorator(createFolderDecorator());
     }
 
-    protected abstract CEntityEditableComponent<E> createItem();
+    protected abstract CEntityFolderItem<E> createItem();
 
     protected abstract FolderDecorator createFolderDecorator();
 
@@ -68,7 +68,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     protected void addRow() {
-        final CEntityEditableComponent<E> comp = createItem();
+        final CEntityFolderItem<E> comp = createItem();
 
         @SuppressWarnings("unchecked")
         E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
@@ -84,8 +84,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             public void onSuccess(E result) {
                 getValue().add(result);
                 comp.createContent();
-                content.add(comp);
                 comp.populate(result);
+                FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
+                folderItemDecorator.setWidget(comp);
+                content.add(folderItemDecorator);
             }
 
         });
@@ -111,10 +113,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
         content.clear();
         for (E item : value) {
-            CEntityEditableComponent<E> comp = createItem();
+            CEntityFolderItem<E> comp = createItem();
             comp.createContent();
-            content.add(comp);
             comp.populate(item);
+            FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
+            folderItemDecorator.setWidget(comp);
+            content.add(folderItemDecorator);
 
         }
     }

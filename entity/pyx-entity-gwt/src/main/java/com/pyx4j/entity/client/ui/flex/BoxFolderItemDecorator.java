@@ -28,13 +28,13 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class FormsFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
+public class BoxFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
 
     private final Image image;
 
     private final SimplePanel content;
 
-    public FormsFolderItemDecorator(ImageResource removeButton) {
+    public BoxFolderItemDecorator(ImageResource removeButton) {
         image = new Image(removeButton);
         content = new SimplePanel();
         add(content);
