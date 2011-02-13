@@ -44,7 +44,4 @@ public interface PotentialTenant extends IEntity {
 
     IPrimitive<Boolean> takeOwnership();
 
-    PotentialTenantInfo tenantInfo();
-
-    PotentialTenantFinancial tenantFinancial();
 }

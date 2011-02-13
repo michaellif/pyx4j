@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PotentialTenantInfo extends IEntity {
+public interface PotentialTenantInfo extends PotentialTenant {
 
     // secure information
     IPrimitive<String> driversLicense();
