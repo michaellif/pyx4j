@@ -25,6 +25,8 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -34,11 +36,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public class TableFolderDecorator extends FlowPanel implements FolderDecorator {
 
+    final Image image;
+
     private final SimplePanel content;
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
 
-        final Image image = new Image(addButton);
+        image = new Image(addButton);
         FlowPanel header = new FlowPanel();
         header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         header.setWidth("100%");
@@ -61,6 +65,11 @@ public class TableFolderDecorator extends FlowPanel implements FolderDecorator {
     @Override
     public void setWidget(IsWidget w) {
         content.setWidget(w);
+    }
+
+    @Override
+    public HandlerRegistration addRowAddClickHandler(ClickHandler handler) {
+        return image.addClickHandler(handler);
     }
 
 }

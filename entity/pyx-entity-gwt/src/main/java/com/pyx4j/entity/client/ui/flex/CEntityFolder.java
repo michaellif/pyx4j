@@ -20,12 +20,17 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 /**
  * This component represents list of IEntities
@@ -49,6 +54,49 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
         content = new FlowPanel();
         folderDecorator.setWidget(content);
+
+        folderDecorator.addRowAddClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                addRow();
+            }
+        });
+    }
+
+    protected void addRow() {
+        final CEntityEditableComponent<E> comp = createItem();
+
+        @SuppressWarnings("unchecked")
+        E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
+
+        createNewEntity(newEntity, new AsyncCallback<E>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+
+            @Override
+            public void onSuccess(E result) {
+                getValue().add(result);
+                comp.createContent();
+                content.add(comp);
+                comp.populate(result);
+            }
+
+        });
+
+    }
+
+    /**
+     * Implementation to override new Entity creation. No need to call
+     * super.createNewEntity().
+     * 
+     * @param newEntity
+     * @param callback
+     */
+    protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
+        callback.onSuccess(newEntity);
     }
 
     @Override

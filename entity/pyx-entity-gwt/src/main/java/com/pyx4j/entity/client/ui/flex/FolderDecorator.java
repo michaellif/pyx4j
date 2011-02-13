@@ -20,9 +20,13 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface FolderDecorator extends AcceptsOneWidget, IsWidget {
+
+    HandlerRegistration addRowAddClickHandler(ClickHandler handler);
 
 }
