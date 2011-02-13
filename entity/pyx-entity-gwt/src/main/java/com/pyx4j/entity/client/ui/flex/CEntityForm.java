@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.flex;
 
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -33,11 +34,15 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
  */
 public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComponent<E> {
 
-    private final BaseEditableComponentFactory factory;
+    private final EditableComponentFactory factory;
 
     public CEntityForm(Class<E> rootClass) {
+        this(rootClass, new BaseEditableComponentFactory());
+    }
+
+    public CEntityForm(Class<E> rootClass, EditableComponentFactory editableComponentFactory) {
         super(new EntityFormBinder<E>(rootClass));
-        factory = new BaseEditableComponentFactory();
+        factory = editableComponentFactory;
         createContent();
 
     }
