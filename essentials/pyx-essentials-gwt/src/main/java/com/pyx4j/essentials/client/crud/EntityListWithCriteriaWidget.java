@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.shared.IEntity;
@@ -66,6 +67,8 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
     private final String entityName;
 
     private final Map<Integer, String> encodedCursorReferences;
+
+    private EntitySearchCriteria<E> cursorCriteria;
 
     private final Class<? extends NavigNode> serachPage;
 
@@ -233,6 +236,7 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
             public void onSuccess(EntitySearchResult<? extends IEntity> result) {
                 log.info("Loaded " + result.getData().size() + " " + entityName + "('s) in {} msec ", System.currentTimeMillis() - start);
                 log.info("Registering encodedCursorReference:" + result.getEncodedCursorReference() + " for page:" + criteria.getPageNumber());
+                cursorCriteria = (EntitySearchCriteria<E>) criteria.clone();
                 encodedCursorReferences.put(criteria.getPageNumber(), result.getEncodedCursorReference());
                 List<E> entities = new ArrayList<E>();
                 for (IEntity entity : result.getData()) {
@@ -248,6 +252,10 @@ public class EntityListWithCriteriaWidget<E extends IEntity> extends DockPanel i
                 throw new UnrecoverableClientError(caught);
             }
         };
+
+        if (!EqualsHelper.equals(cursorCriteria, criteria)) {
+            encodedCursorReferences.clear();
+        }
 
         String encodedCursorReference = encodedCursorReferences.get(criteria.getPageNumber());
         log.info("page {} encodedCursorReference {} ", criteria.getPageNumber(), encodedCursorReference);

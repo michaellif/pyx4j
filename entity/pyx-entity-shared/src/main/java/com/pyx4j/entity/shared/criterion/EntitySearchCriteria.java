@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -136,6 +137,22 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
         this.sorts = sorts;
     }
 
+    public String getEncodedCursorReference() {
+        return encodedCursorReference;
+    }
+
+    public void setEncodedCursorReference(String encodedCursorReference) {
+        this.encodedCursorReference = encodedCursorReference;
+    }
+
+    public boolean filtersEquals(EntitySearchCriteria<?> other) {
+        if ((!getEntityClass().equals(other.getEntityClass())) || (getPageSize() != other.getPageSize())) {
+            return false;
+        } else {
+            return EqualsHelper.equals(getSorts(), other.getSorts()) && EqualsHelper.equals(getFilters(), other.getFilters());
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -151,11 +168,23 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
         return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
     }
 
-    public String getEncodedCursorReference() {
-        return encodedCursorReference;
+    // N.B. Do not use @Override for GWT to compile
+    //@Override
+    public Object clone() {
+        EntitySearchCriteria<E> c = create(getEntityClass());
+        c.setPageNumber(this.getPageNumber());
+        c.setPageSize(this.getPageSize());
+        if (this.getSorts() != null) {
+            for (Sort s : this.getSorts()) {
+                c.sort(s);
+            }
+        }
+        if (this.getFilters() != null) {
+            for (Map.Entry<PathSearch, Serializable> f : this.getFilters().entrySet()) {
+                c.setValue(f.getKey(), f.getValue());
+            }
+        }
+        return c;
     }
 
-    public void setEncodedCursorReference(String encodedCursorReference) {
-        this.encodedCursorReference = encodedCursorReference;
-    }
 }
