@@ -117,7 +117,6 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
 
     public void setParent(CContainer parent) {
         this.parent = parent;
-        setDebugId(new CompositeDebugId(parent.getDebugId(), getDebugId()));
         if (inheritContainerAccessRules) {
             addAccessAdapter(parent.getContainerAccessAdapter());
         }
@@ -234,13 +233,17 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     }
 
     public IDebugId getDebugId() {
-        return debugId;
+        if ((parent != null) && (debugId != null)) {
+            return new CompositeDebugId(parent.getDebugId(), debugId);
+        } else {
+            return debugId;
+        }
     }
 
     public void setDebugId(IDebugId debugId) {
         this.debugId = debugId;
-        if (widget != null) {
-            widget.ensureDebugId(debugId.getDebugIdString());
+        if ((widget != null) && (debugId != null)) {
+            widget.ensureDebugId(getDebugId().getDebugIdString());
         }
     }
 
