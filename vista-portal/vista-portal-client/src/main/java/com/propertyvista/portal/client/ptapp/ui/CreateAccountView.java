@@ -20,6 +20,8 @@ public interface CreateAccountView extends IsWidget {
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
+
+        void goToSignin();
     }
 
 }

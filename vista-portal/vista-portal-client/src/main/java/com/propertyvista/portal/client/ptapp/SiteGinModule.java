@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.client.ptapp.activity.ActivityModule;
 import com.propertyvista.portal.client.ptapp.mvp.MvpModule;
 import com.propertyvista.portal.client.ptapp.ui.ViewModule;
 
@@ -28,6 +27,5 @@ public class SiteGinModule extends AbstractGinModule {
 
         install(new MvpModule());
         install(new ViewModule());
-        install(new ActivityModule());
     }
 }

@@ -24,22 +24,23 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.domain.DemoData;
-import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 
-public class CreateAccountViewImpl extends VerticalPanel implements CreateAccountView {
+public class LoginViewImpl extends VerticalPanel implements LoginView {
 
-    private static I18n i18n = I18nFactory.getI18n(CreateAccountViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(LoginViewImpl.class);
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<AccountCreationRequest> form;
+    private final CEntityEditableComponent<AuthenticationRequest> form;
 
     private int devCount = 1;
 
@@ -47,35 +48,30 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     private HandlerRegistration handlerRegistration;
 
-    public CreateAccountViewImpl() {
+    public LoginViewImpl() {
 
-        Button signinButton = new Button("Signin");
-        signinButton.ensureDebugId("Signin");
-        signinButton.addClickHandler(new ClickHandler() {
+        if (ApplicationMode.isDevelopment()) {
+            add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
+            add(new HTML("Press <i>Ctrl+Alt+T</i> to login"));
 
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.goToSignin();
-            }
+        }
 
-        });
-        signinButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
-        add(signinButton);
-
-        form = new CreateAccountViewForm();
+        form = new LoginViewForm();
         add(form);
 
-        Button viewButton = new Button("Let's Start");
+        Button viewButton = new Button("Login");
         viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         viewButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
+                presenter.login(form.getValue());
             }
 
         });
         viewButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
         add(viewButton);
+
     }
 
     @Override

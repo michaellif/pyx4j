@@ -28,9 +28,12 @@ public class ViewModule extends AbstractGinModule {
         bind(FooterView.class).to(FooterViewImpl.class).in(Singleton.class);
         bind(MainNavigView.class).to(MainNavigViewImpl.class).in(Singleton.class);
         bind(StaticContentView.class).to(StaticContentViewImpl.class).in(Singleton.class);
-        bind(CreateAccountView.class).to(CreateAccountViewImpl.class).in(Singleton.class);
+
         bind(TopRightActionsView.class).to(TopRightActionsViewImpl.class).in(Singleton.class);
         bind(CaptionView.class).to(CaptionViewImpl.class).in(Singleton.class);
+
+        bind(CreateAccountView.class).to(CreateAccountViewImpl.class).in(Singleton.class);
+        bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
         bind(ApartmentView.class).to(ApartmentViewImpl.class).in(Singleton.class);
 
         bind(TenantsView.class).to(TenantsViewImpl.class).in(Singleton.class);

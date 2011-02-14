@@ -11,22 +11,19 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.activity;
+package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class ActivityModule extends AbstractGinModule {
+import com.pyx4j.security.rpc.AuthenticationRequest;
 
-    @Override
-    protected void configure() {
+public interface LoginView extends IsWidget {
 
-        bind(LogoActivity.class);
-        bind(MainNavigActivity.class);
-        bind(CreateAccountActivity.class);
-        bind(TopRightActionsActivity.class);
-        bind(FooterActivity.class);
-        bind(StaticContentActivity.class);
+    public void setPresenter(Presenter presenter);
 
+    public interface Presenter {
+
+        void login(AuthenticationRequest value);
     }
 
 }

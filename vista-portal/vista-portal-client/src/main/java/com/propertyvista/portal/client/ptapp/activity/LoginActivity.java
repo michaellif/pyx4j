@@ -15,29 +15,26 @@ package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
+import com.propertyvista.portal.client.ptapp.ui.LoginView;
 
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.site.client.place.AppPlace;
 
-public class CreateAccountActivity extends AbstractActivity implements CreateAccountView.Presenter {
+public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 
-    private final CreateAccountView view;
-
-    private final PlaceController placeController;
+    private final LoginView view;
 
     @Inject
-    public CreateAccountActivity(CreateAccountView view, PlaceController placeController, PtAppWizardManager manager) {
+    public LoginActivity(LoginView view, PtAppWizardManager manager) {
         this.view = view;
-        this.placeController = placeController;
         view.setPresenter(this);
     }
 
-    public CreateAccountActivity withPlace(AppPlace place) {
+    public LoginActivity withPlace(AppPlace place) {
         return this;
     }
 
@@ -47,8 +44,9 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
     }
 
     @Override
-    public void goToSignin() {
-        placeController.goTo(new SiteMap.Login());
+    public void login(AuthenticationRequest value) {
+        // TODO Auto-generated method stub
+
     }
 
 }

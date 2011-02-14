@@ -20,7 +20,11 @@ import com.pyx4j.site.client.place.AppPlace;
 public class SiteMap {
 
     @PlaceProperties(caption = "Application Form")
-    public static class SignIn extends AppPlace {
+    public static class CreateAccount extends AppPlace {
+    }
+
+    @PlaceProperties(caption = "Login")
+    public static class Login extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Apartment")
@@ -64,10 +68,6 @@ public class SiteMap {
 
     @PlaceProperties(caption = "Terms and conditions", staticContent = "termsAndConditions")
     public static class TermsAndConditions extends AppPlace {
-    }
-
-    @PlaceProperties(caption = "LogOut")
-    public static class LogOut extends AppPlace {
     }
 
 }

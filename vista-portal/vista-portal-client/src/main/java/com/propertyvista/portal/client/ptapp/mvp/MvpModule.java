@@ -53,7 +53,7 @@ public class MvpModule extends AbstractGinModule {
     public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, EventBus eventBus) {
         PlaceHistoryMapper historyMapper = GWT.create(PlaceHistoryMapper.class);
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, new SiteMap.SignIn());
+        historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
 
         return historyHandler;
     }

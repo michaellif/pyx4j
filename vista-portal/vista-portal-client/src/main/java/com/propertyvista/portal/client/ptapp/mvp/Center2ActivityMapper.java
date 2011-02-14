@@ -23,6 +23,7 @@ import com.propertyvista.portal.client.ptapp.activity.ApartmentActivity;
 import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
 import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
+import com.propertyvista.portal.client.ptapp.activity.LoginActivity;
 import com.propertyvista.portal.client.ptapp.activity.PaymentActivity;
 import com.propertyvista.portal.client.ptapp.activity.PetsActivity;
 import com.propertyvista.portal.client.ptapp.activity.StaticContentActivity;
@@ -33,7 +34,9 @@ import com.pyx4j.site.client.place.AppPlace;
 
 public class Center2ActivityMapper implements ActivityMapper {
 
-    Provider<CreateAccountActivity> signInActivityProvider;
+    Provider<CreateAccountActivity> createAccountActivityProvider;
+
+    Provider<LoginActivity> loginActivityProvider;
 
     Provider<ApartmentActivity> apartmentActivityProvider;
 
@@ -52,7 +55,9 @@ public class Center2ActivityMapper implements ActivityMapper {
     Provider<StaticContentActivity> staticContentActivity;
 
     @Inject
-    public Center2ActivityMapper(final Provider<CreateAccountActivity> signInActivityProvider,
+    public Center2ActivityMapper(final Provider<CreateAccountActivity> createAccountActivityProvider,
+
+    final Provider<LoginActivity> loginActivityProvider,
 
     final Provider<ApartmentActivity> apartmentActivityProvider,
 
@@ -71,7 +76,8 @@ public class Center2ActivityMapper implements ActivityMapper {
     final Provider<StaticContentActivity> staticContentActivity) {
 
         super();
-        this.signInActivityProvider = signInActivityProvider;
+        this.createAccountActivityProvider = createAccountActivityProvider;
+        this.loginActivityProvider = loginActivityProvider;
         this.apartmentActivityProvider = apartmentActivityProvider;
         this.tenantsActivityProvider = tenantsActivityProvider;
         this.infoActivityProvider = infoActivityProvider;
@@ -85,8 +91,10 @@ public class Center2ActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof SiteMap.SignIn) {
-            return signInActivityProvider.get().withPlace((AppPlace) place);
+        if (place instanceof SiteMap.CreateAccount) {
+            return createAccountActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.Login) {
+            return loginActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Apartment) {
             return apartmentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Tenants) {
