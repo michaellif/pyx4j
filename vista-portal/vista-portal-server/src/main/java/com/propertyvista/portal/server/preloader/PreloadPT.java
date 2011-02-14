@@ -20,13 +20,13 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.Address;
-import com.propertyvista.portal.domain.pt.Address.ownedRented;
+import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.incomeTypes;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.IncomeTypes;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantIncome;
@@ -60,7 +60,7 @@ public class PreloadPT extends AbstractDataPreloader {
     public static PotentialTenantFinancial createFinancial() {
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
-        ptf.occupation().setValue((incomeTypes) RandomUtil.random(PotentialTenantFinancial.incomeTypes.class));
+        ptf.occupation().setValue((IncomeTypes) RandomUtil.random(PotentialTenantFinancial.IncomeTypes.class));
 
         Employer currentEmployer = createEmployer();
         PersistenceServicesFactory.getPersistenceService().persist(currentEmployer);
@@ -145,7 +145,7 @@ public class PreloadPT extends AbstractDataPreloader {
         address.payment().setValue(1000f + RandomUtil.randomInt(1000));
 
         address.phone().setValue(RandomUtil.randomPhone());
-        address.rented().setValue((ownedRented) RandomUtil.random(Address.ownedRented.class));
+        address.rented().setValue((OwnedRented) RandomUtil.random(Address.OwnedRented.class));
         address.canadian().setValue(RandomUtil.randomBoolean());
         address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
 

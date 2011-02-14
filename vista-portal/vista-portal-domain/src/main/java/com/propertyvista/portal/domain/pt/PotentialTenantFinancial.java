@@ -20,11 +20,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PotentialTenantFinancial extends IEntity {
 
-    public static enum incomeTypes {
+    public static enum IncomeTypes {
         fulltime, parttime, socialService, pension, se, retired, student, odsp, other
     }
 
-    IPrimitive<incomeTypes> occupation();
+    IPrimitive<IncomeTypes> occupation();
 
     @Owned
     Employer currentEmployer();

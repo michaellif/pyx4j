@@ -22,6 +22,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Address extends IEntity {
+
+    public enum OwnedRented {
+        Owned, Rented
+    }
+
     @Caption(name = "Address 1")
     IPrimitive<String> street1();
 
@@ -45,13 +50,9 @@ public interface Address extends IEntity {
 
     IPrimitive<String> phone();
 
-    public enum ownedRented {
-        Owned, Rented
-    }
-
     @Caption(name = "Owned/Rented")
     @Editor(type = EditorType.radiogroup)
-    IPrimitive<ownedRented> rented();
+    IPrimitive<OwnedRented> rented();
 
     IPrimitive<Boolean> canadian();
 
