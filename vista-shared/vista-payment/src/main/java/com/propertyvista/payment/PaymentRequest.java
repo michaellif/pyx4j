@@ -28,4 +28,5 @@ public interface PaymentRequest extends IEntity {
 
     IPrimitive<Float> amount();
 
+    IPrimitive<String> referenceNumber();
 }

@@ -51,4 +51,27 @@
 
     </dependencies>
 
+    <profiles>
+        <!-- Hack: have the 2nd profile's excludes override the 1st -->
+        <profile>
+            <id>vista-no-caledon-tests</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/caledon/*.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

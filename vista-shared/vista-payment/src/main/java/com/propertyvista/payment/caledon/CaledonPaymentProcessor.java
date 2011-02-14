@@ -28,8 +28,12 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse sale(PaymentRequest request) {
+    public PaymentResponse realTimeSale(PaymentRequest request) {
         CaledonRequest crequest = new CaledonRequest();
+
+        crequest.terminalID = "BIRCHWTT";
+        crequest.transactionType = CaledonTransactionType.SALE.getValue();
+        crequest.referenceNumber = request.referenceNumber().getValue();
 
         crequest.setAmount(request.amount().getValue());
         crequest.creditCardNumber = request.creditCardNumber().getValue();
@@ -43,7 +47,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse authorization(PaymentRequest request) {
+    public PaymentResponse realTimeAuthorization(PaymentRequest request) {
         return null;
     }
 

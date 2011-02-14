@@ -15,8 +15,8 @@ package com.propertyvista.payment;
 
 public interface IPaymentProcessor {
 
-    PaymentResponse sale(PaymentRequest request);
+    PaymentResponse realTimeSale(PaymentRequest request);
 
-    PaymentResponse authorization(PaymentRequest request);
+    PaymentResponse realTimeAuthorization(PaymentRequest request);
 
 }
