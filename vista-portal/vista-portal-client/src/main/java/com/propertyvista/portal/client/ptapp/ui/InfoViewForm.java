@@ -158,9 +158,9 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                 main.add(new HTML());
                 main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().home(), this)));
+                main.add(new BasicWidgetDecorator(create(proto().homePhone(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().mobile(), this)));
+                main.add(new BasicWidgetDecorator(create(proto().mobilePhone(), this)));
                 main.add(new HTML());
                 main.add(new BasicWidgetDecorator(create(proto().address().street1(), this)));
                 main.add(new HTML());

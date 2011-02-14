@@ -23,9 +23,9 @@ public interface ContactDetails extends IEntity {
 
     IPrimitive<String> lastName();
 
-    IPrimitive<String> home();
+    IPrimitive<String> homePhone();
 
-    IPrimitive<String> mobile();
+    IPrimitive<String> mobilePhone();
 
     IPrimitive<String> email();
 }

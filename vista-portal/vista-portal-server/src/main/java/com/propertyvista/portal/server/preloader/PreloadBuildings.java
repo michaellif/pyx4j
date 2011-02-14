@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.Address;
-import com.propertyvista.portal.domain.Address.AddressType;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.Complex;
@@ -65,19 +64,6 @@ public class PreloadBuildings extends AbstractDataPreloader {
         phone.phoneNumber().setValue("(" + code + ") 555-" + digits);
 
         return phone;
-    }
-
-    private Address createAddress(String line1, String zip) {
-        Address address = EntityFactory.create(Address.class);
-
-        address.addressType().setValue(AddressType.property);
-        address.addressLine1().setValue(line1);
-        address.city().setValue("Toronto");
-        address.state().setValue("ON");
-        address.country().name().setValue("Canada");
-        address.zip().setValue(zip);
-
-        return address;
     }
 
     private Complex createComplex(int numBuildings) {
@@ -187,7 +173,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
             // address
             String street = RandomUtil.randomInt(10000) + " Yonge St";
             String zip = "L" + (i + 1 % 10) + "C " + (i + 5 % 10) + "M" + (i + 7 % 10);
-            Address address = createAddress(street, zip);
+            Address address = PreloadUtil.createAddress(street, zip);
 
             // phones
             List<Phone> phones = new ArrayList<Phone>();

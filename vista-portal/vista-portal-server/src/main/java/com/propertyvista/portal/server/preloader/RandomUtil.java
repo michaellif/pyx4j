@@ -13,12 +13,27 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class RandomUtil {
 
     //	private static Random random = new Random(System.currentTimeMillis());
     private static Random random = new Random(100); // we want pseudo-randomness, same results each time
+
+    public static Date randomDate() {
+        return randomDate(1930, 2020);
+    }
+
+    public static Date randomDate(int yearFrom, int yearTo) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, yearFrom + randomInt(yearTo - yearFrom));
+        calendar.set(Calendar.DAY_OF_YEAR, randomInt(365));
+
+        // TODO have not done minutes/hours for now
+        return calendar.getTime();
+    }
 
     public static boolean randomBoolean() {
         return random.nextBoolean();
@@ -33,5 +48,16 @@ public class RandomUtil {
             return null;
         int index = random.nextInt(array.length);
         return array[index];
+    }
+
+    public static String randomPhone() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("(416) ");
+        sb.append(randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
+        sb.append("-");
+        sb.append(randomInt(10) * 1000 + randomInt(10) * 100 + randomInt(10) * 10 + randomInt(10));
+
+        return sb.toString();
     }
 }
