@@ -29,6 +29,10 @@ import java.util.Locale;
 
 public abstract class HostConfig {
 
+    protected String proxyHost;
+
+    protected int proxyPort;
+
     public void configure() {
         configure(getLocalHostName());
     }
@@ -71,10 +75,24 @@ public abstract class HostConfig {
     }
 
     public void setProxy(String proxyHost, String proxyPort) {
+        setProxy(proxyHost, Integer.valueOf(proxyPort));
+    }
+
+    public void setProxy(String proxyHost, int proxyPort) {
+        this.proxyHost = proxyHost;
+        this.proxyPort = proxyPort;
         System.setProperty("http.proxyHost", proxyHost);
-        System.setProperty("http.proxyPort", proxyPort);
+        System.setProperty("http.proxyPort", String.valueOf(proxyPort));
         System.setProperty("https.proxyHost", proxyHost);
-        System.setProperty("https.proxyPort", proxyPort);
+        System.setProperty("https.proxyPort", String.valueOf(proxyPort));
         System.setProperty("http.noProxyHosts", "localhost");
+    }
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public int getProxyPort() {
+        return proxyPort;
     }
 }
