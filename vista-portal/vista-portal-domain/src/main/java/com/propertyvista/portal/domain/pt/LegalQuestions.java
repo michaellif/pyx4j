@@ -13,19 +13,39 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface LegalQuestions extends IEntity {
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever been sued for rent?")
     IPrimitive<Boolean> suedForRent();
 
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever been sued for damages?")
     IPrimitive<Boolean> suedForDamages();
 
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever been evicted?")
     IPrimitive<Boolean> everEvicted();
 
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever defaulted on a lease?")
     IPrimitive<Boolean> defaultedOnLease();
 
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever been convicted of a felony that involved an offence against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?")
     IPrimitive<Boolean> convictedOfFelony();
 
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever had any public record suits, liens, judgements or reposessions?")
     IPrimitive<Boolean> legalTroubles();
+
+    @Editor(type = EditorType.radiogroup)
+    @Caption(name = "Have you ever filed for bankruptcy protection?")
+    IPrimitive<Boolean> filedBankruptcy();
+
 }

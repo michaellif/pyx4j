@@ -92,6 +92,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new HTML());
         main.add(create(proto().legalQuestions().legalTroubles(), this));
         main.add(new HTML());
+        main.add(create(proto().legalQuestions().filedBankruptcy(), this));
+        main.add(new HTML());
 
         main.add(new HTML("<p/><h4>Emergency Contacts</h4>"));
 
