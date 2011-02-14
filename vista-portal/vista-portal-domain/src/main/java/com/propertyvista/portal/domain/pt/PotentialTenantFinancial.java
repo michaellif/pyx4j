@@ -13,19 +13,28 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PotentialTenantFinancial extends IEntity {
 
-    IPrimitive<String> occupation();
+    public static enum incomeTypes {
+        fulltime, parttime, socialService, pension, se, retired, student, odsp, other
+    }
 
+    IPrimitive<incomeTypes> occupation();
+
+    @Owned
     Employer currentEmployer();
 
+    @Owned
     Employer previousEmployer();
 
+    @Owned
     IList<TenantIncome> incomes();
 
+    @Owned
     IList<TenantAsset> assets();
 }

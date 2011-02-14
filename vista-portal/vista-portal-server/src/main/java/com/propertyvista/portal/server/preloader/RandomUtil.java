@@ -50,6 +50,11 @@ public class RandomUtil {
         return array[index];
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T random(Class<?> en) {
+        return (T) random(en.getEnumConstants());
+    }
+
     public static String randomPhone() {
         StringBuilder sb = new StringBuilder();
 

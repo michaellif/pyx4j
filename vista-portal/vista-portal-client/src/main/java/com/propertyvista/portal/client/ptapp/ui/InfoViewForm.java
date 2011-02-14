@@ -80,19 +80,19 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(create(proto().vehicles(), this));
 
         main.add(new HTML("<p/><h4>General Questions</h4>"));
-        main.add(create(proto().legalQuestions().suedForRent(), this));
+        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForRent(), this)));
         main.add(new HTML());
-        main.add(create(proto().legalQuestions().suedForDamages(), this));
+        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForDamages(), this)));
         main.add(new HTML());
-        main.add(create(proto().legalQuestions().everEvicted(), this));
+        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().everEvicted(), this)));
         main.add(new HTML());
-        main.add(create(proto().legalQuestions().defaultedOnLease(), this));
+        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().defaultedOnLease(), this)));
         main.add(new HTML());
-        main.add(create(proto().legalQuestions().convictedOfFelony(), this));
+        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().convictedOfFelony(), this)));
         main.add(new HTML());
-        main.add(create(proto().legalQuestions().legalTroubles(), this));
+        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().legalTroubles(), this)));
         main.add(new HTML());
-        main.add(create(proto().legalQuestions().filedBankruptcy(), this));
+        main.add((create(proto().legalQuestions().filedBankruptcy(), this)));
         main.add(new HTML());
 
         main.add(new HTML("<p/><h4>Emergency Contacts</h4>"));

@@ -16,6 +16,8 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.inject.Singleton;
@@ -37,10 +39,15 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 @Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
+
+    private FlowPanel previousPanel;
+
+    protected CEditableComponent<?, ?> currentEmployedForYears;
 
     public FinancialViewForm() {
         super(PotentialTenantFinancial.class);
@@ -53,35 +60,26 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
         main.add(new BasicWidgetDecorator(create(proto().occupation(), this)));
         main.add(new HTML());
 
-        addEmployerSection("Current Employer", proto().currentEmployer(), this, main);
+        main.add(new HTML("<p/><h4>Current Employer</h4>"));
+        main.add(create(proto().currentEmployer(), this));
+        main.add(new HTML());
 
-        addEmployerSection("Previous Employer", proto().currentEmployer(), this, main);
+        previousPanel = new FlowPanel();
+        previousPanel.setVisible(false);
+        main.add(previousPanel);
+        previousPanel.add(new HTML("<p/><h4>Previous Employer</h4>"));
+        previousPanel.add(create(proto().previousEmployer(), this));
+        previousPanel.add(new HTML());
 
         main.add(new HTML("<p/><h4>Assets</h4>"));
         main.add(create(proto().assets(), this));
+        main.add(new HTML());
 
         main.add(new HTML("<p/><h4>Income sources</h4>"));
         main.add(create(proto().incomes(), this));
+        main.add(new HTML());
 
         setWidget(main);
-    }
-
-    private void addEmployerSection(String label, Employer employer, FinancialViewForm form, FlowPanel main) {
-        main.add(new HTML("<p/><h4>" + label + "</h4>"));
-        //TODO: checkbox enabling/disabling the whole section? or list with +/-?
-        main.add(new BasicWidgetDecorator(create(employer.name(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(employer.employedForYears(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(employer.address().street1(), this)));
-        main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(employer.address().street2(), this)));
-        main.add(new HTML());
-    }
-
-    @Override
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
-        return super.createMemberEditor(member);
     }
 
     @Override
@@ -93,6 +91,52 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
         } else {
             return super.createMemberFolderEditor(member);
         }
+    }
+
+    @Override
+    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+        if (member.getValueClass().equals(Employer.class)) {
+            return createEmployerEditor();
+        }
+        return super.createMemberEditor(member);
+    }
+
+    private CEntityEditableComponent<Employer> createEmployerEditor() {
+        return new CEntityEditableComponent<Employer>(Employer.class) {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @Override
+            public void createContent() {
+                FlowPanel main = new FlowPanel();
+                main.add(new BasicWidgetDecorator(create(proto().name(), this)));
+                main.add(new HTML());
+                currentEmployedForYears = (CEditableComponent<?, ?>) create(proto().employedForYears(), this);
+                currentEmployedForYears.addValueChangeHandler(new ValueChangeHandler() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent event) {
+                        previousPanel.setVisible(((Integer) event.getValue()) < 2);
+                    }
+                });
+                main.add(new BasicWidgetDecorator(currentEmployedForYears));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().street1(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().street2(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().city(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().address().province(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().supervisorName(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().supervisorPhone(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().monthlySalary(), this)));
+                main.add(new HTML());
+                main.add(new BasicWidgetDecorator(create(proto().position(), this)));
+                main.add(new HTML());
+                setWidget(main);
+            }
+        };
     }
 
     private CEntityFolder<TenantAsset> createAssetFolderEditorColumns() {

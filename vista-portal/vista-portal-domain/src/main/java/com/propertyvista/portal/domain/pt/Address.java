@@ -16,6 +16,8 @@ package com.propertyvista.portal.domain.pt;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -43,7 +45,13 @@ public interface Address extends IEntity {
 
     IPrimitive<String> phone();
 
-    IPrimitive<Boolean> rented();
+    public enum ownedRented {
+        Owned, Rented
+    }
+
+    @Caption(name = "Owned/Rented")
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<ownedRented> rented();
 
     IPrimitive<Boolean> canadian();
 
