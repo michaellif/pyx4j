@@ -64,6 +64,10 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         binder.bind(component, member);
     }
 
+    public <T> CEditableComponent<T, ?> get(IObject<T> member) {
+        return binder.get(member);
+    }
+
     @Override
     protected NativeEntityEditor<E> initWidget() {
         return new NativeEntityEditor<E>();
