@@ -26,6 +26,7 @@ import java.util.Map;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -54,6 +55,7 @@ public class NativeRadioGroup<E extends Enum<E>> extends SimplePanel implements 
             panel = new VerticalPanel();
         }
         this.setWidget(panel);
+        panel.add(new Label(cComponent.getTitle()));
 
         String groupName = cComponent.getOptionsClass().getName();
 

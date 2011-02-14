@@ -40,6 +40,7 @@ import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRichTextAreaPopup;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
@@ -95,6 +96,13 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 return new CEmailField();
             case phone:
                 return new CPhoneField();
+            case radiogroup:
+                if (mm.getValueClass() == Boolean.class) {
+                    return new CRadioGroup<yesNo>(mm.getCaption(), yesNo.class, CRadioGroup.Layout.HORISONTAL);
+                }
+                if (mm.getValueClass().isEnum()) {
+                    return new CRadioGroup(mm.getCaption(), mm.getValueClass(), CRadioGroup.Layout.HORISONTAL);
+                }
             default:
                 throw new Error("Unknown ");
             }
@@ -131,6 +139,10 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
         } else {
             return new CTextField();
         }
+    }
+
+    public enum yesNo {
+        yes, no
     }
 
     protected EntityFormFactory<? extends IEntity> createEntityFormFactory(IObject<?> member) {
