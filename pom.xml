@@ -137,6 +137,84 @@
                 <version>1.4</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-server</artifactId>
+                <version>${pyxVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-stubs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-1.0-sdk</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-stubs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-testing</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-stubs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-labs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-labs</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>pyx-essentials-j2se</artifactId>
+                <version>${pyxVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-stubs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-1.0-sdk</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-stubs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-testing</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-stubs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-labs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.appengine</groupId>
+                        <artifactId>appengine-api-labs</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+			    <groupId>commons-httpclient</groupId>
+			    <artifactId>commons-httpclient</artifactId>
+			    <version>3.0.1</version>
+		    </dependency>
+
         </dependencies>
     </dependencyManagement>
 
