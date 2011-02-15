@@ -44,6 +44,7 @@ class CaledonHttpClient {
         GetMethod httpMethod = new GetMethod(url);
         httpMethod.setFollowRedirects(false);
         httpMethod.setQueryString(buildRequestQuery(request));
+        //System.out.println(httpMethod.getQueryString());
 
         HttpClient httpClient = new HttpClient();
         if (CommonsStringUtils.isStringSet(configuration.getProxyHost())) {
