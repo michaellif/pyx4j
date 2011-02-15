@@ -18,6 +18,7 @@ import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
@@ -29,6 +30,14 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     static final String recaptchaPrivateKey = "6LfVZMESAAAAANrD2Ln5t4yWg3czLMBjQRuKosGx";
 
     static final String recaptchaPublicKey = "6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth";
+
+    @Override
+    public ServerSideConfiguration selectInstanceByContextName(String contextName) {
+        if ("vista33".equals(contextName)) {
+
+        }
+        return this;
+    }
 
     @Override
     public AclCreator getAclCreator() {
