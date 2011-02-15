@@ -174,18 +174,23 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity execute(EntityQueryCriteria<?> request) {
-            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
-            IEntity ent;
-            if (request instanceof EntityCriteriaByPK) {
-                ent = PersistenceServicesFactory.getPersistenceService().retrieve(request.getEntityClass(), ((EntityCriteriaByPK<?>) request).getPrimaryKey());
-            } else {
-                ent = PersistenceServicesFactory.getPersistenceService().retrieve(request);
-            }
-            if (ent != null) {
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-            }
-            return ent;
+            return secureRetrieve(request);
         }
+
+    }
+
+    public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
+        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+        T ent;
+        if (criteria instanceof EntityCriteriaByPK) {
+            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
+        } else {
+            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        }
+        if (ent != null) {
+            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+        }
+        return ent;
     }
 
     public static class RetrieveByPKImpl implements EntityServices.RetrieveByPK {
