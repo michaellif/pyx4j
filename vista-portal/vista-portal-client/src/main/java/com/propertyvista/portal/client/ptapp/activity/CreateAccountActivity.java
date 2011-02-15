@@ -28,8 +28,8 @@ import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.place.AppPlace;
@@ -69,11 +69,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
             @Override
             public void onFailure(Throwable caught) {
-                if (caught instanceof UserRuntimeException) {
-                    view.showUserErrorMessage(caught.getMessage());
-                } else {
-                    view.showSystemErrorMessage(i18n.tr("TODO: Generic error message"));
-                }
+                throw new UnrecoverableClientError(caught);
             }
 
             @Override

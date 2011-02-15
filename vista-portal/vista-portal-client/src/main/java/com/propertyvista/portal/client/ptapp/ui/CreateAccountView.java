@@ -20,10 +20,6 @@ public interface CreateAccountView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    public void showSystemErrorMessage(String message);
-
-    public void showUserErrorMessage(String message);
-
     public interface Presenter {
 
         void goToSignin();

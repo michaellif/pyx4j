@@ -33,7 +33,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class CreateAccountViewImpl extends VerticalPanel implements CreateAccountView {
 
@@ -78,8 +78,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
                 CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
                 if (captcha.isValueEmpty()) {
-                    MessageDialog.warn(i18n.tr("Validation failed."), i18n.tr("Captcha code is required"));
-                    return;
+                    throw new UserRuntimeException(i18n.tr("Validation failed.") + " " + i18n.tr("Captcha code is required."));
                 }
                 // Captcha do not have events is Google component. We need to fix this! 
                 captcha.retrieveValue();
@@ -156,14 +155,4 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         }
     }
 
-    @Override
-    public void showSystemErrorMessage(String message) {
-        MessageDialog.error(i18n.tr("TODO: SystemErrorMessage"), message);
-    }
-
-    @Override
-    public void showUserErrorMessage(String message) {
-        MessageDialog.error(i18n.tr("TODO: UserErrorMessage"), message);
-
-    }
 }

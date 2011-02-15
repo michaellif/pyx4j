@@ -7,26 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
+ * Created on 2011-02-15
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.User;
-
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface Application extends IEntity {
+public interface ApplicationProgress extends IEntity {
 
-    @ReadOnly
-    User user();
-
-    Money rent();
-
-    @Owned
-    ApplicationProgress status();
 }

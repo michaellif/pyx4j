@@ -7,26 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
+ * Created on 2011-02-15
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.client.ptapp.activity;
 
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.User;
+public class UserMessageActivity {
 
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IEntity;
+    public void showSystemErrorMessage(String message) {
 
-public interface Application extends IEntity {
+    }
 
-    @ReadOnly
-    User user();
+    public void showUserErrorMessage(String message) {
 
-    Money rent();
-
-    @Owned
-    ApplicationProgress status();
+    }
 }

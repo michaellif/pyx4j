@@ -13,11 +13,18 @@
  */
 package com.propertyvista.portal.rpc.pt;
 
+import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
+import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface PotencialTenantServices {
+
+    public interface GetCurrentApplication extends Service<VoidSerializable, Application> {
+
+    }
 
     /**
      * For User in Session find current(*) Application Object. Create one if not exists.
@@ -32,4 +39,12 @@ public interface PotencialTenantServices {
     public interface GetAvalableUnits extends Service<UnitSelection, UnitSelection> {
 
     }
+
+    public interface Save extends EntityServices.Save {
+
+    };
+
+    public interface RetrieveByPK extends EntityServices.RetrieveByPK {
+
+    };
 }
