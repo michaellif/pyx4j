@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import org.mortbay.log.Log;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -68,6 +70,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     protected void addRow() {
+        if (getValue() == null) {
+            Log.warn("Request to add row has been issued before the form populated with value");
+            return;
+        }
+
         final CEntityFolderItem<E> comp = createItem();
 
         @SuppressWarnings("unchecked")
