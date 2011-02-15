@@ -21,8 +21,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.InfoView;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class InfoActivity extends AbstractActivity implements InfoView.Presenter {
@@ -31,10 +32,14 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
 
     private final InfoView view;
 
+    //TODO FOR TESTING
+    private static PotentialTenantInfo potentialTenantInfo = EntityFactory.create(PotentialTenantInfo.class);
+
     @Inject
     public InfoActivity(InfoView view) {
         this.view = view;
         view.setPresenter(this);
+
     }
 
     public InfoActivity withPlace(AppPlace place) {
@@ -44,11 +49,17 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+
+        //TODO get real PotentialTenantInfo
+        log.info("LOADED {}", potentialTenantInfo);
+        view.populate(potentialTenantInfo);
+
     }
 
     @Override
-    public void save(PotentialTenant entity) {
+    public void save(PotentialTenantInfo entity) {
         log.info("SAVED {}", entity);
+        potentialTenantInfo = entity;
     }
 
 }
