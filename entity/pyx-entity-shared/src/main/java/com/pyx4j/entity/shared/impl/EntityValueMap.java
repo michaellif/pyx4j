@@ -45,6 +45,15 @@ public class EntityValueMap extends HashMap<String, Object> {
         this.identityHashCode = identityHashCode;
     }
 
+    //  USe to debug big problems
+    //    @Override
+    //    public Object put(String key, Object value) {
+    //        if (value != null) {
+    //            System.out.println("set " + key + " = " + value.getClass() + " " + value);
+    //        }
+    //        return super.put(key, value);
+    //    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

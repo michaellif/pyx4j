@@ -62,7 +62,7 @@ public class EntityBinder<E extends IEntity> {
             Path memberPath = binding.get(event.getSource());
             if ((memberPath != null) && (editableEntity != null)) {
                 Object value = event.getValue();
-                if (value instanceof IEntity) {
+                if ((value instanceof IEntity) || (value instanceof ICollection)) {
                     value = ((IEntity) value).getValue();
                 } else if ((value instanceof Date)) {
                     Class<?> cls = editableEntity.getEntityMeta().getMemberMeta(memberPath).getValueClass();
