@@ -16,7 +16,7 @@
  *
  * Created on 2011-01-31
  * @author VladLL
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * @version $Id$
  */
 package com.pyx4j.dashboard.client;
 
@@ -77,8 +77,7 @@ public class CustomFlowPanelDropController extends FlowPanelDropController {
         // place off screen for border calculation
         RootPanel.get().add(outer, -500, -500);
 
-        // Ensure IE quirks mode returns valid outer.offsetHeight, and thus valid
-        // DOMUtil.getVerticalBorders(outer)
+        // Ensure IE quirks mode returns valid outer.offsetHeight, and thus valid DOMUtil.getVerticalBorders(outer)
         outer.setWidget(DUMMY_LABEL_IE_QUIRKS_MODE_OFFSET_HEIGHT);
 
         int width = 0;
