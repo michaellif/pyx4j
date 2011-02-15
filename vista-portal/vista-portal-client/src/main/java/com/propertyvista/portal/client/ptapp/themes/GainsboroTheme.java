@@ -11,13 +11,14 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.client.ptapp.themes;
 
-import com.pyx4j.site.client.theme.AppSiteTheme;
+import com.propertyvista.portal.client.ptapp.ui.SiteView;
+
 import com.pyx4j.widgets.client.style.Selector;
 import com.pyx4j.widgets.client.style.Style;
 
-public class DefaultTheme extends AppSiteTheme {
+public class GainsboroTheme extends VistaTheme {
 
     @Override
     protected void initBodyStyles() {

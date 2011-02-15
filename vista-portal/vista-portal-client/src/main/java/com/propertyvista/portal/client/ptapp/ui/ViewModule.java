@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
 
 import com.pyx4j.widgets.client.style.Theme;
 
@@ -43,7 +44,7 @@ public class ViewModule extends AbstractGinModule {
         bind(PaymentView.class).to(PaymentViewImpl.class).in(Singleton.class);
         bind(SummaryView.class).to(SummaryViewImpl.class).in(Singleton.class);
 
-        bind(Theme.class).to(DefaultTheme.class).in(Singleton.class);
+        bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
 
     }
 

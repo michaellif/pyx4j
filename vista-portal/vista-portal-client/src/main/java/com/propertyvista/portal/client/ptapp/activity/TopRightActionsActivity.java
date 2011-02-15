@@ -13,17 +13,27 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
+import com.propertyvista.portal.client.ptapp.themes.LightSkyBlueTheme;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
 
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.widgets.client.style.StyleManger;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
+
+    public enum Theme {
+        gainsboro, lightSkyBlue
+    }
 
     private final TopRightActionsView view;
 
@@ -31,11 +41,14 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     private final AppPlaceListing appPlaceListing;
 
+    private Theme currentTheme;
+
     @Inject
     public TopRightActionsActivity(TopRightActionsView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
         this.view = view;
         this.placeController = placeController;
         this.appPlaceListing = appPlaceListing;
+        this.currentTheme = Theme.gainsboro;
         view.setPresenter(this);
     }
 
@@ -48,6 +61,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         panel.setWidget(view);
     }
 
+    @Override
     public PlaceController getPlaceController() {
         return placeController;
     }
@@ -55,6 +69,30 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public AppPlaceListing getAppPlaceListing() {
         return appPlaceListing;
+    }
+
+    @Override
+    public Collection<Theme> getThemes() {
+        return Arrays.asList(Theme.values());
+    }
+
+    @Override
+    public Theme getCurrentTheme() {
+        return currentTheme;
+    }
+
+    @Override
+    public void setTheme(Theme theme) {
+        currentTheme = theme;
+        switch (theme) {
+        case gainsboro:
+            StyleManger.installTheme(new GainsboroTheme());
+            break;
+        case lightSkyBlue:
+            StyleManger.installTheme(new LightSkyBlueTheme());
+            break;
+        }
+
     }
 
 }
