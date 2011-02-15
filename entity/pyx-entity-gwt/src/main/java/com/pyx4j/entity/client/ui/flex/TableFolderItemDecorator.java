@@ -48,6 +48,11 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
 
     }
 
+    public TableFolderItemDecorator(ImageResource removeButton, String title) {
+        this(removeButton);
+        image.setTitle(title);
+    }
+
     @Override
     public void setWidget(IsWidget w) {
         content.setWidget(w);

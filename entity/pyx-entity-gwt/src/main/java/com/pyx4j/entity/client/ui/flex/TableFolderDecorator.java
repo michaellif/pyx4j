@@ -62,6 +62,11 @@ public class TableFolderDecorator extends FlowPanel implements FolderDecorator {
         add(image);
     }
 
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
+        this(columns, addButton);
+        image.setTitle(title);
+    }
+
     @Override
     public void setWidget(IsWidget w) {
         content.setWidget(w);
