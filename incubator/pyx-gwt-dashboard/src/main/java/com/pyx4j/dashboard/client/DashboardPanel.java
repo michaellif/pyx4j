@@ -23,9 +23,8 @@ package com.pyx4j.dashboard.client;
 import java.util.Vector;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -221,21 +220,19 @@ public class DashboardPanel extends SimplePanel {
     // CSS style names used: 
     private static final String CSS_DASHBOARD_PANEL = "DashboardPanel";
 
-    private static final String CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE = "DashboardPanel-column-composite";
+    private static final String CSS_DASHBOARD_PANEL_COLUMN = "DashboardPanel-column";
 
     private static final String CSS_DASHBOARD_PANEL_COLUMN_HEADING = "DashboardPanel-column-heading";
 
-    private static final String CSS_DASHBOARD_PANEL_COLUMN_CONTAINER = "DashboardPanel-column-container";
+    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER = "DashboardPanel-holder";
 
-    private static final String CSS_DASHBOARD_PANEL_HOLDER = "DashboardPanel-holder";
+    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_SETUP = "DashboardPanel-holder-setup";
 
-    private static final String CSS_DASHBOARD_PANEL_HOLDER_SETUP = "DashboardPanel-holder-setup";
+    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_CAPTION = "DashboardPanel-holder-caption";
 
-    private static final String CSS_DASHBOARD_PANEL_HOLDER_CAPTION = "DashboardPanel-holder-caption";
+    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU = "DashboardPanel-holder-menu";
 
-    private static final String CSS_DASHBOARD_PANEL_HOLDER_MENU = "DashboardPanel-holder-menu";
-
-    private static final String CSS_DASHBOARD_PANEL_HOLDER_MENU_BUTTON = "DashboardPanel-holder-menu-button";
+    private static final String CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU_BUTTON = "DashboardPanel-holder-menu-button";
 
     // internal data:	
     protected Layout layout;
@@ -246,6 +243,8 @@ public class DashboardPanel extends SimplePanel {
     protected PickupDragController widgetDragController;
 
     protected FlowPanel columnsContainerPanel; // holds columns (as vertical panels).
+
+    private boolean isRefreshAllowed;
 
     // construction:
     public DashboardPanel() {
@@ -269,6 +268,9 @@ public class DashboardPanel extends SimplePanel {
     }
 
     public boolean refresh() {
+        if (!isRefreshAllowed)
+            return false;
+
         int gadgetsCount = 0;
         // hold the current widgets for a while:
         Vector<VerticalPanelWithSpacer> columnWidgetsPanels = new Vector<VerticalPanelWithSpacer>(columnsContainerPanel.getWidgetCount());
@@ -343,6 +345,7 @@ public class DashboardPanel extends SimplePanel {
     // initializing:
     protected boolean init() {
         addStyleName(CSS_DASHBOARD_PANEL);
+        isRefreshAllowed = true;
 
         // use the boundary panel as this composite's widget:
         AbsolutePanel boundaryPanel = new AbsolutePanel();
@@ -351,7 +354,6 @@ public class DashboardPanel extends SimplePanel {
 
         // initialize horizontal panel to hold our columns:
         columnsContainerPanel = new FlowPanel();
-        columnsContainerPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
         columnsContainerPanel.setWidth("100%");
 
         //        // VladLL : column drag-n-drop functionality is commented till now!..
@@ -379,7 +381,6 @@ public class DashboardPanel extends SimplePanel {
         for (int col = 0; col < layout.getColumns(); ++col) {
             // vertical panel to hold the heading and a second vertical panel for widgets:
             FlowPanel columnCompositePanel = new FlowPanel();
-            columnCompositePanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_COMPOSITE);
             columnCompositePanel
                     .setWidth(((layout.isColumnWidths() ? layout.getCoumnWidth(col) : 100.0 / layout.getColumns()) - layout.getHorizontalSpacing() * 2) * 0.995
                             + "%"); // note that nasty .99x multiplier - it seems that IE calculates % widths less precisely tham Mozilla, that leads to last  
@@ -393,8 +394,8 @@ public class DashboardPanel extends SimplePanel {
             // put column name if necessary:
             if (layout.isColumnNames()) {
                 Label heading = new Label(layout.getCoumnName(col));
-                heading.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 heading.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_HEADING);
+                heading.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                 heading.setWidth("100%");
 
                 columnCompositePanel.add(heading);
@@ -406,7 +407,7 @@ public class DashboardPanel extends SimplePanel {
 
             // inner vertical panel to hold individual widgets:
             VerticalPanelWithSpacer columnPanel = new VerticalPanelWithSpacer();
-            columnPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN_CONTAINER);
+            columnPanel.addStyleName(CSS_DASHBOARD_PANEL_COLUMN);
             columnPanel.setWidth("100%");
 
             // widget drop controller for the current column:
@@ -445,7 +446,7 @@ public class DashboardPanel extends SimplePanel {
 
         private final DashboardPanel dashboardPanel;
 
-        private final VerticalPanel holder = new VerticalPanel();
+        private final VerticalPanel frame = new VerticalPanel();
 
         private final Label title = new Label();
 
@@ -458,33 +459,32 @@ public class DashboardPanel extends SimplePanel {
         public GadgetHolder(IGadget widget, DashboardPanel mainPanel) {
             this.holdedGadget = widget;
             this.dashboardPanel = mainPanel;
+            this.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER);
 
             // create caption with title and menu:
             title.setText(holdedGadget.getName());
             title.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            HorizontalPanel widgetHolderCaption = new HorizontalPanel();
-            widgetHolderCaption.add(title);
-            widgetHolderCaption.setCellWidth(widgetHolderCaption.getWidget(widgetHolderCaption.getWidgetCount() - 1), "90%");
-            widgetHolderCaption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-            widgetHolderCaption.add(createWidgetMenu());
-            widgetHolderCaption.setCellWidth(widgetHolderCaption.getWidget(widgetHolderCaption.getWidgetCount() - 1), "10%");
-            widgetHolderCaption.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_CAPTION);
-            widgetHolderCaption.setWidth("100%");
+            HorizontalPanel caption = new HorizontalPanel();
+            caption.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_CAPTION);
+            caption.add(title);
+            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "90%");
+            caption.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+            caption.add(createWidgetMenu());
+            caption.setCellWidth(caption.getWidget(caption.getWidgetCount() - 1), "10%");
+            caption.setWidth("100%");
 
             // put it together:
-            holder.add(widgetHolderCaption);
-            holder.add(holdedGadget.getWidget());
-            holder.addStyleName(CSS_DASHBOARD_PANEL_HOLDER);
-            holder.setWidth("100%");
+            frame.add(caption);
+            frame.add(holdedGadget.getWidget());
+            frame.setWidth("100%");
+            frame.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
-            this.setWidget(holder);
+            this.setWidget(frame);
             this.setWidth("100%");
 
             // don't forget about vertical spacing:
             this.getElement().getStyle().setMarginTop(layout.getVerticalSpacing(), Unit.PX);
             this.getElement().getStyle().setMarginBottom(layout.getVerticalSpacing(), Unit.PX);
-            this.getElement().getStyle().setPosition(Position.RELATIVE);
-            this.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             // make the widget place holder draggable by its title:
             widgetDragController.makeDraggable(this, title);
@@ -492,6 +492,7 @@ public class DashboardPanel extends SimplePanel {
 
         private Widget createWidgetMenu() {
             final Button btn = new Button("^");
+            btn.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU_BUTTON);
             btn.addClickHandler(new ClickHandler() {
                 private final PopupPanel pp = new PopupPanel(true);
 
@@ -532,6 +533,8 @@ public class DashboardPanel extends SimplePanel {
 
                     // create the menu:
                     MenuBar menu = new MenuBar(true);
+                    menu.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_MENU);
+
                     if (holdedGadget.isMinimizable())
                         menu.addItem((isMinimized() ? "Expand" : "Minimize"), cmdMinimize);
 
@@ -545,15 +548,12 @@ public class DashboardPanel extends SimplePanel {
                         menu.addItem("Setup", cmdSetup);
                     }
 
-                    menu.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU);
-
                     pp.setWidget(menu);
                     pp.setPopupPosition(btn.getAbsoluteLeft(), btn.getAbsoluteTop() + btn.getOffsetHeight());
                     pp.show();
                 } // onClick button event handler...
             }); // ClickHandler class...
 
-            btn.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_MENU_BUTTON);
             return btn;
         }
 
@@ -561,12 +561,12 @@ public class DashboardPanel extends SimplePanel {
 
         private void minimize() {
             if (isMinimized()) {
-                holder.add(minimizedWidget);
+                frame.add(minimizedWidget);
                 minimizedWidget = null;
                 holdedGadget.onMinimize(false);
             } else { // minimize:
-                minimizedWidget = holder.getWidget(holder.getWidgetCount() - 1);
-                holder.remove(minimizedWidget);
+                minimizedWidget = frame.getWidget(frame.getWidgetCount() - 1);
+                frame.remove(minimizedWidget);
                 holdedGadget.onMinimize(true);
             }
         }
@@ -587,6 +587,7 @@ public class DashboardPanel extends SimplePanel {
 
                 widgetDragController.makeDraggable(this, title);
                 holdedGadget.onMaximize(false);
+                isRefreshAllowed = true;
             } else { // maximize:
                 maximizeData.saveWidgetPosition(this);
                 maximizeData.boundaryPanel = dashboardPanel.getWidget();
@@ -594,6 +595,7 @@ public class DashboardPanel extends SimplePanel {
 
                 widgetDragController.makeNotDraggable(this);
                 holdedGadget.onMaximize(true);
+                isRefreshAllowed = false;
             }
         }
 
@@ -635,47 +637,46 @@ public class DashboardPanel extends SimplePanel {
         // --------------------------------------------------------------
 
         private void setup() {
-            final ISetup gadgetSetup = holdedGadget.getSetup();
+            final ISetup setupGadget = holdedGadget.getSetup();
 
             // create main gadget setup panel: 
-            final FlowPanel setupPanel = new FlowPanel();
-            //            setupPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            setupPanel.setWidth("80%");
-
-            setupPanel.add(gadgetSetup.getWidget());
+            final FlowPanel setup = new FlowPanel();
+            setup.addStyleName(CSS_DASHBOARD_PANEL_GADGET_HOLDER_SETUP);
+            setup.add(setupGadget.getWidget());
 
             // create panel with Ok/Cancel buttons:
-            HorizontalPanel bp = new HorizontalPanel();
-            bp.add(new Button("Ok", new ClickHandler() {
+            HorizontalPanel buttons = new HorizontalPanel();
+
+            buttons.add(new Button("OK", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    gadgetSetup.onOk();
-                    switchViewToNormal();
-                }
-            }));
-            bp.add(new Button("Cancel", new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    gadgetSetup.onCancel();
+                    setupGadget.onOk();
                     switchViewToNormal();
                 }
             }));
 
-            setupPanel.add(bp);
+            buttons.add(new Button("Cancel", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    setupGadget.onCancel();
+                    switchViewToNormal();
+                }
+            }));
+
+            buttons.setSpacing(10);
+            setup.add(buttons);
 
             // switch displayed widget with setup one:
-            switchViewToSetup(setupPanel);
+            switchViewTo(setup);
         }
 
-        private void switchViewToSetup(Widget setup) {
-            holder.remove(holder.getWidgetCount() - 1);
-            setup.addStyleName(CSS_DASHBOARD_PANEL_HOLDER_SETUP);
-            holder.add(setup);
+        private void switchViewTo(Widget view) {
+            frame.remove(frame.getWidgetCount() - 1);
+            frame.add(view);
         }
 
         private void switchViewToNormal() {
-            holder.remove(holder.getWidgetCount() - 1);
-            holder.add(holdedGadget.getWidget());
+            switchViewTo(holdedGadget.getWidget());
         }
     } // WidgetHolder
 } // DashboardPanel class...

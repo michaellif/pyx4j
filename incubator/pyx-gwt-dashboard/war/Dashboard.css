@@ -37,26 +37,22 @@ div.dragdrop-dropTarget-engage {
 
 .DashboardPanel {
 }
-.DashboardPanel .DashboardPanel-holder, .DashboardPanel .DashboardPanel-column-heading, .DashboardPanel .DashboardPanel-spacer {
-
-}
-.DashboardPanel .DashboardPanel-column-container {
-}
-.DashboardPanel .DashboardPanel-column-composite {
-/*    float: left;*/
+.DashboardPanel .DashboardPanel-column {
 }
 .DashboardPanel .DashboardPanel-column-heading {
 	background-color: #87B3FF;
 	font-weight: bold;
   	text-align: center;
 }
+.DashboardPanel .DashboardPanel-column-spacer {
+    height: 4em;
+}
+
 .DashboardPanel .DashboardPanel-holder {
 	background-color: #B3FF87;
     border: 2px solid blue;
 }
-.DashboardPanel .DashboardPanel-spacer {
-    height: 4em;
-}
+
 
 .DashboardPanel .DashboardPanel-holder-setup {
 	background-color: fuchsia;

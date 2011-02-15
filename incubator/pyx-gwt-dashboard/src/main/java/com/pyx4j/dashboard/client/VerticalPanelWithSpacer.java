@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
  * of the panel and its parent.
  */
 public class VerticalPanelWithSpacer extends FlowPanel /* VerticalPanel */{
-    private static final String CSS_DASHBOARD_PANEL_SPACER = "DashboardPanel-spacer";
+    private static final String CSS_DASHBOARD_PANEL_COLUMN_SPACER = "DashboardPanel-column-spacer";
 
     public VerticalPanelWithSpacer() {
         clear();
@@ -59,7 +59,7 @@ public class VerticalPanelWithSpacer extends FlowPanel /* VerticalPanel */{
     public void clear() {
         super.clear();
         Label spacerLabel = new Label("");
-        spacerLabel.setStylePrimaryName(CSS_DASHBOARD_PANEL_SPACER);
+        spacerLabel.setStylePrimaryName(CSS_DASHBOARD_PANEL_COLUMN_SPACER);
         super.add(spacerLabel);
     }
 }
