@@ -13,17 +13,27 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.PetsView;
+import com.propertyvista.portal.domain.pt.Pets;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class PetsActivity extends AbstractActivity implements PetsView.Presenter {
 
+    private static final Logger log = LoggerFactory.getLogger(PetsActivity.class);
+
     private final PetsView view;
+
+    //TODO FOR TESTING
+    private static Pets potentialTenantInfo = EntityFactory.create(Pets.class);
 
     @Inject
     public PetsActivity(PetsView view) {
@@ -38,6 +48,14 @@ public class PetsActivity extends AbstractActivity implements PetsView.Presenter
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+
+        //TODO get real PotentialTenantInfo
+        log.info("LOADED {}", potentialTenantInfo);
+        view.populate(potentialTenantInfo);
     }
 
+    @Override
+    public void save(Pets value) {
+        log.info("SAVED {}", value);
+    }
 }

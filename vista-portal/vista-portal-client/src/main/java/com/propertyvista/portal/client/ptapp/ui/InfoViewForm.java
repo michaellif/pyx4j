@@ -205,7 +205,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow());
+                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a vehicle");
             }
 
             @Override
@@ -218,7 +218,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove vehicle");
                     }
 
                 };

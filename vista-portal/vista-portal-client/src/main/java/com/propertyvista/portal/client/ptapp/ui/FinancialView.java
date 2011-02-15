@@ -25,4 +25,6 @@ public interface FinancialView extends IsWidget {
         void save(PotentialTenantFinancial value);
     }
 
+    public void populate(PotentialTenantFinancial potentialTenantInfo);
+
 }

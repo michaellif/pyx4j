@@ -58,4 +58,9 @@ public class FinancialViewImpl extends FlowPanel implements FinancialView {
         this.presenter = presenter;
     }
 
+    @Override
+    public void populate(PotentialTenantFinancial potentialTenantInfo) {
+        form.populate(potentialTenantInfo);
+    }
+
 }

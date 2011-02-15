@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.FinancialView;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class FinancialActivity extends AbstractActivity implements FinancialView.Presenter {
@@ -30,6 +31,9 @@ public class FinancialActivity extends AbstractActivity implements FinancialView
     private static final Logger log = LoggerFactory.getLogger(FinancialActivity.class);
 
     private final FinancialView view;
+
+    //TODO FOR TESTING
+    private static PotentialTenantFinancial potentialTenantInfo = EntityFactory.create(PotentialTenantFinancial.class);
 
     @Inject
     public FinancialActivity(FinancialView view) {
@@ -44,6 +48,10 @@ public class FinancialActivity extends AbstractActivity implements FinancialView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+
+        //TODO get real PotentialTenantInfo
+        log.info("LOADED {}", potentialTenantInfo);
+        view.populate(potentialTenantInfo);
     }
 
     @Override

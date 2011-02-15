@@ -152,7 +152,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
             @Override
             protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow());
+                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add an asset");
             }
 
             @Override
@@ -165,7 +165,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove asset");
                     }
 
                 };
@@ -188,7 +188,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
             @Override
             protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow());
+                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add an income source");
             }
 
             @Override
@@ -201,7 +201,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove income source");
                     }
 
                 };
