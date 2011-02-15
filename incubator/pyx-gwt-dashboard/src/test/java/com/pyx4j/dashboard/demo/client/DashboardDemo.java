@@ -1,9 +1,31 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on 2011-01-31
+ * @author VladLL
+ * @version $Id$
+ */
 package com.pyx4j.dashboard.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -159,7 +181,10 @@ public final class DashboardDemo implements EntryPoint {
                         setupPanel.add(new Label("Enter new gadget content:"));
 
                         content.setText(getHTML());
-                        //                        content.setWidth("100%");
+                        content.setWidth("100%");
+                        content.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                        content.getElement().getStyle().setPosition(Position.RELATIVE);
+
                         setupPanel.add(content);
 
                         return setupPanel;
@@ -208,7 +233,7 @@ public final class DashboardDemo implements EntryPoint {
         for (int col = 0; col < dashboardPanel.getLayout().getColumns(); ++col)
             for (int row = 0; row < 3; ++row) {
                 // initialize a widget
-                MyHTML widget = new MyHTML("Widget #" + ++count);
+                MyHTML widget = new MyHTML("Gadget #" + ++count);
                 widget.setHeight(Random.nextInt(8) + 2 + "em");
                 //			dashboardPanel.insertWidget(widget, col, row);
                 dashboardPanel.addGadget(widget, col);
