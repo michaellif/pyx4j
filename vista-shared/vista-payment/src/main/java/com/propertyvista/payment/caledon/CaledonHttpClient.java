@@ -56,6 +56,12 @@ class CaledonHttpClient {
             if (httpResponseCode != HttpURLConnection.HTTP_OK) {
                 throw new PaymentProcessingException("Unexpected rerver Response " + httpResponseCode);
             }
+            String tmp = httpMethod.getResponseBodyAsString();
+            System.out.println(tmp);
+            if (!tmp.contains("TEXT=CARD OK")) {
+                throw new PaymentProcessingException("TODO");
+            }
+
         } catch (HttpException e) {
             log.error("transaction protocol error", e);
             throw new PaymentProcessingException("Protocol error occurs", e);

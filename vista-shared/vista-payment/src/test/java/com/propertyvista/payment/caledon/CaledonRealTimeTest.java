@@ -42,6 +42,6 @@ public class CaledonRealTimeTest extends TestCase {
 
     public void testSampleTransactions() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
-        proc.realTimeSale(createRequest("5123456789012345", "2015-01", 10.0));
+        proc.realTimeSale(createRequest("5555555555554444", "2015-01", 10.0));
     }
 }
