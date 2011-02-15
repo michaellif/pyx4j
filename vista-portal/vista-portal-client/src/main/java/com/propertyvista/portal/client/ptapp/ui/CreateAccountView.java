@@ -14,14 +14,21 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
 public interface CreateAccountView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
+    public void showSystemErrorMessage(String message);
+
+    public void showUserErrorMessage(String message);
+
     public interface Presenter {
 
         void goToSignin();
+
+        void createAccount(AccountCreationRequest request);
     }
 
 }

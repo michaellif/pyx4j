@@ -32,6 +32,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class CreateAccountViewImpl extends VerticalPanel implements CreateAccountView {
 
@@ -63,6 +65,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         add(signinButton);
 
         form = new CreateAccountViewForm();
+        form.populate(null);
         add(form);
 
         Button viewButton = new Button("Let's Start");
@@ -71,6 +74,24 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
             @Override
             public void onClick(ClickEvent event) {
+                //TODO validation!
+
+                CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
+                if (captcha.isValueEmpty()) {
+                    MessageDialog.warn(i18n.tr("Validation failed."), i18n.tr("Captcha code is required"));
+                    return;
+                }
+                // Captcha do not have events is Google component. We need to fix this! 
+                captcha.retrieveValue();
+
+                //
+                //                ValidationResults validationResults = form.getValidationResults();
+                //                if (!validationResults.isValid()) {
+                //                    MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
+                //                    return;
+                //                }
+
+                presenter.createAccount(form.getValue());
             }
 
         });
@@ -100,7 +121,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
         String devLoginUserPrefix = null;
-        int max = 1;
+        int max = 10;
         switch (nativeKeyCode) {
         case 'A':
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
@@ -133,5 +154,16 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         if (ApplicationMode.isDevelopment()) {
             handlerRegistration.removeHandler();
         }
+    }
+
+    @Override
+    public void showSystemErrorMessage(String message) {
+        MessageDialog.error(i18n.tr("TODO: SystemErrorMessage"), message);
+    }
+
+    @Override
+    public void showUserErrorMessage(String message) {
+        MessageDialog.error(i18n.tr("TODO: UserErrorMessage"), message);
+
     }
 }

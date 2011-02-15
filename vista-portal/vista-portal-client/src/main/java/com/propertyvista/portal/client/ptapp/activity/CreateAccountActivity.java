@@ -13,18 +13,30 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
+import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
+import com.propertyvista.portal.rpc.pt.ActivationServices;
 
+import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class CreateAccountActivity extends AbstractActivity implements CreateAccountView.Presenter {
+
+    private static I18n i18n = I18nFactory.getI18n(CreateAccountActivity.class);
 
     private final CreateAccountView view;
 
@@ -49,6 +61,29 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
     @Override
     public void goToSignin() {
         placeController.goTo(new SiteMap.Login());
+    }
+
+    @Override
+    public void createAccount(AccountCreationRequest request) {
+        AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.showUserErrorMessage(caught.getMessage());
+                } else {
+                    view.showSystemErrorMessage(i18n.tr("TODO: Generic error message"));
+                }
+            }
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+            }
+
+        };
+        RPCManager.execute(ActivationServices.CreateAccount.class, request, callback);
+
     }
 
 }
