@@ -74,17 +74,21 @@ public class EntityServicesImpl {
 
         @Override
         public IEntity execute(IEntity request) {
-            if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-                throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
-            }
-            if (request.getPrimaryKey() == null) {
-                SecurityController.assertPermission(EntityPermission.permissionCreate(request));
-            } else {
-                SecurityController.assertPermission(EntityPermission.permissionUpdate(request));
-            }
-            PersistenceServicesFactory.getPersistenceService().merge(request);
+            secureSave(request);
             return request;
         }
+    }
+
+    public static <T extends IEntity> void secureSave(T entity) {
+        if (ServerSideConfiguration.instance().datastoreReadOnly()) {
+            throw new UnRecoverableRuntimeException(applicationReadOnlyMessage());
+        }
+        if (entity.getPrimaryKey() == null) {
+            SecurityController.assertPermission(EntityPermission.permissionCreate(entity));
+        } else {
+            SecurityController.assertPermission(EntityPermission.permissionUpdate(entity));
+        }
+        PersistenceServicesFactory.getPersistenceService().merge(entity);
     }
 
     public static class SaveListImpl implements EntityServices.SaveList {
