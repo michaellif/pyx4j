@@ -22,8 +22,12 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.InfoView;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class InfoActivity extends AbstractActivity implements InfoView.Presenter {
@@ -32,8 +36,7 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
 
     private final InfoView view;
 
-    //TODO FOR TESTING
-    private static PotentialTenantInfo potentialTenantInfo = EntityFactory.create(PotentialTenantInfo.class);
+    private static PotentialTenantInfo potentialTenantInfo;
 
     @Inject
     public InfoActivity(InfoView view) {
@@ -50,16 +53,30 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        //TODO get real PotentialTenantInfo
-        log.info("LOADED {}", potentialTenantInfo);
-        view.populate(potentialTenantInfo);
+        RPCManager.execute(PotencialTenantServices.RetrieveByPK.class,
+                EntityCriteriaByPK.create(PotentialTenantInfo.class, (potentialTenantInfo == null) ? null : potentialTenantInfo.getPrimaryKey()),
+                new DefaultAsyncCallback<IEntity>() {
+
+                    @Override
+                    public void onSuccess(IEntity result) {
+                        potentialTenantInfo = (PotentialTenantInfo) result;
+                        log.info("LOADED {}", potentialTenantInfo);
+                        view.populate(potentialTenantInfo);
+                    }
+                });
 
     }
 
     @Override
     public void save(PotentialTenantInfo entity) {
-        log.info("SAVED {}", entity);
-        potentialTenantInfo = entity;
+        RPCManager.execute(PotencialTenantServices.Save.class, entity, new DefaultAsyncCallback<IEntity>() {
+
+            @Override
+            public void onSuccess(IEntity result) {
+                log.info("SAVED {}", result);
+                potentialTenantInfo = (PotentialTenantInfo) result;
+            }
+        });
     }
 
 }

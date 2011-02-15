@@ -7,22 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
+ * Created on 2011-02-15
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.server.access;
 
 import com.propertyvista.portal.domain.IUserEntity;
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.server.pt.PtUserDataAccess;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface Application extends IEntity, IUserEntity {
+public class UserEntityInstanceAccess implements InstanceAccess {
 
-    Money rent();
+    private static final long serialVersionUID = -3642752850612488708L;
 
-    @Owned
-    ApplicationProgress status();
+    @Override
+    public boolean allow(IEntity entity) {
+        return (entity instanceof IUserEntity)
+                && (EqualsHelper.equals(((IUserEntity) entity).user().getPrimaryKey(), PtUserDataAccess.getCurrentUserPrimaryKey()));
+    }
+
 }

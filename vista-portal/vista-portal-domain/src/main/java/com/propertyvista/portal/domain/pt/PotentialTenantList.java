@@ -16,10 +16,8 @@ package com.propertyvista.portal.domain.pt;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface PotentialTenantList extends IEntity {
+public interface PotentialTenantList extends IEntity, IApplicationEntity {
 
-    Application application();
-
-    IList<PotentialTenant> tenants();
+    IList<PotentialTenantInfo> tenants();
 
 }

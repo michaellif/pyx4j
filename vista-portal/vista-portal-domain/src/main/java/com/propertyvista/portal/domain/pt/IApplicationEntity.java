@@ -13,8 +13,17 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface ApplicationProgress extends IEntity, IApplicationEntity {
+@AbstractEntity
+public interface IApplicationEntity extends IEntity {
 
+    @ReadOnly
+    @Detached
+    @NotNull
+    Application application();
 }

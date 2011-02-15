@@ -11,10 +11,19 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface ApplicationProgress extends IEntity, IApplicationEntity {
+@AbstractEntity
+public interface IUserEntity extends IEntity {
 
+    @ReadOnly
+    @Detached
+    @NotNull
+    User user();
 }

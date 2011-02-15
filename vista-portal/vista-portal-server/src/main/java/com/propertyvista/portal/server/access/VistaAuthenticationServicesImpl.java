@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.rpc.pt.PtUserVisit;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -103,7 +105,12 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
     public static void beginSession(User user, UserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.add(userCredential.behavior().getValue());
-        UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
+        UserVisit visit;
+        if (behaviors.contains(VistaBehavior.POTENCIAL_TENANT)) {
+            visit = new PtUserVisit(user.getPrimaryKey(), user.name().getValue());
+        } else {
+            visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
+        }
         visit.setEmail(user.email().getValue());
         Lifecycle.beginSession(visit, behaviors);
     }

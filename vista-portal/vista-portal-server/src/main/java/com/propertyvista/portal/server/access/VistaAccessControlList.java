@@ -16,10 +16,14 @@ package com.propertyvista.portal.server.access;
 import com.propertyvista.portal.admin.rpc.VistaAdminServices;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
+import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.essentials.rpc.admin.AdminServices;
 import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessServices;
@@ -32,6 +36,8 @@ import com.pyx4j.security.shared.CoreBehavior;
 
 public class VistaAccessControlList extends ServletContainerAclBuilder {
 
+    public final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
+
     public VistaAccessControlList() {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
@@ -42,6 +48,8 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
             grant(new EntityPermission("*", EntityPermission.ALL));
             grant(new EntityPermission("*", EntityPermission.READ));
         }
+
+        ptGrants();
 
         grant(VistaBehavior.EMPLOYEE, new ServiceExecutePermission(EntityServices.Query.class));
         grant(VistaBehavior.EMPLOYEE, new ServiceExecutePermission(ReportServices.class, "*"));
@@ -57,5 +65,15 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(AdminServices.class, "*"));
 
         freeze();
+    }
+
+    private void ptGrants() {
+        InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
+
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));
+
+        InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantList.class, applicationEntityAccess, CRUD));
+        grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(PotentialTenantInfo.class, applicationEntityAccess, CRUD));
     }
 }
