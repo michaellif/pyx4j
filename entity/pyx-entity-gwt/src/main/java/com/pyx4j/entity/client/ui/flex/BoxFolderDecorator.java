@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -28,7 +29,10 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class BoxFolderDecorator extends FlowPanel implements FolderDecorator {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
+public class BoxFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
 
     private final Image image;
 
@@ -50,6 +54,12 @@ public class BoxFolderDecorator extends FlowPanel implements FolderDecorator {
     @Override
     public HandlerRegistration addRowAddClickHandler(ClickHandler handler) {
         return image.addClickHandler(handler);
+    }
+
+    @Override
+    public void onValueChange(ValueChangeEvent<IList<E>> event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

@@ -26,6 +26,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -34,17 +35,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class TableFolderDecorator extends FlowPanel implements FolderDecorator {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
+public class TableFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
 
     private final Image image;
 
     private final SimplePanel content;
 
+    private FlowPanel header;
+
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
 
         image = new Image(addButton);
-        FlowPanel header = new FlowPanel();
-        header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        header = new FlowPanel();
+        setHeaderVisible(false);
         header.setWidth("100%");
         header.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
         for (EntityFolderColumnDescriptor column : columns) {
@@ -77,4 +83,16 @@ public class TableFolderDecorator extends FlowPanel implements FolderDecorator {
         return image.addClickHandler(handler);
     }
 
+    @Override
+    public void onValueChange(ValueChangeEvent<IList<E>> event) {
+        setHeaderVisible(!event.getValue().isNull() && event.getValue().size() > 0);
+    }
+
+    private void setHeaderVisible(boolean visible) {
+        if (visible) {
+            header.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        } else {
+            header.getElement().getStyle().setDisplay(Display.NONE);
+        }
+    }
 }

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,7 +43,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
-    private FolderDecorator folderDecorator;
+    private FolderDecorator<E> folderDecorator;
 
     private FlowPanel content;
 
@@ -55,10 +56,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     protected abstract CEntityFolderItem<E> createItem();
 
-    protected abstract FolderDecorator createFolderDecorator();
+    protected abstract FolderDecorator<E> createFolderDecorator();
 
-    public void setFolderDecorator(FolderDecorator folderDecorator) {
+    public void setFolderDecorator(FolderDecorator<E> folderDecorator) {
         this.folderDecorator = folderDecorator;
+
+        addValueChangeHandler(folderDecorator);
+
         asWidget().setWidget(folderDecorator);
 
         content = new FlowPanel();
@@ -102,6 +106,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     }
 
+    //TODO add remove handlers
+    protected void removeRow(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
+        abandonFolderItem(folderItemDecorator);
+    }
+
     /**
      * Implementation to override new Entity creation. No need to call
      * super.createNewEntity().
@@ -128,10 +137,16 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
     }
 
+    private void abandonFolderItem(FolderItemDecorator folderItemDecorator) {
+        content.remove(folderItemDecorator);
+        ValueChangeEvent.fire(this, getValue());
+    }
+
     private void adoptFolderItem(final CEntityFolderItem<E> comp) {
         final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
         folderItemDecorator.setWidget(comp);
         content.add(folderItemDecorator);
+        ValueChangeEvent.fire(this, getValue());
         folderItemDecorator.addRowRemoveClickHandler(new ClickHandler() {
 
             @Override
@@ -139,11 +154,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
                 removeRow(comp, folderItemDecorator);
             }
         });
-    }
-
-    //TODO add remove handlers
-    protected void removeRow(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
-        content.remove(folderItemDecorator);
     }
 
     @Override
