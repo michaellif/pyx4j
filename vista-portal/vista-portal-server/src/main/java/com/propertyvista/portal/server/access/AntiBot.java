@@ -36,6 +36,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18nFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 
 public class AntiBot {
@@ -48,7 +49,7 @@ public class AntiBot {
 
     public static void assertCaptcha(Pair<String, String> challengeRresponse) {
         if (challengeRresponse == null || CommonsStringUtils.isEmpty(challengeRresponse.getA()) || CommonsStringUtils.isEmpty(challengeRresponse.getB())) {
-            throw new RuntimeExceptionSerializable(i18n.tr("Captcha code is required"));
+            throw new UserRuntimeException(i18n.tr("Captcha code is required"));
         }
 
         String privateKey = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPrivateKey();
@@ -69,7 +70,7 @@ public class AntiBot {
 
         if (!captchaResponse.isValid()) {
             if ("incorrect-captcha-sol".equals(captchaResponse.getErrorMessage())) {
-                throw new RuntimeExceptionSerializable(i18n.tr("The CAPTCHA solution was incorrect"));
+                throw new UserRuntimeException(i18n.tr("The CAPTCHA solution was incorrect"));
             } else {
                 throw new RuntimeExceptionSerializable(captchaResponse.getErrorMessage());
             }
