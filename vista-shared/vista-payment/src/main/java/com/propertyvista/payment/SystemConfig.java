@@ -26,7 +26,7 @@ public class SystemConfig extends HostConfig {
 
     private final static Logger log = LoggerFactory.getLogger(SystemConfig.class);
 
-    private static List<String> doxHost = Arrays.asList("vlads-i7");
+    private static List<String> doxHost = Arrays.asList("vlads-i7", "michaellif01");
 
     public SystemConfig() {
         configure();
