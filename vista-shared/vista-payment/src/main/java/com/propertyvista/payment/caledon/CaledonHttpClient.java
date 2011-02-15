@@ -59,7 +59,7 @@ class CaledonHttpClient {
             String tmp = httpMethod.getResponseBodyAsString();
             System.out.println(tmp);
             if (!tmp.contains("TEXT=CARD OK")) {
-                throw new PaymentProcessingException("TODO");
+                throw new PaymentProcessingException("TODO [" + tmp + "]");
             }
 
         } catch (HttpException e) {
