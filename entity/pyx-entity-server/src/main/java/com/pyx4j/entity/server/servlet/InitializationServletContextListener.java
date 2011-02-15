@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server.servlet;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -34,7 +35,10 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
 
 /**
- * System property "com.pyx4j.appConfig" defines Config suffix class to use
+ * System property "com.pyx4j.appConfig" defines Config suffix class to use.
+ * 
+ * contextName in <context-param> can redefine what configuration to use if
+ * ServerSideConfiguration.selectInstanceByContextName is overriden
  * 
  */
 public class InitializationServletContextListener implements ServletContextListener {
@@ -46,7 +50,8 @@ public class InitializationServletContextListener implements ServletContextListe
             if (CommonsStringUtils.isStringSet(configClass)) {
                 try {
                     configClass += System.getProperty("com.pyx4j.appConfig", "");
-                    ServerSideConfiguration.setInstance((ServerSideConfiguration) Class.forName(configClass).newInstance());
+                    ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
+                    ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(getContextName(sce.getServletContext())));
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
                     log.error("ServerSideConfiguration creation error", e);
@@ -61,6 +66,25 @@ public class InitializationServletContextListener implements ServletContextListe
             Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
             log.error("initialization error", e);
         }
+    }
+
+    protected String getContextName(ServletContext servletContext) {
+        // Can define this in web.xml
+        String configContextName = servletContext.getInitParameter("contextName");
+        if (CommonsStringUtils.isStringSet(configContextName)) {
+            return configContextName;
+        }
+        // Version 2.5
+        configContextName = servletContext.getContextPath();
+        if (CommonsStringUtils.isStringSet(configContextName)) {
+            int idx = configContextName.lastIndexOf('/');
+            if (idx != -1) {
+                return configContextName.substring(idx + 1);
+            } else {
+                System.err.println("WARN unexpected context path [" + configContextName + "]");
+            }
+        }
+        return null;
     }
 
     @Override

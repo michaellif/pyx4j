@@ -69,6 +69,10 @@ public class ServerSideConfiguration {
         ServerSideConfiguration.instance = instance;
     }
 
+    public ServerSideConfiguration selectInstanceByContextName(String contextName) {
+        return this;
+    }
+
     public boolean isDevelopmentBehavior() {
         return true;
     }
