@@ -15,4 +15,9 @@ package com.propertyvista.portal.server;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
 
+    @Override
+    public boolean isDevelopmentBehavior() {
+        return true;
+    }
+
 }

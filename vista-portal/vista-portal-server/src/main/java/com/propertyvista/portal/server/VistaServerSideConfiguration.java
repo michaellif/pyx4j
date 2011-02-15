@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server;
 
+import javax.servlet.ServletContext;
+
 import com.propertyvista.portal.server.access.VistaAccessControlList;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
@@ -32,9 +34,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     static final String recaptchaPublicKey = "6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth";
 
     @Override
-    public ServerSideConfiguration selectInstanceByContextName(String contextName) {
+    public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         if ("vista33".equals(contextName)) {
-
+            return new VistaServerSideConfiguration33();
+        } else if (servletContext.getServerInfo().contains("jetty")) {
+            return new VistaServerSideConfigurationDev();
         }
         return this;
     }
