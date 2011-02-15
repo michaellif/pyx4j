@@ -50,8 +50,16 @@ public class InitializationServletContextListener implements ServletContextListe
             if (CommonsStringUtils.isStringSet(configClass)) {
                 try {
                     configClass += System.getProperty("com.pyx4j.appConfig", "");
+                    ServletContext servletContext = sce.getServletContext();
+
                     ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
-                    ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(getContextName(sce.getServletContext())));
+                    ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(servletContext, getContextName(servletContext)));
+
+                    Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
+                    log.debug("ServerInfo", servletContext.getServerInfo());
+                    log.debug("Java Servlet API", servletContext.getMajorVersion(), servletContext.getMinorVersion());
+                    log.debug("ServletContext", servletContext.getContextPath(), servletContext.getServletContextName());
+
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
                     log.error("ServerSideConfiguration creation error", e);

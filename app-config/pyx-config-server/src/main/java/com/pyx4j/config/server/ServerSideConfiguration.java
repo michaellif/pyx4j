@@ -22,6 +22,8 @@ package com.pyx4j.config.server;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
@@ -69,7 +71,7 @@ public class ServerSideConfiguration {
         ServerSideConfiguration.instance = instance;
     }
 
-    public ServerSideConfiguration selectInstanceByContextName(String contextName) {
+    public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         return this;
     }
 
