@@ -20,7 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import org.mortbay.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,6 +39,8 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
  * This component represents list of IEntities
  */
 public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> {
+
+    private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
     private FolderDecorator folderDecorator;
 
@@ -71,7 +74,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     protected void addRow() {
         if (getValue() == null) {
-            Log.warn("Request to add row has been issued before the form populated with value");
+            log.warn("Request to add row has been issued before the form populated with value");
             return;
         }
 
