@@ -15,7 +15,7 @@
  * the License.
  *
  * Created on 2011-02-09
- * @author jim
+ * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.pyx4j.site.client.place;

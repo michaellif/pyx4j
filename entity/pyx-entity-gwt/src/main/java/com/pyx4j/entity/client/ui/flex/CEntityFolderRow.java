@@ -47,12 +47,16 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.setWidth("100%");
         for (EntityFolderColumnDescriptor column : columns) {
-            CComponent<?> component = form.create(column.getObject(), this);
+            CComponent<?> component = createCell(column);
             component.setWidth(column.getWidth());
             component.asWidget().getElement().getStyle().setFloat(Float.LEFT);
             main.add(component);
         }
         setWidget(main);
+    }
+
+    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        return form.create(column.getObject(), this);
     }
 
 }
