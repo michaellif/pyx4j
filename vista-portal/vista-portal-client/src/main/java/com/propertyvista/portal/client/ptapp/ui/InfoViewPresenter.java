@@ -17,6 +17,4 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
 public interface InfoViewPresenter extends WizardStepPresenter<PotentialTenantInfo> {
 
-    @Override
-    public void save(PotentialTenantInfo entity);
 }
