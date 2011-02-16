@@ -26,9 +26,9 @@ import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
 import com.propertyvista.portal.client.ptapp.themes.LightSkyBlueTheme;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -63,6 +63,16 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                if (ClientContext.isAuthenticated()) {
+                    view.onLogedIn(ClientContext.getUserVisit().getName());
+                } else {
+                    view.onLogedOut();
+                }
+            }
+        });
     }
 
     @Override
@@ -101,12 +111,12 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void logout() {
-        ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                //Do nothing
-            }
-        });
+        ClientContext.logout(null);
+    }
+
+    @Override
+    public void login() {
+        placeController.goTo(new SiteMap.Login());
     }
 
 }

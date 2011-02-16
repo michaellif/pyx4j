@@ -13,6 +13,7 @@ public interface TopRightActionsView extends IsWidget {
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
+
         public AppPlaceListing getAppPlaceListing();
 
         public PlaceController getPlaceController();
@@ -25,6 +26,12 @@ public interface TopRightActionsView extends IsWidget {
 
         public void logout();
 
+        public void login();
+
     }
+
+    public void onLogedOut();
+
+    public void onLogedIn(String userName);
 
 }
