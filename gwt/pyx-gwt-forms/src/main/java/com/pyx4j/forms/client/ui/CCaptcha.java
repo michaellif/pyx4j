@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.gwt.NativeCaptcha;
 public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCaptcha> {
 
     public CCaptcha() {
-
+        setMandatoryValidationMessage("Captcha code is required.");
     }
 
     public void retrieveValue() {

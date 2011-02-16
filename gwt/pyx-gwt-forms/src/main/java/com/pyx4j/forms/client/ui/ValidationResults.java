@@ -49,18 +49,26 @@ public class ValidationResults {
     public String getMessagesText(boolean html) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(messages);
-        for (String m : messages) {
-            switch (c.next()) {
-            case SINGLE:
-                messagesBuffer.append(m);
-                break;
-            case FIRST:
-            case ITEM:
-                messagesBuffer.append("- ").append(m).append(html ? "<br/>" : ";\n");
-                break;
-            case LAST:
-                messagesBuffer.append("- ").append(m);
-                break;
+        if (html) {
+            messagesBuffer.append("<ul>");
+            for (String m : messages) {
+                messagesBuffer.append("<li>").append(m).append("</li>");
+            }
+            messagesBuffer.append("</ul>");
+        } else {
+            for (String m : messages) {
+                switch (c.next()) {
+                case SINGLE:
+                    messagesBuffer.append(m);
+                    break;
+                case FIRST:
+                case ITEM:
+                    messagesBuffer.append("- ").append(m).append(";\n");
+                    break;
+                case LAST:
+                    messagesBuffer.append("- ").append(m);
+                    break;
+                }
             }
         }
         return messagesBuffer.toString();
