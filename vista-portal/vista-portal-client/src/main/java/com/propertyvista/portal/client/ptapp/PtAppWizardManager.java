@@ -13,10 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
-import java.util.Set;
-
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -29,9 +25,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 
-public class PtAppWizardManager {
+public class PtAppWizardManager implements SecurityControllerHandler {
 
     private Application application;
 
@@ -43,7 +40,7 @@ public class PtAppWizardManager {
     public PtAppWizardManager(EventBus eventBus, PlaceController placeController) {
         this.eventBus = eventBus;
         this.placeController = placeController;
-
+        eventBus.addHandler(SecurityControllerEvent.getType(), this);
     }
 
     public void saveApplicationProgress() {
@@ -56,7 +53,13 @@ public class PtAppWizardManager {
         });
     }
 
-    protected void onSecurityControllerEvent() {
+    protected void goToNext() {
+        Place current = placeController.getWhere();
+        placeController.goTo(new SiteMap.Apartment());
+    }
+
+    @Override
+    public void onSecurityContextChange(SecurityControllerEvent event) {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
             RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, null, new DefaultAsyncCallback<Application>() {
 
@@ -70,11 +73,5 @@ public class PtAppWizardManager {
             application = null;
             placeController.goTo(new SiteMap.CreateAccount());
         }
-
-    }
-
-    protected void goToNext() {
-        Place current = placeController.getWhere();
-        placeController.goTo(new SiteMap.Apartment());
     }
 }
