@@ -139,7 +139,7 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
     }
 
     protected void showMessage(String string) {
-        eventBus.fireEvent(new UserMessageEvent(Arrays.asList(new String[] { string })));
+        eventBus.fireEvent(new UserMessageEvent(string));
 
     }
 }

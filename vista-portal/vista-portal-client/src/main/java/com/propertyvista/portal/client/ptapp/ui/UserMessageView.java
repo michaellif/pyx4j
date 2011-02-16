@@ -13,10 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.ui.UserMessageView.Type;
 
 public interface UserMessageView extends IsWidget {
 
@@ -36,7 +33,7 @@ public interface UserMessageView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    void show(List<String> messages, Type type);
+    void show(String messages, Type type);
 
     void hide(Type type);
 

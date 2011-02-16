@@ -14,15 +14,12 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
 
 @Singleton
@@ -50,9 +47,9 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     }
 
     @Override
-    public void show(List<String> messages, Type type) {
+    public void show(String message, Type type) {
         HTML html = holders.get(type);
-        html.setHTML(buildMessage(messages));
+        html.setHTML(message);
         html.setVisible(true);
     }
 
@@ -61,16 +58,6 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         HTML html = holders.get(type);
         html.setHTML("");
         html.setVisible(false);
-    }
-
-    private String buildMessage(List<String> messages) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<ul>");
-        for (String message : messages) {
-            builder.append("<li>").append(message).append("</li>");
-        }
-        builder.append("</ul>");
-        return builder.toString();
     }
 
     class Holder extends HTML {

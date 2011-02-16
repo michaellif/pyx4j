@@ -81,16 +81,13 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
             @Override
             public void onClick(ClickEvent event) {
 
-                CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
-                if (captcha.isValueEmpty()) {
-                    throw new UserRuntimeException(i18n.tr("Captcha code is required."));
-                }
-                // Captcha do not have events is Google component. We need to fix this! 
-                captcha.retrieveValue();
-
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
+
+                CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
+                // Captcha do not have events is Google component. We need to fix this! 
+                captcha.retrieveValue();
 
                 presenter.createAccount(form.getValue());
             }

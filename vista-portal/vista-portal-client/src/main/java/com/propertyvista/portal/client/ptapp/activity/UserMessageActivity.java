@@ -49,7 +49,7 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
 
     @Override
     public void onUserMessage(UserMessageEvent event) {
-        view.show(event.getMessages(), UserMessageView.Type.error);
+        view.show(event.getMessage(), UserMessageView.Type.error);
     }
 
 }

@@ -13,18 +13,16 @@
  */
 package com.propertyvista.portal.client.ptapp.events;
 
-import java.util.List;
-
 import com.google.gwt.event.shared.GwtEvent;
 
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 
     private static Type<UserMessageHandler> TYPE;
 
-    private final List<String> messages;
+    private final String message;
 
-    public UserMessageEvent(List<String> messages) {
-        this.messages = messages;
+    public UserMessageEvent(String message) {
+        this.message = message;
     }
 
     public static Type<UserMessageHandler> getType() {
@@ -44,7 +42,7 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
         handler.onUserMessage(this);
     }
 
-    public List<String> getMessages() {
-        return messages;
+    public String getMessage() {
+        return message;
     }
 }
