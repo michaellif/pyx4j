@@ -7,23 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-13
+ * Created on 2011-02-16
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.caledon;
+package com.propertyvista.payment;
 
-class CaledonResponse {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    @HttpResponseField("CODE")
-    String code;
+public interface Merchant extends IEntity {
 
-    @HttpResponseField("TEXT")
-    String text;
+    IPrimitive<String> terminalID();
 
-    @HttpResponseField("AUTH")
-    String authorizationNumber;
-
-    @HttpResponseField("ECHO")
-    String echo;
 }

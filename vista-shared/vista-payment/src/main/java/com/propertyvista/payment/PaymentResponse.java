@@ -14,7 +14,13 @@
 package com.propertyvista.payment;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PaymentResponse extends IEntity {
 
+    IPrimitive<String> code();
+
+    IPrimitive<String> message();
+
+    IPrimitive<String> authorizationNumber();
 }

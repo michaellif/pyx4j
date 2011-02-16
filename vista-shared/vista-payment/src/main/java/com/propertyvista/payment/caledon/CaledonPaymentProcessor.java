@@ -14,6 +14,7 @@
 package com.propertyvista.payment.caledon;
 
 import com.propertyvista.payment.IPaymentProcessor;
+import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 
@@ -28,10 +29,10 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse realTimeSale(PaymentRequest request) {
+    public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) {
         CaledonRequest crequest = new CaledonRequest();
 
-        crequest.terminalID = "BIRCHWTT";
+        crequest.terminalID = merchant.terminalID().getValue();
         crequest.transactionType = CaledonTransactionType.SALE.getValue();
         crequest.referenceNumber = request.referenceNumber().getValue();
 
@@ -42,12 +43,15 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         CaledonResponse cresponse = client.transaction(crequest);
 
         PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.code().setValue(cresponse.code);
+        response.message().setValue(cresponse.text);
+        response.authorizationNumber().setValue(cresponse.authorizationNumber);
 
         return response;
     }
 
     @Override
-    public PaymentResponse realTimeAuthorization(PaymentRequest request) {
+    public PaymentResponse realTimeAuthorization(Merchant merchant, PaymentRequest request) {
         return null;
     }
 

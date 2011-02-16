@@ -49,4 +49,7 @@ class CaledonRequest {
 
     @HttpRequestField("TYPE")
     String transactionType;
+
+    @HttpRequestField("ECHO")
+    String echo;
 }

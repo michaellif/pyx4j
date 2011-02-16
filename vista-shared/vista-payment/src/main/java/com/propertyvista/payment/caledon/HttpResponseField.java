@@ -7,23 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-13
+ * Created on 2011-02-16
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.payment.caledon;
 
-class CaledonResponse {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    @HttpResponseField("CODE")
-    String code;
+@Target({ ElementType.FIELD })
+@Retention(RetentionPolicy.RUNTIME)
+@interface HttpResponseField {
 
-    @HttpResponseField("TEXT")
-    String text;
-
-    @HttpResponseField("AUTH")
-    String authorizationNumber;
-
-    @HttpResponseField("ECHO")
-    String echo;
+    String value();
 }
