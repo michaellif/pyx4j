@@ -24,9 +24,10 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.events.UserMessageEvent;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.SiteMap;
+import com.propertyvista.portal.client.ptapp.VistaUnrecoverableErrorHandler;
+import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
 import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
@@ -48,7 +49,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
     private EventBus eventBus;
 
     @Inject
-    public CreateAccountActivity(CreateAccountView view, PlaceController placeController, PtAppWizardManager manager) {
+    public CreateAccountActivity(CreateAccountView view, PlaceController placeController) {
         this.view = view;
         this.placeController = placeController;
         view.setPresenter(this);
@@ -75,7 +76,6 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
             @Override
             public void onFailure(Throwable caught) {
-                eventBus.fireEvent(new UserMessageEvent(Arrays.asList(new String[] { caught.getMessage() })));
                 throw new UnrecoverableClientError(caught);
             }
 

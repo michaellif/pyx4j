@@ -17,8 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 import com.propertyvista.portal.client.ptapp.ui.LoginView;
 
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -29,7 +27,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     private final LoginView view;
 
     @Inject
-    public LoginActivity(LoginView view, PtAppWizardManager manager) {
+    public LoginActivity(LoginView view) {
         this.view = view;
         view.setPresenter(this);
     }

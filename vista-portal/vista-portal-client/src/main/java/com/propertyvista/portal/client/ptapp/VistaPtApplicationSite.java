@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 
 public class VistaPtApplicationSite extends AppSite {
 
@@ -30,10 +29,6 @@ public class VistaPtApplicationSite extends AppSite {
 
         CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
 
-        //TODO move this to Buss and show in UserMessageActivity
-        UnrecoverableErrorHandlerDialog.register();
-
         hideLoadingIndicator();
     }
-
 }

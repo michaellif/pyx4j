@@ -83,13 +83,6 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
                 // Captcha do not have events is Google component. We need to fix this! 
                 captcha.retrieveValue();
 
-                //
-                //                ValidationResults validationResults = form.getValidationResults();
-                //                if (!validationResults.isValid()) {
-                //                    MessageDialog.warn(i18n.tr("Validation failed."), validationResults.getMessagesText(false));
-                //                    return;
-                //                }
-
                 presenter.createAccount(form.getValue());
             }
 

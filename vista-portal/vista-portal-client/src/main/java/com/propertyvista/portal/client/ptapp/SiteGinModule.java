@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.mvp.MvpModule;
@@ -23,7 +25,8 @@ public class SiteGinModule extends AbstractGinModule {
     @Override
     protected void configure() {
 
-        bind(PtAppWizardManager.class).in(Singleton.class);
+        bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
+        bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
 
         install(new MvpModule());
         install(new ViewModule());
