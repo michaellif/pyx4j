@@ -44,6 +44,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     @Owned
     Address previousAddress();
 
+    @Owned
     IList<Vehicle> vehicles();
 
     LegalQuestions legalQuestions();

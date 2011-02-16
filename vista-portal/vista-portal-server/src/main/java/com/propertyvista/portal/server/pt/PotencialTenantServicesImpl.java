@@ -39,7 +39,7 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
             EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
             Application application = secureRetrieve(criteria);
-            if (application != null) {
+            if (application == null) {
                 application = EntityFactory.create(Application.class);
                 application.user().set(PtUserDataAccess.getCurrentUser());
                 secureSave(application);

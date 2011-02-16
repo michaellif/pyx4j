@@ -18,7 +18,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentView;
+import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class ApartmentActivity extends AbstractActivity implements ApartmentView.Presenter {
@@ -38,6 +42,13 @@ public class ApartmentActivity extends AbstractActivity implements ApartmentView
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+
+        // TODO move this to proper initialization place.
+        RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, null, new DefaultAsyncCallback<Application>() {
+            @Override
+            public void onSuccess(Application result) {
+            }
+        });
     }
 
 }
