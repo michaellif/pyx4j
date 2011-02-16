@@ -33,7 +33,7 @@ public class PetsViewImpl extends FlowPanel implements PetsView {
 
     private final CEntityEditableComponent<Pets> form;
 
-    private static I18n i18n = I18nFactory.getI18n(FinancialViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(PetsViewImpl.class);
 
     public PetsViewImpl() {
         form = new PetsViewForm();

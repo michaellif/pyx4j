@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Tenant extends IEntity {
     public enum RelationshipToApplicant {
-        spouse, sun, daughter, other
+        applicant, spouse, sun, daughter, other
     }
 
     IPrimitive<String> firstName();

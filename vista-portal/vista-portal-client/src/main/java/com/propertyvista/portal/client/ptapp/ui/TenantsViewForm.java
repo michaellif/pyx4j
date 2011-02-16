@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Feb 15, 2011
+ * @author antonk
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
 package com.propertyvista.portal.client.ptapp.ui;
@@ -19,8 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.domain.pt.Pet;
-import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.pt.Tenant;
 import com.propertyvista.portal.domain.pt.Tenants;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -37,69 +36,76 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 @Singleton
-public class PetsViewForm extends CEntityForm<Pets> {
+public class TenantsViewForm extends CEntityForm<Tenants> {
 
-    public PetsViewForm() {
-        super(Pets.class);
+    public TenantsViewForm() {
+        super(Tenants.class);
     }
 
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(create(proto().pets(), this));
+        main.add(create(proto().tenants(), this));
         setWidget(main);
     }
 
     @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.equals(proto().pets())) {
-            return createPetsEditorColumns();
+        if (member.equals(proto().tenants())) {
+            return createTenantsEditorColumns();
         } else {
             return super.createMemberFolderEditor(member);
         }
     }
 
-    private CEntityFolder<Pet> createPetsEditorColumns() {
-        return new CEntityFolder<Pet>() {
+    private CEntityFolder<Tenant> createTenantsEditorColumns() {
+        return new CEntityFolder<Tenant>() {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                Pet proto = EntityFactory.getEntityPrototype(Pet.class);
+                Tenant proto = EntityFactory.getEntityPrototype(Tenant.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.type(), "60px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.email(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "100px"));
+                //TODO: make stuff readonly
             }
 
             @Override
             protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a pet");
+                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a tenant");
             }
 
             @Override
-            protected CEntityFolderItem<Pet> createItem() {
-                return createPetRowEditor(columns);
+            protected CEntityFolderItem<Tenant> createItem() {
+                return createTenantRowEditor(columns);
             }
 
-            private CEntityFolderItem<Pet> createPetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<Pet>(Pet.class, columns, PetsViewForm.this) {
+            private CEntityFolderItem<Tenant> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRow<Tenant>(Tenant.class, columns, TenantsViewForm.this) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove pet");
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove tenant");
                     }
 
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = super.createCell(column);
-                        comp.setEnabled(column.getObject() != proto().charge());
+                        Tenants val = TenantsViewForm.this.getValue();
+                        comp.setEnabled(val.tenants().size() > 1);
+                        if (column == proto().dependant() || column == proto().takeOwnership()) {
+                            // no title for checkboxes
+                            comp.setTitle("");
+                        }
                         return comp;
                     }
+
                 };
             }
 

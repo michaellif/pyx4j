@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on 2011-02-14
- * @author jim
+ * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.propertyvista.portal.domain.pt;

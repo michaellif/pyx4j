@@ -7,22 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 8, 2011
- * @author Misha
+ * Created on 2011-02-14
+ * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.domain.pt;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.pt.Tenants;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-public interface TenantsView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-        void save(Tenants value);
-    }
-
-    public void populate(Tenants entity);
+public interface Tenants extends IEntity {
+    IList<Tenant> tenants();
 }
