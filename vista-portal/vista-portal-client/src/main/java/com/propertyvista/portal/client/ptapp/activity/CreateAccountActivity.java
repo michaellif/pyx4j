@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import java.util.Arrays;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -22,13 +24,14 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.events.UserMessageEvent;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.CreateAccountView;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -41,6 +44,8 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
     private final CreateAccountView view;
 
     private final PlaceController placeController;
+
+    private EventBus eventBus;
 
     @Inject
     public CreateAccountActivity(CreateAccountView view, PlaceController placeController, PtAppWizardManager manager) {
@@ -55,6 +60,7 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        this.eventBus = eventBus;
         panel.setWidget(view);
     }
 
@@ -65,7 +71,13 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
 
     @Override
     public void createAccount(AccountCreationRequest request) {
-        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
+        AsyncCallback<AuthenticationResponse> callback = new AsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                eventBus.fireEvent(new UserMessageEvent(Arrays.asList(new String[] { caught.getMessage() })));
+                throw new UnrecoverableClientError(caught);
+            }
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
