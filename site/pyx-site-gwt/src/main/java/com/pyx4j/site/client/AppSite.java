@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -66,6 +67,7 @@ public abstract class AppSite implements EntryPoint {
         if (ApplicationMode.isDevelopment()) {
             ClientLogger.setDebugOn(true);
         }
+        ClientEntityFactory.ensureIEntityImplementations();
         log.debug("{}", BrowserType.getCompiledType());
         onSiteLoad();
     }
