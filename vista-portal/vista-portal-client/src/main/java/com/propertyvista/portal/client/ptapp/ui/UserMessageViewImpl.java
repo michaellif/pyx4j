@@ -78,13 +78,12 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         html.setVisible(false);
     }
 
-    class Holder extends HTML {
+    private class Holder extends HTML {
         Holder(String borderColor) {
             setWidth("100%");
-            getElement().getStyle().setBorderColor("green");
-            getElement().getStyle().setBorderWidth(1, Unit.PX);
+            getElement().getStyle().setBorderColor(borderColor);
+            getElement().getStyle().setBorderWidth(2, Unit.PX);
             getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-
         }
     }
 }
