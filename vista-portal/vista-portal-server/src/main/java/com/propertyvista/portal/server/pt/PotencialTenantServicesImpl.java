@@ -53,9 +53,16 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
 
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
-            return super.execute(request);
+            if (request.getPrimaryKey() == 0) {
+                // Find first Entity of that type in Application 
+                @SuppressWarnings("unchecked")
+                EntityQueryCriteria<IApplicationEntity> criteria = EntityQueryCriteria.create((Class<IApplicationEntity>) request.getEntityClass());
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+                return secureRetrieve(criteria);
+            } else {
+                return super.execute(request);
+            }
         }
-
     }
 
     public static class SaveImpl extends EntityServicesImpl.MergeSaveImpl implements PotencialTenantServices.Save {
