@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
@@ -28,33 +30,17 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
     private Presenter presenter;
 
-    private final HTML notesHolder;
-
-    private final HTML errorsHolder;
-
-    private final HTML failuresHolder;
+    private final Map<Type, HTML> holders;
 
     public UserMessageViewImpl() {
-        notesHolder = new HTML();
-        notesHolder.setWidth("100%");
-        notesHolder.getElement().getStyle().setBorderColor("blue");
-        notesHolder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        notesHolder.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-        add(notesHolder);
 
-        errorsHolder = new HTML();
-        errorsHolder.setWidth("100%");
-        errorsHolder.getElement().getStyle().setBorderColor("orange");
-        errorsHolder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        errorsHolder.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-        add(errorsHolder);
+        holders = new HashMap<Type, HTML>();
 
-        failuresHolder = new HTML();
-        failuresHolder.setWidth("100%");
-        failuresHolder.getElement().getStyle().setBorderColor("red");
-        failuresHolder.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        failuresHolder.getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
-        add(failuresHolder);
+        for (Type type : Type.values()) {
+            Holder holder = new Holder(type.getColor());
+            holders.put(type, holder);
+            add(holder);
+        }
 
     }
 
@@ -64,18 +50,17 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     }
 
     @Override
-    public void showNotes(List<String> messages) {
-        notesHolder.setHTML(buildMessage(messages));
+    public void show(List<String> messages, Type type) {
+        HTML html = holders.get(type);
+        html.setHTML(buildMessage(messages));
+        html.setVisible(true);
     }
 
     @Override
-    public void showErrors(List<String> messages) {
-        errorsHolder.setHTML(buildMessage(messages));
-    }
-
-    @Override
-    public void showFailures(List<String> messages) {
-        failuresHolder.setHTML(buildMessage(messages));
+    public void hide(Type type) {
+        HTML html = holders.get(type);
+        html.setHTML("");
+        html.setVisible(false);
     }
 
     private String buildMessage(List<String> messages) {
@@ -86,5 +71,15 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         }
         builder.append("</ul>");
         return builder.toString();
+    }
+
+    class Holder extends HTML {
+        Holder(String borderColor) {
+            setWidth("100%");
+            getElement().getStyle().setBorderColor("green");
+            getElement().getStyle().setBorderWidth(1, Unit.PX);
+            getElement().getStyle().setBorderStyle(BorderStyle.DOTTED);
+
+        }
     }
 }

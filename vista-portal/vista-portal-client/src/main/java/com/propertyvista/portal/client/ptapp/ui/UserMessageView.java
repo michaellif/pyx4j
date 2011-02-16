@@ -16,16 +16,29 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.client.ptapp.ui.UserMessageView.Type;
 
 public interface UserMessageView extends IsWidget {
 
+    public enum Type {
+        info("green"), warning("blue"), error("orange"), failure("red");
+
+        private final String color;
+
+        Type(String color) {
+            this.color = color;
+        }
+
+        public String getColor() {
+            return color;
+        }
+    }
+
     public void setPresenter(Presenter presenter);
 
-    void showNotes(List<String> messages);
+    void show(List<String> messages, Type type);
 
-    void showErrors(List<String> messages);
-
-    void showFailures(List<String> messages);
+    void hide(Type type);
 
     public interface Presenter {
 

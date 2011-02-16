@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
 import com.propertyvista.portal.client.ptapp.events.UserMessageHandler;
 import com.propertyvista.portal.client.ptapp.ui.UserMessageView;
+import com.propertyvista.portal.client.ptapp.ui.UserMessageView.Type;
 
 import com.pyx4j.site.client.place.AppPlace;
 
@@ -34,22 +35,21 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     }
 
     public UserMessageActivity withPlace(AppPlace place) {
+        for (Type type : UserMessageView.Type.values()) {
+            view.hide(type);
+        }
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, final EventBus eventBus) {
         panel.setWidget(view);
-
         eventBus.addHandler(UserMessageEvent.getType(), this);
-
     }
 
     @Override
     public void onUserMessage(UserMessageEvent event) {
-        view.showNotes(event.getMessages());
-        view.showErrors(event.getMessages());
-        view.showFailures(event.getMessages());
+        view.show(event.getMessages(), UserMessageView.Type.error);
     }
 
 }
