@@ -14,12 +14,18 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 
 public interface ApartmentView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
     public interface Presenter {
+
+        public void save(UnitSelection result);
+
     }
+
+    public void populate(UnitSelection result);
 
 }

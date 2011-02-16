@@ -18,6 +18,7 @@ import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
@@ -28,14 +29,22 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public class PotencialTenantServicesImpl extends EntityServicesImpl implements PotencialTenantServices {
+
+    public static class UnitExistsImpl implements PotencialTenantServices.UnitExists {
+
+        @Override
+        public Boolean execute(UnitSelectionCriteria request) {
+            return false;
+        }
+
+    }
 
     public static class GetCurrentApplicationImpl implements PotencialTenantServices.GetCurrentApplication {
 
         @Override
-        public Application execute(VoidSerializable request) {
+        public Application execute(UnitSelectionCriteria request) {
             EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
             Application application = secureRetrieve(criteria);

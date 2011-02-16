@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 
 @Singleton
 public class ApartmentViewImpl extends SimplePanel implements ApartmentView {
@@ -32,6 +33,11 @@ public class ApartmentViewImpl extends SimplePanel implements ApartmentView {
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(UnitSelection result) {
+        // TODO Auto-generated method stub
     }
 
 }

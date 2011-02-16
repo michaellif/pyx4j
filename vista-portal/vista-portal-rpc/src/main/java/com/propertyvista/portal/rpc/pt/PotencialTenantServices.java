@@ -15,19 +15,23 @@ package com.propertyvista.portal.rpc.pt;
 
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.rpc.shared.Service;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface PotencialTenantServices {
 
-    public interface GetCurrentApplication extends Service<VoidSerializable, Application> {
+    public interface UnitExists extends Service<UnitSelectionCriteria, Boolean> {
+
+    }
+
+    public interface GetCurrentApplication extends Service<UnitSelectionCriteria, Application> {
 
     }
 
     /**
-     * For User in Session find current(*) Application Object. Create one if not exists.
+     * For User in Session find current(*) Application Object.
      * 
      * For Application find UnitSelection Object. If criteria Objects are different then
      * use one from Request.

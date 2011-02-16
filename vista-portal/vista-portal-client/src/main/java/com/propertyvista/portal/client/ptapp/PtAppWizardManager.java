@@ -16,11 +16,14 @@ package com.propertyvista.portal.client.ptapp;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
@@ -36,11 +39,25 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private final PlaceController placeController;
 
+    private final UnitSelectionCriteria unitSelectionCriteria;
+
     @Inject
     public PtAppWizardManager(EventBus eventBus, PlaceController placeController) {
         this.eventBus = eventBus;
         this.placeController = placeController;
         eventBus.addHandler(SecurityControllerEvent.getType(), this);
+
+        unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
+        unitSelectionCriteria.buildingName().setValue(Window.Location.getParameter("b"));
+        unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
+
+        RPCManager.execute(PotencialTenantServices.UnitExists.class, unitSelectionCriteria, new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                // TODO show mesage
+            }
+        });
     }
 
     public void saveApplicationProgress() {
@@ -61,7 +78,8 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     @Override
     public void onSecurityContextChange(SecurityControllerEvent event) {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
-            RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, null, new DefaultAsyncCallback<Application>() {
+
+            RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<Application>() {
 
                 @Override
                 public void onSuccess(Application result) {
