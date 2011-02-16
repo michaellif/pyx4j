@@ -13,22 +13,37 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.TenantsView;
+import com.propertyvista.portal.domain.pt.Tenant;
+import com.propertyvista.portal.domain.pt.Tenants;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class TenantsActivity extends AbstractActivity implements TenantsView.Presenter {
 
+    private static final Logger log = LoggerFactory.getLogger(TenantsActivity.class);
+
     private final TenantsView view;
+
+    //TODO FOR TESTING
+    private static Tenants potentialTenantInfo = EntityFactory.create(Tenants.class);
 
     @Inject
     public TenantsActivity(TenantsView view) {
         this.view = view;
         view.setPresenter(this);
+
+        //TODO: for testing
+        Tenant t = EntityFactory.create(Tenant.class);
+        potentialTenantInfo.tenants().add(t);
     }
 
     public TenantsActivity withPlace(AppPlace place) {
@@ -38,6 +53,14 @@ public class TenantsActivity extends AbstractActivity implements TenantsView.Pre
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+
+        //TODO get real PotentialTenantInfo
+        log.info("LOADED {}", potentialTenantInfo);
+        view.populate(potentialTenantInfo);
     }
 
+    @Override
+    public void save(Tenants value) {
+        log.info("SAVED {}", value);
+    }
 }
