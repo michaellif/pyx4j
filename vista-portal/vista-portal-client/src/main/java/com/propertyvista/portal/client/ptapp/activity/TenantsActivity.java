@@ -21,7 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.TenantsView;
-import com.propertyvista.portal.domain.pt.Tenant;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.Tenants;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -42,7 +42,7 @@ public class TenantsActivity extends AbstractActivity implements TenantsView.Pre
         view.setPresenter(this);
 
         //TODO: for testing
-        Tenant t = EntityFactory.create(Tenant.class);
+        PotentialTenant t = EntityFactory.create(PotentialTenant.class);
         potentialTenantInfo.tenants().add(t);
     }
 

@@ -17,5 +17,5 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 public interface Tenants extends IEntity {
-    IList<Tenant> tenants();
+    IList<PotentialTenant> tenants();
 }

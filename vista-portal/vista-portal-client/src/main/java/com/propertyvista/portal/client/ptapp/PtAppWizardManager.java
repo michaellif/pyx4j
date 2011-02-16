@@ -41,7 +41,7 @@ public class PtAppWizardManager {
         ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
-                // Buss generate event
+                // Bus generates event
                 onBusstSecurityEvent();
             }
         });

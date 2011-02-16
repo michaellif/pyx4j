@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.domain.pt.Tenant;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.Tenants;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -58,12 +58,12 @@ public class TenantsViewForm extends CEntityForm<Tenants> {
         }
     }
 
-    private CEntityFolder<Tenant> createTenantsEditorColumns() {
-        return new CEntityFolder<Tenant>() {
+    private CEntityFolder<PotentialTenant> createTenantsEditorColumns() {
+        return new CEntityFolder<PotentialTenant>() {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                Tenant proto = EntityFactory.getEntityPrototype(Tenant.class);
+                PotentialTenant proto = EntityFactory.getEntityPrototype(PotentialTenant.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "100px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "100px"));
@@ -82,12 +82,12 @@ public class TenantsViewForm extends CEntityForm<Tenants> {
             }
 
             @Override
-            protected CEntityFolderItem<Tenant> createItem() {
+            protected CEntityFolderItem<PotentialTenant> createItem() {
                 return createTenantRowEditor(columns);
             }
 
-            private CEntityFolderItem<Tenant> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<Tenant>(Tenant.class, columns, TenantsViewForm.this) {
+            private CEntityFolderItem<PotentialTenant> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRow<PotentialTenant>(PotentialTenant.class, columns, TenantsViewForm.this) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {

@@ -219,7 +219,8 @@ public class PreloadPT extends AbstractDataPreloader {
                 + RandomUtil.random(DemoData.EMAIL_DOMAINS);
         pt.email().setValue(email);
 
-        pt.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
+        //TODO first tenant should be applicant
+        pt.relationship().setValue(RandomUtil.random(PotentialTenant.Relationship.values()));
         pt.payment().setValue(1.0f + RandomUtil.randomInt(3000));
 
         pt.dependant().setValue(RandomUtil.randomBoolean());

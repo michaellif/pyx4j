@@ -33,7 +33,7 @@ public class PetsActivity extends AbstractActivity implements PetsView.Presenter
     private final PetsView view;
 
     //TODO FOR TESTING
-    private static Pets potentialTenantInfo = EntityFactory.create(Pets.class);
+    private static Pets pets = EntityFactory.create(Pets.class);
 
     @Inject
     public PetsActivity(PetsView view) {
@@ -50,8 +50,8 @@ public class PetsActivity extends AbstractActivity implements PetsView.Presenter
         panel.setWidget(view);
 
         //TODO get real PotentialTenantInfo
-        log.info("LOADED {}", potentialTenantInfo);
-        view.populate(potentialTenantInfo);
+        log.info("LOADED {}", pets);
+        view.populate(pets);
     }
 
     @Override

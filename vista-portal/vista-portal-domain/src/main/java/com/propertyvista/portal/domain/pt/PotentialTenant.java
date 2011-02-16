@@ -23,6 +23,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 @AbstractEntity
 public interface PotentialTenant extends IEntity, IApplicationEntity {
 
+    public enum Relationship {
+        applicant, spouse, sun, daughter, other
+    }
+
     @Caption(name = "First")
     IPrimitive<String> firstName();
 
@@ -44,7 +48,7 @@ public interface PotentialTenant extends IEntity, IApplicationEntity {
     @Caption(name = "Email")
     IPrimitive<String> email();
 
-    IPrimitive<String> relationship();
+    IPrimitive<Relationship> relationship();
 
     IPrimitive<Float> payment();
 

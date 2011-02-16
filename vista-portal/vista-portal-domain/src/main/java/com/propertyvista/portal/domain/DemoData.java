@@ -46,8 +46,6 @@ public class DemoData {
 
     public final static String[] EMAIL_DOMAINS = { "gmail.com", "gmail.ca", "rogers.com", "yahoo.ca", "yahoo.com" };
 
-    public final static String[] RELATIONSHIPS = { "self", "spouse", "child" };
-
     public final static String[] CITIES = { "Toronto", "Vancouver", "Montreal", "Quebec", "Richmond Hill", "New Market", "Thornhill", "Scarbough" };
 
     public final static String[] PROVINCES = { "ON", "QC", "NS", "NB", "MB", "BC", "PE", "SK", "AB", "NL" };
