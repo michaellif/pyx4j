@@ -27,6 +27,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 import com.pyx4j.security.client.ClientSecurityController;
+import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.shared.Behavior;
 
 public class AppSiteEventBus extends SimpleEventBus {
@@ -39,6 +40,7 @@ public class AppSiteEventBus extends SimpleEventBus {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
                 System.out.println("ClientSecurityController event++++++++++");
+                fireEvent(new SecurityControllerEvent(event.getValue()));
             }
         });
 
