@@ -18,6 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.LoginView;
@@ -36,6 +37,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
 
     private final PlaceController placeController;
 
+    @Inject
     public LoginActivity(LoginView view, PlaceController placeController, PtAppWizardManager manager) {
         this.view = view;
         this.placeController = placeController;
