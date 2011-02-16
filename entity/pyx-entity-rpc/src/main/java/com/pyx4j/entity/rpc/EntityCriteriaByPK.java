@@ -51,6 +51,14 @@ public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E
         return c;
     }
 
+    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, T entity) {
+        EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>(entityClass);
+        if ((entity != null) && (entity.getPrimaryKey() != null)) {
+            c.setPrimaryKey(entity.getPrimaryKey());
+        }
+        return c;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends IEntity> EntityCriteriaByPK<T> create(T entity) {
         EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>((Class<T>) entity.getValueClass());
