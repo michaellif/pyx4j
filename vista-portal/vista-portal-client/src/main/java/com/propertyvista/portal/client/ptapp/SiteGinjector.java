@@ -14,14 +14,13 @@
 package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.inject.client.Ginjector;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 
-@GinModules(SiteGinModule.class)
-public interface SiteGinjector extends Ginjector {
+import com.pyx4j.site.client.AppSiteGinjector;
 
-    PlaceHistoryHandler getPlaceHistoryHandler();
+@GinModules(SiteGinModule.class)
+public interface SiteGinjector extends AppSiteGinjector {
 
     SiteView getSiteView();
 

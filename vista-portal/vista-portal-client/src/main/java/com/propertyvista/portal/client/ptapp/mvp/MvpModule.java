@@ -13,15 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.mvp;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.place.shared.PlaceHistoryMapper;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 
 public class MvpModule extends AbstractGinModule {
 
@@ -44,22 +36,6 @@ public class MvpModule extends AbstractGinModule {
 
         bind(BottomActivityMapper.class);
 
-    }
-
-    @Provides
-    @Singleton
-    public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, EventBus eventBus) {
-        PlaceHistoryMapper historyMapper = GWT.create(PlaceHistoryMapper.class);
-        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
-
-        return historyHandler;
-    }
-
-    @Provides
-    @Singleton
-    public PlaceController getPlaceController(EventBus eventBus) {
-        return new PlaceController(eventBus);
     }
 
 }

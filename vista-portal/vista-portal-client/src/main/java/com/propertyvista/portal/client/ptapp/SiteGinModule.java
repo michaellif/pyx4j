@@ -14,24 +14,36 @@
 package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.mvp.MvpModule;
 import com.propertyvista.portal.client.ptapp.ui.ViewModule;
 
-public class SiteGinModule extends AbstractGinModule {
+import com.pyx4j.site.client.AppSiteGinModule;
+
+public class SiteGinModule extends AppSiteGinModule {
 
     @Override
     protected void configure() {
-
-        bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-
-        install(new MvpModule());
+        super.configure();
 
         bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
         bind(PtAppWizardManager.class).asEagerSingleton();
 
+        install(new MvpModule());
+
         install(new ViewModule());
     }
+
+    @Override
+    @Provides
+    @Singleton
+    public PlaceHistoryHandler getHistoryHandler(PlaceController placeController, EventBus eventBus) {
+        PlaceHistoryHandler historyHandler = super.getHistoryHandler(placeController, eventBus);
+        historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
+        return historyHandler;
+    }
+
 }
