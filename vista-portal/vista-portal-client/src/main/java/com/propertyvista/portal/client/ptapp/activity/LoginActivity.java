@@ -60,7 +60,6 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
-                placeController.goTo(new SiteMap.Apartment());
             }
 
         };

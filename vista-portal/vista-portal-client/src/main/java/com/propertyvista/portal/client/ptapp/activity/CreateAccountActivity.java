@@ -82,7 +82,6 @@ public class CreateAccountActivity extends AbstractActivity implements CreateAcc
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
-                placeController.goTo(new SiteMap.Apartment());
             }
 
         };
