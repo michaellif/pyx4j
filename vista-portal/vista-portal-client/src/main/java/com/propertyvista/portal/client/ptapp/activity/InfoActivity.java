@@ -53,8 +53,7 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        RPCManager.execute(PotencialTenantServices.RetrieveByPK.class,
-                EntityCriteriaByPK.create(PotentialTenantInfo.class, (potentialTenantInfo == null) ? null : potentialTenantInfo.getPrimaryKey()),
+        RPCManager.execute(PotencialTenantServices.RetrieveByPK.class, EntityCriteriaByPK.create(PotentialTenantInfo.class, potentialTenantInfo),
                 new DefaultAsyncCallback<IEntity>() {
 
                     @Override
