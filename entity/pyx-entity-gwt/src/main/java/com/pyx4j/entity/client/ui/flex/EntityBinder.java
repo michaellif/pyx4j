@@ -23,6 +23,7 @@ package com.pyx4j.entity.client.ui.flex;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,6 +176,10 @@ public class EntityBinder<E extends IEntity> {
 
     public E getValue() {
         return editableEntity;
+    }
+
+    public Set<CEditableComponent<?, ?>> getComponents() {
+        return binding.keySet();
     }
 
 }

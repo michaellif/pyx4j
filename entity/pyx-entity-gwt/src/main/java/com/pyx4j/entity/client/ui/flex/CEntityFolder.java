@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 /**
@@ -163,6 +164,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     public void setWidget(Widget widget) {
         folderDecorator.setWidget(widget);
+    }
+
+    public ValidationResults getValidationResults() {
+        // TODO Implement propagation of validation
+        return null;
     }
 
 }

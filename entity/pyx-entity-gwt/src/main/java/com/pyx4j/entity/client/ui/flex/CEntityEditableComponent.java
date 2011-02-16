@@ -27,7 +27,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CFormFolder;
+import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -64,10 +68,35 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
 
     @Override
     public E getValue() {
-        if (!isValid()) {
-            throw new UserRuntimeException(i18n.tr("Validation failed.") + getValidationMessage());
-        }
         return binder.getValue();
+    }
+
+    @Override
+    public boolean isValid() {
+        if (!isEditable() || !isEnabled()) {
+            return true;
+        }
+        for (CComponent<?> ccomponent : binder.getComponents()) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ValidationResults getValidationResults() {
+        ValidationResults validationResults = new ValidationResults();
+        for (CComponent<?> ccomponent : binder.getComponents()) {
+            if (ccomponent instanceof CEntityEditableComponent<?> && !((CEntityEditableComponent<?>) ccomponent).isValid()) {
+                validationResults.appendValidationErrors(((CEntityEditableComponent<?>) ccomponent).getValidationResults());
+            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+                validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
+                        + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
+            } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).isValid()) {
+                validationResults.appendValidationErrors(((CEntityFolder<?>) ccomponent).getValidationResults());
+            }
+        }
+        return validationResults;
     }
 
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
