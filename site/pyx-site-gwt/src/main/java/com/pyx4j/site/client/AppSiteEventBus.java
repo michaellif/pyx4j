@@ -34,12 +34,10 @@ public class AppSiteEventBus extends SimpleEventBus {
 
     public AppSiteEventBus() {
         super();
-        System.out.println("AppSiteEventBus event++++++++++");
 
         ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
-                System.out.println("ClientSecurityController event++++++++++");
                 fireEvent(new SecurityControllerEvent(event.getValue()));
             }
         });
