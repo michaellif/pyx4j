@@ -13,18 +13,14 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
-public interface InfoView extends IsWidget {
+public interface InfoView extends WizardStepView<PotentialTenantInfo, InfoViewPresenter> {
 
-    public void setPresenter(Presenter presenter);
+    @Override
+    public void setPresenter(InfoViewPresenter presenter);
 
+    @Override
     public void populate(PotentialTenantInfo entity);
-
-    public interface Presenter {
-
-        public void save(PotentialTenantInfo entity);
-    }
 
 }

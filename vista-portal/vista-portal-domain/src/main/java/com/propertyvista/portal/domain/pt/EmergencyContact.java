@@ -13,6 +13,10 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Owned;
+
 public interface EmergencyContact extends ContactDetails {
+
+    @Owned
     Address address();
 }

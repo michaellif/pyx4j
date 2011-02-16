@@ -31,7 +31,7 @@ public class InfoViewImpl extends FlowPanel implements InfoView {
 
     private static I18n i18n = I18nFactory.getI18n(InfoViewImpl.class);
 
-    private Presenter presenter;
+    private InfoViewPresenter presenter;
 
     private final CEntityEditableComponent<PotentialTenantInfo> form;
 
@@ -55,7 +55,7 @@ public class InfoViewImpl extends FlowPanel implements InfoView {
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(InfoViewPresenter presenter) {
         this.presenter = presenter;
     }
 
