@@ -36,6 +36,7 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
 
         @Override
         public Boolean execute(UnitSelectionCriteria request) {
+            //TODO Dmitry please implement.
             return false;
         }
 
@@ -49,9 +50,29 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
             Application application = secureRetrieve(criteria);
             if (application == null) {
+
+                //TODO Dmitry find if UnitSelectionCriteria is valid. e.g. the same as in UnitExistsImpl
+                UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
+                unitSelection.buildingName().set(request.buildingName());
+                unitSelection.floorplanName().set(request.floorplanName());
+                //unitSelection.building().set(????);  //TODO Dmitry use found building
+
                 application = EntityFactory.create(Application.class);
                 application.user().set(PtUserDataAccess.getCurrentUser());
                 secureSave(application);
+
+                unitSelection.application().set(application);
+                secureSave(unitSelection);
+
+            } else {
+                //Verify if buildingName and floorplanName are the same
+                EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
+                criteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
+                UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
+
+                if ((!unitSelection.buildingName().equals(request.buildingName())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
+                    //TODO What if they are diferent ?  We need to discard some part of application flow.
+                }
             }
             PtUserDataAccess.setCurrentUserApplication(application);
             return application;
@@ -62,15 +83,22 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
 
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
+            IEntity ret;
             if (request.getPrimaryKey() == 0) {
                 // Find first Entity of that type in Application 
                 @SuppressWarnings("unchecked")
                 EntityQueryCriteria<IApplicationEntity> criteria = EntityQueryCriteria.create((Class<IApplicationEntity>) request.getEntityClass());
                 criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-                return secureRetrieve(criteria);
+                ret = secureRetrieve(criteria);
             } else {
-                return super.execute(request);
+                ret = super.execute(request);
             }
+
+            if (ret instanceof UnitSelection) {
+                loadAvalableUnits((UnitSelection) ret);
+            }
+
+            return ret;
         }
     }
 
@@ -98,17 +126,24 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
                 throw new UnRecoverableRuntimeException("Invalid object");
             }
 
-            return super.execute(request);
+            IEntity ret = super.execute(request);
+
+            if (ret instanceof UnitSelection) {
+                loadAvalableUnits((UnitSelection) ret);
+            }
+
+            return ret;
         }
 
     }
 
-    public static class GetAvalableUnitsImpl implements PotencialTenantServices.GetAvalableUnits {
-
-        @Override
-        public UnitSelection execute(UnitSelection request) {
-            return null;
-        }
+    /**
+     * TODO Dmitry
+     * 
+     * Build the AvalableUnitsByFloorplan object.
+     */
+    private static void loadAvalableUnits(UnitSelection unitSelection) {
 
     }
+
 }

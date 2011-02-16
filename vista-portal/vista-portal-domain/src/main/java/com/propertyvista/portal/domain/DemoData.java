@@ -38,6 +38,10 @@ public class DemoData {
 
     public static int NUM_POTENTIAL_TENANTS = 3;
 
+    public static final String REGISTRATION_DEFAULT_BUILDINGNAME = "740";
+
+    public static final String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
+
     //    public static int NUM_UNITS = 10;
 
     public final static String[] FIRST_NAMES = { "John", "Jim", "Bob", "Alex", "Chris" };

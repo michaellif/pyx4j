@@ -18,11 +18,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
+import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -50,6 +52,14 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
         unitSelectionCriteria.buildingName().setValue(Window.Location.getParameter("b"));
         unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
+        if (ApplicationMode.isDevelopment()) {
+            if (unitSelectionCriteria.floorplanName().isNull()) {
+                unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
+            }
+            if (unitSelectionCriteria.buildingName().isNull()) {
+                unitSelectionCriteria.buildingName().setValue(DemoData.REGISTRATION_DEFAULT_BUILDINGNAME);
+            }
+        }
 
         RPCManager.execute(PotencialTenantServices.UnitExists.class, unitSelectionCriteria, new DefaultAsyncCallback<Boolean>() {
 

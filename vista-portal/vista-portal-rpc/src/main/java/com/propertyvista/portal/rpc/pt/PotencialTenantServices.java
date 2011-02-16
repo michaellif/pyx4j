@@ -14,7 +14,6 @@
 package com.propertyvista.portal.rpc.pt;
 
 import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 import com.pyx4j.entity.rpc.EntityServices;
@@ -27,20 +26,6 @@ public interface PotencialTenantServices {
     }
 
     public interface GetCurrentApplication extends Service<UnitSelectionCriteria, Application> {
-
-    }
-
-    /**
-     * For User in Session find current(*) Application Object.
-     * 
-     * For Application find UnitSelection Object. If criteria Objects are different then
-     * use one from Request.
-     * 
-     * Assume that building is provided in request.
-     * 
-     * Build the AvalableUnitsByFloorplan object.
-     */
-    public interface GetAvalableUnits extends Service<UnitSelection, UnitSelection> {
 
     }
 

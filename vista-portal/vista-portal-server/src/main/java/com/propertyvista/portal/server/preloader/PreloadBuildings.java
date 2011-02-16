@@ -83,7 +83,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
         floorplan.area().setValue(1200);
-        floorplan.name().setValue("Luxury 2-bedroom");
+        floorplan.name().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
 
         // for now save just one picture
         int imageIndex = RandomUtil.randomInt(3) + 1;
@@ -187,6 +187,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
             Building building = createBuilding(buildingType, complex, website, address, phones, email);
             //			log.info("Created: " + building);
+
+            if (i == 0) {
+                building.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_BUILDINGNAME);
+            } else {
+                building.propertyCode().setValue(String.valueOf(i));
+            }
 
             // now create units for the building
             int numFloors = RandomUtil.randomInt(5);
