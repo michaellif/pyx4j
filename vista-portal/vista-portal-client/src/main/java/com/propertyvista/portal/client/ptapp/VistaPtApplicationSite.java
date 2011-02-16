@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
@@ -30,5 +31,7 @@ public class VistaPtApplicationSite extends AppSite {
         CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
 
         hideLoadingIndicator();
+
+        ClientContext.obtainAuthenticationData(null);
     }
 }
