@@ -43,12 +43,6 @@ public class PtAppWizardManager {
     public PtAppWizardManager(EventBus eventBus, PlaceController placeController) {
         this.eventBus = eventBus;
         this.placeController = placeController;
-        ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
-                onSecurityControllerEvent();
-            }
-        });
 
     }
 

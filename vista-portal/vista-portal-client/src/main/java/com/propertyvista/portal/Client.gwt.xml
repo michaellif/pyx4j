@@ -14,7 +14,7 @@
 
     <source path="client"/>
 
-    <entry-point class='com.propertyvista.portal.client.VistaSiteDispatcher'/>
+    <entry-point class='com.propertyvista.portal.client.ptapp.VistaPtApplicationSite'/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.client.*" />
     
