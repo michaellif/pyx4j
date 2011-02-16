@@ -1,7 +1,5 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.List;
-
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -16,8 +14,6 @@ import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.activity.TopRightActionsActivity.Theme;
 
 import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.site.client.place.AppPlace;
@@ -58,6 +54,7 @@ public class TopRightActionsViewImpl extends SimplePanel implements TopRightActi
         CHyperlink logout = new CHyperlink(null, new Command() {
             @Override
             public void execute() {
+                presenter.logout();
             }
         });
         logout.setDebugId(new StringDebugId("logout"));

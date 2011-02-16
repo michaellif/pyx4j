@@ -23,6 +23,8 @@ public interface TopRightActionsView extends IsWidget {
 
         public void setTheme(Theme theme);
 
+        public void logout();
+
     }
 
 }

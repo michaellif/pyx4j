@@ -21,10 +21,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
 import com.propertyvista.portal.client.ptapp.themes.LightSkyBlueTheme;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.widgets.client.style.StyleManger;
@@ -93,6 +97,16 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
             break;
         }
 
+    }
+
+    @Override
+    public void logout() {
+        ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                placeController.goTo(new SiteMap.Login());
+            }
+        });
     }
 
 }

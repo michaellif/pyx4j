@@ -52,11 +52,12 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
 
         if (ApplicationMode.isDevelopment()) {
             add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
-            add(new HTML("Press <i>Ctrl+Alt+T</i> to login"));
-
+            add(new HTML("Press <i>Ctrl+Q</i> to login"));
         }
 
         form = new LoginViewForm();
+        form.get(form.proto().captcha()).setVisible(false);
+        form.populate(null);
         add(form);
 
         Button viewButton = new Button("Login");
@@ -86,7 +87,7 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
             handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
                 @Override
                 public void onPreviewNativeEvent(NativePreviewEvent event) {
-                    if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey() && event.getNativeEvent().getAltKey()) {
+                    if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey()) {
                         setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
                     }
                 }
@@ -96,12 +97,12 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
         String devLoginUserPrefix = null;
-        int max = 1;
+        int max = DemoData.maxCustomers;
         switch (nativeKeyCode) {
         case 'A':
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
             break;
-        case 'T':
+        case 'Q':
             devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;
             break;
         }

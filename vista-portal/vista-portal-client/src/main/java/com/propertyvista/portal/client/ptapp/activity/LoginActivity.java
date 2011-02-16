@@ -15,20 +15,30 @@ package com.propertyvista.portal.client.ptapp.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
+import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.LoginView;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
 
     private final LoginView view;
 
-    @Inject
-    public LoginActivity(LoginView view) {
+    private final PlaceController placeController;
+
+    public LoginActivity(LoginView view, PlaceController placeController, PtAppWizardManager manager) {
         this.view = view;
+        this.placeController = placeController;
         view.setPresenter(this);
     }
 
@@ -42,8 +52,17 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     }
 
     @Override
-    public void login(AuthenticationRequest value) {
-        // TODO Auto-generated method stub
+    public void login(AuthenticationRequest request) {
+        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
+
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+                placeController.goTo(new SiteMap.Apartment());
+            }
+
+        };
+        RPCManager.execute(AuthenticationServices.Authenticate.class, request, callback);
 
     }
 

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
@@ -64,6 +65,11 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         signinButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
         add(signinButton);
 
+        if (ApplicationMode.isDevelopment()) {
+            add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
+            add(new HTML("Press <i>Ctrl+Q</i> to create new user"));
+        }
+
         form = new CreateAccountViewForm();
         form.populate(null);
         add(form);
@@ -103,7 +109,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
             handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
                 @Override
                 public void onPreviewNativeEvent(NativePreviewEvent event) {
-                    if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey() && event.getNativeEvent().getAltKey()) {
+                    if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey()) {
                         setDevLoginValues(event.getNativeEvent(), event.getNativeEvent().getKeyCode());
                     }
                 }
@@ -113,12 +119,12 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
         String devLoginUserPrefix = null;
-        int max = 10;
+        int max = 100;
         switch (nativeKeyCode) {
         case 'A':
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
             break;
-        case 'T':
+        case 'Q':
             devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;
             break;
         }
@@ -132,7 +138,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
                 }
             }
             devKey = nativeKeyCode;
-            String devLogin = devLoginUserPrefix + CommonsStringUtils.d000(devCount) + DemoData.USERS_DOMAIN;
+            String devLogin = devLoginUserPrefix + CommonsStringUtils.d00(devCount) + DemoData.USERS_DOMAIN;
             event.preventDefault();
             form.get(form.proto().email()).setValue(devLogin);
             form.get(form.proto().password()).setValue(devLogin);

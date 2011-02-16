@@ -38,7 +38,7 @@ public class PreloadUsers extends AbstractDataPreloader {
 
     private int userCount;
 
-    private int empCount;
+    private int custCount;
 
     private User createUser(String email, VistaBehavior behavior) {
         if (!ApplicationMode.isDevelopment()) {
@@ -83,19 +83,19 @@ public class PreloadUsers extends AbstractDataPreloader {
                 createUser(DemoData.CRM_ADMIN_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.ADMIN);
             }
 
-            for (int i = 1; i <= DemoData.maxEmployee; i++) {
-                switch (empCount % 3) {
+            for (int i = 1; i <= DemoData.maxCustomers; i++) {
+                switch (custCount % 3) {
                 case 0:
-                    createUser(DemoData.CRM_EMPLOYEE_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.EMPLOYEE);
+                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENCIAL_TENANT);
                     break;
                 case 1:
-                    createUser(DemoData.CRM_EMPLOYEE_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.EMPLOYEE);
+                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENCIAL_TENANT);
                     break;
                 case 2:
-                    createUser(DemoData.CRM_EMPLOYEE_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.EMPLOYEE);
+                    createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENCIAL_TENANT);
                     break;
                 }
-                empCount++;
+                custCount++;
 
             }
         }

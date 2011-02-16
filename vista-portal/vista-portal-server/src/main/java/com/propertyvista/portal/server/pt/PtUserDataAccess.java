@@ -24,6 +24,7 @@ import com.propertyvista.portal.rpc.pt.PtUserVisit;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
@@ -57,9 +58,13 @@ public class PtUserDataAccess {
 
     public static Long getCurrentUserApplicationPrimaryKey() {
         Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null)) {
+        if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("no session"));
+        }
+        if (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null) {
+            log.trace("no application selected");
+            throw new UserRuntimeException(i18n.tr("no application selected"));
         }
         return ((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey();
     }
@@ -70,7 +75,10 @@ public class PtUserDataAccess {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("no session"));
         }
-
+        if (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null) {
+            log.trace("no application selected");
+            throw new UserRuntimeException(i18n.tr("no application selected"));
+        }
         Application application = EntityFactory.create(Application.class);
         application.setPrimaryKey(((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey());
         return application;
@@ -78,7 +86,7 @@ public class PtUserDataAccess {
 
     public static void setCurrentUserApplication(Application application) {
         Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null)) {
+        if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("no session"));
         }

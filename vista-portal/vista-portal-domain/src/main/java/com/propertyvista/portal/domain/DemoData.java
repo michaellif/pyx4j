@@ -20,7 +20,7 @@ public class DemoData {
      * they are of the same kind, just different type
      */
 
-    public static int maxCustomers = 4;
+    public static int maxCustomers = 100;
 
     public static int maxEmployee = 300;
 
@@ -32,7 +32,7 @@ public class DemoData {
 
     public static String CRM_EMPLOYEE_USER_PREFIX = "emp";
 
-    public static String USERS_DOMAIN = "@propertyvista.com";
+    public static String USERS_DOMAIN = "@pyx4j.com";
 
     public static int NUM_RESIDENTIAL_BUILDINGS = 3;
 
