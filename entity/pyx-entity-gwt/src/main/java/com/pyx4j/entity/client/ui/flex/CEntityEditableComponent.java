@@ -20,13 +20,20 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> {
+
+    private static I18n i18n = I18nFactory.getI18n(CEntityEditableComponent.class);
 
     private final EntityBinder<E> binder;
 
@@ -57,6 +64,9 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
 
     @Override
     public E getValue() {
+        if (!isValid()) {
+            throw new UserRuntimeException(i18n.tr("Validation failed.") + getValidationMessage());
+        }
         return binder.getValue();
     }
 
