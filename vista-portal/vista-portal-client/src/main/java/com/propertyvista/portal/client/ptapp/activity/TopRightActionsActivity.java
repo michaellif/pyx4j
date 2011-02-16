@@ -104,7 +104,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                placeController.goTo(new SiteMap.Login());
+                //Do nothing
             }
         });
     }
