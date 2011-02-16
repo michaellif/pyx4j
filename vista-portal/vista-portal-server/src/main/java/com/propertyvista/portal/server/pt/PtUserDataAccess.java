@@ -71,7 +71,7 @@ public class PtUserDataAccess {
 
     public static Application getCurrentUserApplication() {
         Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (((PtUserVisit) v.getUserVisit()).getApplicationPrimaryKey() == null)) {
+        if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("no session"));
         }
