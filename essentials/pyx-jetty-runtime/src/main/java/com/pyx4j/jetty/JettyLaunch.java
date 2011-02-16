@@ -20,6 +20,8 @@
  */
 package com.pyx4j.jetty;
 
+import java.net.ServerSocket;
+
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -45,8 +47,16 @@ public abstract class JettyLaunch {
     }
 
     public static void launch(JettyLaunch jettyLaunch) throws Exception {
-
-        Server server = new Server(jettyLaunch.getServerPort());
+    	int port = jettyLaunch.getServerPort();
+    	//see if port is available
+    	try {
+	        ServerSocket s = new ServerSocket(port);
+	        s.close();
+    	} catch (Exception e) {
+    		throw new RuntimeException("Port already in use", e);
+    	}
+    	
+        Server server = new Server(port);
 
         RewriteHandler rewrite = new RewriteHandler();
         rewrite.setRewriteRequestURI(false);
