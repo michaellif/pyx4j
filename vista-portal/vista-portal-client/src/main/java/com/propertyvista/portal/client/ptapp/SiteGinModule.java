@@ -26,9 +26,12 @@ public class SiteGinModule extends AbstractGinModule {
     protected void configure() {
 
         bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-        bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
 
         install(new MvpModule());
+
+        bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
+        bind(PtAppWizardManager.class).asEagerSingleton();
+
         install(new ViewModule());
     }
 }

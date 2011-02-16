@@ -24,5 +24,5 @@ public interface Application extends IEntity, IUserEntity {
     Money rent();
 
     @Owned
-    ApplicationProgress status();
+    ApplicationProgress progress();
 }

@@ -17,7 +17,11 @@ import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
@@ -25,26 +29,28 @@ import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.RPCManager;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
 
 public class PtAppWizardManager {
 
-    Application application;
+    private Application application;
 
-    public static PtAppWizardManager instance() {
-        return (PtAppWizardManager) ClientContext.getAttribute("appwizard");
-    }
+    private final EventBus eventBus;
 
-    public static void todo1() {
+    private final PlaceController placeController;
+
+    @Inject
+    public PtAppWizardManager(EventBus eventBus, PlaceController placeController) {
+        this.eventBus = eventBus;
+        this.placeController = placeController;
         ClientSecurityController.instance().addValueChangeHandler(new ValueChangeHandler<Set<Behavior>>() {
             @Override
             public void onValueChange(ValueChangeEvent<Set<Behavior>> event) {
-                // Bus generates event
-                onBusstSecurityEvent();
+                onSecurityControllerEvent();
             }
         });
+
     }
 
     public void saveApplicationProgress() {
@@ -59,14 +65,13 @@ public class PtAppWizardManager {
 
             @Override
             public void onSuccess(IEntity result) {
-                ClientContext.setAttribute("appwizard", result);
+                application = (Application) result;
             }
         });
     }
 
-    protected static void onBusstSecurityEvent() {
+    protected void onSecurityControllerEvent() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
-
             RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, null, new AsyncCallback<Application>() {
 
                 @Override
@@ -76,11 +81,19 @@ public class PtAppWizardManager {
 
                 @Override
                 public void onSuccess(Application result) {
-                    ClientContext.setAttribute("appwizard", result);
-                    //TODO fire more events to start application flow
+                    application = result;
+                    goToNext();
                 }
             });
+        } else {
+            application = null;
+            placeController.goTo(new SiteMap.CreateAccount());
         }
 
+    }
+
+    protected void goToNext() {
+        Place current = placeController.getWhere();
+        placeController.goTo(new SiteMap.Apartment());
     }
 }
