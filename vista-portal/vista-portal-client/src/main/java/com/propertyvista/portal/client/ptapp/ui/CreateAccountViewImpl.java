@@ -52,7 +52,7 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
 
     public CreateAccountViewImpl() {
 
-        Button signinButton = new Button("Signin");
+        Button signinButton = new Button(i18n.tr("Signin"));
         signinButton.ensureDebugId("Signin");
         signinButton.addClickHandler(new ClickHandler() {
 
@@ -74,20 +74,23 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         form.populate(null);
         add(form);
 
-        Button viewButton = new Button("Let's Start");
+        Button viewButton = new Button(i18n.tr("Let's Start"));
         viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         viewButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                //TODO validation!
 
                 CCaptcha captcha = ((CCaptcha) form.get(form.proto().captcha()));
                 if (captcha.isValueEmpty()) {
-                    throw new UserRuntimeException(i18n.tr("Validation failed.") + " " + i18n.tr("Captcha code is required."));
+                    throw new UserRuntimeException(i18n.tr("Captcha code is required."));
                 }
                 // Captcha do not have events is Google component. We need to fix this! 
                 captcha.retrieveValue();
+
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
 
                 presenter.createAccount(form.getValue());
             }

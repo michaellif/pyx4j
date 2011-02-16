@@ -34,6 +34,7 @@ import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
 
@@ -73,7 +74,10 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
                 cause = cause.getCause();
             }
         }
-        if (cause instanceof UnrecoverableClientWarning) {
+
+        if (cause instanceof UserRuntimeException) {
+            showWarningMessage(cause.getMessage());
+        } else if (cause instanceof UnrecoverableClientWarning) {
             showWarningMessage(cause.getMessage());
         } else if (cause instanceof IncompatibleRemoteServiceException) {
             showReloadApplicationMessage();
