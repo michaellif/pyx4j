@@ -20,14 +20,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.shared.Behavior;
@@ -55,14 +54,7 @@ public class PtAppWizardManager {
 
     public void saveApplicationProgress() {
 
-        RPCManager.execute(PotencialTenantServices.Save.class, application, new AsyncCallback<IEntity>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-
-            }
-
+        RPCManager.execute(PotencialTenantServices.Save.class, application, new DefaultAsyncCallback<IEntity>() {
             @Override
             public void onSuccess(IEntity result) {
                 application = (Application) result;
@@ -72,12 +64,7 @@ public class PtAppWizardManager {
 
     protected void onSecurityControllerEvent() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
-            RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, null, new AsyncCallback<Application>() {
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnrecoverableClientError(caught);
-                }
+            RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, null, new DefaultAsyncCallback<Application>() {
 
                 @Override
                 public void onSuccess(Application result) {

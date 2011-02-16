@@ -14,28 +14,15 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
 
 public interface UserMessageView extends IsWidget {
 
-    public enum Type {
-        info("green"), warning("blue"), error("orange"), failure("red");
-
-        private final String color;
-
-        Type(String color) {
-            this.color = color;
-        }
-
-        public String getColor() {
-            return color;
-        }
-    }
-
     public void setPresenter(Presenter presenter);
 
-    void show(String messages, Type type);
+    void show(String messages, UserMessageType type);
 
-    void hide(Type type);
+    void hide(UserMessageType type);
 
     public interface Presenter {
 

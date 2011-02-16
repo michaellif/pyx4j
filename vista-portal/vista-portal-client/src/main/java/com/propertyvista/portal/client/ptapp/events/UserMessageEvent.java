@@ -17,12 +17,19 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 
+    public enum UserMessageType {
+        INFO, WARN, ERROR, FAILURE, DEBUG
+    }
+
     private static Type<UserMessageHandler> TYPE;
 
     private final String message;
 
-    public UserMessageEvent(String message) {
+    private final UserMessageType messageType;
+
+    public UserMessageEvent(String message, UserMessageType messageType) {
         this.message = message;
+        this.messageType = messageType;
     }
 
     public static Type<UserMessageHandler> getType() {
@@ -45,4 +52,9 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
     public String getMessage() {
         return message;
     }
+
+    public UserMessageType getMessageType() {
+        return messageType;
+    }
+
 }

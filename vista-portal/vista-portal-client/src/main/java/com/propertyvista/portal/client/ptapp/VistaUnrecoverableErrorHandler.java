@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
-import java.util.Arrays;
-
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -27,6 +25,7 @@ import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
+import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -95,17 +94,17 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
 
     protected void showReloadApplicationMessage() {
         String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
-                + "\n Do you want to refresh the page now?");
-        showMessage(message);
+                + "\nPlease refresh the page now!");
+        showMessage(message, UserMessageType.FAILURE);
     }
 
     protected void showWarningMessage(String text) {
-        showMessage(text);
+        showMessage(text, UserMessageType.WARN);
     }
 
     protected void showThrottleMessage() {
         showMessage(i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
-                + "To protect our users, we can't process your request at this time."));
+                + "To protect our users, we can't process your request at this time."), UserMessageType.FAILURE);
     }
 
     protected void showDefaultErrorMessage(Throwable caught, String errorCode) {
@@ -113,16 +112,6 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
         String detailsMessage = "";
         if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
             detailsMessage += "\n" + caught.getMessage();
-        }
-        if (ApplicationMode.isDevelopment() && (errorCode != null)) {
-            detailsMessage += "\n\nErrorCode [" + errorCode + "]";
-        }
-
-        if (ApplicationMode.isDevelopment() && (caught != null)) {
-            detailsMessage += "\n" + caught.getClass();
-            if (caught instanceof StatusCodeException) {
-                detailsMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
-            }
         }
 
         boolean sessionClosed = false;
@@ -135,11 +124,27 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
 
         + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
 
-        + detailsMessage);
+        + detailsMessage, UserMessageType.ERROR);
+
+        if (ApplicationMode.isDevelopment()) {
+            String debugMessage = "";
+            if (errorCode != null) {
+                debugMessage += "ErrorCode [" + errorCode + "]";
+            }
+            if (caught != null) {
+                debugMessage += "\n" + caught.getClass();
+                if (caught instanceof StatusCodeException) {
+                    debugMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
+                }
+            }
+            if (debugMessage.length() > 0) {
+                showMessage(debugMessage, UserMessageType.DEBUG);
+            }
+        }
     }
 
-    protected void showMessage(String string) {
-        eventBus.fireEvent(new UserMessageEvent(string));
+    protected void showMessage(String string, UserMessageType messageType) {
+        eventBus.fireEvent(new UserMessageEvent(string, messageType));
 
     }
 }

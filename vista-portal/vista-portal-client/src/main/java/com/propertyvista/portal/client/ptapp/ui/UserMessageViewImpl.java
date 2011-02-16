@@ -21,24 +21,42 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
 
 @Singleton
 public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
     private Presenter presenter;
 
-    private final Map<Type, HTML> holders;
+    private final Map<UserMessageType, HTML> holders;
 
     public UserMessageViewImpl() {
 
-        holders = new HashMap<Type, HTML>();
+        holders = new HashMap<UserMessageType, HTML>();
 
-        for (Type type : Type.values()) {
-            Holder holder = new Holder(type.getColor());
+        for (UserMessageType type : UserMessageType.values()) {
+            Holder holder = new Holder(getColor(type));
             holders.put(type, holder);
             add(holder);
         }
 
+    }
+
+    private String getColor(UserMessageType type) {
+        switch (type) {
+        case INFO:
+            return "green";
+        case WARN:
+            return "blue";
+        case ERROR:
+            return "orange";
+        case FAILURE:
+            return "red";
+        case DEBUG:
+            return "black";
+        default:
+            return "yellow";
+        }
     }
 
     @Override
@@ -47,14 +65,14 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     }
 
     @Override
-    public void show(String message, Type type) {
+    public void show(String message, UserMessageType type) {
         HTML html = holders.get(type);
         html.setHTML(message);
         html.setVisible(true);
     }
 
     @Override
-    public void hide(Type type) {
+    public void hide(UserMessageType type) {
         HTML html = holders.get(type);
         html.setHTML("");
         html.setVisible(false);

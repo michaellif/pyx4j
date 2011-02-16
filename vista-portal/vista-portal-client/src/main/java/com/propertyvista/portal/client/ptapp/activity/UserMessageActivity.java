@@ -18,9 +18,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
+import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ptapp.events.UserMessageHandler;
 import com.propertyvista.portal.client.ptapp.ui.UserMessageView;
-import com.propertyvista.portal.client.ptapp.ui.UserMessageView.Type;
 
 import com.pyx4j.site.client.place.AppPlace;
 
@@ -35,7 +35,7 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     }
 
     public UserMessageActivity withPlace(AppPlace place) {
-        for (Type type : UserMessageView.Type.values()) {
+        for (UserMessageType type : UserMessageType.values()) {
             view.hide(type);
         }
         return this;
@@ -49,7 +49,12 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
 
     @Override
     public void onUserMessage(UserMessageEvent event) {
-        view.show(event.getMessage(), UserMessageView.Type.error);
+        if (event.getMessageType() != UserMessageEvent.UserMessageType.DEBUG) {
+            for (UserMessageType type : UserMessageType.values()) {
+                view.hide(type);
+            }
+        }
+        view.show(event.getMessage(), event.getMessageType());
     }
 
 }
