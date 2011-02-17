@@ -107,8 +107,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 @Override
-                protected FolderDecorator createFolderDecorator() {
-                    return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow());
+                protected FolderDecorator<Employee> createFolderDecorator() {
+                    return new TableFolderDecorator<Employee>(columns, SiteImages.INSTANCE.addRow());
                 }
 
                 @Override
@@ -120,7 +120,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                     return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentForm.this) {
 
                         @Override
-                        public FolderItemDecorator createFolderItemDecorator() {
+                        public FolderItemDecorator createFolderItemDecorator(int index) {
                             return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
 
@@ -135,8 +135,8 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
             return new CEntityFolder<Employee>() {
 
                 @Override
-                protected FolderDecorator createFolderDecorator() {
-                    return new BoxFolderDecorator(SiteImages.INSTANCE.addRow());
+                protected FolderDecorator<Employee> createFolderDecorator() {
+                    return new BoxFolderDecorator<Employee>(SiteImages.INSTANCE.addRow());
 
                 }
 
@@ -156,7 +156,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                         }
 
                         @Override
-                        public FolderItemDecorator createFolderItemDecorator() {
+                        public FolderItemDecorator createFolderItemDecorator(int index) {
                             return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
                     };

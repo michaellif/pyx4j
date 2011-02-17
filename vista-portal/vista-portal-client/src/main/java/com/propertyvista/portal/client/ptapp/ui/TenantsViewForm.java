@@ -88,8 +88,12 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                 return new CEntityFolderRow<PotentialTenantInfo>(PotentialTenantInfo.class, columns, TenantsViewForm.this) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove tenant");
+                    public FolderItemDecorator createFolderItemDecorator(int index) {
+                        if (index == 1) {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.hideRemoveRow(), "Remove tenant", false);
+                        } else {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove tenant", true);
+                        }
                     }
 
                 };

@@ -26,4 +26,8 @@ public interface SiteImages extends ClientBundle {
 
     @Source("list_remove.png")
     ImageResource removeRow();
+
+    @Source("list_empty.png")
+    ImageResource hideRemoveRow();
+
 }
