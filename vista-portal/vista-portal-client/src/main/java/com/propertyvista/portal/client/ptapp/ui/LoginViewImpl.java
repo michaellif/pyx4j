@@ -76,6 +76,11 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
     }
 
     @Override
+    public void challengeVerificationRequired() {
+        form.get(form.proto().captcha()).setVisible(true);
+    }
+
+    @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
@@ -131,4 +136,5 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
             handlerRegistration.removeHandler();
         }
     }
+
 }

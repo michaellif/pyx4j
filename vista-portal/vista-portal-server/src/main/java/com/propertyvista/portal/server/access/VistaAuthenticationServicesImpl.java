@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
@@ -59,10 +59,10 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
         @Override
         public AuthenticationResponse execute(AuthenticationRequest request) {
             if (ServerSideConfiguration.instance().datastoreReadOnly() || AppengineHelper.isDBReadOnly()) {
-                throw new UnRecoverableRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
+                throw new UserRuntimeException(EntityServicesImpl.applicationReadOnlyMessage());
             }
             if (CommonsStringUtils.isEmpty(request.email().getValue()) || CommonsStringUtils.isEmpty(request.password().getValue())) {
-                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
             String email = request.email().getValue().toLowerCase(Locale.ENGLISH).trim();
             AbstractAntiBot.assertLogin(email, request.captcha().getValue());
@@ -75,24 +75,24 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
                 if (AbstractAntiBot.authenticationFailed(email)) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too many failed log-in attempts"));
                 } else {
-                    throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
             }
             User user = users.get(0);
 
             UserCredential cr = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
             if (cr == null) {
-                throw new RuntimeException(i18n.tr("Invalid user account, contact support"));
+                throw new UserRuntimeException(i18n.tr("Invalid user account, contact support"));
             }
             if (!cr.enabled().isBooleanTrue()) {
-                throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
             if (!checkPassword(request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(email)) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too many failed log-in attempts"));
                 } else {
-                    throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
             }
 

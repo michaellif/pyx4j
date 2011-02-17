@@ -20,15 +20,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.LoginView;
 
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationServices;
+import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class LoginActivity extends AbstractActivity implements LoginView.Presenter {
@@ -62,9 +63,16 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
                 ClientContext.authenticated(result);
             }
 
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof ChallengeVerificationRequired) {
+                    view.challengeVerificationRequired();
+                }
+                throw new UnrecoverableClientError(caught);
+            }
+
         };
         RPCManager.execute(AuthenticationServices.Authenticate.class, request, callback);
 
     }
-
 }
