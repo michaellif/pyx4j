@@ -40,7 +40,7 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
         NavigTab(final AppPlace place, MainNavigViewImpl parent) {
             super(presenter.getNavigLabel(place));
             this.place = place;
-            getElement().getStyle().setMargin(40, Unit.PX);
+            getElement().getStyle().setMargin(30, Unit.PX);
             getElement().getStyle().setProperty("textDecoration", "none");
             getElement().getStyle().setProperty("color", "#333");
             getElement().getStyle().setFontSize(1.1, Unit.EM);
