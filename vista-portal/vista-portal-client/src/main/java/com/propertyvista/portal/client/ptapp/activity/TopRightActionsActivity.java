@@ -63,16 +63,21 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        updateAuthenticatedView();
         eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                if (ClientContext.isAuthenticated()) {
-                    view.onLogedIn(ClientContext.getUserVisit().getName());
-                } else {
-                    view.onLogedOut();
-                }
+                updateAuthenticatedView();
             }
         });
+    }
+
+    private void updateAuthenticatedView() {
+        if (ClientContext.isAuthenticated()) {
+            view.onLogedIn(ClientContext.getUserVisit().getName());
+        } else {
+            view.onLogedOut();
+        }
     }
 
     @Override
