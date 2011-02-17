@@ -110,7 +110,7 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
     protected void showDefaultErrorMessage(Throwable caught, String errorCode) {
 
         String detailsMessage = "";
-        if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
+        if (ApplicationMode.isDevelopment() && CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
             detailsMessage += "\n" + caught.getMessage();
         }
 
