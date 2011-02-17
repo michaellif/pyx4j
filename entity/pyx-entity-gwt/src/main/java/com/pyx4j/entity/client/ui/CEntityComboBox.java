@@ -77,6 +77,10 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     private boolean hasAsyncValue = false;
 
+    public CEntityComboBox(Class<E> entityClass) {
+        this(null, entityClass, (NotInOptionsPolicy) null);
+    }
+
     public CEntityComboBox(String title, Class<E> entityClass) {
         this(title, entityClass, (NotInOptionsPolicy) null);
     }

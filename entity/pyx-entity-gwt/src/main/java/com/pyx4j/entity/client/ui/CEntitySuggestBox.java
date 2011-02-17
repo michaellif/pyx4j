@@ -75,6 +75,10 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
 
     private boolean hasAsyncValue = false;
 
+    public CEntitySuggestBox(Class<E> entityClass) {
+        this(null, entityClass);
+    }
+
     public CEntitySuggestBox(String title, Class<E> entityClass) {
         super(title);
         this.entityClass = entityClass;

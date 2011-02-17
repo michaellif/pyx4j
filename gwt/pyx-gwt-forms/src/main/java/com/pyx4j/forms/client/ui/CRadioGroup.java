@@ -30,11 +30,19 @@ public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E, Native
         VERTICAL, HORISONTAL;
     }
 
+    public enum YesNo {
+        yes, no
+    }
+
     private final Layout layout;
 
     private final Class<E> optionsClass;
 
     private String fieldname;
+
+    public CRadioGroup(Class<E> optionsClass, Layout layout, String fieldname) {
+        this(null, optionsClass, layout, fieldname);
+    }
 
     public CRadioGroup(String title, Class<E> optionsClass, Layout layout, String fieldname) {
         super(title);

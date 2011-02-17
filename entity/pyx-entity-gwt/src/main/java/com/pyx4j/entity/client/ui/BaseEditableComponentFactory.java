@@ -66,7 +66,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 return new CRichTextAreaPopup();
             case combo:
                 if (mm.isEntity()) {
-                    CEntityComboBox comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+                    CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
                     if (mm.isEmbedded()) {
                         comp.setUseNamesComparison(true);
                     }
@@ -80,7 +80,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 }
             case suggest:
                 if (mm.isEntity()) {
-                    return new CEntitySuggestBox(mm.getCaption(), mm.getObjectClass());
+                    return new CEntitySuggestBox(mm.getObjectClass());
                 } else {
                     return new CSuggestBox();
                 }
@@ -98,13 +98,14 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 return new CPhoneField();
             case radiogroup:
                 if (mm.getValueClass() == Boolean.class) {
-                    return new CRadioGroup<yesNo>(mm.getCaption(), yesNo.class, CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
-                }
-                if (mm.getValueClass().isEnum()) {
-                    return new CRadioGroup(mm.getCaption(), mm.getValueClass(), CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
+                    return new CRadioGroup<CRadioGroup.YesNo>(CRadioGroup.YesNo.class, CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
+                } else if (mm.getValueClass().isEnum()) {
+                    return new CRadioGroup(mm.getValueClass(), CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
+                } else {
+                    throw new Error("Unknown");
                 }
             default:
-                throw new Error("Unknown ");
+                throw new Error("Unknown");
             }
         } else if (mm.getObjectClassType() == ObjectClassType.EntityList) {
             return new CEntityFormFolder(mm.getValueClass(), createEntityFormFactory(member));
@@ -113,7 +114,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
         } else if (mm.getValueClass().equals(String.class)) {
             return new CTextField();
         } else if (mm.isEntity()) {
-            CEntityComboBox comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            CEntityComboBox comp = new CEntityComboBox(mm.getObjectClass());
             if (mm.isEmbedded()) {
                 (comp).setUseNamesComparison(true);
             }
@@ -139,10 +140,6 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
         } else {
             return new CTextField();
         }
-    }
-
-    public enum yesNo {
-        yes, no
     }
 
     protected EntityFormFactory<? extends IEntity> createEntityFormFactory(IObject<?> member) {
