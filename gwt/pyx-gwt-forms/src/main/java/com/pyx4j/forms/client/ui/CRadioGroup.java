@@ -34,14 +34,17 @@ public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E, Native
 
     private final Class<E> optionsClass;
 
-    public CRadioGroup(String title, Class<E> optionsClass, Layout layout) {
+    private String fieldname;
+
+    public CRadioGroup(String title, Class<E> optionsClass, Layout layout, String fieldname) {
         super(title);
         this.layout = layout;
         this.optionsClass = optionsClass;
+        this.fieldname = fieldname;
     }
 
     public CRadioGroup(Class<E> optionsClass, Layout layout) {
-        this(null, optionsClass, layout);
+        this(null, optionsClass, layout, optionsClass.getName());
     }
 
     public Layout getLayout() {
@@ -59,6 +62,10 @@ public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E, Native
     @Override
     protected NativeRadioGroup<E> initWidget() {
         return new NativeRadioGroup<E>(this);
+    }
+
+    public String getFieldName() {
+        return fieldname;
     }
 
 }
