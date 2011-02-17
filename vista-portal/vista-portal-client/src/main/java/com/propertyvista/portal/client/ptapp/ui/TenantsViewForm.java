@@ -33,7 +33,6 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 
 @Singleton
 public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
@@ -76,8 +75,8 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             }
 
             @Override
-            protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a tenant");
+            protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
+                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), "Add a tenant");
             }
 
             @Override
@@ -91,18 +90,6 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove tenant");
-                    }
-
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
-                        PotentialTenantList val = TenantsViewForm.this.getValue();
-                        comp.setEnabled(val.tenants().size() > 1);
-                        if (column == proto().dependant() || column == proto().takeOwnership()) {
-                            // no title for checkboxes
-                            comp.setTitle("");
-                        }
-                        return comp;
                     }
 
                 };
