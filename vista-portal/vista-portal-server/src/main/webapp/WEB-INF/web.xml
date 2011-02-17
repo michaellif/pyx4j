@@ -6,9 +6,8 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
     <!--
 		@version $Revision$ ($Author$) $Date$
-
-		TEMPLATE Used: DEV
 	-->
+    <display-name>Vista Portal ${buildLabel}</display-name>
 
     <context-param>
         <param-name>com.pyx4j.config.server.ServerSideConfiguration</param-name>
@@ -28,9 +27,9 @@
             <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
-    
+
     <!--PRODUCTION_TEMPLATE_REMOVE_START-->
-    <!-- 
+    <!--
     <security-constraint>
         <web-resource-collection>
             <url-pattern>/*</url-pattern>
@@ -59,7 +58,7 @@
     <security-role>
         <role-name>admin</role-name>
     </security-role>
-    
+
     <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
@@ -71,7 +70,7 @@
     </filter-mapping>
 
     <!-- Servlets -->
-<!--     
+<!--
     <servlet>
         <servlet-name>CronServlet</servlet-name>
         <servlet-class>com.propertyvista.server.admin.VistaCronServlet</servlet-class>
@@ -81,7 +80,7 @@
         <servlet-name>CronServlet</servlet-name>
         <url-pattern>/internal/cron/*</url-pattern>
     </servlet-mapping>
--->    
+-->
 
     <servlet>
         <servlet-name>StatusServlet</servlet-name>
@@ -92,7 +91,7 @@
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/status</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>DebugServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
@@ -128,12 +127,12 @@
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/tester/srv/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/admin/srv/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
@@ -163,7 +162,7 @@
         <servlet-name>ServletContainerLoginServlet</servlet-name>
         <url-pattern>/_aj/*</url-pattern>
     </servlet-mapping>
-    
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

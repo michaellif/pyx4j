@@ -231,11 +231,11 @@
             <id>hasBuildLabel</id>
             <activation>
                 <property>
-                    <name>label</name>
+                    <name>bamboo.buildNumber</name>
                 </property>
             </activation>
             <properties>
-                <buildLabel>${label}</buildLabel>
+                <buildLabel>${bamboo.buildNumber}</buildLabel>
             </properties>
         </profile>
 
