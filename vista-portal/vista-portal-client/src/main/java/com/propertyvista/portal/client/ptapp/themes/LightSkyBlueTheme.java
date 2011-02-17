@@ -13,80 +13,30 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
-import com.propertyvista.portal.client.ptapp.ui.SiteView;
-
-import com.pyx4j.widgets.client.style.Selector;
-import com.pyx4j.widgets.client.style.Style;
+import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.ThemeColor;
 
 public class LightSkyBlueTheme extends VistaTheme {
 
     @Override
-    protected void initBodyStyles() {
-        super.initBodyStyles();
-        Style style = new Style("body");
-        style.addProperty("background-color", "lightBlue");
-        style.addProperty("font-family", "Arial,Helvetica,Tahoma,Verdana,sans-serif");
-        style.addProperty("font-size", "0.9em");
-        addStyle(style);
-    }
-
-    @Override
-    protected void initSiteViewStyles() {
-        String prefix = SiteView.DEFAULT_STYLE_PREFIX;
-
-        int minWidth = 960;
-        int maxWidth = 960;
-        int leftColumnWidth = 0;
-        int rightColumnWidth = 0;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", "#fff");
-        style.addProperty("width", "95%");
-        style.addProperty("min-width", minWidth + "px");
-        style.addProperty("max-width", maxWidth + "px");
-        style.addProperty("margin", "0 auto");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
-        style.addProperty("height", "100px");
-        style.addProperty("background", "#ccc");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
-        style.addProperty("width", "100%");
-        style.addProperty("float", "left");
-        style.addProperty("background-color", "#eee");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
-        style.addProperty("width", "100%");
-        style.addProperty("float", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Main));
-        style.addProperty("height", "100%");
-        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
-        style.addProperty("float", "left");
-        style.addProperty("width", leftColumnWidth + "px");
-        style.addProperty("margin-left", "-100%");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Right));
-        style.addProperty("float", "left");
-        style.addProperty("width", rightColumnWidth + "px");
-        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
-        style.addProperty("clear", "left");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
-        addStyle(style);
-
+    protected void initThemeColors() {
+        float hue = (float) 240 / 360;
+        float saturation = (float) 0.9;
+        float brightness = (float) 0.7;
+        putThemeColor(ThemeColor.OBJECT_TONE1, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08));
+        putThemeColor(ThemeColor.OBJECT_TONE2, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.12));
+        putThemeColor(ThemeColor.OBJECT_TONE3, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.16));
+        putThemeColor(ThemeColor.OBJECT_TONE4, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.2));
+        putThemeColor(ThemeColor.OBJECT_TONE5, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.99));
+        putThemeColor(ThemeColor.BORDER, 0xf0f0f0);
+        putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
+        putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
+        putThemeColor(ThemeColor.TEXT, 0x000000);
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
+        putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
+        putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
+        putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
+        putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
     }
 
 }

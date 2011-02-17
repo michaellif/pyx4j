@@ -16,10 +16,13 @@ package com.propertyvista.portal.client.ptapp.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
@@ -47,9 +50,18 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
             }
 
         });
-        saveButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
+
+        HTML separator = new HTML();
+        separator.getElement().getStyle().setProperty("border", "1px dotted black");
+        separator.getElement().getStyle().setProperty("margin", "1em 0em 0em 0em");
+        add(separator);
+
+        saveButton.getElement().getStyle().setProperty("margin", "1em 1em 1em 0em");
+        //        saveButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(saveButton);
 
+        getElement().getStyle().setMarginLeft(10, Unit.PCT);
+        setWidth("60%");
     }
 
     @Override

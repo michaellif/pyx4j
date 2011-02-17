@@ -16,10 +16,13 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.Employer;
@@ -41,6 +44,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.ThemeColor;
 
 @Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
@@ -56,26 +62,26 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(new HTML("<h4>Income Details</h4>"));
+        main.add(new ViewHeaderDecorator(new HTML("<h4>Income Details</h4>")));
         main.add(new BasicWidgetDecorator(create(proto().occupation(), this)));
         main.add(new HTML());
 
-        main.add(new HTML("<p/><h4>Current Employer</h4>"));
+        main.add(new HTML("<h6>Current Employer</h6>"));
         main.add(create(proto().currentEmployer(), this));
         main.add(new HTML());
 
         previousPanel = new FlowPanel();
         previousPanel.setVisible(false);
         main.add(previousPanel);
-        previousPanel.add(new HTML("<p/><h4>Previous Employer</h4>"));
+        previousPanel.add(new HTML("<h6>Previous Employer</h6>"));
         previousPanel.add(create(proto().previousEmployer(), this));
         previousPanel.add(new HTML());
 
-        main.add(new HTML("<p/><h4>Assets</h4>"));
+        main.add(new ViewHeaderDecorator(new HTML("<h4>Assets</h4>")));
         main.add(create(proto().assets(), this));
         main.add(new HTML());
 
-        main.add(new HTML("<p/><h4>Income sources</h4>"));
+        main.add(new ViewHeaderDecorator(new HTML("<h4>Income sources</h4>")));
         main.add(create(proto().incomes(), this));
         main.add(new HTML());
 

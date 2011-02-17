@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
+import com.propertyvista.portal.client.ptapp.ui.SiteView;
+import com.propertyvista.portal.client.ptapp.ui.ViewHeaderDecorator;
+
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -122,6 +125,8 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("color", ThemeColor.TEXT);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
+        style.addProperty("font-family", "Arial,Helvetica,Tahoma,Verdana,sans-serif");
+        style.addProperty("font-size", "0.9em");
         addStyle(style);
     }
 
@@ -741,6 +746,68 @@ public abstract class VistaTheme extends Theme {
 
     }
 
-    protected abstract void initSiteViewStyles();
+    protected void initSiteViewStyles() {
+        String prefix = SiteView.DEFAULT_STYLE_PREFIX;
+
+        int minWidth = 960;
+        int maxWidth = 960;
+        int leftColumnWidth = 0;
+        int rightColumnWidth = 0;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", "#fff");
+        style.addProperty("width", "95%");
+        style.addProperty("min-width", minWidth + "px");
+        style.addProperty("max-width", maxWidth + "px");
+        style.addProperty("margin", "0 auto");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("height", "100px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("width", "100%");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
+        style.addProperty("width", "100%");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Main));
+        style.addProperty("height", "100%");
+        style.addProperty("margin", "0 " + rightColumnWidth + "px 0 " + leftColumnWidth + "px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Left));
+        style.addProperty("float", "left");
+        style.addProperty("width", leftColumnWidth + "px");
+        style.addProperty("margin-left", "-100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Right));
+        style.addProperty("float", "left");
+        style.addProperty("width", rightColumnWidth + "px");
+        style.addProperty("margin-left", "-" + rightColumnWidth + "px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
+        style.addProperty("clear", "left");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Display));
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("padding", "0.2em 0 0.3em 1em");
+        style.addProperty("margin", "0.2em 0 0.5em 0");
+        addStyle(style);
+    }
 
 }

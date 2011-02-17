@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
@@ -28,8 +30,13 @@ public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
 
     @Override
     public void createContent() {
+        HTML header = new HTML("<h4>Login to Your Account</h4>");
+        header.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        header.getElement().getStyle().setMarginRight(2, Unit.EM);
+        header.getElement().getStyle().setMarginBottom(1, Unit.EM);
+
         FlowPanel main = new FlowPanel();
-        main.add(new HTML("<h4>Login to Your Account</h4>"));
+        main.add(header);
         main.add(new BasicWidgetDecorator(create(proto().email(), this)));
         main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().password(), this)));

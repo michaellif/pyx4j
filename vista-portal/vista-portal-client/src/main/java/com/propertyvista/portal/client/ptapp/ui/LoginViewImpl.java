@@ -25,6 +25,7 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.domain.DemoData;
 
@@ -70,9 +71,12 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
             }
 
         });
-        viewButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
+        viewButton.getElement().getStyle().setProperty("margin", "0.5em 6em 1em 0");
         add(viewButton);
 
+        setCellHorizontalAlignment(form.asWidget(), HasHorizontalAlignment.ALIGN_RIGHT);
+        setCellHorizontalAlignment(viewButton, HasHorizontalAlignment.ALIGN_RIGHT);
+        setWidth("60%");
     }
 
     @Override

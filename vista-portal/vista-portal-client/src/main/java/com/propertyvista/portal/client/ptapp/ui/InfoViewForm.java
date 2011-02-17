@@ -16,8 +16,10 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.Address;
@@ -38,6 +40,8 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
+import com.pyx4j.widgets.client.style.StyleManger;
+import com.pyx4j.widgets.client.style.ThemeColor;
 
 @Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
@@ -49,7 +53,8 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(new HTML("<h4>Contact Details</h4>"));
+
+        main.add(DecorateHeader(new HTML("<h4>Contact Details</h4>")));
         main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
         main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().middleName(), this)));
@@ -62,7 +67,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().email(), this)));
 
-        main.add(new HTML("<p/><h4>Secure Information</h4>"));
+        main.add(DecorateHeader(new HTML("<h4>Secure Information</h4>")));
         main.add(new BasicWidgetDecorator(create(proto().driversLicense(), this)));
         main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().driversLicenseState(), this)));
@@ -70,16 +75,16 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new BasicWidgetDecorator(create(proto().secureIdentifier(), this)));
         main.add(new HTML());
 
-        main.add(new HTML("<p/><h4>Current Address</h4>"));
+        main.add(DecorateHeader(new HTML("<h4>Current Address</h4>")));
         main.add(create(proto().currentAddress(), this));
 
-        main.add(new HTML("<p/><h4>Previous Address</h4>"));
+        main.add(DecorateHeader(new HTML("<h4>Previous Address</h4>")));
         main.add(create(proto().previousAddress(), this));
 
-        main.add(new HTML("<p/><h4>Vehicles</h4>"));
+        main.add(DecorateHeader(new HTML("<h4>Vehicles</h4>")));
         main.add(create(proto().vehicles(), this));
 
-        main.add(new HTML("<p/><h4>General Questions</h4>"));
+        main.add(DecorateHeader(new HTML("<h4>General Questions</h4>")));
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForRent(), this), 300, 100));
         main.add(new HTML());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForDamages(), this), 300, 100));
@@ -95,7 +100,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().filedBankruptcy(), this), 300, 100));
         main.add(new HTML());
 
-        main.add(new HTML("<p/><h4>Emergency Contacts</h4>"));
+        main.add(DecorateHeader(new HTML("<h4>Emergency Contacts</h4>")));
 
         main.add(new HTML("<p/><h6>Contact1</h6>"));
         main.add(create(proto().emergencyContact1(), this));
@@ -226,5 +231,15 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         };
 
+    }
+
+    private Widget DecorateHeader(Widget header) {
+        header.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        header.getElement().getStyle().setPaddingTop(0.1, Unit.EM);
+        header.getElement().getStyle().setPaddingBottom(0.2, Unit.EM);
+        header.getElement().getStyle().setMarginTop(0.2, Unit.EM);
+        header.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+        header.getElement().getStyle().setBackgroundColor(StyleManger.getTheme().getThemeColorString(ThemeColor.OBJECT_TONE4));
+        return header;
     }
 }
