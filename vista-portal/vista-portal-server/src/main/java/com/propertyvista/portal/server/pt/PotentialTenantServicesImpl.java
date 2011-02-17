@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +62,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
             // find floor plan
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), ""));
+            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), request.floorplanName().getStringView()));
             Floorplan floorplan = secureRetrieve(floorplanCriteria);
 
             log.info("Found floorplan " + floorplan);
@@ -100,7 +102,6 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     return application;
                 }
 
-                //TODO Dmitry find if UnitSelectionCriteria is valid. e.g. the same as in UnitExistsImpl
                 UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
                 unitSelection.propertyCode().set(request.propertyCode());
                 unitSelection.floorplanName().set(request.floorplanName());
@@ -190,12 +191,25 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
      * Build the AvalableUnitsByFloorplan object.
      */
     private static void loadAvailableUnits(UnitSelection unitSelection) {
-        //        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-        //        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getStringView()));
-        //        Building building = secureRetrieve(buildingCriteria);
+        AvailableUnitsByFloorplan availableUnits = unitSelection.availableUnits();
 
-        AvailableUnitsByFloorplan availableUnits = null;
-        unitSelection.availableUnits().set(availableUnits);
+        // find floor plan
+        EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.floorplanName().getStringView()));
+        Floorplan floorplan = secureRetrieve(floorplanCriteria);
+
+        if (floorplan == null) {
+            log.info("Could not find floorplan=" + unitSelection.floorplanName().getStringView());
+            return;
+        }
+        availableUnits.floorplan().set(floorplan);
+
+        // find units
+        EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), unitSelection.building()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+        List<Unit> units = secureQuery(criteria);
+        log.info("Found " + units.size() + " units");
+        availableUnits.units().addAll(units);
     }
-
 }
