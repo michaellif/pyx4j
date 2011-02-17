@@ -18,12 +18,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
@@ -60,12 +62,31 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
             @SuppressWarnings("unchecked")
             @Override
             public void onSuccess(IEntity result) {
-                entity = (E) result;
-                log.info("LOADED {}", entity);
-                view.populate(entity);
+                if (result == null) {
+                    E newEntity = EntityFactory.create(clazz);
+
+                    createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
+
+                        @Override
+                        public void onSuccess(E result) {
+                            entity = result;
+                            log.info("CREATED {}", entity);
+                            view.populate(entity);
+                        }
+
+                    });
+                } else {
+                    entity = (E) result;
+                    log.info("LOADED {}", entity);
+                    view.populate(entity);
+                }
             }
         });
 
+    }
+
+    protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
+        callback.onSuccess(newEntity);
     }
 
     @Override
