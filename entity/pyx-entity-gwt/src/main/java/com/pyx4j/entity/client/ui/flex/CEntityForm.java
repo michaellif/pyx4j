@@ -20,14 +20,18 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 /**
  * This component represents root IEntity of the shown object tree
@@ -70,6 +74,37 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
 
     protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
         throw new Error("No MemberEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
+    }
+
+    @Override
+    public void populate(E value) {
+        if (value == null) {
+
+            @SuppressWarnings("unchecked")
+            E newEntity = (E) EntityFactory.create(proto().getValueClass());
+
+            createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
+
+                @Override
+                public void onSuccess(E result) {
+                    CEntityForm.super.populate(result);
+                }
+
+            });
+        } else {
+            super.populate(value);
+        }
+    }
+
+    /**
+     * Implementation to override new Entity creation. No need to call
+     * super.createNewEntity().
+     * 
+     * @param newEntity
+     * @param callback
+     */
+    protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
+        callback.onSuccess(newEntity);
     }
 
 }

@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 /**
  * This component represents list of IEntities
@@ -88,12 +88,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         @SuppressWarnings("unchecked")
         E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
 
-        createNewEntity(newEntity, new AsyncCallback<E>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
+        createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
 
             @Override
             public void onSuccess(E result) {
