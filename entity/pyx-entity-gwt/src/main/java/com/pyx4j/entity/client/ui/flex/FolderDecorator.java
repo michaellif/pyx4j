@@ -31,6 +31,6 @@ import com.pyx4j.entity.shared.IList;
 
 public interface FolderDecorator<E extends IEntity> extends AcceptsOneWidget, IsWidget, ValueChangeHandler<IList<E>> {
 
-    HandlerRegistration addRowAddClickHandler(ClickHandler handler);
+    HandlerRegistration addItemAddClickHandler(ClickHandler handler);
 
 }

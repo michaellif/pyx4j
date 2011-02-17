@@ -52,7 +52,7 @@ public class BoxFolderDecorator<E extends IEntity> extends FlowPanel implements 
     }
 
     @Override
-    public HandlerRegistration addRowAddClickHandler(ClickHandler handler) {
+    public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
         return image.addClickHandler(handler);
     }
 

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface FolderItemDecorator extends AcceptsOneWidget, IsWidget {
 
-    HandlerRegistration addRowRemoveClickHandler(ClickHandler handler);
+    HandlerRegistration addItemRemoveClickHandler(ClickHandler handler);
 
     HandlerRegistration addRowUpClickHandler(ClickHandler handler);
 

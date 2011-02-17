@@ -59,7 +59,7 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
     }
 
     @Override
-    public HandlerRegistration addRowRemoveClickHandler(ClickHandler handler) {
+    public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
         return image.addClickHandler(handler);
     }
 

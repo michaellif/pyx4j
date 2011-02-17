@@ -69,17 +69,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         content = new FlowPanel();
         folderDecorator.setWidget(content);
 
-        folderDecorator.addRowAddClickHandler(new ClickHandler() {
+        folderDecorator.addItemAddClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                addRow();
+                addItem();
             }
         });
     }
 
-    protected void addRow() {
+    protected void addItem() {
         if (getValue() == null) {
-            log.warn("Request to add row has been issued before the form populated with value");
+            log.warn("Request to add item has been issued before the form populated with value");
             return;
         }
 
@@ -103,7 +103,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     //TODO add remove handlers
-    protected void removeRow(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
+    protected void removeItem(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
         abandonFolderItem(folderItemDecorator);
     }
 
@@ -143,11 +143,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         folderItemDecorator.setWidget(comp);
         content.add(folderItemDecorator);
         ValueChangeEvent.fire(this, getValue());
-        folderItemDecorator.addRowRemoveClickHandler(new ClickHandler() {
+        folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                removeRow(comp, folderItemDecorator);
+                removeItem(comp, folderItemDecorator);
             }
         });
     }

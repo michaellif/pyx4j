@@ -79,7 +79,7 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
     }
 
     @Override
-    public HandlerRegistration addRowAddClickHandler(ClickHandler handler) {
+    public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
         return image.addClickHandler(handler);
     }
 
