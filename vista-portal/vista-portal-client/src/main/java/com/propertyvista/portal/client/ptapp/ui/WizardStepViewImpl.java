@@ -60,8 +60,9 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         //        saveButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(saveButton);
 
-        getElement().getStyle().setMarginLeft(10, Unit.PCT);
-        setWidth("60%");
+        getElement().getStyle().setMarginLeft(5, Unit.PCT);
+        getElement().getStyle().setMarginRight(5, Unit.PCT);
+        //TODO setWidth("60%");
     }
 
     @Override
