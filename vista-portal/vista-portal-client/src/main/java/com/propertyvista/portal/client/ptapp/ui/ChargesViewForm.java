@@ -78,8 +78,8 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             }
 
             @Override
-            protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a ChargeLine");
+            protected FolderDecorator<ChargeLine> createFolderDecorator() {
+                return new TableFolderDecorator<ChargeLine>(columns, SiteImages.INSTANCE.addRow(), "Add a ChargeLine");
             }
 
             @Override
