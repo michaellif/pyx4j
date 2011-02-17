@@ -7,14 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 8, 2011
- * @author Misha
+ * Created on 2011-02-14
+ * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.pyx4j.entity.shared.IList;
 
-public interface TenantsView extends WizardStepView<PotentialTenantList, TenantsViewPresenter> {
+public interface Charges extends IApplicationEntity {
+    IList<ChargeLine> applicationCharges();
 
+    IList<ChargeLine> rentCharges();
+
+    IList<ChargeLine> upgradeCharges();
 }

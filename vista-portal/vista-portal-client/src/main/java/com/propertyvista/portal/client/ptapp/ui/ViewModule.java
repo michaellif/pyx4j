@@ -43,6 +43,7 @@ public class ViewModule extends AbstractGinModule {
         bind(FinancialView.class).to(FinancialViewImpl.class).in(Singleton.class);
         bind(PetsView.class).to(PetsViewImpl.class).in(Singleton.class);
         bind(PaymentView.class).to(PaymentViewImpl.class).in(Singleton.class);
+        bind(ChargesView.class).to(ChargesViewImpl.class).in(Singleton.class);
         bind(SummaryView.class).to(SummaryViewImpl.class).in(Singleton.class);
 
         bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);

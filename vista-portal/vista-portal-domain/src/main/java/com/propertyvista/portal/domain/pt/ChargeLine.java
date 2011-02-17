@@ -7,14 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 8, 2011
- * @author Misha
+ * Created on 2011-02-16
+ * @author jim
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface TenantsView extends WizardStepView<PotentialTenantList, TenantsViewPresenter> {
+public interface ChargeLine extends IEntity {
+    public enum chargeType {
+        deposit, applicationFee, firstMonthRent, parking, locker, petDeposit, extraParking, extraLocker, cableTv
+    }
 
+    IPrimitive<chargeType> type();
+
+    IList<TenantCharge> charges();
 }

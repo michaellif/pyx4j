@@ -17,11 +17,10 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
-public interface PotentialTenant extends IEntity, IApplicationEntity {
+public interface PotentialTenant extends IApplicationEntity {
 
     public enum Relationship {
         applicant, spouse, sun, daughter, other

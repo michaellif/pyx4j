@@ -52,14 +52,19 @@ public class SiteMap {
     public static class Pets extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Payments")
-    @PlaceProperties(caption = "Payments")
-    public static class Payments extends AppPlace {
+    @NavigationItem(navigLabel = "Charges")
+    @PlaceProperties(caption = "Charges")
+    public static class Charges extends AppPlace {
     }
 
     @NavigationItem(navigLabel = "Summary")
     @PlaceProperties(caption = "Summary")
     public static class Summary extends AppPlace {
+    }
+
+    @NavigationItem(navigLabel = "Payment")
+    @PlaceProperties(caption = "Payment")
+    public static class Payment extends AppPlace {
     }
 
     @PlaceProperties(caption = "Privacy policy", staticContent = "privacyPolicy")

@@ -71,8 +71,9 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
         places.add(new SiteMap.Info());
         places.add(new SiteMap.Financial());
         places.add(new SiteMap.Pets());
-        places.add(new SiteMap.Payments());
+        places.add(new SiteMap.Charges());
         places.add(new SiteMap.Summary());
+        places.add(new SiteMap.Payment());
         return places;
     }
 

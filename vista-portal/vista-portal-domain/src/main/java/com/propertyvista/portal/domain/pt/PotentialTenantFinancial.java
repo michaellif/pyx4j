@@ -14,11 +14,10 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PotentialTenantFinancial extends IEntity {
+public interface PotentialTenantFinancial extends IApplicationEntity {
 
     public static enum IncomeTypes {
         fulltime, parttime, socialService, pension, se, retired, student, odsp, other

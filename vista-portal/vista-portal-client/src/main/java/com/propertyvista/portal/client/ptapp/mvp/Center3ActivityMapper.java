@@ -24,6 +24,7 @@ import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
 import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
 import com.propertyvista.portal.client.ptapp.activity.LoginActivity;
+import com.propertyvista.portal.client.ptapp.activity.ChargesActivity;
 import com.propertyvista.portal.client.ptapp.activity.PaymentActivity;
 import com.propertyvista.portal.client.ptapp.activity.PetsActivity;
 import com.propertyvista.portal.client.ptapp.activity.StaticContentActivity;
@@ -50,6 +51,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     Provider<PaymentActivity> paymentActivityProvider;
 
+    Provider<ChargesActivity> chargesActivityProvider;
+
     Provider<SummaryActivity> summaryActivityProvider;
 
     Provider<StaticContentActivity> staticContentActivity;
@@ -71,6 +74,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     final Provider<PaymentActivity> paymentActivityProvider,
 
+    final Provider<ChargesActivity> chargesActivityProvider,
+
     final Provider<SummaryActivity> summaryActivityProvider,
 
     final Provider<StaticContentActivity> staticContentActivity) {
@@ -84,6 +89,7 @@ public class Center3ActivityMapper implements ActivityMapper {
         this.financialActivityProvider = financialActivityProvider;
         this.petsActivityProvider = petsActivityProvider;
         this.paymentActivityProvider = paymentActivityProvider;
+        this.chargesActivityProvider = chargesActivityProvider;
         this.summaryActivityProvider = summaryActivityProvider;
         this.staticContentActivity = staticContentActivity;
 
@@ -105,7 +111,9 @@ public class Center3ActivityMapper implements ActivityMapper {
             return financialActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Pets) {
             return petsActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.Payments) {
+        } else if (place instanceof SiteMap.Charges) {
+            return chargesActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.Payment) {
             return paymentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Summary) {
             return summaryActivityProvider.get().withPlace((AppPlace) place);

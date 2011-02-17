@@ -18,9 +18,10 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.ptapp.SiteMap.Tenants;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
-import com.propertyvista.portal.domain.pt.Tenants;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -36,10 +37,10 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 @Singleton
-public class TenantsViewForm extends CEntityForm<Tenants> {
+public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
     public TenantsViewForm() {
-        super(Tenants.class);
+        super(PotentialTenantList.class);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class TenantsViewForm extends CEntityForm<Tenants> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = super.createCell(column);
-                        Tenants val = TenantsViewForm.this.getValue();
+                        PotentialTenantList val = TenantsViewForm.this.getValue();
                         comp.setEnabled(val.tenants().size() > 1);
                         if (column == proto().dependant() || column == proto().takeOwnership()) {
                             // no title for checkboxes

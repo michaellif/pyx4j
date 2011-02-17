@@ -13,50 +13,15 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.FinancialView;
+import com.propertyvista.portal.client.ptapp.ui.FinancialViewPresenter;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.place.AppPlace;
-
-public class FinancialActivity extends AbstractActivity implements FinancialView.Presenter {
-
-    private static final Logger log = LoggerFactory.getLogger(FinancialActivity.class);
-
-    private final FinancialView view;
-
-    //TODO FOR TESTING
-    private static PotentialTenantFinancial potentialTenantInfo = EntityFactory.create(PotentialTenantFinancial.class);
+public class FinancialActivity extends WizardStepActivity<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialViewPresenter {
 
     @Inject
     public FinancialActivity(FinancialView view) {
-        this.view = view;
-        view.setPresenter(this);
+        super(view, PotentialTenantFinancial.class);
     }
-
-    public FinancialActivity withPlace(AppPlace place) {
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-
-        //TODO get real PotentialTenantInfo
-        log.info("LOADED {}", potentialTenantInfo);
-        view.populate(potentialTenantInfo);
-    }
-
-    @Override
-    public void save(PotentialTenantFinancial value) {
-        log.info("SAVED {}", value);
-    }
-
 }

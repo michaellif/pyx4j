@@ -19,8 +19,8 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.domain.pt.Pet;
-import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.Charges;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -36,67 +36,70 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 @Singleton
-public class PetsViewForm extends CEntityForm<Pets> {
+public class ChargesViewForm extends CEntityForm<Charges> {
 
-    public PetsViewForm() {
-        super(Pets.class);
+    public ChargesViewForm() {
+        super(Charges.class);
     }
 
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(create(proto().pets(), this));
+        main.add(create(proto().applicationCharges(), this));
+        main.add(create(proto().rentCharges(), this));
+        main.add(create(proto().upgradeCharges(), this));
         setWidget(main);
     }
 
     @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.equals(proto().pets())) {
-            return createPetsEditorColumns();
+        if (member == proto().applicationCharges() || member == proto().rentCharges() || member == proto().upgradeCharges()) {
+            return createChargesEditorColumns();
         } else {
             return super.createMemberFolderEditor(member);
         }
     }
 
-    private CEntityFolder<Pet> createPetsEditorColumns() {
-        return new CEntityFolder<Pet>() {
+    private CEntityFolder<ChargeLine> createChargesEditorColumns() {
+        return new CEntityFolder<ChargeLine>() {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                Pet proto = EntityFactory.getEntityPrototype(Pet.class);
+                ChargeLine proto = EntityFactory.getEntityPrototype(ChargeLine.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto.type(), "60px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.name(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.color(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "120px"));
+                //                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "120px"));
             }
 
             @Override
             protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a pet");
+                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a ChargeLine");
             }
 
             @Override
-            protected CEntityFolderItem<Pet> createItem() {
-                return createPetRowEditor(columns);
+            protected CEntityFolderItem<ChargeLine> createItem() {
+                return createChargeLineRowEditor(columns);
             }
 
-            private CEntityFolderItem<Pet> createPetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<Pet>(Pet.class, columns, PetsViewForm.this) {
+            private CEntityFolderItem<ChargeLine> createChargeLineRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRow<ChargeLine>(ChargeLine.class, columns, ChargesViewForm.this) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove pet");
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove ChargeLine");
                     }
 
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        //                        if (column.getObject() == proto().)
                         CComponent<?> comp = super.createCell(column);
-                        comp.setEnabled(column.getObject() != proto().charge());
+                        //                        comp.setEnabled(column.getObject() != proto().charge());
                         return comp;
                     }
                 };

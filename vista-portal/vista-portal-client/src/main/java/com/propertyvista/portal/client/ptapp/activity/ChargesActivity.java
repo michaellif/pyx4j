@@ -8,19 +8,20 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Feb 1, 2011
- * @author Misha
+ * @author antonk
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.client.ptapp.activity;
 
-import com.google.inject.Singleton;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.ui.ChargesView;
+import com.propertyvista.portal.client.ptapp.ui.ChargesViewPresenter;
+import com.propertyvista.portal.domain.pt.Charges;
 
-@Singleton
-public class FinancialViewImpl extends WizardStepViewImpl<PotentialTenantFinancial, FinancialViewPresenter> implements FinancialView {
+public class ChargesActivity extends WizardStepActivity<Charges, ChargesViewPresenter> implements ChargesViewPresenter {
 
-    public FinancialViewImpl() {
-        super(new FinancialViewForm());
+    @Inject
+    public ChargesActivity(ChargesView view) {
+        super(view, Charges.class);
     }
-
 }

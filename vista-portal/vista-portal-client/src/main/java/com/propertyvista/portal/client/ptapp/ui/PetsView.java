@@ -13,18 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.domain.pt.Pets;
 
-public interface PetsView extends IsWidget {
-
-    public void setPresenter(Presenter presenter);
-
-    public interface Presenter {
-
-        void save(Pets value);
-    }
-
-    public void populate(Pets entity);
+public interface PetsView extends WizardStepView<Pets, PetsViewPresenter> {
 
 }
