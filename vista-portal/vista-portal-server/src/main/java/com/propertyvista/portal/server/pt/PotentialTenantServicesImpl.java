@@ -32,6 +32,7 @@ import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -196,7 +197,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         // find floor plan
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.floorplanName().getStringView()));
-        Floorplan floorplan = secureRetrieve(floorplanCriteria);
+        Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
         if (floorplan == null) {
             log.info("Could not find floorplan=" + unitSelection.floorplanName().getStringView());
@@ -208,7 +209,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), unitSelection.building()));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-        List<Unit> units = secureQuery(criteria);
+        List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found " + units.size() + " units");
         availableUnits.units().addAll(units);
     }
