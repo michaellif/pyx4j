@@ -27,19 +27,19 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     //Criteria
     IPrimitive<String> floorplanName();
 
-    IPrimitive<String> buildingName();
+    IPrimitive<String> propertyCode();
 
     Building building();
 
     //Criteria
-    IPrimitive<Date> avalableFrom();
+    IPrimitive<Date> availableFrom();
 
     //Criteria
-    IPrimitive<Date> avalableTo();
+    IPrimitive<Date> availableTo();
 
     // Found by App server
     @Transient
-    AvalableUnitsByFloorplan avalableUnits();
+    AvailableUnitsByFloorplan availableUnits();
 
     Unit selectedUnit();
 

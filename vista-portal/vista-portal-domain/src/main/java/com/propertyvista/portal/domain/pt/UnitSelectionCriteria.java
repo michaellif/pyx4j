@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface UnitSelectionCriteria extends IEntity {
 
+    // TODO change the query later to use building id and floorplan id
+
     IPrimitive<String> floorplanName();
 
     // as per Vlad's suggestion we will be using property code instead of building name

@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.IUserEntity;
 import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -48,11 +49,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             log.info("Checking whether unit exists for " + request);
 
             // find building first
-            // TODO change the query later to use building id
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            //            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), request.propertyCode().getStringView()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), "A1"));
-            Building building = secureRetrieve(criteria);
+            EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getStringView()));
+            Building building = secureRetrieve(buildingCriteria);
 
             log.info("Found building " + building);
             if (building == null) {
@@ -83,16 +82,29 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         @Override
         public Application execute(UnitSelectionCriteria request) {
+
+            // find application by user
             EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
             Application application = secureRetrieve(criteria);
+
             if (application == null) {
+
+                // find building
+                EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+                buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getStringView()));
+                Building building = secureRetrieve(buildingCriteria);
+
+                if (building == null) {
+                    log.info("Could not find building with propertyCode=" + request.propertyCode().getStringView());
+                    return application;
+                }
 
                 //TODO Dmitry find if UnitSelectionCriteria is valid. e.g. the same as in UnitExistsImpl
                 UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-                unitSelection.buildingName().set(request.propertyCode());
+                unitSelection.propertyCode().set(request.propertyCode());
                 unitSelection.floorplanName().set(request.floorplanName());
-                //unitSelection.building().set(????);  //TODO Dmitry use found building
+                unitSelection.building().set(building);
 
                 application = EntityFactory.create(Application.class);
                 application.user().set(PtUserDataAccess.getCurrentUser());
@@ -107,7 +119,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 criteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
                 UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
 
-                if ((!unitSelection.buildingName().equals(request.propertyCode())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
+                if ((!unitSelection.propertyCode().equals(request.propertyCode())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
                     //TODO What if they are diferent ?  We need to discard some part of application flow.
                 }
             }
@@ -132,7 +144,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             }
 
             if (ret instanceof UnitSelection) {
-                loadAvalableUnits((UnitSelection) ret);
+                loadAvailableUnits((UnitSelection) ret);
             }
 
             return ret;
@@ -166,7 +178,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             IEntity ret = super.execute(request);
 
             if (ret instanceof UnitSelection) {
-                loadAvalableUnits((UnitSelection) ret);
+                loadAvailableUnits((UnitSelection) ret);
             }
 
             return ret;
@@ -175,12 +187,15 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
     }
 
     /**
-     * TODO Dmitry
-     * 
      * Build the AvalableUnitsByFloorplan object.
      */
-    private static void loadAvalableUnits(UnitSelection unitSelection) {
+    private static void loadAvailableUnits(UnitSelection unitSelection) {
+        //        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        //        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getStringView()));
+        //        Building building = secureRetrieve(buildingCriteria);
 
+        AvailableUnitsByFloorplan availableUnits = null;
+        unitSelection.availableUnits().set(availableUnits);
     }
 
 }

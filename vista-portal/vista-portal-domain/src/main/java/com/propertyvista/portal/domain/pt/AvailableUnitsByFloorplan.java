@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 /*
  * This is cache of units for Rent
  */
-public interface AvalableUnitsByFloorplan extends IEntity {
+public interface AvailableUnitsByFloorplan extends IEntity {
 
     Floorplan floorplan();
 
