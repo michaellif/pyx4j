@@ -183,6 +183,21 @@ public class EntityServicesImpl {
 
     }
 
+    public static <T extends IEntity> List<T> secureQuery(EntityQueryCriteria<T> criteria) {
+        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+        return PersistenceServicesFactory.getPersistenceService().query(criteria);
+        //        T ent;
+        //        if (criteria instanceof EntityCriteriaByPK) {
+        //            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
+        //        } else {
+        //        }
+        // TODO add needed security and more
+        //        if (ent != null) {
+        //            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+        //        }
+        //        return ent;
+    }
+
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         T ent;
