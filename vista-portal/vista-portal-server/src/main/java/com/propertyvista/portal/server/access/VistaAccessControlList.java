@@ -19,6 +19,7 @@ import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.entity.rpc.EntityServices;
@@ -41,6 +42,8 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
     public VistaAccessControlList() {
         grant(new ServiceExecutePermission(LogServices.Log.class));
         grant(new ServiceExecutePermission(AuthenticationServices.class, "*"));
+        grant(new ServiceExecutePermission(PotentialTenantServices.UnitExists.class));
+
         {
             // Debug
             grant(new ServiceExecutePermission(EntityServices.class, "*"));
@@ -49,7 +52,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
             grant(new EntityPermission("*", EntityPermission.READ));
         }
 
-        ptGrants();
+        potentialTenantGrants();
 
         grant(VistaBehavior.EMPLOYEE, new ServiceExecutePermission(EntityServices.Query.class));
         grant(VistaBehavior.EMPLOYEE, new ServiceExecutePermission(ReportServices.class, "*"));
@@ -67,7 +70,10 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         freeze();
     }
 
-    private void ptGrants() {
+    private void potentialTenantGrants() {
+
+        grant(new ServiceExecutePermission(PotentialTenantServices.class, "*"));
+
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
 
         grant(VistaBehavior.POTENCIAL_TENANT, new EntityPermission(Application.class, userEntityAccess, CRUD));

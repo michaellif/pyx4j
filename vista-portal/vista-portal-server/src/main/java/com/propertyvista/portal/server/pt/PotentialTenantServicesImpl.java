@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -45,7 +46,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
     private final static Logger log = LoggerFactory.getLogger(PotentialTenantServicesImpl.class);
 
-    public static class UnitExistsImpl implements PotentialTenantServices.UnitExists {
+    public static class UnitExistsImpl implements PotentialTenantServices.UnitExists, IsIgnoreSessionTokenService {
 
         @Override
         public Boolean execute(UnitSelectionCriteria request) {

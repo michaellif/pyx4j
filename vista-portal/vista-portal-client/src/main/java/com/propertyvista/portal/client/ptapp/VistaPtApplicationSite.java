@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.CaptchaComposite;
@@ -24,14 +25,25 @@ public class VistaPtApplicationSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
-        SiteGinjector ginjector = GWT.create(SiteGinjector.class);
+        final SiteGinjector ginjector = GWT.create(SiteGinjector.class);
         RootPanel.get().add(ginjector.getSiteView());
-        ginjector.getPlaceHistoryHandler().handleCurrentHistory();
 
         CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
 
         hideLoadingIndicator();
 
-        ClientContext.obtainAuthenticationData(null);
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
+            }
+        });
     }
 }
