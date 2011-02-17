@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
 public interface PotentialTenantList extends IApplicationEntity {
 
-    IList<PotentialTenant> tenants();
+    @Owned
+    IList<PotentialTenantInfo> tenants();
 
 }
