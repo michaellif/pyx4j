@@ -21,7 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
-import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
+import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.shared.IEntity;
@@ -55,7 +55,7 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        RPCManager.execute(PotencialTenantServices.RetrieveByPK.class, EntityCriteriaByPK.create(clazz, entity), new DefaultAsyncCallback<IEntity>() {
+        RPCManager.execute(PotentialTenantServices.RetrieveByPK.class, EntityCriteriaByPK.create(clazz, entity), new DefaultAsyncCallback<IEntity>() {
 
             @SuppressWarnings("unchecked")
             @Override
@@ -70,7 +70,7 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
 
     @Override
     public void save(E entity) {
-        RPCManager.execute(PotencialTenantServices.Save.class, entity, new DefaultAsyncCallback<IEntity>() {
+        RPCManager.execute(PotentialTenantServices.Save.class, entity, new DefaultAsyncCallback<IEntity>() {
 
             @SuppressWarnings("unchecked")
             @Override

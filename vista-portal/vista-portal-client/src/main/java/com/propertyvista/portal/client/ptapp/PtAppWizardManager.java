@@ -22,7 +22,7 @@ import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
+import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -61,7 +61,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
             }
         }
 
-        RPCManager.execute(PotencialTenantServices.UnitExists.class, unitSelectionCriteria, new DefaultAsyncCallback<Boolean>() {
+        RPCManager.execute(PotentialTenantServices.UnitExists.class, unitSelectionCriteria, new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {
@@ -72,7 +72,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     public void saveApplicationProgress() {
 
-        RPCManager.execute(PotencialTenantServices.Save.class, application, new DefaultAsyncCallback<IEntity>() {
+        RPCManager.execute(PotentialTenantServices.Save.class, application, new DefaultAsyncCallback<IEntity>() {
             @Override
             public void onSuccess(IEntity result) {
                 application = (Application) result;
@@ -89,7 +89,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     public void onSecurityContextChange(SecurityControllerEvent event) {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
 
-            RPCManager.execute(PotencialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<Application>() {
+            RPCManager.execute(PotentialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<Application>() {
 
                 @Override
                 public void onSuccess(Application result) {

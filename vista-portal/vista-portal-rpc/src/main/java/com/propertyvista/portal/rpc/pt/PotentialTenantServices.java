@@ -19,7 +19,7 @@ import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.rpc.shared.Service;
 
-public interface PotencialTenantServices {
+public interface PotentialTenantServices {
 
     public interface UnitExists extends Service<UnitSelectionCriteria, Boolean> {
 

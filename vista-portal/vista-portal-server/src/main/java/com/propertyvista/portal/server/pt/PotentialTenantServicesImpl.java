@@ -19,7 +19,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
-import com.propertyvista.portal.rpc.pt.PotencialTenantServices;
+import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -30,9 +30,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
-public class PotencialTenantServicesImpl extends EntityServicesImpl implements PotencialTenantServices {
+public class PotentialTenantServicesImpl extends EntityServicesImpl implements PotentialTenantServices {
 
-    public static class UnitExistsImpl implements PotencialTenantServices.UnitExists {
+    public static class UnitExistsImpl implements PotentialTenantServices.UnitExists {
 
         @Override
         public Boolean execute(UnitSelectionCriteria request) {
@@ -42,7 +42,7 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
 
     }
 
-    public static class GetCurrentApplicationImpl implements PotencialTenantServices.GetCurrentApplication {
+    public static class GetCurrentApplicationImpl implements PotentialTenantServices.GetCurrentApplication {
 
         @Override
         public Application execute(UnitSelectionCriteria request) {
@@ -79,7 +79,7 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
         }
     }
 
-    public static class RetrieveByPKImpl extends EntityServicesImpl.RetrieveByPKImpl implements PotencialTenantServices.RetrieveByPK {
+    public static class RetrieveByPKImpl extends EntityServicesImpl.RetrieveByPKImpl implements PotentialTenantServices.RetrieveByPK {
 
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
@@ -102,7 +102,7 @@ public class PotencialTenantServicesImpl extends EntityServicesImpl implements P
         }
     }
 
-    public static class SaveImpl extends EntityServicesImpl.MergeSaveImpl implements PotencialTenantServices.Save {
+    public static class SaveImpl extends EntityServicesImpl.MergeSaveImpl implements PotentialTenantServices.Save {
 
         @Override
         public IEntity execute(IEntity request) {
