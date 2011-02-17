@@ -114,17 +114,10 @@ public class EntityServicesImpl {
 
     public static class QueryImpl implements EntityServices.Query {
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
         public Vector execute(EntityQueryCriteria request) {
-            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
-            List<IEntity> rc = PersistenceServicesFactory.getPersistenceService().query(request);
-            Vector<IEntity> v = new Vector<IEntity>();
-            for (IEntity ent : rc) {
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-                v.add(ent);
-            }
-            return v;
+            return (Vector) secureQuery(request);
         }
     }
 
@@ -185,17 +178,13 @@ public class EntityServicesImpl {
 
     public static <T extends IEntity> List<T> secureQuery(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
-        return PersistenceServicesFactory.getPersistenceService().query(criteria);
-        //        T ent;
-        //        if (criteria instanceof EntityCriteriaByPK) {
-        //            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
-        //        } else {
-        //        }
-        // TODO add needed security and more
-        //        if (ent != null) {
-        //            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-        //        }
-        //        return ent;
+        List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        Vector<T> v = new Vector<T>();
+        for (T ent : rc) {
+            SecurityController.assertPermission(EntityPermission.permissionRead(ent));
+            v.add(ent);
+        }
+        return v;
     }
 
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
