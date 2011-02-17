@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class PotentialTenantServicesImpl extends EntityServicesImpl implements PotentialTenantServices {
 
@@ -49,24 +50,24 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         @Override
         public Boolean execute(UnitSelectionCriteria request) {
 
-            log.info("Checking whether unit exists for " + request);
+            log.info("Checking whether unit exists for {} ", request);
 
             // find building first
             EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getStringView()));
-            Building building = secureRetrieve(buildingCriteria);
+            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getValue()));
+            Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
 
-            log.info("Found building " + building);
+            log.info("Found building {}", building);
             if (building == null) {
                 return false;
             }
 
             // find floor plan
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), request.floorplanName().getStringView()));
-            Floorplan floorplan = secureRetrieve(floorplanCriteria);
+            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), request.floorplanName().getValue()));
+            Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
-            log.info("Found floorplan " + floorplan);
+            log.info("Found floorplan {}", floorplan);
             if (floorplan == null) {
                 return false;
             }
@@ -75,7 +76,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             EntityQueryCriteria<Unit> unitCriteria = EntityQueryCriteria.create(Unit.class);
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building(), building));
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().floorplan(), floorplan));
-            Unit unit = secureRetrieve(unitCriteria);
+            Unit unit = PersistenceServicesFactory.getPersistenceService().retrieve(unitCriteria);
 
             return unit != null;
         }
@@ -95,12 +96,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
                 // find building
                 EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-                buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getStringView()));
-                Building building = secureRetrieve(buildingCriteria);
+                buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getValue()));
+                Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
 
                 if (building == null) {
-                    log.info("Could not find building with propertyCode=" + request.propertyCode().getStringView());
-                    return application;
+                    log.info("Could not find building with propertyCode {}", request.propertyCode());
+                    throw new UserRuntimeException("Selected building not found");
                 }
 
                 UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
@@ -196,11 +197,11 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         // find floor plan
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.floorplanName().getStringView()));
+        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.floorplanName().getValue()));
         Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
         if (floorplan == null) {
-            log.info("Could not find floorplan=" + unitSelection.floorplanName().getStringView());
+            log.info("Could not find floorplan {}", unitSelection.floorplanName());
             return;
         }
         availableUnits.floorplan().set(floorplan);

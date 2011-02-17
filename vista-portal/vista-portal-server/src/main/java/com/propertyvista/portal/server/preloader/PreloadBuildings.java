@@ -188,15 +188,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
             Email email = createEmail(emailAddress);
 
             // organization contacts - not many fields there at the moment, will do this later
-
-            Building building = createBuilding("A" + i, buildingType, complex, website, address, phones, email);
-            //			log.info("Created: " + building);
-
+            String propertyCode = "A" + String.valueOf(i);
             if (i == 0) {
-                building.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_BUILDINGNAME);
-            } else {
-                building.propertyCode().setValue(String.valueOf(i));
+                propertyCode = DemoData.REGISTRATION_DEFAULT_BUILDINGNAME;
             }
+            Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email);
+            //			log.info("Created: " + building);
 
             // now create units for the building
             int numFloors = RandomUtil.randomInt(5);
