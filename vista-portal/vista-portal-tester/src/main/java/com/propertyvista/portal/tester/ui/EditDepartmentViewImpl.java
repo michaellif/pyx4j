@@ -103,6 +103,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                     columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "120px"));
                     columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "120px"));
                     columns.add(new EntityFolderColumnDescriptor(proto.phone(), "100px"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.reliable(), "20px"));
                 }
 
                 @Override
@@ -150,6 +151,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                             main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
                             main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
                             main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
+                            main.add(new BasicWidgetDecorator(create(proto().reliable(), this)));
                             setWidget(main);
                         }
 

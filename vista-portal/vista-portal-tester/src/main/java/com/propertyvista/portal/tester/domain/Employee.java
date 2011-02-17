@@ -32,4 +32,6 @@ public interface Employee extends IEntity {
     @NotNull
     IPrimitive<String> phone();
 
+    IPrimitive<Boolean> reliable();
+
 }
