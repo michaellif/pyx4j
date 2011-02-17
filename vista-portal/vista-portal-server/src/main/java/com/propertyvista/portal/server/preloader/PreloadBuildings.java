@@ -79,11 +79,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return complex;
     }
 
-    private Floorplan createFloorplan() {
+    private Floorplan createFloorplan(String name) {
         Floorplan floorplan = EntityFactory.create(Floorplan.class);
 
         floorplan.area().setValue(1200);
-        floorplan.name().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
+        floorplan.name().setValue(name);
+        //floorplan.name().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
 
         // for now save just one picture
         int imageIndex = RandomUtil.randomInt(3) + 1;
@@ -210,7 +211,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
                     float bathrooms = 2.0f;
 
                     // later floor plans should be more elaborate
-                    Floorplan floorplan = createFloorplan();
+                    Floorplan floorplan = createFloorplan(i + "-" + floor + "-" + j);
 
                     createUnit(building, floor, area, bedrooms, bathrooms, floorplan);
                 }

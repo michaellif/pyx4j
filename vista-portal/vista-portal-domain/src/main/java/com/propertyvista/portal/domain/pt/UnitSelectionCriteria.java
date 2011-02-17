@@ -22,6 +22,7 @@ public interface UnitSelectionCriteria extends IEntity {
 
     IPrimitive<String> floorplanName();
 
-    IPrimitive<String> buildingName();
+    // as per Vlad's suggestion we will be using property code instead of building name
+    IPrimitive<String> propertyCode();
 
 }

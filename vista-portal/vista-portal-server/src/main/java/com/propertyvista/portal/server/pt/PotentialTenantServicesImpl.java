@@ -13,7 +13,13 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.propertyvista.portal.domain.Building;
+import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.IUserEntity;
+import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
@@ -32,14 +38,45 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 public class PotentialTenantServicesImpl extends EntityServicesImpl implements PotentialTenantServices {
 
+    private final static Logger log = LoggerFactory.getLogger(PotentialTenantServicesImpl.class);
+
     public static class UnitExistsImpl implements PotentialTenantServices.UnitExists {
 
         @Override
         public Boolean execute(UnitSelectionCriteria request) {
-            //TODO Dmitry please implement.
-            return false;
-        }
 
+            log.info("Checking whether unit exists for " + request);
+
+            // find building first
+            // TODO change the query later to use building id
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            //            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), request.propertyCode().getStringView()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), "A1"));
+            Building building = secureRetrieve(criteria);
+
+            log.info("Found building " + building);
+            if (building == null) {
+                return false;
+            }
+
+            // find floor plan
+            EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+            floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), ""));
+            Floorplan floorplan = secureRetrieve(floorplanCriteria);
+
+            log.info("Found floorplan " + floorplan);
+            if (floorplan == null) {
+                return false;
+            }
+
+            // find unit with floor plan
+            EntityQueryCriteria<Unit> unitCriteria = EntityQueryCriteria.create(Unit.class);
+            unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building(), building));
+            unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().floorplan(), floorplan));
+            Unit unit = secureRetrieve(unitCriteria);
+
+            return unit != null;
+        }
     }
 
     public static class GetCurrentApplicationImpl implements PotentialTenantServices.GetCurrentApplication {
@@ -53,7 +90,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
                 //TODO Dmitry find if UnitSelectionCriteria is valid. e.g. the same as in UnitExistsImpl
                 UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-                unitSelection.buildingName().set(request.buildingName());
+                unitSelection.buildingName().set(request.propertyCode());
                 unitSelection.floorplanName().set(request.floorplanName());
                 //unitSelection.building().set(????);  //TODO Dmitry use found building
 
@@ -70,7 +107,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 criteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
                 UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
 
-                if ((!unitSelection.buildingName().equals(request.buildingName())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
+                if ((!unitSelection.buildingName().equals(request.propertyCode())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
                     //TODO What if they are diferent ?  We need to discard some part of application flow.
                 }
             }

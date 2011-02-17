@@ -50,14 +50,14 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         eventBus.addHandler(SecurityControllerEvent.getType(), this);
 
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
-        unitSelectionCriteria.buildingName().setValue(Window.Location.getParameter("b"));
+        unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
         unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
         if (ApplicationMode.isDevelopment()) {
             if (unitSelectionCriteria.floorplanName().isNull()) {
                 unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
             }
-            if (unitSelectionCriteria.buildingName().isNull()) {
-                unitSelectionCriteria.buildingName().setValue(DemoData.REGISTRATION_DEFAULT_BUILDINGNAME);
+            if (unitSelectionCriteria.propertyCode().isNull()) {
+                unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_BUILDINGNAME);
             }
         }
 
