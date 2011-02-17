@@ -126,6 +126,8 @@
         <appGWTModuleSufix></appGWTModuleSufix>
         <appWebXmlTemplate>Open</appWebXmlTemplate>
         <gaeDeployServerId>appengine.google.com-pyx</gaeDeployServerId>
+
+        <scm.revision></scm.revision>
     </properties>
 
     <dependencyManagement>
