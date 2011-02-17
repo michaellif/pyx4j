@@ -24,9 +24,14 @@ import com.pyx4j.forms.client.gwt.NativeCheckBox;
 
 public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
 
+    private Alignment alignment = Alignment.left;
+
+    public enum Alignment {
+        left, center, right
+    }
+
     public CCheckBox() {
-        super();
-        populate(false);
+        this(null);
     }
 
     public CCheckBox(String title) {
@@ -54,4 +59,14 @@ public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
         return super.getValue() != null && (super.getValue());
     }
 
+    void setAlignmet(Alignment alignment) {
+        this.alignment = alignment;
+        if (isWidgetCreated()) {
+            asWidget().setAlignmet(alignment);
+        }
+    }
+
+    public Alignment getAlignmet() {
+        return alignment;
+    }
 }

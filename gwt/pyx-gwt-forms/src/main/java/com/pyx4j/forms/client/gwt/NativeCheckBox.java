@@ -24,6 +24,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CCheckBox.Alignment;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.CheckBox;
 
@@ -44,8 +45,9 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
                 checkBox.setValue(Boolean.valueOf(getValue()));
             }
         });
-        setText(checkBox.getTitle());
         setTabIndex(checkBox.getTabIndex());
+        setWidth(checkBox.getWidth());
+        setAlignmet(checkBox.getAlignmet());
 
     }
 
@@ -60,15 +62,18 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
         return enabled;
     }
 
+    @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
         super.setEnabled(editable && this.isEnabled());
     }
 
+    @Override
     public boolean isEditable() {
         return editable;
     }
 
+    @Override
     public void setNativeValue(Boolean value) {
         boolean newValue = value == null ? false : value;
         if (newValue != getValue()) {
@@ -76,6 +81,7 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
         }
     }
 
+    @Override
     public CCheckBox getCComponent() {
         return checkBox;
     }
@@ -91,4 +97,9 @@ public class NativeCheckBox extends CheckBox implements INativeEditableComponent
         super.onUnload();
         DomDebug.detachWidget();
     }
+
+    public void setAlignmet(Alignment alignment) {
+        getElement().getStyle().setProperty("textAlign", alignment.name());
+    }
+
 }
