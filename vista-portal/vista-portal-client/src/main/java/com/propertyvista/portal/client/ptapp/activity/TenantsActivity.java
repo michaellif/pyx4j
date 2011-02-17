@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.TenantsView;
 import com.propertyvista.portal.client.ptapp.ui.TenantsViewPresenter;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
@@ -34,6 +35,7 @@ public class TenantsActivity extends WizardStepActivity<PotentialTenantList, Ten
         newEntity.tenants().clear();
         PotentialTenantInfo first = newEntity.tenants().$();
         first.email().setValue(ClientContext.getUserVisit().getEmail());
+        first.relationship().setValue(Relationship.applicant);
         newEntity.tenants().add(first);
         callback.onSuccess(newEntity);
     }
