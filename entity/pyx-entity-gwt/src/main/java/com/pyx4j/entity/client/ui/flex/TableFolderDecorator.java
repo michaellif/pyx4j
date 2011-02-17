@@ -46,9 +46,19 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
 
     private FlowPanel header;
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
 
         image = new Image(addButton);
+        image.getElement().getStyle().setFloat(Float.LEFT);
+
+        FlowPanel imageHolder = new FlowPanel();
+        imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        imageHolder.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
+        imageHolder.add(image);
+        Label addButtonLabel = new Label(title);
+        addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
+        imageHolder.add(addButtonLabel);
+
         header = new FlowPanel();
         setHeaderVisible(false);
         header.setWidth("100%");
@@ -65,12 +75,12 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         content = new SimplePanel();
         add(content);
 
-        add(image);
+        add(imageHolder);
+
     }
 
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
-        this(columns, addButton);
-        image.setTitle(title);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
+        this(columns, addButton, null);
     }
 
     @Override
