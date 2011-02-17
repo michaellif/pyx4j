@@ -312,7 +312,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                     }
                 }
-            } else if ((index != null) && ((index.global() != 0) || (index.keywordLenght() != 0))) {
+            } else if ((index != null) && ((index.global() != 0) || (index.keywordLength() != 0))) {
                 throw new Error("Invalid @Index annotation for " + iEntity.getEntityMeta().getCaption() + "." + meta.getFieldName());
             }
         }

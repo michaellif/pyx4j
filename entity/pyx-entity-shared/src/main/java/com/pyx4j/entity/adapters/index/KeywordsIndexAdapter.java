@@ -38,7 +38,7 @@ public class KeywordsIndexAdapter extends AbstractIndexAdapter<String> {
         if (value == null) {
             return null;
         }
-        return getIndexValueKeys(memberMeta.getAnnotation(Indexed.class).keywordLenght(), value);
+        return getIndexValueKeys(memberMeta.getAnnotation(Indexed.class).keywordLength(), value);
     }
 
     public static Set<String> getIndexValueKeys(int keywordLenght, String string) {

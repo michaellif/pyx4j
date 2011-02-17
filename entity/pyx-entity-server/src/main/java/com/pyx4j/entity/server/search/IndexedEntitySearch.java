@@ -148,8 +148,8 @@ public class IndexedEntitySearch {
                 }
                 Indexed index = mm.getAnnotation(Indexed.class);
                 //If indexed by keywords
-                if ((index != null) && (index.keywordLenght() > 0)) {
-                    Set<String> keys = IndexString.getIndexValues(index.keywordLenght(), str);
+                if ((index != null) && (index.keywordLength() > 0)) {
+                    Set<String> keys = IndexString.getIndexValues(index.keywordLength(), str);
                     for (String key : keys) {
                         if (inMemoryFilterOnly) {
                             inMemoryFilters.add(new StringInMemoryFilter(path, key));

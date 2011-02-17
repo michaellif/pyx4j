@@ -63,7 +63,7 @@ public interface Order extends IEntity {
     }
 
     @ToString
-    @Indexed(global = '#', keywordLenght = 3, adapters = NumberIndexAdapter.class)
+    @Indexed(global = '#', keywordLength = 3, adapters = NumberIndexAdapter.class)
     @Caption(name = "Order #")
     IPrimitive<Integer> orderNumber();
 
@@ -82,13 +82,13 @@ public interface Order extends IEntity {
     /**
      * Copy of data from customer
      */
-    @Indexed(global = 'n', keywordLenght = 2, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 'n', keywordLength = 2, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> customerName();
 
     /**
      * Copy of data from customer
      */
-    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 'p', keywordLength = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     @Editor(type = EditorType.phone)
     IPrimitive<String> customerPhone();
 
@@ -96,7 +96,7 @@ public interface Order extends IEntity {
     Resource resource();
 
     @ToString
-    @Indexed(global = 'd', keywordLenght = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 'd', keywordLength = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> description();
 
     IPrimitive<java.sql.Date> completedDate();

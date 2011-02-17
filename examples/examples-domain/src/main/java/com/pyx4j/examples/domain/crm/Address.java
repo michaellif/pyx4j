@@ -34,11 +34,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Address extends IEntity {
 
     @ToString(index = 0)
-    @Indexed(global = 's', keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 's', keywordLength = 2, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> street();
 
     @ToString(index = 1)
-    @Indexed(global = 'c', keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 'c', keywordLength = 2, adapters = KeywordsIndexAdapter.class)
     IPrimitive<String> city();
 
     @ToString(index = 2)

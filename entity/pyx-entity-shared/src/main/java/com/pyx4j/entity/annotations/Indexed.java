@@ -40,7 +40,7 @@ public @interface Indexed {
 
     Class<? extends IndexAdapter<?>>[] adapters() default {};
 
-    int keywordLenght() default 0;
+    int keywordLength() default 0;
 
     char global() default 0;
 

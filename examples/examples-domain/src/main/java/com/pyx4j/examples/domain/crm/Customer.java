@@ -48,11 +48,11 @@ import com.pyx4j.geo.GeoPoint;
 public interface Customer extends IEntity {
 
     @NotNull
-    @Indexed(global = 'n', keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 'n', keywordLength = 2, adapters = KeywordsIndexAdapter.class)
     @ToString
     IPrimitive<String> name();
 
-    @Indexed(global = 'p', keywordLenght = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
+    @Indexed(global = 'p', keywordLength = 3, indexPrimaryValue = false, adapters = KeywordsIndexAdapter.class)
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 

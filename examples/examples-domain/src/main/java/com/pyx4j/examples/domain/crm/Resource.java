@@ -49,7 +49,7 @@ public interface Resource extends IEntity {
     }
 
     @NotNull
-    @Indexed(keywordLenght = 2, adapters = KeywordsIndexAdapter.class)
+    @Indexed(keywordLength = 2, adapters = KeywordsIndexAdapter.class)
     @ToString
     IPrimitive<String> name();
 
