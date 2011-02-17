@@ -28,6 +28,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditab
         super(clazz);
     }
 
-    public abstract FolderItemDecorator createFolderItemDecorator();
+    public abstract FolderItemDecorator createFolderItemDecorator(int index);
 
 }

@@ -139,7 +139,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     private void adoptFolderItem(final CEntityFolderItem<E> comp) {
-        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
+        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator(content.getWidgetCount() + 1);
         folderItemDecorator.setWidget(comp);
         content.add(folderItemDecorator);
         ValueChangeEvent.fire(this, getValue());

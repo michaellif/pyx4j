@@ -35,7 +35,11 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
 
     private final SimplePanel content;
 
-    public TableFolderItemDecorator(ImageResource removeButton) {
+    private final boolean removable;
+
+    public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
+        this.removable = removable;
+
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         image = new Image(removeButton);
@@ -46,11 +50,16 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         add(content);
 
+        image.setTitle(title);
+
     }
 
     public TableFolderItemDecorator(ImageResource removeButton, String title) {
-        this(removeButton);
-        image.setTitle(title);
+        this(removeButton, title, true);
+    }
+
+    public TableFolderItemDecorator(ImageResource removeButton) {
+        this(removeButton, null, true);
     }
 
     @Override
@@ -60,7 +69,11 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        return image.addClickHandler(handler);
+        if (removable) {
+            return image.addClickHandler(handler);
+        } else {
+            return null;
+        }
     }
 
     @Override
