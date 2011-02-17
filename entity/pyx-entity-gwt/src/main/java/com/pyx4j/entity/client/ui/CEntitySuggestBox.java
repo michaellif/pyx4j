@@ -47,7 +47,6 @@ import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.IAcceptText;
@@ -142,11 +141,11 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
      * Should fire when component is displayed ?
      */
     @Override
-    protected NativeSuggestBox<E> initWidget() {
+    protected void onWidgetCreated() {
+        super.onWidgetCreated();
         if (criteria != null) {
             retriveOptions(null);
         }
-        return super.initWidget();
     }
 
     private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {

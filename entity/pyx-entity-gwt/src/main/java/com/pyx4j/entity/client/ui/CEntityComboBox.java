@@ -46,7 +46,6 @@ import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.gwt.NativeComboBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
@@ -146,11 +145,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
      * Should fire when component is displayed ?
      */
     @Override
-    protected NativeComboBox<E> initWidget() {
-        if (isWidgetCreated() && (criteria != null)) {
+    protected void onWidgetCreated() {
+        super.onWidgetCreated();
+        if (criteria != null) {
             retriveOptions(null);
         }
-        return super.initWidget();
     }
 
     private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {
