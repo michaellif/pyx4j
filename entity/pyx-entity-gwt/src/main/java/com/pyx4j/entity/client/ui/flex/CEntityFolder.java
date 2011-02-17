@@ -92,6 +92,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
             @Override
             public void onSuccess(E result) {
+                comp.setFirst(content.getWidgetCount() == 0);
                 getValue().add(result);
                 comp.createContent();
                 comp.populate(result);
@@ -127,6 +128,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         content.clear();
         for (E item : value) {
             CEntityFolderItem<E> comp = createItem();
+            comp.setFirst(content.getWidgetCount() == 0);
             comp.createContent();
             comp.populate(item);
             adoptFolderItem(comp);
@@ -139,7 +141,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     private void adoptFolderItem(final CEntityFolderItem<E> comp) {
-        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator(content.getWidgetCount() + 1);
+        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
         folderItemDecorator.setWidget(comp);
         content.add(folderItemDecorator);
         ValueChangeEvent.fire(this, getValue());

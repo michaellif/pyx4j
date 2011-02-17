@@ -24,10 +24,20 @@ import com.pyx4j.entity.shared.IEntity;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditableComponent<E> {
 
+    private boolean first;
+
     public CEntityFolderItem(Class<E> clazz) {
         super(clazz);
     }
 
-    public abstract FolderItemDecorator createFolderItemDecorator(int index);
+    public abstract FolderItemDecorator createFolderItemDecorator();
+
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
 
 }
