@@ -47,15 +47,15 @@ public abstract class JettyLaunch {
     }
 
     public static void launch(JettyLaunch jettyLaunch) throws Exception {
-    	int port = jettyLaunch.getServerPort();
-    	//see if port is available
-    	try {
-	        ServerSocket s = new ServerSocket(port);
-	        s.close();
-    	} catch (Exception e) {
-    		throw new RuntimeException("Port already in use", e);
-    	}
-    	
+        int port = jettyLaunch.getServerPort();
+        //see if port is available
+        try {
+            ServerSocket s = new ServerSocket(port);
+            s.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Port already in use", e);
+        }
+
         Server server = new Server(port);
 
         RewriteHandler rewrite = new RewriteHandler();
