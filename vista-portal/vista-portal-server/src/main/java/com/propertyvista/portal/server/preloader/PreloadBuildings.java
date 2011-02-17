@@ -103,8 +103,11 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return floorplan;
     }
 
-    private Building createBuilding(BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones, Email email) {
+    private Building createBuilding(String propertyCode, BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones,
+            Email email) {
         Building building = EntityFactory.create(Building.class);
+
+        building.propertyCode().setValue(propertyCode);
 
         building.buildingType().setValue(buildingType);
         //		building.complex().
@@ -185,7 +188,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
             // organization contacts - not many fields there at the moment, will do this later
 
-            Building building = createBuilding(buildingType, complex, website, address, phones, email);
+            Building building = createBuilding("A" + i, buildingType, complex, website, address, phones, email);
             //			log.info("Created: " + building);
 
             if (i == 0) {
