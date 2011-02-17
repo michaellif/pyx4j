@@ -57,7 +57,7 @@ public class CollectionsTableModel {
     /**
      * Convert collection to its IDs
      */
-    private static Collection convertICollectionValue(MemberOperationsMeta member, Collection<Object> dataSet) {
+    private static Collection convertICollectionKeys(MemberOperationsMeta member, Collection<Object> dataSet) {
         Collection<Long> idDataSet = new Vector<Long>();
         for (Object value : dataSet) {
             Map<String, Object> map = (Map<String, Object>) value;
@@ -79,7 +79,7 @@ public class CollectionsTableModel {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
         if (type != ObjectClassType.PrimitiveSet) {
-            dataSet = convertICollectionValue(member, dataSet);
+            dataSet = convertICollectionKeys(member, dataSet);
             valueClass = Long.class;
         }
 
@@ -108,6 +108,25 @@ public class CollectionsTableModel {
         }
     }
 
+    /**
+     * Convert collection to its IDs
+     */
+    private static Map<Long, Object> convertICollectionValue(MemberOperationsMeta member, Collection<Object> dataSet) {
+        Map<Long, Object> idDataMap = new HashMap<Long, Object>();
+        for (Object value : dataSet) {
+            Map<String, Object> map = (Map<String, Object>) value;
+            if (map == null) {
+                throw new Error("Saving null reference " + member.getMemberMeta().getCaption());
+            }
+            Long childKey = (Long) map.get(IEntity.PRIMARY_KEY);
+            if (childKey == null) {
+                throw new Error("Saving non persisted reference " + member.getMemberMeta().getCaption());
+            }
+            idDataMap.put(childKey, value);
+        }
+        return idDataMap;
+    }
+
     public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
@@ -115,7 +134,11 @@ public class CollectionsTableModel {
         Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
 
         Collection<Object> insertData = isList ? new Vector<Object>() : new HashSet<Object>();
+        Map<Long, Object> valueMap = null;
         if (dataSet != null) {
+            if (type != ObjectClassType.PrimitiveSet) {
+                valueMap = convertICollectionValue(member, dataSet);
+            }
             insertData.addAll(dataSet);
         }
 
@@ -128,8 +151,14 @@ public class CollectionsTableModel {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Object value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
-                if (insertData.contains(value)) {
-                    insertData.remove(value);
+                boolean hasValue = (valueMap == null) ? insertData.contains(value) : valueMap.containsKey(value);
+                if (hasValue) {
+                    if (valueMap == null) {
+                        insertData.remove(value);
+                    } else {
+                        Object data = valueMap.remove(value);
+                        insertData.remove(data);
+                    }
                 } else {
                     rs.deleteRow();
                 }

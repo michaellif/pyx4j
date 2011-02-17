@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -162,7 +163,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (entity.getPrimaryKey() == null) {
             insert(connection, tm, entity, now);
         } else {
-            if (!update(connection, tm, entity, now)) {
+            if (!update(connection, tm, entity, now, false)) {
                 if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
                     insert(connection, tm, entity, now);
                 } else {
@@ -190,14 +191,18 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    private boolean update(Connection connection, TableModel tm, IEntity entity, Date now) {
+    private boolean update(Connection connection, TableModel tm, IEntity entity, Date now, boolean doMerge) {
         for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
             if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                 MemberMeta memberMeta = member.getMemberMeta();
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
                     if (memberMeta.isOwnedRelationships()) {
-                        persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                        if (doMerge) {
+                            merge(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                        } else {
+                            persist(connection, tableModel(childEntity.getEntityMeta()), childEntity, now);
+                        }
                     } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
                         mergeReference(connection, memberMeta, childEntity, now);
                     }
@@ -286,7 +291,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @SuppressWarnings("unchecked")
-    private boolean applyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
+    private boolean applyModifications(Connection connection, TableModel tm, IEntity baseEntity, IEntity entity) {
         boolean updated = false;
         Class<? extends MemberModificationAdapter<?>>[] entityMemebersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
@@ -337,9 +342,34 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     }
                 }
+            } else if (memberMeta.isOwnedRelationships() && ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                // Special case for child collections update. Collection itself is the same and in the same order.
+                ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
+                Iterator<IEntity> iterator = collectionMember.iterator();
+                ICollection<IEntity, ?> baseCollectionMember = (ICollection<IEntity, ?>) member.getMember(baseEntity);
+                Iterator<IEntity> baseIterator = baseCollectionMember.iterator();
+                TableModel childTM = tableModel(EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getValueClass()));
+                for (; iterator.hasNext() && baseIterator.hasNext();) {
+                    IEntity childEntity = iterator.next();
+                    IEntity childBaseEntity = baseIterator.next();
+                    updated |= retrieveAndApplyModifications(connection, childTM, childBaseEntity, childEntity);
+                }
+                updated = true;
             }
         }
         return updated;
+    }
+
+    private boolean retrieveAndApplyModifications(Connection connection, TableModel tm, IEntity baseEntity, IEntity entity) {
+        if (!tm.retrieve(connection, entity.getPrimaryKey(), baseEntity)) {
+            throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
+        }
+        String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
+        if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
+            log.debug("Timestamp " + updatedTs + " change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
+            throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
+        }
+        return applyModifications(connection, tm, baseEntity, entity);
     }
 
     private void merge(Connection connection, TableModel tm, IEntity entity, Date now) {
@@ -347,14 +377,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
         boolean updated;
         if (entity.getPrimaryKey() != null) {
-            if (!tm.retrieve(connection, entity.getPrimaryKey(), baseEntity)) {
-                throw new RuntimeException("Entity " + tm.entityMeta().getCaption() + " " + entity.getPrimaryKey() + " NotFound");
-            }
-            if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
-                log.debug("Timestamp " + updatedTs + " change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
-                throw new ConcurrentUpdateException(i18n.tr("{0} updated externally", tm.entityMeta().getCaption()));
-            }
-            updated = applyModifications(tm, baseEntity, entity);
+            updated = retrieveAndApplyModifications(connection, tm, baseEntity, entity);
         } else {
             updated = true;
         }
@@ -381,7 +404,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if (entity.getPrimaryKey() == null) {
                 insert(connection, tm, entity, now);
             } else {
-                if (!update(connection, tm, entity, now)) {
+                if (!update(connection, tm, entity, now, true)) {
                     if (tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) {
                         insert(connection, tm, entity, now);
                     } else {

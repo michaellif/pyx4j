@@ -61,8 +61,8 @@ public abstract class DatastoreTestBase extends TestCase {
         }
     }
 
-    public static synchronized String uniqueString() {
-        return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis());
+    public synchronized String uniqueString() {
+        return Integer.toHexString(++uniqueCount) + "_" + Long.toHexString(System.currentTimeMillis()) + " " + this.getName();
     }
 
     public static Date getRoundedNow() {

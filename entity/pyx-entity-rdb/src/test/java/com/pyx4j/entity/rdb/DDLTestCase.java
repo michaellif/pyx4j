@@ -30,12 +30,27 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Status;
-import com.pyx4j.entity.test.shared.domain.Task;
 
 public abstract class DDLTestCase extends DatastoreTestBase {
 
-    @Table(prefix = "test", name = "task")
-    public interface TaskAlt extends IEntity {
+    @Table(prefix = "test", name = "ddl")
+    public interface TaskAlt1 extends IEntity {
+
+        IPrimitive<Boolean> finished();
+
+        @ToString
+        IPrimitive<String> description();
+
+        @ToString(index = 1)
+        IPrimitive<Status> status();
+
+        IPrimitive<Date> deadLine();
+
+        IPrimitiveSet<String> notes();
+    }
+
+    @Table(prefix = "test", name = "ddl")
+    public interface TaskAlt2 extends IEntity {
 
         IPrimitive<Boolean> finished();
 
@@ -51,10 +66,10 @@ public abstract class DDLTestCase extends DatastoreTestBase {
     }
 
     public void testCreateTable() {
-        Task task = EntityFactory.create(Task.class);
-        srv.persist(task);
+        TaskAlt1 task1 = EntityFactory.create(TaskAlt1.class);
+        srv.persist(task1);
 
-        TaskAlt task2 = EntityFactory.create(TaskAlt.class);
+        TaskAlt2 task2 = EntityFactory.create(TaskAlt2.class);
         srv.persist(task2);
     }
 

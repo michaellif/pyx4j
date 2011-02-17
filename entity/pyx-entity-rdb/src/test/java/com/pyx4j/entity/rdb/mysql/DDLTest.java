@@ -25,7 +25,6 @@ import com.pyx4j.entity.rdb.DDLTestCase;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
-import com.pyx4j.entity.test.shared.domain.Task;
 
 public class DDLTest extends DDLTestCase {
 
@@ -33,7 +32,7 @@ public class DDLTest extends DDLTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         try {
-            ((EntityPersistenceServiceRDB) srv).dropTable(Task.class);
+            ((EntityPersistenceServiceRDB) srv).dropTable(TaskAlt1.class);
         } catch (RuntimeExceptionSerializable ignore) {
         }
     }
