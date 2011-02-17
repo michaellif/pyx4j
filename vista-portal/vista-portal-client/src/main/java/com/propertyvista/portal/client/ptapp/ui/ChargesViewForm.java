@@ -91,7 +91,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
                 return new CEntityFolderRow<ChargeLine>(ChargeLine.class, columns, ChargesViewForm.this) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator(int index) {
+                    public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove ChargeLine");
                     }
 

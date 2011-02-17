@@ -120,7 +120,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                     return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentForm.this) {
 
                         @Override
-                        public FolderItemDecorator createFolderItemDecorator(int index) {
+                        public FolderItemDecorator createFolderItemDecorator() {
                             return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
 
@@ -156,7 +156,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                         }
 
                         @Override
-                        public FolderItemDecorator createFolderItemDecorator(int index) {
+                        public FolderItemDecorator createFolderItemDecorator() {
                             return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
                         }
                     };

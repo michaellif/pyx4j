@@ -222,7 +222,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
                 return new CEntityFolderRow<Vehicle>(Vehicle.class, columns, InfoViewForm.this) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator(int index) {
+                    public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove vehicle");
                     }
 

@@ -89,7 +89,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                 return new CEntityFolderRow<Pet>(Pet.class, columns, PetsViewForm.this) {
 
                     @Override
-                    public FolderItemDecorator createFolderItemDecorator(int index) {
+                    public FolderItemDecorator createFolderItemDecorator() {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove pet");
                     }
 
