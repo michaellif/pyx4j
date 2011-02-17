@@ -18,9 +18,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
-import com.propertyvista.portal.client.ptapp.SiteMap.Tenants;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -59,12 +58,12 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
         }
     }
 
-    private CEntityFolder<PotentialTenant> createTenantsEditorColumns() {
-        return new CEntityFolder<PotentialTenant>() {
+    private CEntityFolder<PotentialTenantInfo> createTenantsEditorColumns() {
+        return new CEntityFolder<PotentialTenantInfo>() {
 
             private List<EntityFolderColumnDescriptor> columns;
             {
-                PotentialTenant proto = EntityFactory.getEntityPrototype(PotentialTenant.class);
+                PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "100px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "100px"));
@@ -74,7 +73,6 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                 columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "100px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "100px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "100px"));
-                //TODO: make stuff readonly
             }
 
             @Override
@@ -83,12 +81,12 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             }
 
             @Override
-            protected CEntityFolderItem<PotentialTenant> createItem() {
+            protected CEntityFolderItem<PotentialTenantInfo> createItem() {
                 return createTenantRowEditor(columns);
             }
 
-            private CEntityFolderItem<PotentialTenant> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<PotentialTenant>(PotentialTenant.class, columns, TenantsViewForm.this) {
+            private CEntityFolderItem<PotentialTenantInfo> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+                return new CEntityFolderRow<PotentialTenantInfo>(PotentialTenantInfo.class, columns, TenantsViewForm.this) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
