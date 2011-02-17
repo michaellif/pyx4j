@@ -20,17 +20,12 @@
  */
 package com.pyx4j.widgets.client;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.widgets.client.style.CSSClass;
 
 public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextBox {
 
     public PasswordTextBox() {
         setStyleName(CSSClass.pyx4j_TextBox.name());
-        getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        getElement().getStyle().setBorderWidth(1, Unit.PX);
     }
 
 }
