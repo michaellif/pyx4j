@@ -763,12 +763,12 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("height", "100px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         style.addProperty("width", "100%");
         style.addProperty("float", "left");
         addStyle(style);
@@ -797,6 +797,7 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Footer));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("clear", "left");
         addStyle(style);
 
