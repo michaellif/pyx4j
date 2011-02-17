@@ -59,7 +59,7 @@ public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
         return super.getValue() != null && (super.getValue());
     }
 
-    void setAlignmet(Alignment alignment) {
+    public void setAlignmet(Alignment alignment) {
         this.alignment = alignment;
         if (isWidgetCreated()) {
             asWidget().setAlignmet(alignment);

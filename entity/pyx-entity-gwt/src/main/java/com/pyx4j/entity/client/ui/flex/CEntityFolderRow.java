@@ -27,6 +27,7 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 
 public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderItem<E> {
@@ -56,7 +57,14 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
     }
 
     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-        return form.create(column.getObject(), this);
+        CComponent<?> comp = form.create(column.getObject(), this);
+
+        //Special TableFolder customisation
+        if (comp instanceof CCheckBox) {
+            ((CCheckBox) comp).setAlignmet(CCheckBox.Alignment.center);
+        }
+
+        return comp;
     }
 
 }
