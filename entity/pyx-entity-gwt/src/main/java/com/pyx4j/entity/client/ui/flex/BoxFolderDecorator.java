@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -40,6 +41,8 @@ public class BoxFolderDecorator<E extends IEntity> extends FlowPanel implements 
 
     public BoxFolderDecorator(ImageResource addButton) {
         image = new Image(addButton);
+        image.getElement().getStyle().setCursor(Cursor.POINTER);
+
         content = new SimplePanel();
         add(content);
 
