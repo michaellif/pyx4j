@@ -45,7 +45,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.save(form.getValue());
+                presenter.save(getValue());
             }
 
         });
@@ -61,7 +61,6 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
         getElement().getStyle().setMarginLeft(5, Unit.PCT);
         getElement().getStyle().setMarginRight(5, Unit.PCT);
-        //TODO setWidth("60%");
     }
 
     @Override
@@ -72,6 +71,10 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     @Override
     public void populate(E entity) {
         form.populate(entity);
+    }
+
+    protected E getValue() {
+        return form.getValue();
     }
 
 }
