@@ -18,9 +18,11 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(name = "pt_address")
 public interface Address extends IEntity {
 
     public enum OwnedRented {
