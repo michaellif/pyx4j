@@ -13,39 +13,16 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentView;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentViewPresenter;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
-import com.pyx4j.site.client.place.AppPlace;
-
-public class ApartmentActivity extends AbstractActivity implements ApartmentViewPresenter {
-
-    private final ApartmentView view;
+public class ApartmentActivity extends WizardStepActivity<UnitSelection, ApartmentViewPresenter> implements ApartmentViewPresenter {
 
     @Inject
     public ApartmentActivity(ApartmentView view) {
-        this.view = view;
-        view.setPresenter(this);
-    }
-
-    public ApartmentActivity withPlace(AppPlace place) {
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-    }
-
-    @Override
-    public void save(UnitSelection result) {
-        // TODO Auto-generated method stub
-
+        super(view, UnitSelection.class);
     }
 
 }

@@ -75,7 +75,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                 Unit proto = EntityFactory.getEntityPrototype(Unit.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto.marketingName(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.marketRent(), "120px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.requiredDeposit(), "100px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.bedrooms(), "100px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.bathrooms(), "100px"));
@@ -85,7 +84,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             protected FolderDecorator<Unit> createFolderDecorator() {
-                return new TableFolderDecorator<Unit>(columns, SiteImages.INSTANCE.addRow(), "Add a vehicle");
+                return new TableFolderDecorator<Unit>(columns, SiteImages.INSTANCE.addRow());
             }
 
             @Override
