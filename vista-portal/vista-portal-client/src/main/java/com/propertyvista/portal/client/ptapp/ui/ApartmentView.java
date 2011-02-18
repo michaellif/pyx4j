@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 public interface ApartmentView extends WizardStepView<UnitSelection, ApartmentViewPresenter> {

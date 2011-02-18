@@ -22,4 +22,5 @@ public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, Apartme
     public ApartmentViewImpl() {
         super(new ApartmentViewForm());
     }
+
 }
