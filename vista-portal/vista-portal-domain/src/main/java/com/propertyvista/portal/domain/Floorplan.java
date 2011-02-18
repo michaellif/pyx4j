@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -23,6 +24,7 @@ public interface Floorplan extends IEntity {
     /**
      * Contains the picture of the floorplan / model unit
      */
+    @RpcTransient
     IPrimitive<byte[]> picture();
 
     /**
