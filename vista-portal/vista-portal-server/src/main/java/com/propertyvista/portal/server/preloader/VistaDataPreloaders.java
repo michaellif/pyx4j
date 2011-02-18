@@ -20,6 +20,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
     public VistaDataPreloaders() {
         //        add(new PreloadPT());
         add(new PreloadBuildings());
+        add(new ClearPTDataPreloader());
         add(new PreloadUsers());
     }
 }

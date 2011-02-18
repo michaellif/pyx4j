@@ -40,6 +40,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class PreloadBuildings extends AbstractDataPreloader {
+
     private final static Logger log = LoggerFactory.getLogger(PreloadBuildings.class);
 
     private int buildingCount;
@@ -152,7 +153,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, Unit.class);
+            return deleteAll(Building.class, Unit.class, Floorplan.class);
         } else {
             return "This is production";
         }
