@@ -28,11 +28,7 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
     private final Class<E> optionsClass;
 
     public CRadioGroupEnum(Class<E> optionsClass, CRadioGroup.Layout layout) {
-        this(optionsClass, layout, optionsClass.getName());
-    }
-
-    public CRadioGroupEnum(Class<E> optionsClass, CRadioGroup.Layout layout, String groupName) {
-        super(layout, groupName);
+        super(layout);
         this.optionsClass = optionsClass;
         setFormat(new IFormat<E>() {
 
@@ -55,6 +51,15 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
     @Override
     public Collection<E> getOptions() {
         return EnumSet.allOf(optionsClass);
+    }
+
+    @Override
+    public String getOptionDebugId(E option) {
+        if (option == null) {
+            return "nil";
+        } else {
+            return option.name();
+        }
     }
 
 }

@@ -34,8 +34,8 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
     private String falseText = i18n.tr("No");
 
-    public CRadioGroupBoolean(CRadioGroup.Layout layout, String groupName) {
-        super(layout, groupName);
+    public CRadioGroupBoolean(CRadioGroup.Layout layout) {
+        super(layout);
         setFormat(new IFormat<Boolean>() {
 
             @Override
@@ -64,5 +64,16 @@ public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
     public void setTrueFalseOptionText(String trueText, String falseText) {
         this.trueText = trueText;
         this.falseText = falseText;
+    }
+
+    @Override
+    public String getOptionDebugId(Boolean option) {
+        if (option == null) {
+            return "nil";
+        } else if (option) {
+            return "Y";
+        } else {
+            return "N";
+        }
     }
 }

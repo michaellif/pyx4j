@@ -32,18 +32,15 @@ public abstract class CRadioGroup<E> extends CEditableComponent<E, NativeRadioGr
 
     private final Layout layout;
 
-    private String groupName;
-
     private IFormat<E> format;
 
-    public CRadioGroup(Layout layout, String groupName) {
-        this(null, layout, groupName);
+    public CRadioGroup(Layout layout) {
+        this(null, layout);
     }
 
-    public CRadioGroup(String title, Layout layout, String groupName) {
+    public CRadioGroup(String title, Layout layout) {
         super(title);
         this.layout = layout;
-        this.groupName = groupName;
     }
 
     public Layout getLayout() {
@@ -52,16 +49,14 @@ public abstract class CRadioGroup<E> extends CEditableComponent<E, NativeRadioGr
 
     public abstract Collection<E> getOptions();
 
+    public abstract String getOptionDebugId(E option);
+
     public IFormat<E> getFormat() {
         return format;
     }
 
     public void setFormat(IFormat<E> format) {
         this.format = format;
-    }
-
-    public String getGroupName() {
-        return groupName;
     }
 
     @Override

@@ -37,6 +37,8 @@ import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
 public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableComponent<E> {
 
+    private static int uniqueGroupId = 0;
+
     private final CRadioGroup<E> cComponent;
 
     private boolean enabled = true;
@@ -55,7 +57,7 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
         }
         this.setWidget(panel);
 
-        String groupName = cComponent.getGroupName();
+        String groupName = "rb" + (uniqueGroupId++);
 
         for (final E option : cComponent.getOptions()) {
             RadioButton b = new RadioButton(groupName, cComponent.getFormat().format(option));
@@ -116,6 +118,14 @@ public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableC
             for (RadioButton b : buttons.values()) {
                 b.setFocus(false);
             }
+        }
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+        for (Map.Entry<E, RadioButton> me : buttons.entrySet()) {
+            me.getValue().ensureDebugId(baseID + "_" + cComponent.getOptionDebugId(me.getKey()));
         }
     }
 
