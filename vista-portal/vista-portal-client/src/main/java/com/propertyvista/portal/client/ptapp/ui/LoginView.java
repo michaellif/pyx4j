@@ -24,7 +24,11 @@ public interface LoginView extends IsWidget {
     public interface Presenter {
 
         void login(AuthenticationRequest value);
+
+        public void forgotPassword();
+
     }
 
     public void challengeVerificationRequired();
+
 }

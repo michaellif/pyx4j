@@ -75,4 +75,9 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
         RPCManager.execute(AuthenticationServices.Authenticate.class, request, callback);
 
     }
+
+    @Override
+    public void forgotPassword() {
+        // TODO Anton Kraev VISTA-80 
+    }
 }

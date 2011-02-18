@@ -56,7 +56,14 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
             add(new HTML("Press <i>Ctrl+Q</i> to login"));
         }
 
-        form = new LoginViewForm();
+        form = new LoginViewForm() {
+
+            @Override
+            public void forgotPassword() {
+                presenter.forgotPassword();
+            }
+        };
+
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
         add(form);
