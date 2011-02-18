@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeRadioGroup<E extends Enum<E>> extends SimplePanel implements INativeEditableComponent<E> {
+public class NativeRadioGroup<E> extends SimplePanel implements INativeEditableComponent<E> {
 
     private final CRadioGroup<E> cComponent;
 
@@ -55,10 +55,10 @@ public class NativeRadioGroup<E extends Enum<E>> extends SimplePanel implements 
         }
         this.setWidget(panel);
 
-        String groupName = cComponent.getFieldName();
+        String groupName = cComponent.getGroupName();
 
         for (final E option : cComponent.getOptions()) {
-            RadioButton b = new RadioButton(groupName, option.toString());
+            RadioButton b = new RadioButton(groupName, cComponent.getFormat().format(option));
             buttons.put(option, b);
             b.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override

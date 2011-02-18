@@ -20,60 +20,53 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.EnumSet;
+import java.util.Collection;
 
 import com.pyx4j.forms.client.gwt.NativeRadioGroup;
 
-public class CRadioGroup<E extends Enum<E>> extends CEditableComponent<E, NativeRadioGroup<E>> {
+public abstract class CRadioGroup<E> extends CEditableComponent<E, NativeRadioGroup<E>> {
 
     public enum Layout {
         VERTICAL, HORISONTAL;
     }
 
-    public enum YesNo {
-        yes, no
-    }
-
     private final Layout layout;
 
-    private final Class<E> optionsClass;
+    private String groupName;
 
-    private String fieldname;
+    private IFormat<E> format;
 
-    public CRadioGroup(Class<E> optionsClass, Layout layout, String fieldname) {
-        this(null, optionsClass, layout, fieldname);
+    public CRadioGroup(Layout layout, String groupName) {
+        this(null, layout, groupName);
     }
 
-    public CRadioGroup(String title, Class<E> optionsClass, Layout layout, String fieldname) {
+    public CRadioGroup(String title, Layout layout, String groupName) {
         super(title);
         this.layout = layout;
-        this.optionsClass = optionsClass;
-        this.fieldname = fieldname;
-    }
-
-    public CRadioGroup(Class<E> optionsClass, Layout layout) {
-        this(null, optionsClass, layout, optionsClass.getName());
+        this.groupName = groupName;
     }
 
     public Layout getLayout() {
         return layout;
     }
 
-    public Class<E> getOptionsClass() {
-        return optionsClass;
+    public abstract Collection<E> getOptions();
+
+    public IFormat<E> getFormat() {
+        return format;
     }
 
-    public EnumSet<E> getOptions() {
-        return EnumSet.allOf(getOptionsClass());
+    public void setFormat(IFormat<E> format) {
+        this.format = format;
+    }
+
+    public String getGroupName() {
+        return groupName;
     }
 
     @Override
     protected NativeRadioGroup<E> initWidget() {
         return new NativeRadioGroup<E>(this);
-    }
-
-    public String getFieldName() {
-        return fieldname;
     }
 
 }

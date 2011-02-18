@@ -14,61 +14,55 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 11, 2010
- * @author Michael
+ * Created on Feb 18, 2011
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-public class CComboBoxBoolean extends CComboBox<Boolean> {
+public class CRadioGroupBoolean extends CRadioGroup<Boolean> {
 
-    private static I18n i18n = I18nFactory.getI18n(CComboBoxBoolean.class);
+    private static I18n i18n = I18nFactory.getI18n(CRadioGroupBoolean.class);
 
     private String trueText = i18n.tr("Yes");
 
     private String falseText = i18n.tr("No");
 
-    public CComboBoxBoolean() {
-        super();
-        setBooleanOptions();
+    public CRadioGroupBoolean(CRadioGroup.Layout layout, String groupName) {
+        super(layout, groupName);
+        setFormat(new IFormat<Boolean>() {
+
+            @Override
+            public String format(Boolean value) {
+                if (value == null) {
+                    return null;
+                } else if (value) {
+                    return trueText;
+                } else {
+                    return falseText;
+                }
+            }
+
+            @Override
+            public Boolean parse(String string) {
+                return null;
+            }
+        });
     }
 
-    public CComboBoxBoolean(String title) {
-        super(title);
-        setBooleanOptions();
-    }
-
-    public CComboBoxBoolean(String title, String trueText, String falseText) {
-        this(title);
-        setTrueFalseOptionText(trueText, falseText);
-    }
-
-    public CComboBoxBoolean(String title, boolean mandatory) {
-        super(title, mandatory);
-        setBooleanOptions();
-    }
-
-    private void setBooleanOptions() {
-        setOptions(Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE }));
+    @Override
+    public Collection<Boolean> getOptions() {
+        return Arrays.asList(new Boolean[] { Boolean.TRUE, Boolean.FALSE });
     }
 
     public void setTrueFalseOptionText(String trueText, String falseText) {
         this.trueText = trueText;
         this.falseText = falseText;
-    }
-
-    @Override
-    public String getItemName(Boolean o) {
-        if (Boolean.TRUE.equals(o)) {
-            return trueText;
-        } else if (Boolean.FALSE.equals(o)) {
-            return falseText;
-        }
-        return super.getItemName(o);
     }
 }

@@ -41,6 +41,8 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CRadioGroup;
+import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CRichTextAreaPopup;
 import com.pyx4j.forms.client.ui.CSuggestBox;
 import com.pyx4j.forms.client.ui.CTextArea;
@@ -98,9 +100,9 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 return new CPhoneField();
             case radiogroup:
                 if (mm.getValueClass() == Boolean.class) {
-                    return new CRadioGroup<CRadioGroup.YesNo>(CRadioGroup.YesNo.class, CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
+                    return new CRadioGroupBoolean(CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
                 } else if (mm.getValueClass().isEnum()) {
-                    return new CRadioGroup(mm.getValueClass(), CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
+                    return new CRadioGroupEnum(mm.getValueClass(), CRadioGroup.Layout.HORISONTAL, mm.getFieldName());
                 } else {
                     throw new Error("Unknown");
                 }
