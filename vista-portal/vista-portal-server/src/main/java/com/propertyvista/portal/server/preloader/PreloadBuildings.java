@@ -13,6 +13,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.Email;
 import com.propertyvista.portal.domain.Email.EmailType;
 import com.propertyvista.portal.domain.Floorplan;
+import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Picture;
@@ -142,6 +144,17 @@ public class PreloadBuildings extends AbstractDataPreloader {
         unit.area().setValue(area);
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
+
+        for (int i = 1; i < 4; i++) {
+            MarketRent marketRent = EntityFactory.create(MarketRent.class);
+            marketRent.leaseTerm().setValue(i * 6);
+            marketRent.rent().amount().setValue(565D - 5 * i);
+            unit.marketRent().add(marketRent);
+        }
+
+        unit.requiredDeposit().setValue(150D);
+
+        unit.avalableForRent().setValue(new Date());
 
         PersistenceServicesFactory.getPersistenceService().persist(floorplan);
         unit.floorplan().set(floorplan);

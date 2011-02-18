@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Address.AddressType;
+import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -31,4 +32,5 @@ public class PreloadUtil {
 
         return address;
     }
+
 }
