@@ -84,7 +84,6 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         floorplan.area().setValue(1200);
         floorplan.name().setValue(name);
-        //floorplan.name().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
 
         // for now save just one picture
         int imageIndex = RandomUtil.randomInt(3) + 1;
@@ -162,21 +161,21 @@ public class PreloadBuildings extends AbstractDataPreloader {
     @Override
     public String create() {
 
-        for (int i = 0; i < DemoData.NUM_RESIDENTIAL_BUILDINGS; i++) {
+        for (int b = 0; b < DemoData.NUM_RESIDENTIAL_BUILDINGS; b++) {
 
             // building type
             BuildingType buildingType = RandomUtil.random(BuildingType.values());
 
             Complex complex = null;
-            if (i % 3 == 0) {
+            if (b % 3 == 0) {
                 complex = createComplex(2);
             }
 
-            String website = "www.property" + (i + 1) + ".com";
+            String website = "www.property" + (b + 1) + ".com";
 
             // address
             String street = RandomUtil.randomInt(10000) + " Yonge St";
-            String zip = "L" + (i + 1 % 10) + "C " + (i + 5 % 10) + "M" + (i + 7 % 10);
+            String zip = "L" + (b + 1 % 10) + "C " + (b + 5 % 10) + "M" + (b + 7 % 10);
             Address address = PreloadUtil.createAddress(street, zip);
 
             // phones
@@ -184,12 +183,13 @@ public class PreloadBuildings extends AbstractDataPreloader {
             phones.add(createPhone());
 
             // email
-            String emailAddress = "building" + (i + 1) + "@propertyvista.com";
+            String emailAddress = "building" + (b + 1) + "@propertyvista.com";
             Email email = createEmail(emailAddress);
 
             // organization contacts - not many fields there at the moment, will do this later
-            String propertyCode = "A" + String.valueOf(i);
-            if (i == 0) {
+            String propertyCode = "A" + String.valueOf(b);
+            if (b == 0) {
+                //UI is looking for this building, see references!
                 propertyCode = DemoData.REGISTRATION_DEFAULT_BUILDINGNAME;
             }
             Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email);
@@ -208,7 +208,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
                     float bathrooms = 2.0f;
 
                     // later floor plans should be more elaborate
-                    Floorplan floorplan = createFloorplan(i + "-" + floor + "-" + j);
+                    String floorplanName = b + "-" + floor + "-" + j;
+                    if ((floor == 1) && (j == 1)) {
+                        // UI is looking for this plan, see references!
+                        floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
+                    }
+                    Floorplan floorplan = createFloorplan(floorplanName);
 
                     createUnit(building, floor, area, bedrooms, bathrooms, floorplan);
                 }

@@ -58,7 +58,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), request.propertyCode().getValue()));
             Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
 
-            log.info("Found building {}", building);
+            log.info("Found [{}] building {}", request.propertyCode().getValue(), building);
             if (building == null) {
                 return false;
             }
@@ -68,7 +68,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), request.floorplanName().getValue()));
             Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
-            log.info("Found floorplan {}", floorplan);
+            log.info("Found [{}] floorplan {}", request.floorplanName().getValue(), floorplan);
             if (floorplan == null) {
                 return false;
             }
