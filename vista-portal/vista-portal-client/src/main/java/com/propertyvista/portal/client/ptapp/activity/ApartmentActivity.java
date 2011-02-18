@@ -18,11 +18,12 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentView;
+import com.propertyvista.portal.client.ptapp.ui.ApartmentViewPresenter;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 import com.pyx4j.site.client.place.AppPlace;
 
-public class ApartmentActivity extends AbstractActivity implements ApartmentView.Presenter {
+public class ApartmentActivity extends AbstractActivity implements ApartmentViewPresenter {
 
     private final ApartmentView view;
 

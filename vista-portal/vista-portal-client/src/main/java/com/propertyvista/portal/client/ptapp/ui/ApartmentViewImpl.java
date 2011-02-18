@@ -13,31 +13,13 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 @Singleton
-public class ApartmentViewImpl extends SimplePanel implements ApartmentView {
-
-    private Presenter presenter;
+public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, ApartmentViewPresenter> implements ApartmentView {
 
     public ApartmentViewImpl() {
-        Label labael = new Label("AppartmentView");
-        labael.setSize("300px", "40px");
-        setWidget(labael);
-
+        super(new ApartmentViewForm());
     }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void populate(UnitSelection result) {
-        // TODO Auto-generated method stub
-    }
-
 }

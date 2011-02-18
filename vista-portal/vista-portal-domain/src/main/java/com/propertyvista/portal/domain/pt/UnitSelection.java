@@ -18,6 +18,7 @@ import java.util.Date;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Unit;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,9 +33,11 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     Building building();
 
     //Criteria
+    @Caption(name = "From")
     IPrimitive<Date> availableFrom();
 
     //Criteria
+    @Caption(name = "To")
     IPrimitive<Date> availableTo();
 
     // Found by App server
