@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 
-public class HandlerRegistrationGC {
+public class HandlerRegistrationGC implements HandlerRegistration {
 
     private List<HandlerRegistration> handlers;
 
@@ -36,7 +36,8 @@ public class HandlerRegistrationGC {
         handlers.add(handler);
     }
 
-    public void removeHandlers() {
+    @Override
+    public void removeHandler() {
         if (handlers == null) {
             return;
         }

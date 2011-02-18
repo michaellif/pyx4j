@@ -287,7 +287,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CSuggestBox<E> impleme
                 @Override
                 public void onAsyncChange(AsyncValueChangeEvent<E> event) {
                     callback.onSuccess(event.getValue());
-                    hrgc.removeHandlers();
+                    hrgc.removeHandler();
                 }
             }));
         } else {

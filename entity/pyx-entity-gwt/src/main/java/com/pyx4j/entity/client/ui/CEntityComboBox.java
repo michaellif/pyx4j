@@ -293,7 +293,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                 @Override
                 public void onAsyncChange(AsyncValueChangeEvent<E> event) {
                     callback.onSuccess(event.getValue());
-                    hrgc.removeHandlers();
+                    hrgc.removeHandler();
                 }
             }));
         } else {

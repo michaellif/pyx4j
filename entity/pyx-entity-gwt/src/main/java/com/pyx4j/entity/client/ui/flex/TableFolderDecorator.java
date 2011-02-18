@@ -39,10 +39,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
+import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
 public class TableFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
 
-    private final Image image;
+    private final Image addImage;
+
+    private final Label addButtonLabel;
 
     private final SimplePanel content;
 
@@ -50,22 +53,22 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
 
-        image = new Image(addButton);
-        image.getElement().getStyle().setCursor(Cursor.POINTER);
-        image.getElement().getStyle().setFloat(Float.LEFT);
+        addImage = new Image(addButton);
+        addImage.getElement().getStyle().setCursor(Cursor.POINTER);
+        addImage.getElement().getStyle().setFloat(Float.LEFT);
 
         FlowPanel imageHolder = new FlowPanel();
         imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        imageHolder.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
-        imageHolder.add(image);
-        Label addButtonLabel = new Label(title);
+        imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+        imageHolder.add(addImage);
+        addButtonLabel = new Label(title);
         addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder.add(addButtonLabel);
 
         header = new FlowPanel();
         setHeaderVisible(false);
         header.setWidth("100%");
-        header.getElement().getStyle().setPaddingLeft(image.getWidth(), Unit.PX);
+        header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         for (EntityFolderColumnDescriptor column : columns) {
             Label label = new Label(column.getObject().getMeta().getCaption());
             label.setWidth(column.getWidth());
@@ -96,12 +99,16 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         super.onEnsureDebugId(baseID);
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
-        image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
+        addImage.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
+        addButtonLabel.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString() + "_label");
     }
 
     @Override
     public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
-        return image.addClickHandler(handler);
+        HandlerRegistrationGC h = new HandlerRegistrationGC();
+        h.add(addImage.addClickHandler(handler));
+        h.add(addButtonLabel.addClickHandler(handler));
+        return h;
     }
 
     @Override

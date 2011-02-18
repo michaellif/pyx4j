@@ -239,7 +239,7 @@ public abstract class SitePanel extends SimplePanel {
 
     @Override
     protected void onUnload() {
-        hrgc.removeHandlers();
+        hrgc.removeHandler();
     }
 
     public PagePanel getCurrentPagePanel() {
