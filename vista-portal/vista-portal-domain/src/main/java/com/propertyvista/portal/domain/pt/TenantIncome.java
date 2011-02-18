@@ -22,5 +22,5 @@ public interface TenantIncome extends IEntity {
     IPrimitive<String> description();
 
     @Caption(name = "Monthly amount")
-    IPrimitive<Float> monthlyAmount();
+    IPrimitive<Double> monthlyAmount();
 }

@@ -49,7 +49,7 @@ public interface PotentialTenant extends IApplicationEntity {
 
     IPrimitive<Relationship> relationship();
 
-    IPrimitive<Float> payment();
+    IPrimitive<Double> payment();
 
     IPrimitive<Boolean> dependant();
 

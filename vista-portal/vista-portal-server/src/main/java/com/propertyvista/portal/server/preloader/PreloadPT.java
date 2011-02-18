@@ -49,7 +49,7 @@ public class PreloadPT extends AbstractDataPreloader {
         employer.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
-        employer.monthlySalary().setValue(1000f + RandomUtil.randomInt(4000));
+        employer.monthlySalary().setValue(1000d + RandomUtil.randomInt(4000));
         employer.position().setValue(RandomUtil.random(DemoData.OCCUPATIONS));
         employer.jobStart().setValue(RandomUtil.randomDate(1980, 2020));
         employer.jobEnd().setValue(RandomUtil.randomDate(1980, 2020));
@@ -74,7 +74,7 @@ public class PreloadPT extends AbstractDataPreloader {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
 
             income.description().setValue(RandomUtil.random(DemoData.INCOME_SOURCES));
-            income.monthlyAmount().setValue(10f + RandomUtil.randomInt(5000));
+            income.monthlyAmount().setValue(10d + RandomUtil.randomInt(5000));
 
             PersistenceServicesFactory.getPersistenceService().persist(income);
             ptf.incomes().add(income);
@@ -84,7 +84,7 @@ public class PreloadPT extends AbstractDataPreloader {
             TenantAsset asset = EntityFactory.create(TenantAsset.class);
 
             asset.name().setValue(RandomUtil.random(DemoData.ASSETS));
-            asset.assetValue().setValue(100f + RandomUtil.randomInt(10000));
+            asset.assetValue().setValue(100d + RandomUtil.randomInt(10000));
 
             PersistenceServicesFactory.getPersistenceService().persist(asset);
             ptf.assets().add(asset);
@@ -142,7 +142,7 @@ public class PreloadPT extends AbstractDataPreloader {
         address.moveInDate().setValue(RandomUtil.randomDate(2008, 2010));
         address.moveOutDate().setValue(RandomUtil.randomDate(2010, 2012));
 
-        address.payment().setValue(1000f + RandomUtil.randomInt(1000));
+        address.payment().setValue(1000d + RandomUtil.randomInt(1000));
 
         address.phone().setValue(RandomUtil.randomPhone());
         address.rented().setValue((OwnedRented) RandomUtil.random(Address.OwnedRented.class));
@@ -221,7 +221,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
         //TODO first tenant should be applicant
         pt.relationship().setValue(RandomUtil.random(PotentialTenant.Relationship.values()));
-        pt.payment().setValue(1.0f + RandomUtil.randomInt(3000));
+        pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
 
         pt.dependant().setValue(RandomUtil.randomBoolean());
         pt.takeOwnership().setValue(RandomUtil.randomBoolean());

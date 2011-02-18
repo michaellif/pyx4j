@@ -30,7 +30,7 @@ public interface Employer extends IEntity {
 
     IPrimitive<String> supervisorPhone();
 
-    IPrimitive<Float> monthlySalary();
+    IPrimitive<Double> monthlySalary();
 
     IPrimitive<String> position();
 

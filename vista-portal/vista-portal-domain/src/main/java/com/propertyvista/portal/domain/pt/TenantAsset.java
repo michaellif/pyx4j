@@ -23,5 +23,5 @@ public interface TenantAsset extends IEntity {
     IPrimitive<String> name();
 
     @Caption(name = "Value")
-    IPrimitive<Float> assetValue();
+    IPrimitive<Double> assetValue();
 }

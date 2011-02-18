@@ -46,7 +46,7 @@ public interface Address extends IEntity {
 
     IPrimitive<Date> moveOutDate();
 
-    IPrimitive<Float> payment();
+    IPrimitive<Double> payment();
 
     IPrimitive<String> phone();
 

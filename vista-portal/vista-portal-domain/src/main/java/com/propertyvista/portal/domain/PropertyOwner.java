@@ -36,7 +36,7 @@ public interface PropertyOwner extends IEntity {
     /**
      * Percent of share
      */
-    IPrimitive<Float> share();
+    IPrimitive<Double> share();
 
     IPrimitive<Date> startDate();
 
