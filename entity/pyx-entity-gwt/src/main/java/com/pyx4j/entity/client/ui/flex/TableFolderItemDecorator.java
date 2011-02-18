@@ -50,7 +50,9 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         add(content);
 
-        image.setTitle(title);
+        if (removable) {
+            image.setTitle(title);
+        }
 
     }
 
