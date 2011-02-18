@@ -105,6 +105,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     //TODO add remove handlers
     protected void removeItem(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
+        getValue().remove(comp.getValue());
         abandonFolderItem(folderItemDecorator);
     }
 
