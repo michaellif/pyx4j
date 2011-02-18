@@ -80,7 +80,7 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                 continue nextValue;
             }
             MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (em.getMemberMeta(memberName).isRpcTransient()) {
+            if (memberMeta.isRpcTransient()) {
                 me.setValue(null);
             } else if (memberMeta.isEntity()) {
                 filterMembers((IEntity) entity.getMember(memberName), processed);
