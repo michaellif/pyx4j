@@ -20,11 +20,16 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.entity.shared.IEntity;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditableComponent<E> {
 
     private boolean first;
+
+    private IDebugId rowDebugId;
 
     public CEntityFolderItem(Class<E> clazz) {
         super(clazz);
@@ -40,4 +45,16 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditab
         return first;
     }
 
+    public IDebugId getRowDebugId() {
+        return rowDebugId;
+    }
+
+    public void setRowDebugId(int currentRowDebug) {
+        rowDebugId = new StringDebugId(currentRowDebug);
+    }
+
+    @Override
+    public IDebugId getDebugId() {
+        return new CompositeDebugId(super.getDebugId(), rowDebugId);
+    }
 }

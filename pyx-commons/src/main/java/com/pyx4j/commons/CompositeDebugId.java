@@ -21,6 +21,7 @@
 package com.pyx4j.commons;
 
 public class CompositeDebugId implements IDebugId {
+
     private final IDebugId parent;
 
     private final IDebugId child;
@@ -33,6 +34,10 @@ public class CompositeDebugId implements IDebugId {
     @Override
     public String getDebugIdString() {
         return (parent != null ? parent.getDebugIdString() + "_" : "") + (child != null ? child.getDebugIdString() : "unknown");
+    }
+
+    public static String debugId(IDebugId parent, IDebugId child) {
+        return new CompositeDebugId(parent, child).getDebugIdString();
     }
 
 }

@@ -35,12 +35,14 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.gwt.NativeForm.ToolbarMode;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CFormFolder;
+import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.util.BrowserType;
@@ -80,6 +82,7 @@ public class NativeFormFolder<E> extends DockPanel implements INativeEditableCom
         addCommand.getElement().getStyle().setColor("#6A97C4");
         addCommand.getElement().getStyle().setFontSize(0.8, Unit.EM);
         addCommand.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
+        addCommand.ensureDebugId(CompositeDebugId.debugId(folder.getDebugId(), FormNavigationDebugId.Form_Add));
 
         addCommand.addClickHandler(new ClickHandler() {
             @Override

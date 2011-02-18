@@ -38,6 +38,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 
 public class TableFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
 
@@ -88,6 +89,14 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
     @Override
     public void setWidget(IsWidget w) {
         content.setWidget(w);
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+        //TODO use inheritance of objects
+        //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
+        image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
     }
 
     @Override

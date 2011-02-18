@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-01-28
+ * Created on Feb 18, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.commons;
+package com.pyx4j.forms.client.ui;
 
-public class StringDebugId implements IDebugId {
+import com.pyx4j.commons.IDebugId;
 
-    private final String value;
+public enum FormNavigationDebugId implements IDebugId {
 
-    public StringDebugId(String value) {
-        this.value = value;
-    }
+    Form_Add,
 
-    public StringDebugId(Integer value) {
-        this.value = value.toString();
-    }
+    Form_Remove,
+
+    Form_MoveUp,
+
+    Form_MoveDown;
 
     @Override
     public String getDebugIdString() {
-        return value;
+        return this.name();
     }
+
 }

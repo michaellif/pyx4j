@@ -23,6 +23,9 @@ package com.pyx4j.forms.client.ui;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.gwt.NativeFormFolder;
 
 public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormFolder<E>> {
@@ -38,6 +41,8 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
     private boolean removable = true;
 
     private boolean movable = true;
+
+    protected int currentRowDebugId = 0;
 
     public CFormFolder(FormFactory factory) {
         super();
@@ -122,6 +127,10 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
             }
         }
         return results;
+    }
+
+    public IDebugId getCurrentRowDebugId() {
+        return new CompositeDebugId(this.getDebugId(), new StringDebugId(currentRowDebugId));
     }
 
 }

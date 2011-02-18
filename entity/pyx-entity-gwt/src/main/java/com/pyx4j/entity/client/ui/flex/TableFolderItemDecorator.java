@@ -30,6 +30,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.forms.client.ui.FormNavigationDebugId;
+
 public class TableFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
 
     private final Image image;
@@ -70,6 +72,14 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
     @Override
     public void setWidget(IsWidget w) {
         content.setWidget(w);
+    }
+
+    @Override
+    protected void onEnsureDebugId(String baseID) {
+        super.onEnsureDebugId(baseID);
+        //TODO use inheritance of objects
+        //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
+        image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.getDebugIdString());
     }
 
     @Override

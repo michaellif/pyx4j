@@ -52,6 +52,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Printable;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -62,6 +64,7 @@ import com.pyx4j.forms.client.ui.CForm;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
 import com.pyx4j.forms.client.ui.CFormFolder;
+import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.SelfManagedComponent;
 import com.pyx4j.forms.client.ui.decorators.ImageHolder;
@@ -470,10 +473,12 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
             ActionsPanel() {
 
+                IDebugId rowDebugId = ((CFormFolder) getCComponent().getParentContainer()).getCurrentRowDebugId();
                 upCommand = new Image();
                 upCommand.setResource(ImageFactory.getImages().moveUp());
                 upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
                 upCommand.getElement().getStyle().setMargin(2, Unit.PX);
+                upCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_MoveUp).getDebugIdString());
                 upCommand.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -489,6 +494,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 downCommand.setResource(ImageFactory.getImages().moveDown());
                 downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
                 downCommand.getElement().getStyle().setMargin(2, Unit.PX);
+                downCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_MoveDown).getDebugIdString());
                 downCommand.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -504,6 +510,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 removeCommand.setResource(ImageFactory.getImages().deleteItem());
                 removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
                 removeCommand.getElement().getStyle().setMargin(2, Unit.PX);
+                removeCommand.ensureDebugId(new CompositeDebugId(rowDebugId, FormNavigationDebugId.Form_Remove).getDebugIdString());
                 removeCommand.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {

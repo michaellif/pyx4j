@@ -96,6 +96,7 @@ public class CEntityFormFolder<E extends IEntity> extends CFormFolder<E> impleme
     public void addItem() {
         E item = EntityFactory.create(entityClass);
         getValue().add(item);
+        currentRowDebugId++;
         CForm form = createForm();
         ((DelegatingEntityEditableComponent) form).populateModel(null, item);
         //Keep forms expanded

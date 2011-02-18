@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -47,6 +48,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     private FolderDecorator<E> folderDecorator;
 
     private FlowPanel content;
+
+    protected int currentRowDebugId = 0;
 
     public CEntityFolder() {
     }
@@ -75,6 +78,18 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
                 addItem();
             }
         });
+        //TODO use components inheritance
+        if (this.getDebugId() != null) {
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().getDebugIdString() + "_fd_");
+        }
+    }
+
+    @Override
+    public void setDebugId(IDebugId debugId) {
+        super.setDebugId(debugId);
+        if ((debugId != null) && (folderDecorator != null)) {
+            folderDecorator.asWidget().ensureDebugId(this.getDebugId().getDebugIdString() + "_fd_");
+        }
     }
 
     protected void addItem() {
@@ -84,6 +99,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
 
         final CEntityFolderItem<E> comp = createItem();
+        comp.setRowDebugId(++currentRowDebugId);
 
         @SuppressWarnings("unchecked")
         E newEntity = (E) EntityFactory.create(comp.proto().getValueClass());
@@ -129,6 +145,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         content.clear();
         for (E item : value) {
             CEntityFolderItem<E> comp = createItem();
+            comp.setRowDebugId(++currentRowDebugId);
             comp.setFirst(content.getWidgetCount() == 0);
             comp.createContent();
             comp.populate(item);
@@ -144,6 +161,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     private void adoptFolderItem(final CEntityFolderItem<E> comp) {
         final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
         folderItemDecorator.setWidget(comp);
+        folderItemDecorator.asWidget().ensureDebugId(comp.getDebugId().getDebugIdString());
         content.add(folderItemDecorator);
         ValueChangeEvent.fire(this, getValue());
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
