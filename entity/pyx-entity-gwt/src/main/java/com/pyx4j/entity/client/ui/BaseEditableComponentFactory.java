@@ -139,8 +139,10 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 (comp).setNumberFormat(mm.getFormat());
             }
             return comp;
-        } else {
+        } else if (mm.getValueClass().equals(String.class)) {
             return new CTextField();
+        } else {
+            throw new Error("No factory for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
         }
     }
 
