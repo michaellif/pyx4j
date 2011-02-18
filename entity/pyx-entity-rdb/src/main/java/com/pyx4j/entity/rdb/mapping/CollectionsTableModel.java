@@ -50,18 +50,21 @@ public class CollectionsTableModel {
         if ((dataSet == null) || dataSet.isEmpty()) {
             return;
         } else {
-            insert(connection, dialect, entity.getPrimaryKey(), member, dataSet);
+            insert(connection, dialect, entity.getPrimaryKey(), member, dataSet, true);
         }
     }
 
     /**
      * Convert collection to its IDs
      */
-    private static Collection convertICollectionKeys(MemberOperationsMeta member, Collection<Object> dataSet) {
-        Collection<Long> idDataSet = new Vector<Long>();
+    private static List convertICollectionKeys(MemberOperationsMeta member, Collection<Object> dataSet, boolean insertNull) {
+        List<Long> idDataSet = new Vector<Long>();
         for (Object value : dataSet) {
             Map<String, Object> map = (Map<String, Object>) value;
             if (map == null) {
+                if (!insertNull) {
+                    continue;
+                }
                 throw new Error("Saving null reference " + member.getMemberMeta().getCaption());
             }
             Long childKey = (Long) map.get(IEntity.PRIMARY_KEY);
@@ -73,13 +76,14 @@ public class CollectionsTableModel {
         return idDataSet;
     }
 
-    private static void insert(Connection connection, Dialect dialect, long primaryKey, MemberOperationsMeta member, Collection<Object> dataSet) {
+    private static void insert(Connection connection, Dialect dialect, long primaryKey, MemberOperationsMeta member, Collection<Object> dataSet,
+            boolean insertNull) {
         PreparedStatement stmt = null;
         Class<?> valueClass = member.getMemberMeta().getValueClass();
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
         if (type != ObjectClassType.PrimitiveSet) {
-            dataSet = convertICollectionKeys(member, dataSet);
+            dataSet = convertICollectionKeys(member, dataSet, insertNull);
             valueClass = Long.class;
         }
 
@@ -92,13 +96,15 @@ public class CollectionsTableModel {
             }
             int seq = 0;
             for (Object value : dataSet) {
-                stmt.setLong(1, primaryKey);
-                stmt.setObject(2, TableModel.encodeValue(valueClass, value), targetSqlType);
-                if (isList) {
-                    stmt.setInt(3, seq);
+                if ((value != null) || insertNull) {
+                    stmt.setLong(1, primaryKey);
+                    stmt.setObject(2, TableModel.encodeValue(valueClass, value), targetSqlType);
+                    if (isList) {
+                        stmt.setInt(3, seq);
+                    }
+                    stmt.executeUpdate();
                 }
                 seq++;
-                stmt.executeUpdate();
             }
         } catch (SQLException e) {
             log.error("{} SQL insert error", member.sqlName(), e);
@@ -108,56 +114,47 @@ public class CollectionsTableModel {
         }
     }
 
-    /**
-     * Convert collection to its IDs
-     */
-    private static Map<Long, Object> convertICollectionValue(MemberOperationsMeta member, Collection<Object> dataSet) {
-        Map<Long, Object> idDataMap = new HashMap<Long, Object>();
-        for (Object value : dataSet) {
-            Map<String, Object> map = (Map<String, Object>) value;
-            if (map == null) {
-                throw new Error("Saving null reference " + member.getMemberMeta().getCaption());
-            }
-            Long childKey = (Long) map.get(IEntity.PRIMARY_KEY);
-            if (childKey == null) {
-                throw new Error("Saving non persisted reference " + member.getMemberMeta().getCaption());
-            }
-            idDataMap.put(childKey, value);
-        }
-        return idDataMap;
-    }
-
     public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
+        boolean isPrimitive = (type == ObjectClassType.PrimitiveSet);
 
         Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
 
-        Collection<Object> insertData = isList ? new Vector<Object>() : new HashSet<Object>();
-        Map<Long, Object> valueMap = null;
+        List<Object> insertData = new Vector<Object>();
+
+        List<Object> collectionValues = null;
         if (dataSet != null) {
-            if (type != ObjectClassType.PrimitiveSet) {
-                valueMap = convertICollectionValue(member, dataSet);
+            if (isPrimitive) {
+                insertData.addAll(dataSet);
+            } else {
+                insertData = convertICollectionKeys(member, dataSet, false);
+                collectionValues = new Vector<Object>();
+                collectionValues.addAll(dataSet);
             }
-            insertData.addAll(dataSet);
         }
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT id, value FROM " + member.sqlName() + " WHERE owner = ?" + (isList ? " ORDER BY seq" : ""),
-                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            String sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?" + (isList ? " ORDER BY seq" : "");
+            stmt = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.setLong(1, entity.getPrimaryKey());
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Object value = TableModel.decodeValue(rs.getObject("value"), member.getMemberMeta());
-                boolean hasValue = (valueMap == null) ? insertData.contains(value) : valueMap.containsKey(value);
-                if (hasValue) {
-                    if (valueMap == null) {
+                int valueIdx = insertData.indexOf(value);
+                if (valueIdx != -1) {
+                    if (isPrimitive) {
                         insertData.remove(value);
                     } else {
-                        Object data = valueMap.remove(value);
-                        insertData.remove(data);
+                        if (isList) {
+                            if (valueIdx != rs.getInt("seq")) {
+                                rs.updateInt("seq", valueIdx);
+                                rs.updateRow();
+                            }
+                        }
+                        collectionValues.set(valueIdx, null);
                     }
                 } else {
                     rs.deleteRow();
@@ -172,7 +169,11 @@ public class CollectionsTableModel {
         }
 
         if (!insertData.isEmpty()) {
-            insert(connection, dialect, entity.getPrimaryKey(), member, insertData);
+            if (isPrimitive) {
+                insert(connection, dialect, entity.getPrimaryKey(), member, insertData, true);
+            } else {
+                insert(connection, dialect, entity.getPrimaryKey(), member, collectionValues, false);
+            }
         }
     }
 
