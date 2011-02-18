@@ -13,6 +13,12 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.shared.IPrimitive;
+
 public interface Picture extends File {
+
+    @RpcTransient
+    IPrimitive<byte[]> content();
 
 }

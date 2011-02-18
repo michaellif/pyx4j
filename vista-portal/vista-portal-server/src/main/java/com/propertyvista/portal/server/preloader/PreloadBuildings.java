@@ -28,6 +28,7 @@ import com.propertyvista.portal.domain.Email.EmailType;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
+import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -95,7 +96,9 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 log.info("Could not find picture [" + filename + "] in classpath");
             } else {
                 //            log.info("Picture size is: " + picture.length);
-                floorplan.picture().setValue(picture);
+                Picture blob = EntityFactory.create(Picture.class);
+                blob.content().setValue(picture);
+                floorplan.pictures().add(blob);
             }
         } catch (Exception e) {
             log.error("Failed to read the file [" + filename + "]", e);
@@ -267,7 +270,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 b.append(" ");
                 b.append(unit.area().getStringView()).append(" sq. ft.");
                 b.append(" ");
-                b.append(unit.floorplan().name()).append(" ").append(unit.floorplan().picture());
+                b.append(unit.floorplan().name()).append(" ").append(unit.floorplan().pictures());
                 b.append("\n");
             }
         }

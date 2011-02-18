@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Floorplan extends IEntity {
@@ -22,10 +24,11 @@ public interface Floorplan extends IEntity {
     IPrimitive<String> name();
 
     /**
-     * Contains the picture of the floorplan / model unit
+     * Contains the pictures of the floorplan / model unit
      */
-    @RpcTransient
-    IPrimitive<byte[]> picture();
+    @Detached
+    @Owned
+    IList<Picture> pictures();
 
     /**
      * Approximate value of square ft. size of unit
