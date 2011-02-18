@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -26,7 +25,6 @@ public interface Floorplan extends IEntity {
     /**
      * Contains the pictures of the floorplan / model unit
      */
-    @Detached
     @Owned
     IList<Picture> pictures();
 

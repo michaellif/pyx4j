@@ -21,4 +21,6 @@ public interface Picture extends File {
     @RpcTransient
     IPrimitive<byte[]> content();
 
+    IPrimitive<String> contentBase64();
+
 }

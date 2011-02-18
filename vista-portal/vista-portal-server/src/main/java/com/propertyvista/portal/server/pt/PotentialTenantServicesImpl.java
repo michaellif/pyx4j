@@ -15,12 +15,14 @@ package com.propertyvista.portal.server.pt;
 
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.IUserEntity;
+import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
@@ -206,6 +208,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             return;
         }
         availableUnits.floorplan().set(floorplan);
+        for (Picture picture : floorplan.pictures()) {
+            prepareImage(picture);
+        }
 
         // find units
         EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
@@ -214,5 +219,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found " + units.size() + " units");
         availableUnits.units().addAll(units);
+    }
+
+    //TODO If IE6 ?
+    private static void prepareImage(Picture picture) {
+        if (!picture.content().isNull()) {
+            picture.contentBase64().setValue(new Base64().encodeToString(picture.content().getValue()));
+        }
     }
 }

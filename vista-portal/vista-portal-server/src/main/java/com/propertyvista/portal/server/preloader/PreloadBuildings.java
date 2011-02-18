@@ -133,7 +133,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return building;
     }
 
-    private Unit createUnit(Building building, int floor, int area, float bedrooms, float bathrooms, Floorplan floorplan) {
+    private Unit createUnit(Building building, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan) {
         Unit unit = EntityFactory.create(Unit.class);
 
         unit.building().set(building);

@@ -19,6 +19,12 @@
 
     <dependencies>
 
+		<!-- ensure proper version, NOT from gwt-dev.jar -->
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		</dependency>
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-rpc</artifactId>

@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Money extends IEntity {
 
-    IPrimitive<Float> amount();
+    IPrimitive<Double> amount();
 
     Currency currency();
 }
