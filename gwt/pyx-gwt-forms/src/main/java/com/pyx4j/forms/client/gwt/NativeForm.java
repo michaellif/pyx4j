@@ -410,12 +410,22 @@ public class NativeForm extends FlowPanel implements INativeComponent {
             collapseImageHolder.getElement().getStyle().setPadding(2, Unit.PX);
 
             collapseImage = new Image();
+            //Fix the ensureDebugId initialisation
+            collapseImage.setResource(ImageFactory.getImages().groupBoxClose());
             collapseImage.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     form.setExpended(!form.isExpended());
                 }
             });
+
+            IDebugId parentDebugId;
+            if (getCComponent().getParentContainer() instanceof CFormFolder<?>) {
+                parentDebugId = ((CFormFolder<?>) getCComponent().getParentContainer()).getCurrentRowDebugId();
+            } else {
+                parentDebugId = getCComponent().getParentContainer().getDebugId();
+            }
+            collapseImage.ensureDebugId(new CompositeDebugId(parentDebugId, FormNavigationDebugId.Form_Collapse).getDebugIdString());
             collapseImageHolder.setWidget(collapseImage);
 
             add(collapseImageHolder);

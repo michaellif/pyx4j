@@ -30,7 +30,9 @@ public enum FormNavigationDebugId implements IDebugId {
 
     Form_MoveUp,
 
-    Form_MoveDown;
+    Form_MoveDown,
+
+    Form_Collapse;
 
     @Override
     public String getDebugIdString() {
