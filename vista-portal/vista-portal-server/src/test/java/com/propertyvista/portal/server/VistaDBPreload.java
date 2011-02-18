@@ -13,14 +13,17 @@
  */
 package com.propertyvista.portal.server;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 public class VistaDBPreload {
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
         System.out.println(conf.getDataPreloaders().preloadAll());
+        System.out.println("Total time: " + TimeUtils.secSince(start));
     }
 
 }
