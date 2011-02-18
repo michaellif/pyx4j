@@ -14,7 +14,8 @@
 package com.propertyvista.portal.client.ptapp.themes;
 
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
-import com.propertyvista.portal.client.ptapp.ui.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -806,8 +807,18 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("padding", "0.2em 0 0.3em 1em");
+        style.addProperty("padding", "0.3em 0 0.4em 1em");
         style.addProperty("margin", "0.2em 0 0.5em 0");
+        style.addProperty("width", "70%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "dotted");
+        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("padding-left", "1em");
+        style.addProperty("margin-bottom", "0.3em");
+        style.addProperty("width", "70%");
         addStyle(style);
     }
 

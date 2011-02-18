@@ -7,21 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-17
+ * Created on 2011-02-18
  * @author VladLL
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.client.ptapp.ui.decorations;
 
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.HTML;
 
-public class ViewHeaderDecorator extends SimplePanel {
+public class ViewLineSeparator extends HTML {
 
-    public static String DEFAULT_STYLE_PREFIX = "vista_ViewHeaderDecorator";
+    public static String DEFAULT_STYLE_PREFIX = "vista_ViewLineSeparator";
 
-    public ViewHeaderDecorator(Widget header) {
+    public ViewLineSeparator() {
         setStyleName(DEFAULT_STYLE_PREFIX);
-        setWidget(header);
+    }
+
+    public ViewLineSeparator(double width, Unit unit) {
+        setStyleName(DEFAULT_STYLE_PREFIX);
+        getElement().getStyle().setWidth(width, unit);
     }
 }
