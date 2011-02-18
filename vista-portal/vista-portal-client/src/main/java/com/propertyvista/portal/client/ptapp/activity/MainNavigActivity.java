@@ -66,6 +66,9 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public List<AppPlace> getTopLevelPlaces() {
         List<AppPlace> places = new ArrayList<AppPlace>();
+
+        // TODO call PtAppWizardManager
+
         places.add(new SiteMap.Apartment());
         places.add(new SiteMap.Tenants());
         places.add(new SiteMap.Info());

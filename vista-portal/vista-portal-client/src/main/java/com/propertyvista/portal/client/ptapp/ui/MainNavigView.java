@@ -29,6 +29,10 @@ public interface MainNavigView extends IsWidget {
 
         public String getNavigLabel(AppPlace place);
 
+        //TODO replace with below
         public List<AppPlace> getTopLevelPlaces();
+
+        //public List<WizardStep> getTopLevelPlaces();
+
     }
 }

@@ -32,6 +32,7 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.site.client.place.AppPlace;
 
 public class PtAppWizardManager implements SecurityControllerHandler {
 
@@ -42,6 +43,19 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     private final PlaceController placeController;
 
     private final UnitSelectionCriteria unitSelectionCriteria;
+
+    public static class WizardStep {
+
+        enum StepStatus {
+
+            Visited,
+
+            Incomleate
+        }
+
+        AppPlace place;
+
+    }
 
     @Inject
     public PtAppWizardManager(EventBus eventBus, PlaceController placeController) {
