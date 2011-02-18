@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.pt.UnitSelection;
-import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;

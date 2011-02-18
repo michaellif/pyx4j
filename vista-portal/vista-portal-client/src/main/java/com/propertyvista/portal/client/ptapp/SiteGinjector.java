@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 
 import com.pyx4j.site.client.AppSiteGinjector;

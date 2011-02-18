@@ -16,13 +16,10 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.Employer;
@@ -44,9 +41,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
-import com.pyx4j.widgets.client.style.StyleManger;
-import com.pyx4j.widgets.client.style.ThemeColor;
 
 @Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {

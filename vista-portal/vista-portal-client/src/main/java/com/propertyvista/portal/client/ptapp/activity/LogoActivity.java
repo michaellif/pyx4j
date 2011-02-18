@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.LogoView;
 
 public class LogoActivity extends AbstractActivity implements LogoView.Presenter {
