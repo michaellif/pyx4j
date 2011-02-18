@@ -28,6 +28,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.IncomeTypes;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
@@ -227,6 +228,7 @@ public class PreloadPT extends AbstractDataPreloader {
         pt.takeOwnership().setValue(RandomUtil.randomBoolean());
     }
 
+    @SuppressWarnings("unused")
     private PotentialTenant createPotentialTenant(int index) {
         numTenants++;
         PotentialTenant pt = EntityFactory.create(PotentialTenant.class);
@@ -238,10 +240,11 @@ public class PreloadPT extends AbstractDataPreloader {
         return pt;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class);
+            return deleteAll(PotentialTenantInfo.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class);
         } else {
             return "This is production";
         }
@@ -250,10 +253,14 @@ public class PreloadPT extends AbstractDataPreloader {
     @Override
     public String create() {
         numTenants = 0;
+        PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
+
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
-            createPotentialTenant(i);
-            createPotentialTenantInfo();
+            PotentialTenantInfo tenantInfo = createPotentialTenantInfo();
             createFinancial();
+            tenants.tenants().add(tenantInfo);
+
+            PersistenceServicesFactory.getPersistenceService().persist(tenantInfo);
         }
 
         load();
