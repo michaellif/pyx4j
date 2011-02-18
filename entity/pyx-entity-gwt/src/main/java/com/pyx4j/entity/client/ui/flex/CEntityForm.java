@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.BaseEditableComponentFactory;
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -41,28 +42,15 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
     private final EditableComponentFactory factory;
 
     public CEntityForm(Class<E> rootClass) {
-        this(rootClass, new BaseEditableComponentFactory());
-    }
-
-    public CEntityForm(Class<E> rootClass, EditableComponentFactory editableComponentFactory) {
         super(new EntityFormBinder<E>(rootClass));
-        factory = editableComponentFactory;
+        factory = new EntityFormComponentFactory();
         createContent();
     }
 
     public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
-        MemberMeta mm = member.getMeta();
         CComponent<?> comp = null;
-        if (mm.getObjectClassType() == ObjectClassType.EntityList) {
-            comp = createMemberFolderEditor(member);
-            ((CEntityFolder<?>) comp).createContent();
-            parent.bind((CEntityFolder<?>) comp, member);
-        } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
-            comp = createMemberEditor(member);
-            ((CEntityEditableComponent<?>) comp).createContent();
-            parent.bind((CEntityEditableComponent<?>) comp, member);
-        } else {
-            comp = factory.create(member);
+        comp = factory.create(member);
+        if (comp instanceof CEditableComponent) {
             parent.bind((CEditableComponent<?, ?>) comp, member);
         }
         return comp;
@@ -105,6 +93,29 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
      */
     protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
         callback.onSuccess(newEntity);
+    }
+
+    class EntityFormComponentFactory extends BaseEditableComponentFactory {
+
+        @Override
+        public CEditableComponent<?, ?> create(IObject<?> member) {
+            MemberMeta mm = member.getMeta();
+            CEditableComponent<?, ?> comp = null;
+            if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.EntityList) {
+                comp = createMemberFolderEditor(member);
+                ((CEntityFolder<?>) comp).createContent();
+            } else if (mm.isOwnedRelationships() && mm.isEntity()) {
+                comp = createMemberEditor(member);
+                ((CEntityEditableComponent<?>) comp).createContent();
+            } else if (mm.getObjectClassType() == ObjectClassType.EntityList && mm.getEditorType().equals(EditorType.entityselector)) {
+                comp = createMemberFolderEditor(member);
+                ((CEntityFolder<?>) comp).createContent();
+            } else {
+                comp = super.create(member);
+            }
+            return comp;
+        }
+
     }
 
 }

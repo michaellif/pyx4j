@@ -111,7 +111,7 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
             }
         } else if (mm.getObjectClassType() == ObjectClassType.EntityList) {
             return new CEntityFormFolder(mm.getValueClass(), createEntityFormFactory(member));
-        } else if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.Entity) {
+        } else if (mm.isOwnedRelationships() && mm.isEntity()) {
             return new CEntityFormGroup(mm.getValueClass(), createEntityFormFactory(member));
         } else if (mm.getValueClass().equals(String.class)) {
             return new CTextField();

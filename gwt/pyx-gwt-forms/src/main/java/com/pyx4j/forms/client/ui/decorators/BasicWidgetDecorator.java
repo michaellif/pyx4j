@@ -24,10 +24,13 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -40,8 +43,15 @@ import com.pyx4j.forms.client.gwt.NativeCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.widgets.client.Tooltip;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class BasicWidgetDecorator extends FlowPanel {
+
+    public static String DEFAULT_STYLE_PREFIX = "pyx4j_BasicWidgetDecorator";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Label, Component, Gap
+    }
 
     private final CComponent<?> component;
 
@@ -60,22 +70,85 @@ public class BasicWidgetDecorator extends FlowPanel {
     private Tooltip tooltip;
 
     public BasicWidgetDecorator(final CComponent<?> component) {
-        this(component, 140, 140);
+        this(component, new DecorationData());
     }
 
     public BasicWidgetDecorator(final CComponent<?> component, int labelWidth, int componentWidth) {
+        this(component, new DecorationData(labelWidth, componentWidth));
+    }
 
-        this.component = component;
-        nativeComponent = component.asWidget();
-        nativeComponent.getElement().getStyle().setWidth(componentWidth, Unit.PX);
-        nativeComponent.getElement().getStyle().setFloat(Float.LEFT);
+    static public class DecorationData {
+        public double labelWidth = 140;
+
+        public Unit labelUnit = Unit.PX;
+
+        public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
+
+        public double componentWidth = 140;
+
+        public Unit componentUnit = Unit.PX;
+
+        public double gapWidth = 8;
+
+        public Unit gapUnit = Unit.PX;
+
+        // various construction:
+        public DecorationData() {
+        }
+
+        public DecorationData(int labelWidth, int componentWidth) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = Unit.PX;
+            this.componentWidth = componentWidth;
+            this.componentUnit = Unit.PX;
+        }
+
+        public DecorationData(int labelWidth, int componentWidth, int gapWidth) {
+            this(labelWidth, componentWidth);
+            this.gapWidth = gapWidth;
+            this.gapUnit = Unit.PX;
+        }
+
+        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = labelUnit;
+            this.componentWidth = componentWidth;
+            this.componentUnit = componentUnit;
+        }
+
+        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, double gapWidth, Unit gapUnit) {
+            this(labelWidth, labelUnit, componentWidth, componentUnit);
+            this.gapWidth = gapWidth;
+            this.gapUnit = gapUnit;
+        }
+    }
+
+    public BasicWidgetDecorator(final CComponent<?> component, DecorationData decorData) {
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.getElement().getStyle().setFloat(Float.LEFT);
+        label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
 
-        label.getElement().getStyle().setProperty("textAlign", "right");
+        //        label.getElement().getStyle().setColor("#888888");
+        label.getElement().getStyle().setFontSize(0.8, Unit.EM);
+        label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        //        label.getElement().getStyle().setPaddingTop(0.1, Unit.EM);
+        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
+        label.setHorizontalAlignment(decorData.labelAlignment);
+        label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
 
         Cursor.setDefault(label.getElement());
+
+        this.component = component;
+        nativeComponent = component.asWidget();
+        nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
+        nativeComponent.getElement().getStyle().setFloat(Float.LEFT);
+        nativeComponent.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
+
+        nativeComponent.getElement().getStyle().setFontSize(0.9, Unit.EM);
+        //        nativeComponent.getElement().getStyle().setPaddingBottom(0.1, Unit.EM);
+        nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         if (nativeComponent == null) {
             throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
@@ -98,8 +171,9 @@ public class BasicWidgetDecorator extends FlowPanel {
         imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
-        imageMandatoryHolder = new ImageHolder("7px");
+        imageMandatoryHolder = new ImageHolder(decorData.gapWidth + decorData.gapUnit.getType());
         imageMandatoryHolder.getElement().getStyle().setFloat(Float.LEFT);
+        imageMandatoryHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Gap);
 
         renderToolTip();
         renderMandatoryStar();
@@ -123,18 +197,11 @@ public class BasicWidgetDecorator extends FlowPanel {
 
         add(label);
         add(imageMandatoryHolder);
-
         add(nativeComponent);
         add(imageInfoWarnHolder);
 
-        label.getElement().getStyle().setWidth(labelWidth, Unit.PX);
-        label.getElement().getStyle().setFontSize(0.8, Unit.EM);
-        label.getElement().getStyle().setColor("#888888");
-        label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
-
     }
 
     private void renderToolTip() {
