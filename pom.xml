@@ -97,6 +97,33 @@
             </roles>
             <timezone>-5</timezone>
         </developer>
+                <developer>
+            <name>Vlad Loukiantchenko</name>
+            <id>vladlouk</id>
+            <email>vladlouk@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Dmitry Tumanov</name>
+            <id>dmitryt</id>
+            <email>tumanov@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <name>Anton Kraev</name>
+            <id>antonk</id>
+            <email>amkraev@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
     </developers>
 
 
