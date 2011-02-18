@@ -46,6 +46,7 @@ public class CollectionsTableModel {
     private static final Logger log = LoggerFactory.getLogger(CollectionsTableModel.class);
 
     public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
+        @SuppressWarnings("unchecked")
         Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);
         if ((dataSet == null) || dataSet.isEmpty()) {
             return;
@@ -57,9 +58,11 @@ public class CollectionsTableModel {
     /**
      * Convert collection to its IDs
      */
+    @SuppressWarnings("rawtypes")
     private static List convertICollectionKeys(MemberOperationsMeta member, Collection<Object> dataSet, boolean insertNull) {
         List<Long> idDataSet = new Vector<Long>();
         for (Object value : dataSet) {
+            @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) value;
             if (map == null) {
                 if (!insertNull) {
@@ -76,6 +79,7 @@ public class CollectionsTableModel {
         return idDataSet;
     }
 
+    @SuppressWarnings("unchecked")
     private static void insert(Connection connection, Dialect dialect, long primaryKey, MemberOperationsMeta member, Collection<Object> dataSet,
             boolean insertNull) {
         PreparedStatement stmt = null;
@@ -114,6 +118,7 @@ public class CollectionsTableModel {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void update(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
         ObjectClassType type = member.getMemberMeta().getObjectClassType();
         boolean isList = (type == ObjectClassType.EntityList);
@@ -137,7 +142,7 @@ public class CollectionsTableModel {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?" + (isList ? " ORDER BY seq" : "");
+            String sql = "SELECT id, value " + (isList ? ", seq" : "") + " FROM " + member.sqlName() + " WHERE owner = ?";
             stmt = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             stmt.setLong(1, entity.getPrimaryKey());
             rs = stmt.executeQuery();
@@ -183,6 +188,7 @@ public class CollectionsTableModel {
         if (type == ObjectClassType.PrimitiveSet) {
             member.setMemberValue(entity, dataSet);
         } else {
+            @SuppressWarnings("unchecked")
             ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
             for (Object value : dataSet) {
                 iCollectionMember.add((IEntity) value);
@@ -206,6 +212,7 @@ public class CollectionsTableModel {
                     dataSet.add(value);
                 } else {
                     // TODO get type
+                    @SuppressWarnings("unchecked")
                     IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
                     childIEntity.setPrimaryKey((Long) value);
                     dataSet.add(childIEntity);
@@ -272,6 +279,7 @@ public class CollectionsTableModel {
             if (type == ObjectClassType.PrimitiveSet) {
                 member.setMemberValue(entity, entSet);
             } else {
+                @SuppressWarnings("unchecked")
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (Object value : entSet) {
                     iCollectionMember.add((IEntity) value);
@@ -316,6 +324,7 @@ public class CollectionsTableModel {
                     dataSet.add(value);
                 } else {
                     // TODO get type
+                    @SuppressWarnings("unchecked")
                     IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMemberMeta().getValueClass());
                     childIEntity.setPrimaryKey((Long) value);
                     dataSet.add(childIEntity);
