@@ -61,6 +61,8 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
         getElement().getStyle().setMarginLeft(5, Unit.PCT);
         getElement().getStyle().setMarginRight(5, Unit.PCT);
+        getElement().getStyle().setMarginTop(15, Unit.PX);
+        getElement().getStyle().setMarginBottom(15, Unit.PX);
     }
 
     @Override

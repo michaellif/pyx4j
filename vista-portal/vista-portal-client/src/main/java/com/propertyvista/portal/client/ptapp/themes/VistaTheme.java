@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
+import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
@@ -64,6 +65,7 @@ public abstract class VistaTheme extends Theme {
         initSuggestBoxStyle();
         initBannerStyle();
         initSiteViewStyles();
+        initVistaCaptionViewStyles();
     }
 
     protected void initThemeColors() {
@@ -836,6 +838,15 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("display", "block");
         style.addProperty("color", ThemeColor.OBJECT_TONE5);
         addStyle(style);
+    }
+
+    private void initVistaCaptionViewStyles() {
+        String prefix = CaptionViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        addStyle(style);
+
     }
 
 }

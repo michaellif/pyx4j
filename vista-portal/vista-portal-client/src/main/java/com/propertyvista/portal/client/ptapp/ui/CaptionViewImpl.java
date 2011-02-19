@@ -19,21 +19,29 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
 
+import com.pyx4j.widgets.client.style.IStyleSuffix;
+
 @Singleton
 public class CaptionViewImpl extends SimplePanel implements CaptionView {
+
+    public static String DEFAULT_STYLE_PREFIX = "vista_CaptionView";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        Label
+    }
 
     private final Label captionLabel;
 
     public CaptionViewImpl() {
+        setStyleName(DEFAULT_STYLE_PREFIX);
         captionLabel = new Label();
-        captionLabel.setSize("300px", "40px");
-        captionLabel.getElement().getStyle().setFontSize(1.4, Unit.EM);
+        captionLabel.setSize("300px", "63px");
+        captionLabel.getElement().getStyle().setFontSize(26, Unit.PX);
         captionLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        captionLabel.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        captionLabel.getElement().getStyle().setProperty("lineHeight", "63px");
+        captionLabel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
         setWidget(captionLabel);
-
-        getElement().getStyle().setProperty("borderBottom", "solid 1px #ccc");
-        getElement().getStyle().setMargin(10, Unit.PX);
-
     }
 
     @Override

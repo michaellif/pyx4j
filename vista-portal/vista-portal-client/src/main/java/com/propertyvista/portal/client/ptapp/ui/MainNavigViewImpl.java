@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
