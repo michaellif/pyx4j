@@ -117,7 +117,7 @@ public class Lifecycle {
     @SuppressWarnings("unchecked")
     public static void beginSession(UserVisit userVisit, Set<Behavior> behaviours) {
         Visit currentVisit = Context.getVisit();
-        if ((currentVisit != null) && (currentVisit.isUserLoggedIn())
+        if ((currentVisit != null) && (userVisit != null) && (currentVisit.isUserLoggedIn())
                 && EqualsHelper.equals(userVisit.getPrincipalPrimaryKey(), currentVisit.getUserVisit().getPrincipalPrimaryKey())) {
             // The same user. No need to create new session, consider that behaviours are updated
         } else {
