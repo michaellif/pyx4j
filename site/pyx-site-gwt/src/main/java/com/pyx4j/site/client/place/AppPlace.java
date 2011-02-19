@@ -39,4 +39,12 @@ public class AppPlace extends Place {
         return args;
     }
 
+    //TODO should different args change that equals impl?
+    @Override
+    public boolean equals(Object other) {
+        if (getClass() == other.getClass()) {
+            return true;
+        }
+        return false;
+    }
 }
