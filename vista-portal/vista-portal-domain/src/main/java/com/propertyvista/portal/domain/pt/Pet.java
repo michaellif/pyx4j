@@ -15,8 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
-import com.propertyvista.portal.domain.Money;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -43,5 +41,5 @@ public interface Pet extends IEntity {
 
     public IPrimitive<Date> birthDate();
 
-    public IPrimitive<Money> charge();
+    public IPrimitive<Double> charge();
 }

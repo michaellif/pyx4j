@@ -66,18 +66,18 @@ public class PetsViewForm extends CEntityForm<Pets> {
                 Pet proto = EntityFactory.getEntityPrototype(Pet.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto.type(), "60px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.name(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.color(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "80px"));
             }
 
             @Override
-            protected FolderDecorator createFolderDecorator() {
-                return new TableFolderDecorator(columns, SiteImages.INSTANCE.addRow(), "Add a pet");
+            protected FolderDecorator<Pet> createFolderDecorator() {
+                return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), "Add a pet");
             }
 
             @Override

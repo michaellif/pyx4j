@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
 public interface Charges extends IApplicationEntity {
+
+    @Owned
     IList<ChargeLine> applicationCharges();
 
+    @Owned
     IList<ChargeLine> rentCharges();
 
+    @Owned
     IList<ChargeLine> upgradeCharges();
 }
