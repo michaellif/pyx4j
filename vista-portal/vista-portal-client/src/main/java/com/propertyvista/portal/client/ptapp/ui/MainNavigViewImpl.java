@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,7 +28,7 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
     private Presenter presenter;
 
     public MainNavigViewImpl() {
-        setHeight("40px");
+        setHeight("43px");
     }
 
     class NavigTab extends Anchor {
@@ -40,10 +42,14 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
         NavigTab(final AppPlace place, MainNavigViewImpl parent) {
             super(presenter.getNavigLabel(place));
             this.place = place;
+            setWidth("115px");
             getElement().getStyle().setMargin(30, Unit.PX);
             getElement().getStyle().setProperty("textDecoration", "none");
             getElement().getStyle().setProperty("color", "#333");
-            getElement().getStyle().setFontSize(1.1, Unit.EM);
+            getElement().getStyle().setFontSize(15, Unit.PX);
+            getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            getElement().getStyle().setProperty("lineHeight", "43px");
+            getElement().getStyle().setProperty("textAlign", "center");
 
             addClickHandler(new ClickHandler() {
                 @Override

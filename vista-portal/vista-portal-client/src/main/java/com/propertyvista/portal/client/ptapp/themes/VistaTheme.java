@@ -766,7 +766,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("height", "100px");
+        style.addProperty("height", "125px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
@@ -821,7 +821,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "70%");
         addStyle(style);
-        
+
         style = new Style(Selector.valueOf(BasicWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
         style.addProperty("padding-top", "2px");
         addStyle(style);
@@ -834,7 +834,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
-        
+
         style = new Style(Selector.valueOf("logo"));
         style.addProperty("font-size", "30px");
         style.addProperty("line-heigh", "1.2em");
@@ -843,6 +843,6 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("display", "block");
         style.addProperty("color", ThemeColor.OBJECT_TONE5);
         addStyle(style);
-   }
+    }
 
 }
