@@ -244,7 +244,7 @@ public class PreloadPT extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PotentialTenantInfo.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class);
+            return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class);
         } else {
             return "This is production";
         }
@@ -259,9 +259,8 @@ public class PreloadPT extends AbstractDataPreloader {
             PotentialTenantInfo tenantInfo = createPotentialTenantInfo();
             createFinancial();
             tenants.tenants().add(tenantInfo);
-
-            PersistenceServicesFactory.getPersistenceService().persist(tenantInfo);
         }
+        PersistenceServicesFactory.getPersistenceService().persist(tenants);
 
         load();
 
@@ -271,90 +270,101 @@ public class PreloadPT extends AbstractDataPreloader {
     }
 
     public void load() {
-        List<PotentialTenant> pts = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<PotentialTenant>(PotentialTenant.class));
+        List<PotentialTenantList> tenantLists = PersistenceServicesFactory.getPersistenceService().query(
+                new EntityQueryCriteria<PotentialTenantList>(PotentialTenantList.class));
         StringBuilder sb = new StringBuilder();
-        sb.append("\n\nLoaded " + pts.size() + " potential tenants\n\n");
-        for (PotentialTenant pt : pts) {
-            sb.append(pt.firstName().getStringView());
-            sb.append(" ");
-            if (pt.middleName().getStringView().length() > 0) {
-                sb.append(pt.middleName().getStringView());
-                sb.append(" ");
-            }
-            sb.append(pt.lastName().getStringView());
+        sb.append("\n\nLoaded " + tenantLists.size() + " potential tenant lists\n\n");
 
-            sb.append("\t\t");
-            sb.append(pt.birthDate().getStringView());
+        for (PotentialTenantList tenants : tenantLists) {
 
-            sb.append("\t");
-            sb.append(pt.homePhone().getStringView()).append(" | ").append(pt.mobilePhone().getStringView());
-
-            sb.append("\t");
-            sb.append(pt.email().getStringView());
-
-            sb.append("\t");
-            sb.append(pt.relationship().getStringView());
-
-            sb.append("\t$").append(pt.payment().getStringView());
-
+            sb.append("Tenants ").append(tenants);
             sb.append("\n");
         }
-        sb.append("\n\n");
 
-        List<PotentialTenantInfo> ptis = PersistenceServicesFactory.getPersistenceService().query(
-                new EntityQueryCriteria<PotentialTenantInfo>(PotentialTenantInfo.class));
-        sb.append("Loaded " + ptis.size() + " potential tenant infos\n\n");
-        for (PotentialTenantInfo pti : ptis) {
-
-            sb.append(pti.firstName().getStringView());
-            sb.append(" ");
-            if (pti.middleName().getStringView().length() > 0) {
-                sb.append(pti.middleName().getStringView());
-                sb.append(" ");
-            }
-            sb.append(pti.lastName().getStringView());
-
-            sb.append("\t\t");
-            sb.append(pti.birthDate().getStringView());
-
-            sb.append("\t");
-            sb.append(pti.homePhone().getStringView()).append(" | ").append(pti.mobilePhone().getStringView());
-
-            sb.append("\t");
-            sb.append(pti.email().getStringView());
-
-            sb.append("\t");
-            sb.append(pti.relationship().getStringView());
-
-            sb.append("\t$").append(pti.payment().getStringView());
-
-            sb.append("\n");
-
-            sb.append(pti.driversLicense().getStringView()).append(" ").append(pti.driversLicenseState().getStringView());
-
-            sb.append("\t").append(pti.secureIdentifier().getStringView());
-
-            // vehicles
-            for (Vehicle vehicle : pti.vehicles()) {
-                sb.append("\n\t");
-                sb.append(vehicle.year().getStringView()).append(" ");
-                sb.append(vehicle.province().getStringView()).append(" ");
-                sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
-                sb.append(vehicle.plateNumber().getStringView()).append(" ");
-            }
-
-            sb.append("\n");
-        }
-        sb.append("\n\n");
-
-        List<PotentialTenantFinancial> ptfs = PersistenceServicesFactory.getPersistenceService().query(
-                new EntityQueryCriteria<PotentialTenantFinancial>(PotentialTenantFinancial.class));
-        sb.append("Loaded " + ptis.size() + " potential tenant financials\n\n");
-        for (PotentialTenantFinancial ptf : ptfs) {
-            sb.append(ptf);
-            sb.append("\n");
-        }
-        sb.append("\n\n");
+        //        List<PotentialTenant> pts = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<PotentialTenant>(PotentialTenant.class));
+        //        StringBuilder sb = new StringBuilder();
+        //        sb.append("\n\nLoaded " + pts.size() + " potential tenants\n\n");
+        //        for (PotentialTenant pt : pts) {
+        //            sb.append(pt.firstName().getStringView());
+        //            sb.append(" ");
+        //            if (pt.middleName().getStringView().length() > 0) {
+        //                sb.append(pt.middleName().getStringView());
+        //                sb.append(" ");
+        //            }
+        //            sb.append(pt.lastName().getStringView());
+        //
+        //            sb.append("\t\t");
+        //            sb.append(pt.birthDate().getStringView());
+        //
+        //            sb.append("\t");
+        //            sb.append(pt.homePhone().getStringView()).append(" | ").append(pt.mobilePhone().getStringView());
+        //
+        //            sb.append("\t");
+        //            sb.append(pt.email().getStringView());
+        //
+        //            sb.append("\t");
+        //            sb.append(pt.relationship().getStringView());
+        //
+        //            sb.append("\t$").append(pt.payment().getStringView());
+        //
+        //            sb.append("\n");
+        //        }
+        //        sb.append("\n\n");
+        //
+        //        List<PotentialTenantInfo> ptis = PersistenceServicesFactory.getPersistenceService().query(
+        //                new EntityQueryCriteria<PotentialTenantInfo>(PotentialTenantInfo.class));
+        //        sb.append("Loaded " + ptis.size() + " potential tenant infos\n\n");
+        //        for (PotentialTenantInfo pti : ptis) {
+        //
+        //            sb.append(pti.firstName().getStringView());
+        //            sb.append(" ");
+        //            if (pti.middleName().getStringView().length() > 0) {
+        //                sb.append(pti.middleName().getStringView());
+        //                sb.append(" ");
+        //            }
+        //            sb.append(pti.lastName().getStringView());
+        //
+        //            sb.append("\t\t");
+        //            sb.append(pti.birthDate().getStringView());
+        //
+        //            sb.append("\t");
+        //            sb.append(pti.homePhone().getStringView()).append(" | ").append(pti.mobilePhone().getStringView());
+        //
+        //            sb.append("\t");
+        //            sb.append(pti.email().getStringView());
+        //
+        //            sb.append("\t");
+        //            sb.append(pti.relationship().getStringView());
+        //
+        //            sb.append("\t$").append(pti.payment().getStringView());
+        //
+        //            sb.append("\n");
+        //
+        //            sb.append(pti.driversLicense().getStringView()).append(" ").append(pti.driversLicenseState().getStringView());
+        //
+        //            sb.append("\t").append(pti.secureIdentifier().getStringView());
+        //
+        //            // vehicles
+        //            for (Vehicle vehicle : pti.vehicles()) {
+        //                sb.append("\n\t");
+        //                sb.append(vehicle.year().getStringView()).append(" ");
+        //                sb.append(vehicle.province().getStringView()).append(" ");
+        //                sb.append(vehicle.make().getStringView()).append(" ").append(vehicle.model().getStringView()).append(" ");
+        //                sb.append(vehicle.plateNumber().getStringView()).append(" ");
+        //            }
+        //
+        //            sb.append("\n");
+        //        }
+        //        sb.append("\n\n");
+        //
+        //        List<PotentialTenantFinancial> ptfs = PersistenceServicesFactory.getPersistenceService().query(
+        //                new EntityQueryCriteria<PotentialTenantFinancial>(PotentialTenantFinancial.class));
+        //        sb.append("Loaded " + ptis.size() + " potential tenant financials\n\n");
+        //        for (PotentialTenantFinancial ptf : ptfs) {
+        //            sb.append(ptf);
+        //            sb.append("\n");
+        //        }
+        //        sb.append("\n\n");
 
         log.info(sb.toString());
     }

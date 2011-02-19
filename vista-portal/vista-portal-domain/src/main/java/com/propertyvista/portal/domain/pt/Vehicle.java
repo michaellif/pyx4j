@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(name = "pt_vehicle")
 public interface Vehicle extends IEntity {
 
     IPrimitive<String> plateNumber();
