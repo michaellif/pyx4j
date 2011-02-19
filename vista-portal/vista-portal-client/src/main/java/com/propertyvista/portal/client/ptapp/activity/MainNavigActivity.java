@@ -23,6 +23,8 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.SiteMap;
+import com.propertyvista.portal.client.ptapp.WizardStep;
+import com.propertyvista.portal.client.ptapp.WizardStep.Status;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 
 import com.pyx4j.site.client.place.AppPlace;
@@ -64,20 +66,33 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     }
 
     @Override
-    public List<AppPlace> getTopLevelPlaces() {
-        List<AppPlace> places = new ArrayList<AppPlace>();
+    public List<WizardStep> getWizardSteps() {
+        List<WizardStep> steps = new ArrayList<WizardStep>();
 
         // TODO call PtAppWizardManager
 
-        places.add(new SiteMap.Apartment());
-        places.add(new SiteMap.Tenants());
-        places.add(new SiteMap.Info());
-        places.add(new SiteMap.Financial());
-        places.add(new SiteMap.Pets());
-        places.add(new SiteMap.Charges());
-        places.add(new SiteMap.Summary());
-        places.add(new SiteMap.Payment());
-        return places;
-    }
+        steps.add(new WizardStep(new SiteMap.Apartment(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Tenants(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Info(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Financial(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Pets(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Charges(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Summary(), WizardStep.Status.notVisited));
+        steps.add(new WizardStep(new SiteMap.Payment(), WizardStep.Status.notVisited));
 
+        boolean visited = false;
+
+        for (int i = steps.size() - 1; i >= 0; i--) {
+            if (steps.get(i).getPlace().equals(placeController.getWhere())) {
+                steps.get(i).setStatus(Status.current);
+                visited = true;
+            } else if (i % 2 == 0) {
+                steps.get(i).setStatus(visited == true ? Status.complete : Status.notVisited);
+            } else {
+                steps.get(i).setStatus(visited == true ? Status.hasAlert : Status.notVisited);
+            }
+        }
+
+        return steps;
+    }
 }

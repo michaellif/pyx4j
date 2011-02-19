@@ -50,7 +50,14 @@ public interface SiteImages extends ClientBundle {
 
     @Source("requirements.png")
     ImageResource requirements();
-    
+
     @Source("time.png")
     ImageResource time();
+
+    @Source("exclamation.png")
+    ImageResource exclamation();
+
+    @Source("check.png")
+    ImageResource check();
+
 }

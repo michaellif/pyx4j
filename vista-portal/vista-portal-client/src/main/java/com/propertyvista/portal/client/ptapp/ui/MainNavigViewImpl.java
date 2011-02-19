@@ -13,24 +13,34 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.propertyvista.portal.client.ptapp.WizardStep;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 
 import com.pyx4j.site.client.place.AppPlace;
 
-public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView {
+public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
 
     private Presenter presenter;
 
     public MainNavigViewImpl() {
         setHeight("43px");
+        setWidth("100%");
     }
 
-    class NavigTab extends Anchor {
+    class NavigTab extends FlowPanel {
 
         private final AppPlace place;
 
@@ -38,28 +48,57 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
             return place;
         }
 
-        NavigTab(final AppPlace place, MainNavigViewImpl parent) {
-            super(presenter.getNavigLabel(place));
-            this.place = place;
+        NavigTab(final WizardStep step, boolean visited) {
+            super();
+            getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+
+            Anchor anchor = new Anchor(presenter.getNavigLabel(step.getPlace()));
+            anchor.getElement().getStyle().setProperty("textDecoration", "none");
+            anchor.getElement().getStyle().setPaddingLeft(7, Unit.PX);
+            anchor.getElement().getStyle().setFontSize(15, Unit.PX);
+            anchor.getElement().getStyle().setProperty("color", "#333");
+            anchor.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            add(anchor);
+
+            switch (step.getStatus()) {
+            case hasAlert:
+                Image image = new Image(SiteImages.INSTANCE.exclamation());
+                image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+                add(image);
+                break;
+            case complete:
+                image = new Image(SiteImages.INSTANCE.check());
+                image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+                add(image);
+                break;
+            case current:
+                image = new Image(SiteImages.INSTANCE.stepPointer());
+                image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+                add(image);
+                break;
+
+            default:
+                break;
+            }
+
+            this.place = step.getPlace();
             setWidth("115px");
-            getElement().getStyle().setMargin(30, Unit.PX);
-            getElement().getStyle().setProperty("textDecoration", "none");
-            getElement().getStyle().setProperty("color", "#333");
-            getElement().getStyle().setFontSize(15, Unit.PX);
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
             getElement().getStyle().setProperty("lineHeight", "43px");
             getElement().getStyle().setProperty("textAlign", "center");
 
-            addClickHandler(new ClickHandler() {
+            if (visited) {
+                getElement().getStyle().setBackgroundColor("#999999");
+            }
+
+            anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     presenter.navigTo(place);
                 }
             });
-            parent.add(this);
-            parent.setCellVerticalAlignment(this, HorizontalPanel.ALIGN_MIDDLE);
         }
-
     }
 
     @Override
@@ -68,8 +107,20 @@ public class MainNavigViewImpl extends HorizontalPanel implements MainNavigView 
 
         clear();
 
-        for (AppPlace place : presenter.getTopLevelPlaces()) {
-            new NavigTab(place, this);
+        List<NavigTab> tabs = new ArrayList<NavigTab>();
+
+        boolean visited = false;
+        for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
+            WizardStep step = presenter.getWizardSteps().get(i);
+            if (WizardStep.Status.current.equals(step.getStatus())) {
+                visited = true;
+            }
+            tabs.add(0, new NavigTab(step, visited));
         }
+
+        for (NavigTab navigTab : tabs) {
+            add(navigTab);
+        }
+
     }
 }
