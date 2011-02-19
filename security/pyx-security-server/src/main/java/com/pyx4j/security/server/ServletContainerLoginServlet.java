@@ -21,6 +21,8 @@
 package com.pyx4j.security.server;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +35,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
 
 @SuppressWarnings("serial")
 public class ServletContainerLoginServlet extends HttpServlet {
@@ -67,5 +71,14 @@ public class ServletContainerLoginServlet extends HttpServlet {
     private void createContainerSession(Behavior behavior) {
         HttpSession newSession = Context.getRequest().getSession(true);
         newSession.setAttribute(ROLE_SESSION_ATTRIBUTE, behavior);
+        if (SecurityController.checkBehavior(behavior)) {
+            return;
+        }
+        if (Context.getVisit() != null) {
+            Set<Behavior> behaviours = new HashSet<Behavior>();
+            behaviours.addAll(SecurityController.getBehaviors());
+            behaviours.add(behavior);
+            Lifecycle.beginSession(Context.getVisit().getUserVisit(), behaviours);
+        }
     }
 }
