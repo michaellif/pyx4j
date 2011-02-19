@@ -51,7 +51,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         });
 
         HTML separator = new HTML();
-        separator.getElement().getStyle().setProperty("border", "1px dotted black");
+        separator.getElement().getStyle().setProperty("borderTop", "1px dotted black");
         separator.getElement().getStyle().setProperty("margin", "1em 0em 0em 0em");
         add(separator);
 

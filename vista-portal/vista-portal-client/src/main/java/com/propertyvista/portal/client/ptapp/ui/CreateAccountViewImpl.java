@@ -17,13 +17,11 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ResourcePrototype;
-import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
@@ -31,10 +29,10 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
@@ -61,7 +59,9 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
 
     public CreateAccountViewImpl() {
 
+        // left column setup:
         FlowPanel leftColumn = new FlowPanel();
+        leftColumn.getElement().getStyle().setFloat(Float.LEFT);
         add(leftColumn);
 
         HTML requirements = new HTML(SiteResources.INSTANCE.requirements().getText());
@@ -71,16 +71,35 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         requirements.getElement().getStyle().setProperty("background", "url(" + SiteImages.INSTANCE.requirements().getURL() + ") no-repeat");
         leftColumn.add(requirements);
 
+        HTML time = new HTML(SiteResources.INSTANCE.time().getText());
+        time.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+        time.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+
+        time.getElement().getStyle().setProperty("background", "url(" + SiteImages.INSTANCE.time().getURL() + ") no-repeat");
+        leftColumn.add(time);
+
+        HTML dontWorry = new HTML(SiteResources.INSTANCE.dontWorry().getText());
+        dontWorry.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+        dontWorry.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+
+        dontWorry.getElement().getStyle().setProperty("background", "url(" + SiteImages.INSTANCE.dontWorry().getURL() + ") no-repeat");
+        leftColumn.add(dontWorry);
+
+        leftColumn.setWidth("45%");
+
+        // right column setup:
         FlowPanel rightColumn = new FlowPanel();
+        rightColumn.getElement().getStyle().setFloat(Float.LEFT);
+        rightColumn.getElement().getStyle().setMarginLeft(5, Unit.PCT);
         add(rightColumn);
 
         form = new CreateAccountViewForm();
         form.populate(null);
         rightColumn.add(form);
 
-        Button viewButton = new Button(i18n.tr("Let's Start"));
-        viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        viewButton.addClickHandler(new ClickHandler() {
+        Button startButton = new Button(i18n.tr("Let's Start"));
+        startButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        startButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -97,15 +116,31 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
             }
 
         });
-        viewButton.getElement().getStyle().setProperty("margin", "0.5em 6em 1em 0");
-        rightColumn.add(viewButton);
+        startButton.getElement().getStyle().setProperty("margin", "0.5em 0 0.5em 0");
+
+        VerticalPanel startPanel = new VerticalPanel();
+        startPanel.add(startButton);
+        startPanel.setCellHorizontalAlignment(startButton, HasHorizontalAlignment.ALIGN_RIGHT);
 
         if (ApplicationMode.isDevelopment()) {
-            rightColumn.add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
-            rightColumn.add(new HTML("Press <i>Ctrl+Q</i> to create new user"));
+            startPanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
+            startPanel.add(new HTML("Press <i>Ctrl+Q</i> to create new user"));
         }
 
+        startPanel.setWidth("100%");
+        rightColumn.add(startPanel);
+
+        rightColumn.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM));
+
+        FlowPanel signinPanel = new FlowPanel();
+        signinPanel.getElement().getStyle().setProperty("padding", "0.7em 0 0");
+
+        HTML header = new HTML("<h2>Already Registered?</h2");
+        header.getElement().getStyle().setFloat(Float.LEFT);
+        signinPanel.add(header);
+
         Button signinButton = new Button(i18n.tr("Signin"));
+        signinButton.getElement().getStyle().setFloat(Float.RIGHT);
         signinButton.ensureDebugId("Signin");
         signinButton.addClickHandler(new ClickHandler() {
 
@@ -115,14 +150,15 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
             }
 
         });
-        signinButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
-        rightColumn.add(signinButton);
+        header.getElement().getStyle().setFloat(Float.LEFT);
+        signinButton.getElement().getStyle().setProperty("margin", "1px 0 0 1.25em");
+        signinPanel.add(signinButton);
+        rightColumn.add(signinPanel);
 
         getElement().getStyle().setMarginLeft(5, Unit.PCT);
         getElement().getStyle().setMarginRight(5, Unit.PCT);
         getElement().getStyle().setMarginTop(15, Unit.PX);
         getElement().getStyle().setMarginBottom(15, Unit.PX);
-
     }
 
     @Override
@@ -181,5 +217,4 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
             handlerRegistration.removeHandler();
         }
     }
-
 }

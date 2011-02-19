@@ -17,6 +17,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -35,9 +37,9 @@ import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
-public class LoginViewImpl extends VerticalPanel implements LoginView {
+public class LoginViewImpl extends FlowPanel implements LoginView {
 
-    private static I18n i18n = I18nFactory.getI18n(LoginViewImpl.class);
+    //    private static I18n i18n = I18nFactory.getI18n(LoginViewImpl.class);
 
     private Presenter presenter;
 
@@ -51,26 +53,22 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        if (ApplicationMode.isDevelopment()) {
-            add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
-            add(new HTML("Press <i>Ctrl+Q</i> to login"));
-        }
-
-        form = new LoginViewForm() {
-
-            @Override
-            public void forgotPassword() {
-                presenter.forgotPassword();
-            }
-        };
+        form = new LoginViewForm();
+        //        form = new LoginViewForm() {
+        //
+        //            @Override
+        //            public void forgotPassword() {
+        //                presenter.forgotPassword();
+        //            }
+        //        };
 
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
         add(form);
 
-        Button viewButton = new Button("Login");
-        viewButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        viewButton.addClickHandler(new ClickHandler() {
+        Button loginButton = new Button("Login");
+        loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        loginButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -78,12 +76,27 @@ public class LoginViewImpl extends VerticalPanel implements LoginView {
             }
 
         });
-        viewButton.getElement().getStyle().setProperty("margin", "0.5em 6em 1em 0");
-        add(viewButton);
+        loginButton.getElement().getStyle().setProperty("margin", "0.7em 3em 1em 0");
+        add(loginButton);
 
-        setCellHorizontalAlignment(form.asWidget(), HasHorizontalAlignment.ALIGN_RIGHT);
-        setCellHorizontalAlignment(viewButton, HasHorizontalAlignment.ALIGN_RIGHT);
-        setWidth("60%");
+        VerticalPanel startPanel = new VerticalPanel();
+        startPanel.add(loginButton);
+        startPanel.setCellHorizontalAlignment(loginButton, HasHorizontalAlignment.ALIGN_RIGHT);
+
+        if (ApplicationMode.isDevelopment()) {
+            startPanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
+            startPanel.add(new HTML("Press <i>Ctrl+Q</i> to login"));
+        }
+
+        startPanel.setWidth("100%");
+        add(startPanel);
+
+        setWidth("30%");
+
+        getElement().getStyle().setMarginLeft(5, Unit.PCT);
+        getElement().getStyle().setMarginRight(5, Unit.PCT);
+        getElement().getStyle().setMarginTop(15, Unit.PX);
+        getElement().getStyle().setMarginBottom(15, Unit.PX);
     }
 
     @Override

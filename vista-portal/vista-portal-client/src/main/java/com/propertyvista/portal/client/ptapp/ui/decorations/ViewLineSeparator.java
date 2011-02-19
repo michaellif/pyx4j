@@ -25,7 +25,20 @@ public class ViewLineSeparator extends HTML {
     }
 
     public ViewLineSeparator(double width, Unit unit) {
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        this();
         getElement().getStyle().setWidth(width, unit);
+    }
+
+    public ViewLineSeparator(double width, Unit widthUnit, double topMargin, Unit topMarginUnit) {
+        this();
+        getElement().getStyle().setWidth(width, widthUnit);
+        getElement().getStyle().setMarginTop(topMargin, topMarginUnit);
+    }
+
+    public ViewLineSeparator(double width, Unit widthUnit, double topMargin, Unit topMarginUnit, double bottomMargin, Unit bottomMarginUnit) {
+        this();
+        getElement().getStyle().setWidth(width, widthUnit);
+        getElement().getStyle().setMarginTop(topMargin, topMarginUnit);
+        getElement().getStyle().setMarginBottom(bottomMargin, bottomMarginUnit);
     }
 }

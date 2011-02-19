@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
@@ -30,18 +29,16 @@ public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
 
     @Override
     public void createContent() {
-        HTML header = new HTML("<h4>Create an Account</h4>");
-        header.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        header.getElement().getStyle().setMarginRight(2.5, Unit.EM);
+        HTML header = new HTML("<h2>Create an Account</h2>");
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new BasicWidgetDecorator(create(proto().email(), this)));
+        main.add(new BasicWidgetDecorator(create(proto().email(), this), 62, 152));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().password(), this)));
+        main.add(new BasicWidgetDecorator(create(proto().password(), this), 62, 152));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().captcha(), this)));
+        main.add(new BasicWidgetDecorator(create(proto().captcha(), this), 62, 152));
         setWidget(main);
     }
 

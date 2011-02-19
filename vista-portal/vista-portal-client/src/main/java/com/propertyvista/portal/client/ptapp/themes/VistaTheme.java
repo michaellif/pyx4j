@@ -103,6 +103,7 @@ public abstract class VistaTheme extends Theme {
         style = new Style("h2");
         style.addProperty("font-size", "1.5em");
         style.addProperty("margin", "0");
+        style.addProperty("padding-bottom", "0.25px");
         addStyle(style);
         style = new Style("h3");
         style.addProperty("font-size", "1.17em");
