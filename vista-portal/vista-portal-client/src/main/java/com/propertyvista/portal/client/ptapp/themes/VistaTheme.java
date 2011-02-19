@@ -89,7 +89,11 @@ public abstract class VistaTheme extends Theme {
     }
 
     protected void initGeneralStyles() {
-        Style style = new Style("td");
+        Style style = new Style("html");
+        style.addProperty("overflow-y", "scroll");
+        addStyle(style);
+
+        style = new Style("td");
         style.addProperty("padding", "0px");
         addStyle(style);
         style = new Style("h1");
