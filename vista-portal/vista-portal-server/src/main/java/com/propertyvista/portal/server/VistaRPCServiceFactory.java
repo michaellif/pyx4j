@@ -25,6 +25,8 @@ public class VistaRPCServiceFactory extends EssentialsRPCServiceFactory {
     public Class<? extends Service<?, ?>> getServiceClass(String serviceInterfaceClassName) throws ClassNotFoundException {
         if (AuthenticationServices.Authenticate.class.getName().equals(serviceInterfaceClassName)) {
             return VistaAuthenticationServicesImpl.AuthenticateImpl.class;
+        } else if (AuthenticationServices.Logout.class.getName().equals(serviceInterfaceClassName)) {
+            return VistaAuthenticationServicesImpl.LogoutImpl.class;
         }
 
         return super.getServiceClass(serviceInterfaceClassName);

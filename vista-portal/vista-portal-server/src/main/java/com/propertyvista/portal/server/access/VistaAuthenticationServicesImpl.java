@@ -45,6 +45,8 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.server.AppengineHelper;
 import com.pyx4j.security.server.AuthenticationServicesImpl;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -111,6 +113,12 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
         } else {
             visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         }
+
+        //OpenId
+        if (SecurityController.checkBehavior(CoreBehavior.USER)) {
+            behaviors.add(CoreBehavior.USER);
+        }
+
         visit.setEmail(user.email().getValue());
         Lifecycle.beginSession(visit, behaviors);
     }
@@ -123,5 +131,20 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
     public static boolean checkPassword(String inputPassword, String encryptedPassword) {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         return passwordEncryptor.checkPassword(inputPassword, encryptedPassword);
+    }
+
+    public static class LogoutImpl implements AuthenticationServices.Logout {
+
+        @Override
+        public AuthenticationResponse execute(String request) {
+            boolean hasOpenIdSession = SecurityController.checkBehavior(CoreBehavior.USER);
+            Lifecycle.endSession();
+            if (hasOpenIdSession) {
+                Set<Behavior> behaviours = new HashSet<Behavior>();
+                behaviours.add(CoreBehavior.USER);
+                Lifecycle.beginSession(null, behaviours);
+            }
+            return createAuthenticationResponse(request);
+        }
     }
 }

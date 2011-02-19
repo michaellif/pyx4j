@@ -81,6 +81,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openid4java</groupId>
+            <artifactId>openid4java-consumer</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4</version>
@@ -286,7 +291,7 @@
                                         <groupId>${project.groupId}</groupId>
                                         <artifactId>${project.artifactId}</artifactId>
                                         <type>war</type>
-                                        <pingURL>${vista-app-ping-url}/${deployableName}/status</pingURL>
+                                        <pingURL>${vista-app-ping-url}/${deployableName}/o/status</pingURL>
                                         <pingTimeout>180000</pingTimeout>
                                         <properties>
                                             <context>${deployableName}</context>

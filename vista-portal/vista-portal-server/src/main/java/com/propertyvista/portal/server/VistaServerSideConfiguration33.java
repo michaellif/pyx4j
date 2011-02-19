@@ -31,4 +31,9 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
             }
         };
     }
+
+    @Override
+    public String getMainApplicationURL() {
+        return "http://www33.birchwoodsoftwaregroup.com/vista";
+    }
 }

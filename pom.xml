@@ -244,6 +244,17 @@
 			    <version>3.1</version>
 		    </dependency>
 
+            <dependency>
+                <groupId>org.openid4java</groupId>
+                <artifactId>openid4java-consumer</artifactId>
+                <version>0.9.5</version>
+                <exclusions>
+                    <exclusion><groupId>xml-apis</groupId><artifactId>xml-apis</artifactId></exclusion>
+                    <exclusion><groupId>xerces</groupId><artifactId>xercesImpl</artifactId></exclusion>
+                </exclusions>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 

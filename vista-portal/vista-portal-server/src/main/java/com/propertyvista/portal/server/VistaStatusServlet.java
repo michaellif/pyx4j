@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class VistaStatusServlet extends HttpServlet {
 
+    public static String MAPPING = "/o/status";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Cache-Control", "no-store");

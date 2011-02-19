@@ -69,6 +69,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>OpenIdFilter</filter-name>
+        <filter-class>com.propertyvista.portal.server.access.openId.OpenIdFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>OpenIdFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
     <!-- Servlets -->
 <!--
     <servlet>
@@ -83,13 +93,23 @@
 -->
 
     <servlet>
+        <servlet-name>OpenIdServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.access.openId.OpenIdServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OpenIdServlet</servlet-name>
+        <url-pattern>/o/openid</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>StatusServlet</servlet-name>
         <servlet-class>com.propertyvista.portal.server.VistaStatusServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
-        <url-pattern>/status</url-pattern>
+        <url-pattern>/o/status</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -99,7 +119,7 @@
 
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
-        <url-pattern>/debug/*</url-pattern>
+        <url-pattern>/o/debug/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

@@ -44,6 +44,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     }
 
     @Override
+    public String getMainApplicationURL() {
+        return "http://www22.birchwoodsoftwaregroup.com/vista";
+    }
+
+    @Override
     public AclCreator getAclCreator() {
         return new VistaAccessControlList();
     }
@@ -80,6 +85,10 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
     @Override
     public boolean isDevelopmentBehavior() {
+        return true;
+    }
+
+    public boolean openIdrequired() {
         return true;
     }
 

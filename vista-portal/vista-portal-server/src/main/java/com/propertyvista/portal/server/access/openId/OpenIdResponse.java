@@ -7,27 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-01-25
+ * Created on Jun 18, 2010
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server;
+package com.propertyvista.portal.server.access.openId;
 
-public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
+public class OpenIdResponse {
 
-    @Override
-    public boolean isDevelopmentBehavior() {
-        return true;
-    }
+    String email;
 
-    @Override
-    public boolean openIdrequired() {
-        return false;
-    }
-
-    @Override
-    public String getMainApplicationURL() {
-        return "http://localhost:8888/vista";
-    }
+    String name;
 
 }
