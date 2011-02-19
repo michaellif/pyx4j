@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.themes;
 
 import com.pyx4j.widgets.client.style.ColorFactory;
+import com.pyx4j.widgets.client.style.Style;
 import com.pyx4j.widgets.client.style.ThemeColor;
 
 public class LightSkyBlueTheme extends VistaTheme {
@@ -37,6 +38,14 @@ public class LightSkyBlueTheme extends VistaTheme {
         putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
         putThemeColor(ThemeColor.SEPARATOR, 0xeeeeee);
+    }
+
+    @Override
+    protected void initBodyStyles() {
+        super.initBodyStyles();
+        Style style = new Style("body");
+        style.addProperty("font", "80%/180% Comic Sans");
+        addStyle(style);
     }
 
 }
