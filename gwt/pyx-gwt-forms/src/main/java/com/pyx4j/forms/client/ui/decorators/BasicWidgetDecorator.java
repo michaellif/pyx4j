@@ -22,9 +22,7 @@ package com.pyx4j.forms.client.ui.decorators;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -88,7 +86,7 @@ public class BasicWidgetDecorator extends FlowPanel {
 
         public Unit componentUnit = Unit.PX;
 
-        public double gapWidth = 8;
+        public double gapWidth = 20;
 
         public Unit gapUnit = Unit.PX;
 
@@ -128,15 +126,8 @@ public class BasicWidgetDecorator extends FlowPanel {
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.getElement().getStyle().setFloat(Float.LEFT);
         label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
-
-        //        label.getElement().getStyle().setColor("#888888");
-        label.getElement().getStyle().setFontSize(0.8, Unit.EM);
-        label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        //        label.getElement().getStyle().setPaddingTop(0.1, Unit.EM);
-        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
         label.setHorizontalAlignment(decorData.labelAlignment);
-        label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
+        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
 
         Cursor.setDefault(label.getElement());
 
@@ -144,11 +135,7 @@ public class BasicWidgetDecorator extends FlowPanel {
         nativeComponent = component.asWidget();
         nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
         nativeComponent.getElement().getStyle().setFloat(Float.LEFT);
-        nativeComponent.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
-
-        nativeComponent.getElement().getStyle().setFontSize(0.9, Unit.EM);
-        //        nativeComponent.getElement().getStyle().setPaddingBottom(0.1, Unit.EM);
-        nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        nativeComponent.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
 
         if (nativeComponent == null) {
             throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
