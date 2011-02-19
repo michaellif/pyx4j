@@ -18,9 +18,10 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 public class VistaDataPreloaders extends DataPreloaderCollection {
 
     public VistaDataPreloaders() {
-        //        add(new PreloadPT());
+        add(new PreloadPT());
         add(new PreloadBuildings());
-        add(new ClearPTDataPreloader());
+        // TODO clean up this ClearPTDataPreloader business
+        //        add(new ClearPTDataPreloader());
         add(new PreloadUsers());
     }
 }

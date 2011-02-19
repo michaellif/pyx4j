@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+
 public class DemoData {
 
     /*
@@ -43,6 +45,8 @@ public class DemoData {
     public static final String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";
 
     //    public static int NUM_UNITS = 10;
+
+    public final static Relationship[] RELATIONSHIPS = { Relationship.spouse, Relationship.daughter, Relationship.son, Relationship.other };
 
     public final static String[] FIRST_NAMES = { "John", "Jim", "Bob", "Alex", "Chris" };
 

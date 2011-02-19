@@ -25,6 +25,7 @@ import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.IncomeTypes;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -165,8 +166,15 @@ public class PreloadPT extends AbstractDataPreloader {
         return vehicle;
     }
 
-    private PotentialTenantInfo createPotentialTenantInfo() {
+    private PotentialTenantInfo createPotentialTenantInfo(int index) {
         PotentialTenantInfo pti = EntityFactory.create(PotentialTenantInfo.class);
+
+        // first tenant must always be an applicant
+        if (index == 0) {
+            pti.relationship().setValue(Relationship.applicant);
+        } else {
+            pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
+        }
 
         populatePotentialTenant(pti);
 
@@ -220,8 +228,6 @@ public class PreloadPT extends AbstractDataPreloader {
                 + RandomUtil.random(DemoData.EMAIL_DOMAINS);
         pt.email().setValue(email);
 
-        //TODO first tenant should be applicant
-        pt.relationship().setValue(RandomUtil.random(PotentialTenant.Relationship.values()));
         pt.payment().setValue(1.0d + RandomUtil.randomInt(3000));
 
         pt.dependant().setValue(RandomUtil.randomBoolean());
@@ -256,7 +262,7 @@ public class PreloadPT extends AbstractDataPreloader {
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
 
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
-            PotentialTenantInfo tenantInfo = createPotentialTenantInfo();
+            PotentialTenantInfo tenantInfo = createPotentialTenantInfo(i);
             createFinancial();
             tenants.tenants().add(tenantInfo);
         }
@@ -277,9 +283,15 @@ public class PreloadPT extends AbstractDataPreloader {
 
         for (PotentialTenantList tenants : tenantLists) {
 
-            sb.append("Tenants ").append(tenants);
+            sb.append(tenants.application().getStringView());
             sb.append("\n");
+
+            for (PotentialTenant tenant : tenants.tenants()) {
+                sb.append("\t").append(tenant.getStringView());
+                sb.append("\n");
+            }
         }
+        sb.append("\n\n");
 
         //        List<PotentialTenant> pts = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<PotentialTenant>(PotentialTenant.class));
         //        StringBuilder sb = new StringBuilder();

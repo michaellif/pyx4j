@@ -17,22 +17,27 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
+@ToStringFormat("{0} {1} {2}")
 public interface PotentialTenant extends IApplicationEntity {
 
     public enum Relationship {
-        applicant, spouse, sun, daughter, other
+        applicant, spouse, son, daughter, other
     }
 
     @Caption(name = "First")
+    @ToString(index = 1)
     IPrimitive<String> firstName();
 
     @Caption(name = "Middle")
     IPrimitive<String> middleName();
 
     @Caption(name = "Last")
+    @ToString(index = 2)
     IPrimitive<String> lastName();
 
     @Caption(name = "Birth Date")
@@ -47,6 +52,7 @@ public interface PotentialTenant extends IApplicationEntity {
     @Caption(name = "Email")
     IPrimitive<String> email();
 
+    @ToString(index = 0)
     IPrimitive<Relationship> relationship();
 
     IPrimitive<Double> payment();
