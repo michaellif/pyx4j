@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
@@ -72,6 +73,7 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         for (EntityFolderColumnDescriptor column : columns) {
             Label label = new Label(column.getObject().getMeta().getCaption());
             label.setWidth(column.getWidth());
+            label.getElement().getStyle().setMargin(1, Unit.PX);
             label.asWidget().getElement().getStyle().setFloat(Float.LEFT);
             header.add(label);
         }
