@@ -107,7 +107,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
             } else if (mm.isOwnedRelationships() && mm.isEntity()) {
                 comp = createMemberEditor(member);
                 ((CEntityEditableComponent<?>) comp).createContent();
-            } else if (mm.getObjectClassType() == ObjectClassType.EntityList && mm.getEditorType().equals(EditorType.entityselector)) {
+            } else if (mm.getObjectClassType() == ObjectClassType.EntityList && EditorType.entityselector.equals(mm.getEditorType())) {
                 comp = createMemberFolderEditor(member);
                 ((CEntityFolder<?>) comp).createContent();
             } else {
