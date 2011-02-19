@@ -47,4 +47,9 @@ public class AppPlace extends Place {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
