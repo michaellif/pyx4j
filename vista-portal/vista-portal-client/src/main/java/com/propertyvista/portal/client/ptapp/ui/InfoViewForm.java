@@ -87,21 +87,21 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>General Questions</h4>")));
 
-        BasicWidgetDecorator.DecorationData decor = new BasicWidgetDecorator.DecorationData(300, 100);
+        BasicWidgetDecorator.DecorationData decor = new BasicWidgetDecorator.DecorationData(450, 100);
         decor.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
 
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForRent(), this), decor));
-        main.add(new ViewLineSeparator(380, Unit.PX));
+        main.add(new ViewLineSeparator());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForDamages(), this), decor));
-        main.add(new ViewLineSeparator(380, Unit.PX));
+        main.add(new ViewLineSeparator());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().everEvicted(), this), decor));
-        main.add(new ViewLineSeparator(380, Unit.PX));
+        main.add(new ViewLineSeparator());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().defaultedOnLease(), this), decor));
-        main.add(new ViewLineSeparator(380, Unit.PX));
+        main.add(new ViewLineSeparator());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().convictedOfFelony(), this), decor));
-        main.add(new ViewLineSeparator(380, Unit.PX));
+        main.add(new ViewLineSeparator());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().legalTroubles(), this), decor));
-        main.add(new ViewLineSeparator(380, Unit.PX));
+        main.add(new ViewLineSeparator());
         main.add(new BasicWidgetDecorator(create(proto().legalQuestions().filedBankruptcy(), this), decor));
         main.add(new HTML());
 

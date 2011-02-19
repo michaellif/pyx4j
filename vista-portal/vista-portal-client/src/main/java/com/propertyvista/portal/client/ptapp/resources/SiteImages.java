@@ -30,4 +30,27 @@ public interface SiteImages extends ClientBundle {
     @Source("list_empty.png")
     ImageResource hideRemoveRow();
 
+    @Source("bg_body.gif")
+    ImageResource bodyBackground();
+
+    @Source("bg_step_block.gif")
+    ImageResource stepBlockBackgroun();
+
+    @Source("step_pointer.gif")
+    ImageResource stepPointer();
+
+    @Source("btn.gif")
+    ImageResource buttonBackground();
+
+    @Source("bulet.gif")
+    ImageResource bulet();
+
+    @Source("dont_worry.png")
+    ImageResource dontWorry();
+
+    @Source("requirements.png")
+    ImageResource requirements();
+    
+    @Source("time.png")
+    ImageResource time();
 }

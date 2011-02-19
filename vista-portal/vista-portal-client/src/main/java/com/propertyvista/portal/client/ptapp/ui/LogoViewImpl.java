@@ -26,10 +26,11 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
     private Presenter presenter;
 
     public LogoViewImpl() {
-        HTML labael = new HTML(
-                "<div style='text-align:center; vertical-align:middle; padding-top:30px; width:900px; color:#e8e8e8'><h1>PO Branded Header</h1><div>");
-        labael.getElement().getStyle().setCursor(Cursor.POINTER);
-        labael.addClickHandler(new ClickHandler() {
+        HTML logo = new HTML(
+                "<div style='font-size:32px; text-align:center; vertical-align:middle; padding-top:40px; width:900px; color:#E6E6E6'><h1>PO Branded Header</h1><div>");
+//        logo.setStyleName("logo");
+        logo.getElement().getStyle().setCursor(Cursor.POINTER);
+        logo.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
@@ -37,8 +38,8 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             }
         });
 
-        labael.setSize("300px", "100px");
-        setWidget(labael);
+        logo.setSize("300px", "100px");
+        setWidget(logo);
     }
 
     @Override

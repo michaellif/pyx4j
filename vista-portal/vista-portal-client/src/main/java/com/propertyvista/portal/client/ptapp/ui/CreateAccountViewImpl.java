@@ -66,11 +66,6 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         signinButton.getElement().getStyle().setProperty("margin", "3px 20px 3px 8px");
         add(signinButton);
 
-        if (ApplicationMode.isDevelopment()) {
-            add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
-            add(new HTML("Press <i>Ctrl+Q</i> to create new user"));
-        }
-
         form = new CreateAccountViewForm();
         form.populate(null);
         add(form);
@@ -96,6 +91,11 @@ public class CreateAccountViewImpl extends VerticalPanel implements CreateAccoun
         });
         viewButton.getElement().getStyle().setProperty("margin", "0.5em 6em 1em 0");
         add(viewButton);
+        
+        if (ApplicationMode.isDevelopment()) {
+            add(new HTML("<br/>This application is running in <B>DEVELOPMENT</B> mode.<br/>"));
+            add(new HTML("Press <i>Ctrl+Q</i> to create new user"));
+        }
 
         setCellHorizontalAlignment(form.asWidget(), HasHorizontalAlignment.ALIGN_RIGHT);
         setCellHorizontalAlignment(viewButton, HasHorizontalAlignment.ALIGN_RIGHT);

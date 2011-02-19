@@ -17,6 +17,8 @@ import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 
+import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator.StyleSuffix;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -122,12 +124,11 @@ public abstract class VistaTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("color", ThemeColor.TEXT);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
-        style.addProperty("font-family", "Arial,Helvetica,Tahoma,Verdana,sans-serif");
-        style.addProperty("font-size", "0.9em");
+        style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
         addStyle(style);
     }
 
@@ -813,13 +814,35 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "dotted");
-        style.addProperty("border-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("border-top-width", "1px");
+        style.addProperty("border-top-style", "dotted");
+        style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("padding-left", "1em");
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "70%");
         addStyle(style);
-    }
+        
+        style = new Style(Selector.valueOf(BasicWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
+        style.addProperty("padding-top", "2px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
+        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
+        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
+        addStyle(style);
+        
+        style = new Style(Selector.valueOf("logo"));
+        style.addProperty("font-size", "30px");
+        style.addProperty("line-heigh", "1.2em");
+        style.addProperty("text-align", "center");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("display", "block");
+        style.addProperty("color", ThemeColor.OBJECT_TONE5);
+        addStyle(style);
+   }
 
 }

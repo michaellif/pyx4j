@@ -14,7 +14,9 @@
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface SiteResources extends ClientBundleWithLookup {
 
@@ -25,5 +27,14 @@ public interface SiteResources extends ClientBundleWithLookup {
 
     @Source("termsAndConditions.html")
     TextResource termsAndConditions();
+
+    @Source("dont_worry.html")
+    TextResource dontWorry();
+
+    @Source("requirements.html")
+    TextResource requirements();
+    
+    @Source("time.html")
+    TextResource time();
 
 }
