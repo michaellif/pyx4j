@@ -513,11 +513,13 @@ public abstract class VistaTheme extends Theme {
     }
 
     protected void initTextBoxStyle() {
-        Style style = new Style(CSSClass.pyx4j_TextBox);
-        style.addProperty("border-color", ThemeColor.BORDER);
-        style.addProperty("border-style", "inset");
+        Style style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
+        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
+        style.addProperty("color", ThemeColor.TEXT);
+        style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
         style.addProperty("border-width", "1px");
-        style.addProperty("background-color", "#fff");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_TextBox, " td");
@@ -824,15 +826,6 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(BasicWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
         style.addProperty("padding-top", "2px");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
-        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
-        style.addProperty("color", ThemeColor.TEXT);
-        style.addProperty("background-color", ThemeColor.TEXT_BACKGROUND);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColor.BORDER);
         addStyle(style);
 
         style = new Style(Selector.valueOf("logo"));

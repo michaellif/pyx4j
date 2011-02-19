@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
@@ -25,6 +22,7 @@ import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
 import com.propertyvista.portal.client.ptapp.themes.LightSkyBlueTheme;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
+import com.propertyvista.portal.client.ptapp.ui.TopRightActionsViewImpl.Theme;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
@@ -35,24 +33,17 @@ import com.pyx4j.widgets.client.style.StyleManger;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
-    public enum Theme {
-        gainsboro, lightSkyBlue
-    }
-
     private final TopRightActionsView view;
 
     private final PlaceController placeController;
 
     private final AppPlaceListing appPlaceListing;
 
-    private Theme currentTheme;
-
     @Inject
     public TopRightActionsActivity(TopRightActionsView view, PlaceController placeController, AppPlaceListing appPlaceListing) {
         this.view = view;
         this.placeController = placeController;
         this.appPlaceListing = appPlaceListing;
-        this.currentTheme = Theme.gainsboro;
         view.setPresenter(this);
     }
 
@@ -91,23 +82,12 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     @Override
-    public Collection<Theme> getThemes() {
-        return Arrays.asList(Theme.values());
-    }
-
-    @Override
-    public Theme getCurrentTheme() {
-        return currentTheme;
-    }
-
-    @Override
     public void setTheme(Theme theme) {
-        currentTheme = theme;
         switch (theme) {
-        case gainsboro:
+        case Gainsboro:
             StyleManger.installTheme(new GainsboroTheme());
             break;
-        case lightSkyBlue:
+        case LightSkyBlue:
             StyleManger.installTheme(new LightSkyBlueTheme());
             break;
         }

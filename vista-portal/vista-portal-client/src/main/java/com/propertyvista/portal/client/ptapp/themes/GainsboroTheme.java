@@ -32,7 +32,7 @@ public class GainsboroTheme extends VistaTheme {
         putThemeColor(ThemeColor.SELECTION, ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.4));
         putThemeColor(ThemeColor.SELECTION_TEXT, 0xffffff);
         putThemeColor(ThemeColor.TEXT, 0x333333);
-        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xFFFBF0);
+        putThemeColor(ThemeColor.TEXT_BACKGROUND, 0xffffff);
         putThemeColor(ThemeColor.DISABLED_TEXT_BACKGROUND, 0xfafafa);
         putThemeColor(ThemeColor.MANDATORY_TEXT_BACKGROUND, 0xfcba84);
         putThemeColor(ThemeColor.READ_ONLY_TEXT_BACKGROUND, 0xeeeeee);
