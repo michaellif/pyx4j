@@ -125,7 +125,7 @@
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
 
-        <vista-app-ping-url>${vista-tomcat-url}</vista-app-ping-url>
+        <vista-app-ping-url>http://www22.birchwoodsoftwaregroup.com</vista-app-ping-url>
 
         <!--vista-tomcat-url>http://localhost:9000</vista-tomcat-url>
         <vista-tomcat-username>admin</vista-tomcat-username>

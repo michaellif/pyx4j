@@ -23,12 +23,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.server.contexts.Lifecycle;
 
 @SuppressWarnings("serial")
 public class OpenIdServlet extends HttpServlet {
+
+    private final static Logger log = LoggerFactory.getLogger(OpenIdServlet.class);
 
     public static String MAPPING = "/o/openid";
 
@@ -37,14 +43,14 @@ public class OpenIdServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         OpenIdResponse openIdResponse = OpenId.readResponse(request, DOMAIN);
-
         if (openIdResponse == null) {
+            log.debug("Can't find authentication information in OpenId URL");
             createResponsePage(response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
         } else {
             Set<Behavior> behaviours = new HashSet<Behavior>();
             behaviours.add(CoreBehavior.USER);
             Lifecycle.beginSession(null, behaviours);
-            createResponsePage(response, false, "Login successful Continue to application", "/");
+            createResponsePage(response, false, "Login successful Continue to application", ServerSideConfiguration.instance().getMainApplicationURL());
         }
     }
 
@@ -52,6 +58,10 @@ public class OpenIdServlet extends HttpServlet {
         if (signIn) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+        response.setHeader("Cache-Control", "no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0); //prevents caching at the proxy server
+        response.setDateHeader("X-StatusDate", System.currentTimeMillis());
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");

@@ -109,6 +109,11 @@
 
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
+        <url-pattern>/status</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/o/status</url-pattern>
     </servlet-mapping>
 
@@ -117,6 +122,11 @@
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
     </servlet>
 
+    <servlet-mapping>
+        <servlet-name>DebugServlet</servlet-name>
+        <url-pattern>/debug/*</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/o/debug/*</url-pattern>

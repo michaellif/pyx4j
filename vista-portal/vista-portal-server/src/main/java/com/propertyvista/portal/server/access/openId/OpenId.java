@@ -110,7 +110,7 @@ public class OpenId {
                 @Override
                 public ParameterList getParameters() {
                     ParameterList params = new ParameterList();
-                    params.set(new Parameter("mode", "popup"));
+                    //params.set(new Parameter("mode", "popup"));
                     params.set(new Parameter("icon", "true"));
                     return params;
                 }
@@ -153,6 +153,7 @@ public class OpenId {
     public static OpenIdResponse readResponse(HttpServletRequest request, String userDomain) {
         try {
             if (Context.getVisit() == null) {
+                log.debug("session is missing");
                 return null;
             }
             // extract the parameters from the authentication response
@@ -162,12 +163,19 @@ public class OpenId {
             // retrieve the previously stored discovery information
             DiscoveryInformation discovered = (DiscoveryInformation) Context.getVisit().getAttribute(DISCOVERED_ATTRIBUTE);
             if (discovered == null) {
-                throw new Error("Session terminated");
+                log.debug("Session terminated");
+                return null;
             }
             log.info("has discovered {}", discovered);
 
             // extract the receiving URL from the HTTP request
-            StringBuffer receivingURL = request.getRequestURL();
+            StringBuffer receivingURL;
+            if (request.getHeader("x-forwarded-host") != null) {
+                receivingURL = new StringBuffer();
+                receivingURL.append("http://").append(request.getHeader("x-forwarded-host")).append(request.getRequestURI());
+            } else {
+                receivingURL = request.getRequestURL();
+            }
             String queryString = request.getQueryString();
             if (queryString != null && queryString.length() > 0) {
                 receivingURL.append("?").append(request.getQueryString());
@@ -209,7 +217,7 @@ public class OpenId {
             }
         } catch (OpenIDException e) {
             log.error("Error", e);
-            throw new RuntimeException(e.getMessage());
+            return null;
         }
     }
 }

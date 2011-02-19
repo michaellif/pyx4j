@@ -24,14 +24,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.portal.server.VistaServerSideConfiguration;
-import com.propertyvista.portal.server.VistaStatusServlet;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
 
 public class OpenIdFilter implements Filter {
+
+    private final static Logger log = LoggerFactory.getLogger(OpenIdFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,10 +51,10 @@ public class OpenIdFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             HttpServletRequest httprequest = (HttpServletRequest) request;
-            if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired())
-                    || httprequest.getServletPath().startsWith(OpenIdServlet.MAPPING) || httprequest.getServletPath().startsWith(VistaStatusServlet.MAPPING)) {
+            if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired()) || httprequest.getServletPath().startsWith("/o/")) {
                 chain.doFilter(request, response);
             } else {
+                log.debug("authentication required for ServletPath [{}]", httprequest.getServletPath());
                 OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
             }
         }
