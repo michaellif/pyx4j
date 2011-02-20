@@ -13,16 +13,19 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.Money;
+
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface ChargeLine extends IEntity {
+
     public enum chargeType {
-        deposit, applicationFee, firstMonthRent, parking, locker, petDeposit, extraParking, extraLocker, cableTv
+        deposit, applicationFee, rent, firstMonthRent, parking, locker, petDeposit, extraParking, extraLocker, cableTv
     }
 
     IPrimitive<chargeType> type();
 
-    IList<TenantCharge> charges();
+    Money charge();
+
 }

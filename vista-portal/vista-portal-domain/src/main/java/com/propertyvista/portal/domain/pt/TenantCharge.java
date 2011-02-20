@@ -16,9 +16,14 @@ package com.propertyvista.portal.domain.pt;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantCharge extends IEntity {
+
     PotentialTenant tenant();
 
+    IPrimitive<Integer> percentage();
+
+    //Calculated base on percentage and total monthly payable
     Money charge();
 }
