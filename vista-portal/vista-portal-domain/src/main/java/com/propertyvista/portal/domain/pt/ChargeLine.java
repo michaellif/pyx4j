@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.Money;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -26,6 +27,7 @@ public interface ChargeLine extends IEntity {
 
     IPrimitive<chargeType> type();
 
+    @EmbeddedEntity
     Money charge();
 
 }

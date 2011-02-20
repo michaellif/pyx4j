@@ -15,15 +15,19 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.Money;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantCharge extends IEntity {
 
-    PotentialTenant tenant();
+    //TODO @Detached
+    // TODO Back-end to retrieve only values for ToString
+    PotentialTenantInfo tenant();
 
     IPrimitive<Integer> percentage();
 
     //Calculated base on percentage and total monthly payable
+    @EmbeddedEntity
     Money charge();
 }

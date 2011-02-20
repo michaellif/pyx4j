@@ -48,6 +48,7 @@ public interface Charges extends IApplicationEntity {
     IList<ChargeLine> applicationCharges();
 
     //Calculated base on percentage and total monthly payable. see SharedCalculation.calculateCharges
+    @Owned
     IList<TenantCharge> paymentSplitCharges();
 
 }
