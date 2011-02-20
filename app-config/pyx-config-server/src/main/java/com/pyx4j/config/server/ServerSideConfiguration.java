@@ -138,6 +138,13 @@ public class ServerSideConfiguration {
         return null;
     }
 
+    /**
+     * Null assumes GAE e-mail delivery
+     */
+    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
+        return null;
+    }
+
     public boolean datastoreReadOnly() {
         return false;
     }
