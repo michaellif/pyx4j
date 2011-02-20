@@ -28,8 +28,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.config.SystemConfig;
 import com.propertyvista.payment.PaymentProcessingException;
-import com.propertyvista.payment.SystemConfig;
 
 import com.pyx4j.commons.CommonsStringUtils;
 

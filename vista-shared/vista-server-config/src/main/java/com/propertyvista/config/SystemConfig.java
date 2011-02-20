@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment;
+package com.propertyvista.config;
 
 import java.util.Arrays;
 import java.util.List;
