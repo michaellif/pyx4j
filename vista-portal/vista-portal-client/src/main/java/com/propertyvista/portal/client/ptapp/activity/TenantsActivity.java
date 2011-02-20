@@ -35,7 +35,7 @@ public class TenantsActivity extends WizardStepActivity<PotentialTenantList, Ten
         newEntity.tenants().clear();
         PotentialTenantInfo first = newEntity.tenants().$();
         first.email().setValue(ClientContext.getUserVisit().getEmail());
-        first.relationship().setValue(Relationship.Applicant);
+        first.relationship().setValue(Relationship.applicant);
         newEntity.tenants().add(first);
         callback.onSuccess(newEntity);
     }
