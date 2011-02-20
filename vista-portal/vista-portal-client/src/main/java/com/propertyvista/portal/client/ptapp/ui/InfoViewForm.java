@@ -25,6 +25,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -42,7 +43,6 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 @Singleton
 public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
@@ -56,24 +56,24 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
-        main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().firstName(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().middleName(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().middleName(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().lastName(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().homePhone(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().homePhone(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().mobilePhone(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().email(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().email(), this)));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
-        main.add(new BasicWidgetDecorator(create(proto().driversLicense(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().driversLicenseState(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().driversLicenseState(), this)));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().secureIdentifier(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().secureIdentifier(), this)));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Current Address</h4>")));
@@ -87,22 +87,22 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>General Questions</h4>")));
 
-        BasicWidgetDecorator.DecorationData decor = new BasicWidgetDecorator.DecorationData(450, 100);
+        VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(450, 100);
         decor.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
 
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForRent(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().suedForRent(), this), decor));
         main.add(new ViewLineSeparator());
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().suedForDamages(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().suedForDamages(), this), decor));
         main.add(new ViewLineSeparator());
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().everEvicted(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().everEvicted(), this), decor));
         main.add(new ViewLineSeparator());
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().defaultedOnLease(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().defaultedOnLease(), this), decor));
         main.add(new ViewLineSeparator());
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().convictedOfFelony(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().convictedOfFelony(), this), decor));
         main.add(new ViewLineSeparator());
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().legalTroubles(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().legalTroubles(), this), decor));
         main.add(new ViewLineSeparator());
-        main.add(new BasicWidgetDecorator(create(proto().legalQuestions().filedBankruptcy(), this), decor));
+        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().filedBankruptcy(), this), decor));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Emergency Contacts</h4>")));
@@ -132,27 +132,27 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new BasicWidgetDecorator(create(proto().street1(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().street1(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().street2(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().street2(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().city(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().city(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().province(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().province(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().postalCode(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().postalCode(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().moveInDate(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().moveOutDate(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().moveOutDate(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().payment(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().payment(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().phone(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().rented(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().rented(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().managerName(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().managerName(), this)));
                 main.add(new HTML());
                 setWidget(main);
             }
@@ -164,25 +164,25 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new BasicWidgetDecorator(create(proto().firstName(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().firstName(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().middleName(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().middleName(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().lastName(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().lastName(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().homePhone(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().homePhone(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().mobilePhone(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().street1(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().street1(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().street2(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().street2(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().city(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().city(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().province(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().province(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().postalCode(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().postalCode(), this)));
                 main.add(new HTML());
                 setWidget(main);
             }

@@ -39,7 +39,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
 
-    //    private static I18n i18n = I18nFactory.getI18n(LoginViewImpl.class);
+    private static I18n i18n = I18nFactory.getI18n(LoginViewImpl.class);
 
     private Presenter presenter;
 
@@ -53,14 +53,13 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        form = new LoginViewForm();
-        //        form = new LoginViewForm() {
-        //
-        //            @Override
-        //            public void forgotPassword() {
-        //                presenter.forgotPassword();
-        //            }
-        //        };
+        form = new LoginViewForm() {
+
+            @Override
+            public void forgotPassword() {
+                presenter.forgotPassword();
+            }
+        };
 
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
@@ -76,7 +75,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             }
 
         });
-        loginButton.getElement().getStyle().setProperty("margin", "0.7em 3em 1em 0");
+        loginButton.getElement().getStyle().setProperty("margin", "0.7em 4em 1em 0");
         add(loginButton);
 
         VerticalPanel startPanel = new VerticalPanel();

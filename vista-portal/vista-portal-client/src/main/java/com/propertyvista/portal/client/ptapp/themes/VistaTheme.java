@@ -17,9 +17,9 @@ import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator.StyleSuffix;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
@@ -103,7 +103,7 @@ public abstract class VistaTheme extends Theme {
         style = new Style("h2");
         style.addProperty("font-size", "1.5em");
         style.addProperty("margin", "0");
-        style.addProperty("padding-bottom", "0.25px");
+        style.addProperty("padding-bottom", "0.3px");
         addStyle(style);
         style = new Style("h3");
         style.addProperty("font-size", "1.17em");
@@ -831,7 +831,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("width", "70%");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(BasicWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
+        style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
         style.addProperty("padding-top", "2px");
         addStyle(style);
 

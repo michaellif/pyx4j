@@ -16,10 +16,10 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
 
@@ -34,11 +34,11 @@ public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new BasicWidgetDecorator(create(proto().email(), this), 62, 152));
+        main.add(new VistaWidgetDecorator(create(proto().email(), this), 62, 152));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().password(), this), 62, 152));
+        main.add(new VistaWidgetDecorator(create(proto().password(), this), 62, 152));
         main.add(new HTML());
-        main.add(new BasicWidgetDecorator(create(proto().captcha(), this), 62, 152));
+        main.add(new VistaWidgetDecorator(create(proto().captcha(), this), 62, 152));
         setWidget(main);
     }
 

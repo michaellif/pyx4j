@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
@@ -41,7 +42,6 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 @Singleton
 public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
@@ -58,7 +58,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
     public void createContent() {
         FlowPanel main = new FlowPanel();
         main.add(new ViewHeaderDecorator(new HTML("<h4>Income Details</h4>")));
-        main.add(new BasicWidgetDecorator(create(proto().occupation(), this)));
+        main.add(new VistaWidgetDecorator(create(proto().occupation(), this)));
         main.add(new HTML());
 
         main.add(new HTML("<h6>Current Employer</h6>"));
@@ -108,7 +108,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new BasicWidgetDecorator(create(proto().name(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().name(), this)));
                 main.add(new HTML());
                 currentEmployedForYears = (CEditableComponent<?, ?>) create(proto().employedForYears(), this);
                 currentEmployedForYears.addValueChangeHandler(new ValueChangeHandler() {
@@ -117,23 +117,23 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                         previousPanel.setVisible(((Integer) event.getValue()) < 2);
                     }
                 });
-                main.add(new BasicWidgetDecorator(currentEmployedForYears));
+                main.add(new VistaWidgetDecorator(currentEmployedForYears));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().street1(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().street1(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().street2(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().street2(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().city(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().city(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().address().province(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().address().province(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().supervisorName(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().supervisorName(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().supervisorPhone(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().supervisorPhone(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().monthlySalary(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this)));
                 main.add(new HTML());
-                main.add(new BasicWidgetDecorator(create(proto().position(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().position(), this)));
                 main.add(new HTML());
                 setWidget(main);
             }

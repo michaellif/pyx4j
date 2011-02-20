@@ -18,12 +18,12 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 import com.pyx4j.widgets.client.Button;
 
 public class ApartmentViewForm extends CEntityForm<UnitSelection> {
@@ -41,8 +41,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         HTML caption = new HTML("<h4>Available Units</h4>");
         caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.add(caption);
-        main.add(new BasicWidgetDecorator(create(proto().availableFrom(), this), 40, 100));
-        main.add(new BasicWidgetDecorator(create(proto().availableTo(), this), 40, 100));
+        main.add(new VistaWidgetDecorator(create(proto().availableFrom(), this), 40, 100));
+        main.add(new VistaWidgetDecorator(create(proto().availableTo(), this), 40, 100));
         main.add(new Button("Change"));
         main.add(new HTML());
         availableUnitsTable = new AvailableUnitsTable();
@@ -52,7 +52,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption = new HTML("<h4>Desired Move In Date</h4>");
         caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.add(caption);
-        main.add(new BasicWidgetDecorator(create(proto().moveInDate(), this), 40, 100));
+        main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this), 40, 100));
 
         setWidget(main);
     }
