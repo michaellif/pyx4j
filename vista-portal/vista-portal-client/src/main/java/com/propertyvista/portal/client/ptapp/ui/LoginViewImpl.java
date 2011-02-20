@@ -21,20 +21,20 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.propertyvista.portal.domain.DemoData;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
@@ -53,14 +53,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     public LoginViewImpl() {
 
-        form = new LoginViewForm() {
-
-            @Override
-            public void forgotPassword() {
-                presenter.forgotPassword();
-            }
-        };
-
+        form = new LoginViewForm();
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
         add(form);
@@ -75,27 +68,35 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             }
 
         });
-        loginButton.getElement().getStyle().setProperty("margin", "0.7em 4em 1em 0");
+
+        //                loginButton.getElement().getStyle().setProperty("margin", "0.7em 1m 1em 3em");
+        loginButton.getElement().getStyle().setMarginLeft(6.4, Unit.EM);
+        loginButton.getElement().getStyle().setMarginRight(1, Unit.EM);
+        loginButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         add(loginButton);
 
-        VerticalPanel startPanel = new VerticalPanel();
-        startPanel.add(loginButton);
-        startPanel.setCellHorizontalAlignment(loginButton, HasHorizontalAlignment.ALIGN_RIGHT);
+        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
+
+            @Override
+            public void execute() {
+                presenter.gotoRetrievePassword();
+            }
+        });
+
+        forgotPassword.setValue(i18n.tr("Retrieve password"));
+        add(forgotPassword);
 
         if (ApplicationMode.isDevelopment()) {
-            startPanel.add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
-            startPanel.add(new HTML("Press <i>Ctrl+Q</i> to login"));
+            add(new HTML("This application is running in <B>DEVELOPMENT</B> mode."));
+            add(new HTML("Press <i>Ctrl+Q</i> to login"));
         }
-
-        startPanel.setWidth("100%");
-        add(startPanel);
 
         setWidth("30%");
 
         getElement().getStyle().setMarginLeft(5, Unit.PCT);
         getElement().getStyle().setMarginRight(5, Unit.PCT);
-        getElement().getStyle().setMarginTop(15, Unit.PX);
-        getElement().getStyle().setMarginBottom(15, Unit.PX);
+        getElement().getStyle().setMarginTop(1, Unit.EM);
+        getElement().getStyle().setMarginBottom(1, Unit.EM);
     }
 
     @Override

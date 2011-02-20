@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PasswordRetrievalRequest extends IEntity {
 
+    @Caption(name = "Your Email")
     @Editor(type = EditorType.email)
     @NotNull
     IPrimitive<String> email();

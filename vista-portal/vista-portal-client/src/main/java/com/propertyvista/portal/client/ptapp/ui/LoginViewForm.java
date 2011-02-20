@@ -17,16 +17,14 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
-public abstract class LoginViewForm extends CEntityForm<AuthenticationRequest> {
+public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
 
     private static I18n i18n = I18nFactory.getI18n(LoginViewForm.class);
 
@@ -46,21 +44,6 @@ public abstract class LoginViewForm extends CEntityForm<AuthenticationRequest> {
         main.add(new VistaWidgetDecorator(create(proto().password(), this), 62, 152));
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(create(proto().captcha(), this), 62, 152));
-
-        main.add(new HTML());
-        CHyperlink forgotPassword = new CHyperlink(null, new Command() {
-
-            @Override
-            public void execute() {
-                forgotPassword();
-            }
-        });
-        forgotPassword.setValue(i18n.tr("Did you forget your password?"));
-        main.add(forgotPassword);
-
         setWidget(main);
     }
-
-    public abstract void forgotPassword();
-
 }

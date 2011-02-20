@@ -27,6 +27,10 @@ public class SiteMap {
     public static class Login extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Retrieve Password")
+    public static class RetrievePassword extends AppPlace {
+    }
+
     @NavigationItem(navigLabel = "Apartment")
     @PlaceProperties(caption = "Apartment Info")
     public static class Apartment extends AppPlace {

@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
+import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.LoginView;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -77,7 +78,7 @@ public class LoginActivity extends AbstractActivity implements LoginView.Present
     }
 
     @Override
-    public void forgotPassword() {
-        // TODO Anton Kraev VISTA-80 
+    public void gotoRetrievePassword() {
+        placeController.goTo(new SiteMap.RetrievePassword());
     }
 }

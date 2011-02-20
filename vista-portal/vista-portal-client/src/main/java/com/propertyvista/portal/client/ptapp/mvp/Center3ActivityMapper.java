@@ -27,6 +27,7 @@ import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
 import com.propertyvista.portal.client.ptapp.activity.LoginActivity;
 import com.propertyvista.portal.client.ptapp.activity.PaymentActivity;
 import com.propertyvista.portal.client.ptapp.activity.PetsActivity;
+import com.propertyvista.portal.client.ptapp.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.StaticContentActivity;
 import com.propertyvista.portal.client.ptapp.activity.SummaryActivity;
 import com.propertyvista.portal.client.ptapp.activity.TenantsActivity;
@@ -38,6 +39,8 @@ public class Center3ActivityMapper implements ActivityMapper {
     Provider<CreateAccountActivity> createAccountActivityProvider;
 
     Provider<LoginActivity> loginActivityProvider;
+
+    Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
 
     Provider<ApartmentActivity> apartmentActivityProvider;
 
@@ -62,6 +65,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     final Provider<LoginActivity> loginActivityProvider,
 
+    final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
+
     final Provider<ApartmentActivity> apartmentActivityProvider,
 
     final Provider<TenantsActivity> tenantsActivityProvider,
@@ -83,6 +88,7 @@ public class Center3ActivityMapper implements ActivityMapper {
         super();
         this.createAccountActivityProvider = createAccountActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
+        this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
         this.apartmentActivityProvider = apartmentActivityProvider;
         this.tenantsActivityProvider = tenantsActivityProvider;
         this.infoActivityProvider = infoActivityProvider;
@@ -92,7 +98,6 @@ public class Center3ActivityMapper implements ActivityMapper {
         this.chargesActivityProvider = chargesActivityProvider;
         this.summaryActivityProvider = summaryActivityProvider;
         this.staticContentActivity = staticContentActivity;
-
     }
 
     @Override
@@ -101,6 +106,8 @@ public class Center3ActivityMapper implements ActivityMapper {
             return createAccountActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Login) {
             return loginActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.RetrievePassword) {
+            return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Apartment) {
             return apartmentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Tenants) {

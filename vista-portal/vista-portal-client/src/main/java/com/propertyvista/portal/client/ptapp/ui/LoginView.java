@@ -25,7 +25,7 @@ public interface LoginView extends IsWidget {
 
         void login(AuthenticationRequest value);
 
-        public void forgotPassword();
+        public void gotoRetrievePassword();
 
     }
 

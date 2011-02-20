@@ -36,6 +36,7 @@ public class ViewModule extends AbstractGinModule {
 
         bind(CreateAccountView.class).to(CreateAccountViewImpl.class).in(Singleton.class);
         bind(LoginView.class).to(LoginViewImpl.class).in(Singleton.class);
+        bind(RetrievePasswordView.class).to(RetrievePasswordViewImpl.class).in(Singleton.class);
         bind(ApartmentView.class).to(ApartmentViewImpl.class).in(Singleton.class);
 
         bind(TenantsView.class).to(TenantsViewImpl.class).in(Singleton.class);
@@ -47,7 +48,6 @@ public class ViewModule extends AbstractGinModule {
         bind(SummaryView.class).to(SummaryViewImpl.class).in(Singleton.class);
 
         bind(Theme.class).to(GainsboroTheme.class).in(Singleton.class);
-
     }
 
 }
