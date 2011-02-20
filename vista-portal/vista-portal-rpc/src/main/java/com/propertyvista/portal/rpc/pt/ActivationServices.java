@@ -23,11 +23,27 @@ public interface ActivationServices {
 
     };
 
+    /**
+     * Request E-mail to be sent to customer with 'token' for PasswordReset.
+     */
     public interface PasswordReminder extends Service<PasswordRetrievalRequest, VoidSerializable> {
 
     };
 
-    public interface PasswordChange extends Service<PasswordChangeRequest, VoidSerializable> {
+    /**
+     * Reset password in the system base on token received in E-mail
+     */
+    public interface PasswordReset extends Service<PasswordChangeRequest, AuthenticationResponse> {
 
     };
+
+    //   TODO later
+    //    public interface PasswordChange extends Service<PasswordChangeRequest, VoidSerializable> {
+    //
+    //    };
+    //    
+    //    public interface EmailChange extends Service<EmailChangeRequest, VoidSerializable> {
+    //
+    //    };
+
 }
