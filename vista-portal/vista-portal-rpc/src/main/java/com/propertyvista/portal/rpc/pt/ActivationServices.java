@@ -13,13 +13,21 @@
  */
 package com.propertyvista.portal.rpc.pt;
 
-
 import com.pyx4j.rpc.shared.Service;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 public interface ActivationServices {
 
     public interface CreateAccount extends Service<AccountCreationRequest, AuthenticationResponse> {
+
+    };
+
+    public interface PasswordReminder extends Service<PasswordRetrievalRequest, VoidSerializable> {
+
+    };
+
+    public interface PasswordChange extends Service<PasswordChangeRequest, VoidSerializable> {
 
     };
 }
