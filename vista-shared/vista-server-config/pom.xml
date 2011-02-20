@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-config-server</artifactId>
-    <name>vista-config-server</name>
+    <artifactId>vista-server-config</artifactId>
+    <name>vista-server-config</name>
 
     <dependencies>
 
