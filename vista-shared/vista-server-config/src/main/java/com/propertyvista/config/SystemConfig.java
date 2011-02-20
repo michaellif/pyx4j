@@ -19,14 +19,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.essentials.j2se.HostConfig;
 
 public class SystemConfig extends HostConfig {
 
     private final static Logger log = LoggerFactory.getLogger(SystemConfig.class);
 
+    private static List<String> noCaledonProxyHost = Arrays.asList("vladlnv", "ve.kvrmmdsf.vesrv.com");
+
     private static List<String> doxHost = Arrays.asList("vlads-i7", "michaellif01");
+
+    protected ProxyConfig caledonProxy;
 
     public SystemConfig() {
         configure();
@@ -35,8 +38,8 @@ public class SystemConfig extends HostConfig {
     @Override
     public void configure() {
         super.configure();
-        if (CommonsStringUtils.isStringSet(this.getProxyHost())) {
-            log.info("proxy defined {} ", this.getProxyHost());
+        if (this.getProxyConfig() != null) {
+            log.info("proxy defined {} ", this.getProxyConfig().getHost());
         }
     }
 
@@ -44,11 +47,26 @@ public class SystemConfig extends HostConfig {
     public void configure(String hostName) {
         if (doxHost.contains(hostName)) {
             setDoxProxy();
+        } else if (!noCaledonProxyHost.contains(hostName)) {
+            setVistaCaledonProxy();
         }
     }
 
     public void setDoxProxy() {
         setProxy("torproxy1", "8080");
+        caledonProxy = getProxyConfig();
+    }
+
+    public void setVistaCaledonProxy() {
+        setCaledonProxy("ve.kvrmmdsf.vesrv.com", 8888, "vista", "Vista1102");
+    }
+
+    public void setCaledonProxy(String proxyHost, int proxyPort, String user, String password) {
+        this.caledonProxy = new ProxyConfig(proxyHost, proxyPort, user, password);
+    }
+
+    public ProxyConfig getCaledonProxy() {
+        return caledonProxy;
     }
 
 }

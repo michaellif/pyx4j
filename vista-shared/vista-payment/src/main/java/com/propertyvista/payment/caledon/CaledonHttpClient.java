@@ -21,9 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.payment.PaymentProcessingException;
 
-import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 class CaledonHttpClient {
 
@@ -49,8 +52,13 @@ class CaledonHttpClient {
         //System.out.println(httpMethod.getQueryString());
 
         HttpClient httpClient = new HttpClient();
-        if (CommonsStringUtils.isStringSet(configuration.getProxyHost())) {
-            httpClient.getHostConfiguration().setProxy(configuration.getProxyHost(), configuration.getProxyPort());
+        ProxyConfig proxy = configuration.getCaledonProxy();
+        if (proxy != null) {
+            httpClient.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
+            if (proxy.getUser() != null) {
+                Credentials proxyCreds = new UsernamePasswordCredentials(proxy.getUser(), proxy.getPassword());
+                httpClient.getState().setProxyCredentials(AuthScope.ANY, proxyCreds);
+            }
         }
 
         try {
