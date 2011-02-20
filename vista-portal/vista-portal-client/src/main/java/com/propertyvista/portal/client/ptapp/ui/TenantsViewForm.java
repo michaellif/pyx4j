@@ -79,7 +79,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
             @Override
             protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
-                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), "Add a tenant");
+                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), "Add a person");
             }
 
             @Override
@@ -106,7 +106,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                                 }
 
                                 CComponent<?> component = createCell(column);
-                                if (column.getObject() == proto.relationship()) {
+                                if (column.getObject() == proto.relationship() || column.getObject() == proto.email()) {
                                     component.setEnabled(false);
                                 }
 
@@ -121,9 +121,9 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
                         if (isFirst()) {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.hideRemoveRow(), "Remove tenant", false);
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.hideRemoveRow(), null, false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove tenant", true);
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove person", true);
                         }
                     }
 

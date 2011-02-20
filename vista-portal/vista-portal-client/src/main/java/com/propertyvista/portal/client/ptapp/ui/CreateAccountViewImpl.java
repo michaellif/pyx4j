@@ -139,9 +139,9 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         header.getElement().getStyle().setFloat(Float.LEFT);
         signinPanel.add(header);
 
-        Button signinButton = new Button(i18n.tr("Signin"));
+        Button signinButton = new Button(i18n.tr("Login"));
         signinButton.getElement().getStyle().setFloat(Float.RIGHT);
-        signinButton.ensureDebugId("Signin");
+        signinButton.ensureDebugId("Login");
         signinButton.addClickHandler(new ClickHandler() {
 
             @Override
