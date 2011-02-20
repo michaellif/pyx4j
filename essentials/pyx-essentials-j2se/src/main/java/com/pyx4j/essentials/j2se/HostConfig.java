@@ -39,6 +39,17 @@ public abstract class HostConfig {
 
         private String password;
 
+        private ProxyConfig() {
+        }
+
+        public ProxyConfig(String host, int port, String user, String password) {
+            super();
+            this.host = host;
+            this.port = port;
+            this.user = user;
+            this.password = password;
+        }
+
         public String getHost() {
             return host;
         }
