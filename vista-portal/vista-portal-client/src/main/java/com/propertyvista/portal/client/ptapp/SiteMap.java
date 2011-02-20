@@ -31,6 +31,14 @@ public class SiteMap {
     public static class RetrievePassword extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Create Password")
+    public static class CreatePassword extends AppPlace {
+    }
+
+    @PlaceProperties(caption = "Change Password")
+    public static class ChangePassword extends AppPlace {
+    }
+
     @NavigationItem(navigLabel = "Apartment")
     @PlaceProperties(caption = "Apartment Info")
     public static class Apartment extends AppPlace {
@@ -79,4 +87,7 @@ public class SiteMap {
     public static class TermsAndConditions extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Generic Message")
+    public static class GenericMessage extends AppPlace {
+    }
 }
