@@ -31,8 +31,10 @@ import java.lang.annotation.Target;
  * 
  * Separate PersistenceService of RPC call is required to retrieve such members.
  */
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Detached {
 
+    //TODO implement this
+    boolean retrieveToStringMemebers() default false;
 }
