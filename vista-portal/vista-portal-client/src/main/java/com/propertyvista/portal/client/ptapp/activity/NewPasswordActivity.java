@@ -44,6 +44,10 @@ public class NewPasswordActivity extends AbstractActivity implements NewPassword
         return this;
     }
 
+    public NewPasswordView getView() {
+        return view;
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);

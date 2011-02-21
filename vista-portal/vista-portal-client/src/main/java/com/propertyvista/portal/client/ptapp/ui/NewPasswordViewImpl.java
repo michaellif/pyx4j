@@ -21,9 +21,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 
 public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
@@ -33,8 +31,6 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
     private Presenter presenter;
 
     private final NewPasswordViewForm form;
-
-    private ConversationType conversationType;
 
     public NewPasswordViewImpl() {
 

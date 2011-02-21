@@ -25,12 +25,14 @@ import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
 import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
 import com.propertyvista.portal.client.ptapp.activity.LoginActivity;
+import com.propertyvista.portal.client.ptapp.activity.NewPasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.PaymentActivity;
 import com.propertyvista.portal.client.ptapp.activity.PetsActivity;
 import com.propertyvista.portal.client.ptapp.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.StaticContentActivity;
 import com.propertyvista.portal.client.ptapp.activity.SummaryActivity;
 import com.propertyvista.portal.client.ptapp.activity.TenantsActivity;
+import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 
 import com.pyx4j.site.client.place.AppPlace;
 
@@ -41,6 +43,8 @@ public class Center3ActivityMapper implements ActivityMapper {
     Provider<LoginActivity> loginActivityProvider;
 
     Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
+
+    Provider<NewPasswordActivity> newPasswordActivityProvider;
 
     Provider<ApartmentActivity> apartmentActivityProvider;
 
@@ -67,6 +71,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
 
+    final Provider<NewPasswordActivity> newPasswordActivityProvider,
+
     final Provider<ApartmentActivity> apartmentActivityProvider,
 
     final Provider<TenantsActivity> tenantsActivityProvider,
@@ -89,6 +95,7 @@ public class Center3ActivityMapper implements ActivityMapper {
         this.createAccountActivityProvider = createAccountActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
         this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
+        this.newPasswordActivityProvider = newPasswordActivityProvider;
         this.apartmentActivityProvider = apartmentActivityProvider;
         this.tenantsActivityProvider = tenantsActivityProvider;
         this.infoActivityProvider = infoActivityProvider;
@@ -108,6 +115,12 @@ public class Center3ActivityMapper implements ActivityMapper {
             return loginActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.RetrievePassword) {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.ChangePassword) {
+            newPasswordActivityProvider.get().getView().setConversationType(ConversationType.CHANGE);
+            return newPasswordActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.CreatePassword) {
+            newPasswordActivityProvider.get().getView().setConversationType(ConversationType.CREATE);
+            return newPasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Apartment) {
             return apartmentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Tenants) {
