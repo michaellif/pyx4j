@@ -39,11 +39,11 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
-import com.pyx4j.site.client.annotations.NavigationItem;
-import com.pyx4j.site.client.annotations.PlaceProperties;
-import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
-import com.pyx4j.site.client.place.AppPlaceInfo;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.site.rpc.annotations.NavigationItem;
+import com.pyx4j.site.rpc.annotations.PlaceProperties;
 
 public class AppPlaceListingGenerator extends Generator {
 
@@ -105,7 +105,7 @@ public class AppPlaceListingGenerator extends Generator {
 
         for (JClassType jClassType : placeClasses) {
             String type = jClassType.getQualifiedSourceName();
-            writer.println("if (token.equals(AppPlaceHistoryMapper.getPlaceId(" + type + ".class))) {");
+            writer.println("if (token.equals(AppPlaceInfo.getPlaceId(" + type + ".class))) {");
             writer.indent();
             writer.println("return new " + type + "();");
             writer.outdent();

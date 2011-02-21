@@ -15,6 +15,9 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlaceHistoryMapper.class);
@@ -50,29 +53,9 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
     @Override
     public String getToken(Place place) {
         if (place instanceof AppPlace) {
-            return getPlaceId(place.getClass()) + createQueryString(((AppPlace) place).getArgs());
+            return AppPlaceInfo.getPlaceId(place.getClass()) + createQueryString(((AppPlace) place).getArgs());
         }
         return null;
-    }
-
-    public static String getPlaceId(Class<? extends Place> clazz) {
-        String simpleName = clazz.getName();
-        // strip the package name
-        simpleName = simpleName.substring(simpleName.indexOf("$") + 1).replace("$", "/");
-
-        StringBuilder builder = new StringBuilder();
-        char[] charArray = simpleName.toCharArray();
-
-        for (int i = 0; i < charArray.length; i++) {
-            if (i == 0) {
-                builder.append(Character.toLowerCase(charArray[i]));
-            } else if (Character.isUpperCase(charArray[i])) {
-                builder.append('_').append(Character.toLowerCase(charArray[i]));
-            } else {
-                builder.append(charArray[i]);
-            }
-        }
-        return builder.toString();
     }
 
     protected Map<String, String> parseQueryString(String queryString) {

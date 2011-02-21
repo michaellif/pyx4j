@@ -18,7 +18,9 @@
  * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.site.client.place;
+package com.pyx4j.site.rpc;
+
+import com.google.gwt.place.shared.Place;
 
 public class AppPlaceInfo {
 
@@ -45,4 +47,25 @@ public class AppPlaceInfo {
         this.caption = caption != null && !caption.equals("") ? caption : null;
         this.staticContent = staticContent != null && !staticContent.equals("") ? staticContent : null;
     }
+
+    public static String getPlaceId(Class<? extends Place> clazz) {
+        String simpleName = clazz.getName();
+        // strip the package name
+        simpleName = simpleName.substring(simpleName.indexOf("$") + 1).replace("$", "/");
+
+        StringBuilder builder = new StringBuilder();
+        char[] charArray = simpleName.toCharArray();
+
+        for (int i = 0; i < charArray.length; i++) {
+            if (i == 0) {
+                builder.append(Character.toLowerCase(charArray[i]));
+            } else if (Character.isUpperCase(charArray[i])) {
+                builder.append('_').append(Character.toLowerCase(charArray[i]));
+            } else {
+                builder.append(charArray[i]);
+            }
+        }
+        return builder.toString();
+    }
+
 }

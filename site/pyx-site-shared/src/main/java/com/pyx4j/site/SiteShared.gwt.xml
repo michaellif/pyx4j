@@ -3,6 +3,8 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module>
     <inherits name='com.pyx4j.entity.EntityShared'/>
+    <inherits name="com.google.gwt.place.Place"/>
+
 	<source path="shared"/>
 	<source path="rpc"/>
 </module>

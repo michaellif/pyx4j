@@ -22,6 +22,9 @@ package com.pyx4j.site.client.place;
 
 import java.util.List;
 
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+
 public interface AppPlaceListing {
 
     AppPlace getPlace(String token);

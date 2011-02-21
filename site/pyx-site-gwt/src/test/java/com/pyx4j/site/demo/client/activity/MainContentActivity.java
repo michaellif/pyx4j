@@ -6,8 +6,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 
-import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.demo.client.ui.MainContentView;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class MainContentActivity extends AbstractActivity implements MainContentView.Presenter {
 

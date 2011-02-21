@@ -20,7 +20,7 @@
  */
 package com.pyx4j.site.demo.client;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class SiteMap {
 

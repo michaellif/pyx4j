@@ -18,7 +18,7 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.pyx4j.site.client.place;
+package com.pyx4j.site.rpc;
 
 import java.util.Map;
 
