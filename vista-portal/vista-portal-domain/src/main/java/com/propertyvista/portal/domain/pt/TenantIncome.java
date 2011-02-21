@@ -18,12 +18,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantIncome extends IEntity {
-    public static enum IncomeTypes {
+    public static enum IncomeType {
         pension, unemployment, retired, odsp, dividends, other
     }
 
     @Caption(name = "Description")
-    IPrimitive<IncomeTypes> type();
+    IPrimitive<IncomeType> type();
 
     @Caption(name = "Monthly amount")
     IPrimitive<Double> monthlyAmount();

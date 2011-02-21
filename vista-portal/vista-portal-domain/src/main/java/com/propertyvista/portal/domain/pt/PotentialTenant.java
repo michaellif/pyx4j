@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @ToStringFormat("{0} {1} {2}")
-public interface PotentialTenant extends IPerson {
+public interface PotentialTenant extends IPerson, IApplicationEntity {
 
     public enum Relationship {
         Applicant, Spouse, Son, Daughter, Other

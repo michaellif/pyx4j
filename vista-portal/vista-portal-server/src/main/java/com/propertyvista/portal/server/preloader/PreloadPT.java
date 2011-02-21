@@ -27,7 +27,6 @@ import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.IncomeTypes;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantAsset;
@@ -62,7 +61,7 @@ public class PreloadPT extends AbstractDataPreloader {
     public static PotentialTenantFinancial createFinancial() {
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
-        ptf.occupation().setValue((IncomeTypes) RandomUtil.random(PotentialTenantFinancial.IncomeTypes.class));
+        ptf.occupation().setValue(RandomUtil.random(DemoData.EMPLOYMENT_TYPES));
 
         Employer currentEmployer = createEmployer();
         PersistenceServicesFactory.getPersistenceService().persist(currentEmployer);
@@ -75,7 +74,7 @@ public class PreloadPT extends AbstractDataPreloader {
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
 
-            income.description().setValue(RandomUtil.random(DemoData.INCOME_SOURCES));
+            income.type().setValue(RandomUtil.random(DemoData.INCOME_SOURCES));
             income.monthlyAmount().setValue(10d + RandomUtil.randomInt(5000));
 
             PersistenceServicesFactory.getPersistenceService().persist(income);
@@ -85,7 +84,7 @@ public class PreloadPT extends AbstractDataPreloader {
         for (int i = 0; i < RandomUtil.randomInt(5); i++) {
             TenantAsset asset = EntityFactory.create(TenantAsset.class);
 
-            asset.name().setValue(RandomUtil.random(DemoData.ASSETS));
+            asset.assetType().setValue(RandomUtil.random(DemoData.ASSETS));
             asset.assetValue().setValue(100d + RandomUtil.randomInt(10000));
 
             PersistenceServicesFactory.getPersistenceService().persist(asset);

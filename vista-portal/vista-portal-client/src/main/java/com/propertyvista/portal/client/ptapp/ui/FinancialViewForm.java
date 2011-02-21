@@ -41,6 +41,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
@@ -58,7 +59,9 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
     public void createContent() {
         FlowPanel main = new FlowPanel();
         main.add(new ViewHeaderDecorator(new HTML("<h4>Income Details</h4>")));
-        main.add(new VistaWidgetDecorator(create(proto().occupation(), this)));
+        //XXX: fix after 
+        //        CComboBox occupation = create(proto().occupation();
+        //        main.add(new VistaWidgetDecorator(occupation, this)));
         main.add(new HTML());
 
         main.add(new HTML("<h6>Current Employer</h6>"));
@@ -147,7 +150,8 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             {
                 TenantAsset proto = EntityFactory.getEntityPrototype(TenantAsset.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.assetType(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.percent(), "120px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.assetValue(), "120px"));
             }
 
@@ -183,7 +187,7 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
             {
                 TenantIncome proto = EntityFactory.getEntityPrototype(TenantIncome.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.description(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.type(), "120px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.monthlyAmount(), "120px"));
             }
 

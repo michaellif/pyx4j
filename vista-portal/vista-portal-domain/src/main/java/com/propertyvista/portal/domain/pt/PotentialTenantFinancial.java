@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -20,9 +21,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface PotentialTenantFinancial extends IApplicationEntity {
 
     public static enum EmploymentTypes {
-        fulltime, parttime, selfemployed, seasonallyEmployed, socialServices, student
+        none, fulltime, parttime, selfemployed, seasonallyEmployed, socialServices, student
     }
 
+    @Caption(name = "Employment type")
     IPrimitive<EmploymentTypes> occupation();
 
     @Owned
