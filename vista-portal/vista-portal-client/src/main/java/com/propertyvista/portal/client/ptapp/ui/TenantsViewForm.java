@@ -67,14 +67,14 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             {
                 PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.email(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "6em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.email(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "7em"));
             }
 
             @Override
@@ -106,13 +106,11 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                                 }
 
                                 CComponent<?> component = createCell(column);
+                                component.setWidth("100%");
                                 if (column.getObject() == proto.relationship() || column.getObject() == proto.email()) {
                                     component.setEnabled(false);
                                 }
-
-                                component.setWidth(column.getWidth());
-                                component.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-                                main.add(component);
+                                main.add(createDecorator(component, column.getWidth()));
                             }
                             setWidget(main);
                         }
