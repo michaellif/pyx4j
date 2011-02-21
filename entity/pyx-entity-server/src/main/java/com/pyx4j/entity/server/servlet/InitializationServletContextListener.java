@@ -33,6 +33,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration.EnvironmentType;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.impl.EntityImplGenerator;
+import com.pyx4j.log4j.LoggerConfig;
 
 /**
  * System property "com.pyx4j.appConfig" defines Config suffix class to use.
@@ -51,14 +52,15 @@ public class InitializationServletContextListener implements ServletContextListe
                 try {
                     configClass += System.getProperty("com.pyx4j.appConfig", "");
                     ServletContext servletContext = sce.getServletContext();
-
+                    String configContextName = getContextName(servletContext);
+                    LoggerConfig.setContextName(configContextName);
                     ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
                     ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(servletContext, getContextName(servletContext)));
 
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
-                    log.debug("ServerInfo", servletContext.getServerInfo());
-                    log.debug("Java Servlet API", servletContext.getMajorVersion(), servletContext.getMinorVersion());
-                    log.debug("ServletContext", servletContext.getContextPath(), servletContext.getServletContextName());
+                    log.debug("ServerInfo {}", servletContext.getServerInfo());
+                    log.debug("Java Servlet API {} {}", servletContext.getMajorVersion(), servletContext.getMinorVersion());
+                    log.debug("ServletContext {} {}", servletContext.getContextPath(), servletContext.getServletContextName());
 
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
