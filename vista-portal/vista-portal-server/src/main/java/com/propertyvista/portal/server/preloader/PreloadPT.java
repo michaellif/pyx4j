@@ -26,17 +26,21 @@ import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantIncome;
+import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
+import com.propertyvista.portal.domain.pt.TenantIncome.IncomeType;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public class PreloadPT extends AbstractDataPreloader {
@@ -61,7 +65,7 @@ public class PreloadPT extends AbstractDataPreloader {
     public static PotentialTenantFinancial createFinancial() {
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
-        ptf.occupation().setValue(RandomUtil.random(DemoData.EMPLOYMENT_TYPES));
+        ptf.occupation().setValue(RandomUtil.random(EmploymentType.values()));
 
         Employer currentEmployer = createEmployer();
         PersistenceServicesFactory.getPersistenceService().persist(currentEmployer);
@@ -74,7 +78,7 @@ public class PreloadPT extends AbstractDataPreloader {
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
 
-            income.type().setValue(RandomUtil.random(DemoData.INCOME_SOURCES));
+            income.type().setValue(RandomUtil.random(IncomeType.values()));
             income.monthlyAmount().setValue(10d + RandomUtil.randomInt(5000));
 
             PersistenceServicesFactory.getPersistenceService().persist(income);
@@ -84,14 +88,14 @@ public class PreloadPT extends AbstractDataPreloader {
         for (int i = 0; i < RandomUtil.randomInt(5); i++) {
             TenantAsset asset = EntityFactory.create(TenantAsset.class);
 
-            asset.assetType().setValue(RandomUtil.random(DemoData.ASSETS));
+            asset.assetType().setValue(RandomUtil.random(AssetType.values()));
             asset.assetValue().setValue(100d + RandomUtil.randomInt(10000));
 
             PersistenceServicesFactory.getPersistenceService().persist(asset);
             ptf.assets().add(asset);
         }
 
-        PersistenceServicesFactory.getPersistenceService().persist(ptf);
+        persist(ptf);
 
         return ptf;
     }
@@ -258,6 +262,7 @@ public class PreloadPT extends AbstractDataPreloader {
     @Override
     public String create() {
         numTenants = 0;
+
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
 
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
@@ -266,6 +271,11 @@ public class PreloadPT extends AbstractDataPreloader {
             tenants.tenants().add(tenantInfo);
         }
         PersistenceServicesFactory.getPersistenceService().persist(tenants);
+
+        // add a dummy charge for this list
+        //        Charges charges = EntityFactory.create(Charges.class);
+        //        ChargesServerCalculation.dummyPopulate(charges, tenants.tenants());
+        //        persist(charges);
 
         load();
 
@@ -378,5 +388,9 @@ public class PreloadPT extends AbstractDataPreloader {
         //        sb.append("\n\n");
 
         log.info(sb.toString());
+    }
+
+    private static void persist(IEntity entity) {
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
     }
 }

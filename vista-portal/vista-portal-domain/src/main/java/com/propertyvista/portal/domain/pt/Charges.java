@@ -16,7 +16,6 @@ package com.propertyvista.portal.domain.pt;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IList;
 
 public interface Charges extends IApplicationEntity {
 
@@ -32,23 +31,23 @@ public interface Charges extends IApplicationEntity {
     @Owned
     @Caption(name = "Rent-Related Charges")
     @ReadOnly
-    IList<ChargeLine> rentCharges();
+    ChargeList<ChargeLine> rentCharges();
 
     // When changed the SharedCalculation.calculateCharges should be called on UI.
     @Owned
     @Caption(name = "Available Upgrades")
-    IList<ChargeLineSelectable> upgradeCharges();
+    ChargeList<ChargeLine> upgradeCharges();
 
     @Owned
     @Caption(name = "Pro-Rated Charges")
-    IList<ChargeLine> proRatedCharges();
+    ChargeList<ChargeLine> proRatedCharges();
 
     //Calculated. DUMMY data on back-end for now., Also "deposit" may be changed by SharedCalculation.calculateCharges
     @Owned
-    IList<ChargeLine> applicationCharges();
+    ChargeList<ChargeLine> applicationCharges();
 
     //Calculated base on percentage and total monthly payable. see SharedCalculation.calculateCharges
     @Owned
-    IList<TenantCharge> paymentSplitCharges();
+    ChargeList<TenantCharge> paymentSplitCharges();
 
 }

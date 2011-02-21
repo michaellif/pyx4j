@@ -13,21 +13,31 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
-
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ChargeLine extends IEntity {
+public interface ChargeLine extends Charge {
 
-    public enum chargeType {
-        deposit, applicationFee, rent, firstMonthRent, parking, locker, petDeposit, extraParking, extraLocker, cableTv
+    public enum ChargeType {
+        deposit, applicationFee, rent("Monthly Rent"), firstMonthRent, parking, parking2("Second Parking"), locker, petDeposit, petCharge("Pet Charge"), extraParking, extraLocker, cableTv, prorated;
+
+        private final String label;
+
+        ChargeType() {
+            this.label = name();
+        }
+
+        ChargeType(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
     }
 
-    IPrimitive<chargeType> type();
+    IPrimitive<ChargeType> type();
 
-    @EmbeddedEntity
-    Money charge();
+    IPrimitive<Boolean> selected();
 
+    IPrimitive<String> label();
 }

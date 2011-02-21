@@ -14,7 +14,7 @@
 package com.propertyvista.portal.domain;
 
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentTypes;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.pt.TenantIncome.IncomeType;
 
@@ -69,12 +69,12 @@ public class DemoData {
 
     public final static String[] EMPLOYER_NAMES = { "IBM", "Oracle", "Sun", "Dell", "Apple", "Microsoft" };
 
-    public final static IncomeType[] INCOME_SOURCES = { IncomeType.pension, IncomeType.unemployment, IncomeType.retired, IncomeType.odsp, IncomeType.dividends,
-            IncomeType.other };
-
-    public final static EmploymentTypes[] EMPLOYMENT_TYPES = { EmploymentTypes.none, EmploymentTypes.fulltime, EmploymentTypes.parttime,
-            EmploymentTypes.selfemployed, EmploymentTypes.seasonallyEmployed, EmploymentTypes.socialServices, EmploymentTypes.student };
-
-    public final static AssetType[] ASSETS = { AssetType.bankAccounts, AssetType.realEstateProperties, AssetType.insurancePolicies, AssetType.shares,
-            AssetType.unitTrusts, AssetType.businesses, AssetType.cars, AssetType.other };
+    //    public final static IncomeType[] INCOME_SOURCES = { IncomeType.pension, IncomeType.unemployment, IncomeType.retired, IncomeType.odsp, IncomeType.dividends,
+    //            IncomeType.other };
+    //
+    //    public final static EmploymentTypes[] EMPLOYMENT_TYPES = { EmploymentTypes.none, EmploymentTypes.fulltime, EmploymentTypes.parttime,
+    //            EmploymentTypes.selfemployed, EmploymentTypes.seasonallyEmployed, EmploymentTypes.socialServices, EmploymentTypes.student };
+    //
+    //    public final static AssetType[] ASSETS = { AssetType.bankAccounts, AssetType.realEstateProperties, AssetType.insurancePolicies, AssetType.shares,
+    //            AssetType.unitTrusts, AssetType.businesses, AssetType.cars, AssetType.other };
 }

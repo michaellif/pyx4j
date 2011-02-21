@@ -7,16 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author vlads
+ * Created on Feb 20, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.portal.domain.Money;
 
-public interface ChargeLineSelectable extends ChargeLine {
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.shared.IEntity;
 
-    IPrimitive<Boolean> selected();
-
+public interface Charge extends IEntity {
+    @EmbeddedEntity
+    Money charge();
 }

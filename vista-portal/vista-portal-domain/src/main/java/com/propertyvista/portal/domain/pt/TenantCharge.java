@@ -13,13 +13,9 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
-
-import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface TenantCharge extends IEntity {
+public interface TenantCharge extends Charge {
 
     //TODO @Detached
     // TODO Back-end to retrieve only values for ToString
@@ -28,6 +24,4 @@ public interface TenantCharge extends IEntity {
     IPrimitive<Integer> percentage();
 
     //Calculated base on percentage and total monthly payable
-    @EmbeddedEntity
-    Money charge();
 }

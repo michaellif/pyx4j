@@ -27,7 +27,9 @@ import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
@@ -151,6 +153,16 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
             if (ret instanceof UnitSelection) {
                 loadAvailableUnits((UnitSelection) ret);
+            } else if (ret instanceof Charges) {
+
+                Charges charges = (Charges) ret;
+                // find all potential tenants 
+                EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+                PotentialTenantList tenantList = secureRetrieve(criteria);
+
+                ChargesServerCalculation.dummyPopulate(charges, tenantList.tenants());
+                ChargesServerCalculation.calculateCharges(charges);
             }
 
             return ret;
