@@ -16,6 +16,8 @@ package com.propertyvista.portal.client.ptapp;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.propertyvista.portal.domain.DemoData;
@@ -44,6 +46,8 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private final UnitSelectionCriteria unitSelectionCriteria;
 
+    private Message messageDialog;
+
     public static class WizardStep {
 
         enum StepStatus {
@@ -66,6 +70,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
         unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
         unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
+
         if (ApplicationMode.isDevelopment()) {
             if (unitSelectionCriteria.floorplanName().isNull()) {
                 unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
@@ -79,7 +84,12 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
             @Override
             public void onSuccess(Boolean result) {
-                // TODO show mesage
+                showMessageDialog("We can't find that building", "Error", "Back", new Command() {
+                    @Override
+                    public void execute() {
+                        History.back();
+                    }
+                });
             }
         });
     }
@@ -94,7 +104,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         });
     }
 
-    protected void goToNext() {
+    protected void goToNextStep() {
         Place current = placeController.getWhere();
         placeController.goTo(new SiteMap.Apartment());
     }
@@ -108,12 +118,57 @@ public class PtAppWizardManager implements SecurityControllerHandler {
                 @Override
                 public void onSuccess(Application result) {
                     application = result;
-                    goToNext();
+                    goToNextStep();
                 }
             });
         } else {
             application = null;
             placeController.goTo(new SiteMap.CreateAccount());
         }
+    }
+
+    public Message getMessageDialog() {
+        return messageDialog;
+    }
+
+    public void showMessageDialog(String message, String title, String buttonText, Command command) {
+        messageDialog = new Message(message, title, buttonText, command);
+        placeController.goTo(new SiteMap.GenericMessage());
+    }
+
+    public class Message {
+
+        private final String message;
+
+        private final String title;
+
+        private final String buttonText;
+
+        private final Command command;
+
+        public Message(String message, String title, String buttonText, Command command) {
+            super();
+            this.message = message;
+            this.title = title;
+            this.buttonText = buttonText;
+            this.command = command;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getButtonText() {
+            return buttonText;
+        }
+
+        public Command getCommand() {
+            return command;
+        }
+
     }
 }

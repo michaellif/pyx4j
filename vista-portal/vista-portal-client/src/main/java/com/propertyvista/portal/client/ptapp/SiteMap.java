@@ -90,4 +90,5 @@ public class SiteMap {
     @PlaceProperties(caption = "Generic Message")
     public static class GenericMessage extends AppPlace {
     }
+
 }

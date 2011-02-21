@@ -19,20 +19,35 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
 import com.propertyvista.portal.client.ptapp.ui.GenericMessageView;
 
 import com.pyx4j.site.client.place.AppPlace;
 
+/**
+ * 
+ * Shows dialog style message on full screen
+ * 
+ */
 public class GenericMessageActivity extends AbstractActivity implements GenericMessageView.Presenter {
+
+    enum Params {
+        TITLE, MESSAGE, BUTTON_LABEL
+    }
 
     private final GenericMessageView view;
 
     private final PlaceController placeController;
 
+    private final PtAppWizardManager manager;
+
+    private Message message;
+
     @Inject
     public GenericMessageActivity(GenericMessageView view, PlaceController placeController, PtAppWizardManager manager) {
         this.view = view;
         this.placeController = placeController;
+        this.manager = manager;
         view.setPresenter(this);
     }
 
@@ -43,11 +58,14 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        message = manager.getMessageDialog();
+        view.setMessage(message);
     }
 
     @Override
     public void action() {
-        // TODO Auto-generated method stub
-
+        if (message != null && message.getCommand() != null) {
+            message.getCommand().execute();
+        }
     }
 }

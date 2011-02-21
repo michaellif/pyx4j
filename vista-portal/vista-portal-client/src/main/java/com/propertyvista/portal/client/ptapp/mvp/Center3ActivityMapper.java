@@ -23,6 +23,7 @@ import com.propertyvista.portal.client.ptapp.activity.ApartmentActivity;
 import com.propertyvista.portal.client.ptapp.activity.ChargesActivity;
 import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
+import com.propertyvista.portal.client.ptapp.activity.GenericMessageActivity;
 import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
 import com.propertyvista.portal.client.ptapp.activity.LoginActivity;
 import com.propertyvista.portal.client.ptapp.activity.NewPasswordActivity;
@@ -64,6 +65,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     Provider<StaticContentActivity> staticContentActivity;
 
+    Provider<GenericMessageActivity> genericMessageActivity;
+
     @Inject
     public Center3ActivityMapper(final Provider<CreateAccountActivity> createAccountActivityProvider,
 
@@ -89,7 +92,9 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     final Provider<SummaryActivity> summaryActivityProvider,
 
-    final Provider<StaticContentActivity> staticContentActivity) {
+    final Provider<StaticContentActivity> staticContentActivity,
+
+    final Provider<GenericMessageActivity> genericMessageActivity) {
 
         super();
         this.createAccountActivityProvider = createAccountActivityProvider;
@@ -105,6 +110,7 @@ public class Center3ActivityMapper implements ActivityMapper {
         this.chargesActivityProvider = chargesActivityProvider;
         this.summaryActivityProvider = summaryActivityProvider;
         this.staticContentActivity = staticContentActivity;
+        this.genericMessageActivity = genericMessageActivity;
     }
 
     @Override
@@ -141,6 +147,8 @@ public class Center3ActivityMapper implements ActivityMapper {
             return staticContentActivity.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.PrivacyPolicy) {
             return staticContentActivity.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.GenericMessage) {
+            return genericMessageActivity.get().withPlace((AppPlace) place);
         }
         //TODO what to do on other place
         return null;

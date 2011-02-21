@@ -21,9 +21,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 
 public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
@@ -32,15 +32,21 @@ public class GenericMessageViewImpl extends FlowPanel implements GenericMessageV
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<IEntity> form;
+    private final HTML titleHtml;
+
+    private final HTML messageHtml;
+
+    private final Button actionButton;
 
     public GenericMessageViewImpl() {
 
-        form = new GenericMessageForm();
-        form.populate(null);
-        add(form);
+        titleHtml = new HTML();
+        add(titleHtml);
 
-        Button actionButton = new Button("Action");
+        messageHtml = new HTML();
+        add(messageHtml);
+
+        actionButton = new Button();
         actionButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         actionButton.addClickHandler(new ClickHandler() {
 
@@ -66,5 +72,20 @@ public class GenericMessageViewImpl extends FlowPanel implements GenericMessageV
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setMessage(Message message) {
+        if (message == null) {
+            titleHtml.setText("");
+            messageHtml.setText("");
+            actionButton.setVisible(false);
+        } else {
+            titleHtml.setText(message.getTitle());
+            messageHtml.setText(message.getMessage());
+            actionButton.setText(message.getButtonText());
+            actionButton.setVisible(true);
+        }
+
     }
 }

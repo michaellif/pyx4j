@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
 
 public interface GenericMessageView extends IsWidget {
 
@@ -22,4 +23,6 @@ public interface GenericMessageView extends IsWidget {
     public interface Presenter {
         void action();
     }
+
+    public void setMessage(Message message);
 }
