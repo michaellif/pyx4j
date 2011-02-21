@@ -36,4 +36,8 @@ public interface PotentialTenantFinancial extends IApplicationEntity {
 
     @Owned
     IList<TenantAsset> assets();
+        
+    @Owned
+    IList<TenantGuarantor> guarantors();
+
 }
