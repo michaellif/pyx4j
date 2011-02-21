@@ -22,6 +22,7 @@ package com.pyx4j.entity.rebind;
 
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.Set;
 
 import com.google.gwt.core.ext.TreeLogger;
@@ -46,7 +47,6 @@ public class ReservedWords {
         if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
             name = memberColumn.name();
         }
-        //TODO read file, to HashSet() 
         if (getKeywords().contains(name.toUpperCase(Locale.ENGLISH))) {
             logger.log(TreeLogger.Type.ERROR, "Reserved keyword '" + name + "' used in class " + interfaceType.getQualifiedSourceName());
             throw new UnableToCompleteException();
@@ -56,9 +56,16 @@ public class ReservedWords {
     private static synchronized Set<String> getKeywords() {
         if (keywords == null) {
             keywords = new HashSet<String>();
-            //TODO read file "reserved.txt" lines, to HashSet()
-            keywords.add("to".toUpperCase(Locale.ENGLISH));
-            keywords.add("from".toUpperCase(Locale.ENGLISH));
+            Scanner scanner = new Scanner(ReservedWords.class.getResourceAsStream("reserved.txt"), "UTF-8");
+            try {
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if (!line.startsWith("#"))
+                        keywords.add(line.toUpperCase(Locale.ENGLISH));
+                }
+            } finally {
+                scanner.close();
+            }
         }
         return keywords;
     }
