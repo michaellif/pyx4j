@@ -329,7 +329,7 @@ public class EntityMetaWriter {
             String memeberDescription = null;
             String memeberWatermark = null;
             Caption memeberCaptionAnnotation = method.getAnnotation(Caption.class);
-            if ((memeberCaptionAnnotation != null) && (CommonsStringUtils.isStringSet(memeberCaptionAnnotation.name()))) {
+            if (memeberCaptionAnnotation != null) {
                 memeberCaption = memeberCaptionAnnotation.name();
             } else {
                 memeberCaption = EnglishGrammar.capitalize(method.getName());
