@@ -119,13 +119,13 @@ public class FinancialViewForm extends CEntityForm<PotentialTenantFinancial> {
                 });
                 main.add(new VistaWidgetDecorator(currentEmployedForYears));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().street1(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().street1(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().street2(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().street2(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().city(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().city(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().province(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().province(), this)));
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto().supervisorName(), this)));
                 main.add(new HTML());

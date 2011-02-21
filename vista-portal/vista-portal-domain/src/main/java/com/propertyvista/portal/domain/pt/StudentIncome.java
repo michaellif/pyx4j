@@ -13,10 +13,25 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.Money;
+
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Employer extends IAddress, IEmploymentInfo {
+public interface StudentIncome extends IAddress, IEmploymentInfo {
 
-    IPrimitive<String> name();
+    public enum FundingChoice {
+        scolarship, bursary, grant, loan
+    }
 
+    IPrimitive<String> school();
+
+    @Caption(name = "Graduate/undergraduate")
+    IPrimitive<Boolean> graduate();
+
+    IPrimitive<String> fieldOfStudy();
+
+    IPrimitive<FundingChoice> fundingChoices();
+
+    Money monthlyAmount();
 }

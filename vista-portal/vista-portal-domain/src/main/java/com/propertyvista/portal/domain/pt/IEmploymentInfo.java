@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-10
+ * Created on 2011-02-20
  * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
@@ -16,32 +16,29 @@ package com.propertyvista.portal.domain.pt;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Table(name = "pt_address")
-public interface Address extends IEntity, IAddress {
+public interface IEmploymentInfo {
 
-    public enum OwnedRented {
-        Owned, Rented
-    }
+    @Caption(name = "Supervisor/Manager Name")
+    public abstract IPrimitive<String> supervisorName();
 
-    IPrimitive<Date> moveInDate();
+    @Caption(name = "Supervisor/Manager Phone")
+    public abstract IPrimitive<String> supervisorPhone();
 
-    IPrimitive<Date> moveOutDate();
+    @Caption(name = "Monthly salary")
+    public abstract IPrimitive<Double> monthlySalary();
 
-    IPrimitive<Double> payment();
+    @Caption(name = "Position")
+    public abstract IPrimitive<String> position();
 
-    IPrimitive<String> phone();
+    //TODO: either one of below may be optional/hidden
+    @Caption(name = "Employed for (years)")
+    IPrimitive<Integer> employedForYears();
 
-    @Caption(name = "Owned/Rented")
-    @Editor(type = EditorType.radiogroup)
-    IPrimitive<OwnedRented> rented();
+    @Caption(name = "Started on")
+    IPrimitive<Date> jobStart();
 
-    IPrimitive<Boolean> canadian();
-
-    IPrimitive<String> managerName();
+    @Caption(name = "Ended on")
+    IPrimitive<Date> jobEnd();
 }

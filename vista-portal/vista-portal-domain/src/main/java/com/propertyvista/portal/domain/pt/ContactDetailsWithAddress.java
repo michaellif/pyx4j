@@ -13,17 +13,6 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.shared.IPrimitive;
-
-public interface ContactDetailsWithAddress extends ContactDetails {
-    IPrimitive<String> street1();
-
-    IPrimitive<String> street2();
-
-    IPrimitive<String> city();
-
-    IPrimitive<String> province();
-
-    IPrimitive<String> postalCode();
+public interface ContactDetailsWithAddress extends ContactDetails, IAddress {
 
 }

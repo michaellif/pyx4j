@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-16
+ * Created on 2011-02-20
  * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
@@ -15,19 +15,26 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.Money;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface TenantCharge extends IEntity {
+public interface SelfEmployed extends IEntity, IAddress {
+    @Caption(name = "Name of Company")
+    IPrimitive<String> companyName();
 
-    //TODO @Detached
-    // TODO Back-end to retrieve only values for ToString
-    PotentialTenantInfo tenant();
+    @Caption(name = "Years in business")
+    IPrimitive<Integer> yearsInBusiness();
 
-    IPrimitive<Integer> percentage();
+    @Caption(name = "Is fully owned")
+    IPrimitive<Boolean> fullyOwned();
 
-    //Calculated base on percentage and total monthly payable
-    @EmbeddedEntity
-    Money charge();
+    @Caption(name = "Monthly revenue")
+    Money monthlyRevenue();
+
+    @Caption(name = "Monthly salary/dividend")
+    Money monthlySalary();
+
+    @Caption(name = "Number of employees")
+    IPrimitive<Integer> numberOfEmployees();
 }

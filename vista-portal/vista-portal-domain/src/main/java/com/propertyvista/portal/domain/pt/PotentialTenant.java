@@ -13,44 +13,18 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @ToStringFormat("{0} {1} {2}")
-public interface PotentialTenant extends IApplicationEntity {
+public interface PotentialTenant extends IPerson {
 
     public enum Relationship {
         Applicant, Spouse, Son, Daughter, Other
     }
-
-    @Caption(name = "First Name")
-    @ToString(index = 1)
-    IPrimitive<String> firstName();
-
-    @Caption(name = "Middle")
-    IPrimitive<String> middleName();
-
-    @Caption(name = "Last Name")
-    @ToString(index = 2)
-    IPrimitive<String> lastName();
-
-    @Caption(name = "Birth Date")
-    IPrimitive<Date> birthDate();
-
-    @Caption(name = "Home")
-    IPrimitive<String> homePhone();
-
-    @Caption(name = "Mobile")
-    IPrimitive<String> mobilePhone();
-
-    @Caption(name = "Email")
-    IPrimitive<String> email();
 
     @ToString(index = 0)
     IPrimitive<Relationship> relationship();

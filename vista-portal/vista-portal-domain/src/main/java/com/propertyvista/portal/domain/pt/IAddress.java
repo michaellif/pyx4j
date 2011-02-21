@@ -7,27 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-16
+ * Created on 2011-02-20
  * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
-
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface TenantCharge extends IEntity {
+public interface IAddress extends IEntity {
 
-    //TODO @Detached
-    // TODO Back-end to retrieve only values for ToString
-    PotentialTenantInfo tenant();
+    @Caption(name = "Address 1")
+    IPrimitive<String> street1();
 
-    IPrimitive<Integer> percentage();
+    @Caption(name = "Address 2")
+    IPrimitive<String> street2();
 
-    //Calculated base on percentage and total monthly payable
-    @EmbeddedEntity
-    Money charge();
+    @Caption(name = "City")
+    IPrimitive<String> city();
+
+    @Caption(name = "Province")
+    IPrimitive<String> province();
+
+    @Caption(name = "Postal code")
+    IPrimitive<String> postalCode();
+
 }
