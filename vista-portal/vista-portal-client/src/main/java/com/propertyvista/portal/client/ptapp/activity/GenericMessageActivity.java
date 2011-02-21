@@ -18,6 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
 import com.propertyvista.portal.client.ptapp.ui.GenericMessageView;
@@ -39,15 +40,15 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
 
     private final PlaceController placeController;
 
-    private final PtAppWizardManager manager;
+    private final Provider<PtAppWizardManager> wizardManagerProvider;
 
     private Message message;
 
     @Inject
-    public GenericMessageActivity(GenericMessageView view, PlaceController placeController, PtAppWizardManager manager) {
+    public GenericMessageActivity(GenericMessageView view, PlaceController placeController, Provider<PtAppWizardManager> wizardManagerProvider) {
         this.view = view;
         this.placeController = placeController;
-        this.manager = manager;
+        this.wizardManagerProvider = wizardManagerProvider;
         view.setPresenter(this);
     }
 
@@ -58,7 +59,7 @@ public class GenericMessageActivity extends AbstractActivity implements GenericM
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        message = manager.getMessageDialog();
+        message = wizardManagerProvider.get().getMessageDialog();
         view.setMessage(message);
     }
 

@@ -23,4 +23,6 @@ public interface SiteGinjector extends AppSiteGinjector {
 
     SiteView getSiteView();
 
+    PtAppWizardManager getWizardManager();
+
 }

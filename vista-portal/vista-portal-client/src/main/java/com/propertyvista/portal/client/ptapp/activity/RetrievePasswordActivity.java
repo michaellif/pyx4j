@@ -36,7 +36,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
     private final PlaceController placeController;
 
     @Inject
-    public RetrievePasswordActivity(RetrievePasswordView view, PlaceController placeController, PtAppWizardManager manager) {
+    public RetrievePasswordActivity(RetrievePasswordView view, PlaceController placeController) {
         this.view = view;
         this.placeController = placeController;
         view.setPresenter(this);

@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.inject.Inject;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
@@ -31,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
@@ -42,9 +42,11 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private final EventBus eventBus;
 
+    private SiteGinjector ginjector;
+
     private final PlaceController placeController;
 
-    private final UnitSelectionCriteria unitSelectionCriteria;
+    private UnitSelectionCriteria unitSelectionCriteria;
 
     private Message messageDialog;
 
@@ -61,11 +63,15 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     }
 
-    @Inject
-    public PtAppWizardManager(EventBus eventBus, PlaceController placeController) {
+    public PtAppWizardManager(PlaceController placeController, EventBus eventBus) {
         this.eventBus = eventBus;
         this.placeController = placeController;
         eventBus.addHandler(SecurityControllerEvent.getType(), this);
+
+    }
+
+    public void initWizard(final SiteGinjector ginjector) {
+        this.ginjector = ginjector;
 
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
         unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
@@ -84,12 +90,35 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
             @Override
             public void onSuccess(Boolean result) {
-                showMessageDialog("We can't find that building", "Error", "Back", new Command() {
-                    @Override
-                    public void execute() {
-                        History.back();
-                    }
-                });
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                //TODO Vlad - this should return true
+                if (!result) {
+                    obtainAuthenticationData();
+                } else {
+                    showMessageDialog("We can't find that building", "Error", "Back", new Command() {
+                        @Override
+                        public void execute() {
+                            History.back();
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
             }
         });
     }
@@ -171,4 +200,5 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         }
 
     }
+
 }

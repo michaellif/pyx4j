@@ -30,7 +30,6 @@ public class SiteGinModule extends AppSiteGinModule {
         super.configure();
 
         bind(VistaUnrecoverableErrorHandler.class).asEagerSingleton();
-        bind(PtAppWizardManager.class).asEagerSingleton();
 
         install(new MvpModule());
 
@@ -44,6 +43,12 @@ public class SiteGinModule extends AppSiteGinModule {
         PlaceHistoryHandler historyHandler = super.getHistoryHandler(placeController, eventBus);
         historyHandler.register(placeController, eventBus, new SiteMap.CreateAccount());
         return historyHandler;
+    }
+
+    @Provides
+    @Singleton
+    public PtAppWizardManager getWizardManager(PlaceController placeController, EventBus eventBus) {
+        return new PtAppWizardManager(placeController, eventBus);
     }
 
 }

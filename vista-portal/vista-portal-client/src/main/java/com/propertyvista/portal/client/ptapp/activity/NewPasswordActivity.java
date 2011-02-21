@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
@@ -48,15 +49,15 @@ public class NewPasswordActivity extends AbstractActivity implements NewPassword
 
     private ConversationType conversationType;
 
-    private final PtAppWizardManager manager;
+    private final Provider<PtAppWizardManager> wizardManagerProvider;
 
     private String token;
 
     @Inject
-    public NewPasswordActivity(NewPasswordView view, PlaceController placeController, PtAppWizardManager manager) {
+    public NewPasswordActivity(NewPasswordView view, PlaceController placeController, Provider<PtAppWizardManager> wizardManagerProvider) {
         this.view = view;
         this.placeController = placeController;
-        this.manager = manager;
+        this.wizardManagerProvider = wizardManagerProvider;
         view.setPresenter(this);
     }
 
@@ -69,8 +70,8 @@ public class NewPasswordActivity extends AbstractActivity implements NewPassword
         if (conversationType == ConversationType.CREATE) {
             token = Window.Location.getParameter(ActivationServices.PASSWORD_TOKEN);
             if (CommonsStringUtils.isEmpty(token)) {
-                manager.showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"), i18n.tr("LogIn"),
-                        new Command() {
+                wizardManagerProvider.get().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
+                        i18n.tr("LogIn"), new Command() {
                             @Override
                             public void execute() {
                                 placeController.goTo(new SiteMap.Login());

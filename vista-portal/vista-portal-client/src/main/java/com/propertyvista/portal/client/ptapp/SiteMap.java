@@ -87,7 +87,7 @@ public class SiteMap {
     public static class TermsAndConditions extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Generic Message")
+    @PlaceProperties(caption = "")
     public static class GenericMessage extends AppPlace {
     }
 
