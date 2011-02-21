@@ -26,16 +26,21 @@ import java.util.Set;
 
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Transient;
 
 public class ReservedWords {
 
     private static Set<String> keywords;
 
-    public static void validate(TreeLogger logger, JMethod memberMethod) throws UnableToCompleteException {
+    public static void validate(TreeLogger logger, JClassType interfaceType, JMethod memberMethod) throws UnableToCompleteException {
+        if (interfaceType.getAnnotation(Transient.class) != null) {
+            return;
+        }
         String name = memberMethod.getName();
         MemberColumn memberColumn = memberMethod.getAnnotation(MemberColumn.class);
         if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
@@ -43,7 +48,7 @@ public class ReservedWords {
         }
         //TODO read file, to HashSet() 
         if (getKeywords().contains(name.toUpperCase(Locale.ENGLISH))) {
-            logger.log(TreeLogger.Type.ERROR, "Reserved keyword '" + name + "' used in class " + memberMethod.getEnclosingType());
+            logger.log(TreeLogger.Type.ERROR, "Reserved keyword '" + name + "' used in class " + interfaceType.getQualifiedSourceName());
             throw new UnableToCompleteException();
         }
     }

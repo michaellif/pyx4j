@@ -23,8 +23,10 @@ package com.pyx4j.entity.rdb.mapping;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.AdapterFactory;
@@ -58,15 +60,21 @@ public class EntityOperationsMeta {
             if (memberMeta.isTransient()) {
                 continue;
             }
+            String memberPersistenceName = memberName;
+            MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+            if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
+                memberPersistenceName = memberColumn.name();
+            }
             if (memberMeta.isEmbedded()) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else {
-                    addEmbededMemebers(dialect, new Vector<String>(), memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                    addEmbededMemebers(dialect, new Vector<String>(), memberPersistenceName,
+                            EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + memberName);
+                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + memberPersistenceName);
                     MemberOperationsMeta member = new MemberOperationsMeta(sqlName, memberMeta);
                     collectionMembers.add(member);
                     allMembers.add(member);
@@ -74,7 +82,7 @@ public class EntityOperationsMeta {
                         cascadeRetrieveMembers.add(member);
                     }
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta);
+                    MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberPersistenceName), memberMeta);
                     columnMembers.add(member);
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
@@ -86,11 +94,11 @@ public class EntityOperationsMeta {
                         cascadeRetrieveMembers.add(member);
                     }
                 } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + memberName);
+                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + memberPersistenceName);
                     MemberOperationsMeta member = new MemberOperationsMeta(sqlName, memberMeta);
                     collectionMembers.add(member);
                 } else {
-                    MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberName), memberMeta);
+                    MemberOperationsMeta member = new MemberOperationsMeta(dialect.sqlName(memberPersistenceName), memberMeta);
                     columnMembers.add(member);
                     allMembers.add(member);
                 }
@@ -123,20 +131,26 @@ public class EntityOperationsMeta {
             if (memberMeta.isTransient()) {
                 continue;
             }
+            String memberPersistenceName = memberName;
+            MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+            if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
+                memberPersistenceName = memberColumn.name();
+            }
             if (memberMeta.isEmbedded()) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else {
-                    addEmbededMemebers(dialect, thisPath, memberName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                    addEmbededMemebers(dialect, thisPath, memberPersistenceName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + sqlPrefix.toString() + memberName);
+                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + sqlPrefix.toString() + memberPersistenceName);
                     MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(sqlName, thisPath, memberMeta);
                     collectionMembers.add(member);
                     allMembers.add(member);
                 } else if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta);
+                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberPersistenceName), thisPath,
+                            memberMeta);
                     columnMembers.add(member);
                     allMembers.add(member);
                     if (memberMeta.isOwnedRelationships()) {
@@ -148,11 +162,12 @@ public class EntityOperationsMeta {
                         cascadeRetrieveMembers.add(member);
                     }
                 } else if (IPrimitiveSet.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + sqlPrefix.toString() + memberName);
+                    String sqlName = dialect.sqlName(entityMeta.getPersistenceName() + "_" + sqlPrefix.toString() + memberPersistenceName);
                     MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(sqlName, thisPath, memberMeta);
                     collectionMembers.add(member);
                 } else {
-                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberName), thisPath, memberMeta);
+                    MemberOperationsMeta member = new MemberEmbeddedOperationsMeta(dialect.sqlName(sqlPrefix.toString() + memberPersistenceName), thisPath,
+                            memberMeta);
                     columnMembers.add(member);
                     allMembers.add(member);
                 }
