@@ -26,17 +26,17 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface PotentialTenant extends IApplicationEntity {
 
     public enum Relationship {
-        applicant, spouse, son, daughter, other
+        Applicant, Spouse, Son, Daughter, Other
     }
 
-    @Caption(name = "First")
+    @Caption(name = "First Name")
     @ToString(index = 1)
     IPrimitive<String> firstName();
 
     @Caption(name = "Middle")
     IPrimitive<String> middleName();
 
-    @Caption(name = "Last")
+    @Caption(name = "Last Name")
     @ToString(index = 2)
     IPrimitive<String> lastName();
 

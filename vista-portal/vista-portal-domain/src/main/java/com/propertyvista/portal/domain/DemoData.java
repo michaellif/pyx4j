@@ -46,7 +46,7 @@ public class DemoData {
 
     //    public static int NUM_UNITS = 10;
 
-    public final static Relationship[] RELATIONSHIPS = { Relationship.spouse, Relationship.daughter, Relationship.son, Relationship.other };
+    public final static Relationship[] RELATIONSHIPS = { Relationship.Spouse, Relationship.Daughter, Relationship.Son, Relationship.Other };
 
     public final static String[] FIRST_NAMES = { "John", "Jim", "Bob", "Alex", "Chris" };
 

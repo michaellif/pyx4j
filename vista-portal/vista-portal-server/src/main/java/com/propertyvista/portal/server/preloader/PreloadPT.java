@@ -171,7 +171,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
         // first tenant must always be an applicant
         if (index == 0) {
-            pti.relationship().setValue(Relationship.applicant);
+            pti.relationship().setValue(Relationship.Applicant);
         } else {
             pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
         }

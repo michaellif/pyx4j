@@ -30,13 +30,13 @@ public interface Charges extends IApplicationEntity {
      */
 
     @Owned
-    @Caption(name = "Rent Related Charges")
+    @Caption(name = "Rent-Related Charges")
     @ReadOnly
     IList<ChargeLine> rentCharges();
 
     // When changed the SharedCalculation.calculateCharges should be called on UI.
     @Owned
-    @Caption(name = "Avalable Upgrdes")
+    @Caption(name = "Available Upgrades")
     IList<ChargeLineSelectable> upgradeCharges();
 
     @Owned
