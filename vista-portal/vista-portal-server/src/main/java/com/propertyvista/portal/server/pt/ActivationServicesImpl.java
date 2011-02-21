@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.mail.internet.AddressException;
@@ -26,10 +29,15 @@ import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
+import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
+import com.propertyvista.portal.server.access.AccessKey;
 import com.propertyvista.portal.server.access.AntiBot;
 import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
+import com.propertyvista.portal.server.mail.MessageTemplates;
 import com.propertyvista.server.domain.UserCredential;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -39,8 +47,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.server.AuthenticationServicesImpl;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailDeliveryStatus;
+import com.pyx4j.server.mail.MailMessage;
 
 public class ActivationServicesImpl implements ActivationServices {
 
@@ -102,5 +114,92 @@ public class ActivationServicesImpl implements ActivationServices {
             return AuthenticationServicesImpl.createAuthenticationResponse(null);
         }
 
+    }
+
+    public static class PasswordReminderImpl implements ActivationServices.PasswordReminder {
+
+        @Override
+        public VoidSerializable execute(PasswordRetrievalRequest request) {
+            if (!validEmailAddress(request.email().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Email"));
+            }
+            AntiBot.assertCaptcha(request.captcha().getValue());
+
+            EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue().toLowerCase()));
+            List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            if (users.size() == 0) {
+                throw new UserRuntimeException(i18n.tr("E-mail not registered"));
+            }
+            User user = users.get(0);
+
+            UserCredential credential = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+            if (credential == null) {
+                throw new UserRuntimeException(i18n.tr("Invalid login/password"));
+            }
+            credential.accessKey().setValue(AccessKey.createAccessKey());
+            Calendar expire = new GregorianCalendar();
+            expire.add(Calendar.DATE, 1);
+            credential.accessKeyExpire().setValue(expire.getTime());
+            PersistenceServicesFactory.getPersistenceService().persist(credential);
+
+            String token = AccessKey.compressToken(user.email().getValue(), credential.accessKey().getValue());
+
+            MailMessage m = new MailMessage();
+            m.setTo(user.email().getValue());
+            m.setSender(MessageTemplates.getSender());
+            m.setSubject(i18n.tr("Property Vista password reset"));
+            m.setHtmlBody(MessageTemplates.createPasswordResetEmail(user.name().getValue(), token));
+
+            if (MailDeliveryStatus.Success != Mail.send(m)) {
+                throw new UserRuntimeException(i18n.tr("Mail Service is temporary unavalable, try again later"));
+            }
+            log.debug("pwd change token {} is sent to {}", token, user.email().getValue());
+            return null;
+        }
+    }
+
+    public static class PasswordResetImpl implements ActivationServices.PasswordReset {
+
+        @Override
+        public AuthenticationResponse execute(PasswordChangeRequest request) {
+            // Log-in with token
+            AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
+            if (!validEmailAddress(token.email)) {
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid Email"));
+            }
+
+            final User userMeta = EntityFactory.create(User.class);
+            EntityQueryCriteria<User> criteria = new EntityQueryCriteria<User>(User.class);
+
+            criteria.add(PropertyCriterion.eq(userMeta.email(), token.email));
+            List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            if (users.size() != 1) {
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid request"));
+            }
+            User user = users.get(0);
+
+            UserCredential cr = PersistenceServicesFactory.getPersistenceService().retrieve(UserCredential.class, user.getPrimaryKey());
+            if (cr == null) {
+                throw new RuntimeExceptionSerializable(i18n.tr("Invalid user account, contact support"));
+            }
+            if (!cr.enabled().isBooleanTrue()) {
+                throw new RuntimeExceptionSerializable(i18n.tr("Your account is suspended"));
+            }
+            if (!token.accessKey.equals(cr.accessKey().getValue())) {
+                AntiBot.authenticationFailed(token.email);
+                throw new RuntimeException(i18n.tr("Invalid request"));
+            }
+            if ((new Date().after(cr.accessKeyExpire().getValue()))) {
+                throw new RuntimeExceptionSerializable(i18n.tr("Token has expired."));
+            }
+            cr.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword(request.newPassword().getValue()));
+            cr.accessKey().setValue(null);
+            PersistenceServicesFactory.getPersistenceService().persist(cr);
+
+            VistaAuthenticationServicesImpl.beginSession(user, cr);
+
+            return AuthenticationServicesImpl.createAuthenticationResponse(null);
+        }
     }
 }

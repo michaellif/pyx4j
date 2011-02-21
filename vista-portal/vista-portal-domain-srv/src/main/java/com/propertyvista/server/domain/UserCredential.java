@@ -43,4 +43,10 @@ public interface UserCredential extends IEntity {
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
+    @RpcTransient
+    IPrimitive<String> accessKey();
+
+    @RpcTransient
+    IPrimitive<Date> accessKeyExpire();
+
 }

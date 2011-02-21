@@ -31,6 +31,15 @@ public class SystemConfig extends HostConfig {
 
     protected ProxyConfig caledonProxy;
 
+    private static SystemConfig instance;
+
+    public static SystemConfig instance() {
+        if (instance == null) {
+            instance = new SystemConfig();
+        }
+        return instance;
+    }
+
     public SystemConfig() {
         configure();
     }

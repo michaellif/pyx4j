@@ -15,10 +15,12 @@ package com.propertyvista.portal.server;
 
 import javax.servlet.ServletContext;
 
+import com.propertyvista.config.VistaSMTPMailServiceConfig;
 import com.propertyvista.portal.server.access.VistaAccessControlList;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
@@ -66,6 +68,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     @Override
     public DataPreloaderCollection getDataPreloaders() {
         return new VistaDataPreloaders();
+    }
+
+    @Override
+    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
+        return VistaSMTPMailServiceConfig.instance();
     }
 
     @Override
