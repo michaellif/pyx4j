@@ -50,20 +50,21 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.setWidth("100%");
         for (EntityFolderColumnDescriptor column : columns) {
-            SimplePanel wrapper = new SimplePanel();
-            wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-            wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
-            main.add(wrapper);
-            wrapper.getElement().getStyle().setFloat(Float.LEFT);
-            wrapper.setWidth(column.getWidth());
-
             CComponent<?> component = createCell(column);
             component.setWidth("100%");
-
-            wrapper.setWidget(component);
-
+            main.add(createDecorator(component, column.getWidth()));
         }
         setWidget(main);
+    }
+
+    protected SimplePanel createDecorator(CComponent<?> component, String width) {
+        SimplePanel wrapper = new SimplePanel();
+        wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
+        wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
+        wrapper.getElement().getStyle().setFloat(Float.LEFT);
+        wrapper.setWidth(width);
+        wrapper.setWidget(component);
+        return wrapper;
     }
 
     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
