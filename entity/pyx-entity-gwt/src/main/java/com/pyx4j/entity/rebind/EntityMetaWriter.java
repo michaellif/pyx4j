@@ -340,6 +340,9 @@ public class EntityMetaWriter {
             }
 
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
+            if (!data.persistenceTransient) {
+                ReservedWords.validate(logger, method);
+            }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
             data.detached = (method.getAnnotation(Detached.class) != null);
             data.embedded = (method.getAnnotation(EmbeddedEntity.class) != null) || (valueClass.getAnnotation(EmbeddedEntity.class) != null);
