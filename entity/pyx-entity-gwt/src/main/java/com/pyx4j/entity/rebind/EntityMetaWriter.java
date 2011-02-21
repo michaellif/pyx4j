@@ -37,7 +37,6 @@ import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -116,7 +115,7 @@ public class EntityMetaWriter {
         String description = null;
         String watermark = null;
         Caption captionAnnotation = interfaceType.getAnnotation(Caption.class);
-        if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
+        if (captionAnnotation != null) {
             caption = captionAnnotation.name();
         } else {
             caption = EnglishGrammar.capitalize(interfaceType.getSimpleSourceName());

@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.annotations.Caption;
@@ -132,7 +131,7 @@ public class MemberMetaImpl implements MemberMeta {
         }
 
         Caption captionAnnotation = method.getAnnotation(Caption.class);
-        if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
+        if (captionAnnotation != null) {
             caption = captionAnnotation.name();
         } else {
             caption = EnglishGrammar.capitalize(fieldName);

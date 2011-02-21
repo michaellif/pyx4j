@@ -89,7 +89,7 @@ public class EntityMetaImpl implements EntityMeta {
         }
 
         Caption captionAnnotation = entityClass.getAnnotation(Caption.class);
-        if ((captionAnnotation != null) && (CommonsStringUtils.isStringSet(captionAnnotation.name()))) {
+        if (captionAnnotation != null) {
             caption = captionAnnotation.name();
         } else {
             caption = EnglishGrammar.capitalize(entityClass.getSimpleName());
