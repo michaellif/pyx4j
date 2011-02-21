@@ -16,11 +16,9 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -35,7 +33,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
@@ -45,7 +42,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 
 @Singleton
-public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
+public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
     public InfoViewForm() {
         super(PotentialTenantInfo.class);
@@ -56,17 +53,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
-        main.add(new VistaWidgetDecorator(create(proto().firstName(), this)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().middleName(), this)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().lastName(), this)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().homePhone(), this)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().email(), this)));
+        createIPerson(main, proto());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
         main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this)));
@@ -132,16 +119,7 @@ public class InfoViewForm extends CEntityForm<PotentialTenantInfo> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().street1(), this)));
-                main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().street2(), this)));
-                main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().city(), this)));
-                main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().province(), this)));
-                main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().postalCode(), this)));
-                main.add(new HTML());
+                createIAddress(main, proto());
                 main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this)));
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto().moveOutDate(), this)));
