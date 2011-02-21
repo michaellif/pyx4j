@@ -38,9 +38,9 @@ public interface SocialServices extends IAddress {
     IPrimitive<String> yearsReceiving();
 
     @Caption(name = "Started on")
-    IPrimitive<Date> from();
+    IPrimitive<Date> started();
 
     @Caption(name = "Ended on")
-    IPrimitive<Date> to();
+    IPrimitive<Date> ended();
 
 }
