@@ -145,7 +145,6 @@ public class FlowplayerWidget extends ExtSWFWidget {
          };
     }-*/;
 
-    @SuppressWarnings("unused")
     private static void flowplayerEvent(String playerApiId, String eventName, String arg1, String arg2, String arg3) {
         try {
             FlowplayerWidget p = instances.get(playerApiId);

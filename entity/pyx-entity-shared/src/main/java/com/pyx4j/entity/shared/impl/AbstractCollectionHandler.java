@@ -40,7 +40,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     private final Class<TYPE> valueClass;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     protected AbstractCollectionHandler(Class<? extends IObject> clazz, Class<TYPE> valueClass, IEntity parent, String fieldName) {
         super(clazz, parent, fieldName);
         this.valueClass = valueClass;

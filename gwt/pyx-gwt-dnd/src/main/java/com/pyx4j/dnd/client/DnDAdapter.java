@@ -33,15 +33,21 @@ public abstract class DnDAdapter {
     }
 
     private static native void addEventListener(String type, Element elt) /*-{
-        if ($doc.addEventListener) {
-        elt.addEventListener(type, @com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent, true);
-        } else {
-        var ieDispatcher = $entry(function() { @com.google.gwt.user.client.impl.DOMImplTrident::callDispatchEvent.call(elt, $wnd.event); });    
-        elt.attachEvent("on"+ type, ieDispatcher);
-        }
+		if ($doc.addEventListener) {
+			elt
+					.addEventListener(
+							type,
+							@com.google.gwt.user.client.impl.DOMImplStandard::dispatchEvent,
+							true);
+		} else {
+			var ieDispatcher = $entry(function() {
+				@com.google.gwt.user.client.impl.DOMImplTrident::callDispatchEvent
+						.call(elt, $wnd.event);
+			});
+			elt.attachEvent("on" + type, ieDispatcher);
+		}
     }-*/;
 
-    @SuppressWarnings("deprecation")
     private static <H extends EventHandler> HandlerRegistration addHandler(Widget widget, DomEvent.Type<H> type, final H handler) {
         com.google.gwt.event.shared.HandlerManager hm = WidgetAccess.ensureHandlers(widget);
         if (hm.getHandlerCount(type) == 0) {

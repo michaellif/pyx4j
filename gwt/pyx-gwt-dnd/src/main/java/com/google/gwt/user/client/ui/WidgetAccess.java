@@ -22,7 +22,6 @@ package com.google.gwt.user.client.ui;
 
 public class WidgetAccess {
 
-    @SuppressWarnings("deprecation")
     public static com.google.gwt.event.shared.HandlerManager ensureHandlers(Widget widget) {
         return widget.ensureHandlers();
     }
