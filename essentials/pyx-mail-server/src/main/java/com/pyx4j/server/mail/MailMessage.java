@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 public class MailMessage {
 
@@ -74,6 +75,13 @@ public class MailMessage {
 
     public void setTo(Collection<String> to) {
         this.to = to;
+    }
+
+    public void setTo(String to) {
+        if (this.to == null) {
+            this.to = new Vector<String>();
+        }
+        this.to.add(to);
     }
 
     public Collection<String> getCc() {

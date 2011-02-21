@@ -22,11 +22,11 @@ package com.pyx4j.server.mail;
 
 public class Mail {
 
-    public MailDeliveryStatus send(MailMessage mailMessage) {
+    public static MailDeliveryStatus send(MailMessage mailMessage) {
         return getMailService().send(mailMessage);
     }
 
-    public IMailService getMailService() {
+    public static IMailService getMailService() {
         return new SMTPMailServiceImpl();
     }
 
