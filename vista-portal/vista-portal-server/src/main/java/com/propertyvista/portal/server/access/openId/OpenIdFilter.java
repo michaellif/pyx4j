@@ -30,12 +30,16 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.portal.server.VistaServerSideConfiguration;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
 
 public class OpenIdFilter implements Filter {
 
     private final static Logger log = LoggerFactory.getLogger(OpenIdFilter.class);
+
+    static String REQUESTED_URL_ATTRIBUTE = "access-requested";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -54,8 +58,10 @@ public class OpenIdFilter implements Filter {
             if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired()) || httprequest.getServletPath().startsWith("/o/")) {
                 chain.doFilter(request, response);
             } else {
-                log.debug("authentication required for ServletPath [{}]", httprequest.getServletPath());
+                String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
+                log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
                 OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
+                Context.getVisit().setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
             }
         }
     }

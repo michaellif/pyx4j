@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -169,18 +170,8 @@ public class OpenId {
             log.info("has discovered {}", discovered);
 
             // extract the receiving URL from the HTTP request
-            StringBuffer receivingURL;
-            if (request.getHeader("x-forwarded-host") != null) {
-                receivingURL = new StringBuffer();
-                receivingURL.append("http://").append(request.getHeader("x-forwarded-host")).append(request.getRequestURI());
-            } else {
-                receivingURL = request.getRequestURL();
-            }
-            String queryString = request.getQueryString();
-            if (queryString != null && queryString.length() > 0) {
-                receivingURL.append("?").append(request.getQueryString());
-            }
-            log.info("verify the response {}", receivingURL.toString());
+            String receivingURL = ServletUtils.getActualRequestURL(request, true);
+            log.info("verify the response {}", receivingURL);
 
             String claimed_id = responsePrams.getParameterValue("openid.claimed_id");
             log.info("verify openid.claimed_id {}", claimed_id);
@@ -191,7 +182,7 @@ public class OpenId {
 
             // verify the response; ConsumerManager needs to be the same
             // (static) instance used to place the authentication request
-            VerificationResult verification = manager.verify(receivingURL.toString(), responsePrams, discovered);
+            VerificationResult verification = manager.verify(receivingURL, responsePrams, discovered);
 
             // examine the verification result and extract the verified identifier
             Identifier verified = verification.getVerifiedId();

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 @SuppressWarnings("serial")
@@ -50,7 +51,11 @@ public class OpenIdServlet extends HttpServlet {
             Set<Behavior> behaviours = new HashSet<Behavior>();
             behaviours.add(CoreBehavior.USER);
             Lifecycle.beginSession(null, behaviours);
-            createResponsePage(response, false, "Login successful Continue to application", ServerSideConfiguration.instance().getMainApplicationURL());
+            String receivingURL = (String) Context.getVisit().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
+            if (receivingURL == null) {
+                receivingURL = ServerSideConfiguration.instance().getMainApplicationURL();
+            }
+            createResponsePage(response, false, "Login successful Continue to application", receivingURL);
         }
     }
 
