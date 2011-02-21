@@ -98,7 +98,7 @@ public abstract class QueryTestBase extends DatastoreTestBase {
     }
 
     public void testQueryByDate() {
-        execTestQuery(metaEmp.hiredate(), new Date(1000 * (new Date().getTime() / 1000)));
+        execTestQuery(metaEmp.from(), new Date(1000 * (new Date().getTime() / 1000)));
     }
 
     public void testQueryByLong() {

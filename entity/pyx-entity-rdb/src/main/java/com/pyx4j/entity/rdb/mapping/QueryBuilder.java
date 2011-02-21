@@ -30,7 +30,9 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
@@ -70,10 +72,15 @@ public class QueryBuilder<T extends IEntity> {
 
                     ObjectClassType objectClassType = ObjectClassType.Primitive;
                     MemberMeta memberMeta = null;
+                    String memberPersistenceName = propertyCriterion.getPropertyName();
                     if ((!propertyCriterion.getPropertyName().endsWith(IndexAdapter.SECONDARY_PRROPERTY_SUFIX))
                             && (!IEntity.PRIMARY_KEY.equals(propertyCriterion.getPropertyName()))) {
                         memberMeta = entityMeta.getMemberMeta(propertyCriterion.getPropertyName());
                         objectClassType = memberMeta.getObjectClassType();
+                        MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+                        if ((memberColumn != null) && (CommonsStringUtils.isStringSet(memberColumn.name()))) {
+                            memberPersistenceName = memberColumn.name();
+                        }
                     }
                     switch (objectClassType) {
                     case EntityList:
@@ -89,7 +96,7 @@ public class QueryBuilder<T extends IEntity> {
                         break;
                     default:
                         sql.append(alias).append('.');
-                        sql.append(dialect.sqlName(propertyCriterion.getPropertyName()));
+                        sql.append(dialect.sqlName(memberPersistenceName));
                     }
 
                     if (valueIsNull(propertyCriterion.getValue())) {

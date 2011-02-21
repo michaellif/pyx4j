@@ -51,7 +51,7 @@ public class EntityMetaTest extends InitializerTestCase {
         assertEquals("Entity Caption", "Laborer", EntityFactory.getEntityMeta(Employee.class).getCaption());
 
         assertEquals("Memeber Caption defined", "Home address", emp.homeAddress().getMeta().getCaption());
-        assertEquals("Memeber Caption implicit", "Hiredate", emp.hiredate().getMeta().getCaption());
+        assertEquals("Memeber Caption implicit", "Hire Date", emp.from().getMeta().getCaption());
         assertEquals("Memeber Caption implicit", "Work Address", emp.workAddress().getMeta().getCaption());
 
         MemberMeta setMemberMeta = emp.tasks().getMeta();

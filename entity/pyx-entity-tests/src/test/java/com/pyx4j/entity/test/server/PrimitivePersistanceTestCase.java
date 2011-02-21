@@ -49,20 +49,20 @@ public abstract class PrimitivePersistanceTestCase extends DatastoreTestBase {
 
     public void testDate() {
         Employee emp = EntityFactory.create(Employee.class);
-        Assert.assertNull("Initial value", emp.hiredate().getValue());
-        Assert.assertEquals("Class of Value", Date.class, emp.hiredate().getValueClass());
+        Assert.assertNull("Initial value", emp.from().getValue());
+        Assert.assertEquals("Class of Value", Date.class, emp.from().getValueClass());
         // Round to seconds
         GregorianCalendar c = new GregorianCalendar();
         Date today = getRoundedNow();
         c.setTime(today);
         c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
         Date day = c.getTime();
-        emp.hiredate().setValue(day);
+        emp.from().setValue(day);
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
-        Assert.assertEquals("Class of Value", Date.class, emp2.hiredate().getValue().getClass());
-        Assert.assertEquals("Value", day, emp2.hiredate().getValue());
+        Assert.assertEquals("Class of Value", Date.class, emp2.from().getValue().getClass());
+        Assert.assertEquals("Value", day, emp2.from().getValue());
     }
 
     public void testBoolean() {

@@ -42,11 +42,11 @@ public class PrimitiveTest extends InitializerTestCase {
 
     public void testDate() {
         Employee emp = EntityFactory.create(Employee.class);
-        assertNull("Initial value", emp.hiredate().getValue());
-        assertEquals("Class of Value", Date.class, emp.hiredate().getValueClass());
+        assertNull("Initial value", emp.from().getValue());
+        assertEquals("Class of Value", Date.class, emp.from().getValueClass());
         Date today = new Date();
-        emp.hiredate().setValue(today);
-        assertEquals("Value", today, emp.hiredate().getValue());
+        emp.from().setValue(today);
+        assertEquals("Value", today, emp.from().getValue());
     }
 
     public void testBoolean() {

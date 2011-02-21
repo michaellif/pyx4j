@@ -53,7 +53,7 @@ public class EntitySerializationGWTTest extends TestCase {
         final Employee emp = EntityFactory.create(Employee.class);
         emp.firstName().setValue("Bob");
         final Date today = new Date();
-        emp.hiredate().setValue(today);
+        emp.from().setValue(today);
         emp.reliable().setValue(Boolean.TRUE);
         emp.holidays().setValue(7L);
         emp.rating().setValue(5);
@@ -76,8 +76,8 @@ public class EntitySerializationGWTTest extends TestCase {
                 Assert.assertEquals("String Class of Value", String.class, emp2.firstName().getValue().getClass());
                 Assert.assertEquals("String Value", "Bob", emp2.firstName().getValue());
 
-                Assert.assertEquals("Date Class of Value", Date.class, emp2.hiredate().getValue().getClass());
-                Assert.assertEquals("Date Value", today, emp2.hiredate().getValue());
+                Assert.assertEquals("Date Class of Value", Date.class, emp2.from().getValue().getClass());
+                Assert.assertEquals("Date Value", today, emp2.from().getValue());
 
                 Assert.assertEquals("Boolean Class of Value", Boolean.class, emp2.reliable().getValue().getClass());
                 Assert.assertEquals("Boolean Value", Boolean.TRUE, emp2.reliable().getValue());

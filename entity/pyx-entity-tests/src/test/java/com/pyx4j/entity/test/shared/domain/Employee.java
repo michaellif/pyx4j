@@ -25,6 +25,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
@@ -40,8 +41,8 @@ public interface Employee extends IEntity {
 
     public static int DECLARED_MEMEBERS = 15;
 
-    public static String[] MEMEBERS_ORDER = new String[] { "firstName", "hiredate", "reliable", "holidays", "rating", "salary", "employmentStatus",
-            "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
+    public static String[] MEMEBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "salary", "employmentStatus", "accessStatus",
+            "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
 
     public static enum EmploymentStatus {
         DISMISSED, FULL_TIME, PART_TIME, CONTRACT
@@ -51,7 +52,9 @@ public interface Employee extends IEntity {
     IPrimitive<String> firstName();
 
     @Indexed
-    IPrimitive<Date> hiredate();
+    @Caption(name = "Hire Date")
+    @MemberColumn(name = "hiredate")
+    IPrimitive<Date> from();
 
     IPrimitive<Boolean> reliable();
 
