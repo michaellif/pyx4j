@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
+import com.propertyvista.portal.rpc.pt.ActivationServices;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18nFactory;
@@ -50,7 +52,8 @@ public class MessageTemplates {
                 + "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n"
                 + "    <a style=\"color:#929733\" href=\"{1}\">Change Your Password</a>", name,
 
-        absoluteUrl(ServerSideConfiguration.instance().getMainApplicationURL(), "", "password", token)));
+        // TODO Use SiteMap when it is moved to shared module.  SiteMap.CreatePassword()
+                absoluteUrl(ServerSideConfiguration.instance().getMainApplicationURL(), "create_password", ActivationServices.PASSWORD_TOKEN, token)));
     }
 
     public static String absoluteUrl(String appUrl, String node, String... encodedComponentsNameValue) {

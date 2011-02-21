@@ -28,6 +28,8 @@ public interface NewPasswordView extends IsWidget {
 
     public interface Presenter {
 
-        void newPassword(PasswordChangeRequest request);
+        void passwordReset(PasswordChangeRequest request);
+
+        void passwordChange(PasswordChangeRequest request);
     }
 }

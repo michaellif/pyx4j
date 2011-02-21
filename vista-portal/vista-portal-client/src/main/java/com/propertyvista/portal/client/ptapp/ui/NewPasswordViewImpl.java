@@ -44,7 +44,7 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.newPassword(form.getValue());
+                presenter.passwordReset(form.getValue());
             }
 
         });

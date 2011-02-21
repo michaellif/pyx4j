@@ -51,6 +51,11 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     }
 
     @Override
+    public String getApplicationEmailSender() {
+        return "\"Property Vista Support\" <nobody@birchwoodsoftwaregroup.com>";
+    }
+
+    @Override
     public AclCreator getAclCreator() {
         return new VistaAccessControlList();
     }

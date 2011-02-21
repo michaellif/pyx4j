@@ -30,6 +30,8 @@ public interface ActivationServices {
 
     };
 
+    public static final String PASSWORD_TOKEN = "token";
+
     /**
      * Reset password in the system base on token received in E-mail
      */
