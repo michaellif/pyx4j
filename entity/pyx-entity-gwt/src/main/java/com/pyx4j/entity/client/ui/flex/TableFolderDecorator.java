@@ -74,7 +74,11 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         header.setWidth("100%");
         header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         for (EntityFolderColumnDescriptor column : columns) {
-            Label label = new Label(column.getObject().getMeta().getCaption());
+            String caption = column.getObject().getMeta().getCaption();
+            if (caption == "") {
+                caption = "&nbsp";
+            }
+            HTML label = new HTML(caption);
             label.getElement().getStyle().setPaddingLeft(3, Unit.PX);
             label.getElement().getStyle().setPaddingRight(3, Unit.PX);
             label.getElement().getStyle().setFloat(Float.LEFT);
