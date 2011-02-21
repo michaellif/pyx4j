@@ -26,7 +26,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentTypes;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.SeasonallyEmployed;
 import com.propertyvista.portal.domain.pt.SelfEmployed;
 import com.propertyvista.portal.domain.pt.SocialServices;
@@ -75,10 +75,10 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         FlowPanel main = new FlowPanel();
         main.add(new ViewHeaderDecorator(new HTML("<h4>Income Details</h4>")));
         @SuppressWarnings("unchecked")
-        CComboBox<EmploymentTypes> occupation = (CComboBox<EmploymentTypes>) create(proto().occupation(), this);
-        occupation.addValueChangeHandler(new ValueChangeHandler<EmploymentTypes>() {
+        CComboBox<EmploymentType> occupation = (CComboBox<EmploymentType>) create(proto().occupation(), this);
+        occupation.addValueChangeHandler(new ValueChangeHandler<EmploymentType>() {
             @Override
-            public void onValueChange(ValueChangeEvent<EmploymentTypes> event) {
+            public void onValueChange(ValueChangeEvent<EmploymentType> event) {
                 setVisibility(event.getValue());
             }
         });
@@ -106,7 +106,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         setWidget(main);
     }
 
-    protected void setVisibility(EmploymentTypes value) {
+    protected void setVisibility(EmploymentType value) {
         fulltime.setVisible(false);
         parttime.setVisible(false);
         selfemployed.setVisible(false);
