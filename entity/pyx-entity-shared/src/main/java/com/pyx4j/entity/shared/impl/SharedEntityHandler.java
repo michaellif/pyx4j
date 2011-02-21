@@ -280,7 +280,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             } else {
                 member = lazyCreateMember(memberName);
                 if (member == null) {
-                    throw new RuntimeException("Unknown member " + memberName);
+                    throw new RuntimeException("Unknown member " + memberName + " in " + getObjectClass().getName());
                 }
             }
             members.put(memberName, member);
@@ -335,7 +335,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         for (String memberName : path.getPathMembers()) {
             //TODO ICollection support
             if (!(obj instanceof IEntity)) {
-                throw new RuntimeException("Invalid member in path " + memberName);
+                throw new RuntimeException("Invalid member in path " + memberName + " in " + getObjectClass().getName());
             }
             obj = ((IEntity) obj).getMember(memberName);
         }
@@ -352,7 +352,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             }
             //TODO ICollection support
             if (!(value instanceof Map<?, ?>)) {
-                throw new RuntimeException("Invalid member in path " + memberName);
+                throw new RuntimeException("Invalid member in path " + memberName + " in " + getObjectClass().getName());
             }
             value = ((Map<String, Object>) value).get(memberName);
         }
