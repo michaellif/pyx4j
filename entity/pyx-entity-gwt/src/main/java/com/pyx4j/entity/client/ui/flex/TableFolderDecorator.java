@@ -65,6 +65,7 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         imageHolder.add(addImage);
         addButtonLabel = new Label(title);
+        addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
         imageHolder.add(addButtonLabel);
 
