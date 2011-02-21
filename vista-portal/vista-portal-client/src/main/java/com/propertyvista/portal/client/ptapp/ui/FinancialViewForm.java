@@ -242,7 +242,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private CEntityEditableComponent<SeasonallyEmployed> createSeasonallyEmployedEditor() {
         return new CEntityEditableComponent<SeasonallyEmployed>(SeasonallyEmployed.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
@@ -258,7 +257,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private CEntityEditableComponent<StudentIncome> createStudentIncomeEditor() {
         return new CEntityEditableComponent<StudentIncome>(StudentIncome.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
@@ -274,7 +272,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private CEntityEditableComponent<SelfEmployed> createSelfEmployedEditor(final SelfEmployed proto) {
         return new CEntityEditableComponent<SelfEmployed>(SelfEmployed.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
@@ -299,7 +296,6 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private CEntityEditableComponent<SocialServices> createSocialServicesEditor() {
         return new CEntityEditableComponent<SocialServices>(SocialServices.class) {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
