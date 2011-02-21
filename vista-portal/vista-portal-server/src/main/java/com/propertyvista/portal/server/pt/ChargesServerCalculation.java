@@ -16,10 +16,11 @@ package com.propertyvista.portal.server.pt;
 import com.propertyvista.portal.domain.pt.Charge;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
-import com.propertyvista.portal.domain.pt.ChargeList;
+import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
 
 import com.pyx4j.entity.shared.IList;
@@ -65,7 +66,15 @@ public class ChargesServerCalculation {
         calculate(charges.paymentSplitCharges());
     }
 
-    public static void calculate(ChargeList<? extends Charge> charges) {
+    public static void calculate(ChargeLineList charges) {
+        double total = 0d;
+        for (Charge charge : charges.charges()) {
+            total += charge.charge().amount().getValue();
+        }
+        charges.total().setValue(DomainUtil.createMoney(total));
+    }
+
+    public static void calculate(TenantChargeList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
             total += charge.charge().amount().getValue();

@@ -31,23 +31,23 @@ public interface Charges extends IApplicationEntity {
     @Owned
     @Caption(name = "Rent-Related Charges")
     @ReadOnly
-    ChargeList<ChargeLine> rentCharges();
+    ChargeLineList rentCharges();
 
     // When changed the SharedCalculation.calculateCharges should be called on UI.
     @Owned
     @Caption(name = "Available Upgrades")
-    ChargeList<ChargeLine> upgradeCharges();
+    ChargeLineList upgradeCharges();
 
     @Owned
     @Caption(name = "Pro-Rated Charges")
-    ChargeList<ChargeLine> proRatedCharges();
+    ChargeLineList proRatedCharges();
 
     //Calculated. DUMMY data on back-end for now., Also "deposit" may be changed by SharedCalculation.calculateCharges
     @Owned
-    ChargeList<ChargeLine> applicationCharges();
+    ChargeLineList applicationCharges();
 
     //Calculated base on percentage and total monthly payable. see SharedCalculation.calculateCharges
     @Owned
-    ChargeList<TenantCharge> paymentSplitCharges();
+    TenantChargeList paymentSplitCharges();
 
 }

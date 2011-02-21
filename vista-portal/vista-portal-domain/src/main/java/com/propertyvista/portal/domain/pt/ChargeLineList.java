@@ -19,8 +19,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ChargeList<T extends Charge> extends IEntity {
-    IList<T> charges();
+public interface ChargeLineList extends IEntity {
+    IList<ChargeLine> charges();
 
     IPrimitive<Money> total();
 }
