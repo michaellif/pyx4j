@@ -22,7 +22,7 @@ import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessage
 import com.propertyvista.portal.client.ptapp.events.UserMessageHandler;
 import com.propertyvista.portal.client.ptapp.ui.UserMessageView;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class UserMessageActivity extends AbstractActivity implements UserMessageView.Presenter, UserMessageHandler {
 

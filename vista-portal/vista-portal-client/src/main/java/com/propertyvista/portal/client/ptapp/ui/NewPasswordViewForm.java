@@ -64,7 +64,7 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
             header.setHTML("<h2>Change Password</h2>");
             currentPassword.setVisible(true);
             break;
-        case CREATE:
+        case RESET:
             header.setHTML("<h2>Create Password</h2>");
             currentPassword.setVisible(false);
             break;

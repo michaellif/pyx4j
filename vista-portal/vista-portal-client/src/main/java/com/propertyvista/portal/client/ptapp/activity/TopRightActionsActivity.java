@@ -18,17 +18,17 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
 import com.propertyvista.portal.client.ptapp.themes.LightSkyBlueTheme;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsViewImpl.Theme;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.style.StyleManger;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {

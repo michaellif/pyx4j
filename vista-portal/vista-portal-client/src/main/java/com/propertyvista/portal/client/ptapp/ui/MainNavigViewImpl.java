@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
 

@@ -26,7 +26,7 @@ import com.propertyvista.portal.tester.domain.Employee;
 import com.propertyvista.portal.tester.ui.EditDepartmentView;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class EditDepartmenActivity extends AbstractActivity implements EditDepartmentView.Presenter {
 

@@ -19,7 +19,7 @@ import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 public interface NewPasswordView extends IsWidget {
 
     public enum ConversationType {
-        CREATE, CHANGE
+        RESET, CHANGE
     }
 
     public void setPresenter(Presenter presenter);

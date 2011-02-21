@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.tester.ui.LeftPortletsView;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class LeftPortletsActivity extends AbstractActivity implements LeftPortletsView.Presenter {
 

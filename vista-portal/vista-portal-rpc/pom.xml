@@ -18,6 +18,12 @@
 
     <dependencies>
 
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-domain</artifactId>
@@ -32,6 +38,11 @@
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
     </dependencies>

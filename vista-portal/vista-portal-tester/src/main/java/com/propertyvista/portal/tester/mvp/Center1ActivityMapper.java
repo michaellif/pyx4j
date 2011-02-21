@@ -26,7 +26,7 @@ import com.propertyvista.portal.tester.activity.SignUpActivity;
 import com.propertyvista.portal.tester.activity.SignUpResultActivity;
 import com.propertyvista.portal.tester.activity.TopRightActionsActivity;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class Center1ActivityMapper implements ActivityMapper {
 

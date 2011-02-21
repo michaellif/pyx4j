@@ -11,11 +11,11 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.client.ptapp;
+package com.propertyvista.portal.rpc.pt;
 
-import com.pyx4j.site.client.annotations.NavigationItem;
-import com.pyx4j.site.client.annotations.PlaceProperties;
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.annotations.NavigationItem;
+import com.pyx4j.site.rpc.annotations.PlaceProperties;
 
 public class SiteMap {
 
@@ -31,8 +31,8 @@ public class SiteMap {
     public static class RetrievePassword extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Create Password")
-    public static class CreatePassword extends AppPlace {
+    @PlaceProperties(caption = "Reset Password")
+    public static class ResetPassword extends AppPlace {
     }
 
     @PlaceProperties(caption = "Change Password")

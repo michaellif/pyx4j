@@ -22,13 +22,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.WizardStep.Status;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
-import com.pyx4j.site.client.place.AppPlace;
 import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class MainNavigActivity extends AbstractActivity implements MainNavigView.Presenter {
 

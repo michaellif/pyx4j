@@ -24,7 +24,7 @@ import com.propertyvista.portal.tester.SiteMap.Landing;
 import com.propertyvista.portal.tester.resources.SiteResources;
 import com.propertyvista.portal.tester.ui.MainContentView;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class MainContentActivity extends AbstractActivity implements MainContentView.Presenter {
 

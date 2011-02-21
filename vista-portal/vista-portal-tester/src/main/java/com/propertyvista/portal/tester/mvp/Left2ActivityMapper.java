@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.tester.activity.LeftPortletsActivity;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class Left2ActivityMapper implements ActivityMapper {
 

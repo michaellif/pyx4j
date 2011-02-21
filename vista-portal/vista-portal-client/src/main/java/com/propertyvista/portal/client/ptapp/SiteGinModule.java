@@ -20,6 +20,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.mvp.MvpModule;
 import com.propertyvista.portal.client.ptapp.ui.ViewModule;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.site.client.AppSiteGinModule;
 

@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.tester.SiteMap;
 import com.propertyvista.portal.tester.ui.TopRightActionsView;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 

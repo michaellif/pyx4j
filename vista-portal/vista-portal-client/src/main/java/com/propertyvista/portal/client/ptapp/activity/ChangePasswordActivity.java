@@ -13,56 +13,85 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
-import com.propertyvista.portal.client.ptapp.ui.RetrievePasswordView;
+import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
+import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
-import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
+import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
-public class RetrievePasswordActivity extends AbstractActivity implements RetrievePasswordView.Presenter {
+public class ChangePasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
 
-    private final RetrievePasswordView view;
+    private static I18n i18n = I18nFactory.getI18n(ChangePasswordActivity.class);
+
+    private final NewPasswordView view;
 
     private final PlaceController placeController;
 
+    private ConversationType conversationType;
+
     private final Provider<PtAppWizardManager> wizardManagerProvider;
 
+    private String token;
+
     @Inject
-    public RetrievePasswordActivity(RetrievePasswordView view, PlaceController placeController, Provider<PtAppWizardManager> wizardManagerProvider) {
+    public ChangePasswordActivity(NewPasswordView view, PlaceController placeController, Provider<PtAppWizardManager> wizardManagerProvider) {
         this.view = view;
+        view.setConversationType(ConversationType.CHANGE);
         this.placeController = placeController;
         this.wizardManagerProvider = wizardManagerProvider;
         view.setPresenter(this);
     }
 
-    public RetrievePasswordActivity withPlace(AppPlace place) {
+    public ChangePasswordActivity withPlace(AppPlace place) {
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        //TODO
         panel.setWidget(view);
     }
 
     @Override
-    public void retrievePassword(PasswordRetrievalRequest request) {
+    public void passwordReset(PasswordChangeRequest request) {
+        request.token().setValue(token);
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                wizardManagerProvider.get().showMessageDialog("Please check your email", "", null, null);
+                //TODO
             }
         };
-        RPCManager.execute(ActivationServices.PasswordReminder.class, request, callback);
+
+        RPCManager.execute(ActivationServices.PasswordChange.class, request, callback);
+
+    }
+
+    @Override
+    public void passwordChange(PasswordChangeRequest request) {
+        // TODO later
+    }
+
+    public void setConversationType(ConversationType type) {
+        conversationType = type;
+        view.setConversationType(type);
     }
 }

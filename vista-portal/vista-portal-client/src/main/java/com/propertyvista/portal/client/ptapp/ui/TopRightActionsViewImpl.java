@@ -10,13 +10,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.SiteMap;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.site.client.place.AppPlace;
-import com.pyx4j.site.client.place.AppPlaceInfo;
 import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
 

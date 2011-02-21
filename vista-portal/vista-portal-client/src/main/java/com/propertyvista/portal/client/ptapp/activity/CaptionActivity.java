@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.CaptionView;
 
-import com.pyx4j.site.client.place.AppPlace;
-import com.pyx4j.site.client.place.AppPlaceInfo;
 import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class CaptionActivity extends AbstractActivity {
 

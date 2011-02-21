@@ -18,24 +18,24 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.propertyvista.portal.client.ptapp.SiteMap;
 import com.propertyvista.portal.client.ptapp.activity.ApartmentActivity;
+import com.propertyvista.portal.client.ptapp.activity.ChangePasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.ChargesActivity;
 import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
 import com.propertyvista.portal.client.ptapp.activity.GenericMessageActivity;
 import com.propertyvista.portal.client.ptapp.activity.InfoActivity;
 import com.propertyvista.portal.client.ptapp.activity.LoginActivity;
-import com.propertyvista.portal.client.ptapp.activity.NewPasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.PaymentActivity;
 import com.propertyvista.portal.client.ptapp.activity.PetsActivity;
+import com.propertyvista.portal.client.ptapp.activity.ResetPasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.RetrievePasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.StaticContentActivity;
 import com.propertyvista.portal.client.ptapp.activity.SummaryActivity;
 import com.propertyvista.portal.client.ptapp.activity.TenantsActivity;
-import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class Center3ActivityMapper implements ActivityMapper {
 
@@ -45,7 +45,9 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     Provider<RetrievePasswordActivity> retrievePasswordActivityProvider;
 
-    Provider<NewPasswordActivity> newPasswordActivityProvider;
+    Provider<ResetPasswordActivity> resetPasswordActivityProvider;
+
+    Provider<ChangePasswordActivity> changePasswordActivityProvider;
 
     Provider<ApartmentActivity> apartmentActivityProvider;
 
@@ -74,7 +76,9 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     final Provider<RetrievePasswordActivity> retrievePasswordActivityProvider,
 
-    final Provider<NewPasswordActivity> newPasswordActivityProvider,
+    final Provider<ResetPasswordActivity> resetPasswordActivityProvider,
+
+    final Provider<ChangePasswordActivity> changePasswordActivityProvider,
 
     final Provider<ApartmentActivity> apartmentActivityProvider,
 
@@ -100,7 +104,8 @@ public class Center3ActivityMapper implements ActivityMapper {
         this.createAccountActivityProvider = createAccountActivityProvider;
         this.loginActivityProvider = loginActivityProvider;
         this.retrievePasswordActivityProvider = retrievePasswordActivityProvider;
-        this.newPasswordActivityProvider = newPasswordActivityProvider;
+        this.resetPasswordActivityProvider = resetPasswordActivityProvider;
+        this.changePasswordActivityProvider = changePasswordActivityProvider;
         this.apartmentActivityProvider = apartmentActivityProvider;
         this.tenantsActivityProvider = tenantsActivityProvider;
         this.infoActivityProvider = infoActivityProvider;
@@ -122,11 +127,9 @@ public class Center3ActivityMapper implements ActivityMapper {
         } else if (place instanceof SiteMap.RetrievePassword) {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.ChangePassword) {
-            newPasswordActivityProvider.get().setConversationType(ConversationType.CHANGE);
-            return newPasswordActivityProvider.get().withPlace((AppPlace) place);
-        } else if (place instanceof SiteMap.CreatePassword) {
-            newPasswordActivityProvider.get().setConversationType(ConversationType.CREATE);
-            return newPasswordActivityProvider.get().withPlace((AppPlace) place);
+            return changePasswordActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.ResetPassword) {
+            return resetPasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Apartment) {
             return apartmentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Tenants) {

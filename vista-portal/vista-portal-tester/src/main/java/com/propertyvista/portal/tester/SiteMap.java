@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.tester;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class SiteMap {
 

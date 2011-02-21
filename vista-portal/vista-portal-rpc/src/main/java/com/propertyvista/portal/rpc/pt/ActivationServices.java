@@ -39,11 +39,10 @@ public interface ActivationServices {
 
     };
 
-    //   TODO later
-    //    public interface PasswordChange extends Service<PasswordChangeRequest, VoidSerializable> {
-    //
-    //    };
-    //    
+    public interface PasswordChange extends Service<PasswordChangeRequest, VoidSerializable> {
+
+    };
+
     //    public interface EmailChange extends Service<EmailChangeRequest, VoidSerializable> {
     //
     //    };

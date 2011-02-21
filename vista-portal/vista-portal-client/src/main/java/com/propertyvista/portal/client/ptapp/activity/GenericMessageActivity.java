@@ -23,7 +23,7 @@ import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager.Message;
 import com.propertyvista.portal.client.ptapp.ui.GenericMessageView;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 /**
  * 

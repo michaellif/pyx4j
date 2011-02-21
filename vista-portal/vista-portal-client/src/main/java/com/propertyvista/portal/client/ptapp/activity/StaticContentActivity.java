@@ -25,9 +25,9 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.StaticContentView;
 
-import com.pyx4j.site.client.place.AppPlace;
-import com.pyx4j.site.client.place.AppPlaceInfo;
 import com.pyx4j.site.client.place.AppPlaceListing;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class StaticContentActivity extends AbstractActivity implements StaticContentView.Presenter {
 

@@ -11,7 +11,7 @@ import com.propertyvista.portal.tester.SiteMap;
 import com.propertyvista.portal.tester.SiteMap.SignUpResult;
 import com.propertyvista.portal.tester.ui.SignUpView;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class SignUpActivity extends AbstractActivity implements SignUpView.Presenter {
 

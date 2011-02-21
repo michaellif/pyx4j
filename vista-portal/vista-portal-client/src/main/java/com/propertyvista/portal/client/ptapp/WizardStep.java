@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
-import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.site.rpc.AppPlace;
 
 public class WizardStep {
 
