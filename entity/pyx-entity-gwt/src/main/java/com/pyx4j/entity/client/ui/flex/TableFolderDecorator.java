@@ -74,25 +74,11 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         for (EntityFolderColumnDescriptor column : columns) {
             Label label = new Label(column.getObject().getMeta().getCaption());
+            label.getElement().getStyle().setPaddingLeft(3, Unit.PX);
+            label.getElement().getStyle().setPaddingRight(3, Unit.PX);
             label.getElement().getStyle().setFloat(Float.LEFT);
-            label.getElement().getStyle().setMargin(1, Unit.PX);
             label.setWidth(column.getWidth());
             header.add(label);
-
-            HTML gap = new HTML();
-            gap.getElement().getStyle().setFloat(Float.LEFT);
-            gap.setHeight("1px");
-            gap.setWidth(column.getGap());
-            header.add(gap);
-
-            // add one more gap for the width of the combo drop down list button! 
-            if (column.getObject() instanceof CListBox) {
-                gap = new HTML();
-                gap.getElement().getStyle().setFloat(Float.LEFT);
-                gap.setHeight("1px");
-                gap.setWidth("6px");
-                header.add(gap);
-            }
         }
 
         add(header);

@@ -24,8 +24,9 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -49,16 +50,18 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.setWidth("100%");
         for (EntityFolderColumnDescriptor column : columns) {
-            CComponent<?> component = createCell(column);
-            component.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-            component.setWidth(column.getWidth());
-            main.add(component);
+            SimplePanel wrapper = new SimplePanel();
+            wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
+            wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
+            main.add(wrapper);
+            wrapper.getElement().getStyle().setFloat(Float.LEFT);
+            wrapper.setWidth(column.getWidth());
 
-            HTML gap = new HTML();
-            gap.getElement().getStyle().setFloat(Float.LEFT);
-            gap.setHeight("1px");
-            gap.setWidth(column.getGap());
-            main.add(gap);
+            CComponent<?> component = createCell(column);
+            component.setWidth("100%");
+
+            wrapper.setWidget(component);
+
         }
         setWidget(main);
     }
