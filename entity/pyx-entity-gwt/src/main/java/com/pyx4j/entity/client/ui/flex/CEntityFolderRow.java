@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -49,9 +50,15 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
         main.setWidth("100%");
         for (EntityFolderColumnDescriptor column : columns) {
             CComponent<?> component = createCell(column);
-            component.setWidth(column.getWidth());
             component.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+            component.setWidth(column.getWidth());
             main.add(component);
+
+            HTML gap = new HTML();
+            gap.getElement().getStyle().setFloat(Float.LEFT);
+            gap.setHeight("1px");
+            gap.setWidth(column.getGap());
+            main.add(gap);
         }
         setWidget(main);
     }

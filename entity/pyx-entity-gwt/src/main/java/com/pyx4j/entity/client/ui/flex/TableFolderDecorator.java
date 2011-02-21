@@ -22,7 +22,6 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
@@ -32,6 +31,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -39,6 +39,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CListBox;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 
@@ -72,10 +74,25 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         for (EntityFolderColumnDescriptor column : columns) {
             Label label = new Label(column.getObject().getMeta().getCaption());
-            label.setWidth(column.getWidth());
+            label.getElement().getStyle().setFloat(Float.LEFT);
             label.getElement().getStyle().setMargin(1, Unit.PX);
-            label.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+            label.setWidth(column.getWidth());
             header.add(label);
+
+            HTML gap = new HTML();
+            gap.getElement().getStyle().setFloat(Float.LEFT);
+            gap.setHeight("1px");
+            gap.setWidth(column.getGap());
+            header.add(gap);
+
+            // add one more gap for the width of the combo drop down list button! 
+            if (column.getObject() instanceof CListBox) {
+                gap = new HTML();
+                gap.getElement().getStyle().setFloat(Float.LEFT);
+                gap.setHeight("1px");
+                gap.setWidth("6px");
+                header.add(gap);
+            }
         }
 
         add(header);
