@@ -21,10 +21,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
+import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.AuthenticationServices;
 import com.pyx4j.site.client.place.AppPlace;
 
 public class NewPasswordActivity extends AbstractActivity implements NewPasswordView.Presenter {
@@ -44,10 +47,6 @@ public class NewPasswordActivity extends AbstractActivity implements NewPassword
         return this;
     }
 
-    public NewPasswordView getView() {
-        return view;
-    }
-
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
@@ -64,5 +63,9 @@ public class NewPasswordActivity extends AbstractActivity implements NewPassword
         // TODO: uncomment when AuthenticationServices.PasswordChange will be implemented!!!
         //        RPCManager.execute(AuthenticationServices.PasswordChange.class, request, callback);
 
+    }
+
+    public void setConversationType(ConversationType type) {
+        view.setConversationType(type);
     }
 }

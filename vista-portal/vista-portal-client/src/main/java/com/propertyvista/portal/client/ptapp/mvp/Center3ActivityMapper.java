@@ -116,10 +116,10 @@ public class Center3ActivityMapper implements ActivityMapper {
         } else if (place instanceof SiteMap.RetrievePassword) {
             return retrievePasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.ChangePassword) {
-            newPasswordActivityProvider.get().getView().setConversationType(ConversationType.CHANGE);
+            newPasswordActivityProvider.get().setConversationType(ConversationType.CHANGE);
             return newPasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.CreatePassword) {
-            newPasswordActivityProvider.get().getView().setConversationType(ConversationType.CREATE);
+            newPasswordActivityProvider.get().setConversationType(ConversationType.CREATE);
             return newPasswordActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Apartment) {
             return apartmentActivityProvider.get().withPlace((AppPlace) place);

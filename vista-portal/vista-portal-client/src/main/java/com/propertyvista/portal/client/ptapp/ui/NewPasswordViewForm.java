@@ -29,8 +29,28 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
 
     private static I18n i18n = I18nFactory.getI18n(NewPasswordViewForm.class);
 
+    private final HTML header;
+
+    private final VistaWidgetDecorator currentPassword;
+
     public NewPasswordViewForm() {
         super(PasswordChangeRequest.class);
+
+        FlowPanel main = new FlowPanel();
+
+        header = new HTML();
+        header.getElement().getStyle().setMarginBottom(1, Unit.EM);
+        main.add(header);
+
+        main.add(new HTML());
+        currentPassword = new VistaWidgetDecorator(create(proto().currentPassword(), this), 144, 152);
+        main.add(currentPassword);
+
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto().newPassword(), this), 144, 152));
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto().newPassword2(), this), 144, 152));
+        setWidget(main);
     }
 
     @Override
@@ -39,29 +59,15 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
 
     public void setConversationType(ConversationType type) {
 
-        FlowPanel main = new FlowPanel();
-        HTML header = new HTML();
-        header.getElement().getStyle().setMarginBottom(1, Unit.EM);
-        main.add(header);
-        main.add(new HTML());
-
         switch (type) {
         case CHANGE:
             header.setHTML("<h2>Change Password</h2>");
-            main.add(new VistaWidgetDecorator(create(proto().currentPassword(), this), 96, 152));
-            main.add(new HTML());
-            main.add(new VistaWidgetDecorator(create(proto().newPassword(), this), 96, 152));
-            main.add(new HTML());
-            main.add(new VistaWidgetDecorator(create(proto().newPassword2(), this), 96, 152));
+            currentPassword.setVisible(true);
             break;
         case CREATE:
             header.setHTML("<h2>Create Password</h2>");
-            main.add(new VistaWidgetDecorator(create(proto().newPassword(), this), 96, 152));
-            main.add(new HTML());
-            main.add(new VistaWidgetDecorator(create(proto().newPassword2(), this), 96, 152));
+            currentPassword.setVisible(false);
             break;
         }
-
-        setWidget(main);
     }
 }

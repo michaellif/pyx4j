@@ -54,7 +54,7 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
         newPasswordButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         add(newPasswordButton);
 
-        setWidth("30%");
+        setWidth("50%");
 
         getElement().getStyle().setMarginLeft(5, Unit.PCT);
         getElement().getStyle().setMarginRight(5, Unit.PCT);
