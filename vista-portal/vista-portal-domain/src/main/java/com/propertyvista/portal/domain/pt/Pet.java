@@ -40,7 +40,7 @@ public interface Pet extends IEntity {
 
     public IPrimitive<Integer> weight();
 
-    @Caption(name = " ")
+    @Caption(name = "Units")
     public IPrimitive<WeightUnit> weightUnit();
 
     public IPrimitive<Date> birthDate();
