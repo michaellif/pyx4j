@@ -22,6 +22,7 @@ package com.pyx4j.examples.domain.crm;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
@@ -33,6 +34,7 @@ public interface OrderPhoto extends IEntity {
     @Owner
     @Detached
     @Indexed
+    @MemberColumn(name = "odr")
     Order order();
 
     @RpcTransient
