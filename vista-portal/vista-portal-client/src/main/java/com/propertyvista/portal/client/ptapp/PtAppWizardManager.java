@@ -35,6 +35,8 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.place.AppPlace;
+import com.pyx4j.widgets.client.GlassPanel;
+import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 public class PtAppWizardManager implements SecurityControllerHandler {
 
@@ -71,6 +73,8 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     }
 
     public void initWizard(final SiteGinjector ginjector) {
+        GlassPanel.show(GlassStyle.Transparent);
+
         this.ginjector = ginjector;
 
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
@@ -90,17 +94,18 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
             @Override
             public void onSuccess(Boolean result) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 //TODO Vlad - this should return true
                 if (!result) {
                     obtainAuthenticationData();
                 } else {
+                    ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                     showMessageDialog("We can't find that building", "Error", "Back", new Command() {
                         @Override
                         public void execute() {
                             History.back();
                         }
                     });
+                    GlassPanel.hide();
                 }
             }
         });
@@ -113,12 +118,14 @@ public class PtAppWizardManager implements SecurityControllerHandler {
             @Override
             public void onSuccess(Boolean result) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                GlassPanel.hide();
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
+                GlassPanel.hide();
             }
         });
     }

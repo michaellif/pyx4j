@@ -83,8 +83,13 @@ public class GenericMessageViewImpl extends FlowPanel implements GenericMessageV
         } else {
             titleHtml.setText(message.getTitle());
             messageHtml.setText(message.getMessage());
-            actionButton.setText(message.getButtonText());
-            actionButton.setVisible(true);
+            if (message.getCommand() == null) {
+                actionButton.setVisible(false);
+            } else {
+                actionButton.setText(message.getButtonText());
+                actionButton.setVisible(true);
+            }
+
         }
 
     }

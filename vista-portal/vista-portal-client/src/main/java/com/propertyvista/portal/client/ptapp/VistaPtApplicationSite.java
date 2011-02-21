@@ -18,12 +18,16 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.CaptchaComposite;
+import com.pyx4j.widgets.client.GlassPanel;
 
 public class VistaPtApplicationSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
         final SiteGinjector ginjector = GWT.create(SiteGinjector.class);
+
+        RootPanel.get().add(GlassPanel.instance());
+
         RootPanel.get().add(ginjector.getSiteView());
 
         CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
