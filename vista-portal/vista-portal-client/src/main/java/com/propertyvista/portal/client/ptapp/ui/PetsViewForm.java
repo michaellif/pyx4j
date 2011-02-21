@@ -65,14 +65,14 @@ public class PetsViewForm extends CEntityForm<Pets> {
             {
                 Pet proto = EntityFactory.getEntityPrototype(Pet.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.type(), "60px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "80px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "80px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "80px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "80px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "80px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "80px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "80px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.type(), "6em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.name(), "10em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "8em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "4em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "3em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "7em", "0.5em"));
             }
 
             @Override
