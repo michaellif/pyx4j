@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.geo.GeoPoint;
 
 @EmbeddedEntity
 @ToStringFormat("{0} {1} {2} {3}, {4} {5}")
@@ -84,7 +83,7 @@ public interface Address extends IEntity {
 
     IPrimitive<String> countyName();
 
-//    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
+    //    IPrimitive<GeoPoint> location(); for now the database complains about this unknown type
 
     IPrimitive<AddressType> addressType();
 

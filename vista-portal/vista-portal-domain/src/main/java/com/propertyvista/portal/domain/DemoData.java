@@ -14,9 +14,6 @@
 package com.propertyvista.portal.domain;
 
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
-import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
-import com.propertyvista.portal.domain.pt.TenantIncome.IncomeType;
 
 public class DemoData {
 
