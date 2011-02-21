@@ -9,6 +9,14 @@
     <inherits name='com.pyx4j.forms.Forms'/>
     <inherits name='com.pyx4j.gwt.GwtCommons'/>
 
+	<define-configuration-property name="pyx.validateReservedKeywordsMemebers" is-multi-valued="false" />
+	<set-configuration-property name="pyx.validateReservedKeywordsMemebers" value="true"/>
+
+	<!--
+  		Remove IEntity type names from the Generated Code. 
+ 	-->
+ 	<define-configuration-property name="pyx.ElideEntityClasses" is-multi-valued="true" />
+ 	
     <replace-with class="com.pyx4j.entity.client.ClientEntityFactory">
 		<when-type-is class="com.pyx4j.entity.shared.IEntityFactory"/>
 	</replace-with>

@@ -44,6 +44,11 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 
 public class EntityFactoryGenerator extends Generator {
 
+    /**
+     * Configuration property.
+     */
+    public static final String CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS = "pyx." + "validateReservedKeywordsMemebers";
+
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
         TypeOracle oracle = context.getTypeOracle();
@@ -71,7 +76,7 @@ public class EntityFactoryGenerator extends Generator {
 
             RpcBlacklistCheck rpcFilter = new RpcBlacklistCheck(logger, context.getPropertyOracle());
 
-            ContextHelper contextHelper = new ContextHelper(context);
+            ContextHelper contextHelper = new ContextHelper(logger, context);
 
             List<JClassType> cases = new Vector<JClassType>();
 

@@ -25,7 +25,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.gwt.core.ext.BadPropertyValueException;
+import com.google.gwt.core.ext.ConfigurationProperty;
 import com.google.gwt.core.ext.GeneratorContext;
+import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
@@ -57,7 +61,9 @@ class ContextHelper {
 
     final JClassType numberType;
 
-    ContextHelper(GeneratorContext context) throws NotFoundException {
+    final boolean validateReservedKeywordsMemebers;
+
+    ContextHelper(TreeLogger logger, GeneratorContext context) throws NotFoundException, UnableToCompleteException {
         this.context = context;
 
         TypeOracle oracle = context.getTypeOracle();
@@ -69,6 +75,15 @@ class ContextHelper {
         iListInterfaceType = oracle.getType(IList.class.getName());
         iPrimitiveSetInterfaceType = oracle.getType(IPrimitiveSet.class.getName());
         numberType = oracle.getType(Number.class.getName());
+
+        try {
+            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(EntityFactoryGenerator.CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS);
+            validateReservedKeywordsMemebers = Boolean.valueOf(prop.getValues().get(0));
+        } catch (BadPropertyValueException e) {
+            logger.log(TreeLogger.ERROR, "The configuration property " + EntityFactoryGenerator.CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS
+                    + " was not defined. Is com.pyx4j.entity.Entity.gwt.xml inherited?");
+            throw new UnableToCompleteException();
+        }
     }
 
     boolean isInstantiabeEntity(JClassType type) {

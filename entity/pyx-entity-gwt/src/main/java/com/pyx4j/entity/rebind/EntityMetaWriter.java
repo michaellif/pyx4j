@@ -340,7 +340,7 @@ public class EntityMetaWriter {
             }
 
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
-            if (!data.persistenceTransient) {
+            if ((!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMemebers)) {
                 ReservedWords.validate(logger, interfaceType, method);
             }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
