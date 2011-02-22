@@ -87,7 +87,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         //        caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption.getElement().getStyle().setMarginTop(3, Unit.PX);
         main.add(caption);
-        main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this), 0, 7.1));
+        main.add(new VistaWidgetDecorator(create(proto().rentStart(), this), 0, 7.1));
 
         setWidget(main);
     }

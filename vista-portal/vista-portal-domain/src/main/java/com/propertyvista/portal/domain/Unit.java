@@ -74,8 +74,13 @@ public interface Unit extends Property {
     IPrimitive<Double> requiredDeposit();
 
     // need a lease-terms object
+    //IPrimitive<String> unitLeaseStatus();
 
-    IPrimitive<String> unitLeaseStatus();
+    //IPrimitive<String> unitOccpStatus();
 
-    IPrimitive<String> unitOccpStatus();
+    public static enum Status {
+        available, reserved, leased, notice;
+    }
+
+    IPrimitive<Status> status();
 }

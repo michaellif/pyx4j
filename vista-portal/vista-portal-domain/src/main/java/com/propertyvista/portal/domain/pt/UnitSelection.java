@@ -49,6 +49,6 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     IPrimitive<Integer> leaseTerm();
 
     @Caption(name = " ")
-    IPrimitive<Date> moveInDate();
+    IPrimitive<Date> rentStart();
 
 }
