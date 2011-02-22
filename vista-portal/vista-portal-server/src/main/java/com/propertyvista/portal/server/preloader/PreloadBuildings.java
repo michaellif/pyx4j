@@ -138,7 +138,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         unit.building().set(building);
         unit.floor().setValue(floor);
-        unit.unitType().setValue("Unknown");
+        unit.unitType().setValue(floor + "-230" + RandomUtil.randomInt(10));
         unit.area().setValue(area);
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
