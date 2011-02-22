@@ -19,30 +19,19 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
-    private static VistaSMTPMailServiceConfig instance;
+    public static VistaSMTPMailServiceConfig getGmailConfig(String prefix) {
 
-    public static VistaSMTPMailServiceConfig instance() {
-        if (instance == null) {
-            instance = getGmailConfig();
-        }
-        return instance;
-    }
-
-    private static VistaSMTPMailServiceConfig getGmailConfig() {
         VistaSMTPMailServiceConfig config = new VistaSMTPMailServiceConfig();
 
         config.host = "smtp.gmail.com";
         config.port = 465;
         config.starttls = true;
 
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/mail-credentials.properties");
+        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/" + prefix + "mail-credentials.properties");
         config.user = credentials.email;
         config.password = credentials.password;
 
         return config;
-    }
-
-    private VistaSMTPMailServiceConfig() {
     }
 
 }

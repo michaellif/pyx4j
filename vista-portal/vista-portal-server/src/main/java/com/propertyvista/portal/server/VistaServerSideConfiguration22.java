@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 15, 2011
+ * Created on Feb 22, 2011
  * @author vlads
  * @version $Id$
  */
@@ -16,42 +16,21 @@ package com.propertyvista.portal.server;
 import com.propertyvista.config.VistaSMTPMailServiceConfig;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
-import com.pyx4j.config.server.IPersistenceConfiguration;
 
-public class VistaServerSideConfiguration33 extends VistaServerSideConfigurationDev {
-
-    @Override
-    public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
-            @Override
-            public String dbName() {
-                return "vista_stable";
-            }
-
-            @Override
-            public String userName() {
-                return "vista_stable";
-            }
-
-            @Override
-            public String password() {
-                return "vista_stable";
-            }
-        };
-    }
+public class VistaServerSideConfiguration22 extends VistaServerSideConfigurationDev {
 
     @Override
     public String getMainApplicationURL() {
-        return "http://www33.birchwoodsoftwaregroup.com/";
+        return "http://www22.birchwoodsoftwaregroup.com/vista";
     }
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Property Vista Support33\" <support.www33@birchwoodsoftwaregroup.com>";
+        return "\"Property Vista Support22\" <support.www22@birchwoodsoftwaregroup.com>";
     }
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig("www33-");
+        return VistaSMTPMailServiceConfig.getGmailConfig("www22-");
     }
 }

@@ -41,13 +41,15 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
             return new VistaServerSideConfiguration33();
         } else if (servletContext.getServerInfo().contains("jetty")) {
             return new VistaServerSideConfigurationDev();
+        } else if ("vista".equals(contextName)) {
+            return new VistaServerSideConfiguration22();
         }
         return this;
     }
 
     @Override
     public String getMainApplicationURL() {
-        return "http://www22.birchwoodsoftwaregroup.com/vista";
+        return "http://www.birchwoodsoftwaregroup.com/";
     }
 
     @Override
@@ -77,7 +79,7 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
 
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.instance();
+        return VistaSMTPMailServiceConfig.getGmailConfig("");
     }
 
     @Override
