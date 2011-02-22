@@ -15,11 +15,13 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.Money;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 public interface ChargeLineList extends IEntity {
 
+    @Owned
     IList<ChargeLine> charges();
 
     Money total();

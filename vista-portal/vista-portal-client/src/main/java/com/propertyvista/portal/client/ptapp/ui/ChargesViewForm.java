@@ -45,36 +45,42 @@ public class ChargesViewForm extends CEntityForm<Charges> {
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(create(proto().applicationCharges(), this));
-        main.add(create(proto().rentCharges(), this));
-        main.add(create(proto().upgradeCharges(), this));
+        main.add(create(proto().rentCharges().charges(), this));
+
+        main.add(create(proto().upgradeCharges().charges(), this));
+        main.add(create(proto().proRatedCharges().charges(), this));
+        main.add(create(proto().applicationCharges().charges(), this));
+
+        //TODO
+        //main.add(create(proto().paymentSplitCharges(), this));
+
         setWidget(main);
     }
 
     @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member == proto().applicationCharges() || member == proto().rentCharges() || member == proto().upgradeCharges()) {
-            return createChargesEditorColumns();
+        if (member.getValueClass().equals(ChargeLine.class)) {
+            return createChargesEditorColumns(member == proto().upgradeCharges().charges());
         } else {
             return super.createMemberFolderEditor(member);
         }
     }
 
-    private CEntityFolder<ChargeLine> createChargesEditorColumns() {
+    private CEntityFolder<ChargeLine> createChargesEditorColumns(final boolean selectedable) {
+
         return new CEntityFolder<ChargeLine>() {
+
+            boolean selectedable1 = selectedable;
 
             private List<EntityFolderColumnDescriptor> columns;
             {
                 ChargeLine proto = EntityFactory.getEntityPrototype(ChargeLine.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.type(), "60px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.name(), "120px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.color(), "120px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "120px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "120px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "120px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "120px"));
-                //                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "120px"));
+                if (selectedable1) {
+                    columns.add(new EntityFolderColumnDescriptor(proto.selected(), "60px"));
+                }
+                columns.add(new EntityFolderColumnDescriptor(proto.label(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.charge().amount(), "40px"));
             }
 
             @Override
