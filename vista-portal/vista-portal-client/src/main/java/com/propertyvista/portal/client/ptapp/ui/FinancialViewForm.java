@@ -112,27 +112,29 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         selfemployed.setVisible(false);
         student.setVisible(false);
         socialservices.setVisible(false);
-        switch (value) {
-        case fulltime:
-            fulltime.setVisible(true);
-            break;
+        if (value != null) {
+            switch (value) {
+            case fulltime:
+                fulltime.setVisible(true);
+                break;
 
-        case parttime:
-        case seasonallyEmployed:
-            parttime.setVisible(true);
-            break;
+            case parttime:
+            case seasonallyEmployed:
+                parttime.setVisible(true);
+                break;
 
-        case student:
-            student.setVisible(true);
-            break;
+            case student:
+                student.setVisible(true);
+                break;
 
-        case selfemployed:
-            selfemployed.setVisible(true);
-            break;
+            case selfemployed:
+                selfemployed.setVisible(true);
+                break;
 
-        case socialServices:
-            socialservices.setVisible(true);
-            break;
+            case socialServices:
+                socialservices.setVisible(true);
+                break;
+            }
         }
     }
 
@@ -202,7 +204,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             return createEmployerEditor();
         }
         if (member.getValueClass().equals(SelfEmployed.class)) {
-            return createSelfEmployedEditor(proto().selfEmployed());
+            return createSelfEmployedEditor();
         }
         if (member.getValueClass().equals(SeasonallyEmployed.class)) {
             return createSeasonallyEmployedEditor();
@@ -270,22 +272,22 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         };
     }
 
-    private CEntityEditableComponent<SelfEmployed> createSelfEmployedEditor(final SelfEmployed proto) {
+    private CEntityEditableComponent<SelfEmployed> createSelfEmployedEditor() {
         return new CEntityEditableComponent<SelfEmployed>(SelfEmployed.class) {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto.companyName(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().companyName(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto.yearsInBusiness(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().yearsInBusiness(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto.fullyOwned(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().fullyOwned(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto.monthlyRevenue(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().monthlyRevenue(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto.monthlySalary(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto.numberOfEmployees(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().numberOfEmployees(), this)));
                 main.add(new HTML());
                 createIAddress(main, proto(), this);
                 main.add(new HTML());
