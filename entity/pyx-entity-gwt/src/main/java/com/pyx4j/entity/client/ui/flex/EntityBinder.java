@@ -120,6 +120,8 @@ public class EntityBinder<E extends IEntity> {
 
     @SuppressWarnings("unchecked")
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+        // verify that member actually exists in entity.
+        assert (proto().getMember(member.getPath()) != null);
         component.addValueChangeHandler(valuePropagation);
         applyAttributes(component, member);
         binding.put(component, member.getPath());
