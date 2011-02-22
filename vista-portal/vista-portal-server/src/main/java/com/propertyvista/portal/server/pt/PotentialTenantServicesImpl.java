@@ -30,6 +30,7 @@ import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
@@ -140,6 +141,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
+            if (request.proto() instanceof Summary) {
+                return retrieveSummary();
+            }
             IEntity ret;
             if (request.getPrimaryKey() == 0) {
                 // Find first Entity of that type in Application 
@@ -166,6 +170,22 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             }
 
             return ret;
+        }
+
+        private Summary retrieveSummary() {
+            Summary summary = EntityFactory.create(Summary.class);
+            retrieveApplicationEntity(summary.tenants());
+            retrieveApplicationEntity(summary.financial());
+            retrieveApplicationEntity(summary.pets());
+            retrieveApplicationEntity(summary.charges());
+            return null;
+        }
+
+        private <T extends IApplicationEntity> void retrieveApplicationEntity(T entity) {
+            @SuppressWarnings("unchecked")
+            EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+            entity.set(secureRetrieve(criteria));
         }
     }
 
@@ -239,4 +259,5 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             picture.contentBase64().setValue(new Base64().encodeToString(picture.content().getValue()));
         }
     }
+
 }
