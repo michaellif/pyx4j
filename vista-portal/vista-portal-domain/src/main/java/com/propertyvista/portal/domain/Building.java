@@ -61,6 +61,7 @@ public interface Building extends Property {
     @Owned
     IList<Phone> phoneList();
 
+    @Owned
     Email email(); // email business is not clear at the moment, we need a bit more detail on this
 
     IList<OrganizationContacts> contactsList();
