@@ -13,25 +13,14 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.domain.pt.Summary;
 
 @Singleton
-public class SummaryViewImpl extends SimplePanel implements SummaryView {
-
-    private Presenter presenter;
+public class SummaryViewImpl extends WizardStepViewImpl<Summary, SummaryViewPresenter> implements SummaryView {
 
     public SummaryViewImpl() {
-        Label labael = new Label("SummaryView");
-        labael.setSize("300px", "40px");
-        setWidget(labael);
-
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+        super(new SummaryViewForm());
     }
 
 }

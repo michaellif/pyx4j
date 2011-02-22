@@ -7,14 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 8, 2011
- * @author Misha
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * Created on Feb 16, 2011
+ * @author michaellif
+ * @version $Id: InfoViewPresenter.java 201 2011-02-16 23:35:22Z michaellif $
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.propertyvista.portal.domain.pt.Summary;
 
-public interface SummaryView extends WizardStepView<Summary, SummaryViewPresenter> {
-
+public interface SummaryViewPresenter extends WizardStepPresenter<Summary> {
 }

@@ -21,8 +21,6 @@ public interface Summary extends IEntity {
 
     public PotentialTenantList tenants();
 
-    public PotentialTenantInfo info();
-
     public PotentialTenantFinancial financial();
 
     public Pets pets();

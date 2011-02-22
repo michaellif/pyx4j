@@ -11,18 +11,28 @@
  * @author Misha
  * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
  */
-package com.propertyvista.portal.client.ptapp.activity;
+package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.inject.Inject;
-import com.propertyvista.portal.client.ptapp.ui.SummaryView;
-import com.propertyvista.portal.client.ptapp.ui.SummaryViewPresenter;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.inject.Singleton;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.pt.Summary;
 
-public class SummaryActivity extends WizardStepActivity<Summary, SummaryViewPresenter> implements SummaryViewPresenter {
+@Singleton
+public class SummaryViewForm extends BaseEntityForm<Summary> {
 
-    @Inject
-    public SummaryActivity(SummaryView view) {
-        super(view, Summary.class);
+    public SummaryViewForm() {
+        super(Summary.class);
+    }
+
+    @Override
+    public void createContent() {
+        FlowPanel main = new FlowPanel();
+
+        main.add(new ViewHeaderDecorator(new HTML("<h4>Sample: main applicant email: " + proto().tenants().tenants().get(0).email() + "</h4>")));
+
+        setWidget(main);
     }
 
 }

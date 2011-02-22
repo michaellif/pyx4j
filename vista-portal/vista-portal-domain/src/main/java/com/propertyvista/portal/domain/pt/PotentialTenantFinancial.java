@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,6 +25,7 @@ public interface PotentialTenantFinancial extends IApplicationEntity {
         none, fulltime, parttime, selfemployed, seasonallyEmployed, socialServices, student
     }
 
+    @NotNull
     @Caption(name = "Employment type")
     IPrimitive<EmploymentType> occupation();
 

@@ -16,5 +16,4 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 
 public interface InfoViewPresenter extends WizardStepPresenter<PotentialTenantInfo> {
-
 }
