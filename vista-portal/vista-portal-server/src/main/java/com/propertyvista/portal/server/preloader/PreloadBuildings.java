@@ -122,9 +122,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         building.address().set(address);
 
         for (Phone phone : phones) {
-            //          phone.setPrimaryKey(building.getPrimaryKey());
             building.phoneList().add(phone);
-            PersistenceServicesFactory.getPersistenceService().persist(phone);
         }
 
         PersistenceServicesFactory.getPersistenceService().persist(building);
@@ -148,7 +146,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         for (int i = 1; i < 4; i++) {
             MarketRent marketRent = EntityFactory.create(MarketRent.class);
             marketRent.leaseTerm().setValue(i * 6);
-            marketRent.rent().amount().setValue(565D - 5 * i);
+            marketRent.rent().amount().setValue(565D - 5 * i + RandomUtil.randomInt(100));
             unit.marketRent().add(marketRent);
         }
 
@@ -156,7 +154,6 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         unit.avalableForRent().setValue(new Date());
 
-        PersistenceServicesFactory.getPersistenceService().persist(floorplan);
         unit.floorplan().set(floorplan);
 
         PersistenceServicesFactory.getPersistenceService().persist(unit);
@@ -230,8 +227,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
                     }
                     Floorplan floorplan = createFloorplan(floorplanName);
                     floorplan.building().set(building);
+                    PersistenceServicesFactory.getPersistenceService().persist(floorplan);
 
-                    createUnit(building, floor, area, bedrooms, bathrooms, floorplan);
+                    for (int u = 0; u < 3; u++) {
+                        int uarea = area + RandomUtil.randomInt(10);
+                        createUnit(building, floor, uarea, bedrooms, bathrooms, floorplan);
+                    }
                 }
             }
         }
