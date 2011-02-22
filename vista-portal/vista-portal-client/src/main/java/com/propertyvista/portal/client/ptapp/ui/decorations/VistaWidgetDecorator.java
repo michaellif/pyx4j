@@ -73,20 +73,28 @@ public class VistaWidgetDecorator extends FlowPanel {
         this(component, new DecorationData(labelWidth, componentWidth));
     }
 
-    static public class DecorationData {
-        public double labelWidth = 140;
+    public VistaWidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
+        this(component, new DecorationData(labelWidth, componentWidth));
+    }
 
-        public Unit labelUnit = Unit.PX;
+    public VistaWidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth, double gapWidth) {
+        this(component, new DecorationData(labelWidth, componentWidth, gapWidth));
+    }
+
+    static public class DecorationData {
+        public double labelWidth = 8;
+
+        public Unit labelUnit = Unit.EM;
 
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
-        public double componentWidth = 140;
+        public double componentWidth = 10;
 
-        public Unit componentUnit = Unit.PX;
+        public Unit componentUnit = Unit.EM;
 
-        public double gapWidth = 20;
+        public double gapWidth = 1;
 
-        public Unit gapUnit = Unit.PX;
+        public Unit gapUnit = Unit.EM;
 
         // various construction:
         public DecorationData() {
@@ -103,6 +111,19 @@ public class VistaWidgetDecorator extends FlowPanel {
             this(labelWidth, componentWidth);
             this.gapWidth = gapWidth;
             this.gapUnit = Unit.PX;
+        }
+
+        public DecorationData(double labelWidth, double componentWidth) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = Unit.EM;
+            this.componentWidth = componentWidth;
+            this.componentUnit = Unit.EM;
+        }
+
+        public DecorationData(double labelWidth, double componentWidth, double gapWidth) {
+            this(labelWidth, componentWidth);
+            this.gapWidth = gapWidth;
+            this.gapUnit = Unit.EM;
         }
 
         public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit) {
@@ -123,16 +144,17 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.getElement().getStyle().setFloat(Float.LEFT);
-        label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
         label.setHorizontalAlignment(decorData.labelAlignment);
+        if (decorData.labelWidth != 0)
+            label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
         label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
 
         Cursor.setDefault(label.getElement());
 
         this.component = component;
         nativeComponent = component.asWidget();
-        nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
         nativeComponent.getElement().getStyle().setFloat(Float.LEFT);
+        nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
         nativeComponent.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
 
         if (nativeComponent == null) {
