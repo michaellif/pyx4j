@@ -61,23 +61,31 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        Widget w = new VistaWidgetDecorator(create(proto().availableFrom(), this), 0, 7.1);
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        w.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().availableFrom(), this), 0, 7.1);
+        dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        header.add(w);
+        header.add(dateFrom);
 
-        w = new VistaWidgetDecorator(create(proto().availableTo(), this), 0, 7.1);
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        w.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        header.add(w);
+        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().availableTo(), this), 0, 7.1);
+        dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        header.add(dateTo);
 
-        w = new Button("Change");
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        w.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-        header.add(w);
+        Button btn = new Button("Change");
+        btn.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        btn.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        btn.addClickHandler(new ClickHandler() {
 
-        w = new ViewHeaderDecorator(header);
+            @Override
+            public void onClick(ClickEvent event) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        header.add(btn);
+
+        Widget w = new ViewHeaderDecorator(header);
         w.getElement().getStyle().setMarginBottom(0, Unit.EM);
         w.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
         w.setHeight("2.2em");

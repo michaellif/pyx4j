@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui.decorations;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -49,8 +50,6 @@ public class VistaWidgetDecorator extends FlowPanel {
         Label, Component, Gap
     }
 
-    private final CComponent<?> component;
-
     private final Widget nativeComponent;
 
     private final Label label;
@@ -82,7 +81,7 @@ public class VistaWidgetDecorator extends FlowPanel {
     }
 
     static public class DecorationData {
-        public double labelWidth = 8;
+        public double labelWidth = 10;
 
         public Unit labelUnit = Unit.EM;
 
@@ -92,7 +91,7 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         public Unit componentUnit = Unit.EM;
 
-        public double gapWidth = 1;
+        public double gapWidth = 2;
 
         public Unit gapUnit = Unit.EM;
 
@@ -144,6 +143,9 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.getElement().getStyle().setFloat(Float.LEFT);
+        //        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        //        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
         label.setHorizontalAlignment(decorData.labelAlignment);
         if (decorData.labelWidth != 0)
             label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
@@ -154,6 +156,9 @@ public class VistaWidgetDecorator extends FlowPanel {
         this.component = component;
         nativeComponent = component.asWidget();
         nativeComponent.getElement().getStyle().setFloat(Float.LEFT);
+        //        nativeComponent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        //        nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
         nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
         nativeComponent.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
 
@@ -175,11 +180,15 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         imageInfoWarnHolder = new ImageHolder("18px");
         imageInfoWarnHolder.getElement().getStyle().setFloat(Float.LEFT);
+        //        imageInfoWarnHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        //        imageInfoWarnHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
         imageMandatoryHolder = new ImageHolder(decorData.gapWidth + decorData.gapUnit.getType());
         imageMandatoryHolder.getElement().getStyle().setFloat(Float.LEFT);
+        //        imageMandatoryHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        //        imageMandatoryHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         imageMandatoryHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Gap);
 
         renderToolTip();
@@ -209,6 +218,16 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
+    }
+
+    private final CComponent<?> component;
+
+    public CComponent<?> getComponent() {
+        return component;
+    }
+
+    public Label getLabel() {
+        return label;
     }
 
     private void renderToolTip() {
