@@ -28,7 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,9 +68,8 @@ public class ServletContainerLoginServlet extends HttpServlet {
     }
 
     private void createContainerSession(Behavior behavior) {
-        HttpSession newSession = Context.getRequest().getSession(true);
-        newSession.setAttribute(ROLE_SESSION_ATTRIBUTE, behavior);
         if (SecurityController.checkBehavior(behavior)) {
+            log.info("behavior {} already present", behavior);
             return;
         }
         if (Context.getVisit() != null) {
@@ -79,6 +77,10 @@ public class ServletContainerLoginServlet extends HttpServlet {
             behaviours.addAll(SecurityController.getBehaviors());
             behaviours.add(behavior);
             Lifecycle.beginSession(Context.getVisit().getUserVisit(), behaviours);
+            log.info("behaviors {} set", behaviours);
+        } else {
+            Lifecycle.beginAnonymousSession();
         }
+        Context.getSession().setAttribute(ROLE_SESSION_ATTRIBUTE, behavior);
     }
 }

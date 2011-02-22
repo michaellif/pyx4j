@@ -118,9 +118,14 @@ public class LifecycleFilter implements Filter {
                 }
                 // TODO MDC
                 Lifecycle.beginRequest(httprequest, (HttpServletResponse) response);
+                boolean allOk = false;
                 try {
                     chain.doFilter(request, response);
+                    allOk = true;
                 } finally {
+                    if (!allOk) {
+                        log.warn("return http error");
+                    }
                     Lifecycle.endRequest();
                 }
             }

@@ -30,16 +30,26 @@ public class ServletContainerHelper implements IContainerHelper {
     @Override
     public String createLoginURL(String destinationURL) {
         try {
-            return Context.getRequest().getContextPath() + "/_aj/login?return=" + URLEncoder.encode(destinationURL, "utf8");
+            return getContextPath(destinationURL) + "/_aj/login?return=" + URLEncoder.encode(destinationURL, "utf8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public String getContextPath(String destinationURL) {
+        String contextPath = Context.getRequest().getContextPath();
+        if (destinationURL.contains(contextPath)) {
+            return contextPath;
+        } else {
+            // Consider redirected env.
+            return "";
         }
     }
 
     @Override
     public String createLogoutURL(String destinationURL) {
         try {
-            return Context.getRequest().getContextPath() + "/_aj/logout?return=" + URLEncoder.encode(destinationURL, "utf8");
+            return getContextPath(destinationURL) + "/_aj/logout?return=" + URLEncoder.encode(destinationURL, "utf8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

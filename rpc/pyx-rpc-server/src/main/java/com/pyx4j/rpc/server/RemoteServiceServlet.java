@@ -89,7 +89,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
             }
             String moduleBaseURL = serializedRequest.substring(beginModuleBaseURL, serializedRequest.indexOf('|', beginModuleBaseURL));
             String contextPath = Context.getRequest().getContextPath();
-            log.debug("moduleBaseURL = [{}] contextPath [{}]", moduleBaseURL, contextPath);
+            //log.debug("moduleBaseURL = [{}] contextPath [{}]", moduleBaseURL, contextPath);
             String modulePath = new URL(moduleBaseURL).getPath();
             String moduleRelativePath;
             if (modulePath.contains(contextPath)) {
