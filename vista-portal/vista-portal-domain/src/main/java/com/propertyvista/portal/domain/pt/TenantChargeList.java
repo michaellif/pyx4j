@@ -17,10 +17,10 @@ import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantChargeList extends IEntity {
+
     IList<TenantCharge> charges();
 
-    IPrimitive<Money> total();
+    Money total();
 }
