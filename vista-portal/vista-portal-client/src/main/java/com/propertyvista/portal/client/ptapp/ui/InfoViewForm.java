@@ -53,7 +53,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
-        createIPerson(main, proto());
+        createIPerson(main, proto(), this);
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
         main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this)));
@@ -119,7 +119,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                createIAddress(main, proto());
+                createIAddress(main, proto(), this);
                 main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this)));
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto().moveOutDate(), this)));

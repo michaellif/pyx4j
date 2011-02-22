@@ -233,7 +233,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                 });
                 main.add(new VistaWidgetDecorator(currentEmployedForYears));
                 main.add(new HTML());
-                createIEmploymentInfo(main, proto());
+                createIEmploymentInfo(main, proto(), this);
                 setWidget(main);
             }
 
@@ -246,9 +246,9 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             public void createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(new HTML());
-                createIEmploymentInfo(main, proto());
+                createIEmploymentInfo(main, proto(), this);
                 main.add(new HTML());
-                createIAddress(main, proto());
+                createIAddress(main, proto(), this);
                 main.add(new HTML());
                 setWidget(main);
             }
@@ -261,9 +261,9 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             public void createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(new HTML());
-                createIEmploymentInfo(main, proto());
+                createIEmploymentInfo(main, proto(), this);
                 main.add(new HTML());
-                createIAddress(main, proto());
+                createIAddress(main, proto(), this);
                 main.add(new HTML());
                 setWidget(main);
             }
@@ -287,7 +287,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto.numberOfEmployees(), this)));
                 main.add(new HTML());
-                createIAddress(main, proto());
+                createIAddress(main, proto(), this);
                 main.add(new HTML());
                 setWidget(main);
             }
@@ -309,7 +309,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto().monthlyAmount(), this)));
                 main.add(new HTML());
-                createIAddress(main, proto());
+                createIAddress(main, proto(), this);
                 main.add(new HTML());
                 setWidget(main);
             }

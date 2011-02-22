@@ -54,41 +54,41 @@ public class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         }
     }
 
-    protected void createIPerson(FlowPanel main, IPerson proto) {
-        main.add(new VistaWidgetDecorator(create(proto.firstName(), this)));
+    protected void createIPerson(FlowPanel main, IPerson proto, CEntityEditableComponent<?> parent) {
+        main.add(new VistaWidgetDecorator(create(proto.firstName(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.middleName(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.middleName(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.lastName(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.lastName(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.homePhone(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.homePhone(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.mobilePhone(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.mobilePhone(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.email(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.email(), parent)));
     }
 
-    protected void createIAddress(FlowPanel main, IAddress proto) {
-        main.add(new VistaWidgetDecorator(create(proto.street1(), this)));
+    protected void createIAddress(FlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
+        main.add(new VistaWidgetDecorator(create(proto.street1(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.street2(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.street2(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.city(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.city(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.province(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.province(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.postalCode(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.postalCode(), parent)));
         main.add(new HTML());
     }
 
-    protected void createIEmploymentInfo(FlowPanel main, IEmploymentInfo proto) {
-        main.add(new VistaWidgetDecorator(create(proto.supervisorName(), this)));
+    protected void createIEmploymentInfo(FlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
+        main.add(new VistaWidgetDecorator(create(proto.supervisorName(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.supervisorPhone(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.supervisorPhone(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.monthlySalary(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.monthlySalary(), parent)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.position(), this)));
+        main.add(new VistaWidgetDecorator(create(proto.position(), parent)));
         main.add(new HTML());
     }
 }
