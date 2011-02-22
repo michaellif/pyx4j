@@ -60,6 +60,20 @@
     </security-role>
 
     <filter>
+        <filter-name>GWTCacheFilter</filter-name>
+        <filter-class>com.pyx4j.gwt.server.GWTCacheFilter</filter-class>
+        <init-param>
+            <param-name>cacheExpiresHours</param-name>
+            <param-value>20</param-value>
+        </init-param>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>GWTCacheFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+    <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
     </filter>
