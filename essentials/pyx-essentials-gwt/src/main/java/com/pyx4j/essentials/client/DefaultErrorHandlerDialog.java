@@ -38,11 +38,11 @@ public class DefaultErrorHandlerDialog extends UnrecoverableErrorHandlerDialog {
     }
 
     @Override
-    protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
+    protected void showDefaultError(Throwable caught, String errorCode) {
         if (caught instanceof UserRuntimeException) {
             MessageDialog.show(i18n.tr("Error"), caught.getMessage(), Type.Error, new ShowOnceDialogOptions());
         } else {
-            super.showDefaultErrorDialog(caught, errorCode);
+            super.showDefaultError(caught, errorCode);
         }
     }
 }

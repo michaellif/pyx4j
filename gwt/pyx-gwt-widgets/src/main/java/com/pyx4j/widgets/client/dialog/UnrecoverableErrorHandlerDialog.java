@@ -27,22 +27,17 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.shared.UmbrellaException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
-import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 
-public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandler {
+public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHandler {
 
     private static I18n i18n = I18nFactory.getI18n(UnrecoverableErrorHandlerDialog.class);
 
@@ -78,6 +73,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
      * 
      * @return true if there was a session and it is Closed Now or would we closed ASAP.
      */
+    @Override
     protected boolean closeSessionOnUnrecoverableError() {
         return false;
     }
@@ -93,7 +89,7 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
             @Override
             public void execute() {
                 try {
-                    selectErrorDialog(caught, errorCode);
+                    selectError(caught, errorCode);
                 } catch (Throwable e) {
                     unrecoverableErrorDialogShown = false;
                 }
@@ -102,37 +98,8 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
     }
 
-    protected void selectErrorDialog(final Throwable caught, final String errorCode) {
-        Throwable cause = caught;
-        while ((cause instanceof UmbrellaException)
-                || ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause))) {
-            if (cause instanceof UmbrellaException) {
-                try {
-                    cause = ((UmbrellaException) cause).getCauses().iterator().next();
-                } catch (Throwable ignore) {
-                    break;
-                }
-            } else {
-                cause = cause.getCause();
-            }
-        }
-        if (cause instanceof UnrecoverableClientWarning) {
-            showWarningDialog(cause.getMessage());
-        } else if (cause instanceof IncompatibleRemoteServiceException) {
-            showReloadApplicationDialog();
-        } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
-            showReloadApplicationDialog();
-        } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PRECONDITION_FAILED) {
-            showThrottleDialog();
-        } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
-            // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
-            showReloadApplicationDialog();
-        } else {
-            showDefaultErrorDialog(cause, errorCode);
-        }
-    }
-
-    protected void showReloadApplicationDialog() {
+    @Override
+    protected void showReloadApplication() {
         final YesNoOption optYesNo = new YesNoOption() {
 
             @Override
@@ -151,17 +118,26 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
         MessageDialog.show(i18n.tr("System error"), message, Type.Error, optYesNo);
     }
 
-    protected void showWarningDialog(String text) {
+    @Override
+    protected void showWarning(String text) {
         MessageDialog.show(i18n.tr("Warning"), text, Type.Warning, new ShowOnceDialogOptions());
     }
 
-    protected void showThrottleDialog() {
+    @Override
+    protected void showThrottle() {
         MessageDialog.show(i18n.tr("We're sorry"), i18n
                 .tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
                         + "To protect our users, we can't process your request at this time."), Type.Error, new ShowOnceDialogOptions());
     }
 
-    protected void showDefaultErrorDialog(Throwable caught, String errorCode) {
+    @Override
+    protected void showUnauthorized() {
+        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated ."), Type.Error, new ShowOnceDialogOptions());
+
+    }
+
+    @Override
+    protected void showDefaultError(Throwable caught, String errorCode) {
 
         String detailsMessage = "";
         if (CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
@@ -190,4 +166,5 @@ public class UnrecoverableErrorHandlerDialog implements UnrecoverableErrorHandle
 
         + detailsMessage, Type.Error, new ShowOnceDialogOptions());
     }
+
 }
