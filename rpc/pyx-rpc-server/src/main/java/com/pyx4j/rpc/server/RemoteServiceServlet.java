@@ -136,18 +136,20 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     @Override
     protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
         // Allow for redirected requests environments, consider the context is mapped to root.
-        try {
-            //log.debug("moduleBaseURL orig {}", moduleBaseURL);
-            URL url = new URL(moduleBaseURL);
-            String modulePath = url.getPath();
-            //log.debug("modulePath {}", modulePath);
-            String contextPath = request.getContextPath();
-            if ((modulePath != null) && !modulePath.contains(contextPath)) {
-                moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + contextPath + modulePath;
-                //log.debug("moduleBaseURL corrected {}", moduleBaseURL);
+        if (ServerSideConfiguration.instance().isContextLessDeployment()) {
+            try {
+                //log.debug("moduleBaseURL orig {}", moduleBaseURL);
+                URL url = new URL(moduleBaseURL);
+                String modulePath = url.getPath();
+                //log.debug("modulePath {}", modulePath);
+                String contextPath = request.getContextPath();
+                if ((modulePath != null) && !modulePath.contains(contextPath)) {
+                    moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + contextPath + modulePath;
+                    //log.debug("moduleBaseURL corrected {}", moduleBaseURL);
+                }
+            } catch (MalformedURLException e) {
+                log.error("Malformed moduleBaseURL {} ", moduleBaseURL, e);
             }
-        } catch (MalformedURLException e) {
-            log.error("Malformed moduleBaseURL {} ", moduleBaseURL, e);
         }
         return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
     }

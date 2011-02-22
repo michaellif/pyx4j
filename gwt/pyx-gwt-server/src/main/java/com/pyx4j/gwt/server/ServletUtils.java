@@ -22,6 +22,8 @@ package com.pyx4j.gwt.server;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 public class ServletUtils {
 
     public static String getActualRequestURL(HttpServletRequest request) {
@@ -32,7 +34,13 @@ public class ServletUtils {
         StringBuffer receivingURL;
         if (request.getHeader("x-forwarded-host") != null) {
             receivingURL = new StringBuffer();
-            receivingURL.append("http://").append(request.getHeader("x-forwarded-host")).append(request.getRequestURI());
+            receivingURL.append("http://").append(request.getHeader("x-forwarded-host"));
+            if (ServerSideConfiguration.instance().isContextLessDeployment()) {
+                String contextPath = request.getContextPath();
+                receivingURL.append(request.getRequestURI().substring(contextPath.length()));
+            } else {
+                receivingURL.append(request.getRequestURI());
+            }
         } else {
             receivingURL = request.getRequestURL();
         }
@@ -44,5 +52,4 @@ public class ServletUtils {
         }
         return receivingURL.toString();
     }
-
 }
