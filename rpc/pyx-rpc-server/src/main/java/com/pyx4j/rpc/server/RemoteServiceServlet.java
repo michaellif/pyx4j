@@ -22,6 +22,7 @@ package com.pyx4j.rpc.server;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +30,13 @@ import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -86,30 +89,41 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
             }
             String moduleBaseURL = serializedRequest.substring(beginModuleBaseURL, serializedRequest.indexOf('|', beginModuleBaseURL));
             String contextPath = Context.getRequest().getContextPath();
+            log.debug("moduleBaseURL = [{}] contextPath [{}]", moduleBaseURL, contextPath);
             String modulePath = new URL(moduleBaseURL).getPath();
-            String moduleRelativePath = modulePath.substring(contextPath.length());
+            String moduleRelativePath;
+            if (modulePath.contains(contextPath)) {
+                // Allow for redirected requests environments, consider the context is mapped to root.
+                moduleRelativePath = modulePath.substring(contextPath.length());
+            } else {
+                moduleRelativePath = modulePath;
+            }
 
             Map<String, String> servicePolicy = servicePolicyCache.get(moduleRelativePath);
             if (servicePolicy == null) {
                 InputStream is = this.getServletContext().getResourceAsStream(moduleRelativePath + "pyx-service-manifest.rpc");
-                try {
-                    Properties prop = new Properties();
-                    prop.load(is);
-                    if (prop.size() == 0) {
-                        log.warn("service-manifest is empty");
-                    } else {
-                        log.debug("{} service-manifest has {} service", moduleRelativePath, prop.size());
-                    }
-                    servicePolicy = new HashMap<String, String>();
-                    for (Map.Entry<Object, Object> me : prop.entrySet()) {
-                        if ((me.getKey() instanceof String) && (me.getValue() instanceof String)) {
-                            servicePolicy.put((String) me.getKey(), (String) me.getValue());
+                if (is == null) {
+                    log.warn("service-manifest {} not found", moduleRelativePath);
+                } else {
+                    try {
+                        Properties prop = new Properties();
+                        prop.load(is);
+                        if (prop.size() == 0) {
+                            log.warn("service-manifest is empty");
+                        } else {
+                            log.debug("{} service-manifest has {} service", moduleRelativePath, prop.size());
                         }
+                        servicePolicy = new HashMap<String, String>();
+                        for (Map.Entry<Object, Object> me : prop.entrySet()) {
+                            if ((me.getKey() instanceof String) && (me.getValue() instanceof String)) {
+                                servicePolicy.put((String) me.getKey(), (String) me.getValue());
+                            }
+                        }
+                        servicePolicyCache.put(moduleRelativePath, servicePolicy);
+                        log.trace("servicePolicy {}", servicePolicy);
+                    } finally {
+                        IOUtils.closeQuietly(is);
                     }
-                    servicePolicyCache.put(moduleRelativePath, servicePolicy);
-                    log.trace("servicePolicy {}", servicePolicy);
-                } finally {
-                    IOUtils.closeQuietly(is);
                 }
             }
             Context.getRequest().setAttribute("pyx.ServicePolicy", servicePolicy);
@@ -117,6 +131,25 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
             log.error("unable to load service-manifest", t);
             throw new IncompatibleRemoteServiceException();
         }
+    }
+
+    @Override
+    protected SerializationPolicy doGetSerializationPolicy(HttpServletRequest request, String moduleBaseURL, String strongName) {
+        // Allow for redirected requests environments, consider the context is mapped to root.
+        try {
+            //log.debug("moduleBaseURL orig {}", moduleBaseURL);
+            URL url = new URL(moduleBaseURL);
+            String modulePath = url.getPath();
+            //log.debug("modulePath {}", modulePath);
+            String contextPath = request.getContextPath();
+            if ((modulePath != null) && !modulePath.contains(contextPath)) {
+                moduleBaseURL = url.getProtocol() + "://" + url.getAuthority() + contextPath + modulePath;
+                //log.debug("moduleBaseURL corrected {}", moduleBaseURL);
+            }
+        } catch (MalformedURLException e) {
+            log.error("Malformed moduleBaseURL {} ", moduleBaseURL, e);
+        }
+        return super.doGetSerializationPolicy(request, moduleBaseURL, strongName);
     }
 
     @Override
