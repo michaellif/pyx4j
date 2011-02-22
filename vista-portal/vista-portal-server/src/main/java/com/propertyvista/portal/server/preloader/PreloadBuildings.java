@@ -213,12 +213,10 @@ public class PreloadBuildings extends AbstractDataPreloader {
             //			log.info("Created: " + building);
 
             // now create units for the building
-            int numFloors = RandomUtil.randomInt(5);
-            int numUnits = RandomUtil.randomInt(5);
-            for (int floor = 1; floor < numFloors; floor++) {
+            for (int floor = 1; floor < DemoData.NUM_FLOORS + 1; floor++) {
 
                 // for each floor we want to create the same number of units
-                for (int j = 1; j < numUnits; j++) {
+                for (int j = 1; j < DemoData.NUM_UNITS_PER_FLOOR + 1; j++) {
                     int area = RandomUtil.randomInt(1500);
 
                     float bedrooms = 2.0f;
@@ -231,6 +229,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
                         floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
                     }
                     Floorplan floorplan = createFloorplan(floorplanName);
+                    floorplan.building().set(building);
 
                     createUnit(building, floor, area, bedrooms, bathrooms, floorplan);
                 }
@@ -283,7 +282,11 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 b.append(" ");
                 b.append(unit.area().getStringView()).append(" sq. ft.");
                 b.append(" ");
-                b.append(unit.floorplan().name()).append(" ").append(unit.floorplan().pictures());
+                b.append(unit.building().propertyCode().getStringView());
+                b.append(" ");
+                b.append(unit.floorplan());
+                b.append(" | ");
+                b.append(unit.floorplan().name().getStringView()); //.append(" ").append(unit.floorplan().pictures());
                 b.append("\n");
             }
         }

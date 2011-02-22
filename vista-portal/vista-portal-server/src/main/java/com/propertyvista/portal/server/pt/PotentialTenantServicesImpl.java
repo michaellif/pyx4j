@@ -230,9 +230,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
     private static void loadAvailableUnits(UnitSelection unitSelection) {
         AvailableUnitsByFloorplan availableUnits = unitSelection.availableUnits();
 
+        log.info("Looking for units: " + unitSelection);
+
         // find floor plan
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.floorplanName().getValue()));
+        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), unitSelection.building()));
         Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
         if (floorplan == null) {
@@ -245,6 +248,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         }
 
         // find units
+        log.info("Found floorplan {}, now will look for building {}", floorplan, unitSelection.building());
         EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), unitSelection.building()));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
