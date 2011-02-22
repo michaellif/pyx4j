@@ -18,7 +18,7 @@ import com.propertyvista.config.VistaSMTPMailServiceConfig;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
-public class VistaServerSideConfiguration33 extends VistaServerSideConfigurationDev {
+public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration {
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {

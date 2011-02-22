@@ -17,7 +17,7 @@ import com.propertyvista.config.VistaSMTPMailServiceConfig;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 
-public class VistaServerSideConfiguration22 extends VistaServerSideConfigurationDev {
+public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
 
     @Override
     public String getMainApplicationURL() {
