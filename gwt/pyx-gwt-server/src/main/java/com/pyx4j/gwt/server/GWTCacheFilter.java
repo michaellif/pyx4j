@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 
 /**
  * This should not be used in GAE environment! Use <static-files></static-files> in
@@ -54,7 +55,7 @@ public class GWTCacheFilter implements Filter {
 
     private boolean developmentMode = false;
 
-    private final boolean developmentDebug = false;
+    private final boolean developmentDebug = ServerSideConfiguration.instance().isDevelopmentBehavior();
 
     private long firstRequest = 0;
 
