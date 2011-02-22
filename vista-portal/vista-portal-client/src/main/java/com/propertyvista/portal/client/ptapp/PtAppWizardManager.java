@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -36,10 +39,10 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.GlassPanel;
-import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
 public class PtAppWizardManager implements SecurityControllerHandler {
+
+    private static I18n i18n = I18nFactory.getI18n(PtAppWizardManager.class);
 
     private Application application;
 
@@ -74,10 +77,30 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     }
 
     public void initWizard(final SiteGinjector ginjector) {
-        GlassPanel.show(GlassStyle.Transparent);
-
         this.ginjector = ginjector;
+        //TODO implement initial application message
+        //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
+        obtainAuthenticationData();
+    }
 
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                obtainUnitSelection();
+            }
+
+            //TODO remove this when initial application message is implemented
+            @Override
+            public void onFailure(Throwable caught) {
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
+            }
+        });
+    }
+
+    private void obtainUnitSelection() {
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
         unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
         unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
@@ -95,40 +118,25 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
             @Override
             public void onSuccess(Boolean result) {
-                //TODO Vlad - this should return true
+                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 if (!result) {
-                    obtainAuthenticationData();
-                } else {
-                    ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                     showMessageDialog("We can't find that building", "Error", "Back", new Command() {
                         @Override
                         public void execute() {
                             History.back();
                         }
                     });
-                    GlassPanel.hide();
                 }
             }
-        });
 
-    }
-
-    private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
-
-            @Override
-            public void onSuccess(Boolean result) {
-                ginjector.getPlaceHistoryHandler().handleCurrentHistory();
-                GlassPanel.hide();
-            }
-
+            //TODO remove this when initial application message is implemented
             @Override
             public void onFailure(Throwable caught) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 super.onFailure(caught);
-                GlassPanel.hide();
             }
         });
+
     }
 
     public void saveApplicationProgress() {

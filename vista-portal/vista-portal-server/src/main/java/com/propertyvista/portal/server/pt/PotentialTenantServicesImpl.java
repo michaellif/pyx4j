@@ -43,7 +43,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.rpc.shared.IsIgnoreSessionTokenService;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -51,7 +50,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
     private final static Logger log = LoggerFactory.getLogger(PotentialTenantServicesImpl.class);
 
-    public static class UnitExistsImpl implements PotentialTenantServices.UnitExists, IsIgnoreSessionTokenService {
+    public static class UnitExistsImpl implements PotentialTenantServices.UnitExists {
 
         @Override
         public Boolean execute(UnitSelectionCriteria request) {
@@ -84,7 +83,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().floorplan(), floorplan));
             Unit unit = PersistenceServicesFactory.getPersistenceService().retrieve(unitCriteria);
 
-            return unit != null;
+            boolean unitExists = (unit != null);
+            log.debug("unitExists {}", unitExists);
+            return unitExists;
         }
     }
 
@@ -128,8 +129,10 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 criteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
                 UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
 
-                if ((!unitSelection.propertyCode().equals(request.propertyCode())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
-                    //TODO What if they are diferent ?  We need to discard some part of application flow.
+                if ((unitSelection != null) && (request != null)) {
+                    if ((!unitSelection.propertyCode().equals(request.propertyCode())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
+                        //TODO What if they are diferent ?  We need to discard some part of application flow.
+                    }
                 }
             }
             PtUserDataAccess.setCurrentUserApplication(application);
