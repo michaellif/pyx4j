@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
+@Transient
 public interface Summary extends IEntity {
+
     public PotentialTenantList tenants();
 
     public PotentialTenantInfo info();
