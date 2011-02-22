@@ -71,7 +71,7 @@ public class ChargesServerCalculation {
         for (Charge charge : charges.charges()) {
             total += charge.charge().amount().getValue();
         }
-        charges.total().setValue(DomainUtil.createMoney(total));
+        charges.total().set(DomainUtil.createMoney(total));
     }
 
     public static void calculate(TenantChargeList charges) {
@@ -79,7 +79,7 @@ public class ChargesServerCalculation {
         for (Charge charge : charges.charges()) {
             total += charge.charge().amount().getValue();
         }
-        charges.total().setValue(DomainUtil.createMoney(total));
+        charges.total().set(DomainUtil.createMoney(total));
     }
 
     public static void calculateApplicationCharges(Charges charges) {
