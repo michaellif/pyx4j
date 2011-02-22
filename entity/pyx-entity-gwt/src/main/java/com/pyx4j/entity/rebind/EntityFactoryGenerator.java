@@ -47,7 +47,7 @@ public class EntityFactoryGenerator extends Generator {
     /**
      * Configuration property.
      */
-    public static final String CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS = "pyx." + "validateReservedKeywordsMemebers";
+    public static final String CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS = "pyx.validateReservedKeywordsMemebers";
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
