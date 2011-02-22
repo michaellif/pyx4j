@@ -21,17 +21,21 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.Button;
 
 public class ApartmentViewForm extends CEntityForm<UnitSelection> {
@@ -76,10 +80,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         availableUnitsTable = new AvailableUnitsTable();
         main.add(availableUnitsTable);
 
-        // lease term:
-        main.add(new HTML());
-        main.add(new ViewHeaderDecorator(new HTML("<h3>Lease Terms</h3>")));
-
         // start date:
         main.add(new ViewLineSeparator());
         caption = new HTML("<h3>Start Rent Date</h3>");
@@ -94,7 +94,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     @Override
     public void populate(UnitSelection entity) {
-        //        System.out.println("+++++++++++++++++++" + entity.availableUnits().units().toString());
+        //        System.out.println(">>>" + entity.availableUnits().units().toString());
         availableUnitsTable.populate(entity);
     }
 
@@ -102,11 +102,11 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         private final UnitSelection proto = EntityFactory.getEntityPrototype(UnitSelection.class);
 
-        private final FlowPanel header;
-
         private final FlowPanel content;
 
         Map<String, String> tableLayout = new LinkedHashMap<String, String>();
+
+        private static final String UNIT_DETAIL_PANEL_STYLENAME = "unitDetailPanel";
 
         public AvailableUnitsTable() {
 
@@ -122,12 +122,13 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             tableLayout.put("Sq F", "10%");
             tableLayout.put("Available", "20%");
 
-            header = new FlowPanel();
+            FlowPanel header = new FlowPanel();
             header.setWidth("100%");
             header.setHeight("2em");
             header.getElement().getStyle().setBackgroundColor("lightGray");
             header.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             header.getElement().getStyle().setMarginBottom(1, Unit.EM);
+
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
                 HTML label = new HTML(e.getKey());
@@ -155,15 +156,16 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             FlowPanel floorplan = new FlowPanel();
             floorplan.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
-            addCell(" ", tableLayout.get("Plan"), floorplan);
-            addCell(" ", tableLayout.get("Type"), floorplan);
-            addCell(availableUnits.rent().getStringView(), tableLayout.get("Rent"), floorplan);
-            addCell(" ", tableLayout.get("Deposit"), floorplan);
-            addCell(" ", tableLayout.get("Beds"), floorplan);
-            addCell(" ", tableLayout.get("Baths"), floorplan);
+            addCell("-plan-", tableLayout.get("Plan"), floorplan);
+            addCell(availableUnits.floorplan().name().getStringView(), tableLayout.get("Type"), floorplan);
+            addCell("From " + minRentValue(availableUnits.units()), tableLayout.get("Rent"), floorplan);
+            addCell("-deposit-", tableLayout.get("Deposit"), floorplan);
+            addCell("-beds-", tableLayout.get("Beds"), floorplan);
+            addCell("-baths-", tableLayout.get("Baths"), floorplan);
             addCell(availableUnits.floorplan().area().getStringView(), tableLayout.get("Sq F"), floorplan);
             addCell(" ", tableLayout.get("Available"), floorplan);
 
+            floorplan.setHeight("3em");
             floorplan.setWidth("100%");
             content.add(floorplan);
 
@@ -173,22 +175,38 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         }
 
         private void populateUnits(AvailableUnitsByFloorplan availableUnits) {
-            FlowPanel unitsTable = new FlowPanel();
-            unitsTable.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
             for (com.propertyvista.portal.domain.Unit unit : availableUnits.units()) {
-                addCell(" ", tableLayout.get("Plan"), unitsTable);
-                addCell(unit.unitType().getStringView(), tableLayout.get("Type"), unitsTable);
-                addCell(unit.marketRent().getStringView(), tableLayout.get("Rent"), unitsTable);
-                addCell(unit.requiredDeposit().getStringView(), tableLayout.get("Deposit"), unitsTable);
-                addCell(unit.bedrooms().getStringView(), tableLayout.get("Beds"), unitsTable);
-                addCell(unit.bathrooms().getStringView(), tableLayout.get("Baths"), unitsTable);
-                addCell(unit.area().getStringView(), tableLayout.get("Sq F"), unitsTable);
-                addCell(unit.avalableForRent().getStringView(), tableLayout.get("Available"), unitsTable);
-            }
+                final FlowPanel unitRowPanel = new FlowPanel();
+                unitRowPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                unitRowPanel.addDomHandler(new ClickHandler() {
 
-            unitsTable.setWidth("100%");
-            content.add(unitsTable);
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        for (Widget w : content)
+                            // hide all detail panels
+                            if (w.getStyleName().equals(UNIT_DETAIL_PANEL_STYLENAME))
+                                w.setVisible(false);
+                        // show current one: 
+                        content.getWidget(content.getWidgetIndex(unitRowPanel) + 1).setVisible(true);
+                    }
+                }, ClickEvent.getType());
+
+                addCell("&nbsp", tableLayout.get("Plan"), unitRowPanel);
+                addCell(unit.unitType().getStringView(), tableLayout.get("Type"), unitRowPanel);
+                addCell(Double.toString(minRentValue(unit)), tableLayout.get("Rent"), unitRowPanel);
+                addCell(unit.requiredDeposit().getStringView(), tableLayout.get("Deposit"), unitRowPanel);
+                addCell(unit.bedrooms().getStringView(), tableLayout.get("Beds"), unitRowPanel);
+                addCell(unit.bathrooms().getStringView(), tableLayout.get("Baths"), unitRowPanel);
+                addCell(unit.area().getStringView(), tableLayout.get("Sq F"), unitRowPanel);
+                addCell(unit.avalableForRent().getStringView(), tableLayout.get("Available"), unitRowPanel);
+
+                unitRowPanel.setHeight("2em");
+                unitRowPanel.setWidth("100%");
+                content.add(unitRowPanel);
+
+                populateUnitDetail(unit);
+            }
         }
 
         private void addCell(String text, String width, FlowPanel container) {
@@ -196,6 +214,38 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             label.getElement().getStyle().setFloat(Float.LEFT);
             label.setWidth(width);
             container.add(label);
+        }
+
+        private void populateUnitDetail(com.propertyvista.portal.domain.Unit unit) {
+            FlowPanel unitDetailPanel = new FlowPanel();
+            unitDetailPanel.setStyleName(UNIT_DETAIL_PANEL_STYLENAME);
+
+            // TODO fill it here...
+            unitDetailPanel.getElement().getStyle().setBackgroundColor("yellow");
+            unitDetailPanel.add(new HTML("Unit details goes here..."));
+
+            // lease term:
+            unitDetailPanel.add(new HTML());
+            unitDetailPanel.add(new HTML("<h4>Lease Terms</h4>"));
+
+            unitDetailPanel.setVisible(false);
+            unitDetailPanel.setHeight("10em");
+            unitDetailPanel.setWidth("100%");
+            content.add(unitDetailPanel);
+        }
+
+        private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
+            double rent = Double.MAX_VALUE;
+            for (MarketRent mr : unit.marketRent())
+                rent = Math.min(rent, mr.rent().amount().getValue());
+            return rent;
+        }
+
+        private double minRentValue(IList<com.propertyvista.portal.domain.Unit> units) {
+            double rent = Double.MAX_VALUE;
+            for (com.propertyvista.portal.domain.Unit u : units)
+                rent = Math.min(rent, minRentValue(u));
+            return rent;
         }
     }
 }
