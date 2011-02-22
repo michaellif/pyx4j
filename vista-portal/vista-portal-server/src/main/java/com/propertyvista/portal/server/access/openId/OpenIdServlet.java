@@ -48,10 +48,10 @@ public class OpenIdServlet extends HttpServlet {
             log.debug("Can't find authentication information in OpenId URL");
             createResponsePage(response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
         } else {
+            String receivingURL = (String) Context.getVisit().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
             Set<Behavior> behaviours = new HashSet<Behavior>();
             behaviours.add(CoreBehavior.USER);
             Lifecycle.beginSession(null, behaviours);
-            String receivingURL = (String) Context.getVisit().getAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
             if (receivingURL == null) {
                 receivingURL = ServerSideConfiguration.instance().getMainApplicationURL();
             }

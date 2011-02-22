@@ -51,7 +51,7 @@ public class OpenId {
 
     private static String DISCOVERED_ATTRIBUTE = "openid-disc";
 
-    static String returnServletPath = OpenIdServlet.MAPPING;
+    static String returnServletPath = OpenIdServlet.MAPPING.substring(1);
 
     static boolean requestAttributes = false;
 
