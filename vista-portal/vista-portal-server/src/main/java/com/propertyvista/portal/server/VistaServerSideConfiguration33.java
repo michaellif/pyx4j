@@ -25,17 +25,17 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
         return new VistaConfigurationMySQL() {
             @Override
             public String dbName() {
-                return "vista_stable";
+                return "vista33";
             }
 
             @Override
             public String userName() {
-                return "vista_stable";
+                return "vista33";
             }
 
             @Override
             public String password() {
-                return "vista_stable";
+                return "vista33";
             }
         };
     }
