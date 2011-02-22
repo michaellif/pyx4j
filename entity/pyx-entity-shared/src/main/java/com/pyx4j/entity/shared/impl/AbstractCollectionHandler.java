@@ -118,10 +118,10 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     //TODO move common function from  ISet or IList to this class 
 
-    private static class StringConverter implements ToStringConverter<IEntity> {
+    private class StringConverter implements ToStringConverter<TYPE> {
 
         @Override
-        public String toString(IEntity value) {
+        public String toString(TYPE value) {
             return value.getStringView();
         }
 
@@ -134,7 +134,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         if (thisValue == null) {
             return mm.getNullString();
         } else {
-            return ConverterUtils.convertCollection((Collection<IEntity>) thisValue, new StringConverter());
+            return ConverterUtils.convertCollection(this, new StringConverter());
         }
     }
 

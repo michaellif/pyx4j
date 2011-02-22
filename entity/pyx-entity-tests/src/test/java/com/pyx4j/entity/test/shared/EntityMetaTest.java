@@ -85,6 +85,22 @@ public class EntityMetaTest extends InitializerTestCase {
         assertEquals("Address StringView", "1 Bloor St. " + cityName + " " + countryName, address.getStringView());
     }
 
+    public void testCollectionStringView() {
+        Employee emp = EntityFactory.create(Employee.class);
+
+        Task task1 = EntityFactory.create(Task.class);
+        task1.description().setValue("Something1");
+
+        emp.tasks().add(task1);
+        assertTrue("ISet StringView", emp.tasks().getStringView().contains("Something1"));
+
+        Task task2 = EntityFactory.create(Task.class);
+        task2.description().setValue("nothing2");
+
+        emp.tasksSorted().add(task2);
+        assertTrue("IList StringView", emp.tasksSorted().getStringView().contains("nothing2"));
+    }
+
     @Transient
     @RpcTransient
     @Owned
