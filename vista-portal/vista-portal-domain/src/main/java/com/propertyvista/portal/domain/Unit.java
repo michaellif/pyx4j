@@ -83,4 +83,9 @@ public interface Unit extends Property {
     }
 
     IPrimitive<Status> status();
+    
+    
+    IList<Amenity> amenities();
+    
+    IList<Utility> utilities();
 }
