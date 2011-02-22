@@ -22,6 +22,8 @@ package com.pyx4j.site.rpc;
 
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.shared.meta.NavigNode;
+
 public class AppPlaceInfo {
 
     private final String navigLabel;
@@ -66,6 +68,34 @@ public class AppPlaceInfo {
             }
         }
         return builder.toString();
+    }
+
+    public static String absoluteUrl(String appUrl, Class<? extends Place> placeClass, String... encodedComponentsNameValue) {
+        StringBuilder b = new StringBuilder();
+        if (appUrl != null) {
+            b.append(appUrl);
+        }
+        if (encodedComponentsNameValue != null) {
+            boolean first = true;
+            boolean name = true;
+            for (String encodedComponent : encodedComponentsNameValue) {
+                if (first) {
+                    b.append(NavigNode.ARGS_GROUP_SEPARATOR);
+                    first = false;
+                } else if (name) {
+                    b.append(NavigNode.ARGS_SEPARATOR);
+                } else {
+                    b.append(NavigNode.NAME_VALUE_SEPARATOR);
+                }
+                name = !name;
+                b.append(encodedComponent);
+            }
+        }
+        if (placeClass != null) {
+            b.append("#");
+            b.append(getPlaceId(placeClass));
+        }
+        return b.toString();
     }
 
 }
