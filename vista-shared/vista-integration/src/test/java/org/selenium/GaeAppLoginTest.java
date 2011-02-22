@@ -13,7 +13,13 @@
  */
 package org.selenium;
 
-import com.pyx4j.essentials.client.crud.CrudDebugId;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.selenium.BaseSeleniumTestCase;
@@ -22,25 +28,103 @@ import com.pyx4j.selenium.ISeleniumTestConfiguration;
 
 public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
+    final public String testsite = "http://www22.birchwoodsoftwaregroup.com/vista/tester";
+
+    final public String mainsite = "http://www22.birchwoodsoftwaregroup.com/vista/";
+
+    final public String blankpage = "about:blank";
+
     @Override
     protected ISeleniumTestConfiguration getSeleniumTestConfiguration() {
         return new DefaultSeleniumTestConfiguration() {
             @Override
             public String getTestUrl() {
-                return "http://www22.birchwoodsoftwaregroup.com/tester/";
+                return mainsite;
             }
         };
     }
 
-    public void testLogin() throws Exception {
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
+    public void testLoginToMainSite() throws Exception {
+        //Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
+        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials_birch.properties");
 
+        /*** page 1 ***/
+        selenium.click("id=googleSignIn");
+
+        /*** page 2 ***/
         selenium.type("id=Email", credentials.email);
         selenium.type("id=Passwd", credentials.password);
-        captureScreenshot("Login-test");
-        selenium.click("id=signIn"); //( DialogDebugId.Dialog_Sign)???
+        selenium.click("id=signIn");
 
-        selenium.waitFor(CrudDebugId.Criteria_Submit);
+        /*** page 3 ***/
+        selenium.click("id=continue");
+
+        /*** page 4 ***/
+        selenium.waitFor(By.id("gwt-debug-Login"), 8);
+        selenium.click("id=gwt-debug-Login");
+
+        /*** page 5 ***/
+        selenium.type("id=gwt-debug-AuthenticationRequest$email", "cust001@pyx4j.com");
+        selenium.type("id=gwt-debug-AuthenticationRequest$password", "cust001@pyx4j.com");
+        selenium.click("id=gwt-debug-Criteria_Submit");
+
+        // replace with locale specific formatting.
+        String DATE_FORMAT = "mm/dd/yyyy";
+        DateFormat formatter = new java.text.SimpleDateFormat(DATE_FORMAT);
+        String strDate = selenium.getValue("id=gwt-debug-UnitSelection$availableFrom");
+        try {
+            Date aDate = formatter.parse(strDate);
+        } catch (java.text.ParseException ex) {
+            System.out.println("error in gwt-debug-UnitSelection$availableFrom : format is invalid");
+            //System.out.println(ex.getMessage() + ex.getStackTrace());
+        }
+        System.out.println("Available From: " + strDate);
+        //selenium.click("id=gwt-debug-UnitSelection$availableFrom-trigger");
+        // prepare and set the new date 
+
+        //TODO: and test by setting to future period
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(DATE_FORMAT);
+        Calendar cNow = Calendar.getInstance();
+        cNow.add(Calendar.MONTH, 1);
+        //...
+
+        //TODO: and then test by setting to past
+        //cNow.set(1999, 1, 2); 
+        //...
+
+    }
+
+    public void testLogin() throws Exception {
+
+        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials_birch.properties");
+        selenium.get(testsite);
+
+        /*** page 1 ***/
+        selenium.click("id=googleSignIn");
+
+        /*** page 2 ***/
+        selenium.type("id=Email", credentials.email);
+        selenium.type("id=Passwd", credentials.password);
+        selenium.click("id=signIn");
+
+        /*** page 3 ***/
+        selenium.click("id=continue");
+
+        /*** page 4 ***/
+        //it throw us on main site, but that's OK, we'll use get() :)
+        selenium.waitFor(By.id("gwt-debug-Login"), 8);
+
+        /*** page 5 ***/
+        selenium.get(testsite);
+        //unique ID does not exist for this one. 
+        //This is just a test, I'll fix/remove it if it'll cause problems
+        WebElement element1 = selenium.findElement(By.xpath("html/body/div[3]/div[3]/div/div[1]/table/tbody/tr/td/div/div/div[2]"));
+        String atext = element1.getText();
+        String strToFind = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+        if (atext.indexOf(strToFind) < 1) {
+            System.out.println("Error: Cannot find text ");
+            System.out.println("     : " + strToFind);
+        }
 
     }
 
