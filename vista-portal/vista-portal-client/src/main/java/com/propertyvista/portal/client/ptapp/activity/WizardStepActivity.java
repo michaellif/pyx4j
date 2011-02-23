@@ -33,7 +33,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter<E>> extends AbstractActivity implements WizardStepPresenter<E> {
 
-    private static final Logger log = LoggerFactory.getLogger(InfoActivity.class);
+    protected static final Logger log = LoggerFactory.getLogger(WizardStepActivity.class);
 
     private final WizardStepView<E, T> view;
 

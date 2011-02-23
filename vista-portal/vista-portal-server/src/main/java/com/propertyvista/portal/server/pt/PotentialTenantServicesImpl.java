@@ -200,11 +200,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
             UnitSelection unitSelection = secureRetrieve(criteria);
-
-            loadAvailableUnits(unitSelection);
-
             unitSelection.selectionCriteria().set(request);
 
+            loadAvailableUnits(unitSelection);
             return unitSelection;
         }
 
@@ -251,7 +249,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
     private static void loadAvailableUnits(UnitSelection unitSelection) {
         AvailableUnitsByFloorplan availableUnits = unitSelection.availableUnits();
 
-        log.info("Looking for units: " + unitSelection);
+        log.info("Looking for units {}", unitSelection.selectionCriteria());
 
         // find floor plan
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);

@@ -35,6 +35,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -94,7 +95,9 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.selectByDates(getValue().selectionCriteria());
+                // This is owned entity, it can't be serialised by itself because all values are in owner. So we do clone
+                // TODO fix the RPC services to know about this case.
+                presenter.selectByDates((UnitSelectionCriteria) getValue().selectionCriteria().cloneEntity());
             }
         });
         header.add(changeBtn);
