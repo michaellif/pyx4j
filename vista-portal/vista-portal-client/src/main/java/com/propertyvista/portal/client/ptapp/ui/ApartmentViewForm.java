@@ -38,7 +38,6 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.widgets.client.Button;
 
@@ -142,9 +141,26 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     }
 
-    class AvailableUnitsTable extends FlowPanel {
+    /*
+     * Here is the workaround of the problem: our ViewHeaderDecorator has padding 1em on
+     * both ends in the CSS style, so in order to set all other internal widgets intended
+     * to be whole-width-wide by means of percentage width it's necessary to add those
+     * padding values!
+     */
+    private Widget upperLevelElementElignment(Widget e) {
+        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
+        e.setWidth("70%");
+        return e;
+    }
 
-        private final UnitSelection proto = EntityFactory.getEntityPrototype(UnitSelection.class);
+    private Widget innerLevelElementElignment(Widget e) {
+        upperLevelElementElignment(e);
+        e.setWidth("100%");
+        return e;
+    }
+
+    class AvailableUnitsTable extends FlowPanel {
 
         private final FlowPanel content;
 
@@ -157,6 +173,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         public AvailableUnitsTable() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            //            upperLevelElementElignment(this);
             setWidth("70%");
 
             tableLayout.put("Plan", "10%");
@@ -172,7 +189,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             header.getElement().getStyle().setBackgroundColor("lightGray");
             header.getElement().getStyle().setMarginBottom(1, Unit.EM);
             header.setHeight("2.3em");
-            lineupWidth(header);
+            innerLevelElementElignment(header);
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
@@ -202,21 +219,19 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             FlowPanel floorplan = new FlowPanel();
             floorplan.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
-            addCell("&nbsp", tableLayout.get("Plan"), floorplan);
-            addCell(availableUnits.floorplan().name().getStringView(), tableLayout.get("Type"), floorplan);
-            addCell("From " + minRentValue(availableUnits.units()) + "$", tableLayout.get("Rent"), floorplan);
-            //           addCell("From " + availableUnits.rent().getValue().getA() + "$" + "to " + availableUnits.rent().getValue().getB() + "$", tableLayout.get("Rent"), floorplan);
+            addCell("Plan", "&nbsp", floorplan);
+            addCell("Type", availableUnits.floorplan().name().getStringView(), floorplan);
+            addCell("Rent", "From " + minRentValue(availableUnits.units()) + "$", floorplan);
+            //                       addCell("From " + availableUnits.rent().getValue().getA() + "$" + "to " + availableUnits.rent().getValue().getB() + "$", tableLayout.get("Rent"), floorplan);
             //            System.out.println(">>>" + availableUnits.rent().toString());
 
-            addCell("&nbsp", tableLayout.get("Deposit"), floorplan);
-            addCell("&nbsp", tableLayout.get("Beds"), floorplan);
-            addCell("&nbsp", tableLayout.get("Baths"), floorplan);
-            addCell(availableUnits.floorplan().area().getStringView(), tableLayout.get("Sq F"), floorplan);
-            addCell("&nbsp", tableLayout.get("Available"), floorplan);
+            addCell("Deposit", "&nbsp", floorplan);
+            addCell("Beds", "&nbsp", floorplan);
+            addCell("Baths", "&nbsp", floorplan);
+            addCell("Sq F", availableUnits.floorplan().area().getStringView(), floorplan);
+            addCell("Available", "&nbsp", floorplan);
 
-            lineupWidth(floorplan);
-            content.add(floorplan);
-
+            content.add(innerLevelElementElignment(floorplan));
             content.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 0.5, Unit.EM));
         }
 
@@ -263,26 +278,25 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                     }
                 }, ClickEvent.getType());
 
-                addCell("&nbsp", tableLayout.get("Plan"), unitRowPanel);
-                addCell(unit.unitType().getStringView(), tableLayout.get("Type"), unitRowPanel);
-                addCell(Double.toString(minRentValue(unit)) + "$", tableLayout.get("Rent"), unitRowPanel);
-                addCell(unit.requiredDeposit().getStringView() + "$", tableLayout.get("Deposit"), unitRowPanel);
-                addCell(unit.bedrooms().getStringView(), tableLayout.get("Beds"), unitRowPanel);
-                addCell(unit.bathrooms().getStringView(), tableLayout.get("Baths"), unitRowPanel);
-                addCell(unit.area().getStringView(), tableLayout.get("Sq F"), unitRowPanel);
-                addCell(unit.avalableForRent().getStringView(), tableLayout.get("Available"), unitRowPanel);
+                addCell("Plan", "&nbsp", unitRowPanel);
+                addCell("Type", unit.unitType().getStringView(), unitRowPanel);
+                addCell("Rent", Double.toString(minRentValue(unit)) + "$", unitRowPanel);
+                addCell("Deposit", unit.requiredDeposit().getStringView() + "$", unitRowPanel);
+                addCell("Beds", unit.bedrooms().getStringView(), unitRowPanel);
+                addCell("Baths", unit.bathrooms().getStringView(), unitRowPanel);
+                addCell("Sq F", unit.area().getStringView(), unitRowPanel);
+                addCell("Available", unit.avalableForRent().getStringView(), unitRowPanel);
 
-                lineupWidth(unitRowPanel);
-                content.add(unitRowPanel);
+                content.add(innerLevelElementElignment(unitRowPanel));
 
                 populateUnitDetail(unit);
             }
         }
 
-        private void addCell(String text, String width, FlowPanel container) {
-            HTML label = new HTML(text);
+        private void addCell(String cellName, String cellContent, FlowPanel container) {
+            HTML label = new HTML(cellContent);
             label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.setWidth(width);
+            label.setWidth(tableLayout.get(cellName));
             container.add(label);
         }
 
@@ -360,20 +374,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
             unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
             unitDetailPanel.setVisible(false);
-            lineupWidth(unitDetailPanel);
-            content.add(unitDetailPanel);
-        }
-
-        /*
-         * Here is the workaround of the problem: our ViewHeaderDecorator has padding 1em
-         * on both ends in the CSS style, so in order to set all other internal widgets
-         * intended to be whole-width-wide by means of percentage width it's necessary to
-         * add those padding values!
-         */
-        private void lineupWidth(Widget w) {
-            w.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-            w.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            w.setWidth("100%");
+            content.add(innerLevelElementElignment(unitDetailPanel));
         }
 
         private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
