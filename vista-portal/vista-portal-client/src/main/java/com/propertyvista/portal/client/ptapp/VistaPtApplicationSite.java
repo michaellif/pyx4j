@@ -25,6 +25,9 @@ public class VistaPtApplicationSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
+
+        ApplicationCommon.initRpcGlassPanel();
+
         final SiteGinjector ginjector = GWT.create(SiteGinjector.class);
 
         RootPanel.get().add(GlassPanel.instance());
@@ -34,8 +37,6 @@ public class VistaPtApplicationSite extends AppSite {
         CaptchaComposite.setPublicKey("6LfVZMESAAAAAJaoJgKeTN_F9CKs6_-XGqG4nsth");
 
         hideLoadingIndicator();
-
-        ApplicationCommon.initRpcGlassPanel();
 
         ginjector.getWizardManager().initWizard(ginjector);
 
