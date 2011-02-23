@@ -29,10 +29,17 @@ public class ImageFactory {
     public interface FormsImageBundle extends FormImages {
     }
 
-    private static FormsImageBundle bundle = GWT.create(FormsImageBundle.class);
+    private static FormsImageBundle bundle;
 
     public static FormsImageBundle getImages() {
+        if (bundle == null) {
+            bundle = GWT.create(FormsImageBundle.class);
+        }
         return bundle;
+    }
+
+    public static void setImageBundle(FormsImageBundle bundle) {
+        ImageFactory.bundle = bundle;
     }
 
 }
