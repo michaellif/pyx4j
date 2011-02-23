@@ -23,4 +23,10 @@ public class SummaryViewImpl extends WizardStepViewImpl<Summary, SummaryViewPres
         super(new SummaryViewForm());
     }
 
+    @Override
+    public void populate(Summary entity) {
+        // TODO Auto-generated method stub
+        super.populate(entity);
+    }
+
 }

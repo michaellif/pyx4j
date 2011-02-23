@@ -20,6 +20,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.activity.MainNavigActivity;
 
+import com.pyx4j.security.client.ClientContext;
+
 public class MainNavigActivityMapper implements ActivityMapper {
 
     Provider<MainNavigActivity> mainNavigActivityProvider;
@@ -32,7 +34,11 @@ public class MainNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return mainNavigActivityProvider.get().withPlace(place);
+        if (ClientContext.isAuthenticated()) {
+            return mainNavigActivityProvider.get().withPlace(place);
+        } else {
+            return null;
+        }
     }
 
 }
