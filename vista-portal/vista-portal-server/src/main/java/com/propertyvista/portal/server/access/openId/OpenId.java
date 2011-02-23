@@ -37,8 +37,11 @@ import org.openid4java.util.ProxyProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.config.SystemConfig;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -58,12 +61,11 @@ public class OpenId {
     public static synchronized String getDestinationUrl(String userDomain) {
         try {
             if (manager == null) {
-                String proxyHost = null;// AppConfiguration.getValue("openid", "proxyHost");
-                int proxyPort = 0;// AppConfiguration.getValue("openid", "proxyPort", 8080);
-                if (CommonsStringUtils.isStringSet(proxyHost)) {
+                ProxyConfig proxy = SystemConfig.instance().getProxyConfig();
+                if (proxy != null) {
                     ProxyProperties proxyProps = new ProxyProperties();
-                    proxyProps.setProxyHostName(proxyHost);
-                    proxyProps.setProxyPort(proxyPort);
+                    proxyProps.setProxyHostName(proxy.getHost());
+                    proxyProps.setProxyPort(proxy.getPort());
                     HttpClientFactory.setProxyProperties(proxyProps);
                 }
                 manager = new ConsumerManager();

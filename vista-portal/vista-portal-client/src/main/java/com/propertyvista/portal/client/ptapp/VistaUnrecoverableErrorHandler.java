@@ -16,12 +16,7 @@ package com.propertyvista.portal.client.ptapp;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.UmbrellaException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
@@ -29,13 +24,10 @@ import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessage
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
-import com.pyx4j.gwt.commons.UnrecoverableErrorHandler;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
-public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
+public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
     private static I18n i18n = I18nFactory.getI18n(VistaUnrecoverableErrorHandler.class);
 
@@ -48,66 +40,31 @@ public class VistaUnrecoverableErrorHandler implements UnrecoverableErrorHandler
     }
 
     @Override
-    public void onUnrecoverableError(final Throwable caught, final String errorCode) {
-        // Handle the case when 'stack size exceeded', show dialog later.
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                showMessage(caught, errorCode);
-            }
-        });
-
-    }
-
-    protected void showMessage(final Throwable caught, final String errorCode) {
-        Throwable cause = caught;
-        while ((cause instanceof UmbrellaException)
-                || ((cause instanceof UnrecoverableClientError) && (cause.getCause() != null) && (cause.getCause() != cause))) {
-            if (cause instanceof UmbrellaException) {
-                try {
-                    cause = ((UmbrellaException) cause).getCauses().iterator().next();
-                } catch (Throwable ignore) {
-                    break;
-                }
-            } else {
-                cause = cause.getCause();
-            }
-        }
-
-        if (cause instanceof UserRuntimeException) {
-            showWarningMessage(cause.getMessage());
-        } else if (cause instanceof UnrecoverableClientWarning) {
-            showWarningMessage(cause.getMessage());
-        } else if (cause instanceof IncompatibleRemoteServiceException) {
-            showReloadApplicationMessage();
-        } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_NOT_FOUND) {
-            showReloadApplicationMessage();
-        } else if ((cause instanceof StatusCodeException) && (((StatusCodeException) cause).getStatusCode()) == Response.SC_PRECONDITION_FAILED) {
-            showThrottleMessage();
-        } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
-            // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
-            showReloadApplicationMessage();
-        } else {
-            showDefaultErrorMessage(cause, errorCode);
-        }
-    }
-
-    protected void showReloadApplicationMessage() {
+    protected void showReloadApplication() {
         String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
                 + "\nPlease refresh the page now!");
         showMessage(message, UserMessageType.FAILURE);
     }
 
-    protected void showWarningMessage(String text) {
+    @Override
+    protected void showUnauthorized() {
+        showMessage("This session has been terminated .", UserMessageType.FAILURE);
+
+    }
+
+    @Override
+    protected void showWarning(String text) {
         showMessage(text, UserMessageType.WARN);
     }
 
-    protected void showThrottleMessage() {
+    @Override
+    protected void showThrottle() {
         showMessage(i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
                 + "To protect our users, we can't process your request at this time."), UserMessageType.FAILURE);
     }
 
-    protected void showDefaultErrorMessage(Throwable caught, String errorCode) {
+    @Override
+    protected void showDefaultError(Throwable caught, String errorCode) {
 
         String detailsMessage = "";
         if (ApplicationMode.isDevelopment() && CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {

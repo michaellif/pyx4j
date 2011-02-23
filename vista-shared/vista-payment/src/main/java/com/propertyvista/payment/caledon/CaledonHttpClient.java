@@ -42,8 +42,6 @@ class CaledonHttpClient {
 
     private final String url = "https://lt3a.caledoncard.com/";
 
-    private static SystemConfig configuration = new SystemConfig();
-
     CaledonResponse transaction(CaledonRequest request) {
 
         GetMethod httpMethod = new GetMethod(url);
@@ -52,7 +50,7 @@ class CaledonHttpClient {
         //System.out.println(httpMethod.getQueryString());
 
         HttpClient httpClient = new HttpClient();
-        ProxyConfig proxy = configuration.getCaledonProxy();
+        ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();
         if (proxy != null) {
             httpClient.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
             if (proxy.getUser() != null) {
