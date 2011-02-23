@@ -29,5 +29,4 @@ public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, Apartme
         super.setPresenter(presenter);
         ((ApartmentViewForm) getForm()).setPresenter(getPresenter());
     }
-
 }

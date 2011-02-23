@@ -818,7 +818,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("padding", "0.3em 0 0.4em 1em");
+        style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("margin", "0.2em 0 0.5em 0");
         style.addProperty("width", "70%");
         addStyle(style);
@@ -828,6 +828,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("padding-left", "1em");
+        style.addProperty("padding-right", "1em");
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "70%");
         addStyle(style);

@@ -17,8 +17,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -75,13 +77,13 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().selectionCriteria().availableFrom(), this), 0, 7.1);
+        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().availableFrom(), this), 0, 7.1, 1);
         dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         header.add(dateFrom);
 
-        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().selectionCriteria().availableTo(), this), 0, 7.1);
+        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().availableTo(), this), 0, 7.1, 1);
         dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         header.add(dateTo);
@@ -94,7 +96,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.selectByDates(getValue());
-
             }
         });
         header.add(btn);
@@ -111,10 +112,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         main.add(availableUnitsTable);
 
         // start date:
-        w = new ViewLineSeparator();
-        w.getElement().getStyle().setMarginTop(1, Unit.EM);
-        w.getElement().getStyle().setMarginBottom(1, Unit.EM);
-        main.add(w);
+        main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
         caption = new HTML("<h3>Start Rent Date</h3>");
         caption.getElement().getStyle().setFloat(Float.LEFT);
@@ -133,12 +131,12 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     @Override
     public UnitSelection getValue() {
-        UnitSelection v = super.getValue();
-        if (v != null) {
-            v.selectedUnit().set(selectedUnit);
-            v.selectedUnitLeaseTerm().setValue(selectedTerm);
+        UnitSelection us = super.getValue();
+        if (us != null) {
+            us.selectedUnit().set(selectedUnit);
+            us.selectedUnitLeaseTerm().setValue(selectedTerm);
         }
-        return v;
+        return us;
 
     }
 
@@ -205,6 +203,9 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             addCell("&nbsp", tableLayout.get("Plan"), floorplan);
             addCell(availableUnits.floorplan().name().getStringView(), tableLayout.get("Type"), floorplan);
             addCell("From " + minRentValue(availableUnits.units()) + "$", tableLayout.get("Rent"), floorplan);
+            //           addCell("From " + availableUnits.rent().getValue().getA() + "$" + "to " + availableUnits.rent().getValue().getB() + "$", tableLayout.get("Rent"), floorplan);
+            //            System.out.println(">>>" + availableUnits.rent().toString());
+
             addCell("&nbsp", tableLayout.get("Deposit"), floorplan);
             addCell("&nbsp", tableLayout.get("Beds"), floorplan);
             addCell("&nbsp", tableLayout.get("Baths"), floorplan);
@@ -214,11 +215,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             lineupWidth(floorplan);
             content.add(floorplan);
 
-            Widget sp = new ViewLineSeparator();
-            sp.getElement().getStyle().setMarginTop(1, Unit.EM);
-            sp.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-            sp.setWidth("100%");
-            content.add(sp);
+            content.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 0.5, Unit.EM));
         }
 
         private void populateUnits(AvailableUnitsByFloorplan availableUnits) {
@@ -231,20 +228,36 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
                     @Override
                     public void onClick(ClickEvent event) {
+
+                        selectedUnit = unit; // update user-selected unit...
+
+                        // tweak selected unit data view:
                         for (Widget w : content) {
                             // hide all detail panels:
-                            if (w.getStyleName().equals(UNIT_DETAIL_PANEL_STYLENAME))
+                            if (w.getStyleName().equals(UNIT_DETAIL_PANEL_STYLENAME)) {
                                 w.setVisible(false);
+                                w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+                            }
                             // clear selected background:
-                            if (w.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME))
+                            if (w.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME)) {
                                 w.getElement().getStyle().setBackgroundColor("");
+                                w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+                            }
                         }
 
-                        // show current selected row with details: 
+                        // show current selected row with details + their decorations: 
                         unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
-                        content.getWidget(content.getWidgetIndex(unitRowPanel) + 1).setVisible(true);
+                        unitRowPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+                        unitRowPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+                        unitRowPanel.getElement().getStyle().setBorderColor("black");
+                        unitRowPanel.getElement().getStyle().setProperty("borderBottom", " none");
 
-                        selectedUnit = unit;
+                        Widget detailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
+                        detailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+                        detailPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+                        detailPanel.getElement().getStyle().setBorderColor("black");
+                        detailPanel.getElement().getStyle().setProperty("borderTop", " none");
+                        detailPanel.setVisible(true);
                     }
                 }, ClickEvent.getType());
 
@@ -275,13 +288,48 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         private void populateUnitDetail(com.propertyvista.portal.domain.Unit unit) {
             FlowPanel unitDetailPanel = new FlowPanel();
             unitDetailPanel.setStyleName(UNIT_DETAIL_PANEL_STYLENAME);
+            unitDetailPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
 
-            // TODO fill it here...
-            unitDetailPanel.add(new HTML("Unit details goes here..."));
+            FlowPanel infoPanel = new FlowPanel();
+            infoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            infoPanel.add(new HTML("<h3>Info</h3>"));
+            infoPanel.add(new HTML(unit.infoDetails().getStringView()));
+            infoPanel.setWidth("33%");
+            unitDetailPanel.add(infoPanel);
+
+            FlowPanel amenitiesPanel = new FlowPanel();
+            amenitiesPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            amenitiesPanel.add(new HTML("<h3>Amenities/Utilities:</h3>"));
+            amenitiesPanel.add(new HTML(unit.amenities().getStringView()));
+            amenitiesPanel.add(new HTML(unit.utilities().getStringView()));
+            amenitiesPanel.setWidth("33%");
+            unitDetailPanel.add(amenitiesPanel);
+
+            FlowPanel concessionPanel = new FlowPanel();
+            concessionPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            concessionPanel.add(new HTML("<h3>Concession</h3>"));
+            concessionPanel.add(new HTML(unit.concessions().getStringView()));
+            concessionPanel.setWidth("33%");
+            unitDetailPanel.add(concessionPanel);
+
+            Widget sp = new ViewLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);
+            unitDetailPanel.add(sp);
+
+            FlowPanel addonsPanel = new FlowPanel();
+            addonsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            addonsPanel.add(new HTML("<h3>Available add-ons</h3>"));
+            addonsPanel.setWidth("33%");
+            unitDetailPanel.add(addonsPanel);
+            addonsPanel.add(new HTML(unit.concessions().getStringView()));
+
+            sp = new ViewLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);
+            unitDetailPanel.add(sp);
 
             // lease term:
             unitDetailPanel.add(new HTML());
-            unitDetailPanel.add(new HTML("<h4>Lease Terms</h4>"));
+            unitDetailPanel.add(new HTML("<h3>Lease Terms</h3>"));
             FlowPanel leaseTermsPanel = new FlowPanel();
 
             String groupName = "TermVariants" + unit.hashCode();
@@ -305,13 +353,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             unitDetailPanel.add(leaseTermsPanel);
 
-            Widget sp = new ViewLineSeparator();
-            sp.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-            sp.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-            sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);
-            sp.setWidth("100%");
-            unitDetailPanel.add(sp);
-
+            unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
+            unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
             unitDetailPanel.setVisible(false);
             lineupWidth(unitDetailPanel);
             content.add(unitDetailPanel);
@@ -325,6 +368,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
          */
         private void lineupWidth(Widget w) {
             w.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            w.getElement().getStyle().setPaddingRight(1, Unit.EM);
             w.setWidth("100%");
         }
 
