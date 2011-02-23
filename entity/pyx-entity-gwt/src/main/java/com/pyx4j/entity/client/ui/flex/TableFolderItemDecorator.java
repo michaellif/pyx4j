@@ -32,9 +32,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 
-public class TableFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
+public class TableFolderItemDecorator extends SimplePanel implements FolderItemDecorator {
 
     private final Image image;
+
+    private final FlowPanel holder;
 
     private final SimplePanel content;
 
@@ -43,22 +45,24 @@ public class TableFolderItemDecorator extends FlowPanel implements FolderItemDec
     public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
         this.removable = removable;
 
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        holder = new FlowPanel();
+        holder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         image = new Image(removeButton);
 
         image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        add(image);
+        holder.add(image);
 
         content = new SimplePanel();
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        add(content);
+        holder.add(content);
 
         if (removable) {
             image.setTitle(title);
             image.getElement().getStyle().setCursor(Cursor.POINTER);
         }
 
+        setWidget(holder);
     }
 
     public TableFolderItemDecorator(ImageResource removeButton, String title) {
