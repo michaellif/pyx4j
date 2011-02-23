@@ -26,6 +26,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
+import com.pyx4j.security.client.ClientContext;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
@@ -48,6 +49,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showUnauthorized() {
+        ClientContext.terminateSession();
         showMessage("This session has been terminated .", UserMessageType.FAILURE);
 
     }
