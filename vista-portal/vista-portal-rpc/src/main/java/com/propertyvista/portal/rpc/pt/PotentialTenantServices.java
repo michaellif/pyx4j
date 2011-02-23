@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.pt;
 
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 import com.pyx4j.entity.rpc.EntityServices;
@@ -36,4 +37,8 @@ public interface PotentialTenantServices {
     public interface RetrieveByPK extends EntityServices.RetrieveByPK {
 
     };
+
+    public interface RetrieveUnitSelection extends Service<UnitSelectionCriteria, UnitSelection> {
+
+    }
 }

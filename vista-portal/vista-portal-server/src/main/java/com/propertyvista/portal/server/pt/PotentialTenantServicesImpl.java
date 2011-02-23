@@ -193,6 +193,21 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         }
     }
 
+    public static class RetrieveUnitSelectionImpl implements PotentialTenantServices.RetrieveUnitSelection {
+
+        @Override
+        public UnitSelection execute(UnitSelectionCriteria request) {
+            EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+            UnitSelection unitSelection = secureRetrieve(criteria);
+
+            loadAvailableUnits(unitSelection);
+
+            return unitSelection;
+        }
+
+    }
+
     public static class SaveImpl extends EntityServicesImpl.MergeSaveImpl implements PotentialTenantServices.Save {
 
         @Override
@@ -256,6 +271,16 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), unitSelection.building()));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+
+        if (!unitSelection.selectionCriteria().availableFrom().isNull()) {
+            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.GREATER_THAN_OR_EQUAL, unitSelection
+                    .selectionCriteria().availableFrom().getValue()));
+        }
+        if (!unitSelection.selectionCriteria().availableTo().isNull()) {
+            criteria.add(new PropertyCriterion(criteria.proto().avalableForRent(), PropertyCriterion.Restriction.LESS_THAN_OR_EQUAL, unitSelection
+                    .selectionCriteria().availableTo().getValue()));
+        }
+
         List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found " + units.size() + " units");
         availableUnits.units().addAll(units);
