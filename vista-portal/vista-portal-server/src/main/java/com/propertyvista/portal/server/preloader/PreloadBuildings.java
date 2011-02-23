@@ -13,7 +13,9 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -43,6 +45,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class PreloadBuildings extends AbstractDataPreloader {
@@ -191,7 +194,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         unit.requiredDeposit().setValue(150D);
 
-        unit.avalableForRent().setValue(new Date());
+        Calendar avalable = new GregorianCalendar();
+        avalable.setTime(new Date());
+        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(60));
+        DateUtils.dayStart(avalable);
+
+        unit.avalableForRent().setValue(avalable.getTime());
 
         unit.floorplan().set(floorplan);
 

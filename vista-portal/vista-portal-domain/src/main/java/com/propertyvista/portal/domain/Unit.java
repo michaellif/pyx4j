@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -59,6 +60,7 @@ public interface Unit extends Property {
 
     IPrimitive<Date> moveOut();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<Date> avalableForRent();
 
     /**
@@ -82,15 +84,15 @@ public interface Unit extends Property {
         available, reserved, leased, notice;
     }
 
-    IPrimitive<Status> status();   
-    
+    IPrimitive<Status> status();
+
     IList<Amenity> amenities();
-    
+
     IList<Utility> utilities();
-    
+
     IList<UnitInfo> infoDetails();
-    
+
     IList<Consession> concessions();
-    
+
     IList<AddOn> addOns();
 }
