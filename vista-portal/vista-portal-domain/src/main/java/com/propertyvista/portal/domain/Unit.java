@@ -82,10 +82,15 @@ public interface Unit extends Property {
         available, reserved, leased, notice;
     }
 
-    IPrimitive<Status> status();
-    
+    IPrimitive<Status> status();   
     
     IList<Amenity> amenities();
     
     IList<Utility> utilities();
+    
+    IList<UnitInfo> infoDetails();
+    
+    IList<Consession> concessions();
+    
+    IList<AddOn> addOns();
 }
