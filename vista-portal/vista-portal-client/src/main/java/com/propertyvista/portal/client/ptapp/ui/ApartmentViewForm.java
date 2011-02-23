@@ -279,7 +279,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         private void addCell(String text, String width, FlowPanel container) {
             HTML label = new HTML(text);
             label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
             label.setWidth(width);
             container.add(label);
         }
@@ -291,6 +290,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             FlowPanel infoPanel = new FlowPanel();
             infoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            infoPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             infoPanel.add(new HTML("<h3>Info</h3>"));
             infoPanel.add(new HTML(unit.infoDetails().getStringView()));
             infoPanel.setWidth("33%");
@@ -298,6 +298,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             FlowPanel amenitiesPanel = new FlowPanel();
             amenitiesPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            amenitiesPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             amenitiesPanel.add(new HTML("<h3>Amenities/Utilities:</h3>"));
             amenitiesPanel.add(new HTML(unit.amenities().getStringView()));
             amenitiesPanel.add(new HTML(unit.utilities().getStringView()));
@@ -306,6 +307,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             FlowPanel concessionPanel = new FlowPanel();
             concessionPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            concessionPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             concessionPanel.add(new HTML("<h3>Concession</h3>"));
             concessionPanel.add(new HTML(unit.concessions().getStringView()));
             concessionPanel.setWidth("33%");
