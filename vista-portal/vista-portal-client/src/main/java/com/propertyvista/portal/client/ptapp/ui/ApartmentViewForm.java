@@ -77,16 +77,16 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().availableFrom(), this), 0, 7.1, 1);
-        dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        ////        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().availableFrom(), this), 0, 7.1, 1);
+        //        dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        //        dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        header.add(dateFrom);
+        header.add(dateFr / om);
 
-        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().availableTo(), this), 0, 7.1, 1);
-        dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        header.add(dateTo);
+        ////        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().availableTo(), this), 0, 7.1, 1);
+        //        dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        //        dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        //        header.add(dateTo);
 
         Button btn = new Button("Change");
         btn.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
