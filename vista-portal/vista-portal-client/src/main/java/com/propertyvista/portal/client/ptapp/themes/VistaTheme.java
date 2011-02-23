@@ -516,7 +516,7 @@ public abstract class VistaTheme extends Theme {
 
     protected void initCheckBoxStyle() {
         Style style = new Style(CSSClass.pyx4j_CheckBox);
-        style.addProperty("margin", "50%");
+        style.addProperty("margin", "40%");
         addStyle(style);
     }
 
