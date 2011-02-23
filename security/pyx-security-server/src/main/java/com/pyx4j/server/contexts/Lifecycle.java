@@ -47,6 +47,8 @@ public class Lifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(Lifecycle.class);
 
+    private static String END_SESSION_ATR = "pyx.endSession";
+
     public static void beginRequest(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
         //long start = System.nanoTime();
         Context.beginRequest(httprequest, httpresponse);
@@ -99,6 +101,12 @@ public class Lifecycle {
                     // Force object update in GAE session.
                     session.setAttribute(Context.SESSION_VISIT, visit);
                 }
+            } else if (Context.getRequest().getAttribute(END_SESSION_ATR) != null) {
+                // Remove Session Cookie 
+                Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
+                c.setPath("/");
+                c.setMaxAge(0);
+                Context.getResponse().addCookie(c);
             }
         } finally {
             Context.remove();
@@ -176,11 +184,7 @@ public class Lifecycle {
             } catch (IllegalStateException e) {
                 // this method is called already
             }
-            // Remove Session Cookie 
-            Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
-            c.setPath("/");
-            c.setMaxAge(0);
-            Context.getResponse().addCookie(c);
+            Context.getRequest().setAttribute(END_SESSION_ATR, Boolean.TRUE);
         }
     }
 }

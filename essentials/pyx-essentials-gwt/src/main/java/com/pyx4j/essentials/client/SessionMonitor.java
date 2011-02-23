@@ -105,6 +105,7 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     private void onAuthenticationChange() {
         if (ClientContext.hasServerSession()) {
+            logChangeSessionCookieOnce = true;
             if (!monitoring) {
                 start();
             } else {

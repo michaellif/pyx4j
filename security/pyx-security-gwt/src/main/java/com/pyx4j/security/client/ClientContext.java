@@ -227,6 +227,7 @@ public class ClientContext {
      * only Maintenance
      */
     public static void terminateSession() {
+        log.error("terminateSession");
         userVisit = null;
         attributes.clear();
         RPCManager.setSessionToken(null, null);
