@@ -7,12 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-10
+ * Created on 2011-02-23
  * @author antonk
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.propertyvista.portal.domain.pt;
 
-public interface ContactDetailsWithAddress extends ContactDetails, IAddress {
+import java.util.Date;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+public interface CreditCardInfo extends IEntity {
+    public enum CardType {
+        Visa, Amex, MasterCard, Discover
+    }
+
+    IPrimitive<String> cardNumber();
+
+    IPrimitive<Date> expiry();
+
+    IPrimitive<Date> verificationDigits();
+
+    IPrimitive<String> exactName();
+
+    IPrimitive<String> bankPhone();
 }
