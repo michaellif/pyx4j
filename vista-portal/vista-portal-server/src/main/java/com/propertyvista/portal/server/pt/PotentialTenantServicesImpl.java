@@ -203,6 +203,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
             loadAvailableUnits(unitSelection);
 
+            unitSelection.selectionCriteria().set(request);
+
             return unitSelection;
         }
 
