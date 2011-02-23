@@ -94,7 +94,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.selectByDates(getValue());
+                presenter.selectByDates(getValue().selectionCriteria());
             }
         });
         header.add(changeBtn);

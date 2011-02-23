@@ -17,6 +17,11 @@ import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentView;
 import com.propertyvista.portal.client.ptapp.ui.ApartmentViewPresenter;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
+
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.client.RPCManager;
 
 public class ApartmentActivity extends WizardStepActivity<UnitSelection, ApartmentViewPresenter> implements ApartmentViewPresenter {
 
@@ -26,10 +31,14 @@ public class ApartmentActivity extends WizardStepActivity<UnitSelection, Apartme
     }
 
     @Override
-    public void selectByDates(UnitSelection entity) {
+    public void selectByDates(UnitSelectionCriteria entity) {
+        RPCManager.execute(PotentialTenantServices.RetrieveUnitSelection.class, entity, new DefaultAsyncCallback<UnitSelection>() {
 
-        // TODO just for test purpose:
-        entity.availableUnits().units().remove(0);
-        ((ApartmentView) getView()).populate(entity);
+            @Override
+            public void onSuccess(UnitSelection result) {
+                getView().populate(result);
+            }
+        });
+
     }
 }
