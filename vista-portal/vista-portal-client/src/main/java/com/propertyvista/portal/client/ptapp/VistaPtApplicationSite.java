@@ -15,8 +15,10 @@ package com.propertyvista.portal.client.ptapp;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.propertyvista.portal.client.ptapp.resources.FormImageBundle;
 
 import com.pyx4j.essentials.client.ApplicationCommon;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -25,6 +27,8 @@ public class VistaPtApplicationSite extends AppSite {
 
     @Override
     public void onSiteLoad() {
+
+        ImageFactory.setImageBundle((FormImageBundle) GWT.create(FormImageBundle.class));
 
         ApplicationCommon.initRpcGlassPanel();
 
