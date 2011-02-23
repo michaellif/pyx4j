@@ -148,7 +148,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         private final FlowPanel content;
 
-        Map<String, String> tableLayout = new LinkedHashMap<String, String>();
+        private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
 
         private static final String UNIT_ROW_PANEL_STYLENAME = "unitRowPanel";
 
@@ -366,9 +366,9 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         /*
          * Here is the workaround of the problem: our ViewHeaderDecorator has padding 1em
-         * in the CSS style, so in order to set all other internal widgets intended to be
-         * whole-width-wide by means of percentage width it's necessary to add than left
-         * padding value!
+         * on both ends in the CSS style, so in order to set all other internal widgets
+         * intended to be whole-width-wide by means of percentage width it's necessary to
+         * add those padding values!
          */
         private void lineupWidth(Widget w) {
             w.getElement().getStyle().setPaddingLeft(1, Unit.EM);
