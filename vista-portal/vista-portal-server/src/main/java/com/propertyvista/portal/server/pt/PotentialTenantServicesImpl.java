@@ -112,8 +112,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 }
 
                 UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-                unitSelection.propertyCode().set(request.propertyCode());
-                unitSelection.floorplanName().set(request.floorplanName());
+                unitSelection.selectionCriteria().propertyCode().set(request.propertyCode());
+                unitSelection.selectionCriteria().floorplanName().set(request.floorplanName());
                 unitSelection.building().set(building);
 
                 application = EntityFactory.create(Application.class);
@@ -130,7 +130,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
 
                 if ((unitSelection != null) && (request != null)) {
-                    if ((!unitSelection.propertyCode().equals(request.propertyCode())) || (!unitSelection.floorplanName().equals(request.floorplanName()))) {
+                    if ((!unitSelection.selectionCriteria().propertyCode().equals(request.propertyCode()))
+                            || (!unitSelection.selectionCriteria().floorplanName().equals(request.floorplanName()))) {
                         //TODO What if they are diferent ?  We need to discard some part of application flow.
                     }
                 }
@@ -237,12 +238,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         // find floor plan
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
-        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.floorplanName().getValue()));
+        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.selectionCriteria().floorplanName().getValue()));
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), unitSelection.building()));
         Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
         if (floorplan == null) {
-            log.info("Could not find floorplan {}", unitSelection.floorplanName());
+            log.info("Could not find floorplan {}", unitSelection.selectionCriteria().floorplanName());
             return;
         }
         availableUnits.floorplan().set(floorplan);

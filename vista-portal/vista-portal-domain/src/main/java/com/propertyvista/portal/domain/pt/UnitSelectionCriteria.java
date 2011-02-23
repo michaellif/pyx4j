@@ -13,11 +13,14 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.annotations.Transient;
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
+//TODO this needs to be saved as part of UnitSelection BUT not by itself
+//@Transient
 public interface UnitSelectionCriteria extends IEntity {
 
     // TODO change the query later to use building id and floorplan id
@@ -27,4 +30,11 @@ public interface UnitSelectionCriteria extends IEntity {
     // as per Vlad's suggestion we will be using property code instead of building name
     IPrimitive<String> propertyCode();
 
+    //Criteria
+    @Caption(name = "From")
+    IPrimitive<Date> availableFrom();
+
+    //Criteria
+    @Caption(name = "To")
+    IPrimitive<Date> availableTo();
 }
