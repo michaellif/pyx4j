@@ -77,28 +77,27 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        ////        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().availableFrom(), this), 0, 7.1, 1);
-        //        dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        //        dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().selectionCriteria().availableFrom(), this), 0, 7.2, 1);
+        dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        header.add(dateFrom);
 
-        //        header.add(dateFr / om);
+        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().selectionCriteria().availableTo(), this), 0, 7.2, 1);
+        dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        header.add(dateTo);
 
-        ////        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().availableTo(), this), 0, 7.1, 1);
-        //        dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        //        dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        //        header.add(dateTo);
-
-        Button btn = new Button("Change");
-        btn.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        btn.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-        btn.addClickHandler(new ClickHandler() {
+        Button changeBtn = new Button("Change");
+        changeBtn.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        changeBtn.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        changeBtn.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 presenter.selectByDates(getValue());
             }
         });
-        header.add(btn);
+        header.add(changeBtn);
 
         Widget w = new ViewHeaderDecorator(header);
         w.getElement().getStyle().setMarginBottom(0, Unit.EM);
@@ -118,7 +117,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setFloat(Float.LEFT);
         caption.getElement().getStyle().setMarginTop(3, Unit.PX);
         main.add(caption);
-        main.add(new VistaWidgetDecorator(create(proto().rentStart(), this), 0, 7.1));
+        main.add(new VistaWidgetDecorator(create(proto().rentStart(), this), 0, 7.2));
 
         setWidget(main);
     }
