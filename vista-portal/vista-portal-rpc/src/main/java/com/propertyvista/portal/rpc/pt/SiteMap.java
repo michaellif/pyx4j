@@ -23,19 +23,19 @@ public class SiteMap {
     public static class CreateAccount extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Login")
+    @PlaceProperties(caption = "Application Form")
     public static class Login extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Retrieve Password")
+    @PlaceProperties(caption = "Application Form")
     public static class RetrievePassword extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Reset Password")
+    @PlaceProperties(caption = "Application Form")
     public static class ResetPassword extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Change Password")
+    @PlaceProperties(caption = "Application Form")
     public static class ChangePassword extends AppPlace {
     }
 
@@ -79,11 +79,11 @@ public class SiteMap {
     public static class Payment extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Privacy policy", staticContent = "privacyPolicy")
+    @PlaceProperties(caption = "Application Form", staticContent = "privacyPolicy")
     public static class PrivacyPolicy extends AppPlace {
     }
 
-    @PlaceProperties(caption = "Terms and conditions", staticContent = "termsAndConditions")
+    @PlaceProperties(caption = "Application Form", staticContent = "termsAndConditions")
     public static class TermsAndConditions extends AppPlace {
     }
 

@@ -7,16 +7,13 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.Inject;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
 
@@ -43,7 +40,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     private Theme otherTheme = Theme.LightSkyBlue;
 
     @Inject
-    public TopRightActionsViewImpl(AppPlaceListing appPlaceListing) {
+    public TopRightActionsViewImpl() {
         getElement().getStyle().setFontSize(0.9, Unit.EM);
 
         topLinksPanel = new HorizontalPanel();
@@ -93,12 +90,12 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         themes.setDebugId(new StringDebugId("themes"));
         topLinksPanel.add(themes);
 
-        NavigLink link = new NavigLink(appPlaceListing, new SiteMap.PrivacyPolicy());
+        NavigLink link = new NavigLink("Privacy Policy", new SiteMap.PrivacyPolicy());
         bottomLinksPanel.add(link);
 
         bottomLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
 
-        link = new NavigLink(appPlaceListing, new SiteMap.TermsAndConditions());
+        link = new NavigLink("Terms & Conditions", new SiteMap.TermsAndConditions());
         bottomLinksPanel.add(link);
 
     }
@@ -110,16 +107,15 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private class NavigLink extends CHyperlink {
 
-        public NavigLink(AppPlaceListing listing, final AppPlace place) {
+        public NavigLink(String name, final AppPlace place) {
             super(null, new Command() {
                 @Override
                 public void execute() {
                     presenter.getPlaceController().goTo(place);
                 }
             });
-            AppPlaceInfo info = listing.getPlaceInfo(place);
-            setDebugId(new StringDebugId(info.getCaption()));
-            setValue(i18n.tr(info.getCaption()));
+            setDebugId(new StringDebugId(name));
+            setValue(i18n.tr(name));
         }
 
     }

@@ -98,6 +98,7 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
         style = new Style("h1");
         style.addProperty("font-size", "2em");
+        style.addProperty("line-height", "2.5em");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h2");
@@ -109,8 +110,11 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("font-size", "1.17em");
         style.addProperty("margin", "0");
         addStyle(style);
-        style = new Style("h4, p, blockquote, ul, fieldset, form, ol, dl, dir, menu");
+        style = new Style("h4, blockquote, ul, fieldset, form, ol, dl, dir, menu");
         style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("p");
+        style.addProperty("margin", "0.3em");
         addStyle(style);
         style = new Style("h5");
         style.addProperty("font-size", "1.12em");
