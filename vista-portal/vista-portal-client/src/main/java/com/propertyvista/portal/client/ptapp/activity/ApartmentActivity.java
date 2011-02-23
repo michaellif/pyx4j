@@ -25,4 +25,11 @@ public class ApartmentActivity extends WizardStepActivity<UnitSelection, Apartme
         super(view, UnitSelection.class);
     }
 
+    @Override
+    public void selectByDates(UnitSelection entity) {
+
+        // TODO just for test purpose:
+        entity.availableUnits().units().remove(0);
+        ((ApartmentView) getView()).populate(entity);
+    }
 }

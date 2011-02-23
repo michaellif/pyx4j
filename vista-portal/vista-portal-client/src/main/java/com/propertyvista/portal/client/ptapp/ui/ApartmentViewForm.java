@@ -43,8 +43,22 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     private AvailableUnitsTable availableUnitsTable;
 
+    private ApartmentViewPresenter presenter;
+
+    private com.propertyvista.portal.domain.Unit selectedUnit;
+
+    private int selectedTerm;
+
     public ApartmentViewForm() {
         super(UnitSelection.class);
+    }
+
+    public ApartmentViewPresenter getPresenter() {
+        return presenter;
+    }
+
+    public void setPresenter(ApartmentViewPresenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -79,7 +93,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             @Override
             public void onClick(ClickEvent event) {
-                // TODO Auto-generated method stub
+                presenter.selectByDates(getValue());
 
             }
         });
@@ -115,6 +129,17 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     public void populate(UnitSelection entity) {
         //        System.out.println(">>>" + entity.availableUnits().units().toString());
         availableUnitsTable.populate(entity);
+    }
+
+    @Override
+    public UnitSelection getValue() {
+        UnitSelection v = super.getValue();
+        if (v != null) {
+            v.selectedUnit().set(selectedUnit);
+            v.selectedUnitLeaseTerm().setValue(selectedTerm);
+        }
+        return v;
+
     }
 
     class AvailableUnitsTable extends FlowPanel {
@@ -219,8 +244,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                         unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
                         content.getWidget(content.getWidgetIndex(unitRowPanel) + 1).setVisible(true);
 
-                        // TODO here is selected unit:
-                        com.propertyvista.portal.domain.Unit unit1 = unit;
+                        selectedUnit = unit;
                     }
                 }, ClickEvent.getType());
 
@@ -269,8 +293,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        // TODO here is selected term:
-                        mr.leaseTerm();
+                        selectedTerm = mr.leaseTerm().getValue();
                     }
                 });
 

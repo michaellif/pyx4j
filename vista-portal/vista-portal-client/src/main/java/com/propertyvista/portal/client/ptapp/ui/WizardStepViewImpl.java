@@ -70,6 +70,10 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         this.presenter = presenter;
     }
 
+    protected T getPresenter() {
+        return presenter;
+    }
+
     @Override
     public void populate(E entity) {
         form.populate(entity);
@@ -78,5 +82,10 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     protected E getValue() {
         return form.getValue();
     }
+    
+    protected  CEntityForm<E> getForm() {
+        return form;
+    }
+
 
 }

@@ -102,4 +102,8 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
         });
     }
 
+    protected WizardStepView<E, T> getView() {
+        return view;
+    }
+
 }

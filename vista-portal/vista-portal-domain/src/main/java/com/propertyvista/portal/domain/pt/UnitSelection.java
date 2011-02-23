@@ -44,11 +44,14 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     @Transient
     AvailableUnitsByFloorplan availableUnits();
 
+    // user selected Unit from availableUnits..
     Unit selectedUnit();
+
+    // user selected term (from Unit.marketRent list)
+    IPrimitive<Integer> selectedUnitLeaseTerm();
 
     IPrimitive<Integer> leaseTerm();
 
     @Caption(name = " ")
     IPrimitive<Date> rentStart();
-
 }
