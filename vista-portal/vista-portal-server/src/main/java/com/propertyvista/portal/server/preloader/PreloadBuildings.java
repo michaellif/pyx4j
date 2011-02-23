@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.Address;
+import com.propertyvista.portal.domain.Amenity;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.Complex;
@@ -32,11 +33,13 @@ import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.Utility;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
@@ -109,6 +112,20 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return floorplan;
     }
 
+    public static Utility createUtility(String name) {
+        Utility utility = EntityFactory.create(Utility.class);
+        utility.name().setValue(name);
+        persist(utility);
+        return utility;
+    }
+
+    public static Amenity createAmenity(String name) {
+        Amenity amenity = EntityFactory.create(Amenity.class);
+        amenity.name().setValue(name);
+        persist(amenity);
+        return amenity;
+    }
+
     private Building createBuilding(String propertyCode, BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones,
             Email email) {
         Building building = EntityFactory.create(Building.class);
@@ -148,6 +165,28 @@ public class PreloadBuildings extends AbstractDataPreloader {
             marketRent.leaseTerm().setValue(i * 6);
             marketRent.rent().amount().setValue(565D - 5 * i + RandomUtil.randomInt(100));
             unit.marketRent().add(marketRent);
+        }
+
+        // mandatory utilities
+        unit.utilities().add(createUtility("Water"));
+        unit.utilities().add(createUtility("Heat"));
+        unit.utilities().add(createUtility("Gas"));
+        unit.utilities().add(createUtility("Hydro"));
+
+        // optional utilities
+        if (RandomUtil.randomBoolean()) {
+            unit.utilities().add(createUtility("Cable"));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.utilities().add(createUtility("Internet"));
+        }
+
+        // amenity, all optional
+        if (RandomUtil.randomBoolean()) {
+            unit.amenities().add(createAmenity("1 Indoor Parking"));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.amenities().add(createAmenity("Double Locker"));
         }
 
         unit.requiredDeposit().setValue(150D);
@@ -289,9 +328,15 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 b.append(" | ");
                 b.append(unit.floorplan().name().getStringView()); //.append(" ").append(unit.floorplan().pictures());
                 b.append("\n");
+                b.append("\t\t").append(unit.utilities()).append("\n");
+                b.append("\t\t").append(unit.amenities()).append("\n");
             }
         }
         b.append("\n");
         log.info(b.toString());
+    }
+
+    private static void persist(IEntity entity) {
+        PersistenceServicesFactory.getPersistenceService().persist(entity);
     }
 }

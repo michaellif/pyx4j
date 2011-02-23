@@ -16,8 +16,8 @@ package com.propertyvista.portal.domain.util;
 import com.propertyvista.portal.domain.Currency;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
