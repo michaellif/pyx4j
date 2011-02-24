@@ -183,11 +183,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         private Summary retrieveSummary() {
             Summary summary = EntityFactory.create(Summary.class);
+            retrieveApplicationEntity(summary.unitSelection());
             retrieveApplicationEntity(summary.tenants());
             retrieveApplicationEntity(summary.financial());
             retrieveApplicationEntity(summary.pets());
             retrieveApplicationEntity(summary.charges());
-            return null;
+            return summary;
         }
 
         private <T extends IApplicationEntity> void retrieveApplicationEntity(T entity) {

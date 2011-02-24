@@ -19,11 +19,14 @@ import com.pyx4j.entity.shared.IEntity;
 @Transient
 public interface Summary extends IEntity {
 
-    public PotentialTenantList tenants();
+    UnitSelection unitSelection();
 
-    public PotentialTenantFinancial financial();
+    PotentialTenantList tenants();
 
-    public Pets pets();
+    // TODO this would be PotentialTenantFinancialList after tabs are created.
+    PotentialTenantFinancial financial();
 
-    public Charges charges();
+    Pets pets();
+
+    Charges charges();
 }
