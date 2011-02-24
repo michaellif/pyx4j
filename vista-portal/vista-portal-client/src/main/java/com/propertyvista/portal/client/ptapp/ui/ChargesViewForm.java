@@ -15,10 +15,17 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -26,6 +33,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 
@@ -109,26 +117,54 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
         public abstract void populate(Charges value);
 
-        protected void addRow(String label, String value) {
-            addRow(label, value, false);
+        public void addRow(String label, String value) {
+
+            addRow(new HTML(label), new HTML(value));
         }
 
-        protected void addCheckRow(String label, String value) {
-            addRow(label, value, true);
+        public CheckBox addCheckRow(String label, String value, boolean setSelected) {
+
+            CheckBox chk = new CheckBox(label);
+            chk.setValue(setSelected);
+            addRow(chk, new HTML(value));
+            return chk;
         }
 
-        private void addRow(String label, String value, boolean chekBox) {
+        public TextBox addEditRow(String label, String edit, String value) {
 
-            Widget l = (chekBox ? new CheckBox(label) : new HTML(label));
-            l.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            l.setWidth("40%");
-            add(l);
+            TextBox txt = new TextBox();
+            txt.setValue(label);
+            addRow(new HTML(label), txt, new HTML(value));
+            return txt;
+        }
 
-            HTML v = new HTML(value);
-            v.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            v.getElement().getStyle().setProperty("textAlign", " right");
-            v.setWidth("20%");
-            add(v);
+        // Internal formatters:
+        private void addRow(Widget left, Widget right) {
+
+            left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            left.setWidth("40%");
+            add(left);
+
+            right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            right.getElement().getStyle().setProperty("textAlign", " right");
+            right.setWidth("30%");
+            add(right);
+        }
+
+        private void addRow(Widget left, Widget middle, Widget right) {
+
+            left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            left.setWidth("30%");
+            add(left);
+
+            middle.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            middle.setWidth("20%");
+            add(middle);
+
+            right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            right.getElement().getStyle().setProperty("textAlign", " right");
+            right.setWidth("20%");
+            add(right);
         }
     }
 
@@ -163,9 +199,17 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
-            for (ChargeLine cl : value.upgradeCharges().charges()) {
+            for (final ChargeLine cl : value.upgradeCharges().charges()) {
 
-                addCheckRow(cl.label().getStringView(), "$" + cl.charge().amount().toString());
+                final CheckBox chk = addCheckRow(cl.label().getStringView(), "$" + cl.charge().amount().toString(), cl.selected().getValue());
+                chk.addClickHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        cl.selected().setValue(chk.getValue());
+                    }
+                });
+
                 Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
                 sp.getElement().getStyle().setPadding(0, Unit.EM);
                 add(sp);
@@ -235,13 +279,36 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
-            //            for (ChargeLine cl : value.paymentSplitCharges().charges()) {
-            //
-            //                addRow(cl.label().getStringView(), "$" + cl.charge().amount().toString());
-            //                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-            //                sp.getElement().getStyle().setPadding(0, Unit.EM);
-            //                add(sp);
-            //            }
+            for (final TenantCharge tc : value.paymentSplitCharges().charges()) {
+
+                final TextBox txt = addEditRow(tc.tenant().firstName().getStringView() + "&nbsp" + tc.tenant().lastName().getStringView(), tc.percentage()
+                        .getStringView(), "$" + tc.charge().amount().toString());
+
+                // Filter non-digit input.
+                txt.addKeyPressHandler(new KeyPressHandler() {
+
+                    @Override
+                    public void onKeyPress(KeyPressEvent event) {
+                        if (!Character.isDigit(event.getCharCode())) {
+                            ((TextBox) event.getSource()).cancelKey();
+                        }
+                    }
+                });
+
+                // accept input:
+                txt.addFocusHandler(new FocusHandler() {
+
+                    @Override
+                    public void onFocus(FocusEvent event) {
+                        // TODO : distinguish between SET focus and LOST focus here!!!
+                        tc.percentage().setValue(Integer.parseInt(txt.getValue().trim()));
+                    }
+                });
+
+                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                sp.getElement().getStyle().setPadding(0, Unit.EM);
+                add(sp);
+            }
 
             Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
