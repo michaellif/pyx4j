@@ -16,8 +16,6 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.jasper.tagplugins.jstl.ForEach;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
