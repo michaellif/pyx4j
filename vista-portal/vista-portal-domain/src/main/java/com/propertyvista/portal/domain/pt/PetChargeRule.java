@@ -7,47 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-14
- * @author antonk
+ * Created on 2011-02-24
+ * @author aroytbur
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
 package com.propertyvista.portal.domain.pt;
 
-import java.util.Date;
-
 import com.propertyvista.portal.domain.ChargeType;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Pet extends IEntity {
-    public enum PetType {
-        dog, cat
-    }
-
-    public enum WeightUnit {
-        lb, kg
-    }
-
-    @Caption(name = "Pet type")
-    public IPrimitive<PetType> type();
-
-    public IPrimitive<String> name();
-
-    @Caption(name = "Colour")
-    public IPrimitive<String> color();
-
-    public IPrimitive<String> breed();
-
-    public IPrimitive<Integer> weight();
-
-    @Caption(name = "")
-    public IPrimitive<WeightUnit> weightUnit();
-
-    public IPrimitive<Date> birthDate();
-
-    public IPrimitive<Double> charge();
+public interface PetChargeRule extends IEntity {
+	
+    ChargeType petChargeType();
     
-    public ChargeType petChargeType();
+    IPrimitive<Integer> value(); 
+
 }
