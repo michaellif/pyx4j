@@ -27,6 +27,8 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
+import com.pyx4j.rpc.shared.IsWarningException;
+
 public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
 
     /**
@@ -67,7 +69,7 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
                 cause = cause.getCause();
             }
         }
-        if (cause instanceof UnrecoverableClientWarning) {
+        if (cause instanceof IsWarningException) {
             showWarning(cause.getMessage());
         } else if (cause instanceof IncompatibleRemoteServiceException) {
             showReloadApplication();
