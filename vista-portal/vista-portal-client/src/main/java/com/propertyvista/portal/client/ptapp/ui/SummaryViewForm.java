@@ -90,7 +90,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
         main.add(leaseTermsCheck = new LeaseTermsCheck());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Monthtly Charges</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML("<h4>--- Charges will be added soon --- :o)</h4>")));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
         main.add(signatureView = new SignatureView());
@@ -126,7 +126,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     private Widget innerLevelElementElignment(Widget e) {
-        upperLevelElementElignment(e);
+        //        upperLevelElementElignment(e);
         e.setWidth("100%");
         return e;
     }
@@ -175,6 +175,15 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             content.clear();
 
+            addCell("Type", value.unitSelection().selectedUnit().unitType().getStringView());
+            addCell("Unit", value.unitSelection().selectedUnit().unitType().getStringView());
+            addCell("Rent", value.unitSelection().selectedUnit().marketRent().getStringView());
+            addCell("Deposit", value.unitSelection().selectedUnit().requiredDeposit().getStringView());
+            addCell("Beds", value.unitSelection().selectedUnit().bedrooms().getStringView());
+            addCell("Baths", value.unitSelection().selectedUnit().bathrooms().getStringView());
+            addCell("Sq F", value.unitSelection().selectedUnit().area().getStringView());
+            addCell("Available", value.unitSelection().selectedUnit().avalableForRent().getStringView());
+
         }
 
         private void addCell(String cellName, String cellContent) {
@@ -218,11 +227,11 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            tableLayout.put("Name", "20%");
+            tableLayout.put("Name", "30%");
             tableLayout.put("Date of Birht", "20%");
-            tableLayout.put("Email", "20%");
-            tableLayout.put("Relationship", "20%");
-            tableLayout.put("Dependant", "20%");
+            tableLayout.put("Email", "25%");
+            tableLayout.put("Relationship", "15%");
+            tableLayout.put("Dependant", "10%");
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
@@ -246,7 +255,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             content.clear();
 
             for (PotentialTenantInfo ti : value.tenants().tenants()) {
-                addCell("Name", ti.firstName().getStringView() + "&nbsp" + ti.lastName().getStringView());
+                addCell("Name", ti.firstName().getStringView() + " &nbsp " + ti.lastName().getStringView());
                 addCell("Date of Birht", ti.birthDate().getStringView());
                 addCell("Email", ti.email().getStringView());
                 addCell("Relationship", ti.relationship().getStringView());
@@ -384,14 +393,16 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            tableLayout.put("Type", "20%");
-            tableLayout.put("Name", "20%");
+            tableLayout.put("Type", "10%");
+            tableLayout.put("Name", "25%");
             tableLayout.put("Color", "10%");
             tableLayout.put("Breed", "20%");
             tableLayout.put("Weight", "10%");
             tableLayout.put("Units", "5%");
-            tableLayout.put("Date of Birht", "15%");
+            tableLayout.put("Date of Birht", "20%");
 
+            //  It seems that header doesn't need for pets, but leave it till now... 
+            //
             //            // fill header:
             //            for (Entry<String, String> e : tableLayout.entrySet()) {
             //                HTML label = new HTML(e.getKey());
