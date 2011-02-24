@@ -49,12 +49,10 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
 
     @Override
     public void onUserMessage(UserMessageEvent event) {
-        if (event.getMessageType() != UserMessageEvent.UserMessageType.DEBUG) {
-            for (UserMessageType type : UserMessageType.values()) {
-                view.hide(type);
-            }
+        for (UserMessageType type : UserMessageType.values()) {
+            view.hide(type);
         }
-        view.show(event.getMessage(), event.getMessageType());
+        view.show(event.getUserMessage(), event.getMessageType());
     }
 
 }

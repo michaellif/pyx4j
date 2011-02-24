@@ -16,10 +16,12 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.Pets;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -35,6 +37,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.ValidationResults;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
@@ -73,7 +76,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                 columns.add(new EntityFolderColumnDescriptor(proto.weight(), "7em", "0.5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "5em", "0.5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.charge(), "7em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.chargeDescription(), "7em", "0.5em"));
             }
 
             @Override
@@ -84,6 +87,13 @@ public class PetsViewForm extends CEntityForm<Pets> {
             @Override
             protected CEntityFolderItem<Pet> createItem() {
                 return createPetRowEditor(columns);
+            }
+
+            @Override
+            protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
+                newEntity.weightUnit().setValue(WeightUnit.lb);
+                newEntity.chargeDescription().setValue("100$ Deposit");
+                super.createNewEntity(newEntity, callback);
             }
 
             private CEntityFolderItem<Pet> createPetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
@@ -97,7 +107,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = super.createCell(column);
-                        if (column.getObject() == proto().charge()) {
+                        if (column.getObject() == proto().chargeDescription()) {
                             ((CEditableComponent<?, ?>) comp).setEditable(false);
                         }
                         return comp;
@@ -107,5 +117,35 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
         };
 
+    }
+
+    private boolean hasDuplicates() {
+
+        for (int i = 0; i < getValue().pets().size(); i++) {
+            Pet pet = getValue().pets().get(i);
+            for (int j = i + 1; j < getValue().pets().size(); j++) {
+                Pet otherPet = getValue().pets().get(j);
+                if (pet.name().equals(otherPet.name())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean result = super.isValid();
+        return result && !hasDuplicates();
+    }
+
+    @Override
+    public ValidationResults getValidationResults() {
+        ValidationResults validationResults = new ValidationResults();
+        validationResults.appendValidationErrors(super.getValidationResults());
+        if (hasDuplicates()) {
+            validationResults.appendValidationError("Duplicate pets specifyed");
+        }
+        return validationResults;
     }
 }

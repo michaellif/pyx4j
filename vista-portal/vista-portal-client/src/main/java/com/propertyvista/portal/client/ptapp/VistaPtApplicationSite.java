@@ -42,7 +42,7 @@ public class VistaPtApplicationSite extends AppSite {
 
         hideLoadingIndicator();
 
-        ginjector.getWizardManager().initWizard(ginjector);
+        PtAppWizardManager.initWizard(ginjector);
 
     }
 }

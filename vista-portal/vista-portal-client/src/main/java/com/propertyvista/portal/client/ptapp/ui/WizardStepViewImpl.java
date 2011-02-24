@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
 
@@ -45,6 +46,9 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
             @Override
             public void onClick(ClickEvent event) {
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
                 presenter.save(getValue());
             }
 
@@ -56,7 +60,6 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         add(separator);
 
         saveButton.getElement().getStyle().setProperty("margin", "1em 1em 1em 0em");
-        //        saveButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(saveButton);
 
         getElement().getStyle().setMarginLeft(5, Unit.PCT);
@@ -82,10 +85,9 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     protected E getValue() {
         return form.getValue();
     }
-    
-    protected  CEntityForm<E> getForm() {
+
+    protected CEntityForm<E> getForm() {
         return form;
     }
-
 
 }

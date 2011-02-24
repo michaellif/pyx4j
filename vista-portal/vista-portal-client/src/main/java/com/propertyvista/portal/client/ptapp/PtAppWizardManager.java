@@ -16,9 +16,7 @@ package com.propertyvista.portal.client.ptapp;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
@@ -44,13 +42,11 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private static I18n i18n = I18nFactory.getI18n(PtAppWizardManager.class);
 
+    private static PtAppWizardManager instance;
+
     private Application application;
 
-    private final EventBus eventBus;
-
-    private SiteGinjector ginjector;
-
-    private final PlaceController placeController;
+    private final SiteGinjector ginjector;
 
     private UnitSelectionCriteria unitSelectionCriteria;
 
@@ -69,18 +65,27 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     }
 
-    public PtAppWizardManager(PlaceController placeController, EventBus eventBus) {
-        this.eventBus = eventBus;
-        this.placeController = placeController;
-        eventBus.addHandler(SecurityControllerEvent.getType(), this);
-
-    }
-
-    public void initWizard(final SiteGinjector ginjector) {
+    private PtAppWizardManager(SiteGinjector ginjector) {
         this.ginjector = ginjector;
+        ginjector.getEventBus().addHandler(SecurityControllerEvent.getType(), this);
         //TODO implement initial application message
         //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
         obtainAuthenticationData();
+    }
+
+    public static void initWizard(final SiteGinjector ginjector) {
+        if (instance == null) {
+            instance = new PtAppWizardManager(ginjector);
+        } else {
+            throw new RuntimeException("PtAppWizardManager is already initialized");
+        }
+    }
+
+    public static PtAppWizardManager instance() {
+        if (instance == null) {
+            throw new RuntimeException("PtAppWizardManager is not yet initialized");
+        }
+        return instance;
     }
 
     private void obtainAuthenticationData() {
@@ -140,7 +145,6 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     }
 
     public void saveApplicationProgress() {
-
         RPCManager.execute(PotentialTenantServices.Save.class, application, new DefaultAsyncCallback<IEntity>() {
             @Override
             public void onSuccess(IEntity result) {
@@ -150,8 +154,8 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     }
 
     protected void goToNextStep() {
-        Place current = placeController.getWhere();
-        placeController.goTo(new SiteMap.Apartment());
+        Place current = ginjector.getPlaceController().getWhere();
+        ginjector.getPlaceController().goTo(new SiteMap.Apartment());
     }
 
     @Override
@@ -168,20 +172,20 @@ public class PtAppWizardManager implements SecurityControllerHandler {
             });
         } else {
             application = null;
-            placeController.goTo(new SiteMap.CreateAccount());
+            ginjector.getPlaceController().goTo(new SiteMap.CreateAccount());
         }
     }
 
-    public Message getMessageDialog() {
-        return messageDialog;
+    public static Message getMessageDialog() {
+        return instance().messageDialog;
     }
 
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        messageDialog = new Message(message, title, buttonText, command);
-        placeController.goTo(new SiteMap.GenericMessage());
+    public static void showMessageDialog(String message, String title, String buttonText, Command command) {
+        instance().messageDialog = new Message(message, title, buttonText, command);
+        instance().ginjector.getPlaceController().goTo(new SiteMap.GenericMessage());
     }
 
-    public class Message {
+    public static class Message {
 
         private final String message;
 

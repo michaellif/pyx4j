@@ -46,10 +46,4 @@ public class SiteGinModule extends AppSiteGinModule {
         return historyHandler;
     }
 
-    @Provides
-    @Singleton
-    public PtAppWizardManager getWizardManager(PlaceController placeController, EventBus eventBus) {
-        return new PtAppWizardManager(placeController, eventBus);
-    }
-
 }

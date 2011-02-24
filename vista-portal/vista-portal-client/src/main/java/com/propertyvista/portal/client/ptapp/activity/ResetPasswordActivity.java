@@ -24,7 +24,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
@@ -47,16 +46,13 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
 
     private final PlaceController placeController;
 
-    private final Provider<PtAppWizardManager> wizardManagerProvider;
-
     private String token;
 
     @Inject
-    public ResetPasswordActivity(NewPasswordView view, PlaceController placeController, Provider<PtAppWizardManager> wizardManagerProvider) {
+    public ResetPasswordActivity(NewPasswordView view, PlaceController placeController) {
         this.view = view;
         view.setConversationType(ConversationType.RESET);
         this.placeController = placeController;
-        this.wizardManagerProvider = wizardManagerProvider;
         view.setPresenter(this);
     }
 
@@ -68,7 +64,7 @@ public class ResetPasswordActivity extends AbstractActivity implements NewPasswo
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         token = Window.Location.getParameter(ActivationServices.PASSWORD_TOKEN);
         if (CommonsStringUtils.isEmpty(token)) {
-            wizardManagerProvider.get().showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
+            PtAppWizardManager.showMessageDialog(i18n.tr("The URL you tried to use is either incorrect or no longer valid."), i18n.tr("Error"),
                     i18n.tr("LogIn"), new Command() {
                         @Override
                         public void execute() {

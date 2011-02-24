@@ -75,7 +75,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         boolean sessionClosed = false;
 
-        showMessage(i18n.tr("An Unexpected Error Has Occurred.") + " " +
+        String userMessage = i18n.tr("An Unexpected Error Has Occurred.") + " " +
 
         i18n.tr("Please report the incident to technical support,\n"
 
@@ -83,10 +83,11 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         + ((sessionClosed) ? "\n" + i18n.tr("This session has been terminated to prevent data corruption.") : "")
 
-        + detailsMessage, UserMessageType.ERROR);
+        + detailsMessage;
+
+        String debugMessage = null;
 
         if (ApplicationMode.isDevelopment()) {
-            String debugMessage = "";
             if (errorCode != null) {
                 debugMessage += "ErrorCode [" + errorCode + "]";
             }
@@ -96,14 +97,18 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
                     debugMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
                 }
             }
-            if (debugMessage.length() > 0) {
-                showMessage(debugMessage, UserMessageType.DEBUG);
-            }
         }
+
+        showMessage(userMessage, debugMessage, UserMessageType.ERROR);
     }
 
-    protected void showMessage(String string, UserMessageType messageType) {
-        eventBus.fireEvent(new UserMessageEvent(string, messageType));
+    protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {
+        eventBus.fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
 
     }
+
+    protected void showMessage(String userMessage, UserMessageType messageType) {
+        showMessage(userMessage, null, messageType);
+    }
+
 }

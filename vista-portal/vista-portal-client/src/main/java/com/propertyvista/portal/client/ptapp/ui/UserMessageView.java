@@ -22,6 +22,8 @@ public interface UserMessageView extends IsWidget {
 
     void show(String messages, UserMessageType type);
 
+    void show(String userMessages, String debugMessages, UserMessageType type);
+
     void hide(UserMessageType type);
 
     public interface Presenter {

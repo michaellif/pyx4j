@@ -19,7 +19,6 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.RetrievePasswordView;
 import com.propertyvista.portal.rpc.pt.ActivationServices;
@@ -36,13 +35,10 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
 
     private final PlaceController placeController;
 
-    private final Provider<PtAppWizardManager> wizardManagerProvider;
-
     @Inject
-    public RetrievePasswordActivity(RetrievePasswordView view, PlaceController placeController, Provider<PtAppWizardManager> wizardManagerProvider) {
+    public RetrievePasswordActivity(RetrievePasswordView view, PlaceController placeController) {
         this.view = view;
         this.placeController = placeController;
-        this.wizardManagerProvider = wizardManagerProvider;
         view.setPresenter(this);
     }
 
@@ -60,7 +56,7 @@ public class RetrievePasswordActivity extends AbstractActivity implements Retrie
         AsyncCallback<VoidSerializable> callback = new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                wizardManagerProvider.get().showMessageDialog("Please check your email", "", null, null);
+                PtAppWizardManager.showMessageDialog("Please check your email", "", null, null);
             }
         };
         RPCManager.execute(ActivationServices.PasswordReminder.class, request, callback);

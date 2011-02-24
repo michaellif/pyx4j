@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.inject.client.GinModules;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 
@@ -23,6 +24,6 @@ public interface SiteGinjector extends AppSiteGinjector {
 
     SiteView getSiteView();
 
-    PtAppWizardManager getWizardManager();
+    EventBus getEventBus();
 
 }

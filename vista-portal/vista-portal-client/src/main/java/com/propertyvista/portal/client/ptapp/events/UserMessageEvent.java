@@ -18,17 +18,20 @@ import com.google.gwt.event.shared.GwtEvent;
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 
     public enum UserMessageType {
-        INFO, WARN, ERROR, FAILURE, DEBUG
+        INFO, WARN, ERROR, FAILURE
     }
 
     private static Type<UserMessageHandler> TYPE;
 
-    private final String message;
+    private final String userMessage;
+
+    private final String debugMessage;
 
     private final UserMessageType messageType;
 
-    public UserMessageEvent(String message, UserMessageType messageType) {
-        this.message = message;
+    public UserMessageEvent(String userMessage, String debugMessage, UserMessageType messageType) {
+        this.userMessage = userMessage;
+        this.debugMessage = debugMessage;
         this.messageType = messageType;
     }
 
@@ -49,8 +52,12 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
         handler.onUserMessage(this);
     }
 
-    public String getMessage() {
-        return message;
+    public String getUserMessage() {
+        return userMessage;
+    }
+
+    public String getDebugMessage() {
+        return debugMessage;
     }
 
     public UserMessageType getMessageType() {

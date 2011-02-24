@@ -16,14 +16,11 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
@@ -57,8 +54,6 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
             return "orange";
         case FAILURE:
             return "red";
-        case DEBUG:
-            return "black";
         default:
             return "yellow";
         }
@@ -70,10 +65,15 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     }
 
     @Override
-    public void show(String message, UserMessageType type) {
+    public void show(String userMessages, String debugMessages, UserMessageType type) {
         Holder holder = holders.get(type);
-        holder.setHTML(message);
+        holder.setHTML(userMessages + "<br/>" + debugMessages);
         holder.setVisible(true);
+    }
+
+    @Override
+    public void show(String userMessages, UserMessageType type) {
+        show(userMessages, null, type);
     }
 
     @Override
@@ -112,4 +112,5 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
             html.setHTML(string);
         }
     }
+
 }
