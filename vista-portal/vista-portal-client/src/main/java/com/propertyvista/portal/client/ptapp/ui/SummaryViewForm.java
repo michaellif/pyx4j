@@ -21,21 +21,27 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.widgets.client.Button;
 
 @Singleton
 public class SummaryViewForm extends BaseEntityForm<Summary> {
@@ -47,6 +53,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private LeaseTermView leaseTermView;
 
     private TenantsTable tenantsTable;
+
+    private TenantsView tenantsView;
 
     private PetsTable petsTable;
 
@@ -72,6 +80,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(tenantsTable = new TenantsTable());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Info</h4>")));
+        main.add(tenantsView = new TenantsView());
+
         main.add(new ViewHeaderDecorator(new HTML("<h4>Financial</h4>")));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Pets</h4>")));
@@ -81,7 +91,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(leaseTermsCheck = new LeaseTermsCheck());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Monthtly Charges</h4>")));
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Charges Payable Upon Approval</h4>")));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
         main.add(signatureView = new SignatureView());
@@ -97,6 +106,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         apartmentView.populate(value);
         leaseTermView.populate(value);
         tenantsTable.populate(value);
+        tenantsView.populate(value);
         petsTable.populate(value);
         leaseTermsCheck.populate(value);
         signatureView.populate(value);
@@ -249,6 +259,115 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             label.setWidth(tableLayout.get(cellName));
             content.add(label);
+        }
+    }
+
+    /*
+     * Tenants detailed information view implementation
+     */
+    private class TenantsView extends FlowPanel {
+
+        private final FlowPanel content;
+
+        public TenantsView() {
+
+            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            upperLevelElementElignment(this);
+
+            // add table content panel:
+            add(innerLevelElementElignment(content = new FlowPanel()));
+        }
+
+        public void populate(Summary value) {
+
+            content.clear();
+
+            for (PotentialTenantInfo pti : value.tenants().tenants()) {
+                content.add(new TenantInfo(pti));
+            }
+        }
+
+        private class TenantInfo extends FlowPanel {
+
+            private final PotentialTenantInfo pti;
+
+            private boolean fullView;
+
+            public TenantInfo(PotentialTenantInfo pti) {
+
+                getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+                this.pti = pti;
+                showCompact();
+            }
+
+            public void showCompact() {
+
+                clear();
+
+                addViewSwitcher();
+                HTML tenant = new HTML("<h4>" + pti.firstName().getStringView() + "&nbsp" + pti.lastName().getStringView() + "</h4>");
+                tenant.getElement().getStyle().setMarginLeft(4, Unit.EM);
+                tenant.getElement().getStyle().setMarginBottom(1, Unit.EM);
+                setWidth("100%");
+                add(tenant);
+
+                fullView = false;
+            }
+
+            public void showFull() {
+
+                showCompact();
+
+                DecorationData dd = new DecorationData();
+                dd.labelWidth = 50;
+                dd.labelUnit = Unit.PCT;
+                dd.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
+                dd.componentWidth = 50;
+                dd.componentUnit = Unit.PCT;
+                dd.componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
+
+                FlowPanel panel = new FlowPanel();
+                panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                panel.add(new VistaTextPairDecorator(pti.homePhone().getMeta().getCaption(), pti.homePhone().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.mobilePhone().getMeta().getCaption(), pti.mobilePhone().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.email().getMeta().getCaption(), pti.email().getStringView(), dd));
+                panel.setWidth("40%");
+                add(panel);
+
+                panel = new FlowPanel();
+                panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                panel.getElement().getStyle().setMarginLeft(10, Unit.PCT);
+                panel.add(new VistaTextPairDecorator(pti.driversLicense().getMeta().getCaption(), pti.driversLicense().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.driversLicenseState().getMeta().getCaption(), pti.driversLicenseState().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.secureIdentifier().getMeta().getCaption(), pti.secureIdentifier().getStringView(), dd));
+                panel.setWidth("40%");
+                add(panel);
+
+                Widget sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+                sp.getElement().getStyle().setPadding(0, Unit.EM);
+                add(sp);
+
+                fullView = true;
+            }
+
+            private void addViewSwitcher() {
+
+                Button switcher = new Button("v");
+                switcher.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                switcher.addClickHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        if (fullView) {
+                            showCompact();
+                        } else {
+                            showFull();
+                        }
+                    }
+                });
+                add(switcher);
+            }
         }
     }
 

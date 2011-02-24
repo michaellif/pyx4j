@@ -217,6 +217,8 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         public Unit componentUnit = Unit.EM;
 
+        public HorizontalAlignmentConstant componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
+
         public double gapWidth = 2;
 
         public Unit gapUnit = Unit.EM;
@@ -260,6 +262,63 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, double gapWidth, Unit gapUnit) {
             this(labelWidth, labelUnit, componentWidth, componentUnit);
+            this.gapWidth = gapWidth;
+            this.gapUnit = gapUnit;
+        }
+
+        // the same constructors with alignment:
+        //
+        public DecorationData(HorizontalAlignmentConstant labelAlignment, HorizontalAlignmentConstant componentAlignment) {
+            this.labelAlignment = labelAlignment;
+            this.componentAlignment = componentAlignment;
+        }
+
+        public DecorationData(int labelWidth, HorizontalAlignmentConstant labelAlignment, int componentWidth, HorizontalAlignmentConstant componentAlignment) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = Unit.PX;
+            this.labelAlignment = labelAlignment;
+            this.componentWidth = componentWidth;
+            this.componentUnit = Unit.PX;
+            this.componentAlignment = componentAlignment;
+        }
+
+        public DecorationData(int labelWidth, HorizontalAlignmentConstant labelAlignment, int componentWidth, HorizontalAlignmentConstant componentAlignment,
+                int gapWidth) {
+            this(labelWidth, labelAlignment, componentWidth, componentAlignment);
+            this.gapWidth = gapWidth;
+            this.gapUnit = Unit.PX;
+        }
+
+        public DecorationData(double labelWidth, HorizontalAlignmentConstant labelAlignment, double componentWidth,
+                HorizontalAlignmentConstant componentAlignment) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = Unit.EM;
+            this.labelAlignment = labelAlignment;
+            this.componentWidth = componentWidth;
+            this.componentUnit = Unit.EM;
+            this.componentAlignment = componentAlignment;
+        }
+
+        public DecorationData(double labelWidth, HorizontalAlignmentConstant labelAlignment, double componentWidth,
+                HorizontalAlignmentConstant componentAlignment, double gapWidth) {
+            this(labelWidth, labelAlignment, componentWidth, componentAlignment);
+            this.gapWidth = gapWidth;
+            this.gapUnit = Unit.EM;
+        }
+
+        public DecorationData(double labelWidth, Unit labelUnit, HorizontalAlignmentConstant labelAlignment, double componentWidth, Unit componentUnit,
+                HorizontalAlignmentConstant componentAlignment) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = labelUnit;
+            this.labelAlignment = labelAlignment;
+            this.componentWidth = componentWidth;
+            this.componentUnit = componentUnit;
+            this.componentAlignment = componentAlignment;
+        }
+
+        public DecorationData(double labelWidth, Unit labelUnit, HorizontalAlignmentConstant labelAlignment, double componentWidth, Unit componentUnit,
+                HorizontalAlignmentConstant componentAlignment, double gapWidth, Unit gapUnit) {
+            this(labelWidth, labelUnit, labelAlignment, componentWidth, componentUnit, componentAlignment);
             this.gapWidth = gapWidth;
             this.gapUnit = gapUnit;
         }
