@@ -36,6 +36,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
@@ -101,14 +102,15 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             main.setWidth("100%");
                             for (EntityFolderColumnDescriptor column : columns) {
                                 // Don't show dependant and takeOwnership 
-                                if (column.getObject() == proto.dependant() || column.getObject() == proto.takeOwnership()) {
+                                if (column.getObject() == proto.dependant() || column.getObject() == proto.takeOwnership()
+                                        || column.getObject() == proto.relationship()) {
                                     continue;
                                 }
 
                                 CComponent<?> component = createCell(column);
                                 component.setWidth("100%");
-                                if (column.getObject() == proto.relationship() || column.getObject() == proto.email()) {
-                                    component.setEnabled(false);
+                                if (column.getObject() == proto.email()) {
+                                    ((CEditableComponent) component).setEditable(false);
                                 }
                                 main.add(createDecorator(component, column.getWidth()));
                             }
