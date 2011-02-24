@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
@@ -256,7 +257,7 @@ public class PreloadPT extends AbstractDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class,
-                    ChargeLine.class);
+                    ChargeLine.class, Application.class, UnitSelection.class, ApplicationProgress.class);
         } else {
             return "This is production";
         }

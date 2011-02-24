@@ -13,33 +13,32 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+
+import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class WizardStep {
 
-    public enum Status {
-        notVisited, current, complete, hasAlert
-    }
-
     private final AppPlace place;
 
-    private Status status;
+    private final ApplicationWizardStep step;
 
-    public WizardStep(AppPlace place, Status status) {
-        this.place = place;
-        this.status = status;
+    WizardStep(ApplicationWizardStep step) {
+        super();
+        this.step = step;
+        this.place = AppPlaceHistoryMapper.getPlaceImpl(step.placeToken().getValue());
     }
 
     public AppPlace getPlace() {
         return place;
     }
 
-    public Status getStatus() {
-        return status;
+    public ApplicationWizardStep.Status getStatus() {
+        return step.status().getValue();
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    void setStatus(ApplicationWizardStep.Status status) {
+        this.step.status().setValue(status);
     }
-
 }

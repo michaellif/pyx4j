@@ -20,6 +20,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepPresenter;
 import com.propertyvista.portal.client.ptapp.ui.WizardStepView;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
@@ -98,6 +99,7 @@ public class WizardStepActivity<E extends IEntity, T extends WizardStepPresenter
             public void onSuccess(IEntity result) {
                 log.info("SAVED {}", result);
                 WizardStepActivity.this.entity = (E) result;
+                PtAppWizardManager.instance().nextStep();
             }
         });
     }

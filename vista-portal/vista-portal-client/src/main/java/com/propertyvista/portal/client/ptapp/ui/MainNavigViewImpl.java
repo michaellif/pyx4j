@@ -20,14 +20,12 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -112,7 +110,7 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
         boolean visited = false;
         for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
             WizardStep step = presenter.getWizardSteps().get(i);
-            if (WizardStep.Status.current.equals(step.getStatus())) {
+            if (ApplicationWizardStep.Status.current.equals(step.getStatus())) {
                 visited = true;
             }
             tabs.add(0, new NavigTab(step, visited));

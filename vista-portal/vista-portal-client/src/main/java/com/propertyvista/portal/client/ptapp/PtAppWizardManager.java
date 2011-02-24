@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -24,6 +27,8 @@ import com.google.gwt.user.client.Window;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
@@ -37,7 +42,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.site.rpc.AppPlace;
 
 public class PtAppWizardManager implements SecurityControllerHandler {
 
@@ -47,31 +51,27 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private Application application;
 
+    private ApplicationProgress progress;
+
+    private List<WizardStep> wizardSteps;
+
     private final SiteGinjector ginjector;
 
     private UnitSelectionCriteria unitSelectionCriteria;
 
     private Message messageDialog;
 
-    public static class WizardStep {
-
-        enum StepStatus {
-
-            Visited,
-
-            Incomleate
-        }
-
-        AppPlace place;
-
-    }
-
     private PtAppWizardManager(SiteGinjector ginjector) {
         this.ginjector = ginjector;
         ginjector.getEventBus().addHandler(SecurityControllerEvent.getType(), this);
+        wizardSteps = new Vector<WizardStep>();
         //TODO implement initial application message
         //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
         obtainAuthenticationData();
+    }
+
+    public List<WizardStep> getWizardSteps() {
+        return wizardSteps;
     }
 
     public static void initWizard(final SiteGinjector ginjector) {
@@ -145,18 +145,61 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     }
 
-    public void saveApplicationProgress() {
-        RPCManager.execute(PotentialTenantServices.Save.class, application, new DefaultAsyncCallback<IEntity>() {
-            @Override
-            public void onSuccess(IEntity result) {
-                application = (Application) result;
+    private WizardStep getStep(Place current) {
+        for (WizardStep step : getWizardSteps()) {
+            if (step.getPlace().equals(current)) {
+                return step;
             }
-        });
+        }
+        return null;
     }
 
-    protected void goToNextStep() {
-        Place current = ginjector.getPlaceController().getWhere();
-        ginjector.getPlaceController().goTo(new SiteMap.Apartment());
+    public void nextStep() {
+        WizardStep currentStep = getStep(ginjector.getPlaceController().getWhere());
+        if (currentStep != null) {
+            //TODO hasAlert ?
+            currentStep.setStatus(ApplicationWizardStep.Status.complete);
+        }
+
+        int idx = getWizardSteps().indexOf(currentStep);
+        if (idx == -1) {
+            idx = 0;
+        } else {
+            idx++;
+        }
+        WizardStep nextStep = getWizardSteps().get(idx);
+        nextStep.setStatus(ApplicationWizardStep.Status.current);
+
+        ginjector.getPlaceController().goTo(nextStep.getPlace());
+
+        // save progress to DB
+        saveApplicationProgress();
+    }
+
+    private void saveApplicationProgress() {
+        if (progress != null) {
+            RPCManager.execute(PotentialTenantServices.Save.class, progress, new DefaultAsyncCallback<IEntity>() {
+                @Override
+                public void onSuccess(IEntity result) {
+                }
+            });
+        }
+    }
+
+    private void initApplicationProcess(Application result) {
+        application = result;
+        wizardSteps = new Vector<WizardStep>();
+        progress = (ApplicationProgress) application.progress().cloneEntity();
+        for (ApplicationWizardStep step : progress.steps()) {
+            wizardSteps.add(new WizardStep(step));
+        }
+        for (WizardStep step : wizardSteps) {
+            if (step.getStatus() == ApplicationWizardStep.Status.current) {
+                ginjector.getPlaceController().goTo(step.getPlace());
+                return;
+            }
+        }
+        nextStep();
     }
 
     @Override
@@ -167,12 +210,13 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
                 @Override
                 public void onSuccess(Application result) {
-                    application = result;
-                    goToNextStep();
+                    initApplicationProcess(result);
                 }
             });
         } else {
             application = null;
+            progress = null;
+            wizardSteps = new Vector<WizardStep>();
             ginjector.getPlaceController().goTo(new SiteMap.CreateAccount());
         }
     }
@@ -180,6 +224,8 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     public static EventBus getEventBus() {
         return instance().ginjector.getEventBus();
     }
+
+    // TODO M.L. --- remove all below to different place
 
     public static Message getMessageDialog() {
         return instance().messageDialog;

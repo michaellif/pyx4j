@@ -26,6 +26,8 @@ import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
@@ -33,6 +35,7 @@ import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -44,6 +47,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PotentialTenantServicesImpl extends EntityServicesImpl implements PotentialTenantServices {
 
@@ -119,6 +124,20 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 application.user().set(PtUserDataAccess.getCurrentUser());
                 secureSave(application);
 
+                ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
+                progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
+                progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
+                progress.application().set(application);
+                secureSave(progress);
+
+                application.progress().set(progress);
+
                 unitSelection.application().set(application);
                 secureSave(unitSelection);
 
@@ -134,9 +153,20 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                         //TODO What if they are diferent ?  We need to discard some part of application flow.
                     }
                 }
+
+                EntityQueryCriteria<ApplicationProgress> ppplicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+                criteria.add(PropertyCriterion.eq(ppplicationProgressCriteria.proto().application(), application));
+                application.progress().set(secureRetrieve(ppplicationProgressCriteria));
             }
             PtUserDataAccess.setCurrentUserApplication(application);
             return application;
+        }
+
+        private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
+            ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
+            ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
+            ws.status().setValue(status);
+            return ws;
         }
     }
 

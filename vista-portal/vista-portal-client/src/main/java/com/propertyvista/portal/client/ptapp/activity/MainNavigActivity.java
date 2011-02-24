@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -22,10 +21,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
 import com.propertyvista.portal.client.ptapp.WizardStep;
-import com.propertyvista.portal.client.ptapp.WizardStep.Status;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
-import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.site.rpc.AppPlace;
@@ -67,32 +65,7 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
 
     @Override
     public List<WizardStep> getWizardSteps() {
-        List<WizardStep> steps = new ArrayList<WizardStep>();
+        return PtAppWizardManager.instance().getWizardSteps();
 
-        // TODO call PtAppWizardManager
-
-        steps.add(new WizardStep(new SiteMap.Apartment(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Tenants(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Info(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Financial(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Pets(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Charges(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Summary(), WizardStep.Status.notVisited));
-        steps.add(new WizardStep(new SiteMap.Payment(), WizardStep.Status.notVisited));
-
-        boolean visited = false;
-
-        for (int i = steps.size() - 1; i >= 0; i--) {
-            if (steps.get(i).getPlace().equals(placeController.getWhere())) {
-                steps.get(i).setStatus(Status.current);
-                visited = true;
-            } else if (i % 2 == 0) {
-                steps.get(i).setStatus(visited == true ? Status.complete : Status.notVisited);
-            } else {
-                steps.get(i).setStatus(visited == true ? Status.hasAlert : Status.notVisited);
-            }
-        }
-
-        return steps;
     }
 }

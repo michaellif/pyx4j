@@ -16,13 +16,14 @@ package com.propertyvista.portal.domain.pt;
 import com.propertyvista.portal.domain.IUserEntity;
 import com.propertyvista.portal.domain.Money;
 
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface Application extends IEntity, IUserEntity {
 
     Money rent();
 
-    @Owned
+    //TODO create application initialisation RPC object
+    @Transient
     ApplicationProgress progress();
 }
