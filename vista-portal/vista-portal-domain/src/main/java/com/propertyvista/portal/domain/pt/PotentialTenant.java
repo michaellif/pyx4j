@@ -13,20 +13,24 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import java.io.Serializable;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @ToStringFormat("{0} {1} {2}")
 public interface PotentialTenant extends IPerson, IApplicationEntity {
 
-    public enum Relationship {
-        Applicant, Spouse, Son, Daughter, Other
+    public enum Relationship implements Serializable {
+        Applicant, CoApplicant, Spouse, Son, Daughter, Other
     }
 
     @ToString(index = 0)
+    @NotNull
     IPrimitive<Relationship> relationship();
 
     IPrimitive<Double> payment();
