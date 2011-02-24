@@ -180,20 +180,16 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class LeaseTermView extends FlowPanel {
 
-        private final FlowPanel content;
-
         public LeaseTermView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            // add table content panel:
-            add(innerLevelElementElignment(content = new FlowPanel()));
+            HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
+            add(availabilityAndPricing);
         }
 
         public void populate(Summary value) {
-
-            content.clear();
 
         }
     }
