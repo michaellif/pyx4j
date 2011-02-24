@@ -68,11 +68,11 @@ public class CollectionsTableModel {
                 if (!insertNull) {
                     continue;
                 }
-                throw new Error("Saving null reference " + member.getMemberMeta().getCaption());
+                throw new Error("Saving null item from collection " + member.getMemberName());
             }
             Long childKey = (Long) map.get(IEntity.PRIMARY_KEY);
             if (childKey == null) {
-                throw new Error("Saving non persisted reference " + member.getMemberMeta().getCaption());
+                throw new Error("Saving non persisted item from collection " + member.getMemberName());
             }
             idDataSet.add(childKey);
         }
