@@ -16,11 +16,11 @@ package com.propertyvista.portal.domain;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface UnitInfo extends IEntity {
-		
-	    /**
-	     * UnitInfo type (max 128 chars)
-	     */
-	    IPrimitive<String> name();
+public interface UnitInfoItem extends IEntity {
+
+    /**
+     * UnitInfo type (max 128 chars)
+     */
+    IPrimitive<String> name();
 
 }

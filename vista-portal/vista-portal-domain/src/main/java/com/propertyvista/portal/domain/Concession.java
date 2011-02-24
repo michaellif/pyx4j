@@ -17,35 +17,42 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IEntity;
 
 /**
- * For now we just assume 2 types of consessions:
- * - Free Months:
- *    certain number of months free
+ * For now we just assume 2 types of concessions: - Free Months: certain number of months
+ * free
  * 
- * - Percent Discount:
- *     certain discount over a number of months
+ * - Percent Discount: certain discount over a number of months
  * 
  * Need to redesign
+ * 
+ * TODO Agreed, this is probably not the best design, either indicate one class with all
+ * types of concessions as members, or have one class with type and a single value that
+ * will be determined by concession type
+ * 
+ * 
  * @author aroytbur
- *
+ * 
  */
-public interface Consession extends IEntity {
+public interface Concession extends IEntity {
     /**
-     * Concession type (max 128 chars)
+     * Concession type (max 128 chars) TODO we will need to have this of type
+     * ConcessionType
      */
     IPrimitive<String> name();
-    
-    public enum concessionType {
+
+    public enum ConcessionType {
         freeMonths, percentDiscount
     }
-    
+
     /**
-     *  Number of months to apply concession to
+     * Number of months to apply concession to
+     * 
+     * TODO needs to be float
      */
-    IPrimitive<String> months();
-    
+    IPrimitive<String> freeMonths();
+
     /**
-     *  Percent discount, if applicable
+     * Percent discount, if applicable TODO needs to be float
      */
-    IPrimitive<String> percent();
-    
+    IPrimitive<String> percentage();
+
 }

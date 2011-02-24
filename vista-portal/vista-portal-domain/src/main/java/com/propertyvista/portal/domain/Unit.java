@@ -90,9 +90,9 @@ public interface Unit extends Property {
 
     IList<Utility> utilities();
 
-    IList<UnitInfo> infoDetails();
+    IList<UnitInfoItem> infoDetails();
 
-    IList<Consession> concessions();
+    IList<Concession> concessions();
 
     IList<AddOn> addOns();
 }

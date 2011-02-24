@@ -21,11 +21,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.portal.domain.AddOn;
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Amenity;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.Complex;
+import com.propertyvista.portal.domain.Concession;
+import com.propertyvista.portal.domain.Concession.ConcessionType;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.Email;
 import com.propertyvista.portal.domain.Email.EmailType;
@@ -35,6 +38,7 @@ import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -129,6 +133,34 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return amenity;
     }
 
+    public static UnitInfoItem createUnitInfoItem(String name) {
+        UnitInfoItem item = EntityFactory.create(UnitInfoItem.class);
+        item.name().setValue(name);
+        persist(item);
+        return item;
+    }
+
+    public static Concession createConcession(ConcessionType type, float freeMonths, float percentage) {
+        Concession concession = EntityFactory.create(Concession.class);
+        concession.name().setValue(type.toString()); // TODO this has to be changed to use proper type
+        if (freeMonths > 0) {
+            concession.freeMonths().setValue("" + freeMonths);
+        }
+        if (percentage > 0) {
+            concession.percentage().setValue("" + freeMonths);
+        }
+        persist(concession);
+        return concession;
+    }
+
+    public static AddOn createAddOn(String name, double monthlyCost) {
+        AddOn addOn = EntityFactory.create(AddOn.class);
+        addOn.name().setValue(name);
+        addOn.monthlyCost().setValue(monthlyCost);
+        persist(addOn);
+        return addOn;
+    }
+
     private Building createBuilding(String propertyCode, BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones,
             Email email) {
         Building building = EntityFactory.create(Building.class);
@@ -190,6 +222,56 @@ public class PreloadBuildings extends AbstractDataPreloader {
         }
         if (RandomUtil.randomBoolean()) {
             unit.amenities().add(createAmenity("Double Locker"));
+        }
+
+        // info items
+        if (RandomUtil.randomBoolean()) {
+            unit.infoDetails().add(createUnitInfoItem("Partially Furnished"));
+        } else {
+            unit.infoDetails().add(createUnitInfoItem("Fully Furnished"));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.infoDetails().add(createUnitInfoItem("Colour TV"));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.infoDetails().add(createUnitInfoItem("Breathtaking View"));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.infoDetails().add(createUnitInfoItem("Walk-in Closet"));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.infoDetails().add(createUnitInfoItem("Jacuzzi"));
+        }
+
+        // concessions
+        if (RandomUtil.randomBoolean()) {
+            unit.concessions().add(createConcession(ConcessionType.freeMonths, 2, 0));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 0, 10));
+        }
+
+        // add-ons
+        if (RandomUtil.randomBoolean()) {
+            unit.addOns().add(createAddOn("2nd Parking", 50));
+            if (RandomUtil.randomBoolean()) {
+                unit.addOns().add(createAddOn("3rd Parking", 50));
+            }
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.addOns().add(createAddOn("2nd Locker", 30));
+            if (RandomUtil.randomBoolean()) {
+                unit.addOns().add(createAddOn("3rd Locker", 20));
+            }
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.addOns().add(createAddOn("Conditioner", 100));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.addOns().add(createAddOn("Espresso Machine", 30));
+        }
+        if (RandomUtil.randomBoolean()) {
+            unit.addOns().add(createAddOn("Dishwasher", 30));
         }
 
         unit.requiredDeposit().setValue(150D);
@@ -338,6 +420,9 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 b.append("\n");
                 b.append("\t\t").append(unit.utilities()).append("\n");
                 b.append("\t\t").append(unit.amenities()).append("\n");
+                b.append("\t\t").append(unit.infoDetails()).append("\n");
+                b.append("\t\t").append(unit.concessions()).append("\n");
+                b.append("\t\t").append(unit.addOns()).append("\n");
             }
         }
         b.append("\n");

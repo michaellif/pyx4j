@@ -21,32 +21,35 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
+import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantAsset;
-import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
+import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.TenantIncome.IncomeType;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public class PreloadPT extends AbstractDataPreloader {
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
-
-    private int numTenants = 0;
 
     private static Employer createEmployer() {
         Employer employer = EntityFactory.create(Employer.class);
@@ -239,7 +242,6 @@ public class PreloadPT extends AbstractDataPreloader {
 
     @SuppressWarnings("unused")
     private PotentialTenant createPotentialTenant(int index) {
-        numTenants++;
         PotentialTenant pt = EntityFactory.create(PotentialTenant.class);
 
         populatePotentialTenant(pt);
@@ -253,16 +255,38 @@ public class PreloadPT extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class);
+            return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class,
+                    ChargeLine.class);
         } else {
             return "This is production";
         }
     }
 
+    private void createCharges(IList<PotentialTenantInfo> tenants) {
+        Charges charges = EntityFactory.create(Charges.class);
+        ChargesServerCalculation.dummyPopulate(charges, tenants);
+
+        for (ChargeLine chargeLine : charges.rentCharges().charges()) {
+            persist(chargeLine);
+        }
+        for (ChargeLine chargeLine : charges.upgradeCharges().charges()) {
+            persist(chargeLine);
+        }
+        for (ChargeLine chargeLine : charges.proRatedCharges().charges()) {
+            persist(chargeLine);
+        }
+        for (ChargeLine chargeLine : charges.applicationCharges().charges()) {
+            persist(chargeLine);
+        }
+        for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
+            persist(tenantCharge);
+        }
+
+        persist(charges);
+    }
+
     @Override
     public String create() {
-        numTenants = 0;
-
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
 
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
@@ -272,15 +296,12 @@ public class PreloadPT extends AbstractDataPreloader {
         }
         PersistenceServicesFactory.getPersistenceService().persist(tenants);
 
-        // add a dummy charge for this list
-        //        Charges charges = EntityFactory.create(Charges.class);
-        //        ChargesServerCalculation.dummyPopulate(charges, tenants.tenants());
-        //        persist(charges);
+        createCharges(tenants.tenants());
 
         load();
 
         StringBuilder b = new StringBuilder();
-        b.append("Created " + numTenants + " potential tenants");
+        b.append("Created potential tenant series of data");
         return b.toString();
     }
 
@@ -299,6 +320,20 @@ public class PreloadPT extends AbstractDataPreloader {
                 sb.append("\t").append(tenant.getStringView());
                 sb.append("\n");
             }
+        }
+        sb.append("\n\n");
+
+        // Charges
+        sb.append("------------------------ CHARGES -----------------------\n");
+        List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Charges>(Charges.class));
+        for (Charges charges : chargesList) {
+            sb.append("Charges\n");
+            sb.append("\t").append(charges.rentCharges()).append("\n");
+            sb.append("\t").append(charges.upgradeCharges()).append("\n");
+            sb.append("\t").append(charges.proRatedCharges()).append("\n");
+            sb.append("\t").append(charges.applicationCharges()).append("\n");
+            sb.append("\t").append(charges.paymentSplitCharges()).append("\n");
+            sb.append("\n");
         }
         sb.append("\n\n");
 
