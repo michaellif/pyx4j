@@ -54,6 +54,8 @@ public class OpenIdServlet extends HttpServlet {
             Lifecycle.beginSession(null, behaviours);
             if (receivingURL == null) {
                 receivingURL = ServerSideConfiguration.instance().getMainApplicationURL();
+            } else {
+                Context.getVisit().removeAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
             }
             createResponsePage(response, false, "Login successful Continue to application", receivingURL);
         }

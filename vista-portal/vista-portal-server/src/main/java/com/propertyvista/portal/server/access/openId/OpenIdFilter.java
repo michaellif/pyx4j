@@ -61,7 +61,9 @@ public class OpenIdFilter implements Filter {
                 String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
                 log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
                 OpenIdServlet.createResponsePage((HttpServletResponse) response, true, "Login via Google Apps", OpenId.getDestinationUrl(OpenIdServlet.DOMAIN));
-                Context.getVisit().setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
+                if (Context.getVisit().getAttribute(REQUESTED_URL_ATTRIBUTE) == null) {
+                    Context.getVisit().setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
+                }
             }
         }
     }
