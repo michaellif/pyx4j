@@ -47,10 +47,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     private ApartmentViewPresenter presenter;
 
-    private com.propertyvista.portal.domain.Unit selectedUnit;
-
-    private int selectedTerm;
-
     public ApartmentViewForm() {
         super(UnitSelection.class);
     }
@@ -126,21 +122,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
     @Override
     public void populate(UnitSelection entity) {
-        //        System.out.println(">>>" + entity.availableUnits().units().toString());
-        selectedUnit = entity.selectedUnit();
-        selectedTerm = entity.selectedUnitLeaseTerm().getValue();
+        super.populate(entity);
         availableUnitsTable.populate(entity);
-    }
-
-    @Override
-    public UnitSelection getValue() {
-        UnitSelection us = super.getValue();
-        if (us != null) {
-            us.selectedUnit().set(selectedUnit);
-            us.selectedUnitLeaseTerm().setValue(selectedTerm);
-        }
-        return us;
-
     }
 
     /*
@@ -248,7 +231,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                     @Override
                     public void onClick(ClickEvent event) {
 
-                        selectedUnit.set(unit); // update user-selected unit...
+                        getValue().selectedUnit().set(unit); // update user-selected unit...
                         selectUnitRow(unitRowPanel);
                     }
                 }, ClickEvent.getType());
@@ -266,7 +249,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
                 populateUnitDetail(unit);
 
-                if (unit.equals(selectedUnit)) {
+                if (unit.equals(getValue().selectedUnit())) {
                     selectUnitRow(unitRowPanel);
                 }
             }
@@ -337,15 +320,15 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                         + mr.rent().amount().getValue(), true);
 
                 // set preselected term for selected unit:
-                if (unit.equals(selectedUnit)) {
-                    term.setValue(mr.leaseTerm().getValue() == selectedTerm);
+                if (unit.equals(getValue().selectedUnit())) {
+                    term.setValue(mr.leaseTerm().equals(getValue().selectedUnitLeaseTerm()));
                 }
 
                 term.addClickHandler(new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        selectedTerm = mr.leaseTerm().getValue();
+                        getValue().selectedUnitLeaseTerm().setValue(mr.leaseTerm().getValue());
                     }
                 });
 
@@ -354,7 +337,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             }
 
             // set last (longest) term for all other units:
-            if (term != null && !unit.equals(selectedUnit)) {
+            if (term != null && !unit.equals(getValue().selectedUnit())) {
                 term.setValue(true);
             }
 
