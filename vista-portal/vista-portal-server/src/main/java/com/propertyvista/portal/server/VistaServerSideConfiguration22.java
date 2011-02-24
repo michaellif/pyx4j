@@ -21,7 +21,12 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
 
     @Override
     public String getMainApplicationURL() {
-        return "http://www22.birchwoodsoftwaregroup.com/vista/";
+        return "http://www22.birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public boolean isContextLessDeployment() {
+        return true;
     }
 
     @Override
