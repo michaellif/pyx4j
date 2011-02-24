@@ -14,13 +14,15 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
@@ -35,6 +37,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
@@ -92,6 +95,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                 return new CEntityFolderRow<PotentialTenantInfo>(PotentialTenantInfo.class, columns, TenantsViewForm.this) {
                     PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
 
+                    @SuppressWarnings("rawtypes")
                     @Override
                     public void createContent() {
                         if (!isFirst()) {
@@ -101,7 +105,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                             main.setWidth("100%");
                             for (EntityFolderColumnDescriptor column : columns) {
-                                // Don't show dependant and takeOwnership 
+                                // Don't show dependent and takeOwnership 
                                 if (column.getObject() == proto.dependant() || column.getObject() == proto.takeOwnership()
                                         || column.getObject() == proto.relationship()) {
                                     continue;
@@ -116,6 +120,18 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             }
                             setWidget(main);
                         }
+                    }
+
+                    @SuppressWarnings({ "unchecked", "rawtypes" })
+                    @Override
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
+                        if (proto.relationship() == column.getObject()) {
+                            Collection<Relationship> relationships = EnumSet.allOf(Relationship.class);
+                            relationships.remove(Relationship.Applicant);
+                            ((CComboBox) comp).setOptions(relationships);
+                        }
+                        return comp;
                     }
 
                     @Override
