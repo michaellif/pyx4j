@@ -49,4 +49,9 @@ public class AppSiteGinModule extends AbstractGinModule {
     public PlaceController getPlaceController(EventBus eventBus) {
         return new PlaceController(eventBus);
     }
+
+    public EventBus getEventBus(EventBus eventBus) {
+        return eventBus;
+    }
+
 }
