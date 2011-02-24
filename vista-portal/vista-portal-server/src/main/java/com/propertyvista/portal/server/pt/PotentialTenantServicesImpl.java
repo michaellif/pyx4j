@@ -143,6 +143,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
     public static class RetrieveByPKImpl extends EntityServicesImpl.RetrieveByPKImpl implements PotentialTenantServices.RetrieveByPK {
 
+        @SuppressWarnings("unchecked")
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
             if (request.proto() instanceof Summary) {
@@ -151,12 +152,16 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             IEntity ret;
             if (request.getPrimaryKey() == 0) {
                 // Find first Entity of that type in Application 
-                @SuppressWarnings("unchecked")
                 EntityQueryCriteria<IApplicationEntity> criteria = EntityQueryCriteria.create((Class<IApplicationEntity>) request.getEntityClass());
                 criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
                 ret = secureRetrieve(criteria);
             } else {
                 ret = super.execute(request);
+            }
+
+            if (ret == null) {
+                //Nothing found -> create
+                ret = EntityFactory.create((Class<IApplicationEntity>) request.getEntityClass());
             }
 
             if (ret instanceof UnitSelection) {

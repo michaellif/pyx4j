@@ -13,19 +13,17 @@
  */
 package com.propertyvista.portal.server.pt;
 
-import com.propertyvista.portal.domain.pt.Charge;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
-import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.TenantCharge;
-import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
+import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.shared.IList;
 
-public class ChargesServerCalculation {
+public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     public static void dummyPopulate(Charges charges, IList<PotentialTenantInfo> tenants) {
 
@@ -58,35 +56,4 @@ public class ChargesServerCalculation {
         }
     }
 
-    public static void calculateCharges(Charges charges) {
-        calculate(charges.rentCharges());
-        calculate(charges.upgradeCharges());
-        calculate(charges.proRatedCharges());
-        calculate(charges.applicationCharges());
-        calculate(charges.paymentSplitCharges());
-    }
-
-    public static void calculate(ChargeLineList charges) {
-        double total = 0d;
-        for (Charge charge : charges.charges()) {
-            total += charge.charge().amount().getValue();
-        }
-        charges.total().set(DomainUtil.createMoney(total));
-    }
-
-    public static void calculate(TenantChargeList charges) {
-        double total = 0d;
-        for (Charge charge : charges.charges()) {
-            total += charge.charge().amount().getValue();
-        }
-        charges.total().set(DomainUtil.createMoney(total));
-    }
-
-    public static void calculateApplicationCharges(Charges charges) {
-        //TODO
-    }
-
-    public static void calculatePaymentSplitCharges(Charges charges) {
-
-    }
 }
