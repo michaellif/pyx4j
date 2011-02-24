@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -142,12 +143,12 @@ public class ChargesViewForm extends CEntityForm<Charges> {
         private void addRow(Widget left, Widget right) {
 
             left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            left.setWidth("50%");
+            left.setWidth("60%");
             add(left);
 
             right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             right.getElement().getStyle().setProperty("textAlign", " right");
-            right.setWidth("20%");
+            right.setWidth("10%");
             add(right);
         }
 
@@ -157,8 +158,14 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             left.setWidth("50%");
             add(left);
 
+            HTML preMiddle = new HTML("%&nbsp");
+            preMiddle.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            preMiddle.getElement().getStyle().setProperty("textAlign", " right");
+            preMiddle.setWidth("5%");
+            add(preMiddle);
+
             middle.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            middle.setWidth("10%");
+            middle.setWidth("5%");
             add(middle);
 
             right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -194,7 +201,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("Sub-Total", "$" + value.rentCharges().total().getStringView());
+            addRow("Sub-Total", "$" + value.rentCharges().total().amount().getStringView());
         }
     }
 
@@ -231,7 +238,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("Sub-Total", "$" + value.upgradeCharges().total().getStringView());
+            addRow("Sub-Total", "$" + value.upgradeCharges().total().amount().getStringView());
         }
     }
 
@@ -261,7 +268,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("TOTAL", "$" + value.proRatedCharges().total().getStringView());
+            addRow("TOTAL", "$" + value.proRatedCharges().total().amount().getStringView());
         }
     }
 
@@ -291,7 +298,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("TOTAL", "$" + value.applicationCharges().total().getStringView());
+            addRow("TOTAL", "$" + value.applicationCharges().total().amount().getStringView());
         }
     }
 
@@ -343,7 +350,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("TOTAL", "$" + value.paymentSplitCharges().total().getStringView());
+            addRow("TOTAL", "$" + value.paymentSplitCharges().total().amount().getStringView());
         }
     }
 
