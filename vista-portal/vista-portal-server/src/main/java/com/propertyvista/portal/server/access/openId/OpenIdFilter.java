@@ -57,6 +57,8 @@ public class OpenIdFilter implements Filter {
             HttpServletRequest httprequest = (HttpServletRequest) request;
             if ((!((VistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired()) || httprequest.getServletPath().startsWith("/o/")) {
                 chain.doFilter(request, response);
+            } else if (httprequest.getRequestURI().endsWith(".js") || httprequest.getRequestURI().contains("/srv/")) {
+                ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
                 String receivingURL = ServletUtils.getActualRequestURL(httprequest, true);
                 log.debug("authentication required for ServletPath [{}] [{}]", httprequest.getServletPath(), receivingURL);
