@@ -35,4 +35,12 @@ public interface SiteResources extends ClientBundleWithLookup {
     @Source("time.html")
     TextResource time();
 
+    @Source("availabilityAndPricing.html")
+    TextResource availabilityAndPricing();
+
+    @Source("digitalSignature.html")
+    TextResource digitalSignature();
+
+    @Source("leaseTerms.html")
+    TextResource leaseTerms();
 }
