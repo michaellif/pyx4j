@@ -120,12 +120,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
     }
 
     private boolean hasDuplicates() {
-
         for (int i = 0; i < getValue().pets().size(); i++) {
             Pet pet = getValue().pets().get(i);
             for (int j = i + 1; j < getValue().pets().size(); j++) {
                 Pet otherPet = getValue().pets().get(j);
-                if (pet.name().equals(otherPet.name())) {
+                if (pet.name().equals(otherPet.name()) && pet.type().equals(otherPet.type()) && pet.birthDate().equals(otherPet.birthDate())) {
                     return true;
                 }
             }

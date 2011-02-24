@@ -16,6 +16,8 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.jasper.tagplugins.jstl.ForEach;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -37,26 +39,11 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         holders = new HashMap<UserMessageType, Holder>();
 
         for (UserMessageType type : UserMessageType.values()) {
-            Holder holder = new Holder(getColor(type));
+            Holder holder = new Holder();
             holders.put(type, holder);
             add(holder);
         }
 
-    }
-
-    private String getColor(UserMessageType type) {
-        switch (type) {
-        case INFO:
-            return "green";
-        case WARN:
-            return "blue";
-        case ERROR:
-            return "orange";
-        case FAILURE:
-            return "red";
-        default:
-            return "yellow";
-        }
     }
 
     @Override
@@ -67,13 +54,13 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     @Override
     public void show(String userMessages, String debugMessages, UserMessageType type) {
         Holder holder = holders.get(type);
-        holder.setHTML(userMessages + "<br/>" + debugMessages);
+        StringBuilder message = new StringBuilder();
+        message.append(userMessages);
+        if (debugMessages != null) {
+            message.append("<br/>").append(debugMessages);
+        }
+        holder.setHTML(message.toString());
         holder.setVisible(true);
-    }
-
-    @Override
-    public void show(String userMessages, UserMessageType type) {
-        show(userMessages, null, type);
     }
 
     @Override
@@ -83,13 +70,21 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
         holder.setVisible(false);
     }
 
+    @Override
+    public void hideAll() {
+        for (Holder holder : holders.values()) {
+            holder.setHTML("");
+            holder.setVisible(false);
+        }
+    }
+
     private class Holder extends HorizontalPanel {
 
         private final HTML html;
 
         private final Image image;
 
-        Holder(String borderColor) {
+        Holder() {
             setWidth("100%");
             getElement().getStyle().setMarginLeft(5, Unit.PCT);
             getElement().getStyle().setMarginRight(5, Unit.PCT);

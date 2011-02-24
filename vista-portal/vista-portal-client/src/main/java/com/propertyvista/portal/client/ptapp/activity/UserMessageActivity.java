@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
-import com.propertyvista.portal.client.ptapp.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ptapp.events.UserMessageHandler;
 import com.propertyvista.portal.client.ptapp.ui.UserMessageView;
 
@@ -35,9 +34,7 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     }
 
     public UserMessageActivity withPlace(AppPlace place) {
-        for (UserMessageType type : UserMessageType.values()) {
-            view.hide(type);
-        }
+        view.hideAll();
         return this;
     }
 
@@ -49,10 +46,10 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
 
     @Override
     public void onUserMessage(UserMessageEvent event) {
-        for (UserMessageType type : UserMessageType.values()) {
-            view.hide(type);
+        view.hideAll();
+        if (event.getMessageType() != null) {
+            view.show(event.getUserMessage(), event.getDebugMessage(), event.getMessageType());
         }
-        view.show(event.getUserMessage(), event.getMessageType());
     }
 
 }

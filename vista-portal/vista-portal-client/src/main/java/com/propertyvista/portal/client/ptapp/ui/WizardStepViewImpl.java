@@ -22,6 +22,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.propertyvista.portal.client.ptapp.PtAppWizardManager;
+import com.propertyvista.portal.client.ptapp.events.UserMessageEvent;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
@@ -46,6 +48,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
             @Override
             public void onClick(ClickEvent event) {
+                PtAppWizardManager.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }

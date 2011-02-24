@@ -20,11 +20,11 @@ public interface UserMessageView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    void show(String messages, UserMessageType type);
-
     void show(String userMessages, String debugMessages, UserMessageType type);
 
     void hide(UserMessageType type);
+
+    void hideAll();
 
     public interface Presenter {
 

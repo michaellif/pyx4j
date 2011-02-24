@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
@@ -174,6 +175,10 @@ public class PtAppWizardManager implements SecurityControllerHandler {
             application = null;
             ginjector.getPlaceController().goTo(new SiteMap.CreateAccount());
         }
+    }
+
+    public static EventBus getEventBus() {
+        return instance().ginjector.getEventBus();
     }
 
     public static Message getMessageDialog() {

@@ -41,6 +41,11 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     }
 
     @Override
+    protected void selectError(final Throwable caught, final String errorCode) {
+        super.selectError(caught, errorCode);
+    }
+
+    @Override
     protected void showReloadApplication() {
         String message = i18n.tr("We updated our application.\nIn order to continue using this application you need to refresh the page."
                 + "\nPlease refresh the page now!");
@@ -85,21 +90,21 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         + detailsMessage;
 
-        String debugMessage = null;
+        StringBuilder debugMessage = new StringBuilder();
 
         if (ApplicationMode.isDevelopment()) {
             if (errorCode != null) {
-                debugMessage += "ErrorCode [" + errorCode + "]";
+                debugMessage.append("ErrorCode [" + errorCode + "]");
             }
             if (caught != null) {
-                debugMessage += "\n" + caught.getClass();
+                debugMessage.append("\n" + caught.getClass());
                 if (caught instanceof StatusCodeException) {
-                    debugMessage += " StatusCode: " + (((StatusCodeException) caught).getStatusCode());
+                    debugMessage.append(" StatusCode: " + (((StatusCodeException) caught).getStatusCode()));
                 }
             }
         }
 
-        showMessage(userMessage, debugMessage, UserMessageType.ERROR);
+        showMessage(userMessage, debugMessage.toString(), UserMessageType.ERROR);
     }
 
     protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {
