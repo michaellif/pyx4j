@@ -133,7 +133,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
         public TextBox addEditRow(String label, String edit, String value) {
 
             TextBox txt = new TextBox();
-            txt.setValue(label);
+            txt.setValue(edit);
             addRow(new HTML(label), txt, new HTML(value));
             return txt;
         }
@@ -142,28 +142,28 @@ public class ChargesViewForm extends CEntityForm<Charges> {
         private void addRow(Widget left, Widget right) {
 
             left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            left.setWidth("40%");
+            left.setWidth("50%");
             add(left);
 
             right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             right.getElement().getStyle().setProperty("textAlign", " right");
-            right.setWidth("30%");
+            right.setWidth("20%");
             add(right);
         }
 
         private void addRow(Widget left, Widget middle, Widget right) {
 
             left.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            left.setWidth("30%");
+            left.setWidth("50%");
             add(left);
 
             middle.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            middle.setWidth("20%");
+            middle.setWidth("10%");
             add(middle);
 
             right.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             right.getElement().getStyle().setProperty("textAlign", " right");
-            right.setWidth("20%");
+            right.setWidth("10%");
             add(right);
         }
     }
@@ -175,15 +175,21 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
-            for (ChargeLine cl : value.rentCharges().charges()) {
+            boolean firstRun = true;
+            for (final ChargeLine cl : value.rentCharges().charges()) {
 
-                addRow(cl.label().getStringView(), "$" + cl.charge().amount().toString());
-                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-                sp.getElement().getStyle().setPadding(0, Unit.EM);
-                add(sp);
+                if (!firstRun) {
+                    Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    sp.getElement().getStyle().setPadding(0, Unit.EM);
+                    add(sp);
+                } else {
+                    firstRun = false;
+                }
+
+                addRow(cl.type().getValue().getLabel(), "$" + cl.charge().amount().getStringView());
             }
 
-            Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
@@ -199,9 +205,18 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
+            boolean firstRun = true;
             for (final ChargeLine cl : value.upgradeCharges().charges()) {
 
-                final CheckBox chk = addCheckRow(cl.label().getStringView(), "$" + cl.charge().amount().toString(), cl.selected().getValue());
+                if (!firstRun) {
+                    Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    sp.getElement().getStyle().setPadding(0, Unit.EM);
+                    add(sp);
+                } else {
+                    firstRun = false;
+                }
+
+                final CheckBox chk = addCheckRow(cl.type().getValue().getLabel(), "$" + cl.charge().amount().getStringView(), cl.selected().getValue());
                 chk.addClickHandler(new ClickHandler() {
 
                     @Override
@@ -209,13 +224,9 @@ public class ChargesViewForm extends CEntityForm<Charges> {
                         cl.selected().setValue(chk.getValue());
                     }
                 });
-
-                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-                sp.getElement().getStyle().setPadding(0, Unit.EM);
-                add(sp);
             }
 
-            Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
@@ -231,15 +242,21 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
-            for (ChargeLine cl : value.proRatedCharges().charges()) {
+            boolean firstRun = true;
+            for (final ChargeLine cl : value.proRatedCharges().charges()) {
 
-                addRow(cl.label().getStringView(), "$" + cl.charge().amount().toString());
-                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-                sp.getElement().getStyle().setPadding(0, Unit.EM);
-                add(sp);
+                if (!firstRun) {
+                    Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    sp.getElement().getStyle().setPadding(0, Unit.EM);
+                    add(sp);
+                } else {
+                    firstRun = false;
+                }
+
+                addRow(cl.type().getValue().getLabel(), "$" + cl.charge().amount().getStringView());
             }
 
-            Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
@@ -255,15 +272,21 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
-            for (ChargeLine cl : value.applicationCharges().charges()) {
+            boolean firstRun = true;
+            for (final ChargeLine cl : value.applicationCharges().charges()) {
 
-                addRow(cl.label().getStringView(), "$" + cl.charge().amount().toString());
-                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-                sp.getElement().getStyle().setPadding(0, Unit.EM);
-                add(sp);
+                if (!firstRun) {
+                    Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    sp.getElement().getStyle().setPadding(0, Unit.EM);
+                    add(sp);
+                } else {
+                    firstRun = false;
+                }
+
+                addRow(cl.type().getValue().getLabel(), "$" + cl.charge().amount().getStringView());
             }
 
-            Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
@@ -279,10 +302,19 @@ public class ChargesViewForm extends CEntityForm<Charges> {
 
             clear();
 
+            boolean firstRun = true;
             for (final TenantCharge tc : value.paymentSplitCharges().charges()) {
 
-                final TextBox txt = addEditRow(tc.tenant().firstName().getStringView() + "&nbsp" + tc.tenant().lastName().getStringView(), tc.percentage()
-                        .getStringView(), "$" + tc.charge().amount().toString());
+                if (!firstRun) {
+                    Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+                    sp.getElement().getStyle().setPadding(0, Unit.EM);
+                    add(sp);
+                } else {
+                    firstRun = false;
+                }
+
+                final TextBox txt = addEditRow(tc.tenant().firstName().getStringView() + " &nbsp " + tc.tenant().lastName().getStringView(), tc.percentage()
+                        .getStringView(), "$" + tc.charge().amount().getStringView());
 
                 // Filter non-digit input.
                 txt.addKeyPressHandler(new KeyPressHandler() {
@@ -304,13 +336,9 @@ public class ChargesViewForm extends CEntityForm<Charges> {
                         tc.percentage().setValue(Integer.parseInt(txt.getValue().trim()));
                     }
                 });
-
-                Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-                sp.getElement().getStyle().setPadding(0, Unit.EM);
-                add(sp);
             }
 
-            Widget sp = new ViewLineSeparator(60, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
