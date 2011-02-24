@@ -22,14 +22,17 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlaceHistoryMapper.class);
 
-    private final AppPlaceListing listing;
+    private final static AppPlaceListing listing = GWT.create(AppPlaceListing.class);
 
     public AppPlaceHistoryMapper() {
-        listing = GWT.create(AppPlaceListing.class);
     }
 
     @Override
     public AppPlace getPlace(String token) {
+        return getPlaceImpl(token);
+    }
+
+    public static AppPlace getPlaceImpl(String token) {
         int splitIndex = token.indexOf(ARGS_GROUP_SEPARATOR);
         String placeId = null;
         String queryString = null;
@@ -58,7 +61,7 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
         return null;
     }
 
-    protected Map<String, String> parseQueryString(String queryString) {
+    protected static Map<String, String> parseQueryString(String queryString) {
         if (queryString.startsWith(ARGS_GROUP_SEPARATOR)) {
             queryString = queryString.substring(1);
         }
