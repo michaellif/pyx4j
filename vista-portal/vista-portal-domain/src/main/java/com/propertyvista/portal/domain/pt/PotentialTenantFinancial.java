@@ -21,30 +21,38 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PotentialTenantFinancial extends IApplicationEntity {
 
+    @Deprecated
     public static enum EmploymentType {
         none, fulltime, parttime, selfemployed, seasonallyEmployed, socialServices, student
     }
 
     @NotNull
     @Caption(name = "Employment type")
+    @Deprecated
     IPrimitive<EmploymentType> occupation();
 
     @Owned
+    @Deprecated
     Employer currentEmployer();
 
     @Owned
+    @Deprecated
     Employer previousEmployer();
 
     @Owned
+    @Deprecated
     SelfEmployed selfEmployed();
 
     @Owned
+    @Deprecated
     SeasonallyEmployed seasonallyEmployed();
 
     @Owned
+    @Deprecated
     SocialServices socialServices();
 
     @Owned
+    @Deprecated
     StudentIncome studentIncome();
 
     @Owned
