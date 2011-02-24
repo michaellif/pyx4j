@@ -82,7 +82,7 @@ public class VistaAdminServicesImpl implements VistaAdminServices {
     public static class RetrieveImpl extends EntityServicesImpl.RetrieveImpl implements VistaAdminServices.Retrieve {
 
         @Override
-        public IEntity execute(EntityQueryCriteria request) {
+        public IEntity execute(EntityQueryCriteria<?> request) {
             EntityQueryCriteria<User> criteria;
             if (request instanceof EntityCriteriaByPK) {
                 criteria = EntityCriteriaByPK.create(User.class, ((EntityCriteriaByPK<?>) request).getPrimaryKey());
