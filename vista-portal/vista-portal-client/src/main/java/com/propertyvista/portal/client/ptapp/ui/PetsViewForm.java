@@ -34,6 +34,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
@@ -96,7 +97,9 @@ public class PetsViewForm extends CEntityForm<Pets> {
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                         CComponent<?> comp = super.createCell(column);
-                        comp.setEnabled(column.getObject() != proto().charge());
+                        if (column.getObject() == proto().charge()) {
+                            ((CEditableComponent<?, ?>) comp).setEditable(false);
+                        }
                         return comp;
                     }
                 };

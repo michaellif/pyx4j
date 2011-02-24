@@ -18,6 +18,7 @@ import java.util.Date;
 import com.propertyvista.portal.domain.ChargeType;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -31,6 +32,7 @@ public interface Pet extends IEntity {
     }
 
     @Caption(name = "Pet type")
+    @NotNull
     public IPrimitive<PetType> type();
 
     public IPrimitive<String> name();
@@ -43,6 +45,7 @@ public interface Pet extends IEntity {
     public IPrimitive<Integer> weight();
 
     @Caption(name = "")
+    @NotNull
     public IPrimitive<WeightUnit> weightUnit();
 
     public IPrimitive<Date> birthDate();
