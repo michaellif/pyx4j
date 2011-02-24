@@ -344,7 +344,6 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
                 // for each floor we want to create the same number of units
                 for (int j = 1; j < DemoData.NUM_UNITS_PER_FLOOR + 1; j++) {
-                    int area = RandomUtil.randomInt(1500);
 
                     float bedrooms = 2.0f;
                     float bathrooms = 2.0f;
@@ -358,9 +357,8 @@ public class PreloadBuildings extends AbstractDataPreloader {
                     Floorplan floorplan = createFloorplan(floorplanName);
                     floorplan.building().set(building);
                     PersistenceServicesFactory.getPersistenceService().persist(floorplan);
-
                     for (int u = 0; u < 3; u++) {
-                        int uarea = area + RandomUtil.randomInt(10);
+                        int uarea = floorplan.area().getValue() + RandomUtil.randomInt(10);
                         createUnit(building, floor, uarea, bedrooms, bathrooms, floorplan);
                     }
                 }
