@@ -29,7 +29,6 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -155,13 +154,14 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 EntityQueryCriteria<IApplicationEntity> criteria = EntityQueryCriteria.create((Class<IApplicationEntity>) request.getEntityClass());
                 criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
                 ret = secureRetrieve(criteria);
+                if (ret == null) {
+                    //Nothing found -> create
+                    if (request.proto() instanceof Charges) {
+                        ret = createCharges();
+                    }
+                }
             } else {
                 ret = super.execute(request);
-            }
-
-            if (ret == null) {
-                //Nothing found -> create
-                ret = EntityFactory.create((Class<IApplicationEntity>) request.getEntityClass());
             }
 
             if (ret instanceof UnitSelection) {
@@ -169,16 +169,17 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             } else if (ret instanceof Charges) {
 
                 Charges charges = (Charges) ret;
-                // find all potential tenants 
-                EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
-                PotentialTenantList tenantList = secureRetrieve(criteria);
-
-                ChargesServerCalculation.dummyPopulate(charges, tenantList.tenants());
+                ChargesServerCalculation.updatePaymentSplitCharges(charges, PtUserDataAccess.getCurrentUserApplication());
                 ChargesServerCalculation.calculateCharges(charges);
             }
 
             return ret;
+        }
+
+        private IEntity createCharges() {
+            Charges charges = EntityFactory.create(Charges.class);
+            ChargesServerCalculation.dummyPopulate(charges, PtUserDataAccess.getCurrentUserApplication());
+            return charges;
         }
 
         private Summary retrieveSummary() {

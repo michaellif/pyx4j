@@ -13,19 +13,22 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
 
-    public static void dummyPopulate(Charges charges, IList<PotentialTenantInfo> tenants) {
+    public static void dummyPopulate(Charges charges, Application application) {
 
         // rent charges
         charges.rentCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
@@ -48,12 +51,21 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
 
         // payment splits
-        for (int i = 0; i < tenants.size(); i++) {
+        updatePaymentSplitCharges(charges, application);
+    }
+
+    public static void updatePaymentSplitCharges(Charges charges, Application application) {
+        // find all potential tenants 
+        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+        // payment splits
+        for (int i = 0; i < tenantList.tenants().size(); i++) {
             int percentage = i == 0 ? 100 : 0;
             TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);
-            tenantCharge.tenant().set(tenants.get(i));
+            tenantCharge.tenant().set(tenantList.tenants().get(i));
             charges.paymentSplitCharges().charges().add(tenantCharge);
         }
     }
-
 }
