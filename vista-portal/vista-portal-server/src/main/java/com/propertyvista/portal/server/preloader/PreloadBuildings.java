@@ -295,7 +295,8 @@ public class PreloadBuildings extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, Unit.class, Floorplan.class);
+            return deleteAll(Building.class, Unit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, Amenity.class,
+                    Concession.class, AddOn.class);
         } else {
             return "This is production";
         }
