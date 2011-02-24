@@ -127,6 +127,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     @Override
     public void populate(UnitSelection entity) {
         //        System.out.println(">>>" + entity.availableUnits().units().toString());
+        selectedUnit = entity.selectedUnit();
+        selectedTerm = entity.selectedUnitLeaseTerm().getValue();
         availableUnitsTable.populate(entity);
     }
 
@@ -246,35 +248,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                     @Override
                     public void onClick(ClickEvent event) {
 
-                        selectedUnit = unit; // update user-selected unit...
-
-                        // tweak selected unit data view:
-                        for (Widget w : content) {
-                            // hide all detail panels:
-                            if (w.getStyleName().equals(UNIT_DETAIL_PANEL_STYLENAME)) {
-                                w.setVisible(false);
-                                w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
-                            }
-                            // clear selected background:
-                            if (w.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME)) {
-                                w.getElement().getStyle().setBackgroundColor("");
-                                w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
-                            }
-                        }
-
-                        // show current selected row with details + their decorations: 
-                        unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
-                        unitRowPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-                        unitRowPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-                        unitRowPanel.getElement().getStyle().setBorderColor("black");
-                        unitRowPanel.getElement().getStyle().setProperty("borderBottom", " none");
-
-                        Widget detailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
-                        detailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-                        detailPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-                        detailPanel.getElement().getStyle().setBorderColor("black");
-                        detailPanel.getElement().getStyle().setProperty("borderTop", " none");
-                        detailPanel.setVisible(true);
+                        selectedUnit.set(unit); // update user-selected unit...
+                        selectUnitRow(unitRowPanel);
                     }
                 }, ClickEvent.getType());
 
@@ -290,7 +265,12 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                 content.add(innerLevelElementElignment(unitRowPanel));
 
                 populateUnitDetail(unit);
+
+                if (unit.equals(selectedUnit)) {
+                    selectUnitRow(unitRowPanel);
+                }
             }
+
         }
 
         private void addCell(String cellName, String cellContent, FlowPanel container) {
@@ -353,8 +333,14 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             String groupName = "TermVariants" + unit.hashCode();
             RadioButton term = null; // fill the variants:
             for (final MarketRent mr : unit.marketRent()) {
-                term = new RadioButton(groupName, mr.leaseTerm().getStringView() + "&nbsp&nbsp&nbsp&nbsp month &nbsp&nbsp&nbsp&nbsp "
-                        + mr.rent().amount().getValue() + "$", true);
+                term = new RadioButton(groupName, mr.leaseTerm().getStringView() + "&nbsp&nbsp&nbsp&nbsp month &nbsp&nbsp&nbsp&nbsp $"
+                        + mr.rent().amount().getValue(), true);
+
+                // set preselected term for selected unit:
+                if (unit.equals(selectedUnit)) {
+                    term.setValue(mr.leaseTerm().getValue() == selectedTerm);
+                }
+
                 term.addClickHandler(new ClickHandler() {
 
                     @Override
@@ -366,8 +352,11 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                 term.getElement().getStyle().setDisplay(Display.BLOCK);
                 leaseTermsPanel.add(term);
             }
-            if (term != null)
-                term.setValue(true); // select last term...
+
+            // set last (longest) term for all other units:
+            if (term != null && !unit.equals(selectedUnit)) {
+                term.setValue(true);
+            }
 
             unitDetailPanel.add(leaseTermsPanel);
 
@@ -375,6 +364,37 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
             unitDetailPanel.setVisible(false);
             content.add(innerLevelElementElignment(unitDetailPanel));
+        }
+
+        public void selectUnitRow(FlowPanel unitRowPanel) {
+
+            // tweak selected unit data view:
+            for (Widget w : content) {
+                // hide all detail panels:
+                if (w.getStyleName().contains(UNIT_DETAIL_PANEL_STYLENAME)) {
+                    w.setVisible(false);
+                    w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+                }
+                // clear selected background:
+                if (w.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME)) {
+                    w.getElement().getStyle().setBackgroundColor("");
+                    w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+                }
+            }
+
+            // show current selected row with details + their decorations: 
+            unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
+            unitRowPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            unitRowPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            unitRowPanel.getElement().getStyle().setBorderColor("black");
+            unitRowPanel.getElement().getStyle().setProperty("borderBottom", "none");
+
+            Widget detailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
+            detailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            detailPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            detailPanel.getElement().getStyle().setBorderColor("black");
+            detailPanel.getElement().getStyle().setProperty("borderTop", "none");
+            detailPanel.setVisible(true);
         }
 
         private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
