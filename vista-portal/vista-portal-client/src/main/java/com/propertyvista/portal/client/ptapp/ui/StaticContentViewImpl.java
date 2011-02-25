@@ -28,8 +28,6 @@ public class StaticContentViewImpl extends HorizontalPanel implements StaticCont
         contentHTML = new HTML();
         add(contentHTML);
 
-        getElement().getStyle().setMarginLeft(5, Unit.PCT);
-        getElement().getStyle().setMarginRight(5, Unit.PCT);
         getElement().getStyle().setMarginTop(15, Unit.PX);
         getElement().getStyle().setMarginBottom(15, Unit.PX);
 

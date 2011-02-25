@@ -58,8 +58,6 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
 
         setWidth("30%");
 
-        getElement().getStyle().setMarginLeft(5, Unit.PCT);
-        getElement().getStyle().setMarginRight(5, Unit.PCT);
         getElement().getStyle().setMarginTop(1, Unit.EM);
         getElement().getStyle().setMarginBottom(1, Unit.EM);
     }

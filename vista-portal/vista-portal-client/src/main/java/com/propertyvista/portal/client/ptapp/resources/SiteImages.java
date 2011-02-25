@@ -33,10 +33,13 @@ public interface SiteImages extends ClientBundle {
     @Source("bg_body.gif")
     ImageResource bodyBackground();
 
+    @Source("bg_body_2.gif")
+    ImageResource body2Background();
+
     @Source("bg_step_block.gif")
     ImageResource stepBlockBackgroun();
 
-    @Source("step_pointer.gif")
+    @Source("step_pointer.png")
     ImageResource stepPointer();
 
     @Source("btn.gif")

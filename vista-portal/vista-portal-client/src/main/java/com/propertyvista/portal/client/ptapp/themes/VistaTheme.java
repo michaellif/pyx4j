@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.themes;
 
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -20,7 +21,9 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 
+import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
 import com.pyx4j.widgets.client.style.ColorFactory;
 import com.pyx4j.widgets.client.style.Selector;
@@ -154,6 +157,13 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border", "none");
         style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
         addStyle(style);
+        style = new Style(".body-nonavig");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.body2Background().getURL() + "') repeat-x 0 0 #F7F7F7");
+        addStyle(style);
+        style = new Style(".body-navig");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.bodyBackground().getURL() + "') repeat-x 0 0 #F7F7F7");
+        addStyle(style);
+
     }
 
     protected void initSectionStyles() {
@@ -538,6 +548,7 @@ public abstract class VistaTheme extends Theme {
     }
 
     protected void initTextBoxStyle() {
+
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_TextBox));
         style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
         style.addProperty("color", ThemeColor.TEXT);
@@ -551,12 +562,24 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("padding", "0px");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_TextBox, "-watermark");
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, TextBox.StyleDependent.watermark));
         style.addProperty("color", "gray");
         addStyle(style);
 
-        style = new Style(CSSClass.pyx4j_TextBox, "[disabled]");
-        style.addProperty("background-color", "#eee");
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.disabled));
+        style.addProperty("background-color", "lightGray");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.readOnly));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "none");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.invalid));
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "red");
+        style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 
     }
@@ -784,7 +807,6 @@ public abstract class VistaTheme extends Theme {
         int rightColumnWidth = 0;
 
         Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", "#fff");
         style.addProperty("width", "95%");
         style.addProperty("min-width", minWidth + "px");
         style.addProperty("max-width", maxWidth + "px");
@@ -792,18 +814,15 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Header));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("height", "125px");
+        style.addProperty("height", "120px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.MainNavig));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE3);
         style.addProperty("width", "100%");
         style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SiteView.StyleSuffix.Center));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         style.addProperty("width", "100%");
         style.addProperty("float", "left");
         addStyle(style);
@@ -867,8 +886,13 @@ public abstract class VistaTheme extends Theme {
     private void initVistaCaptionViewStyles() {
         String prefix = CaptionViewImpl.DEFAULT_STYLE_PREFIX;
 
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
+        Style style = new Style(Selector.valueOf(prefix, CaptionViewImpl.StyleSuffix.Label));
+        style.addProperty("color", "#FFFFFF");
+        style.addProperty("font-size", "26px");
+        style.addProperty("font-weight", "normal");
+        style.addProperty("line-height", "86px");
+        style.addProperty("text-transform", "uppercase");
+
         addStyle(style);
 
     }

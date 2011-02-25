@@ -90,7 +90,7 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
             setWidth("115px");
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-            getElement().getStyle().setProperty("lineHeight", "43px");
+            getElement().getStyle().setProperty("lineHeight", "53px");
             getElement().getStyle().setProperty("textAlign", "center");
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 

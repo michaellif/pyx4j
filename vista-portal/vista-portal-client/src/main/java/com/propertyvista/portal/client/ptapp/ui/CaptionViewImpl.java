@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
@@ -35,11 +33,6 @@ public class CaptionViewImpl extends SimplePanel implements CaptionView {
     public CaptionViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
         captionLabel = new Label();
-        captionLabel.setSize("300px", "63px");
-        captionLabel.getElement().getStyle().setFontSize(26, Unit.PX);
-        captionLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        captionLabel.getElement().getStyle().setPaddingLeft(10, Unit.PX);
-        captionLabel.getElement().getStyle().setProperty("lineHeight", "63px");
         captionLabel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
         setWidget(captionLabel);
     }

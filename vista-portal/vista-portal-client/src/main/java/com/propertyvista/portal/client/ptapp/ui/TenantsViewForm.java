@@ -71,12 +71,12 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             {
                 PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.firstName(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.middleName(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "8em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.lastName(), "10em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.email(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.email(), "11em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.relationship(), "9em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.dependant(), "7em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.takeOwnership(), "7em"));
             }
