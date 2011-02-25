@@ -7,10 +7,13 @@
 ---- # To store big blobs
 ---- max_allowed_packet=200M
 
+-- initialization
+CREATE USER 'vista' IDENTIFIED BY 'vista';
+CREATE DATABASE vista;
+GRANT ALL PRIVILEGES ON vista.* TO 'vista'@'%';
+
+
 -- reset
 DROP DATABASE vista;
 CREATE DATABASE vista;
-
-CREATE USER 'vista' IDENTIFIED BY 'vista';
-GRANT ALL PRIVILEGES ON vista.* TO 'vista'@'%';
 
