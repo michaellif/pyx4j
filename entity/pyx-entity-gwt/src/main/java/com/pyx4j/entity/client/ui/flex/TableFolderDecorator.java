@@ -32,6 +32,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -39,10 +40,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CListBox;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
+import com.pyx4j.widgets.client.Tooltip;
 
 public class TableFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
 
@@ -74,16 +75,29 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         header.setWidth("100%");
         header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         for (EntityFolderColumnDescriptor column : columns) {
+            HorizontalPanel cellPanel = new HorizontalPanel();
+            cellPanel.getElement().getStyle().setFloat(Float.LEFT);
+            cellPanel.setWidth(column.getWidth());
+            cellPanel.getElement().getStyle().setMarginLeft(3, Unit.PX);
+            cellPanel.getElement().getStyle().setMarginRight(3, Unit.PX);
+
             String caption = column.getObject().getMeta().getCaption();
             if (caption == "") {
                 caption = "&nbsp";
             }
             HTML label = new HTML(caption);
-            label.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-            label.getElement().getStyle().setPaddingRight(3, Unit.PX);
-            label.getElement().getStyle().setFloat(Float.LEFT);
-            label.setWidth(column.getWidth());
-            header.add(label);
+            cellPanel.add(label);
+
+            String descr = column.getObject().getMeta().getDescription();
+            if ((descr != null) && !descr.trim().equals("")) {
+                Image info = new Image(ImageFactory.getImages().formTooltipInfo());
+
+                info.getElement().getStyle().setPaddingRight(2, Unit.PX);
+                cellPanel.add(info);
+                Tooltip.tooltip(info, column.getObject().getMeta().getDescription());
+            }
+
+            header.add(cellPanel);
         }
 
         add(header);
