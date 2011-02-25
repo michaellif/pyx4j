@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
@@ -51,6 +52,7 @@ public class VistaTextPairDecorator extends FlowPanel {
 
         Label lw = new Label(left);
         lw.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
+        lw.getElement().getStyle().setVerticalAlign(decorData.labelVerticalAlignment);
         lw.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         lw.setHorizontalAlignment(decorData.labelAlignment);
         if (decorData.labelWidth != 0)
@@ -60,6 +62,7 @@ public class VistaTextPairDecorator extends FlowPanel {
 
         Label rw = new Label(right);
         rw.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Right);
+        rw.getElement().getStyle().setVerticalAlign(decorData.componentVerticalAlignment);
         rw.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         rw.setHorizontalAlignment(decorData.componentAlignment);
         if (decorData.componentWidth != 0)

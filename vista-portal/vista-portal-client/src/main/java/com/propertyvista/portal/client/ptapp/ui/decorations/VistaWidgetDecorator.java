@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui.decorations;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -93,14 +94,12 @@ public class VistaWidgetDecorator extends FlowPanel {
         label.setHorizontalAlignment(decorData.labelAlignment);
         if (decorData.labelWidth != 0)
             label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
+
         label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
 
         Cursor.setDefault(label.getElement());
 
-        SimplePanel nativeComponentHolder = new SimplePanel();
-
         nativeComponent = component.asWidget();
-
         if (nativeComponent == null) {
             throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
         }
@@ -118,14 +117,18 @@ public class VistaWidgetDecorator extends FlowPanel {
             });
         }
 
-        nativeComponentHolder.setWidget(nativeComponent);
+        //        if (decorData.componentWidth != 0)
+        //            nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
 
+        SimplePanel nativeComponentHolder = new SimplePanel();
         nativeComponentHolder.getElement().getStyle().setFloat(Float.LEFT);
         //        nativeComponent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         //        nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        if (decorData.componentWidth != 0)
+            nativeComponentHolder.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
 
-        nativeComponentHolder.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
         nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
+        nativeComponentHolder.setWidget(nativeComponent);
 
         imageInfoWarnHolder = new ImageHolder("18px");
         imageInfoWarnHolder.getElement().getStyle().setFloat(Float.LEFT);
@@ -160,10 +163,18 @@ public class VistaWidgetDecorator extends FlowPanel {
             }
         });
 
-        add(label);
-        add(imageMandatoryHolder);
-        add(nativeComponentHolder);
-        add(imageInfoWarnHolder);
+        // put it together:
+        if (decorData.swapOrder) {
+            add(imageInfoWarnHolder);
+            add(nativeComponentHolder);
+            add(imageMandatoryHolder);
+            add(label);
+        } else {
+            add(label);
+            add(imageMandatoryHolder);
+            add(nativeComponentHolder);
+            add(imageInfoWarnHolder);
+        }
 
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
@@ -207,11 +218,14 @@ public class VistaWidgetDecorator extends FlowPanel {
     }
 
     static public class DecorationData {
+
         public double labelWidth = 10;
 
         public Unit labelUnit = Unit.EM;
 
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
+
+        public VerticalAlign labelVerticalAlignment = VerticalAlign.BASELINE;
 
         public double componentWidth = 10;
 
@@ -219,14 +233,19 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         public HorizontalAlignmentConstant componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
+        public VerticalAlign componentVerticalAlignment = VerticalAlign.BASELINE;
+
         public double gapWidth = 2;
 
         public Unit gapUnit = Unit.EM;
+
+        public boolean swapOrder = false;
 
         // various construction:
         public DecorationData() {
         }
 
+        // first set of construction:
         public DecorationData(int labelWidth, int componentWidth) {
             this.labelWidth = labelWidth;
             this.labelUnit = Unit.PX;
@@ -266,7 +285,50 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.gapUnit = gapUnit;
         }
 
-        // the same constructors with alignment:
+        // secons one - with swap order option:
+        public DecorationData(int labelWidth, int componentWidth, boolean swapOrder) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = Unit.PX;
+            this.componentWidth = componentWidth;
+            this.componentUnit = Unit.PX;
+            this.swapOrder = swapOrder;
+        }
+
+        public DecorationData(int labelWidth, int componentWidth, int gapWidth, boolean swapOrder) {
+            this(labelWidth, componentWidth, swapOrder);
+            this.gapWidth = gapWidth;
+            this.gapUnit = Unit.PX;
+        }
+
+        public DecorationData(double labelWidth, double componentWidth, boolean swapOrder) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = Unit.EM;
+            this.componentWidth = componentWidth;
+            this.componentUnit = Unit.EM;
+            this.swapOrder = swapOrder;
+        }
+
+        public DecorationData(double labelWidth, double componentWidth, double gapWidth, boolean swapOrder) {
+            this(labelWidth, componentWidth, swapOrder);
+            this.gapWidth = gapWidth;
+            this.gapUnit = Unit.EM;
+        }
+
+        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, boolean swapOrder) {
+            this.labelWidth = labelWidth;
+            this.labelUnit = labelUnit;
+            this.componentWidth = componentWidth;
+            this.componentUnit = componentUnit;
+            this.swapOrder = swapOrder;
+        }
+
+        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, double gapWidth, Unit gapUnit, boolean swapOrder) {
+            this(labelWidth, labelUnit, componentWidth, componentUnit, swapOrder);
+            this.gapWidth = gapWidth;
+            this.gapUnit = gapUnit;
+        }
+
+        // third one - with alignment:
         //
         public DecorationData(HorizontalAlignmentConstant labelAlignment, HorizontalAlignmentConstant componentAlignment) {
             this.labelAlignment = labelAlignment;

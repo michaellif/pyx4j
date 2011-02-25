@@ -96,37 +96,50 @@ public abstract class VistaTheme extends Theme {
         style = new Style("td");
         style.addProperty("padding", "0px");
         addStyle(style);
+
+        style = new Style("p");
+        style.addProperty("margin", "0.3em");
+        addStyle(style);
+
         style = new Style("h1");
         style.addProperty("font-size", "2em");
         style.addProperty("line-height", "2.5em");
+        style.addProperty("padding-bottom", "0.5px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h2");
         style.addProperty("font-size", "1.5em");
+        style.addProperty("padding-bottom", "0.5px");
         style.addProperty("margin", "0");
-        style.addProperty("padding-bottom", "0.3px");
         addStyle(style);
         style = new Style("h3");
         style.addProperty("font-size", "1.17em");
+        style.addProperty("padding-bottom", "0.5px");
         style.addProperty("margin", "0");
         addStyle(style);
-        style = new Style("h4, blockquote, ul, fieldset, form, ol, dl, dir, menu");
+        style = new Style("h4, blockquote");
+        style.addProperty("padding-bottom", "0.3px");
         style.addProperty("margin", "0");
-        addStyle(style);
-        style = new Style("p");
-        style.addProperty("margin", "0.3em");
         addStyle(style);
         style = new Style("h5");
         style.addProperty("font-size", "1.12em");
+        style.addProperty("padding-bottom", "0.2px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h6");
         style.addProperty("font-size", ".75em");
+        style.addProperty("padding-bottom", "0.2px");
         style.addProperty("margin", "0");
         addStyle(style);
+
         style = new Style("h1, h2, h3, h4, h5, h6, b, strong");
         style.addProperty("font-weight", "bolder");
         addStyle(style);
+
+        style = new Style("blockquote, ul, fieldset, form, ol, dl, dir, menu");
+        style.addProperty("margin", "0");
+        addStyle(style);
+
         style = new Style("blockquote");
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
