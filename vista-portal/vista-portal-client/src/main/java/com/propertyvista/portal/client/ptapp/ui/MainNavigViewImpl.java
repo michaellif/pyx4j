@@ -96,29 +96,27 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
 
             if (visited) {
                 getElement().getStyle().setBackgroundColor("#999999");
-                if (!Status.current.equals(step.getStatus())) {
-                    addDomHandler(new ClickHandler() {
-                        @Override
-                        public void onClick(ClickEvent event) {
-                            presenter.navigTo(place);
-                        }
-                    }, ClickEvent.getType());
-                    addDomHandler(new MouseOverHandler() {
+                addDomHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        presenter.navigTo(place);
+                    }
+                }, ClickEvent.getType());
+                addDomHandler(new MouseOverHandler() {
 
-                        @Override
-                        public void onMouseOver(MouseOverEvent event) {
-                            label.getElement().getStyle().setProperty("color", "#555");
-                        }
-                    }, MouseOverEvent.getType());
-                    addDomHandler(new MouseOutHandler() {
-                        @Override
-                        public void onMouseOut(MouseOutEvent event) {
-                            label.getElement().getStyle().setProperty("color", "#333");
-                        }
-                    }, MouseOutEvent.getType());
+                    @Override
+                    public void onMouseOver(MouseOverEvent event) {
+                        label.getElement().getStyle().setProperty("color", "#555");
+                    }
+                }, MouseOverEvent.getType());
+                addDomHandler(new MouseOutHandler() {
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        label.getElement().getStyle().setProperty("color", "#333");
+                    }
+                }, MouseOutEvent.getType());
 
-                    getElement().getStyle().setCursor(Cursor.POINTER);
-                }
+                getElement().getStyle().setCursor(Cursor.POINTER);
             }
 
         }
