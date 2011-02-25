@@ -46,7 +46,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
     public void testLoginToMainSite() throws Exception {
         //Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials_birch.properties");
+        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
 
         /*** page 1 ***/
         selenium.click("id=googleSignIn");
@@ -96,7 +96,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
     public void testLogin() throws Exception {
 
-        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials_birch.properties");
+        Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
         selenium.get(testsite);
 
         /*** page 1 ***/
