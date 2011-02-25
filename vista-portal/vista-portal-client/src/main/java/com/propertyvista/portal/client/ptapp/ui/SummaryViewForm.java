@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -27,7 +28,9 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
@@ -39,6 +42,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.widgets.client.Button;
@@ -126,7 +130,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     private Widget innerLevelElementElignment(Widget e) {
-        //        upperLevelElementElignment(e);
         e.setWidth("100%");
         return e;
     }
@@ -146,8 +149,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             upperLevelElementElignment(this);
 
             tableLayout.put("Type", "20%");
-            tableLayout.put("Unit", "10%");
-            tableLayout.put("Rent", "10%");
+            tableLayout.put("Unit", "20%");
+            //            tableLayout.put("Rent", "10%");
             tableLayout.put("Deposit", "10%");
             tableLayout.put("Beds", "10%");
             tableLayout.put("Baths", "10%");
@@ -175,9 +178,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             content.clear();
 
-            addCell("Type", value.unitSelection().selectedUnit().unitType().getStringView());
+            addCell("Type", value.unitSelection().selectedUnit().floorplan().name().getStringView());
             addCell("Unit", value.unitSelection().selectedUnit().unitType().getStringView());
-            addCell("Rent", value.unitSelection().selectedUnit().marketRent().getStringView());
+            //            addCell("Rent", value.unitSelection().selectedUnit().marketRent().getStringView());
             addCell("Deposit", value.unitSelection().selectedUnit().requiredDeposit().getStringView());
             addCell("Beds", value.unitSelection().selectedUnit().bedrooms().getStringView());
             addCell("Baths", value.unitSelection().selectedUnit().bathrooms().getStringView());
@@ -199,16 +202,24 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class LeaseTermView extends FlowPanel {
 
+        private final FlowPanel content;
+
         public LeaseTermView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
+            // add table content panel:
+            add(innerLevelElementElignment(content = new FlowPanel()));
+
+            // add static lease term blah-blah:
             HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
             add(availabilityAndPricing);
         }
 
         public void populate(Summary value) {
+
+            content.clear();
 
         }
     }
@@ -276,7 +287,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class TenantsView extends FlowPanel {
 
-        private final FlowPanel content;
+        private final VerticalPanel content;
 
         public TenantsView() {
 
@@ -284,7 +295,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             upperLevelElementElignment(this);
 
             // add table content panel:
-            add(innerLevelElementElignment(content = new FlowPanel()));
+            add(innerLevelElementElignment(content = new VerticalPanel()));
         }
 
         public void populate(Summary value) {
@@ -300,6 +311,10 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             private final PotentialTenantInfo pti;
 
+            private final String LEFT_COLUMN_WIDTH = "40%";
+
+            private final String RIGHT_COLUMN_WIDTH = "40%";
+
             private boolean fullView;
 
             public TenantInfo(PotentialTenantInfo pti) {
@@ -314,12 +329,16 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
                 clear();
 
-                addViewSwitcher();
-                HTML tenant = new HTML("<h4>" + pti.firstName().getStringView() + "&nbsp" + pti.lastName().getStringView() + "</h4>");
+                HorizontalPanel panel = new HorizontalPanel();
+
+                addViewSwitcher(panel);
+
+                HTML tenant = new HTML("<h4>" + pti.firstName().getStringView() + " &nbsp " + pti.lastName().getStringView() + "</h4>");
                 tenant.getElement().getStyle().setMarginLeft(4, Unit.EM);
                 tenant.getElement().getStyle().setMarginBottom(1, Unit.EM);
-                setWidth("100%");
-                add(tenant);
+                panel.add(tenant);
+
+                add(panel);
 
                 fullView = false;
             }
@@ -336,35 +355,153 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 dd.componentUnit = Unit.PCT;
                 dd.componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
+                // ----------------------------------------------------------------------
+
                 FlowPanel panel = new FlowPanel();
                 panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
                 panel.add(new VistaTextPairDecorator(pti.homePhone().getMeta().getCaption(), pti.homePhone().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.mobilePhone().getMeta().getCaption(), pti.mobilePhone().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.workPhone().getMeta().getCaption(), pti.workPhone().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.email().getMeta().getCaption(), pti.email().getStringView(), dd));
-                panel.setWidth("40%");
+                panel.setWidth(LEFT_COLUMN_WIDTH);
                 add(panel);
 
                 panel = new FlowPanel();
                 panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 panel.getElement().getStyle().setMarginLeft(10, Unit.PCT);
+
                 panel.add(new VistaTextPairDecorator(pti.driversLicense().getMeta().getCaption(), pti.driversLicense().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.driversLicenseState().getMeta().getCaption(), pti.driversLicenseState().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.secureIdentifier().getMeta().getCaption(), pti.secureIdentifier().getStringView(), dd));
-                panel.setWidth("40%");
+                panel.setWidth(RIGHT_COLUMN_WIDTH);
                 add(panel);
 
                 Widget sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
                 sp.getElement().getStyle().setPadding(0, Unit.EM);
                 add(sp);
 
+                // ----------------------------------------------------------------------
+
+                panel = new FlowPanel();
+                panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+                panel.add(new HTML("<h4>" + pti.currentAddress().getMeta().getCaption() + "</h4>"));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().postalCode().getMeta().getCaption(), pti.currentAddress().postalCode()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().city().getMeta().getCaption(), pti.currentAddress().city().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().province().getMeta().getCaption(), pti.currentAddress().province().getStringView(),
+                        dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().street1().getMeta().getCaption(), pti.currentAddress().street1().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().moveInDate().getMeta().getCaption(), pti.currentAddress().moveInDate()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().moveOutDate().getMeta().getCaption(), pti.currentAddress().moveOutDate()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().payment().getMeta().getCaption(), pti.currentAddress().payment().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().phone().getMeta().getCaption(), pti.currentAddress().phone().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().rented().getMeta().getCaption(), pti.currentAddress().rented().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.currentAddress().managerName().getMeta().getCaption(), pti.currentAddress().managerName()
+                        .getStringView(), dd));
+                panel.setWidth(LEFT_COLUMN_WIDTH);
+                add(panel);
+
+                panel = new FlowPanel();
+                panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                panel.getElement().getStyle().setMarginLeft(10, Unit.PCT);
+
+                panel.add(new HTML("<h4>" + pti.previousAddress().getMeta().getCaption() + "</h4>"));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().postalCode().getMeta().getCaption(), pti.previousAddress().postalCode()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().city().getMeta().getCaption(), pti.previousAddress().city().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().province().getMeta().getCaption(), pti.previousAddress().province().getStringView(),
+                        dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().street1().getMeta().getCaption(), pti.previousAddress().street1().getStringView(),
+                        dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().moveInDate().getMeta().getCaption(), pti.previousAddress().moveInDate()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().moveOutDate().getMeta().getCaption(), pti.previousAddress().moveOutDate()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().payment().getMeta().getCaption(), pti.previousAddress().payment().getStringView(),
+                        dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().phone().getMeta().getCaption(), pti.previousAddress().phone().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().rented().getMeta().getCaption(), pti.previousAddress().rented().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.previousAddress().managerName().getMeta().getCaption(), pti.previousAddress().managerName()
+                        .getStringView(), dd));
+                panel.setWidth(RIGHT_COLUMN_WIDTH);
+                add(panel);
+
+                sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+                sp.getElement().getStyle().setPadding(0, Unit.EM);
+                add(sp);
+
+                // ----------------------------------------------------------------------
+
+                add(new HTML("<h4>" + pti.vehicles().getMeta().getCaption() + "</h4>"));
+
+                Widget w;
+                for (Vehicle vhcl : pti.vehicles()) {
+                    HorizontalPanel vehiclePanel = new HorizontalPanel();
+
+                    vehiclePanel.add(w = new HTML(vhcl.plateNumber().getStringView()));
+                    vehiclePanel.setCellWidth(w, "20%");
+
+                    vehiclePanel.add(w = new HTML(vhcl.year().getStringView()));
+                    vehiclePanel.setCellWidth(w, "20%");
+
+                    vehiclePanel.add(w = new HTML(vhcl.make().getStringView()));
+                    vehiclePanel.setCellWidth(w, "20%");
+
+                    vehiclePanel.add(w = new HTML(vhcl.model().getStringView()));
+                    vehiclePanel.setCellWidth(w, "20%");
+
+                    vehiclePanel.add(w = new HTML(vhcl.province().getStringView()));
+                    vehiclePanel.setCellWidth(w, "20%");
+
+                    vehiclePanel.setWidth("100%");
+                    add(vehiclePanel);
+                }
+
+                sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+                sp.getElement().getStyle().setPadding(0, Unit.EM);
+                add(sp);
+
+                // ----------------------------------------------------------------------
+                dd.labelWidth = 70;
+                dd.componentWidth = 30;
+
+                panel = new FlowPanel();
+                panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+                panel.add(new HTML("<h4>" + pti.legalQuestions().getMeta().getCaption() + "</h4>"));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().suedForRent().getMeta().getCaption(), pti.legalQuestions().suedForRent()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().suedForDamages().getMeta().getCaption(), pti.legalQuestions().suedForDamages()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().everEvicted().getMeta().getCaption(), pti.legalQuestions().everEvicted()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().defaultedOnLease().getMeta().getCaption(), pti.legalQuestions().defaultedOnLease()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().convictedOfFelony().getMeta().getCaption(), pti.legalQuestions().convictedOfFelony()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().legalTroubles().getMeta().getCaption(), pti.legalQuestions().legalTroubles()
+                        .getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.legalQuestions().filedBankruptcy().getMeta().getCaption(), pti.legalQuestions().filedBankruptcy()
+                        .getStringView(), dd));
+                panel.setWidth("70%");
+                add(panel);
+
+                sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
+                sp.getElement().getStyle().setPadding(0, Unit.EM);
+                add(sp);
+
+                // ----------------------------------------------------------------------
+
                 fullView = true;
             }
 
-            private void addViewSwitcher() {
+            private void addViewSwitcher(HorizontalPanel panel) {
 
                 Button switcher = new Button("v");
-                switcher.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 switcher.addClickHandler(new ClickHandler() {
 
                     @Override
@@ -376,7 +513,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                         }
                     }
                 });
-                add(switcher);
+                panel.add(switcher);
             }
         }
     }
@@ -457,11 +594,14 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             upperLevelElementElignment(this);
 
             // add table content panel:
-            TextArea leaseTerms = new TextArea();
-            leaseTerms.setReadOnly(true);
-            leaseTerms.setText(SiteResources.INSTANCE.leaseTerms().getText());
-            leaseTerms.setVisibleLines(10);
+            HTML leaseTerms = new HTML(SiteResources.INSTANCE.leaseTerms().getText());
+            leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            leaseTerms.getElement().getStyle().setBorderColor("black");
+            leaseTerms.getElement().getStyle().setBackgroundColor("white");
+            leaseTerms.getElement().getStyle().setColor("black");
 
+            leaseTerms.setHeight("10em");
             leaseTerms.setWidth("100%");
             add(leaseTerms);
 
