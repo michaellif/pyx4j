@@ -321,14 +321,14 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
                 // set preselected term for selected unit:
                 if (unit.equals(getValue().selectedUnit())) {
-                    term.setValue(mr.leaseTerm().equals(getValue().selectedUnitLeaseTerm()));
+                    term.setValue(mr.leaseTerm().equals(getValue().markerRent().leaseTerm()));
                 }
 
                 term.addClickHandler(new ClickHandler() {
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        getValue().selectedUnitLeaseTerm().setValue(mr.leaseTerm().getValue());
+                        getValue().markerRent().setValue(mr.getValue());
                     }
                 });
 

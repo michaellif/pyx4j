@@ -20,19 +20,15 @@ import java.util.Map.Entry;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.HorizontalSplitPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
@@ -47,9 +43,6 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.widgets.client.Button;
 
 @Singleton
@@ -119,7 +112,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         leaseTermView.populate(value);
         tenantsTable.populate(value);
         tenantsView.populate(value);
-        financialView.populate(value);
+        //        financialView.populate(value);
         petsTable.populate(value);
         leaseTermsCheck.populate(value);
         signatureView.populate(value);
@@ -230,6 +223,21 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             content.clear();
 
+            HTML label = new HTML(value.unitSelection().markerRent().leaseTerm().getStringView() + "&nbsp month Rent");
+            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            label.setWidth("10%");
+            content.add(label);
+
+            label = new HTML("From &nbsp " + value.unitSelection().rentStart().getStringView());
+            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            label.setWidth("10%");
+            content.add(label);
+
+            label = new HTML(value.unitSelection().markerRent().rent().currency().getStringView()
+                    + value.unitSelection().markerRent().rent().amount().getStringView() + "/month");
+            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            label.setWidth("10%");
+            content.add(label);
         }
     }
 
@@ -1079,7 +1087,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            HTML signatureTerms = new HTML(SiteResources.INSTANCE.digitalSignature().getText());
+            HTML signatureTerms = new HTML(proto().leaseTerms().text().getStringView());
             add(signatureTerms);
 
             VistaWidgetDecorator signature = new VistaWidgetDecorator(create(proto().fullName(), SummaryViewForm.this));
