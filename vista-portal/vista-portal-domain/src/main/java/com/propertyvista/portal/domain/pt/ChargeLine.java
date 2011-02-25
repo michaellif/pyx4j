@@ -18,7 +18,31 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface ChargeLine extends Charge {
 
     public enum ChargeType {
-        deposit, applicationFee, rent("Monthly Rent"), firstMonthRent, parking, parking2("Second Parking"), locker, petDeposit, petCharge("Pet Charge"), extraParking, extraLocker, cableTv, prorated;
+        deposit("Deposit"),
+
+        applicationFee("Application Fee"),
+
+        rent("Monthly Rent"),
+
+        firstMonthRent("Monthly Rent"),
+
+        parking("Parking"),
+
+        parking2("Second Parking"),
+
+        locker("Locker"),
+
+        petDeposit("Pet Deposit"),
+
+        petCharge("Pet Charge"),
+
+        extraParking("Extra Parking"),
+
+        extraLocker("Extra Locker"),
+
+        cableTv("Cable TV"),
+
+        prorated("Prorated");
 
         private final String label;
 
