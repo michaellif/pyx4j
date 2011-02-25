@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.propertyvista.portal.domain.ref.Country;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;

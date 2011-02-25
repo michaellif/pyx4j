@@ -7,22 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 6, 2011
+ * Created on 2011-02-25
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.portal.domain.ref;
 
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-public class VistaDataPreloaders extends DataPreloaderCollection {
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    public VistaDataPreloaders() {
-        add(new LocationsPreload());
-        // TODO clean up this ClearPTDataPreloader business
-        //        add(new ClearPTDataPreloader());
-        add(new PreloadUsers());
-        add(new PreloadBuildings());
-        add(new PreloadPT());
-    }
+public interface Province extends IEntity {
+
+    @ToString
+    @Indexed
+    IPrimitive<String> name();
+
+    @Indexed
+    IPrimitive<String> code();
+
+    Country country();
+
 }

@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
  */
-package com.propertyvista.portal.domain;
+package com.propertyvista.portal.domain.ref;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
