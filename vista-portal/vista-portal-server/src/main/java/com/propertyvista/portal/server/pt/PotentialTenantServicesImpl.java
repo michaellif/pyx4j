@@ -31,6 +31,7 @@ import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
+import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -224,6 +225,10 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             retrieveApplicationEntity(summary.financial());
             retrieveApplicationEntity(summary.pets());
             retrieveApplicationEntity(summary.charges());
+
+            summary.leaseTerms().set(
+                    PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,
+                            summary.unitSelection().selectedUnit().newLeaseTerms().getPrimaryKey()));
         }
 
         private <T extends IApplicationEntity> void retrieveApplicationEntity(T entity) {

@@ -37,6 +37,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.pt.TenantCharge;
@@ -265,7 +266,7 @@ public class PreloadPT extends AbstractDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(PotentialTenantList.class, PotentialTenant.class, PotentialTenantFinancial.class, PotentialTenantInfo.class, Charges.class,
                     ChargeLineList.class, ChargeLine.class, TenantChargeList.class, TenantCharge.class, Application.class, UnitSelection.class,
-                    ApplicationProgress.class, Pets.class, Address.class, EmergencyContact.class);
+                    ApplicationProgress.class, Pets.class, Address.class, EmergencyContact.class, Summary.class);
         } else {
             return "This is production";
         }

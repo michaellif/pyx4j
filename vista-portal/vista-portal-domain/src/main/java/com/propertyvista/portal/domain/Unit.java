@@ -15,6 +15,8 @@ package com.propertyvista.portal.domain;
 
 import java.util.Date;
 
+import com.propertyvista.portal.domain.pt.LeaseTerms;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
@@ -62,6 +64,9 @@ public interface Unit extends Property {
 
     @Format("MM/dd/yyyy")
     IPrimitive<Date> avalableForRent();
+
+    @Detached
+    LeaseTerms newLeaseTerms();
 
     /**
      * Object used as part of a marketing campaign to demonstrate the design, structure,

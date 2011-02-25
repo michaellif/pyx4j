@@ -12,6 +12,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +41,7 @@ import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
+import com.propertyvista.portal.domain.pt.LeaseTerms;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -59,6 +61,10 @@ public class PreloadBuildings extends AbstractDataPreloader {
     private int buildingCount;
 
     private int unitCount;
+
+    private static String resourceFileName(String fileName) {
+        return PreloadBuildings.class.getPackage().getName().replace('.', '/') + "/" + fileName;
+    }
 
     private Email createEmail(String emailAddress) {
         Email email = EntityFactory.create(Email.class);
@@ -101,7 +107,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         // for now save just one picture
         int imageIndex = RandomUtil.randomInt(3) + 1;
-        String filename = "com/propertyvista/portal/server/preloader/apartment" + imageIndex + ".jpg";
+        String filename = resourceFileName("apartment" + imageIndex + ".jpg");
         try {
             byte[] picture = IOUtils.getResource(filename);
             if (picture == null) {
@@ -185,7 +191,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return building;
     }
 
-    private Unit createUnit(Building building, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan) {
+    private Unit createUnit(Building building, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan, LeaseTerms leaseTerms) {
         Unit unit = EntityFactory.create(Unit.class);
 
         unit.building().set(building);
@@ -296,7 +302,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Building.class, Unit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, UnitInfoItem.class,
-                    Amenity.class, Concession.class, AddOn.class);
+                    Amenity.class, Concession.class, AddOn.class, LeaseTerms.class);
         } else {
             return "This is production";
         }
@@ -304,6 +310,14 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
     @Override
     public String create() {
+
+        LeaseTerms leaseTerms = EntityFactory.create(LeaseTerms.class);
+        try {
+            leaseTerms.text().setValue(IOUtils.getTextResource(resourceFileName("leaseTerms.html")));
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+        PersistenceServicesFactory.getPersistenceService().persist(leaseTerms);
 
         for (int b = 0; b < DemoData.NUM_RESIDENTIAL_BUILDINGS; b++) {
 
@@ -359,7 +373,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
                     PersistenceServicesFactory.getPersistenceService().persist(floorplan);
                     for (int u = 0; u < 3; u++) {
                         int uarea = floorplan.area().getValue() + RandomUtil.randomInt(10);
-                        createUnit(building, floor, uarea, bedrooms, bathrooms, floorplan);
+                        createUnit(building, floor, uarea, bedrooms, bathrooms, floorplan, leaseTerms);
                     }
                 }
             }

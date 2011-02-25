@@ -36,6 +36,8 @@ public interface Summary extends IEntity, IApplicationEntity {
     @Transient
     Charges charges();
 
+    LeaseTerms leaseTerms();
+
     @Caption(name = "I Agree")
     IPrimitive<Boolean> agree();
 
