@@ -164,17 +164,10 @@ public class VistaWidgetDecorator extends FlowPanel {
         });
 
         // put it together:
-        if (decorData.swapOrder) {
-            add(imageInfoWarnHolder);
-            add(nativeComponentHolder);
-            add(imageMandatoryHolder);
-            add(label);
-        } else {
-            add(label);
-            add(imageMandatoryHolder);
-            add(nativeComponentHolder);
-            add(imageInfoWarnHolder);
-        }
+        add(label);
+        add(imageMandatoryHolder);
+        add(nativeComponentHolder);
+        add(imageInfoWarnHolder);
 
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
@@ -239,8 +232,6 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         public Unit gapUnit = Unit.EM;
 
-        public boolean swapOrder = false;
-
         // various construction:
         public DecorationData() {
         }
@@ -285,50 +276,7 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.gapUnit = gapUnit;
         }
 
-        // secons one - with swap order option:
-        public DecorationData(int labelWidth, int componentWidth, boolean swapOrder) {
-            this.labelWidth = labelWidth;
-            this.labelUnit = Unit.PX;
-            this.componentWidth = componentWidth;
-            this.componentUnit = Unit.PX;
-            this.swapOrder = swapOrder;
-        }
-
-        public DecorationData(int labelWidth, int componentWidth, int gapWidth, boolean swapOrder) {
-            this(labelWidth, componentWidth, swapOrder);
-            this.gapWidth = gapWidth;
-            this.gapUnit = Unit.PX;
-        }
-
-        public DecorationData(double labelWidth, double componentWidth, boolean swapOrder) {
-            this.labelWidth = labelWidth;
-            this.labelUnit = Unit.EM;
-            this.componentWidth = componentWidth;
-            this.componentUnit = Unit.EM;
-            this.swapOrder = swapOrder;
-        }
-
-        public DecorationData(double labelWidth, double componentWidth, double gapWidth, boolean swapOrder) {
-            this(labelWidth, componentWidth, swapOrder);
-            this.gapWidth = gapWidth;
-            this.gapUnit = Unit.EM;
-        }
-
-        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, boolean swapOrder) {
-            this.labelWidth = labelWidth;
-            this.labelUnit = labelUnit;
-            this.componentWidth = componentWidth;
-            this.componentUnit = componentUnit;
-            this.swapOrder = swapOrder;
-        }
-
-        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, double gapWidth, Unit gapUnit, boolean swapOrder) {
-            this(labelWidth, labelUnit, componentWidth, componentUnit, swapOrder);
-            this.gapWidth = gapWidth;
-            this.gapUnit = gapUnit;
-        }
-
-        // third one - with alignment:
+        // second one - with alignment:
         //
         public DecorationData(HorizontalAlignmentConstant labelAlignment, HorizontalAlignmentConstant componentAlignment) {
             this.labelAlignment = labelAlignment;

@@ -201,7 +201,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("Sub-Total", "$" + value.rentCharges().total().amount().getStringView());
+            addRow(value.rentCharges().total().getMeta().getCaption(), "$" + value.rentCharges().total().amount().getStringView());
         }
     }
 
@@ -238,7 +238,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("Sub-Total", "$" + value.upgradeCharges().total().amount().getStringView());
+            addRow(value.upgradeCharges().total().getMeta().getCaption(), "$" + value.upgradeCharges().total().amount().getStringView());
         }
     }
 
@@ -268,7 +268,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("TOTAL", "$" + value.proRatedCharges().total().amount().getStringView());
+            addRow(value.proRatedCharges().total().getMeta().getCaption(), "$" + value.proRatedCharges().total().amount().getStringView());
         }
     }
 
@@ -298,7 +298,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("TOTAL", "$" + value.applicationCharges().total().amount().getStringView());
+            addRow(value.applicationCharges().total().getMeta().getCaption(), "$" + value.applicationCharges().total().amount().getStringView());
         }
     }
 
@@ -350,7 +350,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow("TOTAL", "$" + value.paymentSplitCharges().total().amount().getStringView());
+            addRow(value.paymentSplitCharges().total().getMeta().getCaption(), "$" + value.paymentSplitCharges().total().amount().getStringView());
         }
     }
 
