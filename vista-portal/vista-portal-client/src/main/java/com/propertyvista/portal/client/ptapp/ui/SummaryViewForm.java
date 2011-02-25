@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
@@ -1041,15 +1042,18 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class LeaseTermsCheck extends FlowPanel {
 
+        private final HTML leaseTermContent = new HTML();
+
         public LeaseTermsCheck() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
             // add table content panel:
-            HTML leaseTerms = new HTML(SiteResources.INSTANCE.leaseTerms().getText());
+
+            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent);
             leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            leaseTerms.getElement().getStyle().setOverflow(Overflow.SCROLL);
+            //            leaseTerms.getElement().getStyle().setOverflow(Overflow.SCROLL);
             leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
             leaseTerms.getElement().getStyle().setBorderColor("black");
             leaseTerms.getElement().getStyle().setBackgroundColor("white");
@@ -1074,6 +1078,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         }
 
         public void populate(Summary value) {
+            leaseTermContent.setText(value.leaseTerms().getStringView());
         }
     }
 
@@ -1087,7 +1092,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            HTML signatureTerms = new HTML(proto().leaseTerms().text().getStringView());
+            HTML signatureTerms = new HTML(SiteResources.INSTANCE.digitalSignature().getText());
             add(signatureTerms);
 
             VistaWidgetDecorator signature = new VistaWidgetDecorator(create(proto().fullName(), SummaryViewForm.this));
