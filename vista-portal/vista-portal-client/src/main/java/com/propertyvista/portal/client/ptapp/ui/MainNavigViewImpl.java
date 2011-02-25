@@ -34,6 +34,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
@@ -117,6 +118,15 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
                 }, MouseOutEvent.getType());
 
                 getElement().getStyle().setCursor(Cursor.POINTER);
+            } else {
+                if (ApplicationMode.isDevelopment()) {
+                    addDomHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            presenter.navigTo(place);
+                        }
+                    }, ClickEvent.getType());
+                }
             }
 
         }
