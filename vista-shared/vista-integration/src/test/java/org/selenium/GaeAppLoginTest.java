@@ -30,7 +30,7 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
 
     final public String testsite = "http://www22.birchwoodsoftwaregroup.com/vista/tester";
 
-    final public String mainsite = "http://www22.birchwoodsoftwaregroup.com/vista/";
+    final public String mainsite = "http://www22.birchwoodsoftwaregroup.com/";
 
     final public String blankpage = "about:blank";
 
