@@ -26,10 +26,9 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
-import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
@@ -42,8 +41,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PtAppWizardManager implements SecurityControllerHandler {
 
@@ -51,9 +48,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private static PtAppWizardManager instance;
 
-    private Application application;
-
-    private ApplicationProgress progress;
+    private CurrentApplication currentApplication;
 
     private List<WizardStep> wizardSteps;
 
@@ -175,35 +170,22 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         ginjector.getPlaceController().goTo(nextStep.getPlace());
 
         // save progress to DB
-        //saveApplicationProgress();
+        saveApplicationProgress();
     }
 
     private void saveApplicationProgress() {
-        if (progress != null) {
-            RPCManager.execute(PotentialTenantServices.Save.class, progress, new DefaultAsyncCallback<IEntity>() {
-                @Override
-                public void onSuccess(IEntity result) {
-                }
-            });
-        }
+        RPCManager.execute(PotentialTenantServices.Save.class, currentApplication.progress, new DefaultAsyncCallback<IEntity>() {
+            @Override
+            public void onSuccess(IEntity result) {
+            }
+        });
     }
 
-    private void initApplicationProcess(Application result) {
-        application = result;
+    private void initApplicationProcess(CurrentApplication result) {
+        currentApplication = result;
         wizardSteps = new Vector<WizardStep>();
-        //progress = (ApplicationProgress) application.progress().cloneEntity();
 
-        progress = EntityFactory.create(ApplicationProgress.class);
-        progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
-        progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
-
-        for (ApplicationWizardStep step : progress.steps()) {
+        for (ApplicationWizardStep step : currentApplication.progress.steps()) {
             wizardSteps.add(new WizardStep(step));
         }
         for (WizardStep step : wizardSteps) {
@@ -215,28 +197,19 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         nextStep();
     }
 
-    @Deprecated
-    private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
-        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
-        ws.status().setValue(status);
-        return ws;
-    }
-
     @Override
     public void onSecurityContextChange(SecurityControllerEvent event) {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
 
-            RPCManager.execute(PotentialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<Application>() {
+            RPCManager.execute(PotentialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<CurrentApplication>() {
 
                 @Override
-                public void onSuccess(Application result) {
+                public void onSuccess(CurrentApplication result) {
                     initApplicationProcess(result);
                 }
             });
         } else {
-            application = null;
-            progress = null;
+            currentApplication = null;
             wizardSteps = new Vector<WizardStep>();
             ginjector.getPlaceController().goTo(new SiteMap.CreateAccount());
         }

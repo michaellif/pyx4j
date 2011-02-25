@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.rpc.pt;
 
-import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
@@ -26,7 +25,7 @@ public interface PotentialTenantServices {
 
     }
 
-    public interface GetCurrentApplication extends Service<UnitSelectionCriteria, Application> {
+    public interface GetCurrentApplication extends Service<UnitSelectionCriteria, CurrentApplication> {
 
     }
 

@@ -50,6 +50,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public class PreloadPT extends AbstractDataPreloader {
+
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
 
     private static Employer createEmployer() {
@@ -273,7 +274,7 @@ public class PreloadPT extends AbstractDataPreloader {
     @Override
     public String create() {
         Application application = EntityFactory.create(Application.class);
-        // TODO
+        // TODO Dima. We need a use to bind this application to.
         //application.user().set(user);
         persist(application);
 
@@ -283,6 +284,8 @@ public class PreloadPT extends AbstractDataPreloader {
         //unitSelection.building().set(building);
         unitSelection.application().set(application);
         persist(unitSelection);
+
+        // TODO Dima. initialize ApplicationProgress here. Create a new class for this and MOVE code from GetCurrentApplicationImpl... have no idea how to name it.
 
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
         tenants.application().set(application);

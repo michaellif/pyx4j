@@ -34,6 +34,7 @@ import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
@@ -96,12 +97,14 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
     public static class GetCurrentApplicationImpl implements PotentialTenantServices.GetCurrentApplication {
 
         @Override
-        public Application execute(UnitSelectionCriteria request) {
+        public CurrentApplication execute(UnitSelectionCriteria request) {
 
             // find application by user
             EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().user(), PtUserDataAccess.getCurrentUser()));
             Application application = secureRetrieve(criteria);
+
+            CurrentApplication currentApplication = new CurrentApplication();
 
             if (application == null) {
 
@@ -134,10 +137,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
                 progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
                 progress.application().set(application);
-                //TODO fix
-                //secureSave(progress);
+                secureSave(progress);
 
-                application.progress().set(progress);
+                currentApplication.progress = progress;
 
                 unitSelection.application().set(application);
                 secureSave(unitSelection);
@@ -155,13 +157,13 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     }
                 }
 
-                //TODO fix
-                //EntityQueryCriteria<ApplicationProgress> ppplicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-                //criteria.add(PropertyCriterion.eq(ppplicationProgressCriteria.proto().application(), application));
-                //application.progress().set(secureRetrieve(ppplicationProgressCriteria));
+                EntityQueryCriteria<ApplicationProgress> ppplicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+                criteria.add(PropertyCriterion.eq(ppplicationProgressCriteria.proto().application(), application));
+                currentApplication.progress = secureRetrieve(ppplicationProgressCriteria);
             }
             PtUserDataAccess.setCurrentUserApplication(application);
-            return application;
+            currentApplication.application = application;
+            return currentApplication;
         }
 
         private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {

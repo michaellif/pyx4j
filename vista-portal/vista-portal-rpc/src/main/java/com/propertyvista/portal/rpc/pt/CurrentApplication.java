@@ -7,19 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
+ * Created on Feb 24, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.rpc.pt;
 
-import com.propertyvista.portal.domain.IUserEntity;
-import com.propertyvista.portal.domain.Money;
+import java.io.Serializable;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.propertyvista.portal.domain.pt.Application;
+import com.propertyvista.portal.domain.pt.ApplicationProgress;
 
-public interface Application extends IEntity, IUserEntity {
+public class CurrentApplication implements Serializable {
 
-    Money rent();
+    public Application application;
+
+    public ApplicationProgress progress;
 
 }
