@@ -13,10 +13,6 @@
  */
 package org.selenium;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -67,30 +63,6 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.type("id=gwt-debug-AuthenticationRequest$email", "cust001@pyx4j.com");
         selenium.type("id=gwt-debug-AuthenticationRequest$password", "cust001@pyx4j.com");
         selenium.click("id=gwt-debug-Criteria_Submit");
-
-        // replace with locale specific formatting.
-        String DATE_FORMAT = "mm/dd/yyyy";
-        DateFormat formatter = new java.text.SimpleDateFormat(DATE_FORMAT);
-        String strDate = selenium.getValue("id=gwt-debug-UnitSelection$availableFrom");
-        try {
-            Date aDate = formatter.parse(strDate);
-        } catch (java.text.ParseException ex) {
-            System.out.println("error in gwt-debug-UnitSelection$availableFrom : format is invalid");
-            //System.out.println(ex.getMessage() + ex.getStackTrace());
-        }
-        System.out.println("Available From: " + strDate);
-        //selenium.click("id=gwt-debug-UnitSelection$availableFrom-trigger");
-        // prepare and set the new date 
-
-        //TODO: and test by setting to future period
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(DATE_FORMAT);
-        Calendar cNow = Calendar.getInstance();
-        cNow.add(Calendar.MONTH, 1);
-        //...
-
-        //TODO: and then test by setting to past
-        //cNow.set(1999, 1, 2); 
-        //...
 
     }
 
