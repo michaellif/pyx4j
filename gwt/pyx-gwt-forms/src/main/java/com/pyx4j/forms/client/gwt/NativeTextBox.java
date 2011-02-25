@@ -20,17 +20,39 @@
  */
 package com.pyx4j.forms.client.gwt;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.Selector;
 
 public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E> {
+
+    public static enum StyleDependent implements IStyleDependent {
+        disabled, readOnly, invalid
+    }
 
     private final NativeTextBoxDelegate<E> delegate;
 
     public NativeTextBox(final CTextFieldBase<E, ?> cTextField) {
         super();
         delegate = new NativeTextBoxDelegate<E>(this, cTextField);
+
+        cTextField.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
+                if (cTextField.isValid()) {
+                    removeStyleDependentName(dependentSuffix);
+                } else {
+                    addStyleDependentName(dependentSuffix);
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -54,11 +76,24 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
+        String dependentSuffix = Selector.getDependentName(StyleDependent.disabled);
+        if (enabled) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 
     @Override
     public void setEditable(boolean editable) {
         super.setReadOnly(!editable);
+        String dependentSuffix = Selector.getDependentName(StyleDependent.readOnly);
+        if (editable) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
+
     }
 
     @Override

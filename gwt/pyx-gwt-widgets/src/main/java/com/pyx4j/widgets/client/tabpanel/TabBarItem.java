@@ -141,7 +141,7 @@ public class TabBarItem extends HorizontalPanel {
             @Override
             public void onMouseOver(MouseOverEvent event) {
                 if (!selected && enabled) {
-                    String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                    String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.hover);
                     addStyleDependentName(dependentSuffix);
                 }
             }
@@ -150,7 +150,7 @@ public class TabBarItem extends HorizontalPanel {
         addDomHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.hover);
                 removeStyleDependentName(dependentSuffix);
             }
         }, MouseOutEvent.getType());
@@ -173,12 +173,12 @@ public class TabBarItem extends HorizontalPanel {
 
     void onSelected(boolean selected) {
         this.selected = selected;
-        String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.selected);
+        String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.selected);
         if (selected) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);
             getWidget(1).addStyleDependentName(dependentSuffix);
-            removeStyleDependentName(Selector.getDependentSuffix(TabPanel.StyleDependent.hover));
+            removeStyleDependentName(Selector.getDependentName(TabPanel.StyleDependent.hover));
         } else {
             removeStyleDependentName(dependentSuffix);
             getWidget(0).removeStyleDependentName(dependentSuffix);
@@ -188,7 +188,7 @@ public class TabBarItem extends HorizontalPanel {
 
     void onEnabled(boolean enabled) {
         this.enabled = enabled;
-        String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.disabled);
+        String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.disabled);
         if (!enabled) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);

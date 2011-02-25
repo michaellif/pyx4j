@@ -76,7 +76,7 @@ public class TabListDropDown extends PopupPanel {
             item.addDomHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                    String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.hover);
                     item.addStyleDependentName(dependentSuffix);
                 }
             }, MouseOverEvent.getType());
@@ -84,7 +84,7 @@ public class TabListDropDown extends PopupPanel {
             item.addDomHandler(new MouseOutHandler() {
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    String dependentSuffix = Selector.getDependentSuffix(TabPanel.StyleDependent.hover);
+                    String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.hover);
                     item.removeStyleDependentName(dependentSuffix);
                 }
             }, MouseOutEvent.getType());

@@ -42,7 +42,7 @@ public class Selector {
         return pefix + (suffix == null ? "" : (suffix.name()));
     }
 
-    public static final String getDependentSuffix(IStyleDependent dependent) {
+    public static final String getDependentName(IStyleDependent dependent) {
         return dependent == null ? "" : (dependent.name());
     }
 
