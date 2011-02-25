@@ -181,9 +181,6 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         @SuppressWarnings("unchecked")
         @Override
         public IEntity execute(EntityCriteriaByPK<?> request) {
-            if (request.proto() instanceof Summary) {
-                return retrieveSummary();
-            }
             IEntity ret;
             if (request.getPrimaryKey() == 0) {
                 // Find first Entity of that type in Application 
@@ -194,6 +191,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     //Nothing found -> create
                     if (request.proto() instanceof Charges) {
                         ret = createCharges();
+                    } else if (request.proto() instanceof Summary) {
+                        ret = EntityFactory.create(Summary.class);
                     }
                 }
             } else {
@@ -203,10 +202,11 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             if (ret instanceof UnitSelection) {
                 loadAvailableUnits((UnitSelection) ret);
             } else if (ret instanceof Charges) {
-
                 Charges charges = (Charges) ret;
                 ChargesServerCalculation.updatePaymentSplitCharges(charges, PtUserDataAccess.getCurrentUserApplication());
                 ChargesServerCalculation.calculateCharges(charges);
+            } else if (ret instanceof Summary) {
+                retrieveSummary((Summary) ret);
             }
 
             return ret;
@@ -218,14 +218,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             return charges;
         }
 
-        private Summary retrieveSummary() {
-            Summary summary = EntityFactory.create(Summary.class);
+        private void retrieveSummary(Summary summary) {
             retrieveApplicationEntity(summary.unitSelection());
             retrieveApplicationEntity(summary.tenants());
             retrieveApplicationEntity(summary.financial());
             retrieveApplicationEntity(summary.pets());
             retrieveApplicationEntity(summary.charges());
-            return summary;
         }
 
         private <T extends IApplicationEntity> void retrieveApplicationEntity(T entity) {

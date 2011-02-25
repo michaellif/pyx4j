@@ -13,20 +13,32 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
-public interface Summary extends IEntity {
+public interface Summary extends IEntity, IApplicationEntity {
 
+    @Transient
     UnitSelection unitSelection();
 
+    @Transient
     PotentialTenantList tenants();
 
     // TODO this would be PotentialTenantFinancialList after tabs are created.
+    @Transient
     PotentialTenantFinancial financial();
 
+    @Transient
     Pets pets();
 
+    @Transient
     Charges charges();
+
+    @Caption(name = "I Agree")
+    IPrimitive<Boolean> agree();
+
+    @Caption(name = "Type Your Full Name")
+    IPrimitive<String> fullName();
 }
