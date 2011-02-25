@@ -13,13 +13,15 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Utility extends IEntity {
-	
+
     /**
      * Utility type (max 32 chars)
      */
+    @ToString
     IPrimitive<String> name();
 }

@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 /**
  * For now we just assume 2 types of concessions: - Free Months: certain number of months
@@ -33,10 +34,12 @@ import com.pyx4j.entity.shared.IEntity;
  * 
  */
 public interface Concession extends IEntity {
+
     /**
      * Concession type (max 128 chars) TODO we will need to have this of type
      * ConcessionType
      */
+    @ToString
     IPrimitive<String> name();
 
     public enum ConcessionType {

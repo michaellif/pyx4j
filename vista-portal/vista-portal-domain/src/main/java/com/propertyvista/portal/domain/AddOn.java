@@ -13,8 +13,9 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 /**
  * For now assume add-ons have monthly cost to be used in calculation of total monthly
@@ -28,11 +29,13 @@ public interface AddOn extends IEntity {
     /**
      * Amenity type (max 32 chars)
      */
+    @ToString
     IPrimitive<String> name();
 
     /**
      * How much it costs monthly for this add-on
      */
+    @ToString
     IPrimitive<Double> monthlyCost();
 
 }
