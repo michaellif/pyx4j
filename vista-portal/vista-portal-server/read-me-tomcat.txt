@@ -1,0 +1,6 @@
+
+Make local tomcat run on 9000
+
+Add -Dcom.pyx4j.appConfig=DevTomcat
+
+Create mail-credentials.properties  in tomcat home.

@@ -7,37 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-01-25
+ * Created on 2011-02-25
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.server;
 
-import javax.servlet.ServletContext;
-
-import com.pyx4j.config.server.ServerSideConfiguration;
-
-public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
+public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfigurationDev {
 
     @Override
-    public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
-        // Disable environment selection.
-        return this;
-    }
-
-    @Override
-    public boolean isDevelopmentBehavior() {
+    public boolean openIdrequired() {
         return true;
     }
 
     @Override
-    public boolean openIdrequired() {
-        return false;
-    }
-
-    @Override
     public String getMainApplicationURL() {
-        return "http://localhost:8888/vista/";
+        return "http://localhost:9000/vista/";
     }
-
 }
