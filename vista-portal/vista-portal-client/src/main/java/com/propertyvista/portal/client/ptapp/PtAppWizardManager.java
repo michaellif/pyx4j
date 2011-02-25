@@ -42,6 +42,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PtAppWizardManager implements SecurityControllerHandler {
 
@@ -173,7 +175,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         ginjector.getPlaceController().goTo(nextStep.getPlace());
 
         // save progress to DB
-        saveApplicationProgress();
+        //saveApplicationProgress();
     }
 
     private void saveApplicationProgress() {
@@ -189,7 +191,18 @@ public class PtAppWizardManager implements SecurityControllerHandler {
     private void initApplicationProcess(Application result) {
         application = result;
         wizardSteps = new Vector<WizardStep>();
-        progress = (ApplicationProgress) application.progress().cloneEntity();
+        //progress = (ApplicationProgress) application.progress().cloneEntity();
+
+        progress = EntityFactory.create(ApplicationProgress.class);
+        progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
+
         for (ApplicationWizardStep step : progress.steps()) {
             wizardSteps.add(new WizardStep(step));
         }
@@ -200,6 +213,14 @@ public class PtAppWizardManager implements SecurityControllerHandler {
             }
         }
         nextStep();
+    }
+
+    @Deprecated
+    private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
+        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
+        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
+        ws.status().setValue(status);
+        return ws;
     }
 
     @Override

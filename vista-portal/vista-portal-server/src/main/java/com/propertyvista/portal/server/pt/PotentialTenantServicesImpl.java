@@ -134,7 +134,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
                 progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
                 progress.application().set(application);
-                secureSave(progress);
+                //TODO fix
+                //secureSave(progress);
 
                 application.progress().set(progress);
 
@@ -154,9 +155,10 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     }
                 }
 
-                EntityQueryCriteria<ApplicationProgress> ppplicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-                criteria.add(PropertyCriterion.eq(ppplicationProgressCriteria.proto().application(), application));
-                application.progress().set(secureRetrieve(ppplicationProgressCriteria));
+                //TODO fix
+                //EntityQueryCriteria<ApplicationProgress> ppplicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+                //criteria.add(PropertyCriterion.eq(ppplicationProgressCriteria.proto().application(), application));
+                //application.progress().set(secureRetrieve(ppplicationProgressCriteria));
             }
             PtUserDataAccess.setCurrentUserApplication(application);
             return application;
