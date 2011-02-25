@@ -55,6 +55,10 @@ public interface PotentialTenantFinancial extends IApplicationEntity {
     @Deprecated
     StudentIncome studentIncome();
 
+    //TODO @Detached
+    // TODO Back-end to retrieve only values for ToString
+    PotentialTenantInfo tenant();
+
     @Owned
     IList<TenantIncome> incomes();
 
