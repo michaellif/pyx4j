@@ -200,6 +200,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
         unit.area().setValue(area);
         unit.bedrooms().setValue(bedrooms);
         unit.bathrooms().setValue(bathrooms);
+        unit.newLeaseTerms().set(leaseTerms);
 
         for (int i = 1; i < 4; i++) {
             MarketRent marketRent = EntityFactory.create(MarketRent.class);
