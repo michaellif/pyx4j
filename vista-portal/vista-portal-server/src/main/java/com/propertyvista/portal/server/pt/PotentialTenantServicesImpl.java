@@ -147,7 +147,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             } else {
                 //Verify if buildingName and floorplanName are the same
                 EntityQueryCriteria<UnitSelection> unitSelectionCriteria = EntityQueryCriteria.create(UnitSelection.class);
-                criteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
+                unitSelectionCriteria.add(PropertyCriterion.eq(unitSelectionCriteria.proto().application(), application));
                 UnitSelection unitSelection = secureRetrieve(unitSelectionCriteria);
 
                 if ((unitSelection != null) && (request != null)) {
@@ -157,12 +157,14 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     }
                 }
 
-                EntityQueryCriteria<ApplicationProgress> ppplicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
-                criteria.add(PropertyCriterion.eq(ppplicationProgressCriteria.proto().application(), application));
-                currentApplication.progress = secureRetrieve(ppplicationProgressCriteria);
+                EntityQueryCriteria<ApplicationProgress> applicationProgressCriteria = EntityQueryCriteria.create(ApplicationProgress.class);
+                applicationProgressCriteria.add(PropertyCriterion.eq(applicationProgressCriteria.proto().application(), application));
+                currentApplication.progress = secureRetrieve(applicationProgressCriteria);
             }
             PtUserDataAccess.setCurrentUserApplication(application);
             currentApplication.application = application;
+            log.info("Start application {}", application);
+            log.info("  progress {}", currentApplication.progress);
             return currentApplication;
         }
 

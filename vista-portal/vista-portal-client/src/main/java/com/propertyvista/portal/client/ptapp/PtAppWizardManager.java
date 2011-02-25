@@ -16,6 +16,8 @@ package com.propertyvista.portal.client.ptapp;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -42,7 +44,9 @@ import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 
-public class PtAppWizardManager implements SecurityControllerHandler {
+public class PtAppWizardManager {
+
+    private final static Logger log = LoggerFactory.getLogger(PtAppWizardManager.class);
 
     private static I18n i18n = I18nFactory.getI18n(PtAppWizardManager.class);
 
@@ -60,7 +64,13 @@ public class PtAppWizardManager implements SecurityControllerHandler {
 
     private PtAppWizardManager(SiteGinjector ginjector) {
         this.ginjector = ginjector;
-        ginjector.getEventBus().addHandler(SecurityControllerEvent.getType(), this);
+        ginjector.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                getCurrentApplication();
+            }
+        });
         wizardSteps = new Vector<WizardStep>();
         //TODO implement initial application message
         //showMessageDialog(i18n.tr("Application is looking for building availability..."), i18n.tr("Loading..."), null, null);
@@ -188,6 +198,9 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         for (ApplicationWizardStep step : currentApplication.progress.steps()) {
             wizardSteps.add(new WizardStep(step));
         }
+
+        log.info("start application {}", currentApplication.application);
+
         for (WizardStep step : wizardSteps) {
             if (step.getStatus() == ApplicationWizardStep.Status.current) {
                 ginjector.getPlaceController().goTo(step.getPlace());
@@ -197,8 +210,7 @@ public class PtAppWizardManager implements SecurityControllerHandler {
         nextStep();
     }
 
-    @Override
-    public void onSecurityContextChange(SecurityControllerEvent event) {
+    private void getCurrentApplication() {
         if (ClientSecurityController.checkBehavior(VistaBehavior.POTENCIAL_TENANT)) {
 
             RPCManager.execute(PotentialTenantServices.GetCurrentApplication.class, unitSelectionCriteria, new DefaultAsyncCallback<CurrentApplication>() {

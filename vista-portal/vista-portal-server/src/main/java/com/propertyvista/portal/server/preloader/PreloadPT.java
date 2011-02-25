@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
@@ -273,9 +274,14 @@ public class PreloadPT extends AbstractDataPreloader {
 
     @Override
     public String create() {
+        User user = EntityFactory.create(User.class);
+        user.name().setValue("z");
+        user.email().setValue("x");
+        PersistenceServicesFactory.getPersistenceService().persist(user);
+
         Application application = EntityFactory.create(Application.class);
         // TODO Dima. We need a use to bind this application to.
-        //application.user().set(user);
+        application.user().set(user);
         persist(application);
 
         UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
