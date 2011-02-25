@@ -96,6 +96,7 @@ public class ActivationServicesImpl implements ActivationServices {
             user.name().setValue(request.email().getValue());
 
             credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword(request.password().getValue()));
+            credential.enabled().setValue(Boolean.TRUE);
             credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
 
             PersistenceServicesFactory.getPersistenceService().persist(user);
