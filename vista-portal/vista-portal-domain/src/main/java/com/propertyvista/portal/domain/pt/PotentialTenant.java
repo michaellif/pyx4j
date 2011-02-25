@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain.pt;
 import java.io.Serializable;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -35,8 +36,12 @@ public interface PotentialTenant extends IPerson, IApplicationEntity {
 
     IPrimitive<Double> payment();
 
+    //TODO add appropriate description
+    @Caption(name = "Dependant", description = "A person who depends on another person, organization, etc., for support, aid, or sustenance, esp financial support")
     IPrimitive<Boolean> dependant();
 
+    //TODO add appropriate description
+    @Caption(name = "Take Ownership", description = "Take Ownership of application filling means ...")
     IPrimitive<Boolean> takeOwnership();
 
 }

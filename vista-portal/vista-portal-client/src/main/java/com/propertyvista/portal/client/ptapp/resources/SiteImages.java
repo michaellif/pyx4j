@@ -63,4 +63,7 @@ public interface SiteImages extends ClientBundle {
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
 
+    @Source("qv.png")
+    ImageResource qv();
+
 }

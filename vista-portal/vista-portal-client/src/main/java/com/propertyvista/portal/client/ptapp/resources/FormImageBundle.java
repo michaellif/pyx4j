@@ -35,4 +35,8 @@ public interface FormImageBundle extends FormsImageBundle {
     @Source("date.png")
     ImageResource triggerBlueDisabled();
 
+    @Override
+    @Source("qv.png")
+    public ImageResource formTooltipInfo();
+
 }

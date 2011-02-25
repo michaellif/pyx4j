@@ -23,13 +23,10 @@ public interface PotentialTenantInfo extends PotentialTenant {
     // secure information
     IPrimitive<String> driversLicense();
 
+    @Caption(name = "License Province")
     IPrimitive<String> driversLicenseState();
 
-    /**
-     * This can be SSN or Tax No. Since the form does not ask to indicate the type we will
-     * not store the type here
-     */
-    @Caption(name = "SSN Or Tax No.")
+    @Caption(name = "SIN")
     IPrimitive<String> secureIdentifier();
 
     IPrimitive<Boolean> canadianCitizen();
