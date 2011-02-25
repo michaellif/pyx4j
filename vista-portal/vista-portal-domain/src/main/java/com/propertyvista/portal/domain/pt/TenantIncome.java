@@ -20,15 +20,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantIncome extends IEntity {
 
-    @Deprecated
-    public static enum IncomeType {
-        pension, unemployment, retired, odsp, dividends, other
-    }
-
-    @Caption(name = "Description")
-    @Deprecated
-    IPrimitive<IncomeType> type();
-
     IPrimitive<IncomeSource> incomeSource();
 
     @Caption(name = "Monthly amount")

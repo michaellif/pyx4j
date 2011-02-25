@@ -32,6 +32,11 @@ import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
+import com.propertyvista.portal.domain.pt.PotentialTenantFinancialList;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -194,6 +199,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                         ret = createCharges();
                     } else if (request.proto() instanceof Summary) {
                         ret = EntityFactory.create(Summary.class);
+                    } else if (request.proto() instanceof PotentialTenantFinancial) {
+                        ret = createFinancial();
                     }
                 }
             } else {
@@ -213,10 +220,36 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             return ret;
         }
 
-        private IEntity createCharges() {
+        private Charges createCharges() {
             Charges charges = EntityFactory.create(Charges.class);
             ChargesServerCalculation.dummyPopulate(charges, PtUserDataAccess.getCurrentUserApplication());
             return charges;
+        }
+
+        private PotentialTenantFinancial createFinancial() {
+            Application application = PtUserDataAccess.getCurrentUserApplication();
+
+            PotentialTenantFinancial financial = EntityFactory.create(PotentialTenantFinancial.class);
+            financial.application().set(application);
+
+            EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+            PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+            PotentialTenantFinancialList finList = EntityFactory.create(PotentialTenantFinancialList.class);
+            finList.application().set(application);
+            finList.tenantFinancials().add(financial);
+
+            for (PotentialTenantInfo pti : tenantList.tenants()) {
+                if (pti.relationship().getValue().equals(Relationship.Applicant)) {
+                    financial.tenant().set(pti);
+                    break;
+                }
+            }
+
+            PersistenceServicesFactory.getPersistenceService().persist(finList);
+
+            return financial;
         }
 
         private void retrieveSummary(Summary summary) {

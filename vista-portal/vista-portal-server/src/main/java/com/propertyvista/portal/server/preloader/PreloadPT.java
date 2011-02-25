@@ -29,12 +29,12 @@ import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.Employer;
+import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
-import com.propertyvista.portal.domain.pt.PotentialTenantFinancial.EmploymentType;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
@@ -43,7 +43,6 @@ import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.pt.TenantIncome;
-import com.propertyvista.portal.domain.pt.TenantIncome.IncomeType;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
@@ -76,23 +75,13 @@ public class PreloadPT extends AbstractDataPreloader {
     public static PotentialTenantFinancial createFinancial() {
         PotentialTenantFinancial ptf = EntityFactory.create(PotentialTenantFinancial.class);
 
-        ptf.occupation().setValue(RandomUtil.random(EmploymentType.values()));
-
-        Employer currentEmployer = createEmployer();
-        PersistenceServicesFactory.getPersistenceService().persist(currentEmployer);
-        ptf.currentEmployer().set(currentEmployer);
-
-        Employer previousEmployer = createEmployer();
-        PersistenceServicesFactory.getPersistenceService().persist(previousEmployer);
-        ptf.previousEmployer().set(previousEmployer);
-
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
 
-            income.type().setValue(RandomUtil.random(IncomeType.values()));
+            income.incomeSource().setValue(IncomeSource.fulltime);
+            income.employer().set(createEmployer());
             income.monthlyAmount().setValue(10d + RandomUtil.randomInt(5000));
 
-            PersistenceServicesFactory.getPersistenceService().persist(income);
             ptf.incomes().add(income);
         }
 

@@ -15,13 +15,11 @@ package com.propertyvista.portal.domain.pt;
 
 public enum IncomeSource {
 
-    //TODO add texts as in 
+    fulltime("Full time"),
 
-    fulltime,
+    parttime("Part time"),
 
-    parttime,
-
-    selfemployed,
+    selfemployed("Self employed"),
 
     seasonallyEmployed,
 
@@ -40,5 +38,20 @@ public enum IncomeSource {
     dividends,
 
     other;
+
+    private final String label;
+
+    IncomeSource() {
+        this.label = name();
+    }
+
+    IncomeSource(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String toString() {
+        return label;
+    }
 
 }
