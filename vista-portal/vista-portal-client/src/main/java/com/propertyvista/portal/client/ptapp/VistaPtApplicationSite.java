@@ -9,7 +9,7 @@
  *
  * Created on Feb 1, 2011
  * @author vlads
- * @version $Id: VistaTesterSite.java 36 2011-02-05 13:34:09Z michaellif $
+ * @version $Id$
  */
 package com.propertyvista.portal.client.ptapp;
 

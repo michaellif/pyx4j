@@ -9,7 +9,7 @@
  *
  * Created on 2011-02-22
  * @author aroytbur
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * @version $Id$
  */
 package com.propertyvista.portal.domain;
 

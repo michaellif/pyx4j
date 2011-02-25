@@ -9,7 +9,7 @@
  *
  * Created on Feb 16, 2011
  * @author antonk
- * @version $Id: InfoViewPresenter.java 201 2011-02-16 23:35:22Z michaellif $
+ * @version $Id$
  */
 package com.propertyvista.portal.client.ptapp.ui;
 

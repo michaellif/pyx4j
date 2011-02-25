@@ -9,7 +9,7 @@
  *
  * Created on Feb 1, 2011
  * @author Misha
- * @version $Id: VistaTesterDispatcher.java 32 2011-02-02 04:49:39Z vlads $
+ * @version $Id$
  */package com.propertyvista.portal.tester.resources;
 
 import com.google.gwt.core.client.GWT;

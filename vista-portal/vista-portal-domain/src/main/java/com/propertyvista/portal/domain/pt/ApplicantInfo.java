@@ -14,7 +14,7 @@ import com.pyx4j.entity.shared.IList;
  *
  * Created on 2011-02-10
  * @author antonk
- * @version $Id: code-templates.xml 7812 2011-01-10 20:13:00Z vlads $
+ * @version $Id$
  */
 
 public interface ApplicantInfo extends IEntity {
