@@ -16,16 +16,23 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;
 
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -49,14 +56,14 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
         NavigTab(final WizardStep step, boolean visited) {
             super();
             getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            sinkEvents(Event.ONCLICK);
 
-            Anchor anchor = new Anchor(presenter.getNavigLabel(step.getPlace()));
-            anchor.getElement().getStyle().setProperty("textDecoration", "none");
-            anchor.getElement().getStyle().setPaddingLeft(7, Unit.PX);
-            anchor.getElement().getStyle().setFontSize(15, Unit.PX);
-            anchor.getElement().getStyle().setProperty("color", "#333");
-            anchor.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-            add(anchor);
+            final Label label = new Label(presenter.getNavigLabel(step.getPlace()));
+            label.getElement().getStyle().setPaddingLeft(7, Unit.PX);
+            label.getElement().getStyle().setFontSize(15, Unit.PX);
+            label.getElement().getStyle().setProperty("color", "#333");
+            label.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            add(label);
 
             switch (step.getStatus()) {
             case hasAlert:
@@ -85,17 +92,35 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
 
             getElement().getStyle().setProperty("lineHeight", "43px");
             getElement().getStyle().setProperty("textAlign", "center");
+            getElement().getStyle().setCursor(Cursor.DEFAULT);
 
             if (visited) {
                 getElement().getStyle().setBackgroundColor("#999999");
+                if (!Status.current.equals(step.getStatus())) {
+                    addDomHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            presenter.navigTo(place);
+                        }
+                    }, ClickEvent.getType());
+                    addDomHandler(new MouseOverHandler() {
+
+                        @Override
+                        public void onMouseOver(MouseOverEvent event) {
+                            label.getElement().getStyle().setProperty("color", "#555");
+                        }
+                    }, MouseOverEvent.getType());
+                    addDomHandler(new MouseOutHandler() {
+                        @Override
+                        public void onMouseOut(MouseOutEvent event) {
+                            label.getElement().getStyle().setProperty("color", "#333");
+                        }
+                    }, MouseOutEvent.getType());
+
+                    getElement().getStyle().setCursor(Cursor.POINTER);
+                }
             }
 
-            anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    presenter.navigTo(place);
-                }
-            });
         }
     }
 
