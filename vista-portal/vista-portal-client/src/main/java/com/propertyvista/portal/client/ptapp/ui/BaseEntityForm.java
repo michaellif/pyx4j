@@ -65,6 +65,8 @@ public class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(create(proto.mobilePhone(), parent)));
         main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto.workPhone(), parent)));
+        main.add(new HTML());
         main.add(new VistaWidgetDecorator(create(proto.email(), parent)));
     }
 

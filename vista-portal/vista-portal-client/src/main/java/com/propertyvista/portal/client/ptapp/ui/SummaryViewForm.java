@@ -340,6 +340,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 panel.add(new VistaTextPairDecorator(pti.homePhone().getMeta().getCaption(), pti.homePhone().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.mobilePhone().getMeta().getCaption(), pti.mobilePhone().getStringView(), dd));
+                panel.add(new VistaTextPairDecorator(pti.workPhone().getMeta().getCaption(), pti.workPhone().getStringView(), dd));
                 panel.add(new VistaTextPairDecorator(pti.email().getMeta().getCaption(), pti.email().getStringView(), dd));
                 panel.setWidth("40%");
                 add(panel);

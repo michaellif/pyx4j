@@ -41,6 +41,9 @@ public interface IPerson {
     @Caption(name = "Mobile")
     public abstract IPrimitive<String> mobilePhone();
 
+    @Caption(name = "Work")
+    public abstract IPrimitive<String> workPhone();
+
     @Caption(name = "Email")
     public abstract IPrimitive<String> email();
 

@@ -230,6 +230,7 @@ public class PreloadPT extends AbstractDataPreloader {
         pt.birthDate().setValue(RandomUtil.randomDate(1930, 1980));
         pt.homePhone().setValue(RandomUtil.randomPhone());
         pt.mobilePhone().setValue(RandomUtil.randomPhone());
+        pt.workPhone().setValue(RandomUtil.randomPhone());
 
         String email = pt.firstName().getStringView().toLowerCase() + "." + pt.lastName().getStringView().toLowerCase() + "@"
                 + RandomUtil.random(DemoData.EMAIL_DOMAINS);
