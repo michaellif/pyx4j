@@ -19,7 +19,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
@@ -88,8 +93,6 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.getElement().getStyle().setFloat(Float.LEFT);
-        //        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        //        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         label.setHorizontalAlignment(decorData.labelAlignment);
         if (decorData.labelWidth != 0)
@@ -117,13 +120,9 @@ public class VistaWidgetDecorator extends FlowPanel {
             });
         }
 
-        //        if (decorData.componentWidth != 0)
-        //            nativeComponent.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
-
         SimplePanel nativeComponentHolder = new SimplePanel();
+
         nativeComponentHolder.getElement().getStyle().setFloat(Float.LEFT);
-        //        nativeComponent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        //        nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         if (decorData.componentWidth != 0)
             nativeComponentHolder.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
 
@@ -132,15 +131,11 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         imageInfoWarnHolder = new ImageHolder("18px");
         imageInfoWarnHolder.getElement().getStyle().setFloat(Float.LEFT);
-        //        imageInfoWarnHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        //        imageInfoWarnHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
         imageMandatoryHolder = new ImageHolder(decorData.gapWidth + decorData.gapUnit.getType());
         imageMandatoryHolder.getElement().getStyle().setFloat(Float.LEFT);
-        //        imageMandatoryHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        //        imageMandatoryHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         imageMandatoryHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Gap);
 
         renderToolTip();
