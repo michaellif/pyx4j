@@ -31,6 +31,27 @@ import com.pyx4j.commons.TimeUtils;
 
 public class DateUtils extends TimeUtils {
 
+    /**
+     * Quickly create a date object
+     * 
+     * @param year
+     * @param month
+     *            starts with 0, January == 0
+     * @param day
+     * @return
+     */
+    public static Date createDate(int year, int month, int day) {
+        Calendar c = new GregorianCalendar();
+
+        dayStart(c);
+
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, day);
+
+        return c.getTime();
+    }
+
     public static void dayStart(Calendar calendar) {
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -61,7 +82,7 @@ public class DateUtils extends TimeUtils {
 
         "yyyy-MM-dd HH:mm",
 
-        // We are North America after all.
+                // We are North America after all.
 
                 "MM-dd-yyyy HH:mm:ss.SSS",
 
