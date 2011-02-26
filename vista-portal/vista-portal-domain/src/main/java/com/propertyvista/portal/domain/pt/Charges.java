@@ -14,10 +14,8 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IList;
 
 public interface Charges extends IApplicationEntity {
 
@@ -42,18 +40,9 @@ public interface Charges extends IApplicationEntity {
     @Deprecated
     ChargeLineList upgradeChargesOld();
 
-    @EmbeddedEntity
-    public interface MonthlyCharges extends ChargeLineList {
-
-        @Owned
-        @Caption(name = "Available Upgrades")
-        IList<ChargeLine> upgradeCharges();
-
-    }
-
     @Caption(name = "Rent-Related Charges")
     @Owned
-    MonthlyCharges monthlyCharges();
+    ChargeLineMontlyList monthlyCharges();
 
     // TODO add Pro-Rated duration,fraction information for calulation to be posible 
 
