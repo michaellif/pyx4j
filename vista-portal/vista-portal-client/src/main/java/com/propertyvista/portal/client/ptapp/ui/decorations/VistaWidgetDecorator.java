@@ -123,7 +123,8 @@ public class VistaWidgetDecorator extends FlowPanel {
         infoImageHolder = new SpaceHolder("18px");
         infoImageHolder.getElement().getStyle().setFloat(Float.LEFT);
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
-        infoImageHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        infoImageHolder.getElement().getStyle().setPaddingLeft(5, Unit.PX);
+        infoImageHolder.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
         if (component.getToolTip() != null && component.getToolTip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
