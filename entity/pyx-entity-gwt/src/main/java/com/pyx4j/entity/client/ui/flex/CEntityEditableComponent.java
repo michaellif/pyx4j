@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexConextComponent {
+public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexConextComponent {
 
     private final EntityBinder<E> binder;
 
@@ -41,8 +41,7 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
     }
 
     @Override
-    public void createContent() {
-    }
+    public abstract void createContent();
 
     public EntityBinder<E> binder() {
         return binder;
