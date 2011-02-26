@@ -26,7 +26,7 @@ public class VistaTextPairDecorator extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_VistatextPairDecorator";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Left, Right, Gap
+        Left, Right
     }
 
     public VistaTextPairDecorator(String left, String right) {
