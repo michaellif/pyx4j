@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.propertyvista.portal.domain.pt.PropertyProfile;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.StringLength;
@@ -66,4 +68,5 @@ public interface Building extends Property {
 
     IList<OrganizationContacts> contactsList();
 
+    PropertyProfile propertyProfile();
 }

@@ -27,6 +27,7 @@ import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Amenity;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Building.BuildingType;
+import com.propertyvista.portal.domain.ChargeType;
 import com.propertyvista.portal.domain.Complex;
 import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.Concession.ConcessionType;
@@ -42,6 +43,8 @@ import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
+import com.propertyvista.portal.domain.pt.PetChargeRule;
+import com.propertyvista.portal.domain.pt.PropertyProfile;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -167,8 +170,40 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return addOn;
     }
 
+    public static ChargeType createChargeType(ChargeType.Mode mode) {
+        ChargeType chargeType = EntityFactory.create(ChargeType.class);
+        chargeType.chargeType().setValue(mode);
+        persist(chargeType);
+        return chargeType;
+    }
+
+    public static PetChargeRule createPetCharge(ChargeType.Mode mode, int value) {
+        PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
+        petCharge.petChargeType().set(createChargeType(mode));
+        petCharge.value().setValue(value);
+        persist(petCharge);
+        return petCharge;
+    }
+
+    public static PropertyProfile createPropertyProfile(int index) {
+        PropertyProfile propertyProfile = EntityFactory.create(PropertyProfile.class);
+
+        PetChargeRule petCharge;
+        if (index == 0) {
+            petCharge = createPetCharge(ChargeType.Mode.deposit, 100);
+        } else if (index == 1) {
+            petCharge = createPetCharge(ChargeType.Mode.oneTime, 50);
+        } else {
+            petCharge = createPetCharge(ChargeType.Mode.monthly, 200);
+        }
+        propertyProfile.petCharge().set(petCharge);
+
+        persist(propertyProfile);
+        return propertyProfile;
+    }
+
     private Building createBuilding(String propertyCode, BuildingType buildingType, Complex complex, String website, Address address, List<Phone> phones,
-            Email email) {
+            Email email, PropertyProfile propertyProfile) {
         Building building = EntityFactory.create(Building.class);
 
         building.propertyCode().setValue(propertyCode);
@@ -182,6 +217,8 @@ public class PreloadBuildings extends AbstractDataPreloader {
         for (Phone phone : phones) {
             building.phoneList().add(phone);
         }
+
+        building.propertyProfile().set(propertyProfile);
 
         PersistenceServicesFactory.getPersistenceService().persist(building);
 
@@ -351,7 +388,11 @@ public class PreloadBuildings extends AbstractDataPreloader {
                 //UI is looking for this building, see references!
                 propertyCode = DemoData.REGISTRATION_DEFAULT_BUILDINGNAME;
             }
-            Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email);
+
+            // property profile
+            PropertyProfile propertyProfile = createPropertyProfile(b);
+
+            Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email, propertyProfile);
             //			log.info("Created: " + building);
 
             // now create units for the building
