@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -25,6 +26,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -155,6 +160,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         private static final String UNIT_DETAIL_PANEL_STYLENAME = "unitDetailPanel";
 
+        private static final String UNIT_PANELS_SELECTED_STYLENAME_SUFIX = "-selected";
+
         public AvailableUnitsTable() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -206,7 +213,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             addCell("Plan", "&nbsp", floorplan);
             addCell("Type", availableUnits.floorplan().name().getStringView(), floorplan);
-            addCell("Rent", "From " + minRentValue(availableUnits.units()) + "$", floorplan);
+            addCell("Rent", "From " + "$" + minRentValue(availableUnits.units()), floorplan);
             //                       addCell("From " + availableUnits.rent().getValue().getA() + "$" + "to " + availableUnits.rent().getValue().getB() + "$", tableLayout.get("Rent"), floorplan);
             //            System.out.println(">>>" + availableUnits.rent().toString());
 
@@ -226,6 +233,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                 final FlowPanel unitRowPanel = new FlowPanel();
                 unitRowPanel.setStyleName(UNIT_ROW_PANEL_STYLENAME);
                 unitRowPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                unitRowPanel.getElement().getStyle().setCursor(Cursor.POINTER);
                 unitRowPanel.addDomHandler(new ClickHandler() {
 
                     @Override
@@ -235,6 +243,25 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                         selectUnitRow(unitRowPanel);
                     }
                 }, ClickEvent.getType());
+
+                unitRowPanel.addDomHandler(new MouseOverHandler() {
+
+                    @Override
+                    public void onMouseOver(MouseOverEvent event) {
+                        unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
+                    }
+                }, MouseOverEvent.getType());
+
+                unitRowPanel.addDomHandler(new MouseOutHandler() {
+
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        if (!unitRowPanel.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME + UNIT_PANELS_SELECTED_STYLENAME_SUFIX)) {
+                            unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
+                            unitRowPanel.getElement().getStyle().setBackgroundColor("");
+                        }
+                    }
+                }, MouseOutEvent.getType());
 
                 addCell("Plan", "&nbsp", unitRowPanel);
                 addCell("Type", unit.unitType().getStringView(), unitRowPanel);
@@ -359,9 +386,11 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                     w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
                 }
                 // clear selected background:
-                if (w.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME)) {
+                if (w.getStyleName().contains(UNIT_ROW_PANEL_STYLENAME)) {
                     w.getElement().getStyle().setBackgroundColor("");
                     w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+                    w.getElement().getStyle().setCursor(Cursor.POINTER);
+                    w.setStyleName(UNIT_ROW_PANEL_STYLENAME);
                 }
             }
 
@@ -371,6 +400,8 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             unitRowPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
             unitRowPanel.getElement().getStyle().setBorderColor("black");
             unitRowPanel.getElement().getStyle().setProperty("borderBottom", "none");
+            unitRowPanel.getElement().getStyle().setCursor(Cursor.DEFAULT);
+            unitRowPanel.setStyleName(UNIT_ROW_PANEL_STYLENAME + UNIT_PANELS_SELECTED_STYLENAME_SUFIX);
 
             Widget detailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
             detailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
