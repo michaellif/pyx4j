@@ -49,7 +49,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
             @Override
             public void onClick(ClickEvent event) {
                 PtAppWizardManager.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
-                if (!form.isValid()) {
+                if (!form.validate()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
                 presenter.save(getValue());

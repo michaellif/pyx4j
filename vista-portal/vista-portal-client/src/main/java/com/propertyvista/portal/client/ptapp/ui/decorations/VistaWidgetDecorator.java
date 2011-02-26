@@ -19,12 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
@@ -36,11 +31,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.gwt.Cursor;
-import com.pyx4j.forms.client.gwt.NativeCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.decorators.ImageHolder;
+import com.pyx4j.forms.client.ui.Cursor;
+import com.pyx4j.forms.client.ui.NativeCheckBox;
+import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
@@ -62,13 +57,9 @@ public class VistaWidgetDecorator extends FlowPanel {
 
     private final Label label;
 
-    private final ImageHolder imageMandatoryHolder;
+    private final Label mandatoryLabel;
 
-    private Image imageInfoWarn;
-
-    private final ImageHolder imageInfoWarnHolder;
-
-    private Image imageMandatory;
+    private final SpaceHolder infoImageHolder;
 
     private Tooltip tooltip;
 
@@ -129,17 +120,21 @@ public class VistaWidgetDecorator extends FlowPanel {
         nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
         nativeComponentHolder.setWidget(nativeComponent);
 
-        imageInfoWarnHolder = new ImageHolder("18px");
-        imageInfoWarnHolder.getElement().getStyle().setFloat(Float.LEFT);
-        imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
-        imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        infoImageHolder = new SpaceHolder("18px");
+        infoImageHolder.getElement().getStyle().setFloat(Float.LEFT);
+        infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
+        infoImageHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
-        imageMandatoryHolder = new ImageHolder(decorData.gapWidth + decorData.gapUnit.getType());
-        imageMandatoryHolder.getElement().getStyle().setFloat(Float.LEFT);
-        imageMandatoryHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Gap);
+        if (component.getToolTip() != null && component.getToolTip().trim().length() > 0) {
+            Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
+            tooltip = Tooltip.tooltip(infoImage, component.getToolTip());
+            infoImageHolder.setWidget(infoImage);
+        }
 
-        renderToolTip();
-        renderMandatoryStar();
+        mandatoryLabel = new Label();
+        mandatoryLabel.getElement().getStyle().setFloat(Float.LEFT);
+
+        renderValidationMessage();
 
         label.setVisible(component.isVisible());
         setVisible(component.isVisible());
@@ -148,61 +143,23 @@ public class VistaWidgetDecorator extends FlowPanel {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
                 if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
-                    label.setVisible(component.isVisible());
                     setVisible(component.isVisible());
-                } else if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.TITLE_PROPERTY) {
-                    label.setText(component.getTitle() + ":");
                 }
-                renderToolTip();
-                renderMandatoryStar();
+                renderValidationMessage();
             }
         });
 
         // put it together:
         add(label);
-        add(imageMandatoryHolder);
+        add(infoImageHolder);
         add(nativeComponentHolder);
-        add(imageInfoWarnHolder);
+        add(mandatoryLabel);
 
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
     }
 
-    private void renderToolTip() {
-        if (component.getToolTip() == null || component.getToolTip().trim().length() == 0) {
-            imageInfoWarnHolder.clear();
-        } else {
-            if (imageInfoWarn == null) {
-                imageInfoWarn = new Image();
-                tooltip = Tooltip.tooltip(imageInfoWarn, "");
-            }
-            if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
-                    && !((CEditableComponent<?, ?>) component).isValid()) {
-                imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
-            } else {
-                imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());
-            }
-            imageInfoWarnHolder.setWidget(imageInfoWarn);
-            tooltip.setTooltipText(component.getToolTip());
-
-        }
-    }
-
-    private void renderMandatoryStar() {
-        if (component instanceof CEditableComponent<?, ?>) {
-            if (!((CEditableComponent<?, ?>) component).isMandatoryConditionMet()) {
-                if (imageMandatory == null) {
-                    imageMandatory = new Image();
-                    imageMandatory.setResource(ImageFactory.getImages().mandatory());
-                    imageMandatory.setTitle("This field is mandatory");
-                }
-                imageMandatoryHolder.setWidget(imageMandatory);
-            } else {
-                imageMandatoryHolder.clear();
-            }
-        } else {
-            imageMandatoryHolder.clear();
-        }
+    private void renderValidationMessage() {
     }
 
     static public class DecorationData {

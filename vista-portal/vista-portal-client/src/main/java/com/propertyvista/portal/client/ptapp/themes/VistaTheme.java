@@ -21,7 +21,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.StyleSuffix;
 
-import com.pyx4j.forms.client.gwt.NativeTextBox;
+import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.style.CSSClass;
@@ -578,7 +578,7 @@ public abstract class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.invalid));
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", "red");
+        style.addProperty("border-color", "#f79494");
         style.addProperty("background-color", "#f8d8d8");
         addStyle(style);
 

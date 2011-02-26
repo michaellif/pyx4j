@@ -23,7 +23,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     // secure information
     IPrimitive<String> driversLicense();
 
-    @Caption(name = "License Province")
+    @Caption(name = "License Province", description = "Province, in which a license has been issued.")
     IPrimitive<String> driversLicenseState();
 
     @Caption(name = "SIN")
