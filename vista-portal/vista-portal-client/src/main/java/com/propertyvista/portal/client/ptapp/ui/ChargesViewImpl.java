@@ -20,6 +20,6 @@ import com.propertyvista.portal.domain.pt.Charges;
 public class ChargesViewImpl extends WizardStepViewImpl<Charges, ChargesViewPresenter> implements ChargesView {
 
     public ChargesViewImpl() {
-        super(new ChargesViewFormV1());
+        super(new ChargesViewForm());
     }
 }

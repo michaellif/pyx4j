@@ -28,7 +28,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-public class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
+public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public BaseEntityForm(Class<E> clazz) {
         super(clazz);
