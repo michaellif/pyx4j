@@ -100,7 +100,6 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
         if (comp != null) {
             parent.bind(comp, member);
-            comp.createContent();
             return comp;
         } else {
             return parentForm.create(member, parent);

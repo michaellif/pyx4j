@@ -15,10 +15,15 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.Money;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface Charge extends IEntity {
+
     @EmbeddedEntity
+    @Editor(type = EditorType.label)
     Money charge();
+
 }

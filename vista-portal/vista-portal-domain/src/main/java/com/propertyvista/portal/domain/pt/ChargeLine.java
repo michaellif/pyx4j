@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface ChargeLine extends Charge {
@@ -57,11 +59,18 @@ public interface ChargeLine extends Charge {
         public String getLabel() {
             return label;
         }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
 
+    @Editor(type = EditorType.label)
     IPrimitive<ChargeType> type();
 
     IPrimitive<Boolean> selected();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> label();
 }

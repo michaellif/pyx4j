@@ -15,12 +15,14 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 import com.propertyvista.portal.domain.pt.IPerson;
 
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,9 +36,13 @@ public class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     @Override
     protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
-        //XXX: stupid hack
-        if (member.getClass().getName().contains("Money")) {
-            return new MoneyForm();
+        if (member.getValueClass().equals(Money.class)) {
+            EditorType editorType = member.getMeta().getEditorType();
+            if ((editorType != null) && (editorType == EditorType.label)) {
+                return new ReadOnlyMoneyForm();
+            } else {
+                return new MoneyForm();
+            }
         } else {
             return super.createMemberEditor(member);
         }
