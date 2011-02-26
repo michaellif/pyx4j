@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 
-public interface ChargeLineMontlyList extends ChargeLineList {
+public interface ChargeLineListWithUpgrades extends ChargeLineList {
 
     @Owned
     @Caption(name = "Available Upgrades")

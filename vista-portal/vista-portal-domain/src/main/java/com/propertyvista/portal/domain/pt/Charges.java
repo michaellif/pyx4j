@@ -45,7 +45,7 @@ public interface Charges extends IApplicationEntity {
 
     @Caption(name = "Rent-Related Charges")
     @Owned
-    ChargeLineMontlyList monthlyCharges();
+    ChargeLineListWithUpgrades monthlyCharges();
 
     // TODO add Pro-Rated duration,fraction information for calulation to be posible 
 
