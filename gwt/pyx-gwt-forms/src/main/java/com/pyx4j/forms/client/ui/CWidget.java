@@ -33,7 +33,7 @@ public class CWidget extends CComponent<NativeWidgetHolder> {
     }
 
     @Override
-    protected NativeWidgetHolder initWidget() {
+    protected NativeWidgetHolder createWidget() {
         return new NativeWidgetHolder(widget);
     }
 

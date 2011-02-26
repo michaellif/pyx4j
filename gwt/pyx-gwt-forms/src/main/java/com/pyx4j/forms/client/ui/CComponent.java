@@ -210,7 +210,11 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
 
-    protected abstract WIDGET_TYPE initWidget();
+    protected abstract WIDGET_TYPE createWidget();
+
+    protected WIDGET_TYPE initWidget() {
+        return createWidget();
+    }
 
     protected void onWidgetCreated() {
         applyAccessibilityRules();
@@ -223,7 +227,11 @@ public abstract class CComponent<WIDGET_TYPE extends Widget & INativeComponent> 
     @Override
     public WIDGET_TYPE asWidget() {
         if (widget == null) {
-            widget = initWidget();
+            try {
+                widget = initWidget();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
             if (getDebugId() != null) {
                 setDebugId(getDebugId());
             }

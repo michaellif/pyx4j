@@ -41,7 +41,7 @@ public class CHyperlink extends CFocusComponent<NativeHyperlink> {
     }
 
     @Override
-    protected NativeHyperlink initWidget() {
+    protected NativeHyperlink createWidget() {
         return new NativeHyperlink(this, command);
     }
 

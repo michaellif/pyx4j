@@ -39,7 +39,7 @@ public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
     }
 
     @Override
-    protected NativeCheckBox initWidget() {
+    protected NativeCheckBox createWidget() {
         return new NativeCheckBox(this);
     }
 

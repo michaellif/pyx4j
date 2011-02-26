@@ -33,7 +33,6 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
 
-
 public class NativeTextBoxDelegate<E> {
 
     private final CTextFieldBase<E, ?> cTextBox;
@@ -79,15 +78,7 @@ public class NativeTextBoxDelegate<E> {
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 keyTimer.cancel();
-                keyTimer.schedule(500);
-            }
-        });
-
-        nativeTextBox.addFocusHandler(new FocusHandler() {
-
-            @Override
-            public void onFocus(FocusEvent event) {
-                cTextField.onEditingStart();
+                keyTimer.schedule(CTextComponent.PARSINT_PERIOD);
             }
         });
 
@@ -96,7 +87,6 @@ public class NativeTextBoxDelegate<E> {
             @Override
             public void onBlur(BlurEvent event) {
                 nativeValueUpdate();
-                cTextField.onEditingStop();
             }
         });
 
@@ -118,7 +108,7 @@ public class NativeTextBoxDelegate<E> {
         // Prevents setting the native value while propagating value from native component to CComponent
         nativeValueUpdate = true;
         try {
-            cTextBox.setValue(cTextBox.getFormat().parse(nativeTextBox.getNativeText()));
+            cTextBox.setValueByNativeComponent(cTextBox.getFormat().parse(nativeTextBox.getNativeText()));
         } finally {
             nativeValueUpdate = false;
         }

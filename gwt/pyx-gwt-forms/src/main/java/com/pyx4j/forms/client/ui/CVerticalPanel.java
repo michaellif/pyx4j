@@ -24,7 +24,7 @@ package com.pyx4j.forms.client.ui;
 public class CVerticalPanel extends CPanelBase<NativeVerticalPanel> {
 
     @Override
-    protected NativeVerticalPanel initWidget() {
+    protected NativeVerticalPanel createWidget() {
 
         NativeVerticalPanel nativePanel = new NativeVerticalPanel(this);
 

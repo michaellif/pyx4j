@@ -24,7 +24,7 @@ package com.pyx4j.forms.client.ui;
 public class CRichTextAreaPopup extends CRichTextAreaBase<NativeRichTextAreaPopup> {
 
     @Override
-    protected NativeRichTextAreaPopup initWidget() {
+    protected NativeRichTextAreaPopup createWidget() {
         return new NativeRichTextAreaPopup(this);
     }
 

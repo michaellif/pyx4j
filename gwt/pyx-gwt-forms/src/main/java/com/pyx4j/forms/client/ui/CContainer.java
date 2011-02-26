@@ -46,7 +46,7 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
             return true;
         }
         for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).validate()) {
                 return false;
             } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {
                 return false;
@@ -58,9 +58,9 @@ public abstract class CContainer<WIDGET_TYPE extends Widget & INativeComponent> 
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         for (CComponent<?> ccomponent : getComponents()) {
-            if (ccomponent instanceof CFormFolder && !((CFormFolder) ccomponent).isValid()) {
+            if (ccomponent instanceof CFormFolder && !((CFormFolder) ccomponent).validate()) {
                 validationResults.appendValidationErrors(((CFormFolder) ccomponent).getValidationResults());
-            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).validate()) {
                 validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
                         + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
             } else if (ccomponent instanceof CContainer && !((CContainer) ccomponent).isValid()) {

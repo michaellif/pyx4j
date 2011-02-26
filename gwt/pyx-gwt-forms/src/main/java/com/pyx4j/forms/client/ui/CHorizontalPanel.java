@@ -24,7 +24,7 @@ package com.pyx4j.forms.client.ui;
 public class CHorizontalPanel extends CPanelBase<NativeHorizontalPanel> {
 
     @Override
-    protected NativeHorizontalPanel initWidget() {
+    protected NativeHorizontalPanel createWidget() {
 
         NativeHorizontalPanel nativePanel = new NativeHorizontalPanel(this);
 

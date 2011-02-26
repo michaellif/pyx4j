@@ -48,11 +48,11 @@ public class ElegantWidgetDecorator extends DockPanel {
 
     private final Label label;
 
-    private final ImageHolder imageMandatoryHolder;
+    private final SpaceHolder imageMandatoryHolder;
 
     private Image imageInfoWarn;
 
-    private final ImageHolder imageInfoWarnHolder;
+    private final SpaceHolder imageInfoWarnHolder;
 
     private Image imageMandatory;
 
@@ -91,11 +91,11 @@ public class ElegantWidgetDecorator extends DockPanel {
             });
         }
 
-        imageInfoWarnHolder = new ImageHolder("18px");
+        imageInfoWarnHolder = new SpaceHolder("18px");
         imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
-        imageMandatoryHolder = new ImageHolder("7px");
+        imageMandatoryHolder = new SpaceHolder("7px");
 
         renderToolTip();
         renderMandatoryStar();
@@ -151,7 +151,7 @@ public class ElegantWidgetDecorator extends DockPanel {
                 tooltip = Tooltip.tooltip(imageInfoWarn, "");
             }
             if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
-                    && !((CEditableComponent<?, ?>) component).isValid()) {
+                    && !((CEditableComponent<?, ?>) component).validate()) {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
             } else {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());

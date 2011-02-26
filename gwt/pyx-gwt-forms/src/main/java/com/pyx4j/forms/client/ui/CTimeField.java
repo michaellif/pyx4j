@@ -41,7 +41,7 @@ public class CTimeField extends CTextFieldBase<Integer, NativeTextBox<Integer>> 
     }
 
     @Override
-    protected NativeTextBox<Integer> initWidget() {
+    protected NativeTextBox<Integer> createWidget() {
         return new NativeTextBox<Integer>(this);
     }
 

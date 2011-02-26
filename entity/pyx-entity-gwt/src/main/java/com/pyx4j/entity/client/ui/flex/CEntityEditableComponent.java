@@ -70,12 +70,12 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
     }
 
     @Override
-    public boolean isValid() {
+    public boolean validate() {
         if (!isEditable() || !isEnabled()) {
             return true;
         }
         for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).validate()) {
                 return false;
             }
         }
@@ -85,12 +85,12 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEntityEditableComponent<?> && !((CEntityEditableComponent<?>) ccomponent).isValid()) {
+            if (ccomponent instanceof CEntityEditableComponent<?> && !((CEntityEditableComponent<?>) ccomponent).validate()) {
                 validationResults.appendValidationErrors(((CEntityEditableComponent<?>) ccomponent).getValidationResults());
-            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
+            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).validate()) {
                 validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
                         + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
-            } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).isValid()) {
+            } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).validate()) {
                 validationResults.appendValidationErrors(((CEntityFolder<?>) ccomponent).getValidationResults());
             }
         }
@@ -110,7 +110,7 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
     }
 
     @Override
-    protected NativeEntityEditor<E> initWidget() {
+    protected NativeEntityEditor<E> createWidget() {
         return new NativeEntityEditor<E>();
     }
 

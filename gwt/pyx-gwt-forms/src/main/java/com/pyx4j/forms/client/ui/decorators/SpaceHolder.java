@@ -24,13 +24,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ImageHolder extends SimplePanel {
+public class SpaceHolder extends SimplePanel {
 
     private final String width;
 
     private HTML spaceHolder;
 
-    public ImageHolder(String width) {
+    public SpaceHolder(String width) {
         this.width = width;
         clear();
     }

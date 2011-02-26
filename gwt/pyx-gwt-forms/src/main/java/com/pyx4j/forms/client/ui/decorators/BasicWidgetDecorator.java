@@ -57,11 +57,11 @@ public class BasicWidgetDecorator extends FlowPanel {
 
     private final Label label;
 
-    private final ImageHolder imageMandatoryHolder;
+    private final SpaceHolder imageMandatoryHolder;
 
     private Image imageInfoWarn;
 
-    private final ImageHolder imageInfoWarnHolder;
+    private final SpaceHolder imageInfoWarnHolder;
 
     private Image imageMandatory;
 
@@ -153,12 +153,12 @@ public class BasicWidgetDecorator extends FlowPanel {
             });
         }
 
-        imageInfoWarnHolder = new ImageHolder("18px");
+        imageInfoWarnHolder = new SpaceHolder("18px");
         imageInfoWarnHolder.getElement().getStyle().setFloat(Float.LEFT);
         imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
-        imageMandatoryHolder = new ImageHolder(decorData.gapWidth + decorData.gapUnit.getType());
+        imageMandatoryHolder = new SpaceHolder(decorData.gapWidth + decorData.gapUnit.getType());
         imageMandatoryHolder.getElement().getStyle().setFloat(Float.LEFT);
         imageMandatoryHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Gap);
 
@@ -200,7 +200,7 @@ public class BasicWidgetDecorator extends FlowPanel {
                 tooltip = Tooltip.tooltip(imageInfoWarn, "");
             }
             if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
-                    && !((CEditableComponent<?, ?>) component).isValid()) {
+                    && !((CEditableComponent<?, ?>) component).validate()) {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
             } else {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());

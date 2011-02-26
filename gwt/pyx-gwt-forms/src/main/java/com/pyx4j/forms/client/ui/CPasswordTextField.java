@@ -40,7 +40,7 @@ public class CPasswordTextField extends CTextFieldBase<String, NativePasswordTex
     }
 
     @Override
-    protected NativePasswordTextBox initWidget() {
+    protected NativePasswordTextBox createWidget() {
         return new NativePasswordTextBox(this);
     }
 

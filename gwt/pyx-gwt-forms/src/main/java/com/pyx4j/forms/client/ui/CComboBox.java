@@ -67,7 +67,7 @@ public class CComboBox<E> extends CEditableComponent<E, NativeComboBox<E>> imple
     }
 
     @Override
-    protected NativeComboBox<E> initWidget() {
+    protected NativeComboBox<E> createWidget() {
         NativeComboBox<E> nativeComboBox = new NativeComboBox<E>(this);
         nativeComboBox.setOptions(options);
         return nativeComboBox;

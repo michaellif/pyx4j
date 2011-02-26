@@ -23,6 +23,10 @@ package com.pyx4j.forms.client.ui;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -37,13 +41,20 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends CFocusComponent<WIDGET_TYPE>
         implements HasValueChangeHandlers<DATA_TYPE> {
 
-    private boolean mandatory = false;
-
     private String mandatoryValidationMessage = "This field is Mandatory";
 
     private DATA_TYPE value = null;
 
     private List<EditableValueValidator<DATA_TYPE>> validators;
+
+    private boolean mandatory = false;
+
+    private boolean editing = false;
+
+    // Have been changed after population
+    private boolean visited = false;
+
+    private final boolean valid = false;
 
     public CEditableComponent() {
         this(null);
@@ -53,7 +64,8 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         super(title);
     }
 
-    public boolean isValid() {
+    //TODO make it protected and add isValid that would return result
+    public boolean validate() {
         return !isVisible() || !isEditable() || !isEnabled() || (isMandatoryConditionMet() && isValidationConditionMet());
     }
 
@@ -66,23 +78,36 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
             return;
         }
         this.value = value;
+        this.visited = true;
+
         setNativeComponentValue(value);
+        if (validate()) {
+            asWidget().setValid(true);
+        }
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
+
     }
 
     public void setValue(DATA_TYPE value) {
         if (isValuesEquals(getValue(), value)) {
             return;
         }
+
         this.value = value;
+        //If value was set programmatically it will be handled as not visited 
+        this.visited = false;
+
         setNativeComponentValue(value);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
     }
 
     public void populate(DATA_TYPE value) {
+
         this.value = value;
+        this.visited = false;
+
         setNativeComponentValue(value);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
@@ -128,7 +153,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     @Override
     public String getToolTip() {
         String tooltip = super.getToolTip();
-        if (isValid() || !isMandatoryConditionMet()) {
+        if (validate() || !isMandatoryConditionMet()) {
             return tooltip;
         } else {
             return "<span style=color:red>" + getValidationMessageWithoutMandatoyCondition() + "</span>"
@@ -141,7 +166,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     public String getValidationMessage() {
-        if (!isValid()) {
+        if (!validate()) {
             if (!isMandatoryConditionMet()) {
                 return getMandatoryValidationMessage();
             }
@@ -151,7 +176,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     private String getValidationMessageWithoutMandatoyCondition() {
-        if (!isValid() && isMandatoryConditionMet()) {
+        if (!validate() && isMandatoryConditionMet()) {
             if (validators != null) {
                 for (EditableValueValidator<DATA_TYPE> validator : validators) {
                     if (!validator.isValid(this, getValue())) {
@@ -169,6 +194,10 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void setMandatoryValidationMessage(String message) {
         mandatoryValidationMessage = message;
+    }
+
+    public boolean isVisited() {
+        return visited;
     }
 
     @Override
@@ -219,7 +248,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
 
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
-                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip()
+                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + validate() + "; toolTip=" + getToolTip()
                 + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
@@ -249,4 +278,38 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         applyEditabilityRules();
     }
 
+    public boolean isEditing() {
+        return editing;
+    }
+
+    public void onEditingStart() {
+        editing = true;
+    }
+
+    public void onEditingStop() {
+        editing = false;
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
+        asWidget().setValid(validate());
+    }
+
+    @Override
+    protected WIDGET_TYPE initWidget() {
+        WIDGET_TYPE widget = super.initWidget();
+        widget.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                onEditingStart();
+            }
+        });
+
+        widget.addBlurHandler(new BlurHandler() {
+
+            @Override
+            public void onBlur(BlurEvent event) {
+                onEditingStop();
+            }
+        });
+        return widget;
+    }
 }

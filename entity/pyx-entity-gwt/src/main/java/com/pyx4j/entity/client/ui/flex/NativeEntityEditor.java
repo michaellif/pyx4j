@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -78,5 +81,17 @@ public class NativeEntityEditor<E> extends SimplePanel implements INativeEditabl
 
     @Override
     public void setValid(boolean valid) {
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

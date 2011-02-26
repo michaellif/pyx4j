@@ -45,7 +45,7 @@ public class CEmailField extends CTextFieldBase<String, NativeTextBox<String>> {
     }
 
     @Override
-    protected NativeTextBox<String> initWidget() {
+    protected NativeTextBox<String> createWidget() {
         return new NativeTextBox<String>(this);
     }
 

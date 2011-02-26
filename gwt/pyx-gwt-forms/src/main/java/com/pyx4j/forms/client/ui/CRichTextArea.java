@@ -24,7 +24,7 @@ package com.pyx4j.forms.client.ui;
 public class CRichTextArea extends CRichTextAreaBase<NativeRichTextArea> {
 
     @Override
-    protected NativeRichTextArea initWidget() {
+    protected NativeRichTextArea createWidget() {
         return new NativeRichTextArea(this);
     }
 

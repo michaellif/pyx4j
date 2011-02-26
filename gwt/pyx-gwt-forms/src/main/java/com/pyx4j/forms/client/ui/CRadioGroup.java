@@ -59,7 +59,7 @@ public abstract class CRadioGroup<E> extends CEditableComponent<E, NativeRadioGr
     }
 
     @Override
-    protected NativeRadioGroup<E> initWidget() {
+    protected NativeRadioGroup<E> createWidget() {
         return new NativeRadioGroup<E>(this);
     }
 

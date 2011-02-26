@@ -32,7 +32,7 @@ public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPi
     }
 
     @Override
-    protected NativeMonthYearPicker initWidget() {
+    protected NativeMonthYearPicker createWidget() {
         return new NativeMonthYearPicker(this);
     }
 

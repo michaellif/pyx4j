@@ -34,7 +34,7 @@ public class CCaption extends CComponent<NativeCaption> implements SelfManagedCo
     }
 
     @Override
-    protected NativeCaption initWidget() {
+    protected NativeCaption createWidget() {
         NativeCaption nativeCaption = new NativeCaption(this);
         nativeCaption.setWordWrap(true);
         nativeCaption.setWidth(this.getWidth());

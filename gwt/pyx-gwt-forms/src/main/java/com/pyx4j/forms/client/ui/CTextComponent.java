@@ -28,6 +28,8 @@ import com.pyx4j.widgets.client.WatermarkComponent;
 public abstract class CTextComponent<DATA_TYPE, WIDGET_TYPE extends Widget & INativeEditableComponent<DATA_TYPE>> extends
         CEditableComponent<DATA_TYPE, WIDGET_TYPE> {
 
+    public static final int PARSINT_PERIOD = 500;
+
     private TextComponentLengthValidator validator;
 
     private String watermark;

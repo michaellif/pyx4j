@@ -32,12 +32,12 @@ public abstract class CFormGroup<E> extends CFormContainer<E, NativeFormGroup<E>
     }
 
     @Override
-    protected NativeFormGroup<E> initWidget() {
+    protected NativeFormGroup<E> createWidget() {
         return new NativeFormGroup<E>(this);
     }
 
     @Override
-    public boolean isValid() {
+    public boolean validate() {
         return form.isValid();
     }
 

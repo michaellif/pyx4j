@@ -20,8 +20,11 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.widgets.client.CaptchaComposite;
@@ -78,5 +81,17 @@ public class NativeCaptcha extends CaptchaComposite implements INativeEditableCo
 
     @Override
     public void setValid(boolean valid) {
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

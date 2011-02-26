@@ -22,8 +22,11 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 
 import com.pyx4j.widgets.client.MonthYearPicker;
 
@@ -119,5 +122,17 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
 
     @Override
     public void setValid(boolean valid) {
+    }
+
+    @Override
+    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

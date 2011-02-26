@@ -77,7 +77,7 @@ public class CGroupBoxPanel extends CContainer<NativeGroupBoxPanel> {
     }
 
     @Override
-    protected NativeGroupBoxPanel initWidget() {
+    protected NativeGroupBoxPanel createWidget() {
         NativeGroupBoxPanel nativePanel = new NativeGroupBoxPanel(this, layout);
         nativePanel.addKeyUpHandler(new KeyUpHandler() {
             @Override

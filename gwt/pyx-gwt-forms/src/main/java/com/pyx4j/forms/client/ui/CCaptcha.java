@@ -45,7 +45,7 @@ public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCap
     }
 
     @Override
-    protected NativeCaptcha initWidget() {
+    protected NativeCaptcha createWidget() {
         return new NativeCaptcha(this);
     }
 

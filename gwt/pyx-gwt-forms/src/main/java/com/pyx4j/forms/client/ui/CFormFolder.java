@@ -68,7 +68,7 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
     }
 
     @Override
-    protected NativeFormFolder<E> initWidget() {
+    protected NativeFormFolder<E> createWidget() {
         return new NativeFormFolder<E>(this);
     }
 
@@ -109,7 +109,7 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
     public abstract void moveItem(CForm cForm, boolean up);
 
     @Override
-    public boolean isValid() {
+    public boolean validate() {
         for (CForm form : formsMap.values()) {
             if (!form.isValid()) {
                 return false;

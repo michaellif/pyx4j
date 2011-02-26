@@ -64,7 +64,7 @@ public class NativeTextArea extends TextArea implements INativeEditableComponent
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 keyTimer.cancel();
-                keyTimer.schedule(500);
+                keyTimer.schedule(CTextComponent.PARSINT_PERIOD);
             }
         });
 

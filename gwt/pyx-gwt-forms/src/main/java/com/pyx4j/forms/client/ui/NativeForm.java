@@ -60,7 +60,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CForm.InfoImageAlignment;
 import com.pyx4j.forms.client.ui.CForm.LabelAlignment;
-import com.pyx4j.forms.client.ui.decorators.ImageHolder;
+import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.util.BrowserType;
 
@@ -534,11 +534,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
 
         private final Label label;
 
-        private final ImageHolder imageMandatoryHolder;
+        private final SpaceHolder imageMandatoryHolder;
 
         private Image imageInfoWarn;
 
-        private final ImageHolder imageInfoWarnHolder;
+        private final SpaceHolder imageInfoWarnHolder;
 
         private Image imageMandatory;
 
@@ -575,11 +575,11 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                 });
             }
 
-            imageInfoWarnHolder = new ImageHolder("18px");
+            imageInfoWarnHolder = new SpaceHolder("18px");
             imageInfoWarnHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
             imageInfoWarnHolder.getElement().getStyle().setPaddingLeft(10, Unit.PX);
 
-            imageMandatoryHolder = new ImageHolder("7px");
+            imageMandatoryHolder = new SpaceHolder("7px");
 
             renderToolTip();
             renderMandatoryStar();
@@ -643,7 +643,7 @@ public class NativeForm extends FlowPanel implements INativeComponent {
                         tooltip = Tooltip.tooltip(imageInfoWarn, "");
                     }
                     if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
-                            && !((CEditableComponent<?, ?>) component).isValid()) {
+                            && !((CEditableComponent<?, ?>) component).validate()) {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
                     } else {
                         imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());

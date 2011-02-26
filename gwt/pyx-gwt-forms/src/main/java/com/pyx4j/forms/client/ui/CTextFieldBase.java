@@ -33,8 +33,6 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
 
     private IFormat<DATA_TYPE> format;
 
-    private boolean isEditing = false;
-
     public CTextFieldBase(String title) {
         super(title);
         setWidth("100%");
@@ -50,22 +48,6 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
 
     public IFormat<DATA_TYPE> getFormat() {
         return format;
-    }
-
-    public boolean isEditing() {
-        return isEditing;
-    }
-
-    public void onEditingStart() {
-        isEditing = true;
-    }
-
-    public void onEditingStop() {
-        isEditing = false;
-        if (isParsedSuccesfully()) {
-            setNativeComponentValue(getValue());
-        }
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
     }
 
     @Override
@@ -115,6 +97,14 @@ public abstract class CTextFieldBase<DATA_TYPE, WIDGET_TYPE extends Widget & INa
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void onEditingStop() {
+        if (isParsedSuccesfully()) {
+            setNativeComponentValue(getValue());
+        }
+        super.onEditingStop();
     }
 
 }
