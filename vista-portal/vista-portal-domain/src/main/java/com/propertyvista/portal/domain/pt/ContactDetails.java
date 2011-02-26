@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -23,9 +25,12 @@ public interface ContactDetails extends IEntity {
 
     IPrimitive<String> lastName();
 
+    @Editor(type = EditorType.phone)
     IPrimitive<String> homePhone();
 
+    @Editor(type = EditorType.phone)
     IPrimitive<String> mobilePhone();
 
+    @Editor(type = EditorType.email)
     IPrimitive<String> email();
 }

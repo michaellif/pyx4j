@@ -16,7 +16,9 @@ package com.propertyvista.portal.domain.pt;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface IPerson {
@@ -35,15 +37,19 @@ public interface IPerson {
     @Caption(name = "Birth Date")
     public abstract IPrimitive<Date> birthDate();
 
+    @Editor(type = EditorType.phone)
     @Caption(name = "Home")
     public abstract IPrimitive<String> homePhone();
 
+    @Editor(type = EditorType.phone)
     @Caption(name = "Mobile")
     public abstract IPrimitive<String> mobilePhone();
 
+    @Editor(type = EditorType.phone)
     @Caption(name = "Work")
     public abstract IPrimitive<String> workPhone();
 
+    @Editor(type = EditorType.email)
     @Caption(name = "Email")
     public abstract IPrimitive<String> email();
 
