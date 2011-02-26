@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
@@ -146,6 +145,7 @@ public class VistaWidgetDecorator extends FlowPanel {
                 if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
                     setVisible(component.isVisible());
                 }
+                renderMandatoryMessage();
                 renderValidationMessage();
             }
         });
@@ -158,6 +158,9 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
+    }
+
+    private void renderMandatoryMessage() {
     }
 
     private void renderValidationMessage() {
