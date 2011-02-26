@@ -132,7 +132,7 @@ public class EntityBinder<E extends IEntity> {
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
             component.setMandatory(true);
         }
-        if (String.class == mm.getValueClass()) {
+        if ((String.class == mm.getValueClass()) && (component instanceof CTextComponent)) {
             ((CTextComponent<?, ?>) component).setMaxLength(mm.getStringLength());
             if (mm.getDescription() != null) {
                 ((CTextComponent<?, ?>) component).setWatermark(mm.getWatermark());
