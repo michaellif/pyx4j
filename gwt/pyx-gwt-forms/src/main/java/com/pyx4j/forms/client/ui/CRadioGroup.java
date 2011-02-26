@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Collection;
 
-import com.pyx4j.forms.client.gwt.NativeRadioGroup;
 
 public abstract class CRadioGroup<E> extends CEditableComponent<E, NativeRadioGroup<E>> {
 

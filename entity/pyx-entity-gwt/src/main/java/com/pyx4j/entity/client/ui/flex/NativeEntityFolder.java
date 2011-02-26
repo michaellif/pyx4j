@@ -76,4 +76,7 @@ public class NativeEntityFolder<E> extends SimplePanel implements INativeEditabl
 
     }
 
+    @Override
+    public void setValid(boolean valid) {
+    }
 }

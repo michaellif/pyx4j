@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.RegexValidator;
 
 public class CTextField extends CTextFieldBase<String, NativeTextBox<String>> {

@@ -26,7 +26,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.TimeZone;
 
 import com.pyx4j.commons.Consts;
-import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public class CTimeField extends CTextFieldBase<Integer, NativeTextBox<Integer>> {

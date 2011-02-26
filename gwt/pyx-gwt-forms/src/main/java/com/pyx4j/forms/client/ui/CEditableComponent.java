@@ -61,6 +61,16 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         return value;
     }
 
+    void setValueByNativeComponent(DATA_TYPE value) {
+        if (isValuesEquals(getValue(), value)) {
+            return;
+        }
+        this.value = value;
+        setNativeComponentValue(value);
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
+        ValueChangeEvent.fire(this, value);
+    }
+
     public void setValue(DATA_TYPE value) {
         if (isValuesEquals(getValue(), value)) {
             return;

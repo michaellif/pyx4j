@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
-import com.pyx4j.forms.client.gwt.NativeCaptcha;
 
 public class CCaptcha extends CEditableComponent<Pair<String, String>, NativeCaptcha> {
 

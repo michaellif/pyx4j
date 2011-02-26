@@ -26,7 +26,6 @@ import java.util.List;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.StringDebugId;
-import com.pyx4j.forms.client.gwt.NativeFormFolder;
 
 public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormFolder<E>> {
 

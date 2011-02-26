@@ -29,7 +29,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.gwt.NativeSuggestBox;
 
 public class CSuggestBox<E> extends CTextFieldBase<E, NativeSuggestBox<E>> implements HasOptionsChangeHandlers<List<E>> {
 

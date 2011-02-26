@@ -37,8 +37,6 @@ import com.pyx4j.commons.ICloneable;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.gwt.ListSelectionPopup;
-import com.pyx4j.forms.client.gwt.NativeListBox;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 

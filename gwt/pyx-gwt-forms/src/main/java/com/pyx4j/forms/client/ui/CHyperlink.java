@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.forms.client.gwt.NativeHyperlink;
 
 public class CHyperlink extends CFocusComponent<NativeHyperlink> {
 

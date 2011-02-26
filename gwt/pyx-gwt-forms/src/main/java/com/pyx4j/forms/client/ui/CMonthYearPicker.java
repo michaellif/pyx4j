@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
-import com.pyx4j.forms.client.gwt.NativeMonthYearPicker;
 
 public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPicker> {
 

@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.forms.client.gwt.NativeCheckBox;
 
 public class CCheckBox extends CEditableComponent<Boolean, NativeCheckBox> {
 

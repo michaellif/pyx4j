@@ -26,7 +26,6 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.gwt.NativeForm;
 import com.pyx4j.forms.client.ui.CGroupBoxPanel.Layout;
 
 public class CForm extends CContainer<NativeForm> {

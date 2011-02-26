@@ -36,10 +36,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.gwt.Cursor;
-import com.pyx4j.forms.client.gwt.NativeCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.Cursor;
+import com.pyx4j.forms.client.ui.NativeCheckBox;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 

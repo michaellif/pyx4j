@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 
-import com.pyx4j.forms.client.gwt.NativeCaption;
 
 public class CCaption extends CComponent<NativeCaption> implements SelfManagedComponent {
 

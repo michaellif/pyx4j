@@ -137,6 +137,7 @@ class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<I
                 }
             }
         });
+
     }
 
     @Override
@@ -163,4 +164,7 @@ class NativeEntityHyperlink extends Anchor implements INativeEditableComponent<I
         setHTML("&nbsp;" + cHyperlink.getItemName(value) + "&nbsp;");
     }
 
+    @Override
+    public void setValid(boolean valid) {
+    }
 }

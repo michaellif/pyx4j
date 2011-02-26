@@ -30,10 +30,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.GeoCriteria;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.HasAsyncValue;
-import com.pyx4j.forms.client.gwt.NativeTextBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IAcceptText;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.gwt.commons.UnrecoverableClientWarning;
 import com.pyx4j.gwt.geo.MapUtils;
 
