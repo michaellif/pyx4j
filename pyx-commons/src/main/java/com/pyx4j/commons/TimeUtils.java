@@ -91,6 +91,11 @@ public class TimeUtils {
     }
 
     @SuppressWarnings("deprecation")
+    public static Date createDate(int year, int month, int day) {
+        return new Date(year, month, day);
+    }
+
+    @SuppressWarnings("deprecation")
     public static Date dayStart(Date d) {
         return new Date(d.getYear(), d.getMonth(), d.getDate());
     }
