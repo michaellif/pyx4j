@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -27,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -226,18 +228,22 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             HTML label = new HTML(value.unitSelection().markerRent().leaseTerm().getStringView() + "&nbsp month Rent");
             label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.setWidth("10%");
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            label.setWidth("33%");
             content.add(label);
 
             label = new HTML("From &nbsp " + value.unitSelection().rentStart().getStringView());
             label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.setWidth("10%");
+            label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            label.setWidth("33%");
             content.add(label);
 
             label = new HTML(value.unitSelection().markerRent().rent().currency().getStringView()
-                    + value.unitSelection().markerRent().rent().amount().getStringView() + "/month");
+                    + value.unitSelection().markerRent().rent().amount().getStringView() + " / month");
             label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.setWidth("10%");
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+            label.setWidth("33%");
             content.add(label);
         }
     }
@@ -1059,7 +1065,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTerms.getElement().getStyle().setBackgroundColor("white");
             leaseTerms.getElement().getStyle().setColor("black");
 
-            leaseTerms.setHeight("10em");
+            leaseTerms.setHeight("20em");
             leaseTerms.setWidth("100%");
             add(leaseTerms);
 
@@ -1079,6 +1085,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         public void populate(Summary value) {
             leaseTermContent.setText(value.leaseTerms().getStringView());
+            //            leaseTermContent.setText(SiteResources.INSTANCE.leaseTerms().getText());
         }
     }
 

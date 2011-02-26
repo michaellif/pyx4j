@@ -37,6 +37,8 @@ import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class ChargesViewForm extends CEntityForm<Charges> {
@@ -136,6 +138,12 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             TextBox txt = new TextBox();
             txt.setValue(edit);
             addRow(new HTML(label), txt, new HTML(value));
+            return txt;
+        }
+
+        public CComponent<?> addEditRow(String label, CComponent<?> txt, String value) {
+
+            addRow(new HTML(label), txt.asWidget(), new HTML(value));
             return txt;
         }
 
@@ -320,29 +328,12 @@ public class ChargesViewForm extends CEntityForm<Charges> {
                     firstRun = false;
                 }
 
-                final TextBox txt = addEditRow(tc.tenant().firstName().getStringView() + " &nbsp " + tc.tenant().lastName().getStringView(), tc.percentage()
-                        .getStringView(), "$" + tc.charge().amount().getStringView());
+                //                addEditRow(tc.tenant().firstName().getStringView() + " &nbsp " + tc.tenant().lastName().getStringView(),
+                //                        create(tc.percentage(), ChargesViewForm.this), "$" + tc.charge().amount().getStringView());
 
-                // Filter non-digit input.
-                txt.addKeyPressHandler(new KeyPressHandler() {
+                addEditRow(tc.tenant().firstName().getStringView() + " &nbsp " + tc.tenant().lastName().getStringView(), tc.percentage().getStringView(), "$"
+                        + tc.charge().amount().getStringView());
 
-                    @Override
-                    public void onKeyPress(KeyPressEvent event) {
-                        if (!Character.isDigit(event.getCharCode())) {
-                            ((TextBox) event.getSource()).cancelKey();
-                        }
-                    }
-                });
-
-                // accept input:
-                txt.addFocusHandler(new FocusHandler() {
-
-                    @Override
-                    public void onFocus(FocusEvent event) {
-                        // TODO : distinguish between SET focus and LOST focus here!!!
-                        tc.percentage().setValue(Integer.parseInt(txt.getValue().trim()));
-                    }
-                });
             }
 
             Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
