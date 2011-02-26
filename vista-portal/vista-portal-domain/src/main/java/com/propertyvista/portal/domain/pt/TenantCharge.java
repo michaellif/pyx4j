@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantCharge extends Charge {
 
     //TODO @Detached
     // TODO Back-end to retrieve only values for ToString
+    @Editor(type = EditorType.label)
     PotentialTenantInfo tenant();
 
     IPrimitive<Integer> percentage();

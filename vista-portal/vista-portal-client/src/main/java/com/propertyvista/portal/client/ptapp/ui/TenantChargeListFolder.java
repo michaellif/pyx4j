@@ -15,39 +15,40 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.forms.client.ui.CCheckBox;
 
-public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
+public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
 
     final CEntityForm<?> masterForm;
 
     @SuppressWarnings("rawtypes")
     final ValueChangeHandler valueChangeHandler;
 
-    ChargeLineFolder(CEntityForm<?> masterForm, @SuppressWarnings("rawtypes") ValueChangeHandler valueChangeHandler) {
+    @SuppressWarnings("rawtypes")
+    TenantChargeListFolder(CEntityForm<?> masterForm, ValueChangeHandler valueChangeHandler) {
         this.valueChangeHandler = valueChangeHandler;
         this.masterForm = masterForm;
     }
 
     @Override
-    protected FolderDecorator<ChargeLine> createFolderDecorator() {
-        return new BoxReadOnlyFolderDecorator<ChargeLine>();
+    protected FolderDecorator<TenantCharge> createFolderDecorator() {
+        return new BoxReadOnlyFolderDecorator<TenantCharge>();
     }
 
     @Override
-    protected CEntityFolderItem<ChargeLine> createItem() {
+    protected CEntityFolderItem<TenantCharge> createItem() {
 
-        return new CEntityFolderItem<ChargeLine>(ChargeLine.class) {
+        return new CEntityFolderItem<TenantCharge>(TenantCharge.class) {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
@@ -59,22 +60,13 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
             public void createContent() {
 
                 FlowPanel main = new FlowPanel();
-
-                String width = "60%";
-                if (valueChangeHandler != null) {
-                    CCheckBox cb = (CCheckBox) masterForm.create(proto().selected(), this);
-                    cb.addValueChangeHandler(valueChangeHandler);
-                    //TODO this is hack for Misha to fix.
-                    cb.asWidget().setStyleName(null);
-                    main.add(DecorationUtils.inline(cb, "3%", null));
-                    width = "57%";
-                }
-
-                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
-                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+                main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "55%", null));
+                main.add(DecorationUtils.inline(new HTML("%"), "5%", "right"));
+                main.add(DecorationUtils.inline(masterForm.create(proto().percentage(), this), "5%", "right"));
+                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "5%", "right"));
+                get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
                 setWidget(main);
             }
         };
     }
-
 }
