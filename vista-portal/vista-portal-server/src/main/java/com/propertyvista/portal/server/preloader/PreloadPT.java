@@ -331,8 +331,8 @@ public class PreloadPT extends AbstractDataPreloader {
         List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Charges>(Charges.class));
         for (Charges charges : chargesList) {
             sb.append("Charges\n");
-            sb.append("\t").append(charges.rentCharges()).append("\n");
-            sb.append("\t").append(charges.upgradeCharges()).append("\n");
+            sb.append("\t").append(charges.rentChargesOld()).append("\n");
+            sb.append("\t").append(charges.upgradeChargesOld()).append("\n");
             sb.append("\t").append(charges.proRatedCharges()).append("\n");
             sb.append("\t").append(charges.applicationCharges()).append("\n");
             sb.append("\t").append(charges.paymentSplitCharges()).append("\n");

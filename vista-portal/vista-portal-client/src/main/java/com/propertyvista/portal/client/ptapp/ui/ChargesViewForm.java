@@ -191,7 +191,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             clear();
 
             boolean firstRun = true;
-            for (final ChargeLine cl : value.rentCharges().charges()) {
+            for (final ChargeLine cl : value.rentChargesOld().charges()) {
 
                 if (!firstRun) {
                     Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
@@ -209,7 +209,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow(value.rentCharges().total().getMeta().getCaption(), "$" + value.rentCharges().total().amount().getStringView());
+            addRow(value.rentChargesOld().total().getMeta().getCaption(), "$" + value.rentChargesOld().total().amount().getStringView());
         }
     }
 
@@ -221,7 +221,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             clear();
 
             boolean firstRun = true;
-            for (final ChargeLine cl : value.upgradeCharges().charges()) {
+            for (final ChargeLine cl : value.upgradeChargesOld().charges()) {
 
                 if (!firstRun) {
                     Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
@@ -246,7 +246,7 @@ public class ChargesViewForm extends CEntityForm<Charges> {
             sp.getElement().getStyle().setProperty("border", "1px dotted black");
             add(sp);
 
-            addRow(value.upgradeCharges().total().getMeta().getCaption(), "$" + value.upgradeCharges().total().amount().getStringView());
+            addRow(value.upgradeChargesOld().total().getMeta().getCaption(), "$" + value.upgradeChargesOld().total().amount().getStringView());
         }
     }
 

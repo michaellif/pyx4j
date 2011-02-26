@@ -31,14 +31,14 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     public static void dummyPopulate(Charges charges, Application application) {
 
         // rent charges
-        charges.rentCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
-        charges.rentCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
-        charges.rentCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
-        charges.rentCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, 75));
+        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
+        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
+        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
+        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, 75));
 
         // available upgrades
-        charges.upgradeCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, true));
-        charges.upgradeCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, true));
+        charges.upgradeChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, true));
+        charges.upgradeChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, true));
 
         // pro rated charges
         ChargeLine chargeLine = DomainUtil.createChargeLine(ChargeType.prorated, 350);

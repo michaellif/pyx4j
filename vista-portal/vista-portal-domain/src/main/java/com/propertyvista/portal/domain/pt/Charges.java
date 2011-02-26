@@ -14,8 +14,10 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IList;
 
 public interface Charges extends IApplicationEntity {
 
@@ -31,12 +33,27 @@ public interface Charges extends IApplicationEntity {
     @Owned
     @Caption(name = "Rent-Related Charges")
     @ReadOnly
-    ChargeLineList rentCharges();
+    @Deprecated
+    ChargeLineList rentChargesOld();
 
     // When changed the ChargesSharedCalculation.calculateCharges should be called on UI.
     @Owned
     @Caption(name = "Available Upgrades")
-    ChargeLineList upgradeCharges();
+    @Deprecated
+    ChargeLineList upgradeChargesOld();
+
+    @EmbeddedEntity
+    public interface MonthlyCharges extends ChargeLineList {
+
+        @Owned
+        @Caption(name = "Available Upgrades")
+        IList<ChargeLine> upgradeCharges();
+
+    }
+
+    @Caption(name = "Rent-Related Charges")
+    @Owned
+    MonthlyCharges monthlyCharges();
 
     // TODO add Pro-Rated duration,fraction information for calulation to be posible 
 

@@ -23,8 +23,8 @@ import com.propertyvista.portal.domain.util.DomainUtil;
 public class ChargesSharedCalculation {
 
     public static void calculateCharges(Charges charges) {
-        calculateTotal(charges.rentCharges());
-        calculateSelectableTotal(charges.upgradeCharges());
+        calculateTotal(charges.rentChargesOld());
+        calculateSelectableTotal(charges.upgradeChargesOld());
         calculateProrateCharges(charges);
         calculateApplicationCharges(charges);
         calculatePaymentSplitCharges(charges);

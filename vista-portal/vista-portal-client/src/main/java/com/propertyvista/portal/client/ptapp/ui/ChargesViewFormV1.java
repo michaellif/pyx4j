@@ -56,8 +56,8 @@ public class ChargesViewFormV1 extends BaseEntityForm<Charges> {
     @Override
     public void createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(bind(new ChargeLineListEditor(false), proto().rentCharges()));
-        main.add(bind(new ChargeLineListEditor(true), proto().upgradeCharges()));
+        main.add(bind(new ChargeLineListEditor(false), proto().rentChargesOld()));
+        main.add(bind(new ChargeLineListEditor(true), proto().upgradeChargesOld()));
         main.add(bind(new ChargeLineListEditor(false), proto().proRatedCharges()));
         main.add(bind(new ChargeLineListEditor(false), proto().applicationCharges()));
 
