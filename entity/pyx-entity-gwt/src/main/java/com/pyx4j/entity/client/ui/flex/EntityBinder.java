@@ -145,8 +145,12 @@ public class EntityBinder<E extends IEntity> {
         component.setDebugId(member.getPath());
     }
 
-    @SuppressWarnings("unchecked")
     public void populate(E entity) {
+        setValue(entity);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setValue(E entity) {
         if (entity != null) {
             this.editableEntity = entity;
         } else {

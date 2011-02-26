@@ -31,13 +31,17 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CDoubleField;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CEmailField;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CIntegerField;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CLongField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CPhoneField;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -105,6 +109,18 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                     return new CRadioGroupEnum(mm.getValueClass(), CRadioGroup.Layout.HORISONTAL);
                 } else {
                     throw new Error("Unknown");
+                }
+            case label:
+                if (mm.getValueClass().equals(String.class)) {
+                    return new CLabel();
+                } else if (mm.getValueClass().isEnum()) {
+                    return new CEnumLabel();
+                } else if (mm.isEntity()) {
+                    return new CEntityLabel();
+                } else if (mm.isNumberValueClass()) {
+                    return new CNumberLabel();
+                } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+                    return new CDateLabel();
                 }
             default:
                 throw new Error("Unknown");

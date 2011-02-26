@@ -41,7 +41,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> {
+public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IFlexConextComponent {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -54,6 +54,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public CEntityFolder() {
     }
 
+    @Override
     public void createContent() {
         setFolderDecorator(createFolderDecorator());
     }

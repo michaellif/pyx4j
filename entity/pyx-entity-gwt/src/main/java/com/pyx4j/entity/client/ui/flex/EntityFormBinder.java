@@ -55,7 +55,6 @@ public class EntityFormBinder<E extends IEntity> extends EntityBinder<E> {
     @Override
     @SuppressWarnings("unchecked")
     public void populate(E entity) {
-
         this.origEntity = entity;
         if (entity != null) {
             super.populate((E) entity.cloneEntity());

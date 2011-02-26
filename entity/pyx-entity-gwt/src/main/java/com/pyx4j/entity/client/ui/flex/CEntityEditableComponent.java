@@ -20,9 +20,6 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -31,9 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> {
-
-    private static I18n i18n = I18nFactory.getI18n(CEntityEditableComponent.class);
+public class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexConextComponent {
 
     private final EntityBinder<E> binder;
 
@@ -45,6 +40,7 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         binder = new EntityBinder<E>(clazz);
     }
 
+    @Override
     public void createContent() {
     }
 
@@ -60,6 +56,12 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
     public void populate(E value) {
         binder.populate(value);
         super.populate(binder.getValue());
+    }
+
+    @Override
+    public void setValue(E value) {
+        binder.setValue(value);
+        super.setValue(binder.getValue());
     }
 
     @Override
@@ -95,8 +97,12 @@ public class CEntityEditableComponent<E extends IEntity> extends CEditableCompon
         return validationResults;
     }
 
-    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+    public CEditableComponent<?, ?> bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
+        if (component instanceof IFlexConextComponent) {
+            ((IFlexConextComponent) component).createContent();
+        }
+        return component;
     }
 
     public <T> CEditableComponent<T, ?> get(IObject<T> member) {

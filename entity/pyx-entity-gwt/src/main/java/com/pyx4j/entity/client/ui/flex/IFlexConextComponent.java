@@ -14,28 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Feb 26, 2011
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.client.ui.flex;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public interface IFlexConextComponent {
 
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Editor {
-
-    public static enum EditorType {
-        text, password, passwordCreator, textarea, richtextarea, combo, suggest, captcha, monthyearpicker, yearpicker, timepicker, email, phone, radiogroup, entityselector, label
-    }
-
-    /**
-     * UI Editor type of the member.
-     */
-    EditorType type();
+    public void createContent();
 
 }
