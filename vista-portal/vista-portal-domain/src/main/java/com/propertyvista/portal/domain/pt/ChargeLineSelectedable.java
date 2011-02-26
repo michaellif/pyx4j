@@ -13,15 +13,10 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ChargeLineListWithUpgrades extends ChargeLineList {
+public interface ChargeLineSelectedable extends ChargeLine {
 
-    //TODO change the object type as per Arthur.
-    @Owned
-    @Caption(name = "Available Upgrades")
-    IList<ChargeLine> upgradeCharges();
-    //IList<ChargeLineSelectedable> upgradeCharges();
+    @Override
+    IPrimitive<Boolean> selected();
 }

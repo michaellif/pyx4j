@@ -69,6 +69,7 @@ public interface ChargeLine extends Charge {
     @Editor(type = EditorType.label)
     IPrimitive<ChargeType> type();
 
+    @Deprecated
     IPrimitive<Boolean> selected();
 
     @Editor(type = EditorType.label)
