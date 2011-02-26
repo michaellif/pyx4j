@@ -16,21 +16,23 @@ package com.propertyvista.portal.server.pt;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
+import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.gwt.server.DateUtils;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     public static void dummyPopulate(Charges charges, Application application) {
 
-        charges.rentStart().setValue(DateUtils.createDate(2011, 4, 7)); // dummy date
+        charges.rentStart().setValue(TimeUtils.createDate(2011, 4, 7)); // dummy date
 
         // monthly charges
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
@@ -61,10 +63,20 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 
         // payment splits
-        for (int i = 0; i < tenantList.tenants().size(); i++) {
-            int percentage = i == 0 ? 100 : 0;
+        charges.paymentSplitCharges().charges().clear();
+        for (PotentialTenantInfo tenant : tenantList.tenants()) {
+            Relationship relationship = tenant.relationship().getValue();
+            // only applicant or co-applicant can pay
+            if (relationship != Relationship.Applicant && relationship != Relationship.CoApplicant) {
+                continue;
+            }
+
+            int percentage = 0;
+            if (relationship == Relationship.Applicant) {
+                percentage = 100;
+            }
             TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);
-            tenantCharge.tenant().set(tenantList.tenants().get(i));
+            tenantCharge.tenant().set(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);
         }
     }
