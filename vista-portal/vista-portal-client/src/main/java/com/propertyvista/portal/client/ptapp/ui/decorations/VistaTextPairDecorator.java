@@ -41,10 +41,6 @@ public class VistaTextPairDecorator extends FlowPanel {
         this(left, right, new DecorationData(labelWidth, HasHorizontalAlignment.ALIGN_LEFT, componentWidth, HasHorizontalAlignment.ALIGN_RIGHT));
     }
 
-    public VistaTextPairDecorator(String left, String right, double labelWidth, double componentWidth, double gapWidth) {
-        this(left, right, new DecorationData(labelWidth, HasHorizontalAlignment.ALIGN_LEFT, componentWidth, HasHorizontalAlignment.ALIGN_RIGHT, gapWidth));
-    }
-
     public VistaTextPairDecorator(String left, String right, DecorationData decorData) {
 
         setStyleName(DEFAULT_STYLE_PREFIX);

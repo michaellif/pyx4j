@@ -896,8 +896,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             //            agreeCheck.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
             //            add(agreeCheck);
 
-            VistaWidgetDecorator agree = new VistaWidgetDecorator(create(proto().agree(), SummaryViewForm.this), new DecorationData(0, Unit.EM, 0, Unit.EM, 1,
-                    Unit.EM));
+            VistaWidgetDecorator agree = new VistaWidgetDecorator(create(proto().agree(), SummaryViewForm.this), new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             agree.asWidget().getElement().getStyle().setMarginBottom(0.5, Unit.EM);

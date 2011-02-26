@@ -47,7 +47,7 @@ public class VistaWidgetDecorator extends FlowPanel {
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_VistaWidgetDecorator";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Label, Component, Gap
+        Label, Component
     }
 
     private final CComponent<?> component;
@@ -72,10 +72,6 @@ public class VistaWidgetDecorator extends FlowPanel {
 
     public VistaWidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth) {
         this(component, new DecorationData(labelWidth, componentWidth));
-    }
-
-    public VistaWidgetDecorator(final CComponent<?> component, double labelWidth, double componentWidth, double gapWidth) {
-        this(component, new DecorationData(labelWidth, componentWidth, gapWidth));
     }
 
     public VistaWidgetDecorator(final CComponent<?> component, DecorationData decorData) {
@@ -200,12 +196,6 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.componentUnit = Unit.PX;
         }
 
-        public DecorationData(int labelWidth, int componentWidth, int gapWidth) {
-            this(labelWidth, componentWidth);
-            this.gapWidth = gapWidth;
-            this.gapUnit = Unit.PX;
-        }
-
         public DecorationData(double labelWidth, double componentWidth) {
             this.labelWidth = labelWidth;
             this.labelUnit = Unit.EM;
@@ -213,23 +203,11 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.componentUnit = Unit.EM;
         }
 
-        public DecorationData(double labelWidth, double componentWidth, double gapWidth) {
-            this(labelWidth, componentWidth);
-            this.gapWidth = gapWidth;
-            this.gapUnit = Unit.EM;
-        }
-
         public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit) {
             this.labelWidth = labelWidth;
             this.labelUnit = labelUnit;
             this.componentWidth = componentWidth;
             this.componentUnit = componentUnit;
-        }
-
-        public DecorationData(double labelWidth, Unit labelUnit, double componentWidth, Unit componentUnit, double gapWidth, Unit gapUnit) {
-            this(labelWidth, labelUnit, componentWidth, componentUnit);
-            this.gapWidth = gapWidth;
-            this.gapUnit = gapUnit;
         }
 
         // second one - with alignment:
@@ -248,13 +226,6 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.componentAlignment = componentAlignment;
         }
 
-        public DecorationData(int labelWidth, HorizontalAlignmentConstant labelAlignment, int componentWidth, HorizontalAlignmentConstant componentAlignment,
-                int gapWidth) {
-            this(labelWidth, labelAlignment, componentWidth, componentAlignment);
-            this.gapWidth = gapWidth;
-            this.gapUnit = Unit.PX;
-        }
-
         public DecorationData(double labelWidth, HorizontalAlignmentConstant labelAlignment, double componentWidth,
                 HorizontalAlignmentConstant componentAlignment) {
             this.labelWidth = labelWidth;
@@ -263,13 +234,6 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.componentWidth = componentWidth;
             this.componentUnit = Unit.EM;
             this.componentAlignment = componentAlignment;
-        }
-
-        public DecorationData(double labelWidth, HorizontalAlignmentConstant labelAlignment, double componentWidth,
-                HorizontalAlignmentConstant componentAlignment, double gapWidth) {
-            this(labelWidth, labelAlignment, componentWidth, componentAlignment);
-            this.gapWidth = gapWidth;
-            this.gapUnit = Unit.EM;
         }
 
         public DecorationData(double labelWidth, Unit labelUnit, HorizontalAlignmentConstant labelAlignment, double componentWidth, Unit componentUnit,
@@ -282,11 +246,5 @@ public class VistaWidgetDecorator extends FlowPanel {
             this.componentAlignment = componentAlignment;
         }
 
-        public DecorationData(double labelWidth, Unit labelUnit, HorizontalAlignmentConstant labelAlignment, double componentWidth, Unit componentUnit,
-                HorizontalAlignmentConstant componentAlignment, double gapWidth, Unit gapUnit) {
-            this(labelWidth, labelUnit, labelAlignment, componentWidth, componentUnit, componentAlignment);
-            this.gapWidth = gapWidth;
-            this.gapUnit = gapUnit;
-        }
     }
 }
