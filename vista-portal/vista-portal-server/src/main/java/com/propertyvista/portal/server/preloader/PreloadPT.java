@@ -263,7 +263,9 @@ public class PreloadPT extends AbstractDataPreloader {
 
     private void createCharges(Application application) {
         Charges charges = EntityFactory.create(Charges.class);
+
         ChargesServerCalculation.dummyPopulate(charges, application);
+
         persist(charges);
     }
 
@@ -331,14 +333,49 @@ public class PreloadPT extends AbstractDataPreloader {
         List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Charges>(Charges.class));
         for (Charges charges : chargesList) {
             sb.append("Charges\n");
-            sb.append("\t").append(charges.rentChargesOld()).append("\n");
-            sb.append("\t").append(charges.upgradeChargesOld()).append("\n");
-            sb.append("\t").append(charges.proRatedCharges()).append("\n");
-            sb.append("\t").append(charges.applicationCharges()).append("\n");
-            sb.append("\t").append(charges.paymentSplitCharges()).append("\n");
+
+            sb.append("Monthly\n");
+            for (ChargeLine line : charges.monthlyCharges().charges()) {
+                sb.append("\t");
+                sb.append(line.charge().amount().getStringView());
+                sb.append(" ");
+                sb.append(line.type().getStringView());
+                if (line.selected().getValue()) {
+                    sb.append(" YES");
+                }
+                sb.append("\n");
+            }
+
+            sb.append("Upgrades\n");
+            for (ChargeLine line : charges.monthlyCharges().upgradeCharges()) {
+                sb.append("\t");
+                sb.append(line.charge().amount().getStringView());
+                sb.append(" ");
+                sb.append(line.type().getStringView());
+                if (line.selected().getValue()) {
+                    sb.append(" YES");
+                }
+                sb.append("\n");
+            }
+
+            sb.append("Monthly + Upgrades Total ");
+            sb.append(charges.monthlyCharges().total().amount().getStringView());
+            sb.append("\n\n");
+
+            sb.append("Pro-Rated ").append(charges.proRatedCharges().total().amount().getStringView()).append("\n");
+            for (ChargeLine line : charges.proRatedCharges().charges()) {
+                sb.append("\t").append(line.label().getStringView());
+                sb.append(" ").append(line.charge().amount().getStringView());
+                sb.append("\n");
+            }
+
+            //            sb.append("\t").append(charges.monthlyCharges()).append("\n");
+            //            sb.append("\t").append(charges.proRatedCharges()).append("\n");
+            //            sb.append("\t").append(charges.applicationCharges()).append("\n");
+            //            sb.append("\t").append(charges.paymentSplitCharges()).append("\n");
             sb.append("\n");
         }
-        sb.append("\n\n");
+        sb.append("\n----------------------- END OF CHARGES ------------------\n\n");
 
         //        List<PotentialTenant> pts = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<PotentialTenant>(PotentialTenant.class));
         //        StringBuilder sb = new StringBuilder();

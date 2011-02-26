@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Charges extends IApplicationEntity {
 
@@ -58,4 +61,9 @@ public interface Charges extends IApplicationEntity {
     @Owned
     TenantChargeList paymentSplitCharges();
 
+    /**
+     * We need this here (will be transient in the future) so that calculation libary can
+     * figure out pro-rated charges
+     */
+    IPrimitive<Date> rentStart();
 }

@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.pt;
 
 import com.propertyvista.portal.domain.pt.Application;
-import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
@@ -25,30 +24,31 @@ import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.DateUtils;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     public static void dummyPopulate(Charges charges, Application application) {
 
-        // rent charges
-        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
-        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
-        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
-        charges.rentChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, 75));
+        charges.rentStart().setValue(DateUtils.createDate(2011, 4, 7)); // dummy date
+
+        // monthly charges
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, 75));
 
         // available upgrades
-        charges.upgradeChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, true));
-        charges.upgradeChargesOld().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, true));
-
-        // pro rated charges
-        ChargeLine chargeLine = DomainUtil.createChargeLine(ChargeType.prorated, 350);
-        chargeLine.label().setValue("Pro-Rate (May 20 - May 31)");
-        charges.proRatedCharges().charges().add(chargeLine);
+        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, true));
+        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, true));
 
         // application charges
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.deposit, 1500));
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petDeposit, 100));
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
+
+        // make sure to calculate charges
+        calculateCharges(charges);
 
         // payment splits
         updatePaymentSplitCharges(charges, application);
