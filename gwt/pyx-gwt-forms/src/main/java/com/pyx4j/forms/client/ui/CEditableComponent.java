@@ -150,17 +150,6 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
     }
 
-    @Override
-    public String getToolTip() {
-        String tooltip = super.getToolTip();
-        if (validate() || !isMandatoryConditionMet()) {
-            return tooltip;
-        } else {
-            return "<span style=color:red>" + getValidationMessageWithoutMandatoyCondition() + "</span>"
-                    + ((tooltip == null || tooltip.trim().equals("")) ? "" : "<br>" + tooltip);
-        }
-    }
-
     public boolean isMandatoryConditionMet() {
         return !isEnabled() || !isEditable() || !isMandatory() || !isValueEmpty();
     }
@@ -169,18 +158,12 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         if (!validate()) {
             if (!isMandatoryConditionMet()) {
                 return getMandatoryValidationMessage();
-            }
-            return getValidationMessageWithoutMandatoyCondition();
-        }
-        return null;
-    }
-
-    private String getValidationMessageWithoutMandatoyCondition() {
-        if (!validate() && isMandatoryConditionMet()) {
-            if (validators != null) {
-                for (EditableValueValidator<DATA_TYPE> validator : validators) {
-                    if (!validator.isValid(this, getValue())) {
-                        return validator.getValidationMessage(this, getValue());
+            } else {
+                if (validators != null) {
+                    for (EditableValueValidator<DATA_TYPE> validator : validators) {
+                        if (!validator.isValid(this, getValue())) {
+                            return validator.getValidationMessage(this, getValue());
+                        }
                     }
                 }
             }
