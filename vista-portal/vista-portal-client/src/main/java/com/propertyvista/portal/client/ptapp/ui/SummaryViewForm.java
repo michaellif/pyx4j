@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -136,6 +137,16 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     private Widget innerLevelElementElignment(Widget e) {
+        e.setWidth("100%");
+        return e;
+    }
+
+    // this block of styles alight width and left position: 
+    private Widget innerElement2upperElignment(Widget e) {
+        e.getElement().getStyle().setPosition(Position.RELATIVE);
+        e.getElement().getStyle().setLeft(-1, Unit.EM);
+        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
         e.setWidth("100%");
         return e;
     }
@@ -348,6 +359,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             public TenantInfo(PotentialTenantInfo pti) {
 
                 getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                innerElement2upperElignment(this);
 
                 getElement().getStyle().setBackgroundColor("white");
 
@@ -355,7 +367,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
                 getElement().getStyle().setBorderColor("black");
 
-                getElement().getStyle().setPaddingLeft(1, Unit.EM);
                 //                getElement().getStyle().setPaddingRight(1, Unit.EM);
                 getElement().getStyle().setPaddingTop(0.5, Unit.EM);
                 getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
@@ -870,14 +881,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent);
             leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            //            leaseTerms.getElement().getStyle().setOverflow(Overflow.SCROLL);
             leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
             leaseTerms.getElement().getStyle().setBorderColor("black");
             leaseTerms.getElement().getStyle().setBackgroundColor("white");
             leaseTerms.getElement().getStyle().setColor("black");
 
+            innerElement2upperElignment(leaseTerms);
             leaseTerms.setHeight("20em");
-            leaseTerms.setWidth("100%");
             add(leaseTerms);
 
             //            CEditableComponent<?, ?> agreeCheck = (CEditableComponent<?, ?>) create(proto().agree(), SummaryViewForm.this);
@@ -890,7 +900,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                     Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
-            agree.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
+            agree.asWidget().getElement().getStyle().setMarginBottom(0.5, Unit.EM);
             add(agree);
         }
 
