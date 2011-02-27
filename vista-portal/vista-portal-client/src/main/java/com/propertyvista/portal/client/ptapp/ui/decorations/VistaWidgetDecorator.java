@@ -197,7 +197,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
     private void renderValidationMessage() {
         if (component instanceof CEditableComponent<?, ?>) {
             CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
-            if (!editableComponent.validate()) {
+            if (!editableComponent.isValid()) {
                 validationLabel.setText(editableComponent.getValidationMessage());
             } else {
                 validationLabel.setText(null);

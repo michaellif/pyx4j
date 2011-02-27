@@ -133,8 +133,8 @@ public class PetsViewForm extends CEntityForm<Pets> {
     }
 
     @Override
-    public boolean validate() {
-        boolean result = super.validate();
+    public boolean isValid() {
+        boolean result = super.isValid();
         return result && !hasDuplicates();
     }
 
