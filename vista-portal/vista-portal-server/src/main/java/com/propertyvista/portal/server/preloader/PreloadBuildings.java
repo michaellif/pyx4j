@@ -172,16 +172,9 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return addOn;
     }
 
-    public static ChargeType createChargeType(ChargeType.Mode mode) {
-        ChargeType chargeType = EntityFactory.create(ChargeType.class);
-        chargeType.chargeType().setValue(mode);
-        persist(chargeType);
-        return chargeType;
-    }
-
-    public static PetChargeRule createPetCharge(ChargeType.Mode mode, int value) {
+    public static PetChargeRule createPetCharge(ChargeType mode, int value) {
         PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
-        petCharge.petChargeType().set(createChargeType(mode));
+        petCharge.chargeType().setValue(mode);
         petCharge.value().setValue(value);
         persist(petCharge);
         return petCharge;
@@ -192,11 +185,11 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         PetChargeRule petCharge;
         if (index == 0) {
-            petCharge = createPetCharge(ChargeType.Mode.deposit, 100);
+            petCharge = createPetCharge(ChargeType.deposit, 100);
         } else if (index == 1) {
-            petCharge = createPetCharge(ChargeType.Mode.oneTime, 50);
+            petCharge = createPetCharge(ChargeType.oneTime, 50);
         } else {
-            petCharge = createPetCharge(ChargeType.Mode.monthly, 200);
+            petCharge = createPetCharge(ChargeType.monthly, 200);
         }
         propertyProfile.petCharge().set(petCharge);
 

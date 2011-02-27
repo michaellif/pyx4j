@@ -13,14 +13,8 @@
  */
 package com.propertyvista.portal.domain;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-	
-public interface ChargeType extends IEntity {
-	
-    public static enum Mode {
-	    monthly, deposit, oneTime
-    }
-    
-    IPrimitive<Mode>chargeType();
+public enum ChargeType {
+
+    monthly, deposit, oneTime
+
 }

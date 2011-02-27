@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PetChargeRule extends IEntity {
 
-    ChargeType petChargeType();
+    IPrimitive<ChargeType> chargeType();
 
     IPrimitive<Integer> value(); // TODO this probably would have to be a double instead of an integer
 

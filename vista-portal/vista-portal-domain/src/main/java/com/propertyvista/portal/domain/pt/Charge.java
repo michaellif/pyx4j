@@ -18,12 +18,14 @@ import com.propertyvista.portal.domain.Money;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 
 public interface Charge extends IEntity {
 
     @EmbeddedEntity
     @Editor(type = EditorType.label)
+    @ToString(index = 1)
     Money charge();
 
 }

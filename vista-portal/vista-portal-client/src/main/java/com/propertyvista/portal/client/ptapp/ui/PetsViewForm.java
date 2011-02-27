@@ -20,22 +20,25 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
@@ -43,7 +46,16 @@ import com.pyx4j.forms.client.ui.ValidationResults;
 public class PetsViewForm extends CEntityForm<Pets> {
 
     public PetsViewForm() {
-        super(Pets.class);
+        super(Pets.class, new EntityFormComponentFactory() {
+            @Override
+            public CEditableComponent<?, ?> create(IObject<?> member) {
+                if (member instanceof ChargeLine) {
+                    return new CEntityLabel();
+                } else {
+                    return super.create(member);
+                }
+            }
+        });
     }
 
     @Override
@@ -58,6 +70,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
         if (member.equals(proto().pets())) {
             return createPetsEditorColumns();
         } else {
+
             return super.createMemberFolderEditor(member);
         }
     }
@@ -76,7 +89,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
                 columns.add(new EntityFolderColumnDescriptor(proto.weight(), "7em", "0.5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "5em", "0.5em"));
                 columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.chargeDescription(), "7em", "0.5em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em", "0.5em"));
             }
 
             @Override
@@ -92,7 +105,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
             @Override
             protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
                 newEntity.weightUnit().setValue(WeightUnit.lb);
-                newEntity.chargeDescription().setValue("100$ Deposit");
+                ChargesSharedCalculation.calculatePetCharges(PetsViewForm.this.getValue().petChargeRule(), newEntity);
                 super.createNewEntity(newEntity, callback);
             }
 
@@ -104,14 +117,6 @@ public class PetsViewForm extends CEntityForm<Pets> {
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove pet");
                     }
 
-                    @Override
-                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
-                        if (column.getObject() == proto().chargeDescription()) {
-                            ((CEditableComponent<?, ?>) comp).setEditable(false);
-                        }
-                        return comp;
-                    }
                 };
             }
 

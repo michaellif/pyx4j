@@ -19,6 +19,8 @@ import com.propertyvista.portal.domain.pt.Charge;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
@@ -33,6 +35,20 @@ public class ChargesSharedCalculation {
         calculateProrateCharges(charges);
         calculateApplicationCharges(charges);
         calculatePaymentSplitCharges(charges);
+    }
+
+    public static void calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
+
+        switch (petChargeRule.chargeType().getValue()) {
+        case monthly:
+            pet.chargeLine().label().setValue("Monthly");
+        case deposit:
+            pet.chargeLine().label().setValue("Deposit");
+        case oneTime:
+            pet.chargeLine().label().setValue("One time");
+        }
+        pet.chargeLine().charge().set(DomainUtil.createMoney(petChargeRule.value().getValue()));
+
     }
 
     public static void calculateProrateCharges(Charges charges) {

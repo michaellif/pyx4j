@@ -15,8 +15,11 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("{2} {1}")
 public interface ChargeLine extends Charge {
 
     public enum ChargeType {
@@ -70,5 +73,6 @@ public interface ChargeLine extends Charge {
     IPrimitive<ChargeType> type();
 
     @Editor(type = EditorType.label)
+    @ToString(index = 2)
     IPrimitive<String> label();
 }

@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 public interface Pets extends IApplicationEntity {
@@ -22,4 +23,7 @@ public interface Pets extends IApplicationEntity {
     @Owned
     @Length(10)
     IList<Pet> pets();
+
+    @Transient
+    PetChargeRule petChargeRule();
 }

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.Building;
+import com.propertyvista.portal.domain.ChargeType;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.IUserEntity;
 import com.propertyvista.portal.domain.Picture;
@@ -32,6 +33,8 @@ import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
+import com.propertyvista.portal.domain.pt.PetChargeRule;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancialList;
@@ -215,6 +218,12 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 ChargesServerCalculation.calculateCharges(charges);
             } else if (ret instanceof Summary) {
                 retrieveSummary((Summary) ret);
+            } else if (ret instanceof Pets) {
+                // TODO get it from building
+                PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
+                petCharge.chargeType().setValue(ChargeType.monthly);
+                petCharge.value().setValue(20);
+                ((Pets) ret).petChargeRule().set(petCharge);
             }
 
             return ret;
