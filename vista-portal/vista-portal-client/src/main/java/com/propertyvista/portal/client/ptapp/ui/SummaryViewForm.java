@@ -48,6 +48,9 @@ import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.widgets.client.Button;
 
 @Singleton
@@ -66,6 +69,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private FinancialView financialView;
 
     private PetsTable petsTable;
+
+    private ChargesViewFormBase chargesView;
 
     private LeaseTermsCheck leaseTermsCheck;
 
@@ -100,12 +105,19 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
         main.add(leaseTermsCheck = new LeaseTermsCheck());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>--- Charges will be added soon --- :o)</h4>")));
+        chargesView = new ChargesViewFormBase(this);
+        chargesView.createContent(main, proto().charges());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
         main.add(signatureView = new SignatureView());
 
         setWidget(main);
+    }
+
+    @Override
+    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
+        CEntityFolder<?> editor = chargesView.createMemberFolderEditor(member);
+        return (editor != null ? editor : super.createMemberFolderEditor(member));
     }
 
     @Override
@@ -228,9 +240,16 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             // add table content panel:
             add(innerLevelElementElignment(content = new FlowPanel()));
+            content.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+
+            content.setHeight("100%");
+            content.setWidth("33%");
 
             // add static lease term blah-blah:
             HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
+            availabilityAndPricing.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            availabilityAndPricing.setWidth("66%");
             add(availabilityAndPricing);
         }
 
@@ -239,23 +258,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             content.clear();
 
             HTML label = new HTML(value.unitSelection().markerRent().leaseTerm().getStringView() + "&nbsp month Rent");
-            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            label.setWidth("33%");
-            content.add(label);
-
-            label = new HTML("From &nbsp " + value.unitSelection().rentStart().getStringView());
-            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-            label.setWidth("33%");
             content.add(label);
 
             label = new HTML(value.unitSelection().markerRent().rent().currency().getStringView()
                     + value.unitSelection().markerRent().rent().amount().getStringView() + " / month");
-            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-            label.setWidth("33%");
+            label.getElement().getStyle().setMarginTop(1, Unit.EM);
             content.add(label);
         }
     }

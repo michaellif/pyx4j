@@ -64,7 +64,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "52%", null));
                 main.add(DecorationUtils.inline(new HTML("%"), "3%", "right"));
 
-                if (isFirst()) {
+                if (isFirst() || valueChangeHandler == null) {
                     CNumberLabel fixedPrc = new CNumberLabel();
                     bind(fixedPrc, proto().percentage());
                     main.add(DecorationUtils.inline(fixedPrc, "5%", "right"));
@@ -73,7 +73,9 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 }
 
                 main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
-                get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
+                if (valueChangeHandler != null)
+                    get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
+
                 setWidget(main);
             }
         };
