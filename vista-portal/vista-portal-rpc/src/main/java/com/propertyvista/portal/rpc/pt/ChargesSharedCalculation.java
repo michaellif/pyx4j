@@ -38,14 +38,21 @@ public class ChargesSharedCalculation {
     }
 
     public static void calculatePetCharges(PetChargeRule petChargeRule, Pet pet) {
+        if ((petChargeRule == null) || petChargeRule.chargeType().isNull()) {
+            pet.chargeLine().set(null);
+            return;
+        }
 
         switch (petChargeRule.chargeType().getValue()) {
         case monthly:
             pet.chargeLine().label().setValue("Monthly");
+            break;
         case deposit:
             pet.chargeLine().label().setValue("Deposit");
+            break;
         case oneTime:
             pet.chargeLine().label().setValue("One time");
+            break;
         }
         pet.chargeLine().charge().set(DomainUtil.createMoney(petChargeRule.value().getValue()));
 

@@ -55,6 +55,7 @@ public interface Pet extends IEntity {
     public IPrimitive<Date> birthDate();
 
     @EmbeddedEntity
+    @Caption(name = "Charge")
     public ChargeLine chargeLine();
 
 }
