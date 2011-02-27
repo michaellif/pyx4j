@@ -96,12 +96,11 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         return validationResults;
     }
 
-    public CEditableComponent<?, ?> bind(CEditableComponent<?, ?> component, IObject<?> member) {
+    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
         if (component instanceof IFlexConextComponent) {
             ((IFlexConextComponent) component).createContent();
         }
-        return component;
     }
 
     public <T> CEditableComponent<T, ?> get(IObject<T> member) {
