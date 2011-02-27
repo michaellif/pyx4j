@@ -61,8 +61,9 @@ public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
             public void createContent() {
 
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "55%", null));
-                main.add(DecorationUtils.inline(new HTML("%"), "5%", "right"));
+                main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "52%", null));
+                main.add(DecorationUtils.inline(new HTML("%"), "3%", "right"));
+
                 if (isFirst()) {
                     CNumberLabel fixedPrc = new CNumberLabel();
                     bind(fixedPrc, proto().percentage());
@@ -70,7 +71,8 @@ public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
                 } else {
                     main.add(DecorationUtils.inline(masterForm.create(proto().percentage(), this), "5%", "right"));
                 }
-                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "5%", "right"));
+
+                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
                 get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
                 setWidget(main);
             }

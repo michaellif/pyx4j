@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
@@ -87,11 +88,20 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
     private Widget createHeader2(IObject<?> member) {
 
-        return new HTML("<h5>" + member.getMeta().getCaption() + "</h5>");
+        HTML h = new HTML("<h5>" + member.getMeta().getCaption() + "</h5>");
+        h.getElement().getStyle().setMarginTop(0.5, Unit.EM);
+        h.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        return h;
     }
 
     private Widget createTotal(Money member) {
         FlowPanel totalRow = new FlowPanel();
+
+        Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+        sp.getElement().getStyle().setPadding(0, Unit.EM);
+        sp.getElement().getStyle().setProperty("border", "1px dotted black");
+        totalRow.add(sp);
+
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         totalRow.add(DecorationUtils.inline(total, "60%", null));
         totalRow.add(DecorationUtils.inline(create(member, this), "10%", "right"));

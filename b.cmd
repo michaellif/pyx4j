@@ -7,5 +7,6 @@ for /f "tokens=*" %%I in ('CD') do @set CurDir=%%~nI
 title *%CurDir% - mvn build
 call mvn install -P pyx %*
 title %CurDir%
+pause
 
 

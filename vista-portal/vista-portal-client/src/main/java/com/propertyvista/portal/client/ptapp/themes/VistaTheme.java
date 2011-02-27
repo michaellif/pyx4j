@@ -121,11 +121,12 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h4, blockquote");
+        style.addProperty("font-size", "1.12em");
         style.addProperty("padding-bottom", "0.3px");
         style.addProperty("margin", "0");
         addStyle(style);
         style = new Style("h5");
-        style.addProperty("font-size", "1.12em");
+        style.addProperty("font-size", "1.08em");
         style.addProperty("padding-bottom", "0.2px");
         style.addProperty("margin", "0");
         addStyle(style);

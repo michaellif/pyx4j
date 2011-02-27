@@ -30,7 +30,7 @@ public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements FolderI
     public BoxReadOnlyFolderItemDecorator(boolean withLineSeparator) {
         content = new SimplePanel();
         if (withLineSeparator) {
-            Widget sp = new ViewLineSeparator(70, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            Widget sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             add(sp);
         }
