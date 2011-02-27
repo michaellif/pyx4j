@@ -36,19 +36,23 @@ public interface Pet extends IEntity {
     @NotNull
     public IPrimitive<PetType> type();
 
+    @NotNull
     public IPrimitive<String> name();
 
     @Caption(name = "Colour")
+    @NotNull
     public IPrimitive<String> color();
 
     public IPrimitive<String> breed();
 
+    @NotNull
     public IPrimitive<Integer> weight();
 
     @Caption(name = "")
     @NotNull
     public IPrimitive<WeightUnit> weightUnit();
 
+    @NotNull
     public IPrimitive<Date> birthDate();
 
     public IPrimitive<Double> charge();
