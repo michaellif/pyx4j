@@ -29,6 +29,11 @@ public interface Unit extends Property {
 
     IPrimitive<String> unitType();
 
+    /**
+     * Number of the unit
+     */
+    IPrimitive<String> suiteNumber();
+
     Building building();
 
     /**

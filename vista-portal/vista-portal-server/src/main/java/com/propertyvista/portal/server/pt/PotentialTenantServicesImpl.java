@@ -323,17 +323,27 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
     }
 
     /**
-     * Build the AvalableUnitsByFloorplan object.
+     * Build the AvalableUnitsByFloorplan object. It is made public for now, so that
+     * PreloadPT can call it
      */
-    private static void loadAvailableUnits(UnitSelection unitSelection) {
+    public static void loadAvailableUnits(UnitSelection unitSelection) {
         AvailableUnitsByFloorplan availableUnits = unitSelection.availableUnits();
 
         log.info("Looking for units {}", unitSelection.selectionCriteria());
 
+        // find building first, don't use building from unit selection
+        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), unitSelection.selectionCriteria().propertyCode().getValue()));
+        Building building = PersistenceServicesFactory.getPersistenceService().retrieve(buildingCriteria);
+        if (building == null) {
+            log.info("Could not find building for propertyCode {}", unitSelection.selectionCriteria().propertyCode().getStringView());
+            return;
+        }
+
         // find floor plan
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), unitSelection.selectionCriteria().floorplanName().getValue()));
-        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), unitSelection.building()));
+        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
         Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
 
         if (floorplan == null) {
@@ -346,9 +356,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         }
 
         // find units
-        log.info("Found floorplan {}, now will look for building {}", floorplan, unitSelection.building());
+        log.info("Found floorplan {}, now will look for building {}", floorplan, building);
         EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building(), unitSelection.building()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
 
         if (!unitSelection.selectionCriteria().availableFrom().isNull()) {

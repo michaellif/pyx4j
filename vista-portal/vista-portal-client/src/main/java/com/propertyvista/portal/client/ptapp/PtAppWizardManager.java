@@ -123,7 +123,7 @@ public class PtAppWizardManager {
                 unitSelectionCriteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
             }
             if (unitSelectionCriteria.propertyCode().isNull()) {
-                unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_BUILDINGNAME);
+                unitSelectionCriteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
             }
         }
 

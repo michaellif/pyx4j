@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,9 +230,11 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return building;
     }
 
-    private Unit createUnit(Building building, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan, LeaseTerms leaseTerms) {
+    private Unit createUnit(Building building, String suiteNumber, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan,
+            LeaseTerms leaseTerms) {
         Unit unit = EntityFactory.create(Unit.class);
 
+        unit.suiteNumber().setValue(suiteNumber);
         unit.building().set(building);
         unit.floor().setValue(floor);
         unit.unitType().setValue(floor + "-230" + RandomUtil.randomInt(10));
@@ -239,10 +243,11 @@ public class PreloadBuildings extends AbstractDataPreloader {
         unit.bathrooms().setValue(bathrooms);
         unit.newLeaseTerms().set(leaseTerms);
 
+        double rent = 900 + RandomUtil.randomInt(200);
         for (int i = 1; i < 4; i++) {
             MarketRent marketRent = EntityFactory.create(MarketRent.class);
             marketRent.leaseTerm().setValue(i * 6);
-            marketRent.rent().amount().setValue(565D - 5 * i + RandomUtil.randomInt(100));
+            marketRent.rent().amount().setValue(rent - 35 * i);
             unit.marketRent().add(marketRent);
         }
 
@@ -386,7 +391,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
             String propertyCode = "A" + String.valueOf(b);
             if (b == 0) {
                 //UI is looking for this building, see references!
-                propertyCode = DemoData.REGISTRATION_DEFAULT_BUILDINGNAME;
+                propertyCode = DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE;
             }
 
             // property profile
@@ -395,28 +400,37 @@ public class PreloadBuildings extends AbstractDataPreloader {
             Building building = createBuilding(propertyCode, buildingType, complex, website, address, phones, email, propertyProfile);
             //			log.info("Created: " + building);
 
+            // create floorplans
+            Map<Integer, Floorplan> floorplans = new HashMap<Integer, Floorplan>();
+            for (int i = 0; i < DemoData.NUM_FLOORPLANS; i++) {
+                String floorplanName = b + "-" + i;
+                if (i == 1) {
+                    floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
+                }
+
+                Floorplan floorplan = createFloorplan(floorplanName);
+                floorplan.building().set(building);
+                PersistenceServicesFactory.getPersistenceService().persist(floorplan);
+                floorplans.put(i, floorplan);
+            }
+
             // now create units for the building
             for (int floor = 1; floor < DemoData.NUM_FLOORS + 1; floor++) {
 
                 // for each floor we want to create the same number of units
                 for (int j = 1; j < DemoData.NUM_UNITS_PER_FLOOR + 1; j++) {
 
+                    String suiteNumber = "#" + (floor * 100 + j);
                     float bedrooms = 2.0f;
                     float bathrooms = 2.0f;
 
-                    // later floor plans should be more elaborate
-                    String floorplanName = b + "-" + floor + "-" + j;
-                    if ((floor == 1) && (j == 1)) {
-                        // UI is looking for this plan, see references!
-                        floorplanName = DemoData.REGISTRATION_DEFAULT_FLOORPLAN;
+                    Floorplan floorplan = floorplans.get(j % DemoData.NUM_FLOORPLANS);
+                    if (floorplan == null) {
+                        throw new IllegalStateException("No floorplan");
                     }
-                    Floorplan floorplan = createFloorplan(floorplanName);
-                    floorplan.building().set(building);
-                    PersistenceServicesFactory.getPersistenceService().persist(floorplan);
-                    for (int u = 0; u < 3; u++) {
-                        int uarea = floorplan.area().getValue() + RandomUtil.randomInt(10);
-                        createUnit(building, floor, uarea, bedrooms, bathrooms, floorplan, leaseTerms);
-                    }
+
+                    int uarea = floorplan.area().getValue() + RandomUtil.randomInt(10);
+                    createUnit(building, suiteNumber, floor, uarea, bedrooms, bathrooms, floorplan, leaseTerms);
                 }
             }
         }
@@ -430,58 +444,74 @@ public class PreloadBuildings extends AbstractDataPreloader {
     }
 
     public void load() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n\n");
+
+        List<Floorplan> floorplans = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Floorplan>(Floorplan.class));
+        sb.append(floorplans.size()).append(" floorplans\n");
+        for (Floorplan floorplan : floorplans) {
+            sb.append("\t");
+            sb.append(floorplan);
+            sb.append("\n");
+        }
+
+        //        EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
+        //        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().name(), DemoData.REGISTRATION_DEFAULT_FLOORPLAN));
+        //        floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().propertyCode(), DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE));
+        //        Floorplan floorplan = PersistenceServicesFactory.getPersistenceService().retrieve(floorplanCriteria);
+        //        sb.append("Floorplan: ").append(floorplan);
+
         List<Building> buildings = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Building>(Building.class));
-        StringBuilder b = new StringBuilder();
-        b.append("\n\nLoaded " + buildings.size() + " buildings\n\n");
+        sb.append("\n\nLoaded " + buildings.size() + " buildings\n\n");
         for (Building building : buildings) {
             //            b.append(building.getStringView());
-            b.append(building.buildingType().getStringView());
-            b.append("\t");
-            b.append(building.address().addressLine1().getStringView()).append(", ");
-            b.append(building.address().city().getStringView()).append(" ").append(building.address().state().getStringView()).append(", ");
-            b.append(building.address().zip().getStringView()).append(", ").append(building.address().country().getStringView());
+            sb.append(building.buildingType().getStringView());
+            sb.append("\t");
+            sb.append(building.address().addressLine1().getStringView()).append(", ");
+            sb.append(building.address().city().getStringView()).append(" ").append(building.address().state().getStringView()).append(", ");
+            sb.append(building.address().zip().getStringView()).append(", ").append(building.address().country().getStringView());
 
             // phones
-            b.append("\t");
+            sb.append("\t");
 
             for (Phone phone : building.phoneList()) {
-                b.append(phone.phoneNumber().getStringView());
-                b.append("/").append(phone.phoneType().getStringView());
+                sb.append(phone.phoneNumber().getStringView());
+                sb.append("/").append(phone.phoneType().getStringView());
             }
 
             //            // email
             //            b.append("\t");
             //            b.append(building.email().getStringView());
 
-            b.append("\n");
+            sb.append("\n");
 
             // get the units
             EntityQueryCriteria<Unit> criteria = new EntityQueryCriteria<Unit>(Unit.class);
             criteria.add(new PropertyCriterion("building", Restriction.EQUAL, building.getPrimaryKey()));
             List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
-            b.append("\tBuilding has " + units.size() + " units\n");
+            sb.append("\tBuilding has " + units.size() + " units\n");
 
             for (Unit unit : units) {
-                b.append("\t");
-                b.append(unit.floor().getStringView()).append(" floor");
-                b.append(" ");
-                b.append(unit.area().getStringView()).append(" sq. ft.");
-                b.append(" ");
-                b.append(unit.building().propertyCode().getStringView());
-                b.append(" ");
-                b.append(unit.floorplan());
-                b.append(" | ");
-                b.append(unit.floorplan().name().getStringView()); //.append(" ").append(unit.floorplan().pictures());
-                b.append("\n");
-                b.append("\t\t").append(unit.utilities()).append("\n");
-                b.append("\t\t").append(unit.amenities()).append("\n");
-                b.append("\t\t").append(unit.infoDetails()).append("\n");
-                b.append("\t\t").append(unit.concessions()).append("\n");
-                b.append("\t\t").append(unit.addOns()).append("\n");
+                sb.append("\t");
+                sb.append(unit.floor().getStringView()).append(" floor");
+                sb.append(" ");
+                sb.append(unit.area().getStringView()).append(" sq. ft.");
+                sb.append(" ");
+                sb.append(unit.building().propertyCode().getStringView());
+                sb.append(" ");
+                sb.append(unit.floorplan());
+                sb.append(" | ");
+                sb.append(unit.floorplan().name().getStringView()); //.append(" ").append(unit.floorplan().pictures());
+                sb.append("\n");
+                sb.append("\t\t").append(unit.utilities()).append("\n");
+                sb.append("\t\t").append(unit.amenities()).append("\n");
+                sb.append("\t\t").append(unit.infoDetails()).append("\n");
+                sb.append("\t\t").append(unit.concessions()).append("\n");
+                sb.append("\t\t").append(unit.addOns()).append("\n");
             }
         }
-        b.append("\n");
-        log.info(b.toString());
+        sb.append("\n");
+        log.info(sb.toString());
     }
 
     private static void persist(IEntity entity) {

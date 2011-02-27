@@ -19,11 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.DemoData;
+import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
+import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -44,8 +47,11 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
+import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -53,10 +59,15 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 public class PreloadPT extends AbstractDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
+
+    private Application application;
 
     private static Employer createEmployer() {
         Employer employer = EntityFactory.create(Employer.class);
@@ -260,7 +271,7 @@ public class PreloadPT extends AbstractDataPreloader {
         }
     }
 
-    private void createCharges(Application application) {
+    private void createCharges() {
         Charges charges = EntityFactory.create(Charges.class);
 
         ChargesServerCalculation.dummyPopulate(charges, application);
@@ -268,27 +279,43 @@ public class PreloadPT extends AbstractDataPreloader {
         persist(charges);
     }
 
-    @Override
-    public String create() {
+    private User createUser() {
         User user = EntityFactory.create(User.class);
-        user.name().setValue("z");
-        user.email().setValue("x");
+        user.name().setValue("Gregory Holmes");
+        user.email().setValue("gregory@221b.com");
         PersistenceServicesFactory.getPersistenceService().persist(user);
 
-        Application application = EntityFactory.create(Application.class);
-        // TODO Dima. We need a use to bind this application to.
+        return user;
+    }
+
+    private Application createApplication(User user) {
+        application = EntityFactory.create(Application.class);
         application.user().set(user);
         persist(application);
+        return application;
+    }
 
-        UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
-        //unitSelection.selectionCriteria().propertyCode().set(request.propertyCode());
-        //unitSelection.selectionCriteria().floorplanName().set(request.floorplanName());
-        //unitSelection.building().set(building);
-        unitSelection.application().set(application);
-        persist(unitSelection);
+    private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
+        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
+        ws.placeToken().setValue(AppPlaceInfo.getPlaceId(place.getClass()));
+        ws.status().setValue(status);
+        return ws;
+    }
 
-        // TODO Dima. initialize ApplicationProgress here. Create a new class for this and MOVE code from GetCurrentApplicationImpl... have no idea how to name it.
+    private void createApplicationProgress() {
+        ApplicationProgress progress = EntityFactory.create(ApplicationProgress.class);
+        progress.steps().add(createWizardStep(new SiteMap.Apartment(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Tenants(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Info(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Financial(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Pets(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Charges(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
+        progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
+        progress.application().set(application);
+    }
 
+    private void createPotentialTenantList() {
         PotentialTenantList tenants = EntityFactory.create(PotentialTenantList.class);
         tenants.application().set(application);
         for (int i = 0; i < DemoData.NUM_POTENTIAL_TENANTS; i++) {
@@ -299,8 +326,16 @@ public class PreloadPT extends AbstractDataPreloader {
         }
 
         persist(tenants);
+    }
 
-        createCharges(application);
+    @Override
+    public String create() {
+        User user = createUser();
+        createApplication(user);
+        createUnitSelection();
+        createApplicationProgress();
+        createPotentialTenantList();
+        createCharges();
 
         load();
 
@@ -309,11 +344,72 @@ public class PreloadPT extends AbstractDataPreloader {
         return b.toString();
     }
 
+    private void createUnitSelection() {
+        UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
+        unitSelection.application().set(application);
+
+        // unit selection criteria
+        UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
+        criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
+        criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
+        unitSelection.selectionCriteria().set(criteria);
+
+        PotentialTenantServicesImpl.loadAvailableUnits(unitSelection);
+
+        persist(unitSelection);
+    }
+
+    private void loadUnitSelection(StringBuilder sb) {
+        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+        PotentialTenantServicesImpl.loadAvailableUnits(unitSelection);
+
+        sb.append("Criteria\n\t");
+        sb.append(unitSelection.selectionCriteria());
+        sb.append("\n\n");
+
+        sb.append(unitSelection.availableUnits().units().size());
+        sb.append(" available units\n");
+        for (Unit unit : unitSelection.availableUnits().units()) {
+            sb.append("\t");
+            sb.append(unit.suiteNumber().getStringView());
+            sb.append(" ");
+            sb.append(unit.bedrooms().getValue()).append(" beds ");
+            sb.append(unit.bathrooms().getValue()).append(" baths");
+            sb.append(" ");
+            sb.append(unit.area()).append(" sq ft");
+
+            sb.append(" available on ");
+            sb.append(unit.avalableForRent().getStringView());
+            sb.append("\n");
+
+            // show rent
+            for (MarketRent rent : unit.marketRent()) {
+                sb.append("\t\t");
+                sb.append(rent.leaseTerm().getValue()).append(" months $");
+                sb.append(rent.rent().amount().getValue()).append("");
+                sb.append("\n");
+            }
+        }
+    }
+
+    private void loadTenants(StringBuilder sb) {
+        EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+    }
+
     public void load() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n\n-------------------------- APARTMENT -------------------------------\n");
+        loadUnitSelection(sb);
+
         List<PotentialTenantList> tenantLists = PersistenceServicesFactory.getPersistenceService().query(
                 new EntityQueryCriteria<PotentialTenantList>(PotentialTenantList.class));
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n\nLoaded " + tenantLists.size() + " potential tenant lists\n\n");
+        sb.append("\n\n---------------------------- TENANTS -------------------------------\n\n");
 
         for (PotentialTenantList tenants : tenantLists) {
 
@@ -382,7 +478,7 @@ public class PreloadPT extends AbstractDataPreloader {
             //            sb.append("\t").append(charges.paymentSplitCharges()).append("\n");
             sb.append("\n");
         }
-        sb.append("\n----------------------- END OF CHARGES ------------------\n\n");
+        sb.append("\n\n");
 
         //        List<PotentialTenant> pts = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<PotentialTenant>(PotentialTenant.class));
         //        StringBuilder sb = new StringBuilder();
