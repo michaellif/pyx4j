@@ -85,8 +85,12 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
             case Response.SC_UNAUTHORIZED:
                 showUnauthorized();
                 break;
+            case 12007:
+            case 12029:
+                showInternetConnectionError();
+                break;
             default:
-                showDefaultError(cause, errorCode);
+                showHttpStatusCode((StatusCodeException) cause, statusCode, errorCode);
             }
         } else if ((cause instanceof RuntimeException) && ("HTTP download failed with status 404".equals(cause.getMessage()))) {
             // TODO see if com.google.gwt.core.client.impl.AsyncFragmentLoader.HttpDownloadFailure was made public
@@ -103,6 +107,10 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
     protected abstract void showWarning(String text);
 
     protected abstract void showThrottle();
+
+    protected abstract void showHttpStatusCode(StatusCodeException caught, int statusCode, String errorCode);
+
+    protected abstract void showInternetConnectionError();
 
     protected abstract void showDefaultError(Throwable caught, String errorCode);
 }

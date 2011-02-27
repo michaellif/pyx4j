@@ -36,6 +36,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHandler {
 
@@ -133,7 +134,21 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
     @Override
     protected void showUnauthorized() {
         MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This session has been terminated ."), Type.Error, new ShowOnceDialogOptions());
+    }
 
+    @Override
+    protected void showInternetConnectionError() {
+        showWarning(i18n.tr("Please make sure you are connected to internet."));
+
+    }
+
+    @Override
+    protected void showHttpStatusCode(StatusCodeException caught, int statusCode, String errorCode) {
+        if ((statusCode == 0) && BrowserType.isFirefox()) {
+            showInternetConnectionError();
+        } else {
+            showDefaultError(caught, errorCode);
+        }
     }
 
     @Override
