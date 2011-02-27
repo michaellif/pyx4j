@@ -15,29 +15,31 @@ package com.propertyvista.portal.domain.pt;
 
 public enum IncomeSource {
 
+    //TODO i18n
+
     fulltime("Full time"),
 
     parttime("Part time"),
 
     selfemployed("Self employed"),
 
-    seasonallyEmployed,
+    seasonallyEmployed("Seasonally Employed"),
 
-    socialServices,
+    socialServices("Social Services"),
 
-    pension,
+    pension("Pension"),
 
-    retired,
+    retired("Retired"),
 
-    student,
+    student("Student"),
 
-    unemployment,
+    unemployment("Unemployment"),
 
-    odsp,
+    odsp("ODSP"),
 
-    dividends,
+    dividends("Dividends"),
 
-    other;
+    other("Other");
 
     private final String label;
 

@@ -13,23 +13,52 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantAsset extends IEntity {
-	
-    public enum AssetType {
-    	bankAccounts, realEstateProperties, insurancePolicies, shares, 
-    		unitTrusts, businesses, cars, other
-    }
 
+    public enum AssetType {
+
+        //TODO i18n
+
+        bankAccounts("Bank Accounts"),
+
+        realEstateProperties("Real Estate Properties"),
+
+        insurancePolicies("Insurance Policies"),
+
+        shares("Shares"),
+
+        unitTrusts("Unit Trusts"),
+
+        businesses("Businesses"),
+
+        cars("Cars"),
+
+        other("Other");
+
+        private final String label;
+
+        AssetType() {
+            this.label = name();
+        }
+
+        AssetType(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
 
     @ToString(index = 0)
     IPrimitive<AssetType> assetType();
-    
+
     @Caption(name = "% Ownership")
     IPrimitive<Double> percent();
 
