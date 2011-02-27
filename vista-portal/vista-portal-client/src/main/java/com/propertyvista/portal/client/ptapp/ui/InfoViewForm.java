@@ -57,18 +57,19 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         DecorationData decorData = new DecorationData();
         decorData.editable = false;
-        decorData.componentWidth = 15;
+        decorData.componentWidth = 12;
         main.add(new VistaWidgetDecorator(create(proto().firstName(), this), decorData));
 
         main.add(new HTML());
 
         decorData = new DecorationData();
-        decorData.componentWidth = 10;
+        decorData.componentWidth = 12;
         main.add(new VistaWidgetDecorator(create(proto().middleName(), this), decorData));
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.editable = false;
+        decorData.componentWidth = 20;
         main.add(new VistaWidgetDecorator(create(proto().lastName(), this), decorData));
 
         main.add(new HTML());
@@ -79,7 +80,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new HTML());
 
         decorData = new DecorationData();
-        decorData.componentWidth = 10;
+        decorData.componentWidth = 15;
         main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this), decorData));
         main.add(new HTML());
 
@@ -90,14 +91,19 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         decorData = new DecorationData();
         decorData.editable = false;
+        decorData.componentWidth = 25;
         main.add(new VistaWidgetDecorator(create(proto().email(), this), decorData));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
-        main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 20;
+        main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this), decorData));
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(create(proto().driversLicenseState(), this)));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().secureIdentifier(), this)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 11;
+        main.add(new VistaWidgetDecorator(create(proto().secureIdentifier(), this), decorData));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Current Address</h4>")));
@@ -157,17 +163,30 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             public void createContent() {
                 FlowPanel main = new FlowPanel();
                 createIAddress(main, proto(), this);
-                main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this)));
+                DecorationData decorData = new DecorationData();
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().moveOutDate(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().moveOutDate(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().payment(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().payment(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().phone(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().phone(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().rented(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().rented(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().managerName(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().managerName(), this), decorData));
                 main.add(new HTML());
                 setWidget(main);
             }
@@ -179,25 +198,43 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().firstName(), this)));
+                DecorationData decorData = new DecorationData();
+                decorData.componentWidth = 12;
+                main.add(new VistaWidgetDecorator(create(proto().firstName(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().middleName(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 12;
+                main.add(new VistaWidgetDecorator(create(proto().middleName(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().lastName(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 20;
+                main.add(new VistaWidgetDecorator(create(proto().lastName(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().homePhone(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().homePhone(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().street1(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 40;
+                main.add(new VistaWidgetDecorator(create(proto().address().street1(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().street2(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 40;
+                main.add(new VistaWidgetDecorator(create(proto().address().street2(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().city(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().address().city(), this), decorData));
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto().address().province(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().postalCode(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 7;
+                main.add(new VistaWidgetDecorator(create(proto().address().postalCode(), this), decorData));
                 main.add(new HTML());
                 setWidget(main);
             }
