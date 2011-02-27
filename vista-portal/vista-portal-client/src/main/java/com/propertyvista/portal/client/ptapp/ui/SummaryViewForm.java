@@ -20,7 +20,6 @@ import java.util.Map.Entry;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -29,7 +28,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -37,19 +35,25 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
+import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.widgets.client.Button;
 
@@ -70,7 +74,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private PetsTable petsTable;
 
-    private ChargesViewFormBase chargesView;
+    private ChargesView chargesView;
 
     private LeaseTermsCheck leaseTermsCheck;
 
@@ -105,7 +109,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
         main.add(leaseTermsCheck = new LeaseTermsCheck());
 
-        chargesView = new ChargesViewFormBase(this);
+        chargesView = new ChargesView(this);
         chargesView.createContent(main, proto().charges());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
@@ -131,6 +135,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         tenantsView.populate(value);
         //        financialView.populate(value);
         petsTable.populate(value);
+        chargesView.populate(value);
         leaseTermsCheck.populate(value);
         signatureView.populate(value);
     }
@@ -244,12 +249,12 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
             content.setHeight("100%");
-            content.setWidth("33%");
+            content.setWidth("30%");
 
             // add static lease term blah-blah:
             HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
             availabilityAndPricing.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            availabilityAndPricing.setWidth("66%");
+            availabilityAndPricing.setWidth("70%");
             add(availabilityAndPricing);
         }
 
@@ -871,6 +876,87 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             label.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
             label.setWidth(tableLayout.get(cellName));
             content.add(label);
+        }
+    }
+
+    /*
+     * Lease Terms view implementation
+     */
+    public class ChargesView {
+
+        final CEntityForm<?> masterForm;
+
+        Widget upgradesHeader;
+
+        public ChargesView(CEntityForm<?> masterForm) {
+            this.masterForm = masterForm;
+        }
+
+        public void createContent(FlowPanel main, Charges member) {
+
+            main.add(createHeader(member.monthlyCharges()));
+            main.add(masterForm.create(member.monthlyCharges().charges(), masterForm));
+
+            main.add(upgradesHeader = createHeader2(member.monthlyCharges().upgradeCharges()));
+            main.add(masterForm.create(member.monthlyCharges().upgradeCharges(), masterForm));
+
+            main.add(createTotal(member.monthlyCharges().total()));
+
+            main.add(createHeader(member.proRatedCharges()));
+            main.add(masterForm.create(member.proRatedCharges().charges(), masterForm));
+            main.add(createTotal(member.proRatedCharges().total()));
+
+            main.add(createHeader(member.applicationCharges()));
+            main.add(masterForm.create(member.applicationCharges().charges(), masterForm));
+            main.add(createTotal(member.applicationCharges().total()));
+
+            main.add(createHeader(member.paymentSplitCharges()));
+            main.add(masterForm.create(member.paymentSplitCharges().charges(), masterForm));
+            main.add(createTotal(member.paymentSplitCharges().total()));
+        }
+
+        private Widget createHeader(IObject<?> member) {
+
+            return new ViewHeaderDecorator(new HTML("<h4>" + member.getMeta().getCaption() + "</h4>"));
+        }
+
+        private Widget createHeader2(IObject<?> member) {
+
+            HTML h = new HTML("<h5>" + member.getMeta().getCaption() + "</h5>");
+            h.getElement().getStyle().setMarginTop(0.5, Unit.EM);
+            h.getElement().getStyle().setMarginLeft(1, Unit.EM);
+            return h;
+        }
+
+        private Widget createTotal(Money member) {
+            FlowPanel totalRow = new FlowPanel();
+
+            Widget sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+            sp.getElement().getStyle().setPadding(0, Unit.EM);
+            sp.getElement().getStyle().setProperty("border", "1px dotted black");
+            totalRow.add(sp);
+
+            HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
+            totalRow.add(DecorationUtils.inline(total, "60%", null));
+            totalRow.add(DecorationUtils.inline(masterForm.create(member, masterForm), "10%", "right"));
+            totalRow.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            return totalRow;
+        }
+
+        protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
+            if (member.getValueClass().equals(ChargeLine.class)) {
+                return new ChargeLineFolder(masterForm);
+            } else if (member.getValueClass().equals(ChargeLineSelectable.class)) {
+                return new ChargeLineSelectableFolder(masterForm, null);
+            } else if (member.getValueClass().equals(TenantCharge.class)) {
+                return new ChargeSplitListFolder(masterForm, null);
+            } else {
+                return null;
+            }
+        }
+
+        public void populate(Summary value) {
+            upgradesHeader.setVisible(!value.charges().monthlyCharges().upgradeCharges().isEmpty());
         }
     }
 
