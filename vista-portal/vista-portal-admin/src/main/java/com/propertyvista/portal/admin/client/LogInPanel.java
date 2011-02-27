@@ -119,15 +119,15 @@ public abstract class LogInPanel extends BaseLogInPanel {
         switch (nativeKeyCode) {
         case 'A':
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;
-            max = DemoData.maxAdmin;
+            max = DemoData.MAX_ADMIN;
             break;
         case 'E':
             devLoginUserPrefix = DemoData.CRM_EMPLOYEE_USER_PREFIX;
-            max = DemoData.maxEmployee;
+            max = DemoData.MAX_EMPLOYEE;
             break;
         case 'O':
             devLoginUserPrefix = DemoData.CRM_CUSTOMER_USER_PREFIX;
-            max = DemoData.maxCustomers;
+            max = DemoData.MAX_CUSTOMERS;
             break;
         }
         if (devLoginUserPrefix != null) {

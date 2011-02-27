@@ -122,7 +122,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private void setDevLoginValues(NativeEvent event, int nativeKeyCode) {
         String devLoginUserPrefix = null;
-        int max = DemoData.maxCustomers;
+        int max = DemoData.MAX_CUSTOMERS;
         switch (nativeKeyCode) {
         case 'A':
             devLoginUserPrefix = DemoData.CRM_ADMIN_USER_PREFIX;

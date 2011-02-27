@@ -79,11 +79,11 @@ public class PreloadUsers extends AbstractDataPreloader {
 
         if (ApplicationMode.isDevelopment()) {
 
-            for (int i = 1; i <= DemoData.maxAdmin; i++) {
+            for (int i = 1; i <= DemoData.MAX_ADMIN; i++) {
                 createUser(DemoData.CRM_ADMIN_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.ADMIN);
             }
 
-            for (int i = 1; i <= DemoData.maxCustomers; i++) {
+            for (int i = 1; i <= DemoData.MAX_CUSTOMERS; i++) {
                 switch (custCount % 3) {
                 case 0:
                     createUser(DemoData.CRM_CUSTOMER_USER_PREFIX + CommonsStringUtils.d000(i) + DemoData.USERS_DOMAIN, VistaBehavior.POTENCIAL_TENANT);

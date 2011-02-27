@@ -31,9 +31,24 @@ public interface TenantIncome extends IEntity {
     // incomeSource =  pension, retired, odsp, dividends
     // NOTHING
 
+    //    /**
+    //     * Start of income period. For employment that would be employment start date.
+    //     */
+    //    IPrimitive<Date> dateStart();
+    //
+    //    /**
+    //     * End of income period
+    //     */
+    //    IPrimitive<Date> dateEnd();
+
     // incomeSource = fulltime, parttime
     @Owned
     Employer employer();
+
+    /**
+     * Still is employed
+     */
+    IPrimitive<Boolean> active();
 
     // incomeSource = selfemployed
     @Owned

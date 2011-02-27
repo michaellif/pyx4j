@@ -41,11 +41,11 @@ import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.Employer;
+import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
-import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -55,6 +55,7 @@ import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantAsset.AssetType;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
+import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -83,15 +84,35 @@ public class PreloadPT extends AbstractDataPreloader {
     private static Employer createEmployer() {
         Employer employer = EntityFactory.create(Employer.class);
 
+        populateAddress(employer);
+
         employer.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
         employer.monthlySalary().setValue(1000d + RandomUtil.randomInt(4000));
         employer.position().setValue(RandomUtil.random(DemoData.OCCUPATIONS));
-        employer.jobStart().setValue(RandomUtil.randomDate(1980, 2020));
-        employer.jobEnd().setValue(RandomUtil.randomDate(1980, 2020));
+
+        int startYear = 1990 + RandomUtil.randomInt(20);
+        int endYear = startYear + 1 + RandomUtil.randomInt(8);
+
+        employer.jobStart().setValue(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
+        employer.jobEnd().setValue(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
 
         return employer;
+    }
+
+    private void loadEmployer(Employer employer, StringBuilder sb) {
+        sb.append(" Employer: ").append(employer.name().getStringView());
+        sb.append(" \t").append(employer.jobStart().getStringView()).append(" - ").append(employer.jobEnd().getStringView());
+
+        sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
+        sb.append(" at ").append(employer.supervisorPhone().getStringView());
+
+        sb.append(", Monthly salary $").append(employer.monthlySalary().getValue());
+        sb.append(", Poisiton ").append(employer.position().getStringView());
+
+        sb.append(", \tAddress: ");
+        loadAddress(employer, sb);
     }
 
     public static EmergencyContact createEmergencyContact() {
@@ -129,14 +150,10 @@ public class PreloadPT extends AbstractDataPreloader {
         return lq;
     }
 
-    public static Address createAddress(String line1, String zip) {
+    public static Address createAddress() {
         Address address = EntityFactory.create(Address.class);
 
-        address.street1().setValue(line1);
-        address.street2().setValue("");
-        address.city().setValue(RandomUtil.random(DemoData.CITIES));
-        address.province().setValue(RandomUtil.random(DemoData.PROVINCES));
-        address.postalCode().setValue(zip);
+        populateAddress(address);
 
         address.moveInDate().setValue(RandomUtil.randomDate(2008, 2010));
         address.moveOutDate().setValue(RandomUtil.randomDate(2010, 2012));
@@ -148,6 +165,26 @@ public class PreloadPT extends AbstractDataPreloader {
         address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
 
         return address;
+    }
+
+    public static void populateAddress(IAddress address) {
+
+        String line1 = 100 + RandomUtil.randomInt(10000) + " " + RandomUtil.random(DemoData.STREETS);
+
+        String zip = "M2J 9V1";
+
+        address.street1().setValue(line1);
+        address.street2().setValue("");
+        address.city().setValue(RandomUtil.random(DemoData.CITIES));
+        address.province().setValue(RandomUtil.random(DemoData.PROVINCES));
+        address.postalCode().setValue(zip);
+    }
+
+    public static void loadAddress(IAddress address, StringBuilder sb) {
+        sb.append(address.street1().getValue());
+        sb.append(", ").append(address.city().getStringView());
+        sb.append(", ").append(address.province().getStringView());
+        sb.append(" ").append(address.postalCode().getStringView());
     }
 
     private Vehicle createVehicle() {
@@ -524,7 +561,9 @@ public class PreloadPT extends AbstractDataPreloader {
 
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
-            income.monthlyAmount().setValue(10d + RandomUtil.randomInt(5000));
+            income.monthlyAmount().setValue(300d + RandomUtil.randomInt(4000));
+
+            income.active().setValue(RandomUtil.randomBoolean());
 
             ptf.incomes().add(income);
         }
@@ -574,7 +613,11 @@ public class PreloadPT extends AbstractDataPreloader {
             sb.append(income.incomeSource().getValue());
             sb.append(" $");
             sb.append(income.monthlyAmount().getValue());
-            sb.append(", employer: ").append(income.employer().name().getStringView());
+
+            loadEmployer(income.employer(), sb);
+
+            sb.append(" Active: ").append(income.active().getValue());
+
             sb.append("\n");
         }
 
