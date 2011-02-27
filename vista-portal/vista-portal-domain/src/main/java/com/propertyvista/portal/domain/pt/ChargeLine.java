@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("{2} {1}")
+@ToStringFormat("{0} {1}")
 public interface ChargeLine extends Charge {
 
     public enum ChargeType {
@@ -73,6 +73,6 @@ public interface ChargeLine extends Charge {
     IPrimitive<ChargeType> type();
 
     @Editor(type = EditorType.label)
-    @ToString(index = 2)
+    @ToString(index = 1)
     IPrimitive<String> label();
 }

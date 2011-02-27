@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @EmbeddedEntity
-@ToStringFormat("${1}")
+@ToStringFormat("${0}")
 public interface Money extends IEntity {
 
-    @ToString(index = 1)
+    @ToString(index = 0)
     IPrimitive<Double> amount();
 
     Currency currency();
