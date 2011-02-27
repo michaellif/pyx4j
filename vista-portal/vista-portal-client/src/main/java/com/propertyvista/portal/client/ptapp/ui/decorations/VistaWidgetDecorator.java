@@ -21,11 +21,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ImageFactory;
@@ -43,7 +45,7 @@ import com.pyx4j.widgets.client.style.IStyleSuffix;
  * Widget decorator helpful for representation of Label : [ edit field ] widgets pair in
  * various view forms with uniform project style.
  */
-public class VistaWidgetDecorator extends FlowPanel {
+public class VistaWidgetDecorator extends VerticalPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "pyx4j_VistaWidgetDecorator";
 
@@ -59,7 +61,7 @@ public class VistaWidgetDecorator extends FlowPanel {
 
     private final Label mandatoryLabel;
 
-    private final SpaceHolder infoImageHolder;
+    private final Label validationLabel;
 
     private Tooltip tooltip;
 
@@ -121,7 +123,7 @@ public class VistaWidgetDecorator extends FlowPanel {
         nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
         nativeComponentHolder.setWidget(nativeComponent);
 
-        infoImageHolder = new SpaceHolder("18px");
+        SpaceHolder infoImageHolder = new SpaceHolder("18px");
         infoImageHolder.getElement().getStyle().setFloat(Float.LEFT);
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         infoImageHolder.getElement().getStyle().setPaddingLeft(5, Unit.PX);
@@ -138,10 +140,28 @@ public class VistaWidgetDecorator extends FlowPanel {
         mandatoryLabel.getElement().getStyle().setPaddingLeft(10, Unit.PX);
         mandatoryLabel.getElement().getStyle().setColor("#aaa");
 
-        renderMandatoryMessage();
-        renderValidationMessage();
+        validationLabel = new Label();
+        validationLabel.getElement().getStyle().setFloat(Float.LEFT);
+        validationLabel.getElement().getStyle().setPaddingLeft(decorData.labelWidth, decorData.labelUnit);
+        validationLabel.getElement().getStyle().setMarginLeft(30, Unit.PX);
+        validationLabel.getElement().getStyle().setColor("red");
 
-        label.setVisible(component.isVisible());
+        // put it together:
+
+        FlowPanel firstLine = new FlowPanel();
+        firstLine.add(label);
+        firstLine.add(infoImageHolder);
+        firstLine.add(nativeComponentHolder);
+        firstLine.add(mandatoryLabel);
+
+        FlowPanel secondLine = new FlowPanel();
+        secondLine.add(validationLabel);
+
+        add(firstLine);
+        add(secondLine);
+
+        renderMandatoryMessage();
+
         setVisible(component.isVisible());
 
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -150,25 +170,20 @@ public class VistaWidgetDecorator extends FlowPanel {
                 if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
                     setVisible(component.isVisible());
                 }
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                    renderValidationMessage();
+                }
                 renderMandatoryMessage();
-                renderValidationMessage();
             }
         });
 
-        // put it together:
-        add(label);
-        add(infoImageHolder);
-        add(nativeComponentHolder);
-        add(mandatoryLabel);
-
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getElement().getStyle().setPadding(2, Unit.PX);
     }
 
     private void renderMandatoryMessage() {
         if (component instanceof CEditableComponent<?, ?>) {
             CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
-            if (!editableComponent.isMandatoryConditionMet()) {
+            if (editableComponent.isMandatory()) {
                 mandatoryLabel.setText(null);
             } else {
                 if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable())
@@ -180,6 +195,16 @@ public class VistaWidgetDecorator extends FlowPanel {
     }
 
     private void renderValidationMessage() {
+        if (component instanceof CEditableComponent<?, ?>) {
+            CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
+            if (!editableComponent.validate()) {
+                validationLabel.setText(editableComponent.getValidationMessage());
+            } else {
+                validationLabel.setText(null);
+            }
+        } else {
+            mandatoryLabel.setText(null);
+        }
     }
 
     static public class DecorationData {

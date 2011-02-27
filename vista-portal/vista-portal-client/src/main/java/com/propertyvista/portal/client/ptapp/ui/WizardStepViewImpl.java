@@ -50,6 +50,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
             public void onClick(ClickEvent event) {
                 PtAppWizardManager.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
                 if (!form.validate()) {
+                    scrollToTop();
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }
                 presenter.save(getValue());
@@ -91,4 +92,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         return form;
     }
 
+    public static native void scrollToTop() /*-{
+        $wnd.scroll(0, 0);
+    }-*/;
 }

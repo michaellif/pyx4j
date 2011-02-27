@@ -91,8 +91,6 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
             add(new HTML("Press <i>Ctrl+Q</i> to login"));
         }
 
-        setWidth("30%");
-
         getElement().getStyle().setMarginTop(1, Unit.EM);
         getElement().getStyle().setMarginBottom(1, Unit.EM);
     }
