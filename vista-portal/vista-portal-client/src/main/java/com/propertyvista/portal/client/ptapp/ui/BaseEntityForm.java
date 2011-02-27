@@ -17,10 +17,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
-import com.propertyvista.portal.domain.pt.IPerson;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
@@ -61,26 +62,44 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
     }
 
     protected void createIAddress(FlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
-        main.add(new VistaWidgetDecorator(create(proto.street1(), parent)));
+        DecorationData decorData = new DecorationData();
+        decorData = new DecorationData();
+        decorData.componentWidth = 40;
+        main.add(new VistaWidgetDecorator(create(proto.street1(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.street2(), parent)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 40;
+        main.add(new VistaWidgetDecorator(create(proto.street2(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.city(), parent)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 15;
+        main.add(new VistaWidgetDecorator(create(proto.city(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.province(), parent)));
+        main.add(new VistaWidgetDecorator(create(proto.province(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.postalCode(), parent)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 7;
+        main.add(new VistaWidgetDecorator(create(proto.postalCode(), parent), decorData));
         main.add(new HTML());
     }
 
     protected void createIEmploymentInfo(FlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
-        main.add(new VistaWidgetDecorator(create(proto.supervisorName(), parent)));
+        DecorationData decorData = new DecorationData();
+        decorData = new DecorationData();
+        decorData.componentWidth = 30;
+    	main.add(new VistaWidgetDecorator(create(proto.supervisorName(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.supervisorPhone(), parent)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 15;
+        main.add(new VistaWidgetDecorator(create(proto.supervisorPhone(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.monthlySalary(), parent)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 8;
+        main.add(new VistaWidgetDecorator(create(proto.monthlySalary(), parent), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.position(), parent)));
+        decorData = new DecorationData();
+        decorData.componentWidth = 20;
+        main.add(new VistaWidgetDecorator(create(proto.position(), parent), decorData));
         main.add(new HTML());
     }
 }
