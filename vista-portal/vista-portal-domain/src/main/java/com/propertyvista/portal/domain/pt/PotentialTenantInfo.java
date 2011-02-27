@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -42,6 +43,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     Address previousAddress();
 
     @Owned
+    @Length(10)
     IList<Vehicle> vehicles();
 
     @Owned
