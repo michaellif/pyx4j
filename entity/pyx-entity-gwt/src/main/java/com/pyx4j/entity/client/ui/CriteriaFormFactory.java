@@ -81,7 +81,7 @@ public abstract class CriteriaFormFactory<E extends IEntity> implements FormFact
                     components[i][j] = createComponent(member);
                     MemberMeta mm = member.getMeta();
                     if (components[i][j] instanceof CTextComponent && String.class == mm.getValueClass()) {
-                        ((CTextComponent) components[i][j]).setMaxLength(mm.getStringLength());
+                        ((CTextComponent) components[i][j]).setMaxLength(mm.getLength());
                     }
                     components[i][j].setTitle(mm.getCaption());
                     form.bind((CEditableComponent<?, ?>) components[i][j], member.getPath());

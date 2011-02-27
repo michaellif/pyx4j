@@ -182,7 +182,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
     }
 
     @Override
-    public int getStringLength() {
+    public int getLength() {
         return data.stringLength;
     }
 

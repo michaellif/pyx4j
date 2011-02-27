@@ -124,7 +124,7 @@ class TableDDL {
         if (Enum.class.isAssignableFrom(memberMeta.getValueClass())) {
             sql.append("(" + TableModel.ENUM_STRING_LENGHT_MAX + ")");
         } else if (String.class == memberMeta.getValueClass()) {
-            sql.append('(').append((memberMeta.getStringLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : memberMeta.getStringLength()).append(')');
+            sql.append('(').append((memberMeta.getLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : memberMeta.getLength()).append(')');
         }
         return sql.toString();
     }
@@ -136,7 +136,7 @@ class TableDDL {
             sql.append("(" + TableModel.ENUM_STRING_LENGHT_MAX + ")");
         } else if (String.class == member.getIndexValueClass()) {
             sql.append('(')
-                    .append((member.getMemberMeta().getStringLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : member.getMemberMeta().getStringLength())
+                    .append((member.getMemberMeta().getLength() == 0) ? TableModel.ORDINARY_STRING_LENGHT_MAX : member.getMemberMeta().getLength())
                     .append(')');
         }
         return sql.toString();

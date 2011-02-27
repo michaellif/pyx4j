@@ -107,9 +107,9 @@ public interface MemberMeta {
     public ObjectClassType getObjectClassType();
 
     /**
-     * See com.pyx4j.entity.annotations.StringLength
+     * See com.pyx4j.entity.annotations.Length
      */
-    public int getStringLength();
+    public int getLength();
 
     /*
      * Works only on server side.

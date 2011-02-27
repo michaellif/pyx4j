@@ -96,7 +96,7 @@ public abstract class EntityFormFactory<E extends IEntity> implements FormFactor
                         ((CEditableComponent) components[i][j]).setMandatory(true);
                     }
                     if (components[i][j] instanceof CTextComponent && String.class == mm.getValueClass()) {
-                        ((CTextComponent) components[i][j]).setMaxLength(mm.getStringLength());
+                        ((CTextComponent) components[i][j]).setMaxLength(mm.getLength());
                         if (mm.getDescription() != null) {
                             ((CTextComponent) components[i][j]).setWatermark(mm.getWatermark());
                         }

@@ -37,7 +37,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -117,7 +117,7 @@ public class MemberMetaImpl implements MemberMeta {
         fieldName = method.getName();
 
         // Read Annotations
-        StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
+        Length stringLengthAnnotation = method.getAnnotation(Length.class);
         if (String.class.equals(valueClass)) {
             if (stringLengthAnnotation != null) {
                 stringLength = stringLengthAnnotation.value();
@@ -235,7 +235,7 @@ public class MemberMetaImpl implements MemberMeta {
     }
 
     @Override
-    public int getStringLength() {
+    public int getLength() {
         return stringLength;
     }
 

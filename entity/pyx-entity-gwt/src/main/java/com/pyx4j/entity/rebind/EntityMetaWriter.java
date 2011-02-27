@@ -49,7 +49,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -351,7 +351,7 @@ public class EntityMetaWriter {
             Indexed indexedAnnotation = method.getAnnotation(Indexed.class);
             boolean indexed = (indexedAnnotation != null) && (indexedAnnotation.indexPrimaryValue());
 
-            StringLength stringLengthAnnotation = method.getAnnotation(StringLength.class);
+            Length stringLengthAnnotation = method.getAnnotation(Length.class);
             if (stringLengthAnnotation != null) {
                 data.stringLength = stringLengthAnnotation.value();
             } else {
