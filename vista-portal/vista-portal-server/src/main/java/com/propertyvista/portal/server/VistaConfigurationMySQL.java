@@ -21,6 +21,11 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
+    public String connectionUrl() {
+        return super.connectionUrl() + "?autoReconnect=true";
+    }
+
+    @Override
     public String dbName() {
         return "vista";
     }
