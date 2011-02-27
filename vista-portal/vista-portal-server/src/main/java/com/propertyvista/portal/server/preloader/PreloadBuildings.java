@@ -158,7 +158,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
             concession.freeMonths().setValue("" + freeMonths);
         }
         if (percentage > 0) {
-            concession.percentage().setValue("" + freeMonths);
+            concession.percentage().setValue("" + percentage);
         }
         persist(concession);
         return concession;
@@ -294,10 +294,10 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         // concessions
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.freeMonths, 2, 0));
+            unit.concessions().add(createConcession(ConcessionType.freeMonths, 2f, 0));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 0, 10));
+            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 0, 15));
         }
 
         // add-ons
@@ -323,7 +323,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
             unit.addOns().add(createAddOn("Dishwasher", 30));
         }
 
-        unit.requiredDeposit().setValue(150D);
+        unit.requiredDeposit().setValue(150d + 5 * RandomUtil.randomInt(20));
 
         Calendar avalable = new GregorianCalendar();
         avalable.setTime(new Date());

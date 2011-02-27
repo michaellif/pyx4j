@@ -18,10 +18,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.portal.domain.AddOn;
+import com.propertyvista.portal.domain.Amenity;
+import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
@@ -61,6 +66,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -357,6 +363,13 @@ public class PreloadPT extends AbstractDataPreloader {
 
         PotentialTenantServicesImpl.loadAvailableUnits(unitSelection);
 
+        // now chose the first unit
+        unitSelection.selectedUnit().set(unitSelection.availableUnits().units().iterator().next());
+
+        unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
+
+        unitSelection.rentStart().setValue(DateUtils.createDate(2011, 4, 8));
+
         persist(unitSelection);
     }
 
@@ -377,13 +390,16 @@ public class PreloadPT extends AbstractDataPreloader {
             sb.append("\t");
             sb.append(unit.suiteNumber().getStringView());
             sb.append(" ");
-            sb.append(unit.bedrooms().getValue()).append(" beds ");
-            sb.append(unit.bathrooms().getValue()).append(" baths");
+            sb.append(unit.bedrooms().getValue()).append(" beds, ");
+            sb.append(unit.bathrooms().getValue()).append(" baths,");
             sb.append(" ");
-            sb.append(unit.area()).append(" sq ft");
+            sb.append(unit.area().getValue()).append(", sq ft");
 
             sb.append(" available on ");
             sb.append(unit.avalableForRent().getStringView());
+
+            sb.append(", status: ").append(unit.status().getStringView());
+
             sb.append("\n");
 
             // show rent
@@ -393,7 +409,63 @@ public class PreloadPT extends AbstractDataPreloader {
                 sb.append(rent.rent().amount().getValue()).append("");
                 sb.append("\n");
             }
+
+            sb.append("\t\tDeposit: $").append(unit.requiredDeposit().getValue()).append("\n");
         }
+
+        // selected unit
+        Unit unit = unitSelection.selectedUnit();
+        sb.append("\n\n");
+        sb.append("Selected: ").append(unit.suiteNumber().getStringView());
+        sb.append("\n");
+
+        // amenities
+        sb.append("\tAmenities:\n");
+        for (Amenity amenity : unit.amenities()) {
+            sb.append("\t\t");
+            sb.append(amenity.name().getStringView());
+            sb.append("\n");
+        }
+
+        // utilities
+        sb.append("\tUtilities:\n");
+        for (Utility utility : unit.utilities()) {
+            sb.append("\t\t");
+            sb.append(utility.name().getStringView());
+            sb.append("\n");
+        }
+
+        // utilities
+        sb.append("\tUnitInfoItem:\n");
+        for (UnitInfoItem info : unit.infoDetails()) {
+            sb.append("\t\t");
+            sb.append(info.name().getStringView());
+            sb.append("\n");
+        }
+
+        // utilities
+        sb.append("\tConcessions:\n");
+        for (Concession concession : unit.concessions()) {
+            sb.append("\t\t");
+            sb.append(concession.name().getStringView());
+            sb.append(" freeMonths:").append(concession.freeMonths().getStringView());
+            sb.append(" percentage:").append(concession.percentage().getStringView());
+            sb.append("\n");
+        }
+
+        // utilities
+        sb.append("\tAdd-ons:\n");
+        for (AddOn addOn : unit.addOns()) {
+            sb.append("\t\t");
+            sb.append(addOn.name().getStringView());
+            sb.append(" $").append(addOn.monthlyCost().getValue());
+            sb.append("\n");
+        }
+
+        // rent
+        sb.append("\nStart rent:").append(unitSelection.rentStart().getStringView());
+        sb.append(", Lease: ").append(unitSelection.markerRent().leaseTerm().getValue()).append(" months, $");
+        sb.append(unitSelection.markerRent().rent().amount().getValue());
     }
 
     private void loadTenants(StringBuilder sb) {
