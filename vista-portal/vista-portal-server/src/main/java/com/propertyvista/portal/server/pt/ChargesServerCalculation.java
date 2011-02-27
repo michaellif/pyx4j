@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -29,6 +32,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 public class ChargesServerCalculation extends ChargesSharedCalculation {
+
+    private final static Logger log = LoggerFactory.getLogger(ChargesServerCalculation.class);
 
     public static void dummyPopulate(Charges charges, Application application) {
 
@@ -62,7 +67,48 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 
-        // payment splits
+        log.info("Found {} tenants", tenantList.tenants().size());
+
+        // compare current tenant list with what we have on the form
+        boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
+        for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
+
+            // first, find the tenant (matching by first name and last name)
+            PotentialTenantInfo tenant = null;
+            for (PotentialTenantInfo existingTenant : tenantList.tenants()) {
+                if (tenantCharge.tenant().firstName().equals(existingTenant.firstName()) && tenantCharge.tenant().lastName().equals(existingTenant.lastName())) {
+                    tenant = existingTenant;
+                }
+            }
+            if (tenant == null) {
+                dirty = true;
+                break;
+            }
+
+            // second, change their roles
+            if (!tenant.relationship().getValue().equals(tenantCharge.tenant().relationship().getValue())) {
+                dirty = true;
+                break;
+            }
+
+            //            // first find the corresponding tenant
+            //            int index = tenantList.tenants().indexOf(tenantCharge.tenant());
+            //            if (index == -1) {
+            //                dirty = true;
+            //                break;
+            //            }
+            //            PotentialTenantInfo tenant = tenantList.tenants().get(index);
+
+            //            // now compare their relationships
+            //            if (tenant.relationship()
+        }
+
+        if (dirty) {
+            resetPaymentSplitCharges(charges, tenantList);
+        }
+    }
+
+    private static void resetPaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
         charges.paymentSplitCharges().charges().clear();
         for (PotentialTenantInfo tenant : tenantList.tenants()) {
             Relationship relationship = tenant.relationship().getValue();

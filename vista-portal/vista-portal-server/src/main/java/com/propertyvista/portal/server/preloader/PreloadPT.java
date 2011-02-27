@@ -368,6 +368,14 @@ public class PreloadPT extends AbstractDataPreloader {
                 sb.append("\n");
             }
 
+            sb.append("\nTenants Payment Split ").append(charges.paymentSplitCharges().total().amount().getStringView()).append("\n");
+            for (TenantCharge line : charges.paymentSplitCharges().charges()) {
+                sb.append("\t").append(line.tenant().relationship().getStringView());
+                sb.append(" ").append(line.tenant().firstName().getStringView()).append(" ").append(line.tenant().lastName().getStringView());
+                sb.append(" ").append(line.percentage());
+                sb.append("\n");
+            }
+
             //            sb.append("\t").append(charges.monthlyCharges()).append("\n");
             //            sb.append("\t").append(charges.proRatedCharges()).append("\n");
             //            sb.append("\t").append(charges.applicationCharges()).append("\n");
