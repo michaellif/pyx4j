@@ -281,6 +281,8 @@ public class PreloadPT extends AbstractDataPreloader {
     private void createCharges() {
         Charges charges = EntityFactory.create(Charges.class);
 
+        charges.application().set(application);
+
         ChargesServerCalculation.dummyPopulate(charges, application);
 
         persist(charges);
@@ -472,35 +474,21 @@ public class PreloadPT extends AbstractDataPreloader {
         EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
         PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+        sb.append(tenantList.tenants().size()).append(" potential tenants");
+        sb.append("\n");
+
+        for (PotentialTenant tenant : tenantList.tenants()) {
+            sb.append("\t").append(tenant.getStringView());
+            sb.append("\n");
+        }
     }
 
-    public void load() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("\n\n-------------------------- APARTMENT -------------------------------\n");
-        loadUnitSelection(sb);
-
-        List<PotentialTenantList> tenantLists = PersistenceServicesFactory.getPersistenceService().query(
-                new EntityQueryCriteria<PotentialTenantList>(PotentialTenantList.class));
-        sb.append("\n\n---------------------------- TENANTS -------------------------------\n\n");
-
-        for (PotentialTenantList tenants : tenantLists) {
-
-            sb.append(tenants.application().getStringView());
-            sb.append("\n");
-
-            for (PotentialTenant tenant : tenants.tenants()) {
-                sb.append("\t").append(tenant.getStringView());
-                sb.append("\n");
-            }
-        }
-        sb.append("\n\n");
-
-        // Charges
-        sb.append("------------------------ CHARGES -----------------------\n");
-        List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<Charges>(Charges.class));
+    private void loadCharges(StringBuilder sb) {
+        EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        List<Charges> chargesList = PersistenceServicesFactory.getPersistenceService().query(criteria);
         for (Charges charges : chargesList) {
-            sb.append("Charges\n");
 
             sb.append("Monthly\n");
             for (ChargeLine line : charges.monthlyCharges().charges()) {
@@ -549,6 +537,19 @@ public class PreloadPT extends AbstractDataPreloader {
             sb.append("\n");
         }
         sb.append("\n\n");
+    }
+
+    public void load() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n\n---------------------------- APARTMENT -------------------------------\n");
+        loadUnitSelection(sb);
+
+        sb.append("\n\n---------------------------- TENANTS ---------------------------------\n");
+        loadTenants(sb);
+
+        sb.append("\n\n---------------------------- CHARGES ---------------------------------\n");
+        loadCharges(sb);
 
         //        List<PotentialTenant> pts = PersistenceServicesFactory.getPersistenceService().query(new EntityQueryCriteria<PotentialTenant>(PotentialTenant.class));
         //        StringBuilder sb = new StringBuilder();
