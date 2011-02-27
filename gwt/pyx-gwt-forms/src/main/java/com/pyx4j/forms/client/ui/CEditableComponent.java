@@ -83,6 +83,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         setNativeComponentValue(value);
         if (validate()) {
             asWidget().setValid(true);
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
         }
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
         ValueChangeEvent.fire(this, value);
@@ -271,7 +272,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
 
     public void onEditingStop() {
         editing = false;
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.TOOLTIP_PROPERTY);
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
         asWidget().setValid(validate());
     }
 

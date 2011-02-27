@@ -38,7 +38,9 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         READONLY_PROPERTY,
 
-        EXPENDED_PROPERTY
+        EXPENDED_PROPERTY,
+
+        VALIDITY
 
     };
 
