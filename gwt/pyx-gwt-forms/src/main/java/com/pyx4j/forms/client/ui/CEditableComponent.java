@@ -184,6 +184,12 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         return visited;
     }
 
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+        asWidget().setValid(isValid());
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+    }
+
     @Override
     public HandlerRegistration addValueChangeHandler(ValueChangeHandler<DATA_TYPE> handler) {
         return addHandler(handler, ValueChangeEvent.getType());

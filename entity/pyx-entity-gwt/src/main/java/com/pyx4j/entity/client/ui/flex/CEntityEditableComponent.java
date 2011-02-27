@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
@@ -94,6 +95,15 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
             }
         }
         return validationResults;
+    }
+
+    @Override
+    public void setVisited(boolean visited) {
+        for (CComponent<?> ccomponent : binder.getComponents()) {
+            if (ccomponent instanceof CEditableComponent<?, ?>) {
+                ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
+            }
+        }
     }
 
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
