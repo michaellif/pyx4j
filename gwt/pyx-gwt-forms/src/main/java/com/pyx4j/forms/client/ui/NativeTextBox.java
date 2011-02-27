@@ -108,7 +108,6 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
         } else {
             addStyleDependentName(dependentSuffix);
         }
-
     }
 
 }

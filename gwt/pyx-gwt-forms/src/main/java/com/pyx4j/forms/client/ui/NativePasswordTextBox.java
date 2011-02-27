@@ -20,7 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.forms.client.ui.NativeTextBox.StyleDependent;
 import com.pyx4j.widgets.client.PasswordTextBox;
+import com.pyx4j.widgets.client.style.Selector;
 
 public class NativePasswordTextBox extends PasswordTextBox implements INativeTextComponent<String> {
 
@@ -68,5 +70,11 @@ public class NativePasswordTextBox extends PasswordTextBox implements INativeTex
 
     @Override
     public void setValid(boolean valid) {
+        String dependentSuffix = Selector.getDependentName(StyleDependent.invalid);
+        if (valid) {
+            removeStyleDependentName(dependentSuffix);
+        } else {
+            addStyleDependentName(dependentSuffix);
+        }
     }
 }
