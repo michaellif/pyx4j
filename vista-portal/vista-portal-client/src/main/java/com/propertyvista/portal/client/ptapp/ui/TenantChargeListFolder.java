@@ -26,6 +26,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 
 public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
 
@@ -62,7 +63,13 @@ public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
                 FlowPanel main = new FlowPanel();
                 main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "55%", null));
                 main.add(DecorationUtils.inline(new HTML("%"), "5%", "right"));
-                main.add(DecorationUtils.inline(masterForm.create(proto().percentage(), this), "5%", "right"));
+                if (isFirst()) {
+                    CNumberLabel fixedPrc = new CNumberLabel();
+                    bind(fixedPrc, proto().percentage());
+                    main.add(DecorationUtils.inline(fixedPrc, "5%", "right"));
+                } else {
+                    main.add(DecorationUtils.inline(masterForm.create(proto().percentage(), this), "5%", "right"));
+                }
                 main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "5%", "right"));
                 get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
                 setWidget(main);

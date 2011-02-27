@@ -15,8 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ChargeLineSelectedable extends ChargeLine {
+public interface ChargeLineSelectable extends ChargeLine {
 
-    @Override
     IPrimitive<Boolean> selected();
 }

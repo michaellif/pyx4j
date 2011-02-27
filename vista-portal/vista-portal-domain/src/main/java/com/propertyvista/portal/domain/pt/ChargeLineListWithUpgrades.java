@@ -19,9 +19,8 @@ import com.pyx4j.entity.shared.IList;
 
 public interface ChargeLineListWithUpgrades extends ChargeLineList {
 
-    //TODO change the object type as per Arthur.
     @Owned
     @Caption(name = "Available Upgrades")
-    IList<ChargeLine> upgradeCharges();
-    //IList<ChargeLineSelectedable> upgradeCharges();
+    IList<ChargeLineSelectable> upgradeCharges();
+
 }

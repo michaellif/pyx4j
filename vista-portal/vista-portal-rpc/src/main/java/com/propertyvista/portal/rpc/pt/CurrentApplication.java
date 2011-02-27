@@ -18,6 +18,7 @@ import java.io.Serializable;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 
+@SuppressWarnings("serial")
 public class CurrentApplication implements Serializable {
 
     public Application application;

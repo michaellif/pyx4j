@@ -7,51 +7,70 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-26
+ * Created on Feb 27, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.forms.client.ui.CCheckBox;
 
-public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
+public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectable> {
 
     final CEntityForm<?> masterForm;
 
-    ChargeLineFolder(CEntityForm<?> masterForm) {
+    @SuppressWarnings("rawtypes")
+    final ValueChangeHandler valueChangeHandler;
+
+    ChargeLineSelectableFolder(CEntityForm<?> masterForm, @SuppressWarnings("rawtypes") ValueChangeHandler valueChangeHandler) {
+        this.valueChangeHandler = valueChangeHandler;
         this.masterForm = masterForm;
     }
 
     @Override
-    protected FolderDecorator<ChargeLine> createFolderDecorator() {
-        return new BoxReadOnlyFolderDecorator<ChargeLine>();
+    protected FolderDecorator<ChargeLineSelectable> createFolderDecorator() {
+        return new BoxReadOnlyFolderDecorator<ChargeLineSelectable>();
     }
 
     @Override
-    protected CEntityFolderItem<ChargeLine> createItem() {
+    protected CEntityFolderItem<ChargeLineSelectable> createItem() {
 
-        return new CEntityFolderItem<ChargeLine>(ChargeLine.class) {
+        return new CEntityFolderItem<ChargeLineSelectable>(ChargeLineSelectable.class) {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
                 return new BoxReadOnlyFolderItemDecorator(true);
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             public void createContent() {
+
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), "60%", null));
+
+                String width = "60%";
+                if (valueChangeHandler != null) {
+                    CCheckBox cb = (CCheckBox) masterForm.create(proto().selected(), this);
+                    cb.addValueChangeHandler(valueChangeHandler);
+                    //TODO this is hack for Misha to fix.
+                    cb.asWidget().setStyleName(null);
+                    main.add(DecorationUtils.inline(cb, "3%", null));
+                    width = "57%";
+                }
+
+                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
                 main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
                 setWidget(main);
             }

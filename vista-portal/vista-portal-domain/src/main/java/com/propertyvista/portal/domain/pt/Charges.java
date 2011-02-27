@@ -17,7 +17,6 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Charges extends IApplicationEntity {
@@ -31,18 +30,7 @@ public interface Charges extends IApplicationEntity {
      * Other items: DUMMY data on back-end for now
      */
 
-    @Owned
-    @Caption(name = "Rent-Related Charges")
-    @ReadOnly
-    @Deprecated
-    ChargeLineList rentChargesOld();
-
     // When changed the ChargesSharedCalculation.calculateCharges should be called on UI.
-    @Owned
-    @Caption(name = "Available Upgrades")
-    @Deprecated
-    ChargeLineList upgradeChargesOld();
-
     @Caption(name = "Rent-Related Charges")
     @Owned
     ChargeLineListWithUpgrades monthlyCharges();

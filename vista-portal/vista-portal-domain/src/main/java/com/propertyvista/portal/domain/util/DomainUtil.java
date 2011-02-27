@@ -17,6 +17,7 @@ import com.propertyvista.portal.domain.Currency;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
+import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -37,11 +38,14 @@ public class DomainUtil {
     }
 
     public static ChargeLine createChargeLine(ChargeType type, double money) {
-        return createChargeLine(type, money, true);
+        ChargeLine cl = EntityFactory.create(ChargeLine.class);
+        cl.charge().set(createMoney(money));
+        cl.type().setValue(type);
+        return cl;
     }
 
-    public static ChargeLine createChargeLine(ChargeType type, double money, boolean selected) {
-        ChargeLine cl = EntityFactory.create(ChargeLine.class);
+    public static ChargeLineSelectable createChargeLine(ChargeType type, double money, boolean selected) {
+        ChargeLineSelectable cl = EntityFactory.create(ChargeLineSelectable.class);
         cl.charge().set(createMoney(money));
         cl.type().setValue(type);
         cl.selected().setValue(selected);

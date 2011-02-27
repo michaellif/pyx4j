@@ -29,6 +29,7 @@ import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
+import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.Employer;
@@ -435,14 +436,11 @@ public class PreloadPT extends AbstractDataPreloader {
                 sb.append(line.charge().amount().getStringView());
                 sb.append(" ");
                 sb.append(line.type().getStringView());
-                if (line.selected().getValue()) {
-                    sb.append(" YES");
-                }
                 sb.append("\n");
             }
 
             sb.append("Upgrades\n");
-            for (ChargeLine line : charges.monthlyCharges().upgradeCharges()) {
+            for (ChargeLineSelectable line : charges.monthlyCharges().upgradeCharges()) {
                 sb.append("\t");
                 sb.append(line.charge().amount().getStringView());
                 sb.append(" ");

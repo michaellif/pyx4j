@@ -46,8 +46,8 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, 75));
 
         // available upgrades
-        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, true));
-        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, true));
+        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, false));
+        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, false));
 
         // application charges
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.deposit, 1500));

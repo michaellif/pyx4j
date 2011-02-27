@@ -16,9 +16,10 @@ package com.propertyvista.portal.rpc.pt;
 import java.util.Date;
 
 import com.propertyvista.portal.domain.pt.Charge;
-import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
+import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
 
@@ -37,7 +38,7 @@ public class ChargesSharedCalculation {
     public static void calculateProrateCharges(Charges charges) {
 
         // take all monthly charges and get their total
-        double rentTotal = calculateSelectableTotal(charges.monthlyCharges().charges());
+        double rentTotal = calculateTotal(charges.monthlyCharges());
         double upgradesTotal = calculateSelectableTotal(charges.monthlyCharges().upgradeCharges());
         double monthlyTotal = rentTotal + upgradesTotal;
         charges.monthlyCharges().total().set(DomainUtil.createMoney(monthlyTotal));
@@ -78,28 +79,59 @@ public class ChargesSharedCalculation {
         calculateTotal(charges.applicationCharges());
     }
 
+    /**
+     * As % for other applicants are entered, the % for the main applicant is
+     * proportionately decreased. Note the total amount includes all monthly payments
+     * (rent and upgrades).
+     */
     public static void calculatePaymentSplitCharges(Charges charges) {
+        double totalSplit = 0d;
+        double total = charges.monthlyCharges().total().amount().getValue();
+        TenantCharge applicantCharge = null;
+        for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
+
+            switch (charge.tenant().relationship().getValue()) {
+            case Applicant:
+                applicantCharge = charge;
+                break;
+            case CoApplicant:
+                double v = total * charge.percentage().getValue() / 100d;
+                charge.charge().amount().setValue(v);
+                totalSplit += v;
+                break;
+            default:
+                throw new Error("Can't split charges with non applicant");
+            }
+        }
+        if (applicantCharge == null) {
+            new Error("Applicant charges not found");
+        } else {
+            double v = total - totalSplit;
+            applicantCharge.charge().amount().setValue(v);
+            int prc = (int) (100d * v / total);
+            applicantCharge.percentage().setValue(prc);
+        }
+
         calculateTotal(charges.paymentSplitCharges());
     }
 
-    public static double calculateSelectableTotal(IList<ChargeLine> charges) {
+    public static double calculateSelectableTotal(IList<ChargeLineSelectable> charges) {
         double total = 0d;
-        for (ChargeLine charge : charges) {
+        for (ChargeLineSelectable charge : charges) {
             if (charge.selected().isBooleanTrue()) {
                 total += charge.charge().amount().getValue();
             }
         }
         return total;
-        //        return DomainUtil.createMoney(total);
-        //        charges.total().set(DomainUtil.createMoney(total));
     }
 
-    public static void calculateTotal(ChargeLineList charges) {
+    public static double calculateTotal(ChargeLineList charges) {
         double total = 0d;
         for (Charge charge : charges.charges()) {
             total += charge.charge().amount().getValue();
         }
         charges.total().set(DomainUtil.createMoney(total));
+        return total;
     }
 
     public static void calculateTotal(TenantChargeList charges) {
