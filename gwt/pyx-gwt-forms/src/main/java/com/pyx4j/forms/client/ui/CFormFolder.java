@@ -109,7 +109,7 @@ public abstract class CFormFolder<E> extends CFormContainer<List<E>, NativeFormF
     public abstract void moveItem(CForm cForm, boolean up);
 
     @Override
-    public boolean validate() {
+    public boolean isValid() {
         for (CForm form : formsMap.values()) {
             if (!form.isValid()) {
                 return false;

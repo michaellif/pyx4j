@@ -69,12 +69,12 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
     }
 
     @Override
-    public boolean validate() {
+    public boolean isValid() {
         if (!isEditable() || !isEnabled()) {
             return true;
         }
         for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).validate()) {
+            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
                 return false;
             }
         }
@@ -84,12 +84,12 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
         for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEntityEditableComponent<?> && !((CEntityEditableComponent<?>) ccomponent).validate()) {
+            if (ccomponent instanceof CEntityEditableComponent<?> && !((CEntityEditableComponent<?>) ccomponent).isValid()) {
                 validationResults.appendValidationErrors(((CEntityEditableComponent<?>) ccomponent).getValidationResults());
-            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).validate()) {
+            } else if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
                 validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. "
                         + ((CEditableComponent<?, ?>) ccomponent).getValidationMessage());
-            } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).validate()) {
+            } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).isValid()) {
                 validationResults.appendValidationErrors(((CEntityFolder<?>) ccomponent).getValidationResults());
             }
         }

@@ -200,7 +200,7 @@ public class BasicWidgetDecorator extends FlowPanel {
                 tooltip = Tooltip.tooltip(imageInfoWarn, "");
             }
             if (component instanceof CEditableComponent<?, ?> && ((CEditableComponent<?, ?>) component).isMandatoryConditionMet()
-                    && !((CEditableComponent<?, ?>) component).validate()) {
+                    && !((CEditableComponent<?, ?>) component).isValid()) {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipWarn());
             } else {
                 imageInfoWarn.setResource(ImageFactory.getImages().formTooltipInfo());

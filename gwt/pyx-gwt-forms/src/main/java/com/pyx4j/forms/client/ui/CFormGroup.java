@@ -37,7 +37,7 @@ public abstract class CFormGroup<E> extends CFormContainer<E, NativeFormGroup<E>
     }
 
     @Override
-    public boolean validate() {
+    public boolean isValid() {
         return form.isValid();
     }
 

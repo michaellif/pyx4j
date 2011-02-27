@@ -65,7 +65,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     //TODO make it protected and add isValid that would return result
-    public boolean validate() {
+    public boolean isValid() {
         return !isVisible() || !isEditable() || !isEnabled() || (isMandatoryConditionMet() && isValidationConditionMet());
     }
 
@@ -81,7 +81,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         this.visited = true;
 
         setNativeComponentValue(value);
-        if (validate()) {
+        if (isValid()) {
             asWidget().setValid(true);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
         }
@@ -156,7 +156,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     }
 
     public String getValidationMessage() {
-        if (!validate()) {
+        if (!isValid()) {
             if (!isMandatoryConditionMet()) {
                 return getMandatoryValidationMessage();
             } else {
@@ -232,7 +232,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
         }
 
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
-                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + validate() + "; toolTip=" + getToolTip()
+                + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isValid=" + isValid() + "; toolTip=" + getToolTip()
                 + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
@@ -273,7 +273,7 @@ public abstract class CEditableComponent<DATA_TYPE, WIDGET_TYPE extends Widget &
     public void onEditingStop() {
         editing = false;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
-        asWidget().setValid(validate());
+        asWidget().setValid(isValid());
     }
 
     @Override
