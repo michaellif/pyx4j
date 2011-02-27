@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -32,9 +33,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.propertyvista.portal.client.ptapp.WizardStep;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
-import com.propertyvista.portal.domain.pt.ApplicationWizardStep.Status;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.rpc.AppPlace;
 
 public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
@@ -119,7 +118,7 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
 
                 getElement().getStyle().setCursor(Cursor.POINTER);
             } else {
-                if (ApplicationMode.isDevelopment()) {
+                if (!GWT.isProdMode()) {
                     addDomHandler(new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
