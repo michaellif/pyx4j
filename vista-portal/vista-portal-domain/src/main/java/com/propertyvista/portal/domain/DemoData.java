@@ -40,11 +40,11 @@ public class DemoData {
 
     public static int NUM_POTENTIAL_TENANTS = 3;
 
-    public static int NUM_FLOORS = 3;
+    public static int NUM_FLOORS = 7;
 
-    public static int NUM_FLOORPLANS = 3;
+    public static int NUM_FLOORPLANS = 5;
 
-    public static int NUM_UNITS_PER_FLOOR = 4;
+    public static int NUM_UNITS_PER_FLOOR = 8;
 
     public static final String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
 

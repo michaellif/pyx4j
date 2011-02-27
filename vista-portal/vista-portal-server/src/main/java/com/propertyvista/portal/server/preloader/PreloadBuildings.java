@@ -327,7 +327,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         Calendar avalable = new GregorianCalendar();
         avalable.setTime(new Date());
-        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(60));
+        avalable.add(Calendar.DATE, 5 + RandomUtil.randomInt(30));
         DateUtils.dayStart(avalable);
 
         unit.avalableForRent().setValue(avalable.getTime());

@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -361,16 +364,25 @@ public class PreloadPT extends AbstractDataPreloader {
         UnitSelectionCriteria criteria = EntityFactory.create(UnitSelectionCriteria.class);
         criteria.floorplanName().setValue(DemoData.REGISTRATION_DEFAULT_FLOORPLAN);
         criteria.propertyCode().setValue(DemoData.REGISTRATION_DEFAULT_PROPERTY_CODE);
+
+        Calendar avalableTo = new GregorianCalendar();
+        avalableTo.setTime(new Date());
+        avalableTo.add(Calendar.MONTH, 1);
+        DateUtils.dayStart(avalableTo);
+
+        criteria.availableFrom().setValue(new Date());
+        criteria.availableTo().setValue(avalableTo.getTime());
+
         unitSelection.selectionCriteria().set(criteria);
 
         PotentialTenantServicesImpl.loadAvailableUnits(unitSelection);
 
         // now chose the first unit
-        unitSelection.selectedUnit().set(unitSelection.availableUnits().units().iterator().next());
-
-        unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-
-        unitSelection.rentStart().setValue(DateUtils.createDate(2011, 4, 8));
+        if (!unitSelection.availableUnits().units().isEmpty()) {
+            unitSelection.selectedUnit().set(unitSelection.availableUnits().units().iterator().next());
+            unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
+            unitSelection.rentStart().setValue(DateUtils.createDate(2011, 4, 8));
+        }
 
         persist(unitSelection);
     }
