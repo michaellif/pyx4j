@@ -14,7 +14,6 @@
 package org.selenium;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
@@ -41,7 +40,6 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
     }
 
     public void testLoginToMainSite() throws Exception {
-        //Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
         Credentials credentials = J2SEServiceConnector.getCredentials(System.getProperty("user.dir", ".") + "/credentials.properties");
 
         /*** page 1 ***/
@@ -83,21 +81,10 @@ public class GaeAppLoginTest extends BaseSeleniumTestCase {
         selenium.click("id=continue");
 
         /*** page 4 ***/
-        //it throw us on main site, but that's OK, we'll use get() :)
         selenium.waitFor(By.id("gwt-debug-Login"), 8);
+        selenium.click("id=gwt-debug-Login");
 
-        /*** page 5 ***/
         selenium.get(testsite);
-        //unique ID does not exist for this one. 
-        //This is just a test, I'll fix/remove it if it'll cause problems
-        WebElement element1 = selenium.findElement(By.xpath("html/body/div[3]/div[3]/div/div[1]/table/tbody/tr/td/div/div/div[2]"));
-        String atext = element1.getText();
-        String strToFind = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-        if (atext.indexOf(strToFind) < 1) {
-            System.out.println("Error: Cannot find text ");
-            System.out.println("     : " + strToFind);
-        }
-
     }
 
 }
