@@ -218,7 +218,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 ChargesServerCalculation.calculateCharges(charges);
             } else if (ret instanceof Summary) {
                 retrieveSummary((Summary) ret);
-            } else if (ret instanceof Pets) {
+            } else if ((ret instanceof Pets) || (request.proto() instanceof Pets)) {
                 // TODO get it from building
                 PetChargeRule petCharge = EntityFactory.create(PetChargeRule.class);
                 petCharge.chargeType().setValue(ChargeType.monthly);
