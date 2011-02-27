@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import java.util.Date;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -109,6 +111,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
         StringBuilder debugMessage = new StringBuilder();
 
         if (ApplicationMode.isDevelopment()) {
+            debugMessage.append(new Date());
             if (errorCode != null) {
                 debugMessage.append("ErrorCode [" + errorCode + "]");
             }
