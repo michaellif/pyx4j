@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface LeaseTerms extends IEntity {
 
-    @StringLength(8000)
+    @Length(8000)
     IPrimitive<String> text();
 }

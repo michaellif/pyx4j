@@ -17,7 +17,7 @@ import com.propertyvista.portal.domain.pt.PropertyProfile;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.StringLength;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IList;
@@ -53,7 +53,7 @@ public interface Building extends Property {
     @ToString(index = 0)
     IPrimitive<BuildingType> buildingType();
 
-    @StringLength(100)
+    @Length(100)
     IPrimitive<String> website();
 
     @Caption(name = "Address")
