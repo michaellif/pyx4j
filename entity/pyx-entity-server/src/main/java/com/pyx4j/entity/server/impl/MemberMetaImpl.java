@@ -23,6 +23,7 @@ package com.pyx4j.entity.server.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.commons.EnglishGrammar;
@@ -34,10 +35,10 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -88,9 +89,9 @@ public class MemberMetaImpl implements MemberMeta {
     private final String watermark;
 
     /**
-     * See com.pyx4j.entity.annotations.StringLength
+     * See com.pyx4j.entity.annotations.Length
      */
-    private final int stringLength;
+    private final int length;
 
     @SuppressWarnings("unchecked")
     public MemberMetaImpl(Method method) {
@@ -117,17 +118,18 @@ public class MemberMetaImpl implements MemberMeta {
         fieldName = method.getName();
 
         // Read Annotations
-        Length stringLengthAnnotation = method.getAnnotation(Length.class);
-        if (String.class.equals(valueClass)) {
-            if (stringLengthAnnotation != null) {
-                stringLength = stringLengthAnnotation.value();
+        Length lengthAnnotation = method.getAnnotation(Length.class);
+        if (String.class.equals(valueClass)
+                || EnumSet.of(ObjectClassType.PrimitiveSet, ObjectClassType.EntityList, ObjectClassType.EntitySet).contains(objectClassType)) {
+            if (lengthAnnotation != null) {
+                length = lengthAnnotation.value();
             } else {
-                stringLength = ApplicationBackend.getDefaultDataStringLength();
+                length = ApplicationBackend.getDefaultDataStringLength();
             }
-        } else if (stringLengthAnnotation != null) {
-            throw new RuntimeException("Unexpected @StringLength annotation in  memeber " + fieldName);
+        } else if (lengthAnnotation != null) {
+            throw new RuntimeException("Unexpected @Length annotation in memeber " + fieldName);
         } else {
-            stringLength = 0;
+            length = 0;
         }
 
         Caption captionAnnotation = method.getAnnotation(Caption.class);
@@ -236,7 +238,7 @@ public class MemberMetaImpl implements MemberMeta {
 
     @Override
     public int getLength() {
-        return stringLength;
+        return length;
     }
 
     @Override
