@@ -27,6 +27,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.widgets.client.util.BrowserType;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
@@ -55,7 +56,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     @Override
     protected void showUnauthorized() {
         ClientContext.terminateSession();
-        showMessage("This session has been terminated .", UserMessageType.FAILURE);
+        showMessage(i18n.tr("This session has been terminated ."), UserMessageType.FAILURE);
 
     }
 
@@ -68,6 +69,21 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     protected void showThrottle() {
         showMessage(i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
                 + "To protect our users, we can't process your request at this time."), UserMessageType.FAILURE);
+    }
+
+    @Override
+    protected void showInternetConnectionError() {
+        showMessage(i18n.tr("Please make sure you are connected to internet."), UserMessageType.FAILURE);
+
+    }
+
+    @Override
+    protected void showHttpStatusCode(StatusCodeException caught, int statusCode, String errorCode) {
+        if ((statusCode == 0) && BrowserType.isFirefox()) {
+            showInternetConnectionError();
+        } else {
+            showDefaultError(caught, errorCode);
+        }
     }
 
     @Override
