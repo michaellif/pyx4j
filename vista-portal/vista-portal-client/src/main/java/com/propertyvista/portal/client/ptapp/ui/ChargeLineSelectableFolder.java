@@ -68,11 +68,11 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                     cb.asWidget().setStyleName(null);
                     main.add(DecorationUtils.inline(cb, "3%", null));
                     width = "57%";
-                }
 
-                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
-                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
-                setWidget(main);
+                    main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
+                    main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+                    setWidget(main);
+                }
             }
         };
     }
