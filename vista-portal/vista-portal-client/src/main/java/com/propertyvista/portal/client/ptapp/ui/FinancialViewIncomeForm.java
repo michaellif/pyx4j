@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.SeasonallyEmployed;
@@ -187,9 +189,13 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().name(), this)));
+                DecorationData decorData = new DecorationData();
+                decorData.componentWidth = 12;
+                main.add(new VistaWidgetDecorator(create(proto().name(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().employedForYears(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 2;
+                main.add(new VistaWidgetDecorator(create(proto().employedForYears(), this), decorData));
                 main.add(new HTML());
                 parentForm.createIEmploymentInfo(main, proto(), this);
                 setWidget(main);
@@ -233,17 +239,28 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().companyName(), this)));
+                DecorationData decorData = new DecorationData();
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().companyName(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().yearsInBusiness(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 2;
+                main.add(new VistaWidgetDecorator(create(proto().yearsInBusiness(), this), decorData));
                 main.add(new HTML());
                 main.add(new VistaWidgetDecorator(create(proto().fullyOwned(), this)));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().monthlyRevenue(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 10;
+                main.add(new VistaWidgetDecorator(create(proto().monthlyRevenue(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 8;
+                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().numberOfEmployees(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 4;
+                main.add(new VistaWidgetDecorator(create(proto().numberOfEmployees(), this), decorData));
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
@@ -257,15 +274,26 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public void createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().agency(), this)));
+                DecorationData decorData = new DecorationData();
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().agency(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().yearsReceiving(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().yearsReceiving(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().worker(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 30;
+                main.add(new VistaWidgetDecorator(create(proto().worker(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().workerPhone(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 15;
+                main.add(new VistaWidgetDecorator(create(proto().workerPhone(), this), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().monthlyAmount(), this)));
+                decorData = new DecorationData();
+                decorData.componentWidth = 8;
+                main.add(new VistaWidgetDecorator(create(proto().monthlyAmount(), this), decorData));
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
