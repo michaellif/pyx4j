@@ -60,22 +60,6 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         }
     }
 
-    protected void createIPerson(FlowPanel main, IPerson proto, CEntityEditableComponent<?> parent) {
-        main.add(new VistaWidgetDecorator(create(proto.firstName(), parent)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.middleName(), parent)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.lastName(), parent)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.homePhone(), parent)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.mobilePhone(), parent)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.workPhone(), parent)));
-        main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.email(), parent)));
-    }
-
     protected void createIAddress(FlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
         main.add(new VistaWidgetDecorator(create(proto.street1(), parent)));
         main.add(new HTML());

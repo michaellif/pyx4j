@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +30,7 @@ public interface Address extends IEntity, IAddress {
         Owned, Rented
     }
 
+    @NotNull
     IPrimitive<Date> moveInDate();
 
     IPrimitive<Date> moveOutDate();
@@ -40,8 +42,6 @@ public interface Address extends IEntity, IAddress {
     @Caption(name = "Owned/Rented")
     @Editor(type = EditorType.radiogroup)
     IPrimitive<OwnedRented> rented();
-
-    IPrimitive<Boolean> canadian();
 
     IPrimitive<String> managerName();
 }

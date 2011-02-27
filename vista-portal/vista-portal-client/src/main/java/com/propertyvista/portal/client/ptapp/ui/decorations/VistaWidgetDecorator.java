@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
@@ -89,6 +90,11 @@ public class VistaWidgetDecorator extends FlowPanel {
         Cursor.setDefault(label.getElement());
 
         nativeComponent = component.asWidget();
+
+        if (component instanceof CEditableComponent) {
+            ((CEditableComponent<?, ?>) component).setEditable(decorData.editable);
+        }
+
         if (nativeComponent == null) {
             throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
         }
@@ -129,7 +135,10 @@ public class VistaWidgetDecorator extends FlowPanel {
 
         mandatoryLabel = new Label();
         mandatoryLabel.getElement().getStyle().setFloat(Float.LEFT);
+        mandatoryLabel.getElement().getStyle().setPaddingLeft(10, Unit.PX);
+        mandatoryLabel.getElement().getStyle().setColor("#aaa");
 
+        renderMandatoryMessage();
         renderValidationMessage();
 
         label.setVisible(component.isVisible());
@@ -157,12 +166,25 @@ public class VistaWidgetDecorator extends FlowPanel {
     }
 
     private void renderMandatoryMessage() {
+        if (component instanceof CEditableComponent<?, ?>) {
+            CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
+            if (!editableComponent.isMandatoryConditionMet()) {
+                mandatoryLabel.setText(null);
+            } else {
+                if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable())
+                    mandatoryLabel.setText("Optional");
+            }
+        } else {
+            mandatoryLabel.setText(null);
+        }
     }
 
     private void renderValidationMessage() {
     }
 
     static public class DecorationData {
+
+        public boolean editable = true;
 
         public double labelWidth = 10;
 
@@ -179,10 +201,6 @@ public class VistaWidgetDecorator extends FlowPanel {
         public HorizontalAlignmentConstant componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
         public VerticalAlign componentVerticalAlignment = VerticalAlign.BASELINE;
-
-        public double gapWidth = 2;
-
-        public Unit gapUnit = Unit.EM;
 
         // various construction:
         public DecorationData() {

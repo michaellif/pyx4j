@@ -14,24 +14,29 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface IAddress extends IEntity {
 
     @Caption(name = "Address 1")
+    @NotNull
     IPrimitive<String> street1();
 
     @Caption(name = "Address 2")
     IPrimitive<String> street2();
 
     @Caption(name = "City")
+    @NotNull
     IPrimitive<String> city();
 
     @Caption(name = "Province")
+    @NotNull
     IPrimitive<String> province();
 
     @Caption(name = "Postal code")
+    @NotNull
     IPrimitive<String> postalCode();
 
 }

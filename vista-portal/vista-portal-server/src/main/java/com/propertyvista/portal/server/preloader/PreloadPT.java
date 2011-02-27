@@ -151,7 +151,6 @@ public class PreloadPT extends AbstractDataPreloader {
 
         address.phone().setValue(RandomUtil.randomPhone());
         address.rented().setValue((OwnedRented) RandomUtil.random(Address.OwnedRented.class));
-        address.canadian().setValue(RandomUtil.randomBoolean());
         address.managerName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
 
         return address;

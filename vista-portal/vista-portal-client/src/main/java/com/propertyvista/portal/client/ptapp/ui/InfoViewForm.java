@@ -24,6 +24,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -53,7 +54,31 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
-        createIPerson(main, proto(), this);
+
+        DecorationData decorData = new DecorationData();
+        decorData.editable = false;
+        decorData.componentWidth = 15;
+        main.add(new VistaWidgetDecorator(create(proto().firstName(), this), decorData));
+
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto().middleName(), this)));
+        main.add(new HTML());
+
+        decorData = new DecorationData();
+        decorData.editable = false;
+        main.add(new VistaWidgetDecorator(create(proto().lastName(), this), decorData));
+
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto().homePhone(), this)));
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this)));
+        main.add(new HTML());
+        main.add(new VistaWidgetDecorator(create(proto().workPhone(), this)));
+        main.add(new HTML());
+
+        decorData = new DecorationData();
+        decorData.editable = false;
+        main.add(new VistaWidgetDecorator(create(proto().email(), this), decorData));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
         main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this)));
