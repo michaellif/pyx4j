@@ -116,7 +116,7 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         } else if (member.getValueClass().equals(ChargeLineSelectable.class)) {
             return new ChargeLineSelectableFolder(this, valueChangeHandler);
         } else if (member.getValueClass().equals(TenantCharge.class)) {
-            return new TenantChargeListFolder(this, valueChangeHandler);
+            return new ChargeSplitListFolder(this, valueChangeHandler);
         } else {
             return super.createMemberFolderEditor(member);
         }

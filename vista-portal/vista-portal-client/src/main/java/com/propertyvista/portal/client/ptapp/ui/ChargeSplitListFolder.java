@@ -28,7 +28,7 @@ import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
-public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
+public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     final CEntityForm<?> masterForm;
 
@@ -36,7 +36,7 @@ public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
     final ValueChangeHandler valueChangeHandler;
 
     @SuppressWarnings("rawtypes")
-    TenantChargeListFolder(CEntityForm<?> masterForm, ValueChangeHandler valueChangeHandler) {
+    ChargeSplitListFolder(CEntityForm<?> masterForm, ValueChangeHandler valueChangeHandler) {
         this.valueChangeHandler = valueChangeHandler;
         this.masterForm = masterForm;
     }
@@ -53,7 +53,7 @@ public class TenantChargeListFolder extends CEntityFolder<TenantCharge> {
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new BoxReadOnlyFolderItemDecorator(true);
+                return new BoxReadOnlyFolderItemDecorator(!isFirst());
             }
 
             @SuppressWarnings("unchecked")

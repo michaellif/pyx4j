@@ -51,7 +51,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
             @Override
             public FolderItemDecorator createFolderItemDecorator() {
-                return new BoxReadOnlyFolderItemDecorator(true);
+                return new BoxReadOnlyFolderItemDecorator(!isFirst());
             }
 
             @SuppressWarnings("unchecked")
