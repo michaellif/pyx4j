@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IList;
 public interface Pets extends IApplicationEntity {
 
     @Owned
-    @Length(10)
+    @Length(3)
     IList<Pet> pets();
 
     @Transient

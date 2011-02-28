@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 public interface PotentialTenantList extends IApplicationEntity {
 
     @Owned
-    @Length(10)
+    @Length(6)
     IList<PotentialTenantInfo> tenants();
 
 }

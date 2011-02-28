@@ -24,15 +24,15 @@ public interface PotentialTenantFinancial extends IApplicationEntity {
     PotentialTenantInfo tenant();
 
     @Owned
-    @Length(10)
+    @Length(3)
     IList<TenantIncome> incomes();
 
     @Owned
-    @Length(10)
+    @Length(3)
     IList<TenantAsset> assets();
 
     @Owned
-    @Length(10)
+    @Length(2)
     IList<TenantGuarantor> guarantors();
 
 }

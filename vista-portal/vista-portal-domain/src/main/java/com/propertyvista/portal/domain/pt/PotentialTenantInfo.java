@@ -43,7 +43,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     Address previousAddress();
 
     @Owned
-    @Length(10)
+    @Length(3)
     IList<Vehicle> vehicles();
 
     @Owned
