@@ -974,12 +974,19 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
         style.addProperty("height", "20px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete));
         style.addProperty("background", "#456");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
         style.addProperty("line-height", "33px");
         style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        style.addProperty("background", "#654");
         addStyle(style);
 
     }

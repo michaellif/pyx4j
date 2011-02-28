@@ -137,7 +137,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
             label = new Label(presenter.getNavigLabel(step.getPlace()));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
-            label.getElement().getStyle().setPaddingLeft(7, Unit.PX);
             label.getElement().getStyle().setFontSize(15, Unit.PX);
             label.getElement().getStyle().setProperty("color", "#333");
             labelHolder.add(statusHolder);
@@ -203,6 +202,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             super.addStyleDependentName(style.name());
             arrowHolder.addStyleDependentName(style.name());
             labelHolder.addStyleDependentName(style.name());
+            statusHolder.addStyleDependentName(style.name());
         }
 
         @Override
