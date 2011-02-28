@@ -26,28 +26,90 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.WizardStep;
-import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
+public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
-    private Presenter presenter;
+    public static String DEFAULT_STYLE_PREFIX = "vista_Steps";
 
-    public MainNavigViewImpl() {
-        setHeight("43px");
-        setWidth("100%");
+    public static enum StyleSuffix implements IStyleSuffix {
+        Holder, Tab, ArrowHolder, LabelHolder, StatusHolder, Label
     }
 
-    class NavigTab extends FlowPanel {
+    public static enum StyleDependent implements IStyleDependent {
+        hover, latest, complete, invalid, current
+    }
+
+    private MainNavigPresenter presenter;
+
+    private NavigTabList tabsHolder;
+
+    public MainNavigViewImpl() {
+        setStyleName(DEFAULT_STYLE_PREFIX);
+    }
+
+    @Override
+    public void setPresenter(MainNavigPresenter presenter) {
+        this.presenter = presenter;
+
+        clear();
+        tabsHolder = new NavigTabList();
+
+        List<NavigTab> tabs = new ArrayList<NavigTab>();
+
+        boolean visited = false;
+        for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
+            WizardStep step = presenter.getWizardSteps().get(i);
+            if (ApplicationWizardStep.Status.latest.equals(step.getStatus())) {
+                visited = true;
+            }
+            tabs.add(0, new NavigTab(step, visited));
+        }
+
+        for (NavigTab navigTab : tabs) {
+            tabsHolder.add(navigTab);
+        }
+
+        setWidget(tabsHolder);
+
+    }
+
+    class NavigTabList extends ComplexPanel {
+        public NavigTabList() {
+            setElement(DOM.createElement("ul"));
+            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
+        }
+
+        @Override
+        public void add(Widget w) {
+            super.add(w, getElement());
+        }
+    }
+
+    class NavigTab extends ComplexPanel {
 
         private final AppPlace place;
+
+        private final SimplePanel arrowHolder;
+
+        private final FlowPanel labelHolder;
+
+        private final HTML statusHolder;
+
+        private final Label label;
 
         public AppPlace getPlace() {
             return place;
@@ -55,47 +117,56 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
 
         NavigTab(final WizardStep step, boolean visited) {
             super();
+            setElement(DOM.createElement("li"));
+            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Tab.name());
+
             getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
 
-            final Label label = new Label(presenter.getNavigLabel(step.getPlace()));
+            arrowHolder = new SimplePanel();
+            arrowHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ArrowHolder.name());
+            add(arrowHolder);
+
+            labelHolder = new FlowPanel();
+            labelHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LabelHolder.name());
+            arrowHolder.add(labelHolder);
+
+            statusHolder = new HTML("&nbsp;");
+            statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
+            add(statusHolder);
+
+            label = new Label(presenter.getNavigLabel(step.getPlace()));
+            label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
             label.getElement().getStyle().setPaddingLeft(7, Unit.PX);
             label.getElement().getStyle().setFontSize(15, Unit.PX);
             label.getElement().getStyle().setProperty("color", "#333");
-            label.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-            add(label);
+            labelHolder.add(statusHolder);
+            labelHolder.add(label);
 
             switch (step.getStatus()) {
-            case hasAlert:
-                Image image = new Image(SiteImages.INSTANCE.exclamation());
-                image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-                add(image);
+            case invalid:
+                addStyleDependentName(StyleDependent.invalid);
                 break;
             case complete:
-                image = new Image(SiteImages.INSTANCE.check());
-                image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-                add(image);
+                addStyleDependentName(StyleDependent.complete);
                 break;
-            case current:
-                image = new Image(SiteImages.INSTANCE.stepPointer());
-                image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-                add(image);
+            case latest:
+                addStyleDependentName(StyleDependent.latest);
                 break;
-
             default:
                 break;
             }
 
+            if (step.getPlace().equals(presenter.getWhere())) {
+                label.addStyleDependentName(StyleDependent.current.name());
+            }
+
             this.place = step.getPlace();
-            setWidth("115px");
             getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-            getElement().getStyle().setProperty("lineHeight", "53px");
-            getElement().getStyle().setProperty("textAlign", "center");
             getElement().getStyle().setCursor(Cursor.DEFAULT);
 
             if (visited) {
-                getElement().getStyle().setBackgroundColor("#999999");
                 addDomHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
@@ -103,7 +174,6 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
                     }
                 }, ClickEvent.getType());
                 addDomHandler(new MouseOverHandler() {
-
                     @Override
                     public void onMouseOver(MouseOverEvent event) {
                         label.getElement().getStyle().setProperty("color", "#555");
@@ -115,7 +185,6 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
                         label.getElement().getStyle().setProperty("color", "#333");
                     }
                 }, MouseOutEvent.getType());
-
                 getElement().getStyle().setCursor(Cursor.POINTER);
             } else {
                 if (!GWT.isProdMode()) {
@@ -129,28 +198,16 @@ public class MainNavigViewImpl extends FlowPanel implements MainNavigView {
             }
 
         }
-    }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-
-        clear();
-
-        List<NavigTab> tabs = new ArrayList<NavigTab>();
-
-        boolean visited = false;
-        for (int i = presenter.getWizardSteps().size() - 1; i >= 0; i--) {
-            WizardStep step = presenter.getWizardSteps().get(i);
-            if (ApplicationWizardStep.Status.current.equals(step.getStatus())) {
-                visited = true;
-            }
-            tabs.add(0, new NavigTab(step, visited));
+        public void addStyleDependentName(StyleDependent style) {
+            super.addStyleDependentName(style.name());
+            arrowHolder.addStyleDependentName(style.name());
+            labelHolder.addStyleDependentName(style.name());
         }
 
-        for (NavigTab navigTab : tabs) {
-            add(navigTab);
+        @Override
+        public void add(Widget w) {
+            super.add(w, getElement());
         }
-
     }
 }

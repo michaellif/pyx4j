@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.ptapp.ui.MainNavigView;
 import com.pyx4j.site.client.place.AppPlaceListing;
 import com.pyx4j.site.rpc.AppPlace;
 
-public class MainNavigActivity extends AbstractActivity implements MainNavigView.Presenter {
+public class MainNavigActivity extends AbstractActivity implements MainNavigView.MainNavigPresenter {
 
     private final MainNavigView view;
 
@@ -66,6 +66,11 @@ public class MainNavigActivity extends AbstractActivity implements MainNavigView
     @Override
     public List<WizardStep> getWizardSteps() {
         return PtAppWizardManager.instance().getWizardSteps();
-
     }
+
+    @Override
+    public Place getWhere() {
+        return placeController.getWhere();
+    }
+
 }

@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ptapp.themes;
 
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
+import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
@@ -69,6 +70,7 @@ public abstract class VistaTheme extends Theme {
         initBannerStyle();
         initSiteViewStyles();
         initVistaCaptionViewStyles();
+        initVistaNavigViewStyles();
     }
 
     protected void initThemeColors() {
@@ -894,6 +896,90 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("line-height", "86px");
         style.addProperty("text-transform", "uppercase");
 
+        addStyle(style);
+
+    }
+
+    private void initVistaNavigViewStyles() {
+        String prefix = MainNavigViewImpl.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix));
+        style.addProperty("width", "100%");
+        style.addProperty("height", "53px");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Holder));
+        style.addProperty("height", "53px");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0 0 0 14px");
+        style.addProperty("list-style", "none");
+        style.addProperty("overflow", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointer().getURL() + "') no-repeat 5px 0");
+        style.addProperty("height", "53px");
+        style.addProperty("padding-left", "18px");
+        style.addProperty("margin-right", "-7px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.latest));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepCurrentPointer().getURL() + "') no-repeat 5px 0");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepCompletePointer().getURL() + "') no-repeat 5px 0");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Tab, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepInvalidPointer().getURL() + "') no-repeat 5px 0");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.ArrowHolder));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepPointer().getURL() + "') no-repeat 100% 0");
+        style.addProperty("height", "53px");
+        style.addProperty("padding-right", "13px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.ArrowHolder, MainNavigViewImpl.StyleDependent.latest));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepCurrentPointer().getURL() + "') no-repeat 100% 0");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.ArrowHolder, MainNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepCompletePointer().getURL() + "') no-repeat 100% 0");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.ArrowHolder, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepInvalidPointer().getURL() + "') no-repeat 100% 0");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepBackground().getURL() + "') repeat-x");
+        style.addProperty("padding-left", "20px");
+        style.addProperty("padding-right", "20px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.latest));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepCurrentBackground().getURL() + "') repeat-x");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.complete));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepCompleteBackground().getURL() + "') repeat-x");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.stepInvalidBackground().getURL() + "') repeat-x");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
+        style.addProperty("height", "20px");
+        style.addProperty("background", "#456");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
+        style.addProperty("line-height", "33px");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
     }

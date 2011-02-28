@@ -23,14 +23,16 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public interface MainNavigView extends IsWidget {
 
-    public void setPresenter(Presenter presenter);
+    public void setPresenter(MainNavigPresenter presenter);
 
-    public interface Presenter {
+    public interface MainNavigPresenter {
         public void navigTo(Place place);
 
         public String getNavigLabel(AppPlace place);
 
         public List<WizardStep> getWizardSteps();
+
+        public Place getWhere();
 
     }
 }

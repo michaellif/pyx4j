@@ -175,7 +175,7 @@ public class PtAppWizardManager {
             idx++;
         }
         WizardStep nextStep = getWizardSteps().get(idx);
-        nextStep.setStatus(ApplicationWizardStep.Status.current);
+        nextStep.setStatus(ApplicationWizardStep.Status.latest);
 
         ginjector.getPlaceController().goTo(nextStep.getPlace());
 
@@ -202,7 +202,7 @@ public class PtAppWizardManager {
         log.info("start application {}", currentApplication.application);
 
         for (WizardStep step : wizardSteps) {
-            if (step.getStatus() == ApplicationWizardStep.Status.current) {
+            if (step.getStatus() == ApplicationWizardStep.Status.latest) {
                 ginjector.getPlaceController().goTo(step.getPlace());
                 return;
             }
