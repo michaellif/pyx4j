@@ -35,6 +35,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
@@ -49,12 +51,20 @@ import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
+import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.pt.TenantGuarantor;
+import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CAbstractLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.widgets.client.Button;
 
 @Singleton
@@ -88,6 +98,10 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public void createContent() {
         main = new FlowPanel();
 
+        // create object first!
+        financialView = new FinancialView(this);
+        chargesView = new ChargesView(this);
+
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
         main.add(apartmentView = new ApartmentView());
 
@@ -101,7 +115,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(tenantsView = new TenantsView());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Financial</h4>")));
-        main.add(financialView = new FinancialView());
+        financialView.createContent(main, proto().financial());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Pets</h4>")));
         main.add(petsTable = new PetsTable());
@@ -109,7 +123,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
         main.add(leaseTermsCheck = new LeaseTermsCheck());
 
-        chargesView = new ChargesView(this);
         chargesView.createContent(main, proto().charges());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
@@ -120,7 +133,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        CEntityFolder<?> editor = chargesView.createMemberFolderEditor(member);
+        CEntityFolder<?> editor = null;
+
+        if (editor == null)
+            editor = chargesView.createMemberFolderEditor(member);
+        if (editor == null)
+            editor = financialView.createMemberFolderEditor(member);
+
         return (editor != null ? editor : super.createMemberFolderEditor(member));
     }
 
@@ -672,28 +691,70 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     /*
      * Financial detailed information view implementation
      */
-    private class FinancialView extends FlowPanel {
+    private class FinancialView {
 
         private final VerticalPanel content;
 
-        public FinancialView() {
+        final CEntityForm<?> masterForm;
 
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
+        public FinancialView(CEntityForm<?> masterForm) {
+            this.masterForm = masterForm;
 
             // add table content panel:
-            add(innerLevelElementElignment(content = new VerticalPanel()));
+            upperLevelElementElignment(content = new VerticalPanel());
+        }
+
+        public void createContent(FlowPanel main, PotentialTenantFinancial member) {
+
+            FlowPanel fullname = new FlowPanel();
+            CAbstractLabel<String> name = new CAbstractLabel<String>();
+            masterForm.bind(name, member.tenant().firstName());
+            fullname.add(DecorationUtils.inline(name, "5em", null));
+            name = new CAbstractLabel<String>();
+            masterForm.bind(name, member.tenant().lastName());
+            fullname.add(DecorationUtils.inline(name, "10em", null));
+            fullname.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            fullname.getElement().getStyle().setFontSize(1.5, Unit.EM);
+            fullname.getElement().getStyle().setMarginLeft(4, Unit.EM);
+
+            content.add(fullname);
+
+            content.add(createHeader2(member.incomes()));
+            content.add(masterForm.create(member.incomes(), masterForm));
+            content.add(createHeader2(member.assets()));
+            content.add(masterForm.create(member.assets(), masterForm));
+            content.add(createHeader2(member.guarantors()));
+            content.add(masterForm.create(member.guarantors(), masterForm));
+
+            main.add(content);
+        }
+
+        private Widget createHeader(IObject<?> member) {
+
+            return new HTML("<h4>" + member.getMeta().getCaption() + "</h4>");
+        }
+
+        private Widget createHeader2(IObject<?> member) {
+
+            HTML h = new HTML("<h5>" + member.getMeta().getCaption() + "</h5>");
+            h.getElement().getStyle().setMarginTop(0.5, Unit.EM);
+            h.getElement().getStyle().setMarginLeft(1, Unit.EM);
+            return h;
+        }
+
+        protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
+            if (member.getValueClass().equals(TenantIncome.class)) {
+                return new TenantIncomeListFolder();
+            } else if (member.getValueClass().equals(TenantAsset.class)) {
+                return new TenantAssetListFolder();
+            } else if (member.getValueClass().equals(TenantGuarantor.class)) {
+                return new TenantGuarantorListFolder();
+            } else {
+                return null;
+            }
         }
 
         public void populate(Summary value) {
-
-            content.clear();
-
-            //            for (PotentialTenantFinancial pfi : value.financial().financial()) {
-            //                content.add(new FinancialInfo(pfi));
-            //            }
-
-            content.add(new FinancialInfo(value.financial()));
         }
 
         private class FinancialInfo extends FlowPanel {
@@ -727,7 +788,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 setWidth("100%");
 
                 this.pfi = pfi;
-                showCompact();
+                //                showCompact();
+                showFull();
             }
 
             public void showCompact() {
@@ -813,6 +875,138 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 panel.add(switcher);
             }
         }
+
+        // 
+        private class TenantIncomeListFolder extends CEntityFolder<TenantIncome> {
+
+            @Override
+            protected FolderDecorator<TenantIncome> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<TenantIncome>();
+            }
+
+            @Override
+            protected CEntityFolderItem<TenantIncome> createItem() {
+
+                return new CEntityFolderItem<TenantIncome>(TenantIncome.class) {
+
+                    @Override
+                    public FolderItemDecorator createFolderItemDecorator() {
+                        return new BoxReadOnlyFolderItemDecorator(false);
+                    }
+
+                    @Override
+                    public void createContent() {
+                        VerticalPanel incomeContent = new VerticalPanel();
+
+                        incomeContent.add(formRow(proto().incomeSource()));
+                        incomeContent.add(formRow(proto().monthlyAmount()));
+
+                        incomeContent.setWidth("100%");
+                        setWidget(incomeContent);
+                    }
+
+                    Widget formRow(IObject<?> value) {
+
+                        FlowPanel rowContent = new FlowPanel();
+                        rowContent.add(DecorationUtils.inline(new HTML(value.getMeta().getCaption()), "30%", null));
+
+                        CNumberLabel fixedPrc = new CNumberLabel();
+                        bind(fixedPrc, value);
+                        rowContent.add(DecorationUtils.inline(fixedPrc, "20%", "right"));
+                        return rowContent;
+                    }
+
+                };
+            }
+        }
+
+        private class TenantAssetListFolder extends CEntityFolder<TenantAsset> {
+
+            @Override
+            protected FolderDecorator<TenantAsset> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<TenantAsset>();
+            }
+
+            @Override
+            protected CEntityFolderItem<TenantAsset> createItem() {
+
+                return new CEntityFolderItem<TenantAsset>(TenantAsset.class) {
+
+                    @Override
+                    public FolderItemDecorator createFolderItemDecorator() {
+                        return new BoxReadOnlyFolderItemDecorator(false);
+                    }
+
+                    @Override
+                    public void createContent() {
+                        VerticalPanel incomeContent = new VerticalPanel();
+
+                        incomeContent.add(formRow(proto().assetType()));
+                        incomeContent.add(formRow(proto().percent()));
+                        incomeContent.add(formRow(proto().assetValue()));
+
+                        incomeContent.setWidth("100%");
+                        setWidget(incomeContent);
+                    }
+
+                    Widget formRow(IObject<?> value) {
+
+                        FlowPanel rowContent = new FlowPanel();
+                        rowContent.add(DecorationUtils.inline(new HTML(value.getMeta().getCaption()), "30%", null));
+
+                        CNumberLabel fixedPrc = new CNumberLabel();
+                        bind(fixedPrc, value);
+                        rowContent.add(DecorationUtils.inline(fixedPrc, "20%", "right"));
+                        return rowContent;
+                    }
+
+                };
+            }
+        }
+
+        private class TenantGuarantorListFolder extends CEntityFolder<TenantGuarantor> {
+
+            @Override
+            protected FolderDecorator<TenantGuarantor> createFolderDecorator() {
+                return new BoxReadOnlyFolderDecorator<TenantGuarantor>();
+            }
+
+            @Override
+            protected CEntityFolderItem<TenantGuarantor> createItem() {
+
+                return new CEntityFolderItem<TenantGuarantor>(TenantGuarantor.class) {
+
+                    @Override
+                    public FolderItemDecorator createFolderItemDecorator() {
+                        return new BoxReadOnlyFolderItemDecorator(false);
+                    }
+
+                    @Override
+                    public void createContent() {
+                        VerticalPanel incomeContent = new VerticalPanel();
+
+                        incomeContent.add(formRow(proto().firstName()));
+                        incomeContent.add(formRow(proto().lastName()));
+                        incomeContent.add(formRow(proto().relationship()));
+                        incomeContent.add(formRow(proto().email()));
+
+                        incomeContent.setWidth("100%");
+                        setWidget(incomeContent);
+                    }
+
+                    Widget formRow(IObject<?> value) {
+
+                        FlowPanel rowContent = new FlowPanel();
+                        rowContent.add(DecorationUtils.inline(new HTML(value.getMeta().getCaption()), "30%", null));
+
+                        CNumberLabel fixedPrc = new CNumberLabel();
+                        bind(fixedPrc, value);
+                        rowContent.add(DecorationUtils.inline(fixedPrc, "20%", "right"));
+                        return rowContent;
+                    }
+                };
+            }
+        }
     }
 
     /*
@@ -880,7 +1074,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     /*
-     * Lease Terms view implementation
+     * Charges view implementation
      */
     public class ChargesView {
 
@@ -985,12 +1179,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTerms.setHeight("20em");
             add(leaseTerms);
 
-            //            CEditableComponent<?, ?> agreeCheck = (CEditableComponent<?, ?>) create(proto().agree(), SummaryViewForm.this);
-            //            agreeCheck.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
-            //            agreeCheck.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
-            //            agreeCheck.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
-            //            add(agreeCheck);
-
             VistaWidgetDecorator agree = new VistaWidgetDecorator(create(proto().agree(), SummaryViewForm.this), new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
@@ -999,7 +1187,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         }
 
         public void populate(Summary value) {
-            leaseTermContent.setText(value.leaseTerms().getStringView());
+            leaseTermContent.setHTML(value.leaseTerms().text().getStringView());
             //            leaseTermContent.setText(SiteResources.INSTANCE.leaseTerms().getText());
         }
     }
