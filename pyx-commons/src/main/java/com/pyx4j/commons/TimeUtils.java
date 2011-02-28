@@ -24,6 +24,31 @@ import java.util.Date;
 
 public class TimeUtils {
 
+    public static int[] MONTH_DAYS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    public static int[] MONTH_DAYS_LEAP = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    public static String[] MONTH_NAMES_SHORT = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    public static int maxMonthDays(Date date) {
+        int year = date.getYear();
+        if (isLeapYear(year)) {
+            return MONTH_DAYS_LEAP[date.getMonth()];
+        }
+        return MONTH_DAYS[date.getMonth()];
+    }
+
+    public static boolean isLeapYear(int year) {
+        if (year % 4 == 0) // divisible by 4
+        {
+            if (year % 100 == 0) { // divible by 100 is not a leap year
+                return year % 400 == 0; // unless that year is divisible by 400
+            }
+            return true;
+        }
+        return false;
+    }
+
     public static String secSince(long start) {
         if (start == 0) {
             return "n/a";
