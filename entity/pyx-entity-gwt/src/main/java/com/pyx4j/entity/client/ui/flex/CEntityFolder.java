@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -71,7 +70,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         asWidget().setWidget(folderDecorator);
 
         content = new FlowPanel();
-        folderDecorator.setWidget(content);
+        folderDecorator.setFolder(this);
 
         folderDecorator.addItemAddClickHandler(new ClickHandler() {
             @Override
@@ -161,7 +160,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private void adoptFolderItem(final CEntityFolderItem<E> comp) {
         final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
-        folderItemDecorator.setWidget(comp);
+        folderItemDecorator.setFolderItem(comp);
+
         folderItemDecorator.asWidget().ensureDebugId(comp.getDebugId().getDebugIdString());
         content.add(folderItemDecorator);
         ValueChangeEvent.fire(this, getValue());
@@ -179,13 +179,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         return new NativeEntityFolder<IList<E>>();
     }
 
-    public void setWidget(Widget widget) {
-        folderDecorator.setWidget(widget);
-    }
-
     public ValidationResults getValidationResults() {
         // TODO Implement propagation of validation
         return null;
+    }
+
+    public FlowPanel getContent() {
+        return content;
     }
 
 }

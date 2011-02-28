@@ -23,14 +23,15 @@ package com.pyx4j.entity.client.ui.flex;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public interface FolderDecorator<E extends IEntity> extends AcceptsOneWidget, IsWidget, ValueChangeHandler<IList<E>> {
+public interface FolderDecorator<E extends IEntity> extends IsWidget, ValueChangeHandler<IList<E>> {
 
     HandlerRegistration addItemAddClickHandler(ClickHandler handler);
+
+    void setFolder(CEntityFolder<?> w);
 
 }

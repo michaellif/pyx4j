@@ -28,7 +28,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class BoxFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
@@ -52,8 +51,8 @@ public class BoxFolderItemDecorator extends FlowPanel implements FolderItemDecor
     }
 
     @Override
-    public void setWidget(IsWidget w) {
-        content.setWidget(w);
+    public void setFolderItem(CEntityFolderItem<?> folderItem) {
+        content.setWidget(folderItem);
     }
 
     @Override

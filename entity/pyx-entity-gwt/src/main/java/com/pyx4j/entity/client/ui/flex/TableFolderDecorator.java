@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -114,8 +113,8 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
     }
 
     @Override
-    public void setWidget(IsWidget w) {
-        content.setWidget(w);
+    public void setFolder(CEntityFolder<?> entityFolder) {
+        content.setWidget(entityFolder.getContent());
     }
 
     @Override
@@ -147,4 +146,5 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
             header.getElement().getStyle().setDisplay(Display.NONE);
         }
     }
+
 }

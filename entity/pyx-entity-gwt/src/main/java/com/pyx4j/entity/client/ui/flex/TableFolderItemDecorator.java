@@ -26,17 +26,22 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 
-public class TableFolderItemDecorator extends SimplePanel implements FolderItemDecorator {
+public class TableFolderItemDecorator extends VerticalPanel implements FolderItemDecorator {
 
     private final Image image;
 
-    private final FlowPanel holder;
+    private final FlowPanel rowHolder;
+
+    private final HTML validationMessageHolder;
 
     private final SimplePanel content;
 
@@ -45,24 +50,28 @@ public class TableFolderItemDecorator extends SimplePanel implements FolderItemD
     public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
         this.removable = removable;
 
-        holder = new FlowPanel();
-        holder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        rowHolder = new FlowPanel();
+        rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         image = new Image(removeButton);
 
         image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        holder.add(image);
+        rowHolder.add(image);
 
         content = new SimplePanel();
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        holder.add(content);
+        rowHolder.add(content);
 
         if (removable) {
             image.setTitle(title);
             image.getElement().getStyle().setCursor(Cursor.POINTER);
         }
 
-        setWidget(holder);
+        add(rowHolder);
+
+        validationMessageHolder = new HTML();
+        add(validationMessageHolder);
+
     }
 
     public TableFolderItemDecorator(ImageResource removeButton, String title) {
@@ -74,8 +83,16 @@ public class TableFolderItemDecorator extends SimplePanel implements FolderItemD
     }
 
     @Override
-    public void setWidget(IsWidget w) {
-        content.setWidget(w);
+    public void setFolderItem(final CEntityFolderItem<?> folderItem) {
+        content.setWidget(folderItem);
+        folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                    validationMessageHolder.setHTML(folderItem.getValidationResults().getMessagesText(true));
+                }
+            }
+        });
     }
 
     @Override

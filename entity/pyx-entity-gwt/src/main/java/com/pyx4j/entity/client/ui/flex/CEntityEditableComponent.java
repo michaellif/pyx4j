@@ -24,11 +24,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexConextComponent {
+public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexConextComponent,
+        PropertyChangeHandler {
 
     private final EntityBinder<E> binder;
 
@@ -105,8 +108,17 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         }
     }
 
+    @Override
+    public void onPropertyChange(PropertyChangeEvent event) {
+        if (PropertyChangeEvent.PropertyName.VALIDITY.equals(event.getPropertyName())) {
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.VALIDITY);
+        }
+    }
+
     public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
+        component.addPropertyChangeHandler(this);
+
         if (component instanceof IFlexConextComponent) {
             ((IFlexConextComponent) component).createContent();
         }

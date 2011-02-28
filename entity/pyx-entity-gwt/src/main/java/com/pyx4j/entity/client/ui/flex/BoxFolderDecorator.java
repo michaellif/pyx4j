@@ -50,7 +50,7 @@ public class BoxFolderDecorator<E extends IEntity> extends FlowPanel implements 
     }
 
     @Override
-    public void setWidget(IsWidget w) {
+    public void setFolder(CEntityFolder<?> w) {
         content.setWidget(w);
     }
 

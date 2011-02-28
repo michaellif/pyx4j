@@ -23,13 +23,12 @@ package com.pyx4j.entity.client.ui.flex;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeEditableComponent;
 
-public class NativeEntityFolder<E> extends SimplePanel implements INativeEditableComponent<E>, AcceptsOneWidget {
+public class NativeEntityFolder<E> extends SimplePanel implements INativeEditableComponent<E> {
 
     @Override
     public void setEnabled(boolean enabled) {
