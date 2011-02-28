@@ -24,11 +24,47 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Pet extends IEntity {
 
     public enum PetType {
-        dog, cat
+
+        //TODO i18n
+
+        dog("Dog"), cat("Cat");
+
+        private final String label;
+
+        PetType() {
+            this.label = name();
+        }
+
+        PetType(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
 
     public enum WeightUnit {
-        lb, kg
+
+        //TODO i18n
+
+        lb("LB"), kg("KG");
+
+        private final String label;
+
+        WeightUnit() {
+            this.label = name();
+        }
+
+        WeightUnit(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
 
     @Caption(name = "Pet type")
