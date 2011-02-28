@@ -26,6 +26,7 @@ import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /*
  <pre>
@@ -45,6 +46,12 @@ public class DebugServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        if (req instanceof HttpServletRequest) {
+            HttpServletRequest hrequest = (HttpServletRequest) req;
+            if (hrequest.getParameter("error") != null) {
+                throw new Error();
+            }
+        }
         RequestDebug.debug(req);
     }
 
