@@ -29,4 +29,10 @@ public class SummaryViewImpl extends WizardStepViewImpl<Summary, SummaryViewPres
         super.populate(entity);
     }
 
+    @Override
+    public void setPresenter(SummaryViewPresenter presenter) {
+        super.setPresenter(presenter);
+        ((SummaryViewForm) getForm()).setPresenter(getPresenter());
+    }
+
 }
