@@ -30,6 +30,7 @@ import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.Utility;
+import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
@@ -61,8 +62,11 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
+import com.propertyvista.portal.server.pt.PtUserDataAccess;
+import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -78,6 +82,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 public class PreloadPT extends AbstractDataPreloader {
 
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
+
+    private User user;
 
     private Application application;
 
@@ -296,19 +302,37 @@ public class PreloadPT extends AbstractDataPreloader {
     }
 
     private User createUser() {
-        User user = EntityFactory.create(User.class);
+        user = EntityFactory.create(User.class);
         user.name().setValue("Gregory Holmes");
         user.email().setValue("gregory@221b.com");
+
         PersistenceServicesFactory.getPersistenceService().persist(user);
 
+        UserCredential credential = EntityFactory.create(UserCredential.class);
+        credential.setPrimaryKey(user.getPrimaryKey());
+
+        credential.user().set(user);
+        credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword("london"));
+        credential.enabled().setValue(Boolean.TRUE);
+        credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
+
+        PersistenceServicesFactory.getPersistenceService().persist(credential);
         return user;
     }
 
-    private Application createApplication(User user) {
+    private Application createApplication() {
         application = EntityFactory.create(Application.class);
         application.user().set(user);
         persist(application);
         return application;
+    }
+
+    private void loadApplication(StringBuilder sb) {
+        EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+
+        Application loadedApplication = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        sb.append("Application :").append(loadedApplication.rent().amount()).append("\n");
     }
 
     private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
@@ -329,6 +353,24 @@ public class PreloadPT extends AbstractDataPreloader {
         progress.steps().add(createWizardStep(new SiteMap.Summary(), ApplicationWizardStep.Status.notVisited));
         progress.steps().add(createWizardStep(new SiteMap.Payment(), ApplicationWizardStep.Status.notVisited));
         progress.application().set(application);
+        persist(progress);
+    }
+
+    private void loadApplicationProgress(StringBuilder sb) {
+        EntityQueryCriteria<ApplicationProgress> criteria = EntityQueryCriteria.create(ApplicationProgress.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+
+        ApplicationProgress progress = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if (progress == null) {
+            throw new IllegalStateException("Could not find progress for application");
+        }
+
+        sb.append(progress.steps().size()).append(" steps\n");
+        for (ApplicationWizardStep step : progress.steps()) {
+            sb.append("\t");
+            sb.append(step.placeToken().getStringView());
+            sb.append("\n");
+        }
     }
 
     private void createPotentialTenantList() {
@@ -342,22 +384,6 @@ public class PreloadPT extends AbstractDataPreloader {
         }
 
         persist(tenants);
-    }
-
-    @Override
-    public String create() {
-        User user = createUser();
-        createApplication(user);
-        createUnitSelection();
-        createApplicationProgress();
-        createPotentialTenantList();
-        createCharges();
-
-        load();
-
-        StringBuilder b = new StringBuilder();
-        b.append("Created potential tenant series of data");
-        return b.toString();
     }
 
     private void createUnitSelection() {
@@ -714,8 +740,28 @@ public class PreloadPT extends AbstractDataPreloader {
         sb.append("\n\n");
     }
 
+    @Override
+    public String create() {
+        user = createUser();
+        createApplication();
+        createUnitSelection();
+        createApplicationProgress();
+        createPotentialTenantList();
+        createCharges();
+
+        load();
+
+        StringBuilder b = new StringBuilder();
+        b.append("Created potential tenant series of data");
+        return b.toString();
+    }
+
     public void load() {
         StringBuilder sb = new StringBuilder();
+
+        sb.append("\n\n---------------------------- APPLICATION -----------------------------\n");
+        loadApplication(sb);
+        loadApplicationProgress(sb);
 
         sb.append("\n\n---------------------------- APARTMENT -------------------------------\n");
         loadUnitSelection(sb);
