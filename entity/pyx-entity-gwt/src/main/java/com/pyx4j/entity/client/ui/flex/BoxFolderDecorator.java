@@ -27,7 +27,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -51,7 +50,7 @@ public class BoxFolderDecorator<E extends IEntity> extends FlowPanel implements 
 
     @Override
     public void setFolder(CEntityFolder<?> w) {
-        content.setWidget(w);
+        content.setWidget(w.getContent());
     }
 
     @Override
