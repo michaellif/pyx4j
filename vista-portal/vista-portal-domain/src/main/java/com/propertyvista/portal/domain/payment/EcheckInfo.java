@@ -11,19 +11,34 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.payment;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface EcheckInfo extends IEntity {
+
     public enum AccountType {
         Chequing, Saving
     }
 
+    @NotNull
     IPrimitive<String> nameOnAccount();
 
+    @NotNull
+    IPrimitive<AccountType> accountType();
+
+    @NotNull
     IPrimitive<String> bankName();
 
-    IPrimitive<AccountType> accountType();
+    @NotNull
+    IPrimitive<Integer> routingNo();
+
+    @NotNull
+    IPrimitive<Integer> accountNo();
+
+    @NotNull
+    IPrimitive<Integer> checkNo();
+
 }

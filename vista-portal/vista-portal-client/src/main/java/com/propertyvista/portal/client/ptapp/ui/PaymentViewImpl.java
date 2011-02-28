@@ -13,25 +13,15 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.inject.Singleton;
+import com.propertyvista.portal.client.ptapp.ui.PaymentView.PaymentPresenter;
+import com.propertyvista.portal.domain.pt.PaymentInfo;
 
 @Singleton
-public class PaymentViewImpl extends SimplePanel implements PaymentView {
-
-    private Presenter presenter;
+public class PaymentViewImpl extends WizardStepViewImpl<PaymentInfo, PaymentPresenter> implements PaymentView {
 
     public PaymentViewImpl() {
-        Label labael = new Label("PaymentView");
-        labael.setSize("300px", "40px");
-        setWidget(labael);
-
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+        super(new PaymentViewForm());
     }
 
 }

@@ -13,8 +13,11 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.entity.shared.IObject;
 
 public class ViewHeaderDecorator extends SimplePanel {
 
@@ -23,5 +26,13 @@ public class ViewHeaderDecorator extends SimplePanel {
     public ViewHeaderDecorator(Widget header) {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setWidget(header);
+    }
+
+    public ViewHeaderDecorator(String caption) {
+        this(new HTML("<h4>" + caption + "</h4>"));
+    }
+
+    public ViewHeaderDecorator(IObject<?> member) {
+        this(member.getMeta().getCaption());
     }
 }

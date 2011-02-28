@@ -27,15 +27,12 @@ public interface IAddress extends IEntity {
     @Caption(name = "Address 2")
     IPrimitive<String> street2();
 
-    @Caption(name = "City")
     @NotNull
     IPrimitive<String> city();
 
-    @Caption(name = "Province")
     @NotNull
     IPrimitive<String> province();
 
-    @Caption(name = "Postal code")
     @NotNull
     IPrimitive<String> postalCode();
 

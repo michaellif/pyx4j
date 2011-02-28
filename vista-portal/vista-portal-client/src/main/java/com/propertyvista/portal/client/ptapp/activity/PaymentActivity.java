@@ -13,31 +13,16 @@
  */
 package com.propertyvista.portal.client.ptapp.activity;
 
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.PaymentView;
+import com.propertyvista.portal.client.ptapp.ui.PaymentView.PaymentPresenter;
+import com.propertyvista.portal.domain.pt.PaymentInfo;
 
-import com.pyx4j.site.rpc.AppPlace;
-
-public class PaymentActivity extends AbstractActivity implements PaymentView.Presenter {
-
-    private final PaymentView view;
+public class PaymentActivity extends WizardStepActivity<PaymentInfo, PaymentPresenter> implements PaymentPresenter {
 
     @Inject
     public PaymentActivity(PaymentView view) {
-        this.view = view;
-        view.setPresenter(this);
-    }
-
-    public PaymentActivity withPlace(AppPlace place) {
-        return this;
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
+        super(view, PaymentInfo.class);
     }
 
 }

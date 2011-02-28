@@ -7,19 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-23
- * @author antonk
+ * Created on 2011-02-28
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.payment;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.propertyvista.portal.domain.pt.IAddress;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface InteracInfo extends IEntity {
-    IPrimitive<String> bankNo();
+public interface BillingAddress extends IAddress {
 
-    IPrimitive<String> transitNo();
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> phone();
 
-    IPrimitive<String> accountNo();
 }

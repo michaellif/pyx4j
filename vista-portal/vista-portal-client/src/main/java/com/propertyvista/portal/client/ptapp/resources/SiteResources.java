@@ -43,4 +43,16 @@ public interface SiteResources extends ClientBundleWithLookup {
 
     @Source("leaseTerms.html")
     TextResource leaseTerms();
+
+    //PaymentViewForm
+
+    @Source("paymentApprovalNotes.html")
+    TextResource paymentApprovalNotes();
+
+    @Source("paymentPreauthorisedNotes.html")
+    TextResource paymentPreauthorisedNotes();
+
+    @Source("stub.html")
+    TextResource paymentTermsNotes();
+
 }

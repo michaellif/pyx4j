@@ -7,18 +7,41 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 8, 2011
- * @author Misha
+ * Created on 2011-02-28
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client.ptapp.ui;
+package com.propertyvista.portal.domain.payment;
 
-import com.propertyvista.portal.client.ptapp.ui.PaymentView.PaymentPresenter;
-import com.propertyvista.portal.domain.pt.PaymentInfo;
+public enum PaymentType {
 
-public interface PaymentView extends WizardStepView<PaymentInfo, PaymentPresenter> {
+    //TODO i18n
 
-    public interface PaymentPresenter extends WizardStepPresenter<PaymentInfo> {
+    Echeck("eCheck"),
+
+    Visa,
+
+    Amex,
+
+    MasterCard,
+
+    Discover,
+
+    Interac;
+
+    private final String label;
+
+    PaymentType() {
+        this.label = name();
+    }
+
+    PaymentType(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String toString() {
+        return label;
     }
 
 }

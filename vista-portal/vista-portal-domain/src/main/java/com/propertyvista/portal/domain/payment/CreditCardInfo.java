@@ -11,23 +11,25 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.portal.domain.pt;
+package com.propertyvista.portal.domain.payment;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface CreditCardInfo extends IEntity {
-    public enum CardType {
-        Visa, Amex, MasterCard, Discover
-    }
 
+    @NotNull
     IPrimitive<String> cardNumber();
 
+    @NotNull
     IPrimitive<Date> expiry();
 
-    IPrimitive<Date> verificationDigits();
+    IPrimitive<String> verificationDigits();
 
     IPrimitive<String> exactName();
 

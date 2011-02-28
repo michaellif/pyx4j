@@ -95,4 +95,12 @@ public interface SiteImages extends ClientBundle {
     @Source("qv.png")
     ImageResource qv();
 
+    @Source("payment-master.gif")
+    ImageResource paymentMC();
+
+    @Source("payment-visa.gif")
+    ImageResource paymentVISA();
+
+    @Source("payment-amex.gif")
+    ImageResource paymentAMEX();
 }

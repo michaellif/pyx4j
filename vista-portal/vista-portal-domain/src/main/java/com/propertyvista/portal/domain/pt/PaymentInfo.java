@@ -13,25 +13,48 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
+import com.propertyvista.portal.domain.payment.BillingAddress;
+import com.propertyvista.portal.domain.payment.CreditCardInfo;
+import com.propertyvista.portal.domain.payment.EcheckInfo;
+import com.propertyvista.portal.domain.payment.InteracInfo;
+import com.propertyvista.portal.domain.payment.PaymentType;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface PaymentInfo extends IAddress {
-    public enum PaymentType {
-        Visa, Amex, MasterCard, Discover, Echeck, Interac
-    }
+public interface PaymentInfo extends IApplicationEntity {
 
-    Money deposit();
+    @Transient
+    ChargeLineList applicationCharges();
 
-    Money applicationFee();
+    @Transient
+    ChargeLine applicationFee();
 
-    IPrimitive<Boolean> preauthorised();
+    @Caption(name = "Payment types")
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<PaymentType> type();
 
-    CreditCardInfo creditCard();
-
+    @EmbeddedEntity
     EcheckInfo echeck();
 
+    @EmbeddedEntity
+    @Transient
+    CreditCardInfo creditCard();
+
     InteracInfo interac();
+
+    @Caption(name = "Yes plase enrol me")
+    IPrimitive<Boolean> preauthorised();
+
+    IPrimitive<Boolean> sameAsCurrent();
+
+    Address currentAddress();
+
+    @EmbeddedEntity
+    BillingAddress billingAddress();
 
 }
