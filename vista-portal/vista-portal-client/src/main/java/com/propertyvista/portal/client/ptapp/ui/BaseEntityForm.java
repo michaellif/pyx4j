@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
-
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
@@ -26,6 +25,7 @@ import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
@@ -33,6 +33,10 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public BaseEntityForm(Class<E> clazz) {
         super(clazz);
+    }
+
+    public BaseEntityForm(Class<E> rootClass, EntityFormComponentFactory factory) {
+        super(rootClass, factory);
     }
 
     @Override
@@ -87,7 +91,7 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         DecorationData decorData = new DecorationData();
         decorData = new DecorationData();
         decorData.componentWidth = 30;
-    	main.add(new VistaWidgetDecorator(create(proto.supervisorName(), parent), decorData));
+        main.add(new VistaWidgetDecorator(create(proto.supervisorName(), parent), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 15;

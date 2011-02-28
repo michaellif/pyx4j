@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -66,6 +67,8 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.site.rpc.AppPlace;
@@ -97,7 +100,15 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private SignatureView signatureView;
 
     public SummaryViewForm() {
-        super(Summary.class);
+        super(Summary.class, new ReadOnlyComponentFactory() {
+            @Override
+            public CEditableComponent<?, ?> create(IObject<?> member) {
+                MemberMeta mm = member.getMeta();
+                CEditableComponent<?, ?> comp = null;
+                comp = super.create(member);
+                return comp;
+            }
+        });
     }
 
     public SummaryViewPresenter getPresenter() {
