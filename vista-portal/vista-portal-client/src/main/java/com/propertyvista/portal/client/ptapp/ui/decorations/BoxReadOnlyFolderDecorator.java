@@ -17,20 +17,14 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel implements FolderDecorator<E> {
-
-    @Override
-    public void setWidget(IsWidget w) {
-        super.setWidget(w);
-        this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-    }
 
     @Override
     public void onValueChange(ValueChangeEvent<IList<E>> event) {
@@ -39,6 +33,12 @@ public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel i
     @Override
     public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
         return null;
+    }
+
+    @Override
+    public void setFolder(CEntityFolder<?> w) {
+        super.setWidget(w);
+        this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     }
 
 }
