@@ -54,11 +54,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petDeposit, 100));
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
 
-        // make sure to calculate charges
-        calculateCharges(charges);
-
         // payment splits
         updatePaymentSplitCharges(charges, application);
+
+        // make sure to calculate charges
+        calculateCharges(charges);
     }
 
     public static void updatePaymentSplitCharges(Charges charges, Application application) {
@@ -90,17 +90,6 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
                 dirty = true;
                 break;
             }
-
-            //            // first find the corresponding tenant
-            //            int index = tenantList.tenants().indexOf(tenantCharge.tenant());
-            //            if (index == -1) {
-            //                dirty = true;
-            //                break;
-            //            }
-            //            PotentialTenantInfo tenant = tenantList.tenants().get(index);
-
-            //            // now compare their relationships
-            //            if (tenant.relationship()
         }
 
         if (dirty) {
@@ -123,6 +112,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
             TenantCharge tenantCharge = DomainUtil.createTenantCharge(percentage, 0);
             tenantCharge.tenant().set(tenant);
+            PersistenceServicesFactory.getPersistenceService().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);
         }
     }

@@ -205,6 +205,10 @@ public class PreloadPT extends AbstractDataPreloader {
         // first tenant must always be an applicant
         if (index == 0) {
             pti.relationship().setValue(Relationship.Applicant);
+        } else if (index == 1) {
+            pti.relationship().setValue(Relationship.CoApplicant);
+        } else if (index == 2) {
+            pti.relationship().setValue(Relationship.CoApplicant);
         } else {
             pti.relationship().setValue(RandomUtil.random(DemoData.RELATIONSHIPS));
         }
@@ -289,16 +293,6 @@ public class PreloadPT extends AbstractDataPreloader {
         } else {
             return "This is production";
         }
-    }
-
-    private void createCharges() {
-        Charges charges = EntityFactory.create(Charges.class);
-
-        charges.application().set(application);
-
-        ChargesServerCalculation.dummyPopulate(charges, application);
-
-        persist(charges);
     }
 
     private User createUser() {
@@ -644,6 +638,16 @@ public class PreloadPT extends AbstractDataPreloader {
         sb.append("\n\n");
     }
 
+    private void createCharges() {
+        Charges charges = EntityFactory.create(Charges.class);
+
+        charges.application().set(application);
+
+        ChargesServerCalculation.dummyPopulate(charges, application);
+
+        persist(charges);
+    }
+
     private void loadCharges(StringBuilder sb) {
         EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
@@ -652,18 +656,18 @@ public class PreloadPT extends AbstractDataPreloader {
 
             sb.append("Monthly\n");
             for (ChargeLine line : charges.monthlyCharges().charges()) {
-                sb.append("\t");
+                sb.append("\t$");
                 sb.append(line.charge().amount().getStringView());
-                sb.append(" ");
+                sb.append(" \t");
                 sb.append(line.type().getStringView());
                 sb.append("\n");
             }
 
             sb.append("Upgrades\n");
             for (ChargeLineSelectable line : charges.monthlyCharges().upgradeCharges()) {
-                sb.append("\t");
+                sb.append("\t$");
                 sb.append(line.charge().amount().getStringView());
-                sb.append(" ");
+                sb.append(" \t");
                 sb.append(line.type().getStringView());
                 if (line.selected().getValue()) {
                     sb.append(" YES");
@@ -671,14 +675,24 @@ public class PreloadPT extends AbstractDataPreloader {
                 sb.append("\n");
             }
 
-            sb.append("Monthly + Upgrades Total ");
+            sb.append("Monthly + Upgrades Total \n\t$");
             sb.append(charges.monthlyCharges().total().amount().getStringView());
-            sb.append("\n\n");
+            sb.append("\n");
 
-            sb.append("Pro-Rated ").append(charges.proRatedCharges().total().amount().getStringView()).append("\n");
+            sb.append("\nPro-Rated ").append(charges.proRatedCharges().total().amount().getStringView()).append("\n");
             for (ChargeLine line : charges.proRatedCharges().charges()) {
-                sb.append("\t").append(line.label().getStringView());
-                sb.append(" ").append(line.charge().amount().getStringView());
+                sb.append("\t$");
+                sb.append(line.charge().amount().getStringView());
+                sb.append(" \t").append(line.label().getStringView());
+                sb.append("\n");
+            }
+
+            sb.append("\nApplication Charges ").append(charges.applicationCharges().total().amount().getStringView()).append("\n");
+            for (ChargeLine line : charges.applicationCharges().charges()) {
+                sb.append("\t$");
+                sb.append(line.charge().amount().getStringView());
+                sb.append(" \t");
+                sb.append(line.type().getStringView());
                 sb.append("\n");
             }
 
@@ -686,7 +700,8 @@ public class PreloadPT extends AbstractDataPreloader {
             for (TenantCharge line : charges.paymentSplitCharges().charges()) {
                 sb.append("\t").append(line.tenant().relationship().getStringView());
                 sb.append(" ").append(line.tenant().firstName().getStringView()).append(" ").append(line.tenant().lastName().getStringView());
-                sb.append(" ").append(line.percentage());
+                sb.append(" \t").append(line.percentage().getValue()).append("% $");
+                sb.append(line.charge().amount().getValue());
                 sb.append("\n");
             }
 

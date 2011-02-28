@@ -16,6 +16,8 @@ package com.propertyvista.portal.rpc.pt;
 import java.util.Date;
 
 import com.propertyvista.portal.domain.pt.Charge;
+import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -25,14 +27,14 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantChargeList;
 import com.propertyvista.portal.domain.util.DomainUtil;
 
+import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 
 public class ChargesSharedCalculation {
 
     public static void calculateCharges(Charges charges) {
-        //        calculateTotal(charges.rentChargesOld());
-        //        calculateSelectableTotal(charges.upgradeChargesOld());
-        calculateProrateCharges(charges);
+        calculateMonthlyAndProrateCharges(charges);
         calculateApplicationCharges(charges);
         calculatePaymentSplitCharges(charges);
     }
@@ -58,7 +60,8 @@ public class ChargesSharedCalculation {
 
     }
 
-    public static void calculateProrateCharges(Charges charges) {
+    @SuppressWarnings("deprecation")
+    public static void calculateMonthlyAndProrateCharges(Charges charges) {
 
         // take all monthly charges and get their total
         double rentTotal = calculateTotal(charges.monthlyCharges());
@@ -72,30 +75,29 @@ public class ChargesSharedCalculation {
             return;
         }
 
-        //        GregorianCalendar c = new GregorianCalendar();
-        //        c.setTime(rentStart);
-        //        int currentDay = c.get(Calendar.DAY_OF_MONTH);
-        //        int monthDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        //        int numDays = monthDays - currentDay;
-        //
-        //        // build label
-        //        StringBuilder sb = new StringBuilder();
-        //        sb.append("Pro-Rate (");
-        //        sb.append(c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA));
-        //        sb.append(" ").append(currentDay).append(" - ");
-        //        sb.append(c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.CANADA));
-        //        sb.append(monthDays).append(")");
-        //
-        //        double proratedTotal = monthlyTotal * numDays / monthDays;
-        //
-        //        ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
-        //        proratedCharge.type().setValue(ChargeType.prorated);
-        //        proratedCharge.label().setValue(sb.toString());
-        //        proratedCharge.charge().set(DomainUtil.createMoney(proratedTotal));
-        //
-        //        charges.proRatedCharges().charges().clear();
-        //        charges.proRatedCharges().charges().add(proratedCharge);
-        //        charges.proRatedCharges().total().set(DomainUtil.createMoney(proratedTotal));
+        // month end
+        int currentDay = rentStart.getDate();
+        int monthDays = TimeUtils.maxMonthDays(rentStart);
+        int numDays = monthDays - currentDay;
+
+        // build label
+        StringBuilder sb = new StringBuilder();
+        sb.append("Pro-Rate (");
+        sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
+        sb.append(" ").append(currentDay).append(" - ");
+        sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
+        sb.append(" ").append(monthDays).append(")");
+
+        double proratedTotal = monthlyTotal * numDays / monthDays;
+
+        ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
+        proratedCharge.type().setValue(ChargeType.prorated);
+        proratedCharge.label().setValue(sb.toString());
+        proratedCharge.charge().set(DomainUtil.createMoney(proratedTotal));
+
+        charges.proRatedCharges().charges().clear();
+        charges.proRatedCharges().charges().add(proratedCharge);
+        charges.proRatedCharges().total().set(DomainUtil.createMoney(proratedTotal));
     }
 
     public static void calculateApplicationCharges(Charges charges) {
@@ -108,7 +110,7 @@ public class ChargesSharedCalculation {
      * (rent and upgrades).
      */
     public static void calculatePaymentSplitCharges(Charges charges) {
-        double totalSplit = 0d;
+        double totalSplit = 0d; // everything paid by co-applicants
         double total = charges.monthlyCharges().total().amount().getValue();
         TenantCharge applicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
@@ -120,7 +122,7 @@ public class ChargesSharedCalculation {
             case CoApplicant:
                 double v = total * charge.percentage().getValue() / 100d;
                 charge.charge().amount().setValue(v);
-                totalSplit += v;
+                totalSplit += v; // there may be multiple co-applicants
                 break;
             default:
                 throw new Error("Can't split charges with non applicant");
@@ -129,7 +131,7 @@ public class ChargesSharedCalculation {
         if (applicantCharge == null) {
             new Error("Applicant charges not found");
         } else {
-            double v = total - totalSplit;
+            double v = total - totalSplit; // applicant's share of payment
             applicantCharge.charge().amount().setValue(v);
             int prc = (int) (100d * v / total);
             applicantCharge.percentage().setValue(prc);

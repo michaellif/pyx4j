@@ -33,7 +33,7 @@ public class DemoData {
 
     public static int NUM_RESIDENTIAL_BUILDINGS = 2;
 
-    public static int NUM_POTENTIAL_TENANTS = 3;
+    public static int NUM_POTENTIAL_TENANTS = 4;
 
     public static int NUM_FLOORS = 7;
 
