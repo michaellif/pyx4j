@@ -13,9 +13,13 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
@@ -42,11 +46,16 @@ import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.Button;
 
 public class ApartmentViewForm extends CEntityForm<UnitSelection> {
+
+    private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 
     private AvailableUnitsTable availableUnitsTable;
 
@@ -123,6 +132,40 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         main.add(new VistaWidgetDecorator(create(proto().rentStart(), this), 0, 7.2));
 
         setWidget(main);
+        addValidations();
+    }
+
+    private void addValidations() {
+        this.get(proto().rentStart()).addValueValidator(new EditableValueValidator<Date>() {
+
+            @SuppressWarnings("deprecation")
+            private Date getLastAvailableDay(Date avalableForRent) {
+                if (avalableForRent == null) {
+                    return null;
+                }
+                Date date = new Date(avalableForRent.getTime());
+                int availableDays = 4;
+                date.setDate(date.getDate() + availableDays);
+                return date;
+            }
+
+            @Override
+            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                Date avalableForRent = getValue().selectedUnit().avalableForRent().getValue();
+                if ((avalableForRent == null) || (value == null)) {
+                    return true;
+                } else {
+                    return TimeUtils.isWithinRange(value, avalableForRent, getLastAvailableDay(avalableForRent));
+                }
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                return i18n.tr("Start Rent Date for this unit can not be later than {0,date,medium}", getLastAvailableDay(getValue().selectedUnit()
+                        .avalableForRent().getValue()));
+            }
+        });
+
     }
 
     @Override
