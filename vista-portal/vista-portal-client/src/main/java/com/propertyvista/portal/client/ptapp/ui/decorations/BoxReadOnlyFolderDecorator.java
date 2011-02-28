@@ -37,7 +37,7 @@ public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel i
 
     @Override
     public void setFolder(CEntityFolder<?> w) {
-        super.setWidget(w);
+        super.setWidget(w.getContent());
         this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     }
 
