@@ -70,6 +70,7 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
         add(rowHolder);
 
         validationMessageHolder = new HTML();
+        validationMessageHolder.getElement().getStyle().setColor("red");
         add(validationMessageHolder);
 
     }

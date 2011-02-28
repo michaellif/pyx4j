@@ -92,8 +92,7 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
             } else if (ccomponent instanceof CEditableComponent<?, ?>) {
                 CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) ccomponent;
                 if (!editableComponent.isValid() && editableComponent.isVisited()) {
-                    validationResults.appendValidationError(editableComponent.isVisited() + " Field '" + ccomponent.getTitle() + "'  is not valid. "
-                            + editableComponent.getValidationMessage());
+                    validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. " + editableComponent.getValidationMessage());
                 }
             } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).isValid()) {
                 validationResults.appendValidationErrors(((CEntityFolder<?>) ccomponent).getValidationResults());
