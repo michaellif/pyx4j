@@ -1,6 +1,6 @@
 #$Id: .... $
 # When you increment a build.version in this file You need to set build.buildNum=0 
 # This way the first build will start from 01 
-#Mon Feb 28 13:48:18 EST 2011
-build.buildNum=272
+#Mon Feb 28 15:08:00 EST 2011
 build.version=2.0.2-SNAPSHOT
+build.buildNum=273
