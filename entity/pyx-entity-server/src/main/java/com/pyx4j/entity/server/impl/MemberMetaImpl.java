@@ -119,12 +119,17 @@ public class MemberMetaImpl implements MemberMeta {
 
         // Read Annotations
         Length lengthAnnotation = method.getAnnotation(Length.class);
-        if (String.class.equals(valueClass)
-                || EnumSet.of(ObjectClassType.PrimitiveSet, ObjectClassType.EntityList, ObjectClassType.EntitySet).contains(objectClassType)) {
+        if (String.class.equals(valueClass)) {
             if (lengthAnnotation != null) {
                 length = lengthAnnotation.value();
             } else {
                 length = ApplicationBackend.getDefaultDataStringLength();
+            }
+        } else if (EnumSet.of(ObjectClassType.PrimitiveSet, ObjectClassType.EntityList, ObjectClassType.EntitySet).contains(objectClassType)) {
+            if (lengthAnnotation != null) {
+                length = lengthAnnotation.value();
+            } else {
+                length = 0;
             }
         } else if (lengthAnnotation != null) {
             throw new RuntimeException("Unexpected @Length annotation in memeber " + fieldName);

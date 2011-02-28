@@ -45,6 +45,18 @@ public class CollectionsTableModel {
 
     private static final Logger log = LoggerFactory.getLogger(CollectionsTableModel.class);
 
+    public static void validate(IEntity entity, MemberOperationsMeta member) {
+        int maxLength = member.getMemberMeta().getLength();
+        if (maxLength <= 0) {
+            return;
+        }
+        @SuppressWarnings("rawtypes")
+        Collection c = (Collection) member.getMemberValue(entity);
+        if ((c != null) && (c.size() > maxLength)) {
+            throw new RuntimeException("Member size vialoation in entity '" + entity.getEntityMeta().getCaption() + "' member '" + member.getMemberName() + "'");
+        }
+    }
+
     public static void insert(Connection connection, Dialect dialect, IEntity entity, MemberOperationsMeta member) {
         @SuppressWarnings("unchecked")
         Collection<Object> dataSet = (Collection<Object>) member.getMemberValue(entity);

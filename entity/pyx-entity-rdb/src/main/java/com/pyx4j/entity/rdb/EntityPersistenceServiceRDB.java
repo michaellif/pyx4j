@@ -176,8 +176,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private void insert(Connection connection, TableModel tm, IEntity entity, Date now) {
         tm.insert(connection, entity);
         for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+            CollectionsTableModel.validate(entity, member);
             if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                 MemberMeta memberMeta = member.getMemberMeta();
+                @SuppressWarnings("unchecked")
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
                     if (memberMeta.isOwnedRelationships()) {
@@ -193,8 +195,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private boolean update(Connection connection, TableModel tm, IEntity entity, Date now, boolean doMerge) {
         for (MemberOperationsMeta member : tm.operationsMeta().getCollectionMembers()) {
+            CollectionsTableModel.validate(entity, member);
             if (member.getMemberMeta().getObjectClassType() != ObjectClassType.PrimitiveSet) {
                 MemberMeta memberMeta = member.getMemberMeta();
+                @SuppressWarnings("unchecked")
                 ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
                 for (IEntity childEntity : iCollectionMember) {
                     if (memberMeta.isOwnedRelationships()) {
