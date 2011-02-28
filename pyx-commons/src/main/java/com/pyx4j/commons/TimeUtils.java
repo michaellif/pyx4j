@@ -127,4 +127,9 @@ public class TimeUtils {
     public static int getTimezoneOffset() {
         return (new Date()).getTimezoneOffset();
     }
+
+    public static boolean isWithinRange(Date testDate, Date startDate, Date endDate) {
+        return !(testDate.before(startDate) || testDate.after(endDate));
+    }
+
 }
