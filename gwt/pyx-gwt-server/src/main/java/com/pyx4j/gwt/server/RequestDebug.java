@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.server.dev;
+package com.pyx4j.gwt.server;
 
 import java.util.Enumeration;
 

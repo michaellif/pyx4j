@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.security.server.ThrottleConfig;
 
 /**
@@ -103,6 +104,9 @@ public class LifecycleFilter implements Filter {
                         if (response instanceof HttpServletResponse) {
                             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
                         }
+                        if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                            RequestDebug.debug(request);
+                        }
                         log.error("possible denial-of-service attack from {}", request.getRemoteAddr());
                         return;
                     }
@@ -113,19 +117,23 @@ public class LifecycleFilter implements Filter {
                 chain.doFilter(request, response);
             } else {
                 HttpServletRequest httprequest = (HttpServletRequest) request;
-                if (!allowRequest(httprequest, (HttpServletResponse) response)) {
+                HttpServletResponse httpresponse = (HttpServletResponse) response;
+                if (!allowRequest(httprequest, httpresponse)) {
                     return;
                 }
                 // TODO MDC
-                Lifecycle.beginRequest(httprequest, (HttpServletResponse) response);
-                boolean allOk = false;
+                Lifecycle.beginRequest(httprequest, httpresponse);
                 try {
                     chain.doFilter(request, response);
-                    allOk = true;
-                } finally {
-                    if (!allOk) {
-                        log.warn("return http error");
+                } catch (Throwable t) {
+                    log.error("return http error {}", t);
+                    if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                        RequestDebug.debug(request);
+                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, t.getMessage());
+                    } else {
+                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     }
+                } finally {
                     Lifecycle.endRequest();
                 }
             }
