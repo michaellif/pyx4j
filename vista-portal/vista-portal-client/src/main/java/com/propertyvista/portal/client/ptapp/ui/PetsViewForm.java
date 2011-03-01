@@ -28,7 +28,6 @@ import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -41,7 +40,6 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
@@ -59,27 +57,18 @@ public class PetsViewForm extends CEntityForm<Pets> {
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(create(proto().pets(), this));
+        main.add(inject(proto().pets()));
         return main;
     }
 
     @Override
-    public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member instanceof ChargeLine) {
-            CComponent<?> comp = new CEntityLabel();
-            parent.bind((CEditableComponent<?, ?>) comp, member);
-            return comp;
-        } else {
-            return super.create(member, parent);
-        }
-    }
-
-    @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.equals(proto().pets())) {
+            return new CEntityLabel();
+        } else if (member == proto().pets()) {
             return createPetsEditorColumns();
         } else {
-            return super.createMemberFolderEditor(member);
+            return super.create(member);
         }
     }
 
@@ -107,7 +96,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
             @Override
             protected CEntityFolderItem<Pet> createItem() {
-                return new CEntityFolderRow<Pet>(Pet.class, columns, PetsViewForm.this) {
+                return new CEntityFolderRow<Pet>(Pet.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {

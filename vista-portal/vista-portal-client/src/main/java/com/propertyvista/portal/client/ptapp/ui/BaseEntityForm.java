@@ -24,11 +24,12 @@ import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
@@ -36,12 +37,12 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         super(clazz);
     }
 
-    public BaseEntityForm(Class<E> rootClass, EntityFormComponentFactory factory) {
+    public BaseEntityForm(Class<E> rootClass, EditableComponentFactory factory) {
         super(rootClass, factory);
     }
 
     @Override
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
             EditorType editorType = member.getMeta().getEditorType();
             if ((editorType != null) && (editorType == EditorType.label)) {
@@ -50,7 +51,7 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
                 return new MoneyForm();
             }
         } else {
-            return super.createMemberEditor(member);
+            return super.create(member);
         }
     }
 
@@ -62,49 +63,49 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
 
         @Override
         public IsWidget createContent() {
-            return create(proto().amount(), this);
+            return inject(proto().amount());
         }
     }
 
-    protected void createIAddress(FlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
+    protected static void injectIAddress(FlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
         DecorationData decorData = new DecorationData();
         decorData = new DecorationData();
         decorData.componentWidth = 40;
-        main.add(new VistaWidgetDecorator(create(proto.street1(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.street1()), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 40;
-        main.add(new VistaWidgetDecorator(create(proto.street2(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.street2()), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(create(proto.city(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.city()), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto.province(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.province()), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 7;
-        main.add(new VistaWidgetDecorator(create(proto.postalCode(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.postalCode()), decorData));
         main.add(new HTML());
     }
 
-    protected void createIEmploymentInfo(FlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
+    protected static void injectIEmploymentInfo(FlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
         DecorationData decorData = new DecorationData();
         decorData = new DecorationData();
         decorData.componentWidth = 30;
-        main.add(new VistaWidgetDecorator(create(proto.supervisorName(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.supervisorName()), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(create(proto.supervisorPhone(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.supervisorPhone()), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 8;
-        main.add(new VistaWidgetDecorator(create(proto.monthlySalary(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.monthlySalary()), decorData));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 20;
-        main.add(new VistaWidgetDecorator(create(proto.position(), parent), decorData));
+        main.add(new VistaWidgetDecorator(parent.inject(proto.position()), decorData));
         main.add(new HTML());
     }
 }

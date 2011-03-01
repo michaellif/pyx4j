@@ -42,6 +42,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
@@ -59,102 +60,104 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         DecorationData decorData = new DecorationData();
         decorData.editable = false;
         decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(create(proto().firstName(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().firstName()), decorData));
 
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(create(proto().middleName(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().middleName()), decorData));
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.editable = false;
         decorData.componentWidth = 20;
-        main.add(new VistaWidgetDecorator(create(proto().lastName(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().lastName()), decorData));
 
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(create(proto().homePhone(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().homePhone()), decorData));
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), decorData));
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.componentWidth = 15;
-        main.add(new VistaWidgetDecorator(create(proto().workPhone(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().workPhone()), decorData));
         main.add(new HTML());
 
         decorData = new DecorationData();
         decorData.editable = false;
         decorData.componentWidth = 25;
-        main.add(new VistaWidgetDecorator(create(proto().email(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
         decorData = new DecorationData();
         decorData.componentWidth = 20;
-        main.add(new VistaWidgetDecorator(create(proto().driversLicense(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), decorData));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().driversLicenseState(), this)));
+        main.add(new VistaWidgetDecorator(inject(proto().driversLicenseState())));
         main.add(new HTML());
         decorData = new DecorationData();
         decorData.componentWidth = 11;
-        main.add(new VistaWidgetDecorator(create(proto().secureIdentifier(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), decorData));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Current Address</h4>")));
-        main.add(create(proto().currentAddress(), this));
+        main.add(inject(proto().currentAddress()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Previous Address</h4>")));
-        main.add(create(proto().previousAddress(), this));
+        main.add(inject(proto().previousAddress()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Vehicles</h4>")));
-        main.add(create(proto().vehicles(), this));
+        main.add(inject(proto().vehicles()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>General Questions</h4>")));
 
         VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(450, 100);
         decor.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
 
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().suedForRent(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForRent()), decor));
         main.add(new ViewLineSeparator());
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().suedForDamages(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().suedForDamages()), decor));
         main.add(new ViewLineSeparator());
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().everEvicted(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().everEvicted()), decor));
         main.add(new ViewLineSeparator());
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().defaultedOnLease(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().defaultedOnLease()), decor));
         main.add(new ViewLineSeparator());
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().convictedOfFelony(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().convictedOfFelony()), decor));
         main.add(new ViewLineSeparator());
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().legalTroubles(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().legalTroubles()), decor));
         main.add(new ViewLineSeparator());
-        main.add(new VistaWidgetDecorator(create(proto().legalQuestions().filedBankruptcy(), this), decor));
+        main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Emergency Contacts</h4>")));
 
         main.add(new HTML("<p/><h6>Contact1</h6>"));
-        main.add(create(proto().emergencyContact1(), this));
+        main.add(inject(proto().emergencyContact1()));
 
         main.add(new HTML("<p/><h6>Contact2</h6>"));
-        main.add(create(proto().emergencyContact2(), this));
+        main.add(inject(proto().emergencyContact2()));
 
         return main;
     }
 
     @Override
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Address.class)) {
             return createAddressEditor();
         } else if (member.getValueClass().equals(EmergencyContact.class)) {
             return createEmergencyContactEditor();
+        } else if (member == proto().vehicles()) {
+            return createVehicleFolderEditorColumns();
         } else {
-            return super.createMemberEditor(member);
+            return super.create(member);
         }
     }
 
@@ -163,29 +166,29 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                createIAddress(main, proto(), this);
+                injectIAddress(main, proto(), this);
                 DecorationData decorData = new DecorationData();
                 decorData = new DecorationData();
                 decorData.componentWidth = 10;
-                main.add(new VistaWidgetDecorator(create(proto().moveInDate(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().moveInDate()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 10;
-                main.add(new VistaWidgetDecorator(create(proto().moveOutDate(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().moveOutDate()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 8;
-                main.add(new VistaWidgetDecorator(create(proto().payment(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().payment()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().phone(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().phone()), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().rented(), this)));
+                main.add(new VistaWidgetDecorator(inject(proto().rented())));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 30;
-                main.add(new VistaWidgetDecorator(create(proto().managerName(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().managerName()), decorData));
                 main.add(new HTML());
                 return main;
             }
@@ -199,55 +202,46 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 FlowPanel main = new FlowPanel();
                 DecorationData decorData = new DecorationData();
                 decorData.componentWidth = 12;
-                main.add(new VistaWidgetDecorator(create(proto().firstName(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().firstName()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 12;
-                main.add(new VistaWidgetDecorator(create(proto().middleName(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().middleName()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 20;
-                main.add(new VistaWidgetDecorator(create(proto().lastName(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().lastName()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().homePhone(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().homePhone()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().mobilePhone(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 40;
-                main.add(new VistaWidgetDecorator(create(proto().address().street1(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().address().street1()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 40;
-                main.add(new VistaWidgetDecorator(create(proto().address().street2(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().address().street2()), decorData));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().address().city(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().address().city()), decorData));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().address().province(), this)));
+                main.add(new VistaWidgetDecorator(inject(proto().address().province())));
                 main.add(new HTML());
                 decorData = new DecorationData();
                 decorData.componentWidth = 7;
-                main.add(new VistaWidgetDecorator(create(proto().address().postalCode(), this), decorData));
+                main.add(new VistaWidgetDecorator(inject(proto().address().postalCode()), decorData));
                 main.add(new HTML());
                 return main;
 
             }
         };
-    }
-
-    @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.equals(proto().vehicles())) {
-            return createVehicleFolderEditorColumns();
-        } else {
-            return super.createMemberFolderEditor(member);
-        }
     }
 
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
@@ -276,7 +270,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             }
 
             private CEntityFolderItem<Vehicle> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<Vehicle>(Vehicle.class, columns, InfoViewForm.this) {
+                return new CEntityFolderRow<Vehicle>(Vehicle.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {

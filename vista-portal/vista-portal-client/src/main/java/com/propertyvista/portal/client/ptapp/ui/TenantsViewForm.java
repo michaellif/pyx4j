@@ -52,20 +52,21 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(create(proto().tenants(), this));
+        main.add(inject(proto().tenants()));
         return main;
     }
 
     @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.equals(proto().tenants())) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member == proto().tenants()) {
             return createTenantsEditorColumns();
         } else {
-            return super.createMemberFolderEditor(member);
+            return super.create(member);
         }
     }
 
     private CEntityFolder<PotentialTenantInfo> createTenantsEditorColumns() {
+
         return new CEntityFolder<PotentialTenantInfo>() {
 
             private List<EntityFolderColumnDescriptor> columns;
@@ -93,7 +94,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             }
 
             private CEntityFolderItem<PotentialTenantInfo> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<PotentialTenantInfo>(PotentialTenantInfo.class, columns, TenantsViewForm.this) {
+                return new CEntityFolderRow<PotentialTenantInfo>(PotentialTenantInfo.class, columns) {
                     PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
 
                     @SuppressWarnings("rawtypes")

@@ -23,7 +23,6 @@ import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -31,14 +30,11 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectable> {
 
-    final CEntityForm<?> masterForm;
-
     @SuppressWarnings("rawtypes")
     final ValueChangeHandler valueChangeHandler;
 
-    ChargeLineSelectableFolder(CEntityForm<?> masterForm, @SuppressWarnings("rawtypes") ValueChangeHandler valueChangeHandler) {
+    ChargeLineSelectableFolder(@SuppressWarnings("rawtypes") ValueChangeHandler valueChangeHandler) {
         this.valueChangeHandler = valueChangeHandler;
-        this.masterForm = masterForm;
     }
 
     @Override
@@ -64,7 +60,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
                 String width = "60%";
                 if (valueChangeHandler != null) {
-                    main.add(DecorationUtils.inline(masterForm.create(proto().selected(), this), "3%", null));
+                    main.add(DecorationUtils.inline(inject(proto().selected()), "3%", null));
                     CEditableComponent<Boolean, ?> cb = get(proto().selected());
                     if (cb instanceof CCheckBox) {
                         cb.addValueChangeHandler(valueChangeHandler);
@@ -75,8 +71,8 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                     width = "57%";
                 }
 
-                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
-                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+                main.add(DecorationUtils.inline(inject(proto().type()), width, null));
+                main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
 
                 return main;
             }

@@ -37,36 +37,20 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
-import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.IPerson;
-import com.propertyvista.portal.domain.pt.IncomeSource;
-import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
-import com.propertyvista.portal.domain.pt.TenantAsset;
-import com.propertyvista.portal.domain.pt.TenantGuarantor;
-import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.entity.client.ui.flex.FolderDecorator;
-import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
@@ -85,8 +69,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private TenantsTable tenantsTable;
 
     private TenantsView tenantsView;
-
-    private PetsTable petsTable;
 
     private LeaseTermsCheck leaseTermsCheck;
 
@@ -108,8 +90,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public IsWidget createContent() {
         main = new FlowPanel();
 
-//        main.add(create(proto().financial(), this));
-
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
         main.add(apartmentView = new ApartmentView());
 
@@ -122,15 +102,15 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(createHeaderWithEditLink("Info", new SiteMap.Info()));
         main.add(tenantsView = new TenantsView());
 
-        main.add(create(proto().financial(), this));
+        main.add(inject(proto().financial()));
 
         main.add(createHeaderWithEditLink("Pets", new SiteMap.Pets()));
-        main.add(petsTable = new PetsTable());
+        //main.add(petsTable = new PetsTable());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
         main.add(leaseTermsCheck = new LeaseTermsCheck());
 
-        main.add(create(proto().charges(), this));
+        main.add(inject(proto().charges()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
         main.add(signatureView = new SignatureView());
@@ -150,19 +130,14 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 //    }
 
     @Override
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
-            return new FinancialViewForm(new ReadOnlyComponentFactory());
+            return new FinancialViewForm(this);
         } else if (member.getValueClass().equals(Charges.class)) {
-            return new ChargesViewForm(new ReadOnlyComponentFactory());
+            return new ChargesViewForm(this);
         } else {
-            return super.createMemberEditor(member);
+            return super.create(member);
         }
-    }
-
-    @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        return super.createMemberFolderEditor(member);
     }
 
     @Override
@@ -174,7 +149,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         leaseTermView.populate(value);
         tenantsTable.populate(value);
         tenantsView.populate(value);
-        petsTable.populate(value);
         leaseTermsCheck.populate(value);
         signatureView.populate(value);
     }
@@ -733,431 +707,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     /*
-     * Financial detailed information view implementation
-     */
-    private class FinancialView {
-
-        private final FlowPanel content;
-
-        private final String LEFT_COLUMN_WIDTH = "30%";
-
-        private final String RIGHT_COLUMN_WIDTH = "30%";
-
-        final CEntityForm<?> masterForm;
-
-        public FinancialView(CEntityForm<?> masterForm) {
-            this.masterForm = masterForm;
-
-            // add table content panel:
-            upperLevelElementElignment(content = new FlowPanel());
-            content.getElement().getStyle().setBackgroundColor("white");
-            content.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            content.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            content.getElement().getStyle().setBorderColor("black");
-        }
-
-        public void createContent(FlowPanel main, PotentialTenantFinancial member) {
-
-            FlowPanel fullname = createFullName(member.tenant());
-            fullname.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            fullname.getElement().getStyle().setFontSize(1.5, Unit.EM);
-            fullname.getElement().getStyle().setMarginLeft(3, Unit.EM);
-            content.add(fullname);
-
-            content.add(createHeader2(member.incomes()));
-            content.add(masterForm.create(member.incomes(), masterForm));
-            content.add(createHeader2(member.assets()));
-            content.add(masterForm.create(member.assets(), masterForm));
-            content.add(createHeader2(member.guarantors()));
-            content.add(masterForm.create(member.guarantors(), masterForm));
-
-            main.add(content);
-        }
-
-        private FlowPanel createFullName(IPerson person) {
-            FlowPanel fullname = new FlowPanel();
-            fullname.add(DecorationUtils.inline(masterForm.create(person.firstName(), masterForm), "20%", null));
-            fullname.add(DecorationUtils.inline(masterForm.create(person.middleName(), masterForm), "5%", null));
-            fullname.add(DecorationUtils.inline(masterForm.create(person.lastName(), masterForm), "30%", null));
-            fullname.setWidth("50%");
-            return fullname;
-        }
-
-        private Widget createHeader(IObject<?> member) {
-
-            return new HTML("<h4>" + member.getMeta().getCaption() + "</h4>");
-        }
-
-        private Widget createHeader2(IObject<?> member) {
-
-            HTML h = new HTML("<h5>" + member.getMeta().getCaption() + "</h5>");
-            h.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-            h.getElement().getStyle().setMarginLeft(1, Unit.EM);
-            return h;
-        }
-
-        protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-            if (member.getValueClass().equals(TenantIncome.class)) {
-                return new TenantIncomeListFolder();
-            } else if (member.getValueClass().equals(TenantAsset.class)) {
-                return new TenantAssetListFolder();
-            } else if (member.getValueClass().equals(TenantGuarantor.class)) {
-                return new TenantGuarantorListFolder();
-            } else {
-                return null;
-            }
-        }
-
-        public void populate(Summary value) {
-        }
-
-        // 
-        private class TenantIncomeListFolder extends CEntityFolder<TenantIncome> {
-
-            @Override
-            protected FolderDecorator<TenantIncome> createFolderDecorator() {
-                return new BoxReadOnlyFolderDecorator<TenantIncome>();
-            }
-
-            @Override
-            protected CEntityFolderItem<TenantIncome> createItem() {
-
-                return new CEntityFolderItem<TenantIncome>(TenantIncome.class) {
-
-                    private FlowPanel employer;
-
-                    private FlowPanel selfEmployed;
-
-                    private FlowPanel seasonallyEmployed;
-
-                    private FlowPanel socialservices;
-
-                    private FlowPanel student;
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator(false);
-                    }
-
-                    @Override
-                    public IsWidget createContent() {
-                        FlowPanel main = new FlowPanel();
-
-                        Widget income = formRow(proto().incomeSource());
-                        income.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-                        main.add(income);
-
-                        main.add(employer = createEmployerPanel());
-                        main.add(seasonallyEmployed = createSeasonallyEmployedPanel());
-                        main.add(selfEmployed = createSelfemployedPanel());
-                        main.add(student = createStudentPanel());
-                        main.add(socialservices = createSocialPanel());
-
-                        main.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-                        main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-                        main.setWidth("100%");
-                        return main;
-                    }
-
-                    @Override
-                    public void populate(TenantIncome value) {
-                        super.populate(value);
-                        setVisibility(value.incomeSource().getValue());
-                    }
-
-                    private void setVisibility(IncomeSource value) {
-                        employer.setVisible(false);
-                        seasonallyEmployed.setVisible(false);
-                        selfEmployed.setVisible(false);
-                        student.setVisible(false);
-                        socialservices.setVisible(false);
-                        if (value != null) {
-                            switch (value) {
-                            case fulltime:
-                            case parttime:
-                                employer.setVisible(true);
-                                break;
-                            case selfemployed:
-                                selfEmployed.setVisible(true);
-                                break;
-                            case seasonallyEmployed:
-                                seasonallyEmployed.setVisible(true);
-                                break;
-                            case socialServices:
-                                socialservices.setVisible(true);
-                                break;
-                            case student:
-                                student.setVisible(true);
-                                break;
-                            }
-                        }
-                    }
-
-                    Widget formRow(IObject<?> value) {
-
-                        FlowPanel rowContent = new FlowPanel();
-                        rowContent.add(DecorationUtils.inline(new HTML(value.getMeta().getCaption()), LEFT_COLUMN_WIDTH, null));
-
-                        CLabel wrappper = new CLabel();
-                        bind(wrappper, value);
-                        rowContent.add(DecorationUtils.inline(wrappper, RIGHT_COLUMN_WIDTH, "right"));
-                        return rowContent;
-                    }
-
-                    private FlowPanel createEmployerPanel() {
-                        FlowPanel panel = new FlowPanel();
-
-                        panel.add(new HTML(proto().employer().getMeta().getCaption()));
-                        panel.add(formRow(proto().employer().name()));
-                        panel.add(formRow(proto().employer().employedForYears()));
-                        panel.add(formRow(proto().employer().street1()));
-                        panel.add(formRow(proto().employer().street2()));
-                        panel.add(formRow(proto().employer().city()));
-                        panel.add(formRow(proto().employer().province()));
-                        panel.add(formRow(proto().employer().postalCode()));
-                        panel.add(formRow(proto().employer().supervisorName()));
-                        panel.add(formRow(proto().employer().supervisorPhone()));
-                        panel.add(formRow(proto().employer().monthlySalary()));
-                        panel.add(formRow(proto().employer().position()));
-
-                        panel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-                        return panel;
-                    }
-
-                    private FlowPanel createSelfemployedPanel() {
-                        FlowPanel panel = new FlowPanel();
-
-                        panel.add(new HTML(proto().employer().getMeta().getCaption()));
-                        panel.add(formRow(proto().selfEmployed().companyName()));
-                        panel.add(formRow(proto().selfEmployed().yearsInBusiness()));
-                        panel.add(formRow(proto().selfEmployed().fullyOwned()));
-                        panel.add(formRow(proto().selfEmployed().street1()));
-                        panel.add(formRow(proto().selfEmployed().street2()));
-                        panel.add(formRow(proto().selfEmployed().city()));
-                        panel.add(formRow(proto().selfEmployed().province()));
-                        panel.add(formRow(proto().selfEmployed().postalCode()));
-                        panel.add(formRow(proto().selfEmployed().monthlyRevenue()));
-                        panel.add(formRow(proto().selfEmployed().monthlySalary()));
-                        panel.add(formRow(proto().selfEmployed().numberOfEmployees()));
-
-                        panel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-                        return panel;
-                    }
-
-                    private FlowPanel createSeasonallyEmployedPanel() {
-                        FlowPanel panel = new FlowPanel();
-
-                        panel.add(new HTML(proto().seasonallyEmployed().getMeta().getCaption()));
-                        panel.add(formRow(proto().seasonallyEmployed().street1()));
-                        panel.add(formRow(proto().seasonallyEmployed().street2()));
-                        panel.add(formRow(proto().seasonallyEmployed().city()));
-                        panel.add(formRow(proto().seasonallyEmployed().province()));
-                        panel.add(formRow(proto().seasonallyEmployed().postalCode()));
-                        panel.add(formRow(proto().seasonallyEmployed().monthlySalary()));
-
-                        panel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-                        return panel;
-                    }
-
-                    private FlowPanel createSocialPanel() {
-                        FlowPanel panel = new FlowPanel();
-
-                        panel.add(new HTML(proto().socialServices().getMeta().getCaption()));
-                        panel.add(formRow(proto().socialServices().agency()));
-                        panel.add(formRow(proto().socialServices().street1()));
-                        panel.add(formRow(proto().socialServices().street2()));
-                        panel.add(formRow(proto().socialServices().city()));
-                        panel.add(formRow(proto().socialServices().province()));
-                        panel.add(formRow(proto().socialServices().postalCode()));
-                        panel.add(formRow(proto().socialServices().worker()));
-                        panel.add(formRow(proto().socialServices().workerPhone()));
-                        panel.add(formRow(proto().socialServices().monthlyAmount()));
-                        panel.add(formRow(proto().socialServices().yearsReceiving()));
-
-                        panel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-                        return panel;
-                    }
-
-                    private FlowPanel createStudentPanel() {
-                        FlowPanel panel = new FlowPanel();
-
-                        panel.add(new HTML(proto().studentIncome().getMeta().getCaption()));
-                        panel.add(formRow(proto().studentIncome().school()));
-                        panel.add(formRow(proto().studentIncome().street1()));
-                        panel.add(formRow(proto().studentIncome().street2()));
-                        panel.add(formRow(proto().studentIncome().city()));
-                        panel.add(formRow(proto().studentIncome().province()));
-                        panel.add(formRow(proto().studentIncome().postalCode()));
-                        panel.add(formRow(proto().studentIncome().graduate()));
-                        panel.add(formRow(proto().studentIncome().fieldOfStudy()));
-                        panel.add(formRow(proto().studentIncome().fundingChoices()));
-                        panel.add(formRow(proto().studentIncome().employedForYears()));
-                        panel.add(formRow(proto().studentIncome().supervisorName()));
-                        panel.add(formRow(proto().studentIncome().supervisorPhone()));
-                        panel.add(formRow(proto().studentIncome().monthlySalary()));
-
-                        panel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-                        return panel;
-                    }
-                };
-            }
-        }
-
-        private class TenantAssetListFolder extends CEntityFolder<TenantAsset> {
-
-            @Override
-            protected FolderDecorator<TenantAsset> createFolderDecorator() {
-                return new BoxReadOnlyFolderDecorator<TenantAsset>();
-            }
-
-            @Override
-            protected CEntityFolderItem<TenantAsset> createItem() {
-
-                return new CEntityFolderItem<TenantAsset>(TenantAsset.class) {
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator(false);
-                    }
-
-                    @Override
-                    public IsWidget createContent() {
-                        FlowPanel main = new FlowPanel();
-
-                        main.add(formRow(proto().assetType()));
-                        main.add(formRow(proto().percent()));
-                        main.add(formRow(proto().assetValue()));
-
-                        main.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-                        main.setWidth("100%");
-                        return main;
-                    }
-
-                    Widget formRow(IObject<?> value) {
-
-                        FlowPanel rowContent = new FlowPanel();
-                        rowContent.add(DecorationUtils.inline(new HTML(value.getMeta().getCaption()), LEFT_COLUMN_WIDTH, null));
-
-                        CNumberLabel fixedPrc = new CNumberLabel();
-                        bind(fixedPrc, value);
-                        rowContent.add(DecorationUtils.inline(fixedPrc, RIGHT_COLUMN_WIDTH, "right"));
-                        return rowContent;
-                    }
-
-                };
-            }
-        }
-
-        private class TenantGuarantorListFolder extends CEntityFolder<TenantGuarantor> {
-
-            @Override
-            protected FolderDecorator<TenantGuarantor> createFolderDecorator() {
-                return new BoxReadOnlyFolderDecorator<TenantGuarantor>();
-            }
-
-            @Override
-            protected CEntityFolderItem<TenantGuarantor> createItem() {
-
-                return new CEntityFolderItem<TenantGuarantor>(TenantGuarantor.class) {
-
-                    @Override
-                    public FolderItemDecorator createFolderItemDecorator() {
-                        return new BoxReadOnlyFolderItemDecorator(false);
-                    }
-
-                    @Override
-                    public IsWidget createContent() {
-                        VerticalPanel main = new VerticalPanel();
-
-                        main.add(createFullName(proto()));
-                        main.add(formRow(proto().relationship()));
-                        main.add(formRow(proto().email()));
-
-                        main.getElement().getStyle().setPaddingLeft(2, Unit.EM);
-                        main.setWidth("100%");
-                        return main;
-                    }
-
-                    Widget formRow(IObject<?> value) {
-
-                        FlowPanel rowContent = new FlowPanel();
-                        rowContent.add(DecorationUtils.inline(new HTML(value.getMeta().getCaption()), LEFT_COLUMN_WIDTH, null));
-
-                        CNumberLabel fixedPrc = new CNumberLabel();
-                        bind(fixedPrc, value);
-                        rowContent.add(DecorationUtils.inline(fixedPrc, RIGHT_COLUMN_WIDTH, "right"));
-                        return rowContent;
-                    }
-                };
-            }
-        }
-    }
-
-    /*
-     * Pets information table implementation
-     */
-    private class PetsTable extends FlowPanel {
-        private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
-
-        private final FlowPanel content;
-
-        public PetsTable() {
-
-            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            upperLevelElementElignment(this);
-
-            tableLayout.put("Type", "10%");
-            tableLayout.put("Name", "25%");
-            tableLayout.put("Color", "10%");
-            tableLayout.put("Breed", "20%");
-            tableLayout.put("Weight", "10%");
-            tableLayout.put("Units", "5%");
-            tableLayout.put("Date of Birht", "20%");
-
-            //  It seems that header doesn't need for pets, but leave it till now... 
-            //
-            //            // fill header:
-            //            for (Entry<String, String> e : tableLayout.entrySet()) {
-            //                HTML label = new HTML(e.getKey());
-            //                label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            //                label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-            //                label.setWidth(e.getValue());
-            //                add(label);
-            //            }
-            //
-            //            Widget sp = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
-            //            sp.getElement().getStyle().setPadding(0, Unit.EM);
-            //            add(sp);
-
-            // add table content panel:
-            add(innerLevelElementElignment(content = new FlowPanel()));
-        }
-
-        public void populate(Summary value) {
-
-            content.clear();
-
-            for (Pet pet : value.pets().pets()) {
-                addCell("Type", pet.type().getStringView());
-                addCell("Name", pet.name().getStringView());
-                addCell("Color", pet.color().getStringView());
-                addCell("Breed", pet.breed().getStringView());
-                addCell("Weight", pet.weight().getStringView());
-                addCell("Units", pet.weightUnit().getStringView());
-                addCell("Date of Birht", pet.birthDate().getStringView());
-            }
-        }
-
-        private void addCell(String cellName, String cellContent) {
-            HTML label = new HTML(cellContent);
-            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
-            label.setWidth(tableLayout.get(cellName));
-            content.add(label);
-        }
-    }
-
-    /*
      * Lease Terms view implementation
      */
     private class LeaseTermsCheck extends FlowPanel {
@@ -1182,7 +731,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTerms.setHeight("20em");
             add(leaseTerms);
 
-            VistaWidgetDecorator agree = new VistaWidgetDecorator(create(proto().agree(), SummaryViewForm.this), new DecorationData(0, Unit.EM, 0, Unit.EM));
+            VistaWidgetDecorator agree = new VistaWidgetDecorator(inject(proto().agree()), new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             agree.asWidget().getElement().getStyle().setMarginBottom(0.5, Unit.EM);

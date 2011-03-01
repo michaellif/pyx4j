@@ -35,11 +35,11 @@ public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
 
         FlowPanel main = new FlowPanel();
         main.add(header);
-        main.add(new VistaWidgetDecorator(create(proto().email(), this), 62, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().email()), 62, 152));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().password(), this), 62, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().password()), 62, 152));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().captcha(), this), 62, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().captcha()), 62, 152));
         return main;
     }
 

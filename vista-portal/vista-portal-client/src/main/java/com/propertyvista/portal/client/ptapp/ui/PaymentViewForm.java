@@ -37,9 +37,9 @@ import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 
 public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
@@ -55,21 +55,21 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(proto().applicationCharges()));
-        main.add(create(proto().applicationCharges().charges(), this));
+        main.add(inject(proto().applicationCharges().charges()));
 
         main.add(new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM));
 
         FlowPanel applicationFeePanel = new FlowPanel();
         applicationFeePanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        applicationFeePanel.add(DecorationUtils.inline(create(proto().applicationFee().type(), this), "60%", null));
-        applicationFeePanel.add(DecorationUtils.inline(create(proto().applicationFee().charge(), this), "10%", "right"));
+        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().type()), "60%", null));
+        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().charge()), "10%", "right"));
         main.add(applicationFeePanel);
 
         main.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
 
         main.add(new ViewHeaderDecorator(proto().type()));
         @SuppressWarnings("unchecked")
-        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) create(proto().type(), this);
+        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type());
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
@@ -80,14 +80,14 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         ComplexPanel instrumentsPanel = new FlowPanel();
         instrumentsPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        instrumentsPanel.add(create(proto().echeck(), this));
-        instrumentsPanel.add(create(proto().creditCard(), this));
+        instrumentsPanel.add(inject(proto().echeck()));
+        instrumentsPanel.add(inject(proto().creditCard()));
         main.add(instrumentsPanel);
 
         main.add(new ViewHeaderDecorator(proto().billingAddress()));
         DecorationData decorData = new DecorationData();
         decorData.componentWidth = 12;
-        CCheckBox sameAsCurrent = (CCheckBox) create(proto().sameAsCurrent(), this);
+        CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
         main.add(new VistaWidgetDecorator(sameAsCurrent, decorData));
         sameAsCurrent.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -96,11 +96,11 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
             }
         });
 
-        createIAddress(main, proto().billingAddress(), this);
+        injectIAddress(main, proto().billingAddress(), this);
 
         decorData = new DecorationData();
         decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(create(proto().billingAddress().phone(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().billingAddress().phone()), decorData));
 
         main.add(new ViewHeaderDecorator(i18n.tr("Pre-Authorized Payment")));
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
@@ -109,7 +109,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         decorData = new DecorationData();
         decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(create(proto().preauthorised(), this), decorData));
+        main.add(new VistaWidgetDecorator(inject(proto().preauthorised()), decorData));
 
         main.add(new HTML(SiteResources.INSTANCE.paymentTermsNotes().getText()));
 
@@ -152,22 +152,15 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
     }
 
     @Override
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(EcheckInfo.class)) {
             return createEcheckInfoEditor();
         } else if (member.getValueClass().equals(CreditCardInfo.class)) {
             return createCreditCardInfoEditor();
+        } else if (member.getValueClass().equals(ChargeLine.class)) {
+            return new ChargeLineFolder();
         } else {
-            return super.createMemberEditor(member);
-        }
-    }
-
-    @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.getValueClass().equals(ChargeLine.class)) {
-            return new ChargeLineFolder(this);
-        } else {
-            return super.createMemberFolderEditor(member);
+            return super.create(member);
         }
     }
 
@@ -179,14 +172,14 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
                 DecorationData decorData = new DecorationData();
                 decorData.componentWidth = 12;
-                panel.add(new VistaWidgetDecorator(create(proto().nameOnAccount(), this), decorData));
-                panel.add(new VistaWidgetDecorator(create(proto().accountType(), this), decorData));
-                panel.add(new VistaWidgetDecorator(create(proto().bankName(), this), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().nameOnAccount()), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().accountType()), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().bankName()), decorData));
 
                 HorizontalPanel numbers = new HorizontalPanel();
-                numbers.add(create(proto().routingNo(), this));
-                numbers.add(create(proto().accountNo(), this));
-                numbers.add(create(proto().checkNo(), this));
+                numbers.add(inject(proto().routingNo()));
+                numbers.add(inject(proto().accountNo()));
+                numbers.add(inject(proto().checkNo()));
 
                 panel.add(numbers);
                 return panel;
@@ -201,10 +194,10 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
                 FlowPanel panel = new FlowPanel();
                 DecorationData decorData = new DecorationData();
                 decorData.componentWidth = 12;
-                panel.add(new VistaWidgetDecorator(create(proto().cardNumber(), this), decorData));
-                panel.add(new VistaWidgetDecorator(create(proto().expiry(), this), decorData));
-                panel.add(new VistaWidgetDecorator(create(proto().exactName(), this), decorData));
-                panel.add(new VistaWidgetDecorator(create(proto().bankPhone(), this), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().cardNumber()), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().expiry()), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().exactName()), decorData));
+                panel.add(new VistaWidgetDecorator(inject(proto().bankPhone()), decorData));
                 return panel;
             }
         };

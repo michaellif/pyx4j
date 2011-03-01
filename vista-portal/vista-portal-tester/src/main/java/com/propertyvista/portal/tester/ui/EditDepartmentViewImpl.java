@@ -31,6 +31,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.decorators.BasicWidgetDecorator;
 
 public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentView {
@@ -50,33 +51,26 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         @Override
         public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new BasicWidgetDecorator(create(proto().name(), this), 140, 180));
+            main.add(new BasicWidgetDecorator(inject(proto().name()), 140, 180));
             main.add(new Label("Manager:"));
-            main.add(create(proto().manager(), this));
+            main.add(inject(proto().manager()));
             main.add(new Label("Employees:"));
-            main.add(create(proto().employees(), this));
+            main.add(inject(proto().employees()));
             main.add(new Label("Contractors:"));
-            main.add(create(proto().contractors(), this));
+            main.add(inject(proto().contractors()));
             return main;
         }
 
         @Override
-        protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+        public CEditableComponent<?, ?> create(IObject<?> member) {
             if (member.getValueClass().equals(Employee.class)) {
                 return createEmployeeEditor();
-            } else {
-                return super.createMemberEditor(member);
-            }
-        }
-
-        @Override
-        protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-            if (member.equals(proto().employees())) {
+            } else if (member.equals(proto().employees())) {
                 return createEmployeeFolderEditorColumns();
             } else if (member.equals(proto().contractors())) {
                 return createEmployeeFolderEditorForms();
             } else {
-                return super.createMemberFolderEditor(member);
+                return super.create(member);
             }
         }
 
@@ -85,9 +79,9 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 @Override
                 public IsWidget createContent() {
                     FlowPanel main = new FlowPanel();
-                    main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
-                    main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
-                    main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
+                    main.add(new BasicWidgetDecorator(inject(proto().firstName()), 140, 180));
+                    main.add(new BasicWidgetDecorator(inject(proto().lastName()), 140, 180));
+                    main.add(new BasicWidgetDecorator(inject(proto().phone())));
                     return main;
                 }
             };
@@ -118,7 +112,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                 }
 
                 private CEntityFolderItem<Employee> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                    return new CEntityFolderRow<Employee>(Employee.class, columns, DepartmentForm.this) {
+                    return new CEntityFolderRow<Employee>(Employee.class, columns) {
 
                         @Override
                         public FolderItemDecorator createFolderItemDecorator() {
@@ -149,10 +143,10 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                         @Override
                         public IsWidget createContent() {
                             FlowPanel main = new FlowPanel();
-                            main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
-                            main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
-                            main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
-                            main.add(new BasicWidgetDecorator(create(proto().reliable(), this)));
+                            main.add(new BasicWidgetDecorator(inject(proto().firstName()), 140, 180));
+                            main.add(new BasicWidgetDecorator(inject(proto().lastName()), 140, 180));
+                            main.add(new BasicWidgetDecorator(inject(proto().phone())));
+                            main.add(new BasicWidgetDecorator(inject(proto().reliable())));
                             return main;
                         }
 

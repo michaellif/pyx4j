@@ -22,17 +22,10 @@ import com.propertyvista.portal.domain.pt.ChargeLine;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 
 public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
-
-    final CEntityForm<?> masterForm;
-
-    ChargeLineFolder(CEntityForm<?> masterForm) {
-        this.masterForm = masterForm;
-    }
 
     @Override
     protected FolderDecorator<ChargeLine> createFolderDecorator() {
@@ -52,8 +45,8 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), "60%", null));
-                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+                main.add(DecorationUtils.inline(inject(proto().type()), "60%", null));
+                main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
                 return main;
             }
         };

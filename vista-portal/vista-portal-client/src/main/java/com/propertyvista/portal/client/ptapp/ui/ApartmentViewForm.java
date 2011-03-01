@@ -88,12 +88,12 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(create(proto().selectionCriteria().availableFrom(), this), 0, 7.2);
+        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), 0, 7.2);
         dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         header.add(dateFrom);
 
-        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(create(proto().selectionCriteria().availableTo(), this), 0, 7.2);
+        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), 0, 7.2);
         dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         header.add(dateTo);
@@ -130,7 +130,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setFloat(Float.LEFT);
         caption.getElement().getStyle().setMarginTop(3, Unit.PX);
         main.add(caption);
-        main.add(new VistaWidgetDecorator(create(proto().rentStart(), this), 0, 7.2));
+        main.add(new VistaWidgetDecorator(inject(proto().rentStart()), 0, 7.2));
 
         addValidations();
 

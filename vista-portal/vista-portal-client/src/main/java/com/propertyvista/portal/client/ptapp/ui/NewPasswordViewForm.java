@@ -44,13 +44,13 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
         main.add(header);
 
         main.add(new HTML());
-        currentPassword = new VistaWidgetDecorator(create(proto().currentPassword(), this), 144, 152);
+        currentPassword = new VistaWidgetDecorator(inject(proto().currentPassword()), 144, 152);
         main.add(currentPassword);
 
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().newPassword(), this), 144, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().newPassword()), 144, 152));
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(create(proto().newPassword2(), this), 144, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().newPassword2()), 144, 152));
         setWidget(main);
     }
 

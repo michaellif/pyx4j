@@ -28,13 +28,12 @@ import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
-import com.pyx4j.entity.client.ui.flex.CEntityFolder;
-import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class ChargesViewForm extends BaseEntityForm<Charges> {
@@ -57,7 +56,7 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
     }
 
-    public ChargesViewForm(EntityFormComponentFactory factory) {
+    public ChargesViewForm(EditableComponentFactory factory) {
         super(Charges.class, factory);
 
         valueChangeHandler = null;
@@ -68,24 +67,24 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(proto().monthlyCharges()));
-        main.add(create(proto().monthlyCharges().charges(), this));
+        main.add(inject(proto().monthlyCharges().charges()));
         if (valueChangeHandler != null) {
             main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
-            main.add(create(proto().monthlyCharges().upgradeCharges(), this));
+            main.add(inject(proto().monthlyCharges().upgradeCharges()));
         }
 
         main.add(createTotal(proto().monthlyCharges().total()));
 
         main.add(new ViewHeaderDecorator(proto().proRatedCharges()));
-        main.add(create(proto().proRatedCharges().charges(), this));
+        main.add(inject(proto().proRatedCharges().charges()));
         main.add(createTotal(proto().proRatedCharges().total()));
 
         main.add(new ViewHeaderDecorator(proto().applicationCharges()));
-        main.add(create(proto().applicationCharges().charges(), this));
+        main.add(inject(proto().applicationCharges().charges()));
         main.add(createTotal(proto().applicationCharges().total()));
 
         main.add(new ViewHeaderDecorator(proto().paymentSplitCharges()));
-        main.add(create(proto().paymentSplitCharges().charges(), this));
+        main.add(inject(proto().paymentSplitCharges().charges()));
         main.add(createTotal(proto().paymentSplitCharges().total()));
 
         return main;
@@ -109,21 +108,21 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         totalRow.add(DecorationUtils.inline(total, "60%", null));
-        totalRow.add(DecorationUtils.inline(create(member, this), "10%", "right"));
+        totalRow.add(DecorationUtils.inline(inject(member), "10%", "right"));
         totalRow.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         return totalRow;
     }
 
     @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(ChargeLine.class)) {
-            return new ChargeLineFolder(this);
+            return new ChargeLineFolder();
         } else if (member.getValueClass().equals(ChargeLineSelectable.class)) {
-            return new ChargeLineSelectableFolder(this, valueChangeHandler);
+            return new ChargeLineSelectableFolder(valueChangeHandler);
         } else if (member.getValueClass().equals(TenantCharge.class)) {
-            return new ChargeSplitListFolder(this, valueChangeHandler);
+            return new ChargeSplitListFolder(valueChangeHandler);
         } else {
-            return super.createMemberFolderEditor(member);
+            return super.create(member);
         }
     }
 }

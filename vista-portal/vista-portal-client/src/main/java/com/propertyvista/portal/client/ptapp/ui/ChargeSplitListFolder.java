@@ -24,22 +24,18 @@ import com.propertyvista.portal.domain.pt.TenantCharge;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
 public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
-    final CEntityForm<?> masterForm;
-
     @SuppressWarnings("rawtypes")
     final ValueChangeHandler valueChangeHandler;
 
     @SuppressWarnings("rawtypes")
-    ChargeSplitListFolder(CEntityForm<?> masterForm, ValueChangeHandler valueChangeHandler) {
+    ChargeSplitListFolder(ValueChangeHandler valueChangeHandler) {
         this.valueChangeHandler = valueChangeHandler;
-        this.masterForm = masterForm;
     }
 
     @Override
@@ -62,7 +58,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             public IsWidget createContent() {
 
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "52%", null));
+                main.add(DecorationUtils.inline(inject(proto().tenant()), "52%", null));
                 main.add(DecorationUtils.inline(new HTML("%"), "3%", "right"));
 
                 if (isFirst() || valueChangeHandler == null) {
@@ -70,10 +66,10 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                     bind(fixedPrc, proto().percentage());
                     main.add(DecorationUtils.inline(fixedPrc, "5%", "right"));
                 } else {
-                    main.add(DecorationUtils.inline(masterForm.create(proto().percentage(), this), "5%", "right"));
+                    main.add(DecorationUtils.inline(inject(proto().percentage()), "5%", "right"));
                 }
 
-                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+                main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
                 if (valueChangeHandler != null) {
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
                 }

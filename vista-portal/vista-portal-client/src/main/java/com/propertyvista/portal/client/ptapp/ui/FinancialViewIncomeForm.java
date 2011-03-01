@@ -34,7 +34,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
@@ -51,7 +51,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
         if (!parentForm.isReadOnlyMode()) {
             @SuppressWarnings("unchecked")
-            CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) create(proto().incomeSource(), this);
+            CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) inject(proto().incomeSource());
             incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<IncomeSource> event) {
@@ -60,14 +60,14 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             });
             main.add(new VistaWidgetDecorator(incomeSource));
         } else {
-            main.add(new VistaWidgetDecorator(create(proto().incomeSource(), this)));
+            main.add(new VistaWidgetDecorator(inject(proto().incomeSource())));
         }
 
-        main.add(create(proto().employer(), this));
-        main.add(create(proto().seasonallyEmployed(), this));
-        main.add(create(proto().selfEmployed(), this));
-        main.add(create(proto().studentIncome(), this));
-        main.add(create(proto().socialServices(), this));
+        main.add(inject(proto().employer()));
+        main.add(inject(proto().seasonallyEmployed()));
+        main.add(inject(proto().selfEmployed()));
+        main.add(inject(proto().studentIncome()));
+        main.add(inject(proto().socialServices()));
 
         return main;
     }
@@ -77,26 +77,20 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
     }
 
-    private CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
-        CEntityEditableComponent<?> comp = null;
-
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Employer.class)) {
-            comp = createEmployerEditor();
+            return createEmployerEditor();
         } else if (member.getValueClass().equals(SelfEmployed.class)) {
-            comp = createSelfEmployedEditor();
+            return createSelfEmployedEditor();
         } else if (member.getValueClass().equals(SeasonallyEmployed.class)) {
-            comp = createSeasonallyEmployedEditor();
+            return createSeasonallyEmployedEditor();
         } else if (member.getValueClass().equals(SocialServices.class)) {
-            comp = createSocialServicesEditor();
+            return createSocialServicesEditor();
         } else if (member.getValueClass().equals(StudentIncome.class)) {
-            comp = createStudentIncomeEditor();
-        }
-
-        if (comp != null) {
-            parent.bind(comp, member);
-            return comp;
+            return createStudentIncomeEditor();
         } else {
-            return parentForm.create(member, parent);
+            return super.create(member);
         }
     }
 
@@ -141,11 +135,11 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().name(), this), 10d, 12));
+                main.add(new VistaWidgetDecorator(inject(proto().name()), 10d, 12));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().employedForYears(), this), 10d, 2));
+                main.add(new VistaWidgetDecorator(inject(proto().employedForYears()), 10d, 2));
                 main.add(new HTML());
-                parentForm.createIEmploymentInfo(main, proto(), this);
+                BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
                 return main;
             }
 
@@ -158,9 +152,9 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(new HTML());
-                parentForm.createIEmploymentInfo(main, proto(), this);
+                BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
                 main.add(new HTML());
-                parentForm.createIAddress(main, proto(), this);
+                BaseEntityForm.injectIAddress(main, proto(), this);
                 main.add(new HTML());
                 return main;
             }
@@ -173,9 +167,9 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(new HTML());
-                parentForm.createIEmploymentInfo(main, proto(), this);
+                BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
                 main.add(new HTML());
-                parentForm.createIAddress(main, proto(), this);
+                BaseEntityForm.injectIAddress(main, proto(), this);
                 main.add(new HTML());
                 return main;
             }
@@ -187,19 +181,19 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().companyName(), this), 10d, 15));
+                main.add(new VistaWidgetDecorator(inject(proto().companyName()), 10d, 15));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().yearsInBusiness(), this), 10d, 2));
+                main.add(new VistaWidgetDecorator(inject(proto().yearsInBusiness()), 10d, 2));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().fullyOwned(), this), 10d, 10));
+                main.add(new VistaWidgetDecorator(inject(proto().fullyOwned()), 10d, 10));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().monthlyRevenue(), this), 10d, 10));
+                main.add(new VistaWidgetDecorator(inject(proto().monthlyRevenue()), 10d, 10));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this), 10d, 8));
+                main.add(new VistaWidgetDecorator(inject(proto().monthlySalary()), 10d, 8));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().numberOfEmployees(), this), 10d, 4));
+                main.add(new VistaWidgetDecorator(inject(proto().numberOfEmployees()), 10d, 4));
                 main.add(new HTML());
-                parentForm.createIAddress(main, proto(), this);
+                BaseEntityForm.injectIAddress(main, proto(), this);
                 main.add(new HTML());
                 return main;
             }
@@ -211,17 +205,17 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(new VistaWidgetDecorator(create(proto().agency(), this), 10d, 15));
+                main.add(new VistaWidgetDecorator(inject(proto().agency()), 10d, 15));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().yearsReceiving(), this), 10d, 15));
+                main.add(new VistaWidgetDecorator(inject(proto().yearsReceiving()), 10d, 15));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().worker(), this), 10d, 30));
+                main.add(new VistaWidgetDecorator(inject(proto().worker()), 10d, 30));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().workerPhone(), this), 10d, 15));
+                main.add(new VistaWidgetDecorator(inject(proto().workerPhone()), 10d, 15));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().monthlyAmount(), this), 10d, 8));
+                main.add(new VistaWidgetDecorator(inject(proto().monthlyAmount()), 10d, 8));
                 main.add(new HTML());
-                parentForm.createIAddress(main, proto(), this);
+                BaseEntityForm.injectIAddress(main, proto(), this);
                 main.add(new HTML());
                 return main;
             }

@@ -27,18 +27,19 @@ import com.propertyvista.portal.domain.pt.TenantAsset;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
 public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> {
@@ -49,7 +50,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         super(PotentialTenantFinancial.class);
     }
 
-    public FinancialViewForm(EntityFormComponentFactory factory) {
+    public FinancialViewForm(EditableComponentFactory factory) {
         super(PotentialTenantFinancial.class, factory);
         readOnlyMode = true;
     }
@@ -62,30 +63,30 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         main.add(new ViewHeaderDecorator(proto().incomes()));
-        main.add(create(proto().incomes(), this));
+        main.add(inject(proto().incomes()));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(proto().assets()));
-        main.add(create(proto().assets(), this));
+        main.add(inject(proto().assets()));
         main.add(new HTML());
 
         main.add(new ViewHeaderDecorator(proto().guarantors()));
-        main.add(create(proto().guarantors(), this));
+        main.add(inject(proto().guarantors()));
         main.add(new HTML());
 
         return main;
     }
 
     @Override
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        if (member.equals(proto().incomes())) {
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        if (member == proto().incomes()) {
             return createIncomeFolderEditor();
-        } else if (member.equals(proto().assets())) {
+        } else if (member == proto().assets()) {
             return createAssetFolderEditorColumns();
-        } else if (member.equals(proto().guarantors())) {
+        } else if (member == proto().guarantors()) {
             return createGuarantorFolderEditorColumns();
         } else {
-            return super.createMemberFolderEditor(member);
+            return super.create(member);
         }
     }
 
@@ -129,7 +130,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             }
 
             private CEntityFolderItem<TenantAsset> createAssetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<TenantAsset>(TenantAsset.class, columns, FinancialViewForm.this) {
+                return new CEntityFolderRow<TenantAsset>(TenantAsset.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
@@ -169,7 +170,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             }
 
             private CEntityFolderItem<TenantGuarantor> createGuarantorRowEditor(final List<EntityFolderColumnDescriptor> columns) {
-                return new CEntityFolderRow<TenantGuarantor>(TenantGuarantor.class, columns, FinancialViewForm.this) {
+                return new CEntityFolderRow<TenantGuarantor>(TenantGuarantor.class, columns) {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
