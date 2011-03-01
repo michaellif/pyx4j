@@ -44,26 +44,9 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(Money.class)) {
-            EditorType editorType = member.getMeta().getEditorType();
-            if ((editorType != null) && (editorType == EditorType.label)) {
-                return new ReadOnlyMoneyForm();
-            } else {
-                return new MoneyForm();
-            }
+            return new ReadOnlyMoneyForm();
         } else {
             return super.create(member);
-        }
-    }
-
-    private static class MoneyForm extends CEntityForm<Money> {
-
-        public MoneyForm() {
-            super(Money.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            return inject(proto().amount());
         }
     }
 
