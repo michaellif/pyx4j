@@ -20,13 +20,38 @@ import com.google.gwt.user.client.ui.Widget;
 public class DecorationUtils {
 
     public static IsWidget inline(IsWidget w, String width, String textAlign) {
+        return insert(Display.INLINE_BLOCK, w, width, textAlign);
+    }
+
+    public static IsWidget inline(IsWidget w, String width) {
+        return inline(w, width, null);
+    }
+
+    public static IsWidget inline(IsWidget w) {
+        return inline(w, null, null);
+    }
+
+    public static IsWidget block(IsWidget w, String width, String textAlign) {
+        return insert(Display.BLOCK, w, width, textAlign);
+    }
+
+    public static IsWidget block(IsWidget w, String width) {
+        return block(w, width, null);
+    }
+
+    public static IsWidget block(IsWidget w) {
+        return block(w, null, null);
+    }
+
+    private static IsWidget insert(Display disp, IsWidget w, String width, String textAlign) {
         Widget wg = w.asWidget();
-        wg.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        wg.getElement().getStyle().setDisplay(disp);
         if (textAlign != null) {
             wg.getElement().getStyle().setProperty("textAlign", textAlign);
         }
-        wg.setWidth(width);
+        if (width != null) {
+            wg.setWidth(width);
+        }
         return w;
     }
-
 }
