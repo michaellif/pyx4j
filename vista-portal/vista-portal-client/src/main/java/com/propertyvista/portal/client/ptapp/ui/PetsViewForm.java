@@ -42,6 +42,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 @Singleton
@@ -65,7 +66,9 @@ public class PetsViewForm extends CEntityForm<Pets> {
     @Override
     public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
         if (member instanceof ChargeLine) {
-            return new CEntityLabel();
+            CComponent<?> comp = new CEntityLabel();
+            parent.bind((CEditableComponent<?, ?>) comp, member);
+            return comp;
         } else {
             return super.create(member, parent);
         }
@@ -104,17 +107,6 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
             @Override
             protected CEntityFolderItem<Pet> createItem() {
-                return createPetRowEditor(columns);
-            }
-
-            @Override
-            protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
-                newEntity.weightUnit().setValue(WeightUnit.lb);
-                ChargesSharedCalculation.calculatePetCharges(PetsViewForm.this.getValue().petChargeRule(), newEntity);
-                super.createNewEntity(newEntity, callback);
-            }
-
-            private CEntityFolderItem<Pet> createPetRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<Pet>(Pet.class, columns, PetsViewForm.this) {
 
                     @Override
@@ -123,6 +115,13 @@ public class PetsViewForm extends CEntityForm<Pets> {
                     }
 
                 };
+            }
+
+            @Override
+            protected void createNewEntity(Pet newEntity, AsyncCallback<Pet> callback) {
+                newEntity.weightUnit().setValue(WeightUnit.lb);
+                ChargesSharedCalculation.calculatePetCharges(PetsViewForm.this.getValue().petChargeRule(), newEntity);
+                super.createNewEntity(newEntity, callback);
             }
 
         };
