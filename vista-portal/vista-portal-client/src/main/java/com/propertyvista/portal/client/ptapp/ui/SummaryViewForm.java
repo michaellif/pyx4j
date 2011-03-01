@@ -72,6 +72,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
@@ -101,15 +102,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private SignatureView signatureView;
 
     public SummaryViewForm() {
-        super(Summary.class, new ReadOnlyComponentFactory() {
-            @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
-                MemberMeta mm = member.getMeta();
-                CEditableComponent<?, ?> comp = null;
-                comp = super.create(member);
-                return comp;
-            }
-        });
+        super(Summary.class, new ReadOnlyComponentFactory());
     }
 
     public SummaryViewPresenter getPresenter() {
@@ -750,7 +743,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class FinancialView {
 
-        private final VerticalPanel content;
+        private final FlowPanel content;
 
         private final String LEFT_COLUMN_WIDTH = "30%";
 
@@ -762,7 +755,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             this.masterForm = masterForm;
 
             // add table content panel:
-            upperLevelElementElignment(content = new VerticalPanel());
+            upperLevelElementElignment(content = new FlowPanel());
             content.getElement().getStyle().setBackgroundColor("white");
             content.getElement().getStyle().setBorderWidth(1, Unit.PX);
             content.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
@@ -796,8 +789,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             masterForm.bind(name, person.middleName());
             fullname.add(DecorationUtils.inline(name, "5%", null));
             name = new CLabel();
-            masterForm.bind(name, person.lastName());
-            fullname.add(DecorationUtils.inline(name, "30%", null));
+            ;
+            fullname.add(DecorationUtils.inline(masterForm.create(person.lastName(), masterForm), "30%", null));
             fullname.setWidth("50%");
             return fullname;
         }
@@ -1308,7 +1301,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             HTML signatureTerms = new HTML(SiteResources.INSTANCE.digitalSignature().getText());
             add(signatureTerms);
 
-            VistaWidgetDecorator signature = new VistaWidgetDecorator(create(proto().fullName(), SummaryViewForm.this));
+            CTextField edit = new CTextField();
+            bind(edit, proto().fullName());
+            VistaWidgetDecorator signature = new VistaWidgetDecorator(edit);
             signature.getElement().getStyle().setBackgroundColor("darkGray");
             signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
             signature.setHeight("3em");
