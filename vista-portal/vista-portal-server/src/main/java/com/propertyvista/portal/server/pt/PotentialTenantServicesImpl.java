@@ -30,6 +30,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
@@ -270,6 +271,14 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             retrieveApplicationEntity(summary.financial());
             retrieveApplicationEntity(summary.pets());
             retrieveApplicationEntity(summary.charges());
+
+            // Move selected upgrades for presentation.
+            for (ChargeLineSelectable charge : summary.charges().monthlyCharges().upgradeCharges()) {
+                if (charge.selected().isBooleanTrue()) {
+                    summary.charges().monthlyCharges().charges().add(charge);
+                }
+            }
+            summary.charges().monthlyCharges().upgradeCharges().clear();
 
             summary.leaseTerms().set(
                     PersistenceServicesFactory.getPersistenceService().retrieve(LeaseTerms.class,
