@@ -62,19 +62,11 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private SummaryViewPresenter presenter;
 
-    private FlowPanel main;
-
     private ApartmentView apartmentView;
-
-    private LeaseTermView leaseTermView;
 
     private TenantsTable tenantsTable;
 
     private TenantsView tenantsView;
-
-    private LeaseTermsCheck leaseTermsCheck;
-
-    private SignatureView signatureView;
 
     public SummaryViewForm() {
         super(Summary.class, new ReadOnlyComponentFactory());
@@ -90,13 +82,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     public IsWidget createContent() {
-        main = new FlowPanel();
+        FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
         main.add(apartmentView = new ApartmentView());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Term</h4>")));
-        main.add(leaseTermView = new LeaseTermView());
+        main.add(new LeaseTermView());
 
         main.add(createHeaderWithEditLink("Tenants", new SiteMap.Tenants()));
         main.add(tenantsTable = new TenantsTable());
@@ -110,12 +102,12 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         //main.add(petsTable = new PetsTable());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
-        main.add(leaseTermsCheck = new LeaseTermsCheck());
+        main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
-        main.add(signatureView = new SignatureView());
+        main.add(new SignatureView());
 
         return main;
     }
@@ -148,11 +140,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         // populate internal views:
         apartmentView.populate(value);
-        leaseTermView.populate(value);
         tenantsTable.populate(value);
         tenantsView.populate(value);
-        leaseTermsCheck.populate(value);
-        signatureView.populate(value);
     }
 
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
@@ -280,7 +269,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            // add table content panel:
+            // add lease term/price:
             FlowPanel content = new FlowPanel();
             content.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
@@ -288,7 +277,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             Widget label = inject(proto().unitSelection().markerRent().leaseTerm()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
-            label = new HTML("&nbsp month Rent");
+            label = new HTML("&nbsp;month Rent");
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label));
 
@@ -297,21 +286,18 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             label = inject(proto().unitSelection().markerRent().rent()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
-            label = new HTML("&nbsp / month");
+            label = new HTML("&nbsp;/ month");
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label));
 
             add(innerLevelElementElignment(content));
             content.setWidth("30%");
 
-            // add static lease term blah-blah:
+            // add static lease terms blah-blah:
             HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
             availabilityAndPricing.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             availabilityAndPricing.setWidth("70%");
             add(availabilityAndPricing);
-        }
-
-        public void populate(Summary value) {
         }
     }
 
@@ -744,9 +730,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             agree.asWidget().getElement().getStyle().setMarginBottom(0.5, Unit.EM);
             add(agree);
         }
-
-        public void populate(Summary value) {
-        }
     }
 
     /*
@@ -769,9 +752,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
             signature.setHeight("3em");
             add(signature);
-        }
-
-        public void populate(Summary value) {
         }
     }
 }
