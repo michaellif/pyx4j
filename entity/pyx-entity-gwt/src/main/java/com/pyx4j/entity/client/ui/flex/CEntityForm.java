@@ -34,7 +34,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
  */
 public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComponent<E> {
 
-    private final EntityFormComponentFactory factory;
+    protected final EntityFormComponentFactory factory;
 
     public CEntityForm(Class<E> rootClass) {
         this(rootClass, new EntityFormComponentFactory());
@@ -44,6 +44,9 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
         super(new EntityFormBinder<E>(rootClass));
         this.factory = factory;
         this.factory.setForm(this);
+    }
+
+    public void initialize() {
         setWidget(createContent());
     }
 
