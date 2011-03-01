@@ -49,15 +49,15 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Income sources</h4>")));
+        main.add(new ViewHeaderDecorator(proto().incomes()));
         main.add(create(proto().incomes(), this));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Assets</h4>")));
+        main.add(new ViewHeaderDecorator(proto().assets()));
         main.add(create(proto().assets(), this));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Guarantors</h4>")));
+        main.add(new ViewHeaderDecorator(proto().guarantors()));
         main.add(create(proto().guarantors(), this));
         main.add(new HTML());
 
@@ -170,5 +170,4 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         };
 
     }
-
 }

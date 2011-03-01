@@ -20,8 +20,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
-
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.SeasonallyEmployed;
@@ -41,16 +39,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
     private final BaseEntityForm<?> parentForm;
-
-    private FlowPanel employer;
-
-    private FlowPanel selfEmployed;
-
-    private FlowPanel seasonallyEmployed;
-
-    private FlowPanel socialservices;
-
-    private FlowPanel student;
 
     public FinancialViewIncomeForm(final BaseEntityForm<?> parentForm) {
         super(TenantIncome.class);
@@ -72,11 +60,11 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
         main.add(new VistaWidgetDecorator(incomeSource));
 
-        main.add(employer = createEmployerPanel());
-        main.add(seasonallyEmployed = createSeasonallyEmployedPanel());
-        main.add(selfEmployed = createSelfemployedPanel());
-        main.add(student = createStudentPanel());
-        main.add(socialservices = createSocialPanel());
+        main.add(create(proto().employer(), this));
+        main.add(create(proto().seasonallyEmployed(), this));
+        main.add(create(proto().selfEmployed(), this));
+        main.add(create(proto().studentIncome(), this));
+        main.add(create(proto().socialServices(), this));
 
         return main;
     }
@@ -116,72 +104,32 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     }
 
     private void setVisibility(IncomeSource value) {
-        employer.setVisible(false);
-        seasonallyEmployed.setVisible(false);
-        selfEmployed.setVisible(false);
-        student.setVisible(false);
-        socialservices.setVisible(false);
+        get(proto().employer()).setVisible(false);
+        get(proto().seasonallyEmployed()).setVisible(false);
+        get(proto().selfEmployed()).setVisible(false);
+        get(proto().studentIncome()).setVisible(false);
+        get(proto().socialServices()).setVisible(false);
+
         if (value != null) {
             switch (value) {
             case fulltime:
             case parttime:
-                employer.setVisible(true);
+                get(proto().employer()).setVisible(true);
                 break;
             case selfemployed:
-                selfEmployed.setVisible(true);
+                get(proto().selfEmployed()).setVisible(true);
                 break;
             case seasonallyEmployed:
-                seasonallyEmployed.setVisible(true);
+                get(proto().seasonallyEmployed()).setVisible(true);
                 break;
             case socialServices:
-                socialservices.setVisible(true);
+                get(proto().socialServices()).setVisible(true);
                 break;
             case student:
-                student.setVisible(true);
+                get(proto().studentIncome()).setVisible(true);
                 break;
-
             }
         }
-    }
-
-    private FlowPanel createEmployerPanel() {
-        FlowPanel panel = new FlowPanel();
-        panel.add(new HTML("<h6>Employer</h6>"));
-        panel.add(create(proto().employer(), this));
-        panel.add(new HTML());
-        return panel;
-    }
-
-    private FlowPanel createSelfemployedPanel() {
-        FlowPanel panel = new FlowPanel();
-        panel.add(new HTML("<h6>Self employed</h6>"));
-        panel.add(create(proto().selfEmployed(), this));
-        panel.add(new HTML());
-        return panel;
-    }
-
-    private FlowPanel createSeasonallyEmployedPanel() {
-        FlowPanel panel = new FlowPanel();
-        panel.add(new HTML("<h6>Seasonally Employed</h6>"));
-        panel.add(create(proto().seasonallyEmployed(), this));
-        panel.add(new HTML());
-        return panel;
-    }
-
-    private FlowPanel createSocialPanel() {
-        FlowPanel panel = new FlowPanel();
-        panel.add(new HTML("<h6>Social Income</h6>"));
-        panel.add(create(proto().socialServices(), this));
-        panel.add(new HTML());
-        return panel;
-    }
-
-    private FlowPanel createStudentPanel() {
-        FlowPanel panel = new FlowPanel();
-        panel.add(new HTML("<h6>Student Information</h6>"));
-        panel.add(create(proto().studentIncome(), this));
-        panel.add(new HTML());
-        return panel;
     }
 
     private CEntityEditableComponent<Employer> createEmployerEditor() {
@@ -190,13 +138,9 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                DecorationData decorData = new DecorationData();
-                decorData.componentWidth = 12;
-                main.add(new VistaWidgetDecorator(create(proto().name(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().name(), this), 10d, 12));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 2;
-                main.add(new VistaWidgetDecorator(create(proto().employedForYears(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().employedForYears(), this), 10d, 2));
                 main.add(new HTML());
                 parentForm.createIEmploymentInfo(main, proto(), this);
                 return main;
@@ -240,28 +184,17 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                DecorationData decorData = new DecorationData();
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().companyName(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().companyName(), this), 10d, 15));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 2;
-                main.add(new VistaWidgetDecorator(create(proto().yearsInBusiness(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().yearsInBusiness(), this), 10d, 2));
                 main.add(new HTML());
-                main.add(new VistaWidgetDecorator(create(proto().fullyOwned(), this)));
+                main.add(new VistaWidgetDecorator(create(proto().fullyOwned(), this), 10d, 10));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 10;
-                main.add(new VistaWidgetDecorator(create(proto().monthlyRevenue(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().monthlyRevenue(), this), 10d, 10));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 8;
-                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().monthlySalary(), this), 10d, 8));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 4;
-                main.add(new VistaWidgetDecorator(create(proto().numberOfEmployees(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().numberOfEmployees(), this), 10d, 4));
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
@@ -275,26 +208,15 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                DecorationData decorData = new DecorationData();
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().agency(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().agency(), this), 10d, 15));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().yearsReceiving(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().yearsReceiving(), this), 10d, 15));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 30;
-                main.add(new VistaWidgetDecorator(create(proto().worker(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().worker(), this), 10d, 30));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(create(proto().workerPhone(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().workerPhone(), this), 10d, 15));
                 main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 8;
-                main.add(new VistaWidgetDecorator(create(proto().monthlyAmount(), this), decorData));
+                main.add(new VistaWidgetDecorator(create(proto().monthlyAmount(), this), 10d, 8));
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
