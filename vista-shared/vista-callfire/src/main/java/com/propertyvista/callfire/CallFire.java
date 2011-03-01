@@ -14,5 +14,4 @@
 package com.propertyvista.callfire;
 
 public class CallFire {
-
 }
