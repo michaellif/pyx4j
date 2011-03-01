@@ -956,8 +956,8 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder));
         style.addProperty("background", "url('" + SiteImages.INSTANCE.stepBackground().getURL() + "') repeat-x");
-        style.addProperty("padding-left", "20px");
-        style.addProperty("padding-right", "20px");
+        style.addProperty("padding-left", "10px");
+        style.addProperty("padding-right", "10px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.LabelHolder, MainNavigViewImpl.StyleDependent.latest));
