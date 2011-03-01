@@ -47,6 +47,12 @@ public class DemoData {
 
     public final static Relationship[] RELATIONSHIPS = { Relationship.Spouse, Relationship.Daughter, Relationship.Son, Relationship.Other };
 
+    public final static String[] PET_BREEDS = { "Colly", "German Sheppard", "Schnautzer", "Labrador" };
+
+    public final static String[] PET_COLORS = { "White", "Brown", "Black", "Yellow" };
+
+    public final static String[] PET_NAMES = { "Rover", "Max", "Buddy", "Rocky", "Bear", "Jack", "Toby", "Lucky", "Shadow", "Tucker" };
+
     public final static String[] STREETS = { "Yonge St", "Dufferin St", "Bathurst St", "John St", "16th Ave", "Steeles Ave W" };
 
     public final static String[] FIRST_NAMES = { "John", "Jim", "Bob", "Alex", "Chris", "Jack", "Jill", "Anna", "Bob", "Mark", "Jeff", "Peter", "Neil",

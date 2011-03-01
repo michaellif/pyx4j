@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.AddOn;
 import com.propertyvista.portal.domain.Amenity;
+import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.MarketRent;
@@ -37,6 +38,7 @@ import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.ChargeLine;
+import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
@@ -45,8 +47,10 @@ import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
+import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
+import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -61,11 +65,11 @@ import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
-import com.propertyvista.portal.server.pt.PtUserDataAccess;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -84,6 +88,8 @@ public class PreloadPT extends AbstractDataPreloader {
     private final static Logger log = LoggerFactory.getLogger(PreloadPT.class);
 
     private User user;
+
+    private Building building;
 
     private Application application;
 
@@ -386,6 +392,67 @@ public class PreloadPT extends AbstractDataPreloader {
         persist(tenants);
     }
 
+    private void createPets() {
+        Pets pets = EntityFactory.create(Pets.class);
+        pets.application().set(application);
+
+        for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
+            Pet pet = EntityFactory.create(Pet.class);
+
+            pet.type().setValue(Pet.PetType.dog);
+            pet.name().setValue(RandomUtil.random(DemoData.PET_NAMES));
+            pet.color().setValue(RandomUtil.random(DemoData.PET_COLORS));
+            pet.breed().setValue(RandomUtil.random(DemoData.PET_BREEDS));
+
+            pet.weight().setValue(20 + RandomUtil.randomInt(100));
+            if (RandomUtil.randomBoolean()) {
+                pet.weightUnit().setValue(WeightUnit.kg);
+            } else {
+                pet.weightUnit().setValue(WeightUnit.lb);
+            }
+
+            pet.birthDate().setValue(RandomUtil.randomDate(1985, 2010));
+
+            // charge line
+            pet.chargeLine().set(DomainUtil.createChargeLine(ChargeType.petCharge, 20d + RandomUtil.randomInt(100)));
+
+            persist(pet);
+            pets.pets().add(pet);
+        }
+
+        persist(pets);
+    }
+
+    private void loadPets(StringBuilder sb) {
+        EntityQueryCriteria<Pets> criteria = EntityQueryCriteria.create(Pets.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), application));
+        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+        sb.append("Pets\n");
+
+        for (Pet pet : pets.pets()) {
+            sb.append("\t");
+            sb.append(pet.type().getValue());
+
+            sb.append(" \t");
+            sb.append(pet.name().getStringView());
+
+            sb.append(" \t");
+            sb.append(pet.color().getStringView());
+
+            sb.append(" \t");
+            sb.append(pet.breed().getStringView());
+
+            sb.append(" \t");
+            sb.append(pet.weight().getValue()).append(" ").append(pet.weightUnit().getValue());
+
+            sb.append(" $");
+            sb.append(pet.chargeLine().charge().amount().getValue());
+
+            sb.append("\n");
+        }
+    }
+
     private void createUnitSelection() {
         UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
         unitSelection.application().set(application);
@@ -410,6 +477,9 @@ public class PreloadPT extends AbstractDataPreloader {
         // now chose the first unit
         if (!unitSelection.availableUnits().units().isEmpty()) {
             unitSelection.selectedUnit().set(unitSelection.availableUnits().units().iterator().next());
+            unitSelection.building().set(unitSelection.selectedUnit().building());
+            building = unitSelection.building();
+            //            log.info("Created building {}", unitSelection.selectedUnit().building());
             unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
             unitSelection.rentStart().setValue(DateUtils.createDate(2011, 4, 8));
         }
@@ -442,6 +512,8 @@ public class PreloadPT extends AbstractDataPreloader {
             sb.append(" available on ");
             sb.append(unit.avalableForRent().getStringView());
 
+            log.info("Available {}", unit.building());
+
             sb.append(", status: ").append(unit.status().getStringView());
 
             sb.append("\n");
@@ -462,6 +534,12 @@ public class PreloadPT extends AbstractDataPreloader {
         sb.append("\n\n");
         sb.append("Selected: ").append(unit.suiteNumber().getStringView());
         sb.append("\n");
+
+        // building
+        log.info("Selected unit building {}", unit.building());
+        building = unit.building();
+        sb.append("Building: ").append(building).append("\n");
+        sb.append("Property: ").append(building.propertyProfile()).append("\n");
 
         // amenities
         sb.append("\tAmenities:\n");
@@ -747,6 +825,7 @@ public class PreloadPT extends AbstractDataPreloader {
         createUnitSelection();
         createApplicationProgress();
         createPotentialTenantList();
+        createPets();
         createCharges();
 
         load();
@@ -768,6 +847,9 @@ public class PreloadPT extends AbstractDataPreloader {
 
         sb.append("\n\n---------------------------- TENANTS ---------------------------------\n");
         loadTenants(sb);
+
+        sb.append("\n\n---------------------------- PETS ------------------------------------\n");
+        loadPets(sb);
 
         sb.append("\n\n---------------------------- CHARGES ---------------------------------\n");
         loadCharges(sb);

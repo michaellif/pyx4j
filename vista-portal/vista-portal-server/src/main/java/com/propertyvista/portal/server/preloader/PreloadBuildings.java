@@ -464,6 +464,15 @@ public class PreloadBuildings extends AbstractDataPreloader {
             sb.append(building.address().city().getStringView()).append(" ").append(building.address().state().getStringView()).append(", ");
             sb.append(building.address().zip().getStringView()).append(", ").append(building.address().country().getStringView());
 
+            // property profile
+            sb.append("\nProperty Profile\n");
+            sb.append(building.propertyProfile());
+            sb.append("\t");
+
+            sb.append("\nPet Charge");
+            sb.append(building.propertyProfile().petCharge());
+            sb.append("\t");
+
             // phones
             sb.append("\t");
 
