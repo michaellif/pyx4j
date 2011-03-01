@@ -28,6 +28,7 @@ import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -40,23 +41,18 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
 
     public PetsViewForm() {
-        super(Pets.class, new EntityFormComponentFactory() {
-            @Override
-            public CEditableComponent<?, ?> create(IObject<?> member) {
-                if (member instanceof ChargeLine) {
-                    return new CEntityLabel();
-                } else {
-                    return super.create(member);
-                }
-            }
-        });
+        super(Pets.class);
+    }
+
+    public PetsViewForm(EntityFormComponentFactory factory) {
+        super(Pets.class, factory);
     }
 
     @Override
@@ -67,11 +63,19 @@ public class PetsViewForm extends CEntityForm<Pets> {
     }
 
     @Override
+    public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
+        if (member instanceof ChargeLine) {
+            return new CEntityLabel();
+        } else {
+            return super.create(member, parent);
+        }
+    }
+
+    @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
         if (member.equals(proto().pets())) {
             return createPetsEditorColumns();
         } else {
-
             return super.createMemberFolderEditor(member);
         }
     }
