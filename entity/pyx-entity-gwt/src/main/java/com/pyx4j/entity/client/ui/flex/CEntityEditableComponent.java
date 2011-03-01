@@ -35,6 +35,8 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
 
     private final EntityBinder<E> binder;
 
+    private IFlexContentComponent bindParent;
+
     public CEntityEditableComponent(EntityBinder<E> binder) {
         this.binder = binder;
     }
@@ -114,15 +116,35 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         }
     }
 
-    public void bind(CEditableComponent<?, ?> component, IObject<?> member) {
+    public final void bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
         component.addPropertyChangeHandler(this);
-
-        if (component instanceof CEntityFolder) {
-            ((CEntityFolder) component).setFolderDecorator(((CEntityFolder) component).createContent());
-        } else if (component instanceof CEntityEditableComponent) {
-            ((CEntityEditableComponent) component).setWidget(((CEntityEditableComponent) component).createContent());
+        if (component instanceof IFlexContentComponent) {
+            ((IFlexContentComponent) component).onBound(this);
         }
+    }
+
+    @Override
+    public void onBound(IFlexContentComponent parent) {
+        assert (bindParent == null) : "Flex Component " + this.getClass().getName() + " is already bound to " + bindParent;
+        bindParent = parent;
+        attachContent();
+    }
+
+    public void attachContent() {
+        setWidget(createContent());
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        assert (bindParent != null) : "Flex Component " + this.getClass().getName() + "is not bound";
+        return bindParent.create(member);
+    }
+
+    public final CEditableComponent<?, ?> inject(IObject<?> member) {
+        CEditableComponent<?, ?> comp = create(member);
+        bind(comp, member);
+        return comp;
     }
 
     public <T> CEditableComponent<T, ?> get(IObject<T> member) {

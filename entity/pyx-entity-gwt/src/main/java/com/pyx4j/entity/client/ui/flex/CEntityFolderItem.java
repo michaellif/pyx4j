@@ -92,4 +92,9 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditab
     public SimplePanel getContent() {
         return content;
     }
+
+    @Override
+    public void attachContent() {
+        getContent().setWidget(createContent());
+    }
 }

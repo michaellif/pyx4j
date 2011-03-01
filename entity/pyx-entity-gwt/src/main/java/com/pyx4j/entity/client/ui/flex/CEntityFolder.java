@@ -33,6 +33,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -44,6 +45,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
+    private IFlexContentComponent bindParent;
+
     private FolderDecorator<E> folderDecorator;
 
     private final FlowPanel content;
@@ -52,6 +55,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     public CEntityFolder() {
         content = new FlowPanel();
+    }
+
+    @Override
+    public void onBound(IFlexContentComponent parent) {
+        bindParent = parent;
+        setFolderDecorator(createContent());
+    }
+
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        return bindParent.create(member);
     }
 
     @Override
@@ -110,7 +124,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             public void onSuccess(E result) {
                 comp.setFirst(content.getWidgetCount() == 0);
                 getValue().add(result);
-                comp.getContent().setWidget(comp.createContent());
+                comp.onBound(CEntityFolder.this);
                 comp.populate(result);
                 adoptFolderItem(comp);
             }
@@ -147,7 +161,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             CEntityFolderItem<E> comp = createItem();
             comp.setRowDebugId(++currentRowDebugId);
             comp.setFirst(content.getWidgetCount() == 0);
-            comp.getContent().setWidget(comp.createContent());
+            comp.onBound(this);
             comp.populate(item);
             adoptFolderItem(comp);
         }

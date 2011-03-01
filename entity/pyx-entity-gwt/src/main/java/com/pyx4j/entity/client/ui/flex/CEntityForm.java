@@ -22,10 +22,10 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -34,36 +34,24 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
  */
 public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComponent<E> {
 
-    protected final EntityFormComponentFactory factory;
+    protected final EditableComponentFactory factory;
 
     public CEntityForm(Class<E> rootClass) {
         this(rootClass, new EntityFormComponentFactory());
     }
 
-    public CEntityForm(Class<E> rootClass, EntityFormComponentFactory factory) {
+    public CEntityForm(Class<E> rootClass, EditableComponentFactory factory) {
         super(new EntityFormBinder<E>(rootClass));
         this.factory = factory;
-        this.factory.setForm(this);
     }
 
     public void initialize() {
-        setWidget(createContent());
+        attachContent();
     }
 
-    public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {
-        CComponent<?> comp = factory.create(member);
-        if (comp instanceof CEditableComponent) {
-            parent.bind((CEditableComponent<?, ?>) comp, member);
-        }
-        return comp;
-    }
-
-    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-        throw new Error("No MemberFolderEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
-    }
-
-    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
-        throw new Error("No MemberEditor for member " + member.getMeta().getCaption() + " of class " + member.getValueClass());
+    @Override
+    public CEditableComponent<?, ?> create(IObject<?> member) {
+        return factory.create(member);
     }
 
     @Override

@@ -37,12 +37,9 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
 
     private final List<EntityFolderColumnDescriptor> columns;
 
-    private final CEntityForm<?> form;
-
-    public CEntityFolderRow(Class<E> clazz, List<EntityFolderColumnDescriptor> columns, CEntityForm<?> form) {
+    public CEntityFolderRow(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
         super(clazz);
         this.columns = columns;
-        this.form = form;
     }
 
     @Override
@@ -69,7 +66,7 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
     }
 
     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-        CComponent<?> comp = form.create(column.getObject(), this);
+        CComponent<?> comp = inject(column.getObject());
 
         //Special TableFolder customisation
         if (comp instanceof CCheckBox) {
