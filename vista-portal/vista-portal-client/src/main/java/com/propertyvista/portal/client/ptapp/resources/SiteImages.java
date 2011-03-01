@@ -36,37 +36,29 @@ public interface SiteImages extends ClientBundle {
     @Source("bg_body_2.gif")
     ImageResource body2Background();
 
-    @Source("step_bg.gif")
-    ImageResource stepBackground();
+    @Source("step.png")
+    ImageResource step();
 
-    @Source("step_bg_check.gif")
-    ImageResource stepCompleteBackground();
+    @Source("step_latest.png")
+    ImageResource stepLatest();
 
-    @Source("step_bg_active.gif")
-    ImageResource stepCurrentBackground();
+    @Source("step_valid.png")
+    ImageResource stepValid();
 
-    //TODO change image
-    @Source("step_bg_active.gif")
-    ImageResource stepInvalidBackground();
-
-    @Source("step_block_pointer.gif")
-    ImageResource stepBlockPointer();
-
-    @Source("step_block_pointer_check.gif")
-    ImageResource stepBlockCheckedPointer();
+    @Source("step_invalid.png")
+    ImageResource stepInvalid();
 
     @Source("step_pointer.png")
     ImageResource stepPointer();
 
-    @Source("step_pointer_check.gif")
-    ImageResource stepCompletePointer();
+    @Source("step_pointer_latest.png")
+    ImageResource stepPointerLatest();
 
-    @Source("step_pointer_active.gif")
-    ImageResource stepCurrentPointer();
+    @Source("step_pointer_valid.png")
+    ImageResource stepPointerValid();
 
-    //TODO change image
-    @Source("step_pointer_active.gif")
-    ImageResource stepInvalidPointer();
+    @Source("step_pointer_invalid.png")
+    ImageResource stepPointerInvalid();
 
     @Source("btn.gif")
     ImageResource buttonBackground();

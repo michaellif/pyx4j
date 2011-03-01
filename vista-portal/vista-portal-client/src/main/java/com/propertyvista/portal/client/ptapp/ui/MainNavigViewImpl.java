@@ -19,7 +19,6 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -46,7 +45,7 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
     public static String DEFAULT_STYLE_PREFIX = "vista_Steps";
 
     public static enum StyleSuffix implements IStyleSuffix {
-        Holder, Tab, ArrowHolder, LabelHolder, StatusHolder, Label
+        Holder, Tab, LabelHolder, StatusHolder, Label
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -103,11 +102,9 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         private final AppPlace place;
 
-        private final SimplePanel arrowHolder;
-
         private final FlowPanel labelHolder;
 
-        private final HTML statusHolder;
+        private final SimplePanel statusHolder;
 
         private final Label label;
 
@@ -123,24 +120,17 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
             getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
 
-            arrowHolder = new SimplePanel();
-            arrowHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.ArrowHolder.name());
-            add(arrowHolder);
-
             labelHolder = new FlowPanel();
             labelHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.LabelHolder.name());
-            arrowHolder.add(labelHolder);
+            add(labelHolder);
 
-            statusHolder = new HTML("&nbsp;");
+            statusHolder = new SimplePanel();
             statusHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.StatusHolder.name());
-            add(statusHolder);
+            labelHolder.add(statusHolder);
 
             label = new Label(presenter.getNavigLabel(step.getPlace()));
             label.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label.name());
-            label.getElement().getStyle().setFontSize(15, Unit.PX);
-            label.getElement().getStyle().setProperty("color", "#333");
-            labelHolder.add(statusHolder);
-            labelHolder.add(label);
+            statusHolder.add(label);
 
             switch (step.getStatus()) {
             case invalid:
@@ -175,13 +165,13 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
                 addDomHandler(new MouseOverHandler() {
                     @Override
                     public void onMouseOver(MouseOverEvent event) {
-                        label.getElement().getStyle().setProperty("color", "#555");
+                        //label.getElement().getStyle().setProperty("color", "#555");
                     }
                 }, MouseOverEvent.getType());
                 addDomHandler(new MouseOutHandler() {
                     @Override
                     public void onMouseOut(MouseOutEvent event) {
-                        label.getElement().getStyle().setProperty("color", "#333");
+                        //label.getElement().getStyle().setProperty("color", "#333");
                     }
                 }, MouseOutEvent.getType());
                 getElement().getStyle().setCursor(Cursor.POINTER);
@@ -200,7 +190,6 @@ public class MainNavigViewImpl extends SimplePanel implements MainNavigView {
 
         public void addStyleDependentName(StyleDependent style) {
             super.addStyleDependentName(style.name());
-            arrowHolder.addStyleDependentName(style.name());
             labelHolder.addStyleDependentName(style.name());
             statusHolder.addStyleDependentName(style.name());
         }
