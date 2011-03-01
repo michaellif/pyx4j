@@ -92,8 +92,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private TenantsView tenantsView;
 
-    private FinancialView financialView;
-
     private PetsTable petsTable;
 
     private LeaseTermsCheck leaseTermsCheck;
@@ -114,17 +112,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     public IsWidget createContent() {
-
-        /**
-         * create view processing object first! Note!!! because createContent has being
-         * called in super constructor and SummaryViewForm.createMemberFolderEditor
-         * callback processor is common for all those objects - it's necessary to create
-         * them BEFORE call to any of theirs createContents!!!
-         */
-        financialView = new FinancialView(this);
-
-        // fill main form:
         main = new FlowPanel();
+
+        main.add(create(proto().financial(), this));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
         main.add(apartmentView = new ApartmentView());
@@ -138,8 +128,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(createHeaderWithEditLink("Info", new SiteMap.Info()));
         main.add(tenantsView = new TenantsView());
 
-        main.add(createHeaderWithEditLink("Financial", new SiteMap.Financial()));
-//        financialView.createContent(main, proto().financial());
+//        main.add(create(proto().financial(), this));
 
         main.add(createHeaderWithEditLink("Pets", new SiteMap.Pets()));
         main.add(petsTable = new PetsTable());
@@ -157,7 +146,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
-        if (member.getValueClass().equals(Charges.class)) {
+        if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
+            return new FinancialViewForm(/* factory */);
+        } else if (member.getValueClass().equals(Charges.class)) {
             return new ChargesViewForm(factory);
         } else {
             return super.createMemberEditor(member);
@@ -166,18 +157,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
-//        if (member.getValueClass().equals(Charges.class)) {
-//            return new ChargesViewForm();
-//        }
-
-        CEntityFolder<?> editor = null;
-
-//        if (editor == null)
-//            editor = chargesView.createMemberFolderEditor(member);
-        if (editor == null)
-            editor = financialView.createMemberFolderEditor(member);
-
-        return (editor != null ? editor : super.createMemberFolderEditor(member));
+        return super.createMemberFolderEditor(member);
     }
 
     @Override
@@ -189,9 +169,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         leaseTermView.populate(value);
         tenantsTable.populate(value);
         tenantsView.populate(value);
-        //        financialView.populate(value);
         petsTable.populate(value);
-//        chargesView.populate(value);
         leaseTermsCheck.populate(value);
         signatureView.populate(value);
     }

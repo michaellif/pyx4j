@@ -32,6 +32,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
@@ -44,6 +45,10 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     public FinancialViewForm() {
         super(PotentialTenantFinancial.class);
+    }
+
+    public FinancialViewForm(EntityFormComponentFactory factory) {
+        super(PotentialTenantFinancial.class, factory);
     }
 
     @Override

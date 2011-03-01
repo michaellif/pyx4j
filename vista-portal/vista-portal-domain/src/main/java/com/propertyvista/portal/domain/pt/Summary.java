@@ -30,6 +30,7 @@ public interface Summary extends IEntity, IApplicationEntity {
 
     // TODO this would be PotentialTenantFinancialList after tabs are created.
     @Transient
+    @EmbeddedEntity
     PotentialTenantFinancial financial();
 
     @Transient
