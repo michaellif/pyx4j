@@ -953,13 +953,31 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder));
+        style.addProperty("background", "transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete));
-        //style.addProperty("background", "#456");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.check().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.complete) + ":hover");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.checkHover().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.warning().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.StatusHolder, MainNavigViewImpl.StyleDependent.invalid) + ":hover");
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.warningHover().getURL() + "') no-repeat scroll 50% 0 transparent");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label, MainNavigViewImpl.StyleDependent.current));
+        style.addProperty("background", "url('" + SiteImages.INSTANCE.pointer().getURL() + "') no-repeat scroll 50% 100% transparent");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, MainNavigViewImpl.StyleSuffix.Label));
+        style.addProperty("height", "57px");
         style.addProperty("line-height", "74px");
         style.addProperty("color", "#fff");
         style.addProperty("font-size", "15px");

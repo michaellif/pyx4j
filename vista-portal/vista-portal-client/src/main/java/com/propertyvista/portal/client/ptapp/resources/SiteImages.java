@@ -81,8 +81,20 @@ public interface SiteImages extends ClientBundle {
     @Source("check.png")
     ImageResource check();
 
+    @Source("check_hover.png")
+    ImageResource checkHover();
+
+    @Source("warning_el.png")
+    ImageResource warning();
+
+    @Source("warning_el_hover.png")
+    ImageResource warningHover();
+
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
+
+    @Source("pointer_menu.png")
+    ImageResource pointer();
 
     @Source("qv.png")
     ImageResource qv();
