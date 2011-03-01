@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -58,7 +59,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
             @SuppressWarnings("unchecked")
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
 
                 FlowPanel main = new FlowPanel();
                 main.add(DecorationUtils.inline(masterForm.create(proto().tenant(), this), "52%", null));
@@ -76,7 +77,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 if (valueChangeHandler != null)
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
 
-                setWidget(main);
+                return main;
             }
         };
     }

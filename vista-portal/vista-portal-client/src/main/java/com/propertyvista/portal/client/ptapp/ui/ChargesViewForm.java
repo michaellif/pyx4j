@@ -18,6 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -45,7 +46,7 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         // TODO move to constructor
         valueChangeHandler = new ValueChangeHandler() {
 
@@ -76,7 +77,7 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         main.add(create(proto().paymentSplitCharges().charges(), this));
         main.add(createTotal(proto().paymentSplitCharges().total()));
 
-        setWidget(main);
+        return main;
     }
 
     private Widget createHeader(IObject<?> member) {

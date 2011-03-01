@@ -36,6 +36,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -74,7 +75,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
         // Form first table header: 
@@ -131,8 +132,9 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         main.add(caption);
         main.add(new VistaWidgetDecorator(create(proto().rentStart(), this), 0, 7.2));
 
-        setWidget(main);
         addValidations();
+
+        return main;
     }
 
     private void addValidations() {

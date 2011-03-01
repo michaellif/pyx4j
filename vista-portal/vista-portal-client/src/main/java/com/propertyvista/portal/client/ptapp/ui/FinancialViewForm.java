@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -46,7 +47,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         main.add(new ViewHeaderDecorator(new HTML("<h4>Income sources</h4>")));
         main.add(create(proto().incomes(), this));
@@ -60,7 +61,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         main.add(create(proto().guarantors(), this));
         main.add(new HTML());
 
-        setWidget(main);
+        return main;
     }
 
     @Override

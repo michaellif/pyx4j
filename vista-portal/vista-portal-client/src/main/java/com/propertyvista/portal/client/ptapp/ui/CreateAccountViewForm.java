@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
@@ -28,7 +29,7 @@ public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         HTML header = new HTML("<h2>Create an Account</h2>");
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
@@ -39,7 +40,7 @@ public class CreateAccountViewForm extends CEntityForm<AccountCreationRequest> {
         main.add(new VistaWidgetDecorator(create(proto().password(), this), 62, 152));
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(create(proto().captcha(), this), 62, 152));
-        setWidget(main);
+        return main;
     }
 
 }

@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
@@ -49,10 +50,10 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         main.add(create(proto().tenants(), this));
-        setWidget(main);
+        return main;
     }
 
     @Override
@@ -97,9 +98,9 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
                     @SuppressWarnings("rawtypes")
                     @Override
-                    public void createContent() {
+                    public IsWidget createContent() {
                         if (!isFirst()) {
-                            super.createContent();
+                            return super.createContent();
                         } else {
                             FlowPanel main = new FlowPanel();
                             main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -118,7 +119,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                                 }
                                 main.add(createDecorator(component, column.getWidth()));
                             }
-                            setWidget(main);
+                            return main;
                         }
                     }
 

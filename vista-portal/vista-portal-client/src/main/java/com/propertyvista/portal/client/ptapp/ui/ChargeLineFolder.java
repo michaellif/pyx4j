@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -49,11 +50,11 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
             }
 
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), "60%", null));
                 main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
-                setWidget(main);
+                return main;
             }
         };
     }

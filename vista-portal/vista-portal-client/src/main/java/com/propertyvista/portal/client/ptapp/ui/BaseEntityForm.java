@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
@@ -60,8 +61,8 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         }
 
         @Override
-        public void createContent() {
-            setWidget(create(proto().amount(), this));
+        public IsWidget createContent() {
+            return create(proto().amount(), this);
         }
     }
 

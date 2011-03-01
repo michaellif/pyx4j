@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -50,7 +51,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
@@ -143,7 +144,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new HTML("<p/><h6>Contact2</h6>"));
         main.add(create(proto().emergencyContact2(), this));
 
-        setWidget(main);
+        return main;
     }
 
     @Override
@@ -160,7 +161,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     private CEntityEditableComponent<Address> createAddressEditor() {
         return new CEntityEditableComponent<Address>(Address.class) {
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 createIAddress(main, proto(), this);
                 DecorationData decorData = new DecorationData();
@@ -186,7 +187,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 decorData.componentWidth = 30;
                 main.add(new VistaWidgetDecorator(create(proto().managerName(), this), decorData));
                 main.add(new HTML());
-                setWidget(main);
+                return main;
             }
         };
     }
@@ -194,7 +195,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     private CEntityEditableComponent<EmergencyContact> createEmergencyContactEditor() {
         return new CEntityEditableComponent<EmergencyContact>(EmergencyContact.class) {
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 DecorationData decorData = new DecorationData();
                 decorData.componentWidth = 12;
@@ -234,7 +235,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 decorData.componentWidth = 7;
                 main.add(new VistaWidgetDecorator(create(proto().address().postalCode(), this), decorData));
                 main.add(new HTML());
-                setWidget(main);
+                return main;
+
             }
         };
     }

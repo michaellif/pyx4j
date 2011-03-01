@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -120,7 +121,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
 
         /**
          * create view processing object first! Note!!! because createContent has being
@@ -160,7 +161,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
         main.add(signatureView = new SignatureView());
 
-        setWidget(main);
+        return main;
     }
 
     @Override
@@ -858,7 +859,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                     }
 
                     @Override
-                    public void createContent() {
+                    public IsWidget createContent() {
                         FlowPanel main = new FlowPanel();
 
                         Widget income = formRow(proto().incomeSource());
@@ -874,7 +875,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                         main.getElement().getStyle().setPaddingLeft(2, Unit.EM);
                         main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
                         main.setWidth("100%");
-                        setWidget(main);
+                        return main;
                     }
 
                     @Override
@@ -1039,7 +1040,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                     }
 
                     @Override
-                    public void createContent() {
+                    public IsWidget createContent() {
                         FlowPanel main = new FlowPanel();
 
                         main.add(formRow(proto().assetType()));
@@ -1048,7 +1049,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
                         main.getElement().getStyle().setPaddingLeft(2, Unit.EM);
                         main.setWidth("100%");
-                        setWidget(main);
+                        return main;
                     }
 
                     Widget formRow(IObject<?> value) {
@@ -1084,7 +1085,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                     }
 
                     @Override
-                    public void createContent() {
+                    public IsWidget createContent() {
                         VerticalPanel main = new VerticalPanel();
 
                         main.add(createFullName(proto()));
@@ -1093,7 +1094,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
                         main.getElement().getStyle().setPaddingLeft(2, Unit.EM);
                         main.setWidth("100%");
-                        setWidget(main);
+                        return main;
                     }
 
                     Widget formRow(IObject<?> value) {

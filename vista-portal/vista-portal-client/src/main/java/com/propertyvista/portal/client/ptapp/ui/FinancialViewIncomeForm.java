@@ -17,6 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
@@ -57,7 +58,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
         @SuppressWarnings("unchecked")
@@ -77,7 +78,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         main.add(student = createStudentPanel());
         main.add(socialservices = createSocialPanel());
 
-        setWidget(main);
+        return main;
     }
 
     @Override
@@ -187,7 +188,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
         return new CEntityEditableComponent<Employer>(Employer.class) {
 
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 DecorationData decorData = new DecorationData();
                 decorData.componentWidth = 12;
@@ -198,7 +199,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(new VistaWidgetDecorator(create(proto().employedForYears(), this), decorData));
                 main.add(new HTML());
                 parentForm.createIEmploymentInfo(main, proto(), this);
-                setWidget(main);
+                return main;
             }
 
         };
@@ -207,14 +208,14 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     private CEntityEditableComponent<SeasonallyEmployed> createSeasonallyEmployedEditor() {
         return new CEntityEditableComponent<SeasonallyEmployed>(SeasonallyEmployed.class) {
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(new HTML());
                 parentForm.createIEmploymentInfo(main, proto(), this);
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
-                setWidget(main);
+                return main;
             }
         };
     }
@@ -222,14 +223,14 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     private CEntityEditableComponent<StudentIncome> createStudentIncomeEditor() {
         return new CEntityEditableComponent<StudentIncome>(StudentIncome.class) {
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 main.add(new HTML());
                 parentForm.createIEmploymentInfo(main, proto(), this);
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
-                setWidget(main);
+                return main;
             }
         };
     }
@@ -237,7 +238,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     private CEntityEditableComponent<SelfEmployed> createSelfEmployedEditor() {
         return new CEntityEditableComponent<SelfEmployed>(SelfEmployed.class) {
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 DecorationData decorData = new DecorationData();
                 decorData = new DecorationData();
@@ -264,7 +265,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
-                setWidget(main);
+                return main;
             }
         };
     }
@@ -272,7 +273,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     private CEntityEditableComponent<SocialServices> createSocialServicesEditor() {
         return new CEntityEditableComponent<SocialServices>(SocialServices.class) {
             @Override
-            public void createContent() {
+            public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
                 DecorationData decorData = new DecorationData();
                 decorData = new DecorationData();
@@ -297,7 +298,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(new HTML());
                 parentForm.createIAddress(main, proto(), this);
                 main.add(new HTML());
-                setWidget(main);
+                return main;
             }
         };
     }

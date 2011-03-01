@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
@@ -26,7 +27,7 @@ public class ReadOnlyMoneyForm extends CEntityEditableComponent<Money> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         CNumberLabel amount = new CNumberLabel();
         amount.setFormat(new IFormat<Number>() {
 
@@ -42,7 +43,8 @@ public class ReadOnlyMoneyForm extends CEntityEditableComponent<Money> {
 
         });
         bind(amount, proto().amount());
-        setWidget(amount);
+        return amount;
+
     }
 
 }

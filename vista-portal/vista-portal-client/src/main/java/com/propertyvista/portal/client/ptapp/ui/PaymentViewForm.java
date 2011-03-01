@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -41,7 +42,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
         main.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
@@ -78,7 +79,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         main.add(new HTML(SiteResources.INSTANCE.paymentTermsNotes().getText()));
 
-        setWidget(main);
+        return main;
     }
 
     private Widget createEcheckPanel() {

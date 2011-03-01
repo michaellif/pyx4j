@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.propertyvista.portal.tester.domain.Department;
 import com.propertyvista.portal.tester.domain.Employee;
@@ -47,7 +48,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         }
 
         @Override
-        public void createContent() {
+        public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
             main.add(new BasicWidgetDecorator(create(proto().name(), this), 140, 180));
             main.add(new Label("Manager:"));
@@ -56,7 +57,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
             main.add(create(proto().employees(), this));
             main.add(new Label("Contractors:"));
             main.add(create(proto().contractors(), this));
-            setWidget(main);
+            return main;
         }
 
         @Override
@@ -82,12 +83,12 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         private CEntityEditableComponent<Employee> createEmployeeEditor() {
             return new CEntityEditableComponent<Employee>(Employee.class) {
                 @Override
-                public void createContent() {
+                public IsWidget createContent() {
                     FlowPanel main = new FlowPanel();
                     main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
                     main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
                     main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
-                    setWidget(main);
+                    return main;
                 }
             };
         }
@@ -146,13 +147,13 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
                     return new CEntityFolderItem<Employee>(Employee.class) {
 
                         @Override
-                        public void createContent() {
+                        public IsWidget createContent() {
                             FlowPanel main = new FlowPanel();
                             main.add(new BasicWidgetDecorator(create(proto().firstName(), this), 140, 180));
                             main.add(new BasicWidgetDecorator(create(proto().lastName(), this), 140, 180));
                             main.add(new BasicWidgetDecorator(create(proto().phone(), this)));
                             main.add(new BasicWidgetDecorator(create(proto().reliable(), this)));
-                            setWidget(main);
+                            return main;
                         }
 
                         @Override

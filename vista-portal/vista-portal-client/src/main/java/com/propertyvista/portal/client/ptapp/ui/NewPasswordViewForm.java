@@ -19,6 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
@@ -54,7 +55,8 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
+        return null;
     }
 
     public void setConversationType(ConversationType type) {

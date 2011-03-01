@@ -19,6 +19,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 
@@ -33,7 +34,7 @@ public class RetrievePasswordViewForm extends CEntityForm<PasswordRetrievalReque
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         HTML header = new HTML("<h2>Retrieve Password</h2>");
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
@@ -42,6 +43,6 @@ public class RetrievePasswordViewForm extends CEntityForm<PasswordRetrievalReque
         main.add(new VistaWidgetDecorator(create(proto().email(), this), 62, 152));
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(create(proto().captcha(), this), 62, 152));
-        setWidget(main);
+        return main;
     }
 }
