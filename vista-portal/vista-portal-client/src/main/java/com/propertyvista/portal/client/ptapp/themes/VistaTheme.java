@@ -893,7 +893,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("color", "#FFFFFF");
         style.addProperty("font-size", "26px");
         style.addProperty("font-weight", "normal");
-        style.addProperty("line-height", "86px");
+        style.addProperty("line-height", "92px");
         style.addProperty("text-transform", "uppercase");
 
         addStyle(style);
