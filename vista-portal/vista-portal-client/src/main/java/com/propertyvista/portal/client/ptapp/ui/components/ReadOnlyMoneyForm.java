@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.domain.Money;
 
@@ -31,9 +32,11 @@ public class ReadOnlyMoneyForm extends CEntityEditableComponent<Money> {
         CNumberLabel amount = new CNumberLabel();
         amount.setFormat(new IFormat<Number>() {
 
+            NumberFormat nf = NumberFormat.getFormat("#.00");
+
             @Override
             public String format(Number value) {
-                return "$" + value;
+                return "$" + nf.format(value);
             }
 
             @Override

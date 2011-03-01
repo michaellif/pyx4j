@@ -30,6 +30,10 @@ public class DomainUtil {
         return currency;
     }
 
+    public static double roundMoney(double value) {
+        return Math.round(value * 100d) / 100d;
+    }
+
     public static Money createMoney(double value) {
         Money money = EntityFactory.create(Money.class);
         money.amount().setValue(value);

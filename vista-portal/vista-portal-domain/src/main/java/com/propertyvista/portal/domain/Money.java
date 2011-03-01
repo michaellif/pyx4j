@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @EmbeddedEntity
-@ToStringFormat("${0}")
+@ToStringFormat("${0,number,#.####}")
 public interface Money extends IEntity {
 
     @ToString(index = 0)

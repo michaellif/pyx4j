@@ -88,7 +88,7 @@ public class ChargesSharedCalculation {
         sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(monthDays).append(")");
 
-        double proratedTotal = monthlyTotal * numDays / monthDays;
+        double proratedTotal = DomainUtil.roundMoney((monthlyTotal * numDays) / monthDays);
 
         ChargeLine proratedCharge = EntityFactory.create(ChargeLine.class);
         proratedCharge.type().setValue(ChargeType.prorated);
@@ -120,7 +120,7 @@ public class ChargesSharedCalculation {
                 applicantCharge = charge;
                 break;
             case CoApplicant:
-                double v = total * charge.percentage().getValue() / 100d;
+                double v = DomainUtil.roundMoney(total * charge.percentage().getValue() / 100d);
                 charge.charge().amount().setValue(v);
                 totalSplit += v; // there may be multiple co-applicants
                 break;
