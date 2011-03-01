@@ -782,14 +782,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         private FlowPanel createFullName(IPerson person) {
             FlowPanel fullname = new FlowPanel();
-            CLabel name = new CLabel();
-            masterForm.bind(name, person.firstName());
-            fullname.add(DecorationUtils.inline(name, "20%", null));
-            name = new CLabel();
-            masterForm.bind(name, person.middleName());
-            fullname.add(DecorationUtils.inline(name, "5%", null));
-            name = new CLabel();
-            ;
+            fullname.add(DecorationUtils.inline(masterForm.create(person.firstName(), masterForm), "20%", null));
+            fullname.add(DecorationUtils.inline(masterForm.create(person.middleName(), masterForm), "5%", null));
             fullname.add(DecorationUtils.inline(masterForm.create(person.lastName(), masterForm), "30%", null));
             fullname.setWidth("50%");
             return fullname;
