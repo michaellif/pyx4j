@@ -85,7 +85,7 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
 
     @Override
     public void setFolderItem(final CEntityFolderItem<?> folderItem) {
-        content.setWidget(folderItem);
+        content.setWidget(folderItem.getContent());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {

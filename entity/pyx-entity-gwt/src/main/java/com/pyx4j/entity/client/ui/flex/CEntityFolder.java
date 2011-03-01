@@ -46,11 +46,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private FolderDecorator<E> folderDecorator;
 
-    private FlowPanel content;
+    private final FlowPanel content;
 
     protected int currentRowDebugId = 0;
 
     public CEntityFolder() {
+        content = new FlowPanel();
     }
 
     @Override
@@ -69,7 +70,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
         asWidget().setWidget(folderDecorator);
 
-        content = new FlowPanel();
         folderDecorator.setFolder(this);
 
         folderDecorator.addItemAddClickHandler(new ClickHandler() {
@@ -110,7 +110,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             public void onSuccess(E result) {
                 comp.setFirst(content.getWidgetCount() == 0);
                 getValue().add(result);
-                comp.setWidget(comp.createContent());
+                comp.getContent().setWidget(comp.createContent());
                 comp.populate(result);
                 adoptFolderItem(comp);
             }
@@ -122,7 +122,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     //TODO add remove handlers
     protected void removeItem(CEntityFolderItem<E> comp, FolderItemDecorator folderItemDecorator) {
         getValue().remove(comp.getValue());
-        abandonFolderItem(folderItemDecorator);
+        abandonFolderItem(comp);
     }
 
     /**
@@ -147,24 +147,26 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             CEntityFolderItem<E> comp = createItem();
             comp.setRowDebugId(++currentRowDebugId);
             comp.setFirst(content.getWidgetCount() == 0);
-            comp.setWidget(comp.createContent());
+            comp.getContent().setWidget(comp.createContent());
             comp.populate(item);
             adoptFolderItem(comp);
         }
     }
 
-    private void abandonFolderItem(FolderItemDecorator folderItemDecorator) {
-        content.remove(folderItemDecorator);
+    private void abandonFolderItem(final CEntityFolderItem<E> comp) {
+        content.remove(comp);
         ValueChangeEvent.fire(this, getValue());
     }
 
     private void adoptFolderItem(final CEntityFolderItem<E> comp) {
-        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
-        folderItemDecorator.setFolderItem(comp);
 
-        folderItemDecorator.asWidget().ensureDebugId(comp.getDebugId().getDebugIdString());
-        content.add(folderItemDecorator);
+        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
+
+        comp.setFolderItemDecorator(folderItemDecorator);
+
+        content.add(comp);
         ValueChangeEvent.fire(this, getValue());
+
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
 
             @Override
@@ -172,6 +174,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
                 removeItem(comp, folderItemDecorator);
             }
         });
+
     }
 
     @Override

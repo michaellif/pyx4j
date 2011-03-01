@@ -52,7 +52,7 @@ public class BoxFolderItemDecorator extends FlowPanel implements FolderItemDecor
 
     @Override
     public void setFolderItem(CEntityFolderItem<?> folderItem) {
-        content.setWidget(folderItem);
+        content.setWidget(folderItem.getContent());
     }
 
     @Override
