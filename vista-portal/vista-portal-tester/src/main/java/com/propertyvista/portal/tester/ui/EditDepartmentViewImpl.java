@@ -39,7 +39,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<Department> form;
+    private final CEntityForm<Department> form;
 
     private static class DepartmentForm extends CEntityForm<Department> {
 
@@ -173,6 +173,7 @@ public class EditDepartmentViewImpl extends FlowPanel implements EditDepartmentV
         add(labael);
 
         form = new DepartmentForm();
+        form.initialize();
 
         add(form);
 

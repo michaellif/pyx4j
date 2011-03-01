@@ -32,7 +32,7 @@ import com.propertyvista.portal.domain.DemoData;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -43,7 +43,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<AuthenticationRequest> form;
+    private final CEntityForm<AuthenticationRequest> form;
 
     private int devCount = 1;
 
@@ -54,6 +54,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
     public LoginViewImpl() {
 
         form = new LoginViewForm();
+        form.initialize();
         form.get(form.proto().captcha()).setVisible(false);
         form.populate(null);
         add(form);

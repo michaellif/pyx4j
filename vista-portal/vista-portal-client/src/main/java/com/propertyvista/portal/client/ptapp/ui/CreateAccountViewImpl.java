@@ -38,7 +38,7 @@ import com.propertyvista.portal.rpc.pt.AccountCreationRequest;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -49,7 +49,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<AccountCreationRequest> form;
+    private final CEntityForm<AccountCreationRequest> form;
 
     private int devCount = 1;
 
@@ -94,6 +94,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
         add(rightColumn);
 
         form = new CreateAccountViewForm();
+        form.initialize();
         form.populate(null);
         rightColumn.add(form);
 

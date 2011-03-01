@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 
-import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
@@ -32,11 +32,12 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
 
     private Presenter presenter;
 
-    private final CEntityEditableComponent<PasswordRetrievalRequest> form;
+    private final CEntityForm<PasswordRetrievalRequest> form;
 
     public RetrievePasswordViewImpl() {
 
         form = new RetrievePasswordViewForm();
+        form.initialize();
         form.populate(null);
         add(form);
 

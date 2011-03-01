@@ -35,6 +35,7 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
     public NewPasswordViewImpl() {
 
         form = new NewPasswordViewForm();
+        form.initialize();
         form.populate(null);
         add(form);
 
