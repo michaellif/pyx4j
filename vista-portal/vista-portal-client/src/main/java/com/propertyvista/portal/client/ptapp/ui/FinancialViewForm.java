@@ -43,12 +43,19 @@ import com.pyx4j.entity.shared.IObject;
 @Singleton
 public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> {
 
+    private boolean readOnlyMode = false;
+
     public FinancialViewForm() {
         super(PotentialTenantFinancial.class);
     }
 
     public FinancialViewForm(EntityFormComponentFactory factory) {
         super(PotentialTenantFinancial.class, factory);
+        readOnlyMode = true;
+    }
+
+    public boolean isReadOnlyMode() {
+        return readOnlyMode;
     }
 
     @Override

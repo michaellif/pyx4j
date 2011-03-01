@@ -38,9 +38,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
-    private final BaseEntityForm<?> parentForm;
+    private final FinancialViewForm parentForm;
 
-    public FinancialViewIncomeForm(final BaseEntityForm<?> parentForm) {
+    public FinancialViewIncomeForm(final FinancialViewForm parentForm) {
         super(TenantIncome.class);
         this.parentForm = parentForm;
     }
@@ -49,16 +49,19 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        @SuppressWarnings("unchecked")
-        CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) create(proto().incomeSource(), this);
-        incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<IncomeSource> event) {
-                setVisibility(event.getValue());
-            }
-        });
-
-        main.add(new VistaWidgetDecorator(incomeSource));
+        if (!parentForm.isReadOnlyMode()) {
+            @SuppressWarnings("unchecked")
+            CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) create(proto().incomeSource(), this);
+            incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<IncomeSource> event) {
+                    setVisibility(event.getValue());
+                }
+            });
+            main.add(new VistaWidgetDecorator(incomeSource));
+        } else {
+            main.add(new VistaWidgetDecorator(create(proto().incomeSource(), this)));
+        }
 
         main.add(create(proto().employer(), this));
         main.add(create(proto().seasonallyEmployed(), this));

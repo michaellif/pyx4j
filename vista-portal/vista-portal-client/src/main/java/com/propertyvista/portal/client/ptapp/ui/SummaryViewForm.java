@@ -45,9 +45,6 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
-import com.propertyvista.portal.domain.Money;
-import com.propertyvista.portal.domain.pt.ChargeLine;
-import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.IncomeSource;
@@ -56,7 +53,6 @@ import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.TenantAsset;
-import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.domain.pt.TenantGuarantor;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.Vehicle;
@@ -69,8 +65,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -114,7 +108,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public IsWidget createContent() {
         main = new FlowPanel();
 
-        main.add(create(proto().financial(), this));
+//        main.add(create(proto().financial(), this));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
         main.add(apartmentView = new ApartmentView());
@@ -128,7 +122,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(createHeaderWithEditLink("Info", new SiteMap.Info()));
         main.add(tenantsView = new TenantsView());
 
-//        main.add(create(proto().financial(), this));
+        main.add(create(proto().financial(), this));
 
         main.add(createHeaderWithEditLink("Pets", new SiteMap.Pets()));
         main.add(petsTable = new PetsTable());
@@ -144,12 +138,23 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         return main;
     }
 
+//    @Override
+//    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
+//        if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
+//            return new FinancialViewForm(factory);
+//        } else if (member.getValueClass().equals(Charges.class)) {
+//            return new ChargesViewForm(factory);
+//        } else {
+//            return super.createMemberEditor(member);
+//        }
+//    }
+
     @Override
     protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
         if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
-            return new FinancialViewForm(/* factory */);
+            return new FinancialViewForm(new ReadOnlyComponentFactory());
         } else if (member.getValueClass().equals(Charges.class)) {
-            return new ChargesViewForm(factory);
+            return new ChargesViewForm(new ReadOnlyComponentFactory());
         } else {
             return super.createMemberEditor(member);
         }
