@@ -28,6 +28,7 @@ import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -46,12 +47,19 @@ import com.pyx4j.forms.client.ui.ValidationResults;
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
 
+    private boolean readOnlyMode = false;
+
     public PetsViewForm() {
         super(Pets.class);
     }
 
-    public PetsViewForm(EntityFormComponentFactory factory) {
+    public PetsViewForm(EditableComponentFactory factory) {
         super(Pets.class, factory);
+        readOnlyMode = true;
+    }
+
+    public boolean isReadOnlyMode() {
+        return readOnlyMode;
     }
 
     @Override

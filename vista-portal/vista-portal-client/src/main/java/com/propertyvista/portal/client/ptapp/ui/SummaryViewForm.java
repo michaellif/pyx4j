@@ -44,6 +44,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorat
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
@@ -96,10 +97,11 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(createHeaderWithEditLink("Info", new SiteMap.Info()));
         main.add(tenantsView = new TenantsView());
 
+        main.add(createHeaderWithEditLink("Financial", new SiteMap.Financial()));
         main.add(inject(proto().financial()));
 
         main.add(createHeaderWithEditLink("Pets", new SiteMap.Pets()));
-        //main.add(petsTable = new PetsTable());
+        main.add(inject(proto().pets()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
         main.add(new LeaseTermsCheck());
@@ -112,21 +114,12 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         return main;
     }
 
-//    @Override
-//    protected CEntityEditableComponent<?> createMemberEditor(IObject<?> member) {
-//        if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
-//            return new FinancialViewForm(factory);
-//        } else if (member.getValueClass().equals(Charges.class)) {
-//            return new ChargesViewForm(factory);
-//        } else {
-//            return super.createMemberEditor(member);
-//        }
-//    }
-
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
         if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
             return new FinancialViewForm(this);
+        } else if (member.getValueClass().equals(Pets.class)) {
+            return new PetsViewForm(this);
         } else if (member.getValueClass().equals(Charges.class)) {
             return new ChargesViewForm(this);
         } else {
