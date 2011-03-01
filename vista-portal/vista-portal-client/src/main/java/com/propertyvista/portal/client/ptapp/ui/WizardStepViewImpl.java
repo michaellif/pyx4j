@@ -40,6 +40,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
     public WizardStepViewImpl(final CEntityForm<E> form) {
         this.form = form;
+        form.initialize();
         add(form);
 
         Button saveButton = new Button(actionName());
