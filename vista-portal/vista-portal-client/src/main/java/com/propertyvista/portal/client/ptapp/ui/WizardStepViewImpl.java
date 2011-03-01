@@ -42,7 +42,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         this.form = form;
         add(form);
 
-        Button saveButton = new Button(i18n.tr("Save and Continue"));
+        Button saveButton = new Button(actionName());
         saveButton.ensureDebugId(CrudDebugId.Crud_Save.toString());
         saveButton.addClickHandler(new ClickHandler() {
 
@@ -71,6 +71,10 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         getElement().getStyle().setMarginBottom(15, Unit.PX);
     }
 
+    protected String actionName() {
+        return i18n.tr("Save and Continue");
+    }
+
     @Override
     public void setPresenter(T presenter) {
         this.presenter = presenter;
@@ -94,6 +98,6 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     }
 
     public static native void scrollToTop() /*-{
-        $wnd.scroll(0, 0);
+		$wnd.scroll(0, 0);
     }-*/;
 }

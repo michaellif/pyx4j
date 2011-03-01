@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.ui.PaymentView.PaymentPresenter;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
@@ -20,8 +23,15 @@ import com.propertyvista.portal.domain.pt.PaymentInfo;
 @Singleton
 public class PaymentViewImpl extends WizardStepViewImpl<PaymentInfo, PaymentPresenter> implements PaymentView {
 
+    private static I18n i18n = I18nFactory.getI18n(PaymentViewImpl.class);
+
     public PaymentViewImpl() {
         super(new PaymentViewForm());
+    }
+
+    @Override
+    protected String actionName() {
+        return i18n.tr("Pay and Continue");
     }
 
 }

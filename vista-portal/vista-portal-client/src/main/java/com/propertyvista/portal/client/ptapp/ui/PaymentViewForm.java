@@ -35,7 +35,7 @@ import com.propertyvista.portal.domain.pt.PaymentInfo;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CRadioGroup;
 
 public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
@@ -53,7 +53,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         main.add(new ViewHeaderDecorator(proto().type()));
         @SuppressWarnings("unchecked")
-        CComboBox<PaymentType> paymentType = (CComboBox<PaymentType>) create(proto().type(), this);
+        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) create(proto().type(), this);
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
@@ -98,6 +98,12 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         get(proto().echeck()).setVisible(!card);
         get(proto().creditCard()).setVisible(card);
+    }
+
+    @Override
+    public void populate(PaymentInfo value) {
+        super.populate(value);
+        setVisibility(value.type().getValue());
     }
 
     @Override
