@@ -28,26 +28,24 @@ import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.TenantCharge;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IObject;
 
 @Singleton
 public class ChargesViewForm extends BaseEntityForm<Charges> {
 
     @SuppressWarnings("rawtypes")
-    private ValueChangeHandler valueChangeHandler;
-
-    public ChargesViewForm() {
-        super(Charges.class);
-    }
+    private final ValueChangeHandler valueChangeHandler;
 
     @SuppressWarnings("rawtypes")
-    @Override
-    public IsWidget createContent() {
-        // TODO move to constructor
+    public ChargesViewForm() {
+        super(Charges.class);
+
         valueChangeHandler = new ValueChangeHandler() {
 
             @Override
@@ -57,32 +55,40 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
             }
         };
 
+    }
+
+    public ChargesViewForm(EntityFormComponentFactory factory) {
+        super(Charges.class, factory);
+
+        valueChangeHandler = null;
+    }
+
+    @Override
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(createHeader(proto().monthlyCharges()));
+        main.add(new ViewHeaderDecorator(proto().monthlyCharges()));
         main.add(create(proto().monthlyCharges().charges(), this));
-        main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
-        main.add(create(proto().monthlyCharges().upgradeCharges(), this));
+        if (valueChangeHandler != null) {
+            main.add(createHeader2(proto().monthlyCharges().upgradeCharges()));
+            main.add(create(proto().monthlyCharges().upgradeCharges(), this));
+        }
+
         main.add(createTotal(proto().monthlyCharges().total()));
 
-        main.add(createHeader(proto().proRatedCharges()));
+        main.add(new ViewHeaderDecorator(proto().proRatedCharges()));
         main.add(create(proto().proRatedCharges().charges(), this));
         main.add(createTotal(proto().proRatedCharges().total()));
 
-        main.add(createHeader(proto().applicationCharges()));
+        main.add(new ViewHeaderDecorator(proto().applicationCharges()));
         main.add(create(proto().applicationCharges().charges(), this));
         main.add(createTotal(proto().applicationCharges().total()));
 
-        main.add(createHeader(proto().paymentSplitCharges()));
+        main.add(new ViewHeaderDecorator(proto().paymentSplitCharges()));
         main.add(create(proto().paymentSplitCharges().charges(), this));
         main.add(createTotal(proto().paymentSplitCharges().total()));
 
         return main;
-    }
-
-    private Widget createHeader(IObject<?> member) {
-
-        return new ViewHeaderDecorator(new HTML("<h4>" + member.getMeta().getCaption() + "</h4>"));
     }
 
     private Widget createHeader2(IObject<?> member) {
@@ -120,5 +126,4 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
             return super.createMemberFolderEditor(member);
         }
     }
-
 }

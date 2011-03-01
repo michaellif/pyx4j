@@ -74,8 +74,9 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 }
 
                 main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
-                if (valueChangeHandler != null)
+                if (valueChangeHandler != null) {
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
+                }
 
                 return main;
             }

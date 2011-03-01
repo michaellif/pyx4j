@@ -27,6 +27,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectable> {
 
@@ -63,19 +64,22 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
                 String width = "60%";
                 if (valueChangeHandler != null) {
-                    CCheckBox cb = (CCheckBox) masterForm.create(proto().selected(), this);
-                    cb.addValueChangeHandler(valueChangeHandler);
-                    //TODO this is hack for Misha to fix.
-                    cb.asWidget().setStyleName(null);
-                    main.add(DecorationUtils.inline(cb, "3%", null));
-                    width = "57%";
+                    main.add(DecorationUtils.inline(masterForm.create(proto().selected(), this), "3%", null));
+                    CEditableComponent<Boolean, ?> cb = get(proto().selected());
+                    if (cb instanceof CCheckBox) {
+                        cb.addValueChangeHandler(valueChangeHandler);
 
-                    main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
-                    main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+                        //TODO this is hack for Misha to fix.
+                        cb.asWidget().setStyleName(null);
+                    }
+                    width = "57%";
                 }
+
+                main.add(DecorationUtils.inline(masterForm.create(proto().type(), this), width, null));
+                main.add(DecorationUtils.inline(masterForm.create(proto().charge(), this), "10%", "right"));
+
                 return main;
             }
         };
     }
-
 }
