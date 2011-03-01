@@ -17,9 +17,9 @@ import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 
 public class DemoData {
 
-    public static int MAX_CUSTOMERS = 100;
+    public static int MAX_CUSTOMERS = 20;
 
-    public static int MAX_EMPLOYEE = 300;
+    public static int MAX_EMPLOYEE = 100;
 
     public static int MAX_ADMIN = 2;
 
@@ -35,11 +35,11 @@ public class DemoData {
 
     public static int NUM_POTENTIAL_TENANTS = 4;
 
-    public static int NUM_FLOORS = 7;
+    public static int NUM_FLOORS = 4;
 
-    public static int NUM_FLOORPLANS = 5;
+    public static int NUM_FLOORPLANS = 2;
 
-    public static int NUM_UNITS_PER_FLOOR = 8;
+    public static int NUM_UNITS_PER_FLOOR = 4;
 
     public static final String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
 

@@ -576,7 +576,7 @@ public class PreloadPT extends AbstractDataPreloader {
         ptf.application().set(application);
         ptf.tenant().set(tenant);
 
-        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
+        for (int i = 0; i < RandomUtil.randomInt(2); i++) {
             TenantIncome income = EntityFactory.create(TenantIncome.class);
 
             income.incomeSource().setValue(IncomeSource.fulltime);
@@ -588,7 +588,7 @@ public class PreloadPT extends AbstractDataPreloader {
             ptf.incomes().add(income);
         }
 
-        for (int i = 0; i < RandomUtil.randomInt(5); i++) {
+        for (int i = 0; i < RandomUtil.randomInt(3); i++) {
             TenantAsset asset = EntityFactory.create(TenantAsset.class);
 
             asset.assetType().setValue(RandomUtil.random(AssetType.values()));
