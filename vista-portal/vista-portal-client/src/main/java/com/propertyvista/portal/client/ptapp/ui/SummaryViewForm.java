@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorator;
@@ -51,6 +52,7 @@ import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
@@ -273,19 +275,33 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class LeaseTermView extends FlowPanel {
 
-        private final FlowPanel content;
-
         public LeaseTermView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
             // add table content panel:
-            add(innerLevelElementElignment(content = new FlowPanel()));
+            FlowPanel content = new FlowPanel();
             content.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             content.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
-            content.setHeight("100%");
+            Widget label = inject(proto().unitSelection().markerRent().leaseTerm()).asWidget();
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            content.add(DecorationUtils.inline(label, "auto"));
+            label = new HTML("&nbsp month Rent");
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            content.add(DecorationUtils.inline(label));
+
+            content.add(DecorationUtils.block(new HTML()));
+
+            label = inject(proto().unitSelection().markerRent().rent()).asWidget();
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            content.add(DecorationUtils.inline(label, "auto"));
+            label = new HTML("&nbsp / month");
+            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            content.add(DecorationUtils.inline(label));
+
+            add(innerLevelElementElignment(content));
             content.setWidth("30%");
 
             // add static lease term blah-blah:
@@ -296,18 +312,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         }
 
         public void populate(Summary value) {
-
-            content.clear();
-
-            HTML label = new HTML(value.unitSelection().markerRent().leaseTerm().getStringView() + "&nbsp month Rent");
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            content.add(label);
-
-            label = new HTML(value.unitSelection().markerRent().rent().currency().getStringView()
-                    + value.unitSelection().markerRent().rent().amount().getStringView() + " / month");
-            label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            label.getElement().getStyle().setMarginTop(1, Unit.EM);
-            content.add(label);
         }
     }
 
@@ -711,16 +715,18 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class LeaseTermsCheck extends FlowPanel {
 
-        private final HTML leaseTermContent = new HTML();
-
         public LeaseTermsCheck() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
-            // add table content panel:
+            // add terms content:
+            CLabel leaseTermContent = new CLabel();
+            leaseTermContent.setAllowHtml(true);
+            leaseTermContent.setWordWrap(true);
+            bind(leaseTermContent, proto().leaseTerms().text());
 
-            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent);
+            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent.asWidget());
             leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
             leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
             leaseTerms.getElement().getStyle().setBorderColor("black");
@@ -731,6 +737,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTerms.setHeight("20em");
             add(leaseTerms);
 
+            // "I Agree" check-box:
             VistaWidgetDecorator agree = new VistaWidgetDecorator(inject(proto().agree()), new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
@@ -739,8 +746,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         }
 
         public void populate(Summary value) {
-            leaseTermContent.setHTML(value.leaseTerms().text().getStringView());
-            //            leaseTermContent.setText(SiteResources.INSTANCE.leaseTerms().getText());
         }
     }
 
