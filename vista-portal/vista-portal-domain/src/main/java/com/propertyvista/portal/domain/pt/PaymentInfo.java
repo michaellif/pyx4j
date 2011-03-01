@@ -54,6 +54,8 @@ public interface PaymentInfo extends IApplicationEntity {
 
     Address currentAddress();
 
+    IPrimitive<String> currentPhone();
+
     @EmbeddedEntity
     BillingAddress billingAddress();
 

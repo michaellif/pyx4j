@@ -26,14 +26,17 @@ import com.propertyvista.portal.domain.IUserEntity;
 import com.propertyvista.portal.domain.Picture;
 import com.propertyvista.portal.domain.Unit;
 import com.propertyvista.portal.domain.User;
+import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ApplicationProgress;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
+import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IApplicationEntity;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
+import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
@@ -44,6 +47,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
+import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
@@ -205,6 +209,9 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                         ret = EntityFactory.create(Summary.class);
                     } else if (request.proto() instanceof PotentialTenantFinancial) {
                         ret = createFinancial();
+                    } else if (request.proto() instanceof PaymentInfo) {
+                        ret = EntityFactory.create(PaymentInfo.class);
+                        ((PaymentInfo) ret).type().setValue(PaymentType.Echeck);
                     }
                 }
             } else {
@@ -219,6 +226,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 ChargesServerCalculation.calculateCharges(charges);
             } else if (ret instanceof Summary) {
                 retrieveSummary((Summary) ret);
+            } else if (ret instanceof PaymentInfo) {
+                retrievePaymentInfo((PaymentInfo) ret);
             } else if ((ret instanceof Pets) || (request.proto() instanceof Pets)) {
                 if (ret == null) {
                     ret = EntityFactory.create(Pets.class);
@@ -290,6 +299,30 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             EntityQueryCriteria<T> criteria = (EntityQueryCriteria<T>) EntityQueryCriteria.create(entity.getValueClass());
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
             entity.set(secureRetrieve(criteria));
+        }
+
+        private void retrievePaymentInfo(PaymentInfo paymentInfo) {
+            // TODO VladS find a better way to retrieve just monthlyCharges
+            Charges charges = EntityFactory.create(Charges.class);
+            retrieveApplicationEntity(charges);
+            ChargesSharedCalculation.calculateTotal(paymentInfo.applicationCharges());
+            for (ChargeLine charge : charges.applicationCharges().charges()) {
+                if (charge.type().getValue() == ChargeLine.ChargeType.applicationFee) {
+                    paymentInfo.applicationFee().set(charge);
+                } else {
+                    paymentInfo.applicationCharges().charges().add(charge);
+                }
+            }
+            // Get the currentAddress
+            EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+            for (PotentialTenantInfo tenantInfo : secureRetrieve(criteria).tenants()) {
+                if (tenantInfo.relationship().getValue().equals(Relationship.Applicant)) {
+                    paymentInfo.currentAddress().set(tenantInfo.currentAddress());
+                    paymentInfo.currentPhone().set(tenantInfo.homePhone());
+                    break;
+                }
+            }
         }
     }
 

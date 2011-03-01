@@ -25,16 +25,21 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
+import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
+import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 
 public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
@@ -49,6 +54,17 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
+        main.add(new ViewHeaderDecorator(proto().applicationCharges()));
+        main.add(create(proto().applicationCharges().charges(), this));
+
+        main.add(new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM));
+
+        FlowPanel applicationFeePanel = new FlowPanel();
+        applicationFeePanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        applicationFeePanel.add(DecorationUtils.inline(create(proto().applicationFee().type(), this), "60%", null));
+        applicationFeePanel.add(DecorationUtils.inline(create(proto().applicationFee().charge(), this), "10%", "right"));
+        main.add(applicationFeePanel);
+
         main.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
 
         main.add(new ViewHeaderDecorator(proto().type()));
@@ -57,7 +73,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                setVisibility(event.getValue());
+                setInstrumentsVisibility(event.getValue());
             }
         });
         main.add(paymentType);
@@ -71,7 +87,14 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         main.add(new ViewHeaderDecorator(proto().billingAddress()));
         DecorationData decorData = new DecorationData();
         decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(create(proto().sameAsCurrent(), this), decorData));
+        CCheckBox sameAsCurrent = (CCheckBox) create(proto().sameAsCurrent(), this);
+        main.add(new VistaWidgetDecorator(sameAsCurrent, decorData));
+        sameAsCurrent.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                setAsCurrentAddress(event.getValue());
+            }
+        });
 
         createIAddress(main, proto().billingAddress(), this);
 
@@ -93,17 +116,39 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         return main;
     }
 
-    private void setVisibility(PaymentType value) {
+    private void setInstrumentsVisibility(PaymentType value) {
         boolean card = (value != PaymentType.Echeck);
 
         get(proto().echeck()).setVisible(!card);
         get(proto().creditCard()).setVisible(card);
     }
 
+    private void setAsCurrentAddress(Boolean value) {
+        boolean editable = true;
+        if (value == Boolean.TRUE) {
+            //TODO use a better forms and copy of data
+            get(proto().billingAddress().street1()).setValue(getValue().currentAddress().street1().getValue());
+            get(proto().billingAddress().street2()).setValue(getValue().currentAddress().street2().getValue());
+            get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
+            get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
+            get(proto().billingAddress().province()).setValue(getValue().currentAddress().province().getValue());
+            get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
+            editable = false;
+        }
+
+        get(proto().billingAddress().street1()).setEditable(editable);
+        get(proto().billingAddress().street2()).setEditable(editable);
+        get(proto().billingAddress().city()).setEditable(editable);
+        get(proto().billingAddress().postalCode()).setEditable(editable);
+        get(proto().billingAddress().province()).setEditable(editable);
+        get(proto().billingAddress().phone()).setEditable(editable);
+    }
+
     @Override
     public void populate(PaymentInfo value) {
         super.populate(value);
-        setVisibility(value.type().getValue());
+        setInstrumentsVisibility(value.type().getValue());
+        setAsCurrentAddress(value.sameAsCurrent().getValue());
     }
 
     @Override
@@ -114,6 +159,15 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
             return createCreditCardInfoEditor();
         } else {
             return super.createMemberEditor(member);
+        }
+    }
+
+    @Override
+    protected CEntityFolder<?> createMemberFolderEditor(IObject<?> member) {
+        if (member.getValueClass().equals(ChargeLine.class)) {
+            return new ChargeLineFolder(this);
+        } else {
+            return super.createMemberFolderEditor(member);
         }
     }
 
