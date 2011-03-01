@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexConextComponent,
+public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexContentComponent,
         PropertyChangeHandler {
 
     private final EntityBinder<E> binder;
@@ -42,9 +42,6 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
     public CEntityEditableComponent(Class<E> clazz) {
         binder = new EntityBinder<E>(clazz);
     }
-
-    @Override
-    public abstract void createContent();
 
     public EntityBinder<E> binder() {
         return binder;
@@ -121,8 +118,10 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         binder.bind(component, member);
         component.addPropertyChangeHandler(this);
 
-        if (component instanceof IFlexConextComponent) {
-            ((IFlexConextComponent) component).createContent();
+        if (component instanceof CEntityFolder) {
+            ((CEntityFolder) component).setFolderDecorator(((CEntityFolder) component).createContent());
+        } else if (component instanceof CEntityEditableComponent) {
+            ((CEntityEditableComponent) component).setWidget(((CEntityEditableComponent) component).createContent());
         }
     }
 

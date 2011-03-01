@@ -44,7 +44,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityEditableComp
         super(new EntityFormBinder<E>(rootClass));
         this.factory = factory;
         this.factory.setForm(this);
-        createContent();
+        setWidget(createContent());
     }
 
     public CComponent<?> create(IObject<?> member, CEntityEditableComponent<?> parent) {

@@ -40,7 +40,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IFlexConextComponent {
+public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IFlexContentComponent {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -54,8 +54,8 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     @Override
-    public void createContent() {
-        setFolderDecorator(createFolderDecorator());
+    public FolderDecorator<E> createContent() {
+        return createFolderDecorator();
     }
 
     protected abstract CEntityFolderItem<E> createItem();
@@ -110,7 +110,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             public void onSuccess(E result) {
                 comp.setFirst(content.getWidgetCount() == 0);
                 getValue().add(result);
-                comp.createContent();
+                comp.setWidget(comp.createContent());
                 comp.populate(result);
                 adoptFolderItem(comp);
             }
@@ -147,7 +147,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
             CEntityFolderItem<E> comp = createItem();
             comp.setRowDebugId(++currentRowDebugId);
             comp.setFirst(content.getWidgetCount() == 0);
-            comp.createContent();
+            comp.setWidget(comp.createContent());
             comp.populate(item);
             adoptFolderItem(comp);
         }
@@ -182,6 +182,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public ValidationResults getValidationResults() {
         // TODO Implement propagation of validation
         return null;
+    }
+
+    @Override
+    public void setVisited(boolean visited) {
+        super.setVisited(visited);
     }
 
     public FlowPanel getContent() {

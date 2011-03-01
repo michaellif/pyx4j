@@ -20,12 +20,19 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.entity.shared.IEntity;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityEditableComponent<E> {
+
+    private static final Logger log = LoggerFactory.getLogger(CEntityFolderItem.class);
+
+    private FolderItemDecorator folderItemDecorator;
 
     private boolean first;
 

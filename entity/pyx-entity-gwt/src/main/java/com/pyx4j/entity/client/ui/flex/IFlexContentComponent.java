@@ -20,8 +20,10 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-public interface IFlexConextComponent {
+import com.google.gwt.user.client.ui.IsWidget;
 
-    public void createContent();
+public interface IFlexContentComponent {
+
+    IsWidget createContent();
 
 }

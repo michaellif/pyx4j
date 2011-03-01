@@ -26,6 +26,7 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -45,7 +46,7 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
     }
 
     @Override
-    public void createContent() {
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
         main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.setWidth("100%");
@@ -54,7 +55,7 @@ public abstract class CEntityFolderRow<E extends IEntity> extends CEntityFolderI
             component.setWidth("100%");
             main.add(createDecorator(component, column.getWidth()));
         }
-        setWidget(main);
+        return main;
     }
 
     protected SimplePanel createDecorator(CComponent<?> component, String width) {
