@@ -53,7 +53,8 @@ public class CollectionsTableModel {
         @SuppressWarnings("rawtypes")
         Collection c = (Collection) member.getMemberValue(entity);
         if ((c != null) && (c.size() > maxLength)) {
-            throw new RuntimeException("Member size vialoation in entity '" + entity.getEntityMeta().getCaption() + "' member '" + member.getMemberName() + "'");
+            throw new RuntimeException("Member size vialoation in entity '" + entity.getEntityMeta().getCaption() + "' member '" + member.getMemberName()
+                    + "' size " + c.size() + " is greater than max allowed " + maxLength);
         }
     }
 
