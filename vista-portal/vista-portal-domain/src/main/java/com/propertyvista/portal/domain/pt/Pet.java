@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -88,6 +89,7 @@ public interface Pet extends IEntity {
     public IPrimitive<WeightUnit> weightUnit();
 
     @NotNull
+    @Format("MM/dd/yyyy")
     public IPrimitive<Date> birthDate();
 
     @EmbeddedEntity

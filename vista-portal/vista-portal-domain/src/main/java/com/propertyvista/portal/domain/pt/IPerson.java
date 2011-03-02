@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -39,6 +40,7 @@ public interface IPerson {
 
     @Caption(name = "Birth Date")
     @NotNull
+    @Format("MM/dd/yyyy")
     public abstract IPrimitive<Date> birthDate();
 
     @Editor(type = EditorType.phone)
