@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
 public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
 
     private boolean wordWrap = false;
@@ -75,6 +74,11 @@ public class CAbstractLabel<E> extends CEditableComponent<E, NativeLabel<E>> {
 
     public void setAllowHtml(boolean allowHtml) {
         this.allowHtml = allowHtml;
+    }
+
+    @Override
+    public boolean isEditable() {
+        return false;
     }
 
 }
