@@ -51,6 +51,8 @@ import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 import com.propertyvista.portal.rpc.pt.CurrentApplication;
 import com.propertyvista.portal.rpc.pt.PotentialTenantServices;
 import com.propertyvista.portal.rpc.pt.SiteMap;
+import com.propertyvista.portal.server.campaign.CampaignManager;
+import com.propertyvista.server.domain.CampaignTriger;
 
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
@@ -369,6 +371,10 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
             if (ret instanceof UnitSelection) {
                 loadAvailableUnits((UnitSelection) ret);
+            }
+
+            if (ret instanceof PotentialTenantList) {
+                CampaignManager.fireEvent(CampaignTriger.Registration, (PotentialTenantList) ret);
             }
 
             return ret;

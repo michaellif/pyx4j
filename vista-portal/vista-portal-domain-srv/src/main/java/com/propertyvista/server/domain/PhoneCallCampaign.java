@@ -7,21 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 6, 2011
+ * Created on Mar 2, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.server.domain;
 
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public class VistaDataPreloaders extends DataPreloaderCollection {
+public interface PhoneCallCampaign extends IEntity {
 
-    public VistaDataPreloaders() {
-        add(new LocationsPreload());
-        add(new PreloadUsers());
-        add(new CampaignPreload());
-        add(new PreloadBuildings());
-        add(new PreloadPT());
-    }
+    @MemberColumn(name = "trg")
+    IPrimitive<CampaignTriger> triger();
+
+    IPrimitive<String> campaignid();
+
+    IPrimitive<String> message();
 }

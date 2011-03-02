@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 6, 2011
+ * Created on Mar 2, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader;
+package com.propertyvista.server.domain;
 
-import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+public enum CampaignTriger {
 
-public class VistaDataPreloaders extends DataPreloaderCollection {
+    Registration,
 
-    public VistaDataPreloaders() {
-        add(new LocationsPreload());
-        add(new PreloadUsers());
-        add(new CampaignPreload());
-        add(new PreloadBuildings());
-        add(new PreloadPT());
-    }
+    ApplicationCompleated
+
 }
