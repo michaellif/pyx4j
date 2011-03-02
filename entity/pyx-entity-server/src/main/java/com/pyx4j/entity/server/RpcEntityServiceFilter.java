@@ -78,6 +78,11 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                     throw new Error("Data type corruption");
                 }
                 continue nextValue;
+            } else if (memberName.equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {
+                if ((me.getValue() != null) && (!(me.getValue() instanceof IEntity))) {
+                    throw new Error("Data type corruption");
+                }
+                continue nextValue;
             }
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isRpcTransient()) {
