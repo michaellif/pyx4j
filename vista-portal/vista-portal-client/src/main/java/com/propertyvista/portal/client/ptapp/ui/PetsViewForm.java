@@ -46,6 +46,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
@@ -159,16 +160,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
     }
 
     private boolean hasDuplicates() {
-        // TODO use business Equals
-        for (Pet item : getValue().pets()) {
-            for (Pet otherItem : getValue().pets()) {
-                if ((!item.equals(otherItem)) && item.name().equals(otherItem.name()) && item.type().equals(otherItem.type())
-                        && item.birthDate().equals(otherItem.birthDate())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return EntityGraph.hasBusinessDuplicates(getValue().pets());
     }
 
     @Override

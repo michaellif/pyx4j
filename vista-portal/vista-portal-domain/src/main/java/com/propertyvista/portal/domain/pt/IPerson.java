@@ -15,11 +15,12 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -28,6 +29,7 @@ public interface IPerson {
     @Caption(name = "First Name")
     @ToString(index = 1)
     @NotNull
+    @BusinessEqualValue
     public abstract IPrimitive<String> firstName();
 
     @Caption(name = "Middle")
@@ -36,6 +38,7 @@ public interface IPerson {
     @Caption(name = "Last Name")
     @ToString(index = 2)
     @NotNull
+    @BusinessEqualValue
     public abstract IPrimitive<String> lastName();
 
     @Caption(name = "Birth Date")

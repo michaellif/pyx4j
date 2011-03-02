@@ -15,6 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
@@ -70,9 +71,11 @@ public interface Pet extends IEntity {
 
     @Caption(name = "Pet type")
     @NotNull
+    @BusinessEqualValue
     public IPrimitive<PetType> type();
 
     @NotNull
+    @BusinessEqualValue
     public IPrimitive<String> name();
 
     @Caption(name = "Colour")
@@ -90,6 +93,7 @@ public interface Pet extends IEntity {
 
     @NotNull
     @Format("MM/dd/yyyy")
+    @BusinessEqualValue
     public IPrimitive<Date> birthDate();
 
     @EmbeddedEntity

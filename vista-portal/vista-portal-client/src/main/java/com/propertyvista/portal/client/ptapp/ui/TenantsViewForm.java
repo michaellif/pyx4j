@@ -43,6 +43,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -195,14 +196,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
     }
 
     private boolean hasDuplicates() {
-        for (PotentialTenantInfo tenant : getValue().tenants()) {
-            for (PotentialTenantInfo otherTenant : getValue().tenants()) {
-                if ((!tenant.equals(otherTenant)) && tenant.firstName().equals(otherTenant.firstName()) && tenant.lastName().equals(otherTenant.lastName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return EntityGraph.hasBusinessDuplicates(getValue().tenants());
     }
 
     @Override
