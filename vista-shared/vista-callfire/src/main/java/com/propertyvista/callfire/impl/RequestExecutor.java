@@ -59,8 +59,6 @@ public class RequestExecutor {
 
     private static final String APIKEY = "690124bd5ad1c562d56ffbaadb7f94139ab82fb6";
 
-    private static final String CALLER_NUMBER = "14166653159";
-
     private static final String WEBSERVER_PROTOCOL = "https";
 
     private static final String WEBSERVER_HOST = "www.callfire.com";
@@ -69,7 +67,7 @@ public class RequestExecutor {
 
     private static final String WEBSERVER_CONTEXT = "/cloud/1/";
 
-    static public String createCampaign(String definition) throws URISyntaxException, ClientProtocolException, IOException {
+    static public String createCampaign(String definition, String caller) throws URISyntaxException, ClientProtocolException, IOException {
 
         URI uri = URIUtils.createURI(WEBSERVER_PROTOCOL, WEBSERVER_HOST, WEBSERVER_PORT, WEBSERVER_CONTEXT + "callfirexml/campaign", null, null);
 
@@ -77,7 +75,7 @@ public class RequestExecutor {
         params.add(new BasicNameValuePair("apikey", APIKEY));
         params.add(new BasicNameValuePair("campaignName", "vista-callfire-campaign"));
         params.add(new BasicNameValuePair("isOutbound", "true"));
-        params.add(new BasicNameValuePair("outboundCallerid", CALLER_NUMBER));
+        params.add(new BasicNameValuePair("outboundCallerid", caller));
         params.add(new BasicNameValuePair("callfireXml", definition));
 
         HttpPost request = new HttpPost(uri);
@@ -94,7 +92,7 @@ public class RequestExecutor {
 
     static public boolean sendCalls(String campaignid, String numbers) throws URISyntaxException, ClientProtocolException, IOException {
 
-        URI uri = URIUtils.createURI("https", WEBSERVER_HOST, WEBSERVER_PORT, WEBSERVER_CONTEXT + "callfirexml/campaign", null, null);
+        URI uri = URIUtils.createURI("https", WEBSERVER_HOST, WEBSERVER_PORT, WEBSERVER_CONTEXT + "campaign/" + campaignid + "/call", null, null);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("apikey", APIKEY));
