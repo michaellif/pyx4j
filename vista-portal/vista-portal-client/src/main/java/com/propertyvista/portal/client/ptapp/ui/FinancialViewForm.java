@@ -19,6 +19,7 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -87,6 +88,20 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         main.add(createHeader(proto().guarantors()));
         main.add(inject(proto().guarantors()));
         main.add(new HTML());
+
+        if (isSummaryViewMode()) {
+            main.getElement().getStyle().setBackgroundColor("white");
+            main.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            main.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            main.getElement().getStyle().setBorderColor("black");
+
+            main.getElement().getStyle().setPadding(1, Unit.EM);
+            main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
+            main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
+
+            main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+            main.setWidth("70%");
+        }
 
         return main;
     }
