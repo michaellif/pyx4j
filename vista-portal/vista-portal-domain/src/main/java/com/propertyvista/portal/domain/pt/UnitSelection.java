@@ -22,6 +22,7 @@ import com.propertyvista.portal.domain.Unit;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -43,5 +44,6 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     MarketRent markerRent();
 
     @Caption(name = "")
+    @NotNull
     IPrimitive<Date> rentStart();
 }

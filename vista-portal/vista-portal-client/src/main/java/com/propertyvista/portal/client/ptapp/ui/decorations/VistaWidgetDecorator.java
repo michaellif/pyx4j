@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -21,9 +20,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -65,6 +62,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
     private Tooltip tooltip;
 
+    private final DecorationData decorData;
+
+    private final SpaceHolder infoImageHolder;
+
     public VistaWidgetDecorator(final CComponent<?> component) {
         this(component, new DecorationData());
     }
@@ -79,6 +80,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
     public VistaWidgetDecorator(final CComponent<?> component, DecorationData decorData) {
         this.component = component;
+        this.decorData = decorData;
 
         label = new Label(component.getTitle() == null ? "" : component.getTitle());
         label.getElement().getStyle().setFloat(Float.LEFT);
@@ -123,11 +125,16 @@ public class VistaWidgetDecorator extends VerticalPanel {
         nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
         nativeComponentHolder.setWidget(nativeComponent);
 
-        SpaceHolder infoImageHolder = new SpaceHolder("18px");
+        if (decorData.hideInfoHolder) {
+            infoImageHolder = new SpaceHolder("1px");
+
+        } else {
+            infoImageHolder = new SpaceHolder("18px");
+            infoImageHolder.getElement().getStyle().setPaddingRight(5, Unit.PX);
+        }
         infoImageHolder.getElement().getStyle().setFloat(Float.LEFT);
         infoImageHolder.getElement().getStyle().setPaddingTop(2, Unit.PX);
         infoImageHolder.getElement().getStyle().setPaddingLeft(5, Unit.PX);
-        infoImageHolder.getElement().getStyle().setPaddingRight(5, Unit.PX);
 
         if (component.getToolTip() != null && component.getToolTip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
@@ -183,12 +190,16 @@ public class VistaWidgetDecorator extends VerticalPanel {
     private void renderMandatoryMessage() {
         if (component instanceof CEditableComponent<?, ?>) {
             CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) component;
-            if (editableComponent.isMandatory()) {
-                mandatoryLabel.setText(null);
-            } else {
-                if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable())
-                    mandatoryLabel.setText("Optional");
+            if (editableComponent.isVisible() && editableComponent.isEnabled() && editableComponent.isEditable()) {
+                if (editableComponent.isMandatory() && DecorationData.ShowMandatory.Mandatory.equals(decorData.showMandatory)) {
+                    mandatoryLabel.setText(DecorationData.ShowMandatory.Mandatory.name());
+                } else if (!editableComponent.isMandatory() && DecorationData.ShowMandatory.Optional.equals(decorData.showMandatory)) {
+                    mandatoryLabel.setText(DecorationData.ShowMandatory.Optional.name());
+                } else {
+                    mandatoryLabel.setText(null);
+                }
             }
+
         } else {
             mandatoryLabel.setText(null);
         }
@@ -207,7 +218,11 @@ public class VistaWidgetDecorator extends VerticalPanel {
         }
     }
 
-    static public class DecorationData {
+    public static class DecorationData {
+
+        public static enum ShowMandatory {
+            Mandatory, Optional, None
+        }
 
         public boolean editable = true;
 
@@ -226,6 +241,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
         public HorizontalAlignmentConstant componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
         public VerticalAlign componentVerticalAlignment = VerticalAlign.BASELINE;
+
+        public ShowMandatory showMandatory = ShowMandatory.Optional;
+
+        public boolean hideInfoHolder = false;
 
         // various construction:
         public DecorationData() {

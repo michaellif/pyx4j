@@ -42,6 +42,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
@@ -88,12 +89,23 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), 0, 7.2);
+        DecorationData decorData = new DecorationData();
+        decorData.labelWidth = 0;
+        decorData.componentWidth = 7.2;
+        decorData.hideInfoHolder = true;
+        decorData.showMandatory = DecorationData.ShowMandatory.None;
+        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), decorData);
         dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
         header.add(dateFrom);
 
-        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), 0, 7.2);
+        decorData = new DecorationData();
+        decorData.labelWidth = 0;
+        decorData.componentWidth = 7.2;
+        decorData.hideInfoHolder = true;
+        decorData.showMandatory = DecorationData.ShowMandatory.None;
+        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData);
         dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         header.add(dateTo);
