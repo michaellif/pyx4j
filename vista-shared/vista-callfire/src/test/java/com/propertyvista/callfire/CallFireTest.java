@@ -22,7 +22,6 @@ import org.junit.Test;
 
 public class CallFireTest {
 
-    @Test
     public void testNotificationCampaign() {
         String message = "Hello ${b} ${c}. How are you today";
         String caller = "14167275409";
