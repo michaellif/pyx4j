@@ -76,8 +76,8 @@ public class FactoryTest extends InitializerTestCase {
 
     public void testElvisMemberAccess() {
         Employee employee = EntityFactory.create(Employee.class);
-        assertNotNull("Memeber Descriptor", employee.homeAddress().streetName());
-        assertNull("Memeber value", employee.homeAddress().streetName().getValue());
+        assertNotNull("Member Descriptor", employee.homeAddress().streetName());
+        assertNull("Member value", employee.homeAddress().streetName().getValue());
     }
 
     public void testEquals() {

@@ -142,7 +142,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMemeber(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, TableModel tableModel, MemberOperationsMeta member) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("create table ");
@@ -172,7 +172,7 @@ class TableDDL {
         return sqls;
     }
 
-    public static List<String> validateAndAlterCollectionMemeber(Connection connection, Dialect dialect, TableMetadata memberTableMetadata,
+    public static List<String> validateAndAlterCollectionMember(Connection connection, Dialect dialect, TableMetadata memberTableMetadata,
             TableModel tableModel, MemberOperationsMeta member) {
         List<String> alterSqls = new Vector<String>();
         // TODO Auto-generated method stub

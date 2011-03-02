@@ -146,7 +146,7 @@ public class EntitySearchCriteriaFormModel<E extends IEntity> {
                 return me.getKey();
             }
         }
-        throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
+        throw new IndexOutOfBoundsException("Member " + member.getFieldName() + " is not bound");
     }
 
     @SuppressWarnings("unchecked")

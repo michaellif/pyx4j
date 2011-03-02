@@ -106,7 +106,7 @@ public class EntityBinder<E extends IEntity> {
                 return me.getKey();
             }
         }
-        throw new IndexOutOfBoundsException("Memeber " + member.getFieldName() + " is not bound");
+        throw new IndexOutOfBoundsException("Member " + member.getFieldName() + " is not bound");
     }
 
     public boolean contains(IObject<?> member) {

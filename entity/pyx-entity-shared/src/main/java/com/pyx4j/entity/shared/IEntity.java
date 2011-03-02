@@ -84,7 +84,7 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public Class<? extends IEntity> getInstanceValueClass();
 
     /**
-     * A single instance of MemeberMeta is shared between all instances of the IEntity
+     * A single instance of MemberMeta is shared between all instances of the IEntity
      * inside EntityMeta.
      */
     public EntityMeta getEntityMeta();

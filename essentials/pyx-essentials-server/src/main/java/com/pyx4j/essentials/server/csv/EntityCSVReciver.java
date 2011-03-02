@@ -60,15 +60,15 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         log.debug("headers {}", (Object) headers);
         E entity = EntityFactory.create(entityClass);
         EntityMeta em = entity.getEntityMeta();
-        Map<String, Path> memebersNames = new HashMap<String, Path>();
+        Map<String, Path> membersNames = new HashMap<String, Path>();
         for (String memberName : em.getMemberNames()) {
-            IObject<?> memeber = entity.getMember(memberName);
-            if (memeber instanceof IPrimitive<?>) {
-                memebersNames.put(columnName(memeber), memeber.getPath());
+            IObject<?> member = entity.getMember(memberName);
+            if (member instanceof IPrimitive<?>) {
+                membersNames.put(columnName(member), member.getPath());
             }
         }
         for (String header : headers) {
-            Path path = memebersNames.get(header);
+            Path path = membersNames.get(header);
             if (path != null) {
                 headersPath.add(path);
                 continue;
@@ -98,8 +98,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         }
     }
 
-    protected String columnName(IObject<?> memeber) {
-        return memeber.getMeta().getCaption();
+    protected String columnName(IObject<?> member) {
+        return member.getMeta().getCaption();
     }
 
     @Override

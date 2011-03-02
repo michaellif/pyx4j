@@ -39,17 +39,17 @@ public class EntityReflectionTest extends InitializerTestCase {
 
         assertTrue("Address has streetName", names.contains("streetName"));
         assertTrue("Address has country", names.contains("country"));
-        assertEquals("Address Memebers count", Address.TEST_DECLARED_MEMEBERS, names.size());
+        assertEquals("Address Members count", Address.TEST_DECLARED_MEMBERS, names.size());
     }
 
     public void testEmployeeMemberList() {
         Employee emp = EntityFactory.create(Employee.class);
         List<String> names = emp.getEntityMeta().getMemberNames();
-        assertEquals("Employee Memebers count", Employee.DECLARED_MEMEBERS, names.size());
+        assertEquals("Employee Members count", Employee.DECLARED_MEMBERS, names.size());
         //Test declared order
-        List<String> namesDeclared = Arrays.asList(Employee.MEMEBERS_ORDER);
+        List<String> namesDeclared = Arrays.asList(Employee.MEMBERS_ORDER);
         if (!EqualsHelper.equals(names, namesDeclared)) {
-            fail("Memeber Order is not preserved " + names + " != " + namesDeclared);
+            fail("Member Order is not preserved " + names + " != " + namesDeclared);
         }
     }
 

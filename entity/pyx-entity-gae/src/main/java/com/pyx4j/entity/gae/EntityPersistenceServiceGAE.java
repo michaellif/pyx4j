@@ -380,10 +380,10 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         if (iEntity.isNull()) {
             return;
         }
-        Class<? extends MemberModificationAdapter<?>>[] entityMemebersModificationAdapters = null;
+        Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = iEntity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
-            entityMemebersModificationAdapters = adapters.modificationAdapters();
+            entityMembersModificationAdapters = adapters.modificationAdapters();
         }
 
         nextValue: for (Map.Entry<String, Object> me : iEntity.getValue().entrySet()) {
@@ -449,12 +449,12 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                     ISet<IEntity> memberSet = (ISet<IEntity>) iEntity.getMember(me.getKey());
                     if (meta.isEmbedded()) {
                         Set<Object> childValue = new HashSet<Object>();
-                        String singleMemeberName = null;
+                        String singleMemberName = null;
                         for (IEntity childIEntity : memberSet) {
-                            if (singleMemeberName == null) {
-                                singleMemeberName = childIEntity.getEntityMeta().getMemberNames().iterator().next();
+                            if (singleMemberName == null) {
+                                singleMemberName = childIEntity.getEntityMeta().getMemberNames().iterator().next();
                             }
-                            childValue.add(childIEntity.getMemberValue(singleMemeberName));
+                            childValue.add(childIEntity.getMemberValue(singleMemberName));
                         }
                         value = childValue;
                     } else {
@@ -566,8 +566,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
                         }
                     }
                 }
-                if (entityMemebersModificationAdapters != null) {
-                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMemebersModificationAdapters) {
+                if (entityMembersModificationAdapters != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMembersModificationAdapters) {
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(iEntity, meta, entity.lastValue, value)) {
@@ -886,7 +886,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         IObject<?> member = iEntity.getMember(memberName);
         String memberValueName = keyName.substring(memberName.length() + 1, keyName.length() - EMBEDDED_PRROPERTY_SUFIX.length());
         if (member instanceof ISet<?>) {
-            // Support only singleMemeberName
+            // Support only singleMemberName
             throw new Error("Unsupported Embeded type");
         } else {
             IEntity childIEntity = (IEntity) member;
@@ -955,14 +955,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else if (value instanceof List<?>) {
                 IObject<?> member = iEntity.getMember(keyName);
                 if (member.getMeta().isEmbedded()) {
-                    // We Support only single MemeberName !
-                    String singleMemeberName = null;
+                    // We Support only single MemberName !
+                    String singleMemberName = null;
                     for (Object valueItem : (List) value) {
                         IEntity childIEntity = EntityFactory.create((Class<IEntity>) member.getMeta().getValueClass());
-                        if (singleMemeberName == null) {
-                            singleMemeberName = childIEntity.getEntityMeta().getMemberNames().iterator().next();
+                        if (singleMemberName == null) {
+                            singleMemberName = childIEntity.getEntityMeta().getMemberNames().iterator().next();
                         }
-                        childIEntity.setMemberValue(singleMemeberName, deserializeValue(childIEntity, singleMemeberName, valueItem, aggregator));
+                        childIEntity.setMemberValue(singleMemberName, deserializeValue(childIEntity, singleMemberName, valueItem, aggregator));
                         ((ISet) member).add(childIEntity);
                     }
                     continue;

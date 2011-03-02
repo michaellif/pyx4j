@@ -283,7 +283,7 @@ public class EntityMetaWriter {
         writer.indent();
 
         for (JMethod method : allMethods) {
-            if (!contextHelper.isEntityMemeber(method)) {
+            if (!contextHelper.isEntityMember(method)) {
                 continue;
             }
             JClassType type = (JClassType) method.getReturnType();
@@ -342,22 +342,22 @@ public class EntityMetaWriter {
                 throw new UnableToCompleteException();
             }
 
-            String memeberCaption;
-            String memeberDescription = null;
-            String memeberWatermark = null;
-            Caption memeberCaptionAnnotation = method.getAnnotation(Caption.class);
-            if (memeberCaptionAnnotation != null) {
-                memeberCaption = memeberCaptionAnnotation.name();
+            String memberCaption;
+            String memberDescription = null;
+            String memberWatermark = null;
+            Caption memberCaptionAnnotation = method.getAnnotation(Caption.class);
+            if (memberCaptionAnnotation != null) {
+                memberCaption = memberCaptionAnnotation.name();
             } else {
-                memeberCaption = EnglishGrammar.capitalize(method.getName());
+                memberCaption = EnglishGrammar.capitalize(method.getName());
             }
-            if (memeberCaptionAnnotation != null) {
-                memeberDescription = memeberCaptionAnnotation.description();
-                memeberWatermark = memeberCaptionAnnotation.watermark();
+            if (memberCaptionAnnotation != null) {
+                memberDescription = memberCaptionAnnotation.description();
+                memberWatermark = memberCaptionAnnotation.watermark();
             }
 
             data.persistenceTransient = (method.getAnnotation(Transient.class) != null);
-            if ((!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMemebers)) {
+            if ((!data.persistenceTransient) && (contextHelper.validateReservedKeywordsMembers)) {
                 ReservedWords.validate(logger, interfaceType, method);
             }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
@@ -410,11 +410,11 @@ public class EntityMetaWriter {
             // String fieldName, String caption, String description,
             writer.print(escapeSourceString(method.getName()));
             writer.print(", ");
-            writer.print(i18nEscapeSourceString(memeberCaption));
+            writer.print(i18nEscapeSourceString(memberCaption));
             writer.print(", ");
-            writer.print(i18nEscapeSourceString(memeberDescription));
+            writer.print(i18nEscapeSourceString(memberDescription));
             writer.print(", ");
-            writer.print(i18nEscapeSourceString(memeberWatermark));
+            writer.print(i18nEscapeSourceString(memberWatermark));
             writer.println(", ");
             writer.indent();
 

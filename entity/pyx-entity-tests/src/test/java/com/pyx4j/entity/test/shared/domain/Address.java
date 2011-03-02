@@ -30,7 +30,7 @@ import com.pyx4j.entity.test.shared.adapters.ProvinceReferenceAdapter;
 @Table(prefix = "test")
 public interface Address extends IEntity {
 
-    public static int TEST_DECLARED_MEMEBERS = 4;
+    public static int TEST_DECLARED_MEMBERS = 4;
 
     @ToString(index = 3)
     Country country();

@@ -61,7 +61,7 @@ class ContextHelper {
 
     final JClassType numberType;
 
-    final boolean validateReservedKeywordsMemebers;
+    final boolean validateReservedKeywordsMembers;
 
     ContextHelper(TreeLogger logger, GeneratorContext context) throws NotFoundException, UnableToCompleteException {
         this.context = context;
@@ -77,10 +77,10 @@ class ContextHelper {
         numberType = oracle.getType(Number.class.getName());
 
         try {
-            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(EntityFactoryGenerator.CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS);
-            validateReservedKeywordsMemebers = Boolean.valueOf(prop.getValues().get(0));
+            ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(EntityFactoryGenerator.CONFIG_VALIDATERESERVEDKEYWORDSMEMBERS);
+            validateReservedKeywordsMembers = Boolean.valueOf(prop.getValues().get(0));
         } catch (BadPropertyValueException e) {
-            logger.log(TreeLogger.ERROR, "The configuration property " + EntityFactoryGenerator.CONFIG_VALIDATERESERVEDKEYWORDSMEMEBERS
+            logger.log(TreeLogger.ERROR, "The configuration property " + EntityFactoryGenerator.CONFIG_VALIDATERESERVEDKEYWORDSMEMBERS
                     + " was not defined. Is com.pyx4j.entity.Entity.gwt.xml inherited?");
             throw new UnableToCompleteException();
         }
@@ -95,7 +95,7 @@ class ContextHelper {
 
     }
 
-    boolean isEntityMemeber(JMethod method) {
+    boolean isEntityMember(JMethod method) {
         return (method.getReturnType() != JPrimitiveType.VOID) && (method.getParameters().length == 0);
     }
 
@@ -112,7 +112,7 @@ class ContextHelper {
 
     void getAllEntityMethods(JClassType interfaceType, Set<String> uniqueNames, List<JMethod> allMethods) {
         for (JMethod method : interfaceType.getMethods()) {
-            if (isEntityMemeber(method) && !uniqueNames.contains(method.getName())) {
+            if (isEntityMember(method) && !uniqueNames.contains(method.getName())) {
                 allMethods.add(method);
                 uniqueNames.add(method.getName());
             }

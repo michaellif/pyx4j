@@ -132,7 +132,7 @@ public class MemberMetaImpl implements MemberMeta {
                 length = 0;
             }
         } else if (lengthAnnotation != null) {
-            throw new RuntimeException("Unexpected @Length annotation in memeber " + fieldName);
+            throw new RuntimeException("Unexpected @Length annotation in member " + fieldName);
         } else {
             length = 0;
         }

@@ -39,9 +39,9 @@ import com.pyx4j.entity.shared.ISet;
 @Table(prefix = "test")
 public interface Employee extends IEntity {
 
-    public static int DECLARED_MEMEBERS = 15;
+    public static int DECLARED_MEMBERS = 15;
 
-    public static String[] MEMEBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "salary", "employmentStatus", "accessStatus",
+    public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "salary", "employmentStatus", "accessStatus",
             "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress", "image" };
 
     public static enum EmploymentStatus {

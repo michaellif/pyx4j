@@ -300,7 +300,7 @@ public class EntityHandlerWriter {
 
         writer.println();
         writer.println("@Override");
-        writer.println("public String[] getMemebers() {");
+        writer.println("public String[] getMembers() {");
         writer.indent();
         writer.print("return new String[] {");
         writer.print(membersNamesStringArray.toString());

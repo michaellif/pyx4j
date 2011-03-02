@@ -69,7 +69,7 @@ public class EntityOperationsMeta {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else {
-                    addEmbededMemebers(dialect, new Vector<String>(), memberPersistenceName,
+                    addEmbededMembers(dialect, new Vector<String>(), memberPersistenceName,
                             EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
@@ -115,7 +115,7 @@ public class EntityOperationsMeta {
         }
     }
 
-    private void addEmbededMemebers(Dialect dialect, List<String> path, String embeddedMemberName, EntityMeta entityMeta) {
+    private void addEmbededMembers(Dialect dialect, List<String> path, String embeddedMemberName, EntityMeta entityMeta) {
         List<String> thisPath = new Vector<String>();
         thisPath.addAll(path);
         thisPath.add(embeddedMemberName);
@@ -140,7 +140,7 @@ public class EntityOperationsMeta {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO
                 } else {
-                    addEmbededMemebers(dialect, thisPath, memberPersistenceName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
+                    addEmbededMembers(dialect, thisPath, memberPersistenceName, EntityFactory.getEntityMeta((Class<IEntity>) memberMeta.getObjectClass()));
                 }
             } else {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
@@ -195,9 +195,9 @@ public class EntityOperationsMeta {
         return collectionMembers;
     }
 
-    public MemberOperationsMeta getCollectionMember(String memeberName) {
+    public MemberOperationsMeta getCollectionMember(String memberName) {
         for (MemberOperationsMeta m : collectionMembers) {
-            if (m.getMemberName().equals(memeberName)) {
+            if (m.getMemberName().equals(memberName)) {
                 return m;
             }
         }

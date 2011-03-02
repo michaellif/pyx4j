@@ -199,7 +199,7 @@ public class EntityMetaImpl implements EntityMeta {
             return;
         }
         SharedEntityHandler anInstance = (SharedEntityHandler) EntityFactory.create(getEntityClass());
-        memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMemebers()));
+        memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMembers()));
 
         //Find special members
         for (Method method : getEntityClass().getMethods()) {

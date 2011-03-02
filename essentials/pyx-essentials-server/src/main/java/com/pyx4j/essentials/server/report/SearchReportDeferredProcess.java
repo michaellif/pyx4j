@@ -132,7 +132,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         return EntityFactory.getEntityMeta(entityClass).getCaption() + ".csv";
     }
 
-    protected boolean acceptMemeber(String memberName, MemberMeta memberMeta) {
+    protected boolean acceptMember(String memberName, MemberMeta memberMeta) {
         return true;
     }
 
@@ -152,7 +152,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
             if ((reportColumn != null) && reportColumn.ignore()) {
                 continue;
             }
-            if (!acceptMemeber(memberName, memberMeta)) {
+            if (!acceptMember(memberName, memberMeta)) {
                 continue;
             }
             if (memberMeta.isEntity()) {
@@ -166,7 +166,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         createHeaderEnds();
     }
 
-    protected boolean reportMemeber(IEntity entity, String memberName, MemberMeta memberMeta) {
+    protected boolean reportMember(IEntity entity, String memberName, MemberMeta memberMeta) {
         return true;
     }
 
@@ -178,7 +178,7 @@ public class SearchReportDeferredProcess implements IDeferredProcess {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : selectedMemberNames) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (!reportMemeber(entity, memberName, memberMeta)) {
+            if (!reportMember(entity, memberName, memberMeta)) {
                 continue;
             }
             if (memberMeta.isEntity()) {

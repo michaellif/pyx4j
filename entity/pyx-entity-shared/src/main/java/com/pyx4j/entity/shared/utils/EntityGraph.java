@@ -82,12 +82,12 @@ public class EntityGraph {
         Map<String, Object> otherValue = ent2.getValue();
         for (Map.Entry<String, Object> me : ent1.getValue().entrySet()) {
             if (me.getValue() instanceof Map) {
-                IEntity ent1Memeber = (IEntity) ent1.getMember(me.getKey());
-                if (ent1Memeber.getMeta().isEmbedded()) {
-                    if (!fullyEqualValues(ent1Memeber, (IEntity) ent2.getMember(me.getKey()))) {
+                IEntity ent1Member = (IEntity) ent1.getMember(me.getKey());
+                if (ent1Member.getMeta().isEmbedded()) {
+                    if (!fullyEqualValues(ent1Member, (IEntity) ent2.getMember(me.getKey()))) {
                         return false;
                     }
-                } else if (!fullyEqual(ent1Memeber, (IEntity) ent2.getMember(me.getKey()))) {
+                } else if (!fullyEqual(ent1Member, (IEntity) ent2.getMember(me.getKey()))) {
                     return false;
                 }
             } else if (me.getKey().equals(IEntity.CONCRETE_TYPE_DATA_ATTR)) {

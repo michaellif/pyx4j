@@ -86,7 +86,7 @@ public class CollectionsImplementationTest extends InitializerTestCase {
         assertTrue("contains 3", emp.tasksSorted().contains(task1));
     }
 
-    public void testSetMemeberRefference() {
+    public void testSetMemberRefference() {
         Employee emp = EntityFactory.create(Employee.class);
 
         Task task1 = EntityFactory.create(Task.class);

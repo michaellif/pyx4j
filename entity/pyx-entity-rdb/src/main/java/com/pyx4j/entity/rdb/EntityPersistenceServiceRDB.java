@@ -297,10 +297,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @SuppressWarnings("unchecked")
     private boolean applyModifications(Connection connection, TableModel tm, IEntity baseEntity, IEntity entity) {
         boolean updated = false;
-        Class<? extends MemberModificationAdapter<?>>[] entityMemebersModificationAdapters = null;
+        Class<? extends MemberModificationAdapter<?>>[] entityMembersModificationAdapters = null;
         Adapters adapters = entity.getEntityMeta().getAnnotation(Adapters.class);
         if (adapters != null) {
-            entityMemebersModificationAdapters = adapters.modificationAdapters();
+            entityMembersModificationAdapters = adapters.modificationAdapters();
         }
         for (MemberOperationsMeta member : tm.operationsMeta().getAllMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
@@ -336,8 +336,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     }
                 }
-                if (entityMemebersModificationAdapters != null) {
-                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMemebersModificationAdapters) {
+                if (entityMembersModificationAdapters != null) {
+                    for (Class<? extends MemberModificationAdapter<?>> adapterClass : entityMembersModificationAdapters) {
                         @SuppressWarnings("rawtypes")
                         MemberModificationAdapter adapter = AdapterFactory.getMemberModificationAdapter(adapterClass);
                         if (!adapter.allowModifications(entity, memberMeta, lastValue, value)) {

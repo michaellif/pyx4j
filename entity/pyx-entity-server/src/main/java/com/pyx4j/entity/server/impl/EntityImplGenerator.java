@@ -330,7 +330,7 @@ public class EntityImplGenerator {
             for (CtMethod method : allMethodsSortedByDeclaration) {
                 CtClass type = method.getReturnType();
                 if (type == CtClass.voidType) {
-                    throw new Error("Can't create void memeber " + method.getName() + " for class " + name);
+                    throw new Error("Can't create void member " + method.getName() + " for class " + name);
                 }
                 //System.out.println("Creating " + method.getName() + " of " + method.getDeclaringClass().getName());
                 CtMethod member = new CtMethod(type, method.getName(), null, implClass);
@@ -342,13 +342,13 @@ public class EntityImplGenerator {
                 membersNamesStringArray.append("\"").append(method.getName()).append("\"");
             }
 
-            CtMethod getMemebersMethod = new CtMethod(pool.get(String[].class.getName()), "getMemebers", null, implClass);
+            CtMethod getMembersMethod = new CtMethod(pool.get(String[].class.getName()), "getMembers", null, implClass);
             if (membersNamesStringArray.length() == 0) {
-                getMemebersMethod.setBody("{ return new String[0]; }");
+                getMembersMethod.setBody("{ return new String[0]; }");
             } else {
-                getMemebersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
+                getMembersMethod.setBody("{ return new String[] {" + membersNamesStringArray + "}; }");
             }
-            implClass.addMethod(getMemebersMethod);
+            implClass.addMethod(getMembersMethod);
 
             //Static for optimization
             CtField entityMetaField = new CtField(pool.get(EntityMeta.class.getName()), "entityMeta", implClass);

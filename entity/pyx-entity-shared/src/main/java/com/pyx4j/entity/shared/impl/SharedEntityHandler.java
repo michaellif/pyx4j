@@ -286,7 +286,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
     /**
      * Generator will create the list ordered by member declaration in source.
      */
-    public abstract String[] getMemebers();
+    public abstract String[] getMembers();
 
     @Override
     public IObject<?> getMember(String memberName) {
@@ -448,8 +448,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         String format = getEntityMeta().getToStringFormat();
         if (format != null) {
             List<Object> values = new Vector<Object>();
-            for (String memeberName : sm) {
-                values.add(getMemberStringView(memeberName, true));
+            for (String memberName : sm) {
+                values.add(getMemberStringView(memberName, true));
             }
             return MessageFormat.format(format, values.toArray());
         } else {
@@ -466,13 +466,13 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                     return getEntityMeta().getNullString();
                 }
                 StringBuilder sb = new StringBuilder();
-                for (String memeberName : sm) {
-                    Object v = entityValue.get(memeberName);
+                for (String memberName : sm) {
+                    Object v = entityValue.get(memberName);
                     if (v != null) {
                         if (sb.length() > 0) {
                             sb.append(" ");
                         }
-                        sb.append(getMemberStringView(memeberName, false));
+                        sb.append(getMemberStringView(memberName, false));
                     }
                 }
                 return sb.toString();

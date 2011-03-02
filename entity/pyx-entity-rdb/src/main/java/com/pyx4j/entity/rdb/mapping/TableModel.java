@@ -95,10 +95,10 @@ public class TableModel {
             for (MemberOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
                 TableMetadata memberTableMetadata = TableMetadata.getTableMetadata(connection, member.sqlName());
                 if (memberTableMetadata == null) {
-                    execute(connection, TableDDL.sqlCreateCollectionMemeber(connectionProvider.getDialect(), this, member));
+                    execute(connection, TableDDL.sqlCreateCollectionMember(connectionProvider.getDialect(), this, member));
                 } else {
                     execute(connection,
-                            TableDDL.validateAndAlterCollectionMemeber(connection, connectionProvider.getDialect(), memberTableMetadata, this, member));
+                            TableDDL.validateAndAlterCollectionMember(connection, connectionProvider.getDialect(), memberTableMetadata, this, member));
                 }
             }
         } finally {

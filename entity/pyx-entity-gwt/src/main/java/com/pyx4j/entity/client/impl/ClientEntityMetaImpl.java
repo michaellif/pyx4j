@@ -126,7 +126,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     public List<String> getMemberNames() {
         if (memberNames == null) {
             SharedEntityHandler anInstance = (SharedEntityHandler) EntityFactory.create(getEntityClass());
-            memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMemebers()));
+            memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMembers()));
         }
         return memberNames;
     }

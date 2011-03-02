@@ -36,5 +36,5 @@ import java.lang.annotation.Target;
 public @interface Detached {
 
     //TODO implement this
-    boolean retrieveToStringMemebers() default false;
+    boolean retrieveToStringMembers() default false;
 }
