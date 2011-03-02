@@ -35,6 +35,7 @@ public interface Address extends IEntity, IAddress {
 
     IPrimitive<Date> moveOutDate();
 
+    @Caption(name = "Monthly Payment")
     IPrimitive<Double> payment();
 
     @Editor(type = EditorType.phone)
