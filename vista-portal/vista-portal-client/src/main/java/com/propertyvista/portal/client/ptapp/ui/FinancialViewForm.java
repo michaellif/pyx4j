@@ -16,6 +16,9 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -40,9 +43,12 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
 public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> {
+
+    private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
 
     private boolean readOnlyMode = false;
 
@@ -137,6 +143,23 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove asset");
                     }
 
+                    @Override
+                    public void attachContent() {
+                        super.attachContent();
+                        get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Double, ?> component, Double value) {
+                                return (value == null) || ((value >= 0) && (value <= 100));
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
+                                return i18n.tr("Lorem ipsum dolor sit amet: 0% - 100%");
+                            }
+
+                        });
+                    }
                 };
             }
 

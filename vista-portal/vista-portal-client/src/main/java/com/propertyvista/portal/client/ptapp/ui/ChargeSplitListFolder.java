@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -26,12 +29,16 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
+    private static I18n i18n = I18nFactory.getI18n(ChargeSplitListFolder.class);
+
     @SuppressWarnings("rawtypes")
-    final ValueChangeHandler valueChangeHandler;
+    private final ValueChangeHandler valueChangeHandler;
 
     @SuppressWarnings("rawtypes")
     ChargeSplitListFolder(ValueChangeHandler valueChangeHandler) {
@@ -72,6 +79,20 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
                 if (valueChangeHandler != null) {
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
+
+                    get(proto().percentage()).addValueValidator(new EditableValueValidator<Integer>() {
+
+                        @Override
+                        public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
+                            return (value == null) || ((value >= 0) && (value <= 100));
+                        }
+
+                        @Override
+                        public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
+                            return i18n.tr("Lorem ipsum dolor sit amet: 0% - 100%");
+                        }
+
+                    });
                 }
 
                 return main;

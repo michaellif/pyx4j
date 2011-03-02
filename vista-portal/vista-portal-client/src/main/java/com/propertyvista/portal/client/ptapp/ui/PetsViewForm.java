@@ -130,11 +130,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
     }
 
     private boolean hasDuplicates() {
-        for (int i = 0; i < getValue().pets().size(); i++) {
-            Pet pet = getValue().pets().get(i);
-            for (int j = i + 1; j < getValue().pets().size(); j++) {
-                Pet otherPet = getValue().pets().get(j);
-                if (pet.name().equals(otherPet.name()) && pet.type().equals(otherPet.type()) && pet.birthDate().equals(otherPet.birthDate())) {
+        // TODO use business Equals
+        for (Pet item : getValue().pets()) {
+            for (Pet otherItem : getValue().pets()) {
+                if ((!item.equals(otherItem)) && item.name().equals(otherItem.name()) && item.type().equals(otherItem.type())
+                        && item.birthDate().equals(otherItem.birthDate())) {
                     return true;
                 }
             }
@@ -144,8 +144,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
     @Override
     public boolean isValid() {
-        boolean result = super.isValid();
-        return result && !hasDuplicates();
+        return super.isValid() && !hasDuplicates();
     }
 
     @Override
