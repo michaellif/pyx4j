@@ -19,14 +19,19 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
@@ -71,19 +76,27 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(new ViewHeaderDecorator(proto().incomes()));
+        main.add(createHeader(proto().incomes()));
         main.add(inject(proto().incomes()));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(proto().assets()));
+        main.add(createHeader(proto().assets()));
         main.add(inject(proto().assets()));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(proto().guarantors()));
+        main.add(createHeader(proto().guarantors()));
         main.add(inject(proto().guarantors()));
         main.add(new HTML());
 
         return main;
+    }
+
+    private Widget createHeader(IObject<?> member) {
+        if (isSummaryViewMode()) {
+            return new HTML("<h4>" + member.getMeta().getCaption() + "</h4>");
+        } else {
+            return new ViewHeaderDecorator(member);
+        }
     }
 
     @Override
@@ -149,7 +162,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<TenantAsset>(columns, SiteImages.INSTANCE.addRow(), "Add an asset");
+                    return new TableFolderDecorator<TenantAsset>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add an asset"));
                 }
             }
 
@@ -166,7 +179,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove asset");
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove asset"));
                         }
                     }
 
@@ -220,7 +233,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new TableFolderDecorator<TenantGuarantor>(columns, SiteImages.INSTANCE.addRow(), "Add guarantor");
+                    return new TableFolderDecorator<TenantGuarantor>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add guarantor"));
                 }
             }
 
@@ -237,7 +250,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         if (isSummaryViewMode()) {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove guarantor");
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove guarantor"));
                         }
                     }
 
