@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.IncomeSource;
@@ -49,7 +50,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        if (!parentForm.isReadOnlyMode()) {
+        if (!parentForm.isSummaryViewMode()) {
             @SuppressWarnings("unchecked")
             CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) inject(proto().incomeSource());
             incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
@@ -74,7 +75,11 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
     @Override
     public FolderItemDecorator createFolderItemDecorator() {
-        return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+        if (parentForm.isSummaryViewMode()) {
+            return new BoxReadOnlyFolderItemDecorator(false);
+        } else {
+            return new BoxFolderItemDecorator(SiteImages.INSTANCE.removeRow());
+        }
     }
 
     @Override

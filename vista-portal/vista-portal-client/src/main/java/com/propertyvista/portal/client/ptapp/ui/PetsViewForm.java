@@ -19,11 +19,14 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.Pet;
 import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
@@ -51,7 +54,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
     private static I18n i18n = I18nFactory.getI18n(PetsViewForm.class);
 
-    private boolean readOnlyMode = false;
+    private boolean summaryViewMode = false;
 
     public PetsViewForm() {
         super(Pets.class);
@@ -59,11 +62,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
     public PetsViewForm(EditableComponentFactory factory) {
         super(Pets.class, factory);
-        readOnlyMode = true;
+        summaryViewMode = true;
     }
 
-    public boolean isReadOnlyMode() {
-        return readOnlyMode;
+    public boolean isSummaryViewMode() {
+        return summaryViewMode;
     }
 
     @Override
@@ -91,19 +94,41 @@ public class PetsViewForm extends CEntityForm<Pets> {
             {
                 Pet proto = EntityFactory.getEntityPrototype(Pet.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.type(), "7em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.name(), "14em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.breed(), "7em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weight(), "7em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "5em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "0.5em"));
-                columns.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em", "0.5em"));
+                if (isSummaryViewMode()) {
+                    columns.add(new EntityFolderColumnDescriptor(proto.type(), "4em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.name(), "14em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.breed(), "10em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.weight(), "7em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "5em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "0.5em"));
+
+                } else {
+                    columns.add(new EntityFolderColumnDescriptor(proto.type(), "4em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.name(), "14em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.color(), "6em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.breed(), "10em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.weight(), "7em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.weightUnit(), "5em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.birthDate(), "7em", "0.5em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto.chargeLine(), "7em", "0.5em"));
+                }
             }
 
             @Override
             protected FolderDecorator<Pet> createFolderDecorator() {
-                return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a pet"));
+                if (isSummaryViewMode()) {
+                    return new BoxReadOnlyFolderDecorator<Pet>() {
+                        @Override
+                        public void setFolder(CEntityFolder<?> w) {
+                            super.setFolder(w);
+                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                        }
+                    };
+                } else {
+                    return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a pet"));
+                }
+
             }
 
             @Override
@@ -112,7 +137,11 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove pet"));
+                        if (isSummaryViewMode()) {
+                            return new BoxReadOnlyFolderItemDecorator(false);
+                        } else {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove pet"));
+                        }
                     }
 
                 };

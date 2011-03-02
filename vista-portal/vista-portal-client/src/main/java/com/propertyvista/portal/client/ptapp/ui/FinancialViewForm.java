@@ -19,11 +19,14 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.TenantAsset;
@@ -50,7 +53,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     private static I18n i18n = I18nFactory.getI18n(FinancialViewForm.class);
 
-    private boolean readOnlyMode = false;
+    private boolean summaryViewMode = false;
 
     public FinancialViewForm() {
         super(PotentialTenantFinancial.class);
@@ -58,11 +61,11 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     public FinancialViewForm(EditableComponentFactory factory) {
         super(PotentialTenantFinancial.class, factory);
-        readOnlyMode = true;
+        summaryViewMode = true;
     }
 
-    public boolean isReadOnlyMode() {
-        return readOnlyMode;
+    public boolean isSummaryViewMode() {
+        return summaryViewMode;
     }
 
     @Override
@@ -102,7 +105,17 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected FolderDecorator<TenantIncome> createFolderDecorator() {
-                return new BoxFolderDecorator<TenantIncome>(SiteImages.INSTANCE.addRow());
+                if (isSummaryViewMode()) {
+                    return new BoxReadOnlyFolderDecorator<TenantIncome>() {
+                        @Override
+                        public void setFolder(CEntityFolder<?> w) {
+                            super.setFolder(w);
+                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                        }
+                    };
+                } else {
+                    return new BoxFolderDecorator<TenantIncome>(SiteImages.INSTANCE.addRow());
+                }
             }
 
             @Override
@@ -127,7 +140,17 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected FolderDecorator<TenantAsset> createFolderDecorator() {
-                return new TableFolderDecorator<TenantAsset>(columns, SiteImages.INSTANCE.addRow(), "Add an asset");
+                if (isSummaryViewMode()) {
+                    return new BoxReadOnlyFolderDecorator<TenantAsset>() {
+                        @Override
+                        public void setFolder(CEntityFolder<?> w) {
+                            super.setFolder(w);
+                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                        }
+                    };
+                } else {
+                    return new TableFolderDecorator<TenantAsset>(columns, SiteImages.INSTANCE.addRow(), "Add an asset");
+                }
             }
 
             @Override
@@ -140,7 +163,11 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove asset");
+                        if (isSummaryViewMode()) {
+                            return new BoxReadOnlyFolderItemDecorator(false);
+                        } else {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove asset");
+                        }
                     }
 
                     @Override
@@ -184,7 +211,17 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
             @Override
             protected FolderDecorator<TenantGuarantor> createFolderDecorator() {
-                return new TableFolderDecorator<TenantGuarantor>(columns, SiteImages.INSTANCE.addRow(), "Add guarantor");
+                if (isSummaryViewMode()) {
+                    return new BoxReadOnlyFolderDecorator<TenantGuarantor>() {
+                        @Override
+                        public void setFolder(CEntityFolder<?> w) {
+                            super.setFolder(w);
+                            this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+                        }
+                    };
+                } else {
+                    return new TableFolderDecorator<TenantGuarantor>(columns, SiteImages.INSTANCE.addRow(), "Add guarantor");
+                }
             }
 
             @Override
@@ -197,7 +234,11 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove guarantor");
+                        if (isSummaryViewMode()) {
+                            return new BoxReadOnlyFolderItemDecorator(false);
+                        } else {
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove guarantor");
+                        }
                     }
 
                 };
