@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -120,7 +121,13 @@ public class BaseEditableComponentFactory implements EditableComponentFactory {
                 } else if (mm.isNumberValueClass()) {
                     return new CNumberLabel();
                 } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
-                    return new CDateLabel();
+                    CDateLabel comp = new CDateLabel();
+                    if (mm.getFormat() != null) {
+                        (comp).setDateFormat(mm.getFormat());
+                    }
+                    return comp;
+                } else if (mm.getValueClass() == Boolean.class) {
+                    return new CBooleanLabel();
                 }
             default:
                 throw new Error("Unknown");
