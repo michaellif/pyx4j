@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import static com.pyx4j.commons.HtmlUtils.*;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,8 +64,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.ObjectClassType;
-import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -98,27 +98,27 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        //i18n.tr(
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Apartment")))));
+
         main.add(new ApartmentView());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Term</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Lease Term")))));
         main.add(new LeaseTermView());
 
-        main.add(createHeaderWithEditLink("Tenants", new SiteMap.Tenants()));
+        main.add(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants()));
         main.add(tenantsTable = new TenantsTable());
         main.add(inject(proto().tenants().tenants()));
 
-        main.add(createHeaderWithEditLink("Info", new SiteMap.Info()));
+        main.add(createHeaderWithEditLink(i18n.tr("Info"), new SiteMap.Info()));
         main.add(tenantsView = new TenantsView());
 
-        main.add(createHeaderWithEditLink("Financial", new SiteMap.Financial()));
+        main.add(createHeaderWithEditLink(i18n.tr("Financial"), new SiteMap.Financial()));
         main.add(inject(proto().financial()));
 
-        main.add(createHeaderWithEditLink("Pets", new SiteMap.Pets()));
+        main.add(createHeaderWithEditLink(i18n.tr("Pets"), new SiteMap.Pets()));
         main.add(inject(proto().pets()));
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Terms</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Lease Terms")))));
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges()));
@@ -127,7 +127,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         //bind(new ChargesViewForm(this), proto().charges());
         //main.add(get(proto().charges()));
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Digital Signature")))));
         main.add(new SignatureView());
 
         return main;
@@ -161,14 +161,14 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
 
         FlowPanel header = new FlowPanel();
-        HTML caption = new HTML("<h4>" + captionTxt + "</h4>");
+        HTML caption = new HTML(h4(captionTxt));
         caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         caption.getElement().getStyle().setMarginRight(4, Unit.EM);
         caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
         header.add(caption);
 
-        Button edit = new Button("Edit");
+        Button edit = new Button(i18n.tr("Edit"));
         edit.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         edit.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         edit.addClickHandler(new ClickHandler() {
@@ -283,7 +283,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             Widget label = inject(proto().unitSelection().markerRent().leaseTerm()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
-            label = new HTML("&nbsp;month Rent");
+            label = new HTML("&nbsp;" + i18n.tr("month Rent"));
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label));
 
@@ -292,7 +292,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             label = inject(proto().unitSelection().markerRent().rent()).asWidget();
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label, "auto"));
-            label = new HTML("&nbsp;/ month");
+            label = new HTML("&nbsp;/ " + i18n.tr("month"));
             label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             content.add(DecorationUtils.inline(label));
 
@@ -516,7 +516,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 subviewPanel = new HorizontalPanel();
 
                 panel = new FlowPanel();
-                panel.add(new HTML("<h3>" + pti.currentAddress().getMeta().getCaption() + "</h3>"));
+                panel.add(new HTML(h3(pti.currentAddress().getMeta().getCaption())));
                 panel.add(new VistaTextPairDecorator(pti.currentAddress().postalCode().getMeta().getCaption(), pti.currentAddress().postalCode()
                         .getStringView(), dd2ColumnsTable));
                 panel.add(new VistaTextPairDecorator(pti.currentAddress().city().getMeta().getCaption(), pti.currentAddress().city().getStringView(),
@@ -586,7 +586,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
                 // ----------------------------------------------------------------------
 
-                add(new HTML("<h3>" + pti.vehicles().getMeta().getCaption() + "</h3>"));
+                add(new HTML(h3(pti.vehicles().getMeta().getCaption())));
 
                 Widget w;
                 for (Vehicle vhcl : pti.vehicles()) {
@@ -625,7 +625,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 panel = new FlowPanel();
                 panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-                panel.add(new HTML("<h3>" + pti.legalQuestions().getMeta().getCaption() + "</h3>"));
+                panel.add(new HTML(h3(pti.legalQuestions().getMeta().getCaption())));
                 panel.add(new VistaTextPairDecorator(pti.legalQuestions().suedForRent().getMeta().getCaption(), pti.legalQuestions().suedForRent()
                         .getStringView(), ddQuestionay));
                 panel.add(new VistaTextPairDecorator(pti.legalQuestions().suedForDamages().getMeta().getCaption(), pti.legalQuestions().suedForDamages()
@@ -649,13 +649,12 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
                 // ----------------------------------------------------------------------
 
-                add(new HTML("<h3>" + "Emergency Contacts" + "</h3>"));
+                add(new HTML(h3(i18n.tr("Emergency Contacts"))));
 
                 subviewPanel = new HorizontalPanel();
 
                 panel = new FlowPanel();
-                panel.add(new HTML("<h2>" + pti.emergencyContact1().firstName().getStringView() + " &nbsp "
-                        + pti.emergencyContact1().lastName().getStringView() + "</h2>"));
+                panel.add(new HTML(h2(pti.emergencyContact1().firstName().getStringView() + " &nbsp " + pti.emergencyContact1().lastName().getStringView())));
                 panel.add(new VistaTextPairDecorator(pti.emergencyContact1().homePhone().getMeta().getCaption(), pti.emergencyContact1().homePhone()
                         .getStringView(), dd2ColumnsTable));
                 panel.add(new VistaTextPairDecorator(pti.emergencyContact1().mobilePhone().getMeta().getCaption(), pti.emergencyContact1().mobilePhone()
@@ -679,8 +678,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
 
                 panel = new FlowPanel();
-                panel.add(new HTML("<h2>" + pti.emergencyContact2().firstName().getStringView() + " &nbsp "
-                        + pti.emergencyContact2().lastName().getStringView() + "</h2>"));
+                panel.add(new HTML(h2(pti.emergencyContact2().firstName().getStringView() + " &nbsp " + pti.emergencyContact2().lastName().getStringView())));
                 panel.add(new VistaTextPairDecorator(pti.emergencyContact2().homePhone().getMeta().getCaption(), pti.emergencyContact2().homePhone()
                         .getStringView(), dd2ColumnsTable));
                 panel.add(new VistaTextPairDecorator(pti.emergencyContact2().mobilePhone().getMeta().getCaption(), pti.emergencyContact2().mobilePhone()
