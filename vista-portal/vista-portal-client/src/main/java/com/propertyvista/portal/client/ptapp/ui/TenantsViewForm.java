@@ -15,8 +15,12 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -27,6 +31,7 @@ import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
@@ -41,9 +46,13 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
 public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
+
+    private static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);
 
     public TenantsViewForm() {
         super(PotentialTenantList.class);
@@ -85,7 +94,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
             @Override
             protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
-                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), "Add a person");
+                return new TableFolderDecorator<PotentialTenantInfo>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a person"));
             }
 
             @Override
@@ -95,6 +104,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
             private CEntityFolderItem<PotentialTenantInfo> createTenantRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<PotentialTenantInfo>(PotentialTenantInfo.class, columns) {
+
                     PotentialTenantInfo proto = EntityFactory.getEntityPrototype(PotentialTenantInfo.class);
 
                     @SuppressWarnings("rawtypes")
@@ -124,6 +134,31 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                         }
                     }
 
+                    @Override
+                    public void attachContent() {
+                        super.attachContent();
+                        get(proto.birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+
+                            @Override
+                            public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                                Relationship relationship = getValue().relationship().getValue();
+                                if ((relationship == Relationship.Applicant) || (relationship == Relationship.CoApplicant)) {
+                                    Date now = new Date();
+                                    @SuppressWarnings("deprecation")
+                                    Date y18 = TimeUtils.createDate(now.getYear() - 18, now.getMonth(), now.getDay());
+                                    return value.before(y18);
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                                return i18n.tr("Applicant and co-applicant should be at least 18 years old");
+                            }
+                        });
+                    }
+
                     @SuppressWarnings({ "unchecked", "rawtypes" })
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
@@ -141,7 +176,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                         if (isFirst()) {
                             return new TableFolderItemDecorator(SiteImages.INSTANCE.hideRemoveRow(), null, false);
                         } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove person", true);
+                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove person"), true);
                         }
                     }
 
@@ -149,6 +184,32 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
             }
 
         };
+    }
 
+    private boolean hasDuplicates() {
+        for (PotentialTenantInfo tenant : getValue().tenants()) {
+            for (PotentialTenantInfo otherTenant : getValue().tenants()) {
+                if (tenant.firstName().equals(otherTenant.firstName()) && tenant.lastName().equals(otherTenant.lastName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean result = super.isValid();
+        return result && !hasDuplicates();
+    }
+
+    @Override
+    public ValidationResults getValidationResults() {
+        ValidationResults validationResults = new ValidationResults();
+        validationResults.appendValidationErrors(super.getValidationResults());
+        if (hasDuplicates()) {
+            validationResults.appendValidationError(i18n.tr("Duplicate tenants specified"));
+        }
+        return validationResults;
     }
 }

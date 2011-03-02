@@ -16,6 +16,9 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -34,7 +37,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderRow;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.entity.client.ui.flex.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
@@ -46,6 +48,8 @@ import com.pyx4j.forms.client.ui.ValidationResults;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
+
+    private static I18n i18n = I18nFactory.getI18n(PetsViewForm.class);
 
     private boolean readOnlyMode = false;
 
@@ -99,7 +103,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
             @Override
             protected FolderDecorator<Pet> createFolderDecorator() {
-                return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), "Add a pet");
+                return new TableFolderDecorator<Pet>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a pet"));
             }
 
             @Override
@@ -108,7 +112,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove pet");
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove pet"));
                     }
 
                 };
@@ -149,7 +153,7 @@ public class PetsViewForm extends CEntityForm<Pets> {
         ValidationResults validationResults = new ValidationResults();
         validationResults.appendValidationErrors(super.getValidationResults());
         if (hasDuplicates()) {
-            validationResults.appendValidationError("Duplicate pets specifyed");
+            validationResults.appendValidationError(i18n.tr("Duplicate pets specified"));
         }
         return validationResults;
     }

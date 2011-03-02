@@ -27,7 +27,35 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface PotentialTenant extends IPerson, IApplicationEntity {
 
     public enum Relationship implements Serializable {
-        Applicant, CoApplicant, Spouse, Son, Daughter, Other
+
+        //TODO i18n
+
+        Applicant,
+
+        CoApplicant("Co-applicant"),
+
+        Spouse,
+
+        Son,
+
+        Daughter,
+
+        Other;
+
+        private final String label;
+
+        Relationship() {
+            this.label = name();
+        }
+
+        Relationship(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
 
     @ToString(index = 0)
