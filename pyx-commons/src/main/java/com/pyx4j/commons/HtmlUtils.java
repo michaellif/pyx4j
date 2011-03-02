@@ -99,4 +99,8 @@ public class HtmlUtils {
     public static String htmlHex(char ch) {
         return "&#" + Integer.valueOf(ch) + ";";
     }
+
+    public static String h4(String text) {
+        return "<h4>" + text + "</h4>";
+    }
 }
