@@ -17,6 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -71,6 +74,8 @@ import com.pyx4j.widgets.client.Button;
 @Singleton
 public class SummaryViewForm extends BaseEntityForm<Summary> {
 
+    private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
+
     private SummaryViewPresenter presenter;
 
     private TenantsTable tenantsTable;
@@ -93,6 +98,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
+        //i18n.tr(
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
         main.add(new ApartmentView());
 
@@ -117,6 +123,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         main.add(inject(proto().charges()));
 
+        // Another way of data binding:  
         //bind(new ChargesViewForm(this), proto().charges());
         //main.add(get(proto().charges()));
 
