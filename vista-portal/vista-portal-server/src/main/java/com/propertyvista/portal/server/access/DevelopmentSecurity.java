@@ -47,29 +47,37 @@ public class DevelopmentSecurity {
         return findByOpenId();
     }
 
+    private static boolean hostQueryDone = false;
+
+    private static DevelopmentUser developmentUserHostBased;
+
     private static DevelopmentUser findByHost() {
+        if ((developmentUserHostBased != null) || (hostQueryDone)) {
+            return developmentUserHostBased;
+        }
+        hostQueryDone = true;
         String host = SystemConfig.instance().getLocalHostName();
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().host1(), host));
-        DevelopmentUser developmentUser = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if (developmentUser != null) {
-            return developmentUser;
+        developmentUserHostBased = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if (developmentUserHostBased != null) {
+            return developmentUserHostBased;
         }
 
         // TODO add OR to MySQL criteria
         criteria.getFilters().clear();
         criteria.add(PropertyCriterion.eq(criteria.proto().host2(), host));
-        developmentUser = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if (developmentUser != null) {
-            return developmentUser;
+        developmentUserHostBased = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if (developmentUserHostBased != null) {
+            return developmentUserHostBased;
         }
 
         criteria.getFilters().clear();
         criteria.add(PropertyCriterion.eq(criteria.proto().host3(), host));
-        developmentUser = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        if (developmentUser != null) {
-            return developmentUser;
+        developmentUserHostBased = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if (developmentUserHostBased != null) {
+            return developmentUserHostBased;
         }
 
         return null;
