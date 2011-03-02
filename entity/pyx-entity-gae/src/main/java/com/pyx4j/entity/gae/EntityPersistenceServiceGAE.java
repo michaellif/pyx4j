@@ -1058,17 +1058,27 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
+        T iEntity = EntityFactory.create(entityClass);
+        iEntity.setPrimaryKey(primaryKey);
+        if (retrieve(iEntity)) {
+            return iEntity;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public <T extends IEntity> boolean retrieve(final T iEntity) {
         RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
         final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
 
         long start = System.nanoTime();
         int initCount = datastoreCallStats.get().readCount;
 
-        final T iEntity = EntityFactory.create(entityClass);
         if (iEntity.getEntityMeta().isTransient()) {
             throw new Error("Can't retrieve Transient Entity");
         }
-        final Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), primaryKey);
+        final Key key = KeyFactory.createKey(iEntity.getEntityMeta().getPersistenceName(), iEntity.getPrimaryKey());
         aggregator.request(iEntity.getEntityMeta(), key, new Runnable() {
             @Override
             public void run() {
@@ -1091,17 +1101,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             long duration = System.nanoTime() - start;
             int callsCount = datastoreCallStats.get().readCount - initCount;
             if (duration > Consts.SEC2NANO) {
-                log.warn("Long running retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+                log.warn("Long running retrieve {} took {}ms; calls " + callsCount, iEntity.getValueClass().getName(), (int) (duration / Consts.MSEC2NANO));
             } else {
-                log.debug("retrieve {} took {}ms; calls " + callsCount, entityClass.getName(), (int) (duration / Consts.MSEC2NANO));
+                log.debug("retrieve {} took {}ms; calls " + callsCount, iEntity.getValueClass().getName(), (int) (duration / Consts.MSEC2NANO));
             }
             if (iEntity.isNull()) {
-                return null;
+                return false;
             } else {
-                return iEntity;
+                return true;
             }
         } else {
-            return iEntity;
+            // This is undefined here
+            return true;
         }
     }
 

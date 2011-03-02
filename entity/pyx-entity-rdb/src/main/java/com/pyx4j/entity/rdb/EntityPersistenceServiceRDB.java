@@ -421,12 +421,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey) {
+        final T entity = EntityFactory.create(entityClass);
+        entity.setPrimaryKey(primaryKey);
+        if (retrieve(entity)) {
+            return entity;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public <T extends IEntity> boolean retrieve(T entity) {
         Connection connection = null;
         try {
             connection = connectionProvider.getConnection();
-            final T entity = EntityFactory.create(entityClass);
-            entity.setPrimaryKey(primaryKey);
-            return cascadeRetrieve(connection, entity);
+            return cascadeRetrieve(connection, entity) != null;
         } finally {
             SQLUtils.closeQuietly(connection);
         }

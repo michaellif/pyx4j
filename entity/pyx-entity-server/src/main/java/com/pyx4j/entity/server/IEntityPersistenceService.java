@@ -51,6 +51,14 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, long primaryKey);
 
+    /**
+     * Fill all the information to already existing entity object that has only PK value
+     * set. e.g. @Detached entity member.
+     * 
+     * @return false If entity not found;
+     */
+    public <T extends IEntity> boolean retrieve(T entity);
+
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria);
 
     public <T extends IEntity> Map<Long, T> retrieve(Class<T> entityClass, Iterable<Long> primaryKeys);
