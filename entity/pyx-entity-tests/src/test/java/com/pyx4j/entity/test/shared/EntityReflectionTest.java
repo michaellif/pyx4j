@@ -84,4 +84,22 @@ public class EntityReflectionTest extends InitializerTestCase {
         assertFalse("ConcreteEntity instanceOf Address", concreteEntity.isInstanceOf(Address.class));
         assertFalse("ConcreteEntity isAssignableFrom Address", concreteEntity.isAssignableFrom(Address.class));
     }
+
+    public void testIsNullAndEmpty() {
+        Address address = EntityFactory.create(Address.class);
+        assertTrue("isNull()", address.isNull());
+        assertTrue("isEmpty()", address.isEmpty());
+        address.setPrimaryKey(10L);
+        assertFalse("isNull() with PK", address.isNull());
+        assertTrue("isEmpty() with PK", address.isEmpty());
+
+        address.setPrimaryKey(null);
+        assertTrue("isNull() with PK (null)", address.isNull());
+        assertTrue("isEmpty() with PK (null)", address.isEmpty());
+
+        address.streetName().setValue("Any");
+        assertFalse("isNull()", address.isNull());
+        assertFalse("isEmpty()", address.isEmpty());
+
+    }
 }

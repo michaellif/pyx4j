@@ -276,6 +276,23 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
         return ((EntityValueMap) thisValue).isNull();
     }
 
+    @Override
+    public boolean isEmpty() {
+        Map<String, Object> thisValue = this.getValue();
+        if ((thisValue == null) || (thisValue.isEmpty())) {
+            return true;
+        }
+        if (thisValue.size() == 1) {
+            // Some other field is present other then PK
+            if (thisValue.get(PRIMARY_KEY) == null) {
+                return ((EntityValueMap) thisValue).isNull();
+            } else {
+                return true;
+            }
+        }
+        return ((EntityValueMap) thisValue).isNull();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public EntityMeta getEntityMeta() {

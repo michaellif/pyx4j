@@ -1105,7 +1105,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             } else {
                 log.debug("retrieve {} took {}ms; calls " + callsCount, iEntity.getValueClass().getName(), (int) (duration / Consts.MSEC2NANO));
             }
-            if (iEntity.isNull()) {
+            if (iEntity.isEmpty()) {
                 return false;
             } else {
                 return true;

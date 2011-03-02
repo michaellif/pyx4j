@@ -45,6 +45,11 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     @Indexed
     public IPrimitive<Long> id();
 
+    /**
+     * @return true if only PrimaryKey present and other properties are empty
+     */
+    public boolean isEmpty();
+
     public IObject<?> getMember(String memberName);
 
     public IObject<?> getMember(Path path) throws IllegalArgumentException;
