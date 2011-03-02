@@ -164,19 +164,19 @@ public class EntityBinder<E extends IEntity> {
         for (CEditableComponent component : binding.keySet()) {
             Path memberPath = binding.get(component);
             IObject<?> m = editableEntity.getMember(memberPath);
-            if (component instanceof DelegatingEntityEditableComponent) {
-                ((DelegatingEntityEditableComponent) component).populateModel(null, m);
-            } else if ((m instanceof IEntity) || (m instanceof ICollection)) {
-                component.populate(m);
-            } else {
-                try {
+            try {
+                if (component instanceof DelegatingEntityEditableComponent) {
+                    ((DelegatingEntityEditableComponent) component).populateModel(null, m);
+                } else if ((m instanceof IEntity) || (m instanceof ICollection)) {
+                    component.populate(m);
+                } else {
                     component.populate(m.getValue());
-                } catch (ClassCastException e) {
-                    // TODO Auto-generated catch block
-                    log.error("Error", e);
-                    throw new ClassCastException("property " + memberPath + " ValueClass:" + m.getMeta().getValueClass() + " Error:" + e.getMessage());
                 }
+            } catch (ClassCastException e) {
+                log.error("Error", e);
+                throw new ClassCastException("property " + memberPath + " ValueClass:" + m.getMeta().getValueClass() + " Error:" + e.getMessage());
             }
+
         }
     }
 
