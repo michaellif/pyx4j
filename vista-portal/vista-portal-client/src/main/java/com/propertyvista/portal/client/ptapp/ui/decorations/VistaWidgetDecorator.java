@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,6 +36,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
+import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -93,38 +96,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
 
         Cursor.setDefault(label.getElement());
 
-        nativeComponent = component.asWidget();
-
-        if (component instanceof CEditableComponent) {
-            ((CEditableComponent<?, ?>) component).setEditable(decorData.editable);
-        }
-
-        if (nativeComponent == null) {
-            throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
-        }
-        if (nativeComponent instanceof NativeCheckBox) {
-            ((NativeCheckBox) nativeComponent).setText(null);
-            nativeComponent.getElement().getStyle().setMargin(0, Unit.PX);
-        }
-
-        if (nativeComponent instanceof Focusable) {
-            label.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    ((Focusable) nativeComponent).setFocus(true);
-                }
-            });
-        }
-
-        SimplePanel nativeComponentHolder = new SimplePanel();
-
-        nativeComponentHolder.getElement().getStyle().setFloat(Float.LEFT);
-        if (decorData.componentWidth != 0)
-            nativeComponentHolder.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
-
-        nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
-        nativeComponentHolder.setWidget(nativeComponent);
-
         if (decorData.hideInfoHolder) {
             infoImageHolder = new SpaceHolder("1px");
 
@@ -152,6 +123,42 @@ public class VistaWidgetDecorator extends VerticalPanel {
         validationLabel.getElement().getStyle().setPaddingLeft(decorData.labelWidth, decorData.labelUnit);
         validationLabel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         validationLabel.getElement().getStyle().setColor("red");
+
+        nativeComponent = component.asWidget();
+
+        if (component instanceof CEditableComponent) {
+            ((CEditableComponent<?, ?>) component).setEditable(decorData.editable);
+        }
+
+        if (nativeComponent == null) {
+            throw new RuntimeException("initNativeComponent() method call on [" + component.getClass() + "] returns null.");
+        }
+        if (nativeComponent instanceof NativeCheckBox) {
+            ((NativeCheckBox) nativeComponent).setText(null);
+            nativeComponent.getElement().getStyle().setMargin(0, Unit.PX);
+        } else if (nativeComponent instanceof NativeTextBox) {
+            nativeComponent.getElement().getStyle().setProperty("padding", "2px 5px");
+            mandatoryLabel.getElement().getStyle().setPaddingLeft(14, Unit.PX);
+        }
+
+        if (nativeComponent instanceof Focusable) {
+            label.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    ((Focusable) nativeComponent).setFocus(true);
+                }
+            });
+        }
+
+        SimplePanel nativeComponentHolder = new SimplePanel();
+
+        nativeComponentHolder.getElement().getStyle().setFloat(Float.LEFT);
+        nativeComponentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        if (decorData.componentWidth != 0)
+            nativeComponentHolder.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
+
+        nativeComponentHolder.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Component);
+        nativeComponentHolder.setWidget(nativeComponent);
 
         // put it together:
 
@@ -185,6 +192,8 @@ public class VistaWidgetDecorator extends VerticalPanel {
         });
 
         getElement().getStyle().setPadding(2, Unit.PX);
+        getElement().getStyle().setPaddingBottom(13, Unit.PX);
+
     }
 
     private void renderMandatoryMessage() {
