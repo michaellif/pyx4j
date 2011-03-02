@@ -47,10 +47,8 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pets;
-import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
-import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.SiteMap;
@@ -60,6 +58,8 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.ObjectClassType;
+import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -70,8 +70,6 @@ import com.pyx4j.widgets.client.Button;
 public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private SummaryViewPresenter presenter;
-
-    private ApartmentView apartmentView;
 
     private TenantsTable tenantsTable;
 
@@ -116,6 +114,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges()));
+        //bind(new ChargesViewForm(this), proto().charges());
+        //main.add(get(proto().charges()));
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Digital Signature</h4>")));
         main.add(new SignatureView());
@@ -125,7 +125,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(PotentialTenantInfo.class)) {
+
+        if (member == proto().tenants().tenants()) {
             return tenantsTable.CreateTenantFolder();
         } else if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
             return new FinancialViewForm(this);
@@ -136,6 +137,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         } else {
             return super.create(member);
         }
+
     }
 
     @Override
@@ -143,7 +145,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         super.populate(value);
 
         // populate internal views:
-        tenantsView.populate(value);
+//        tenantsView.populate(value);
     }
 
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
