@@ -37,6 +37,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
@@ -45,12 +47,18 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.pt.PotentialTenant;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
+import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.domain.pt.Vehicle;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
+import com.pyx4j.entity.client.ui.flex.CEntityFolder;
+import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
+import com.pyx4j.entity.client.ui.flex.FolderDecorator;
+import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -86,13 +94,14 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         FlowPanel main = new FlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Apartment</h4>")));
-        main.add(apartmentView = new ApartmentView());
+        main.add(new ApartmentView());
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Lease Term</h4>")));
         main.add(new LeaseTermView());
 
         main.add(createHeaderWithEditLink("Tenants", new SiteMap.Tenants()));
         main.add(tenantsTable = new TenantsTable());
+        main.add(inject(proto().tenants().tenants()));
 
         main.add(createHeaderWithEditLink("Info", new SiteMap.Info()));
         main.add(tenantsView = new TenantsView());
@@ -116,7 +125,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     @Override
     public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
+        if (member.getValueClass().equals(PotentialTenantInfo.class)) {
+            return tenantsTable.CreateTenantFolder();
+        } else if (member.getValueClass().equals(PotentialTenantFinancial.class)) {
             return new FinancialViewForm(this);
         } else if (member.getValueClass().equals(Pets.class)) {
             return new PetsViewForm(this);
@@ -132,8 +143,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         super.populate(value);
 
         // populate internal views:
-        apartmentView.populate(value);
-        tenantsTable.populate(value);
         tenantsView.populate(value);
     }
 
@@ -194,15 +203,12 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      */
     private class ApartmentView extends FlowPanel {
 
-        private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
-
-        private final FlowPanel content;
-
         public ApartmentView() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             upperLevelElementElignment(this);
 
+            Map<String, String> tableLayout = new LinkedHashMap<String, String>();
             tableLayout.put("Type", "20%");
             tableLayout.put("Unit", "20%");
             //            tableLayout.put("Rent", "10%");
@@ -226,29 +232,24 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             add(sp);
 
             // add table content panel:
+            FlowPanel content;
             add(innerLevelElementElignment(content = new FlowPanel()));
+
+            addCell(tableLayout, content, "Type", inject(proto().unitSelection().selectedUnit().floorplan().name()).asWidget());
+            addCell(tableLayout, content, "Unit", inject(proto().unitSelection().selectedUnit().unitType()).asWidget());
+            //            addCell(tableLayout, content, "Rent", inject(proto().unitSelection().selectedUnit().marketRent()).asWidget());
+            addCell(tableLayout, content, "Deposit", inject(proto().unitSelection().selectedUnit().requiredDeposit()).asWidget());
+            addCell(tableLayout, content, "Beds", inject(proto().unitSelection().selectedUnit().bedrooms()).asWidget());
+            addCell(tableLayout, content, "Baths", inject(proto().unitSelection().selectedUnit().bathrooms()).asWidget());
+            addCell(tableLayout, content, "Sq F", inject(proto().unitSelection().selectedUnit().area()).asWidget());
+            addCell(tableLayout, content, "Available", inject(proto().unitSelection().selectedUnit().avalableForRent()).asWidget());
         }
 
-        public void populate(Summary value) {
-
-            content.clear();
-
-            addCell("Type", value.unitSelection().selectedUnit().floorplan().name().getStringView());
-            addCell("Unit", value.unitSelection().selectedUnit().unitType().getStringView());
-            //            addCell("Rent", value.unitSelection().selectedUnit().marketRent().getStringView());
-            addCell("Deposit", value.unitSelection().selectedUnit().requiredDeposit().getStringView());
-            addCell("Beds", value.unitSelection().selectedUnit().bedrooms().getStringView());
-            addCell("Baths", value.unitSelection().selectedUnit().bathrooms().getStringView());
-            addCell("Sq F", value.unitSelection().selectedUnit().area().getStringView());
-            addCell("Available", value.unitSelection().selectedUnit().avalableForRent().getStringView());
-
-        }
-
-        private void addCell(String cellName, String cellContent) {
-            HTML label = new HTML(cellContent);
-            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.setWidth(tableLayout.get(cellName));
-            content.add(label);
+        private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
+            cellContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            cellContent.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
+            cellContent.setWidth(tableLayout.get(cellName));
+            content.add(cellContent);
         }
     }
 
@@ -301,7 +302,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
 
-        private final FlowPanel content;
+        //      private FlowPanel content;
 
         public TenantsTable() {
 
@@ -328,28 +329,49 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             add(sp);
 
             // add table content panel:
-            add(innerLevelElementElignment(content = new FlowPanel()));
+//            add(innerLevelElementElignment(content = new FlowPanel()));
         }
 
-        public void populate(Summary value) {
-
-            content.clear();
-
-            for (PotentialTenantInfo ti : value.tenants().tenants()) {
-                addCell("Name", ti.firstName().getStringView() + " &nbsp " + ti.lastName().getStringView());
-                addCell("Date of Birht", ti.birthDate().getStringView());
-                addCell("Email", ti.email().getStringView());
-                addCell("Relationship", ti.relationship().getStringView());
-                addCell("Dependant", ti.dependant().getStringView());
-            }
+        private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
+            cellContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            cellContent.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
+            cellContent.setWidth(tableLayout.get(cellName));
+            content.add(cellContent);
         }
 
-        private void addCell(String cellName, String cellContent) {
-            HTML label = new HTML(cellContent);
-            label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            label.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
-            label.setWidth(tableLayout.get(cellName));
-            content.add(label);
+        public CEntityFolder<PotentialTenantInfo> CreateTenantFolder() {
+
+            return new CEntityFolder<PotentialTenantInfo>() {
+
+                @Override
+                protected CEntityFolderItem<PotentialTenantInfo> createItem() {
+                    return new CEntityFolderItem<PotentialTenantInfo>(PotentialTenantInfo.class) {
+
+                        @Override
+                        public IsWidget createContent() {
+                            FlowPanel content = new FlowPanel();
+                            addCell(tableLayout, content, "Name", inject(proto().firstName()).asWidget());
+                            addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
+                            addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
+                            addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
+                            addCell(tableLayout, content, "Dependant", inject(proto().dependant()).asWidget());
+                            return upperLevelElementElignment(content);
+//                            return content;
+                        }
+
+                        @Override
+                        public FolderItemDecorator createFolderItemDecorator() {
+                            return new BoxReadOnlyFolderItemDecorator(false);
+                        }
+
+                    };
+                }
+
+                @Override
+                protected FolderDecorator<PotentialTenantInfo> createFolderDecorator() {
+                    return new BoxReadOnlyFolderDecorator<PotentialTenantInfo>();
+                }
+            };
         }
     }
 
