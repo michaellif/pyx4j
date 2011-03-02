@@ -29,8 +29,9 @@ public class DevelopmentSecurity {
         if (developmentUser == null) {
             return null;
         }
-        if ((number.equals(developmentUser.homePhone().getValue())) || (number.equals(developmentUser.mobilePhone().getValue()))
-                || (number.equals(developmentUser.businessPhone().getValue()))) {
+        if ((number != null)
+                && ((number.equals(developmentUser.homePhone().getValue())) || (number.equals(developmentUser.mobilePhone().getValue())) || (number
+                        .equals(developmentUser.businessPhone().getValue())))) {
             return number;
         } else {
             // TODO remove Demo
@@ -71,7 +72,7 @@ public class DevelopmentSecurity {
             return developmentUser;
         }
 
-        return developmentUser;
+        return null;
     }
 
     private static DevelopmentUser findByOpenId() {

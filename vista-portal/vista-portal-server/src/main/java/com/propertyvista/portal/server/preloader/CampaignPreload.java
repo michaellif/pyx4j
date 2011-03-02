@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
 
@@ -34,9 +35,10 @@ public class CampaignPreload extends AbstractDataPreloader {
         return "Created " + 1 + "PhoneCallCampaign";
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        return deleteAll(PhoneCallCampaign.class);
+        return deleteAll(CampaignHistory.class, PhoneCallCampaign.class);
     }
 
 }

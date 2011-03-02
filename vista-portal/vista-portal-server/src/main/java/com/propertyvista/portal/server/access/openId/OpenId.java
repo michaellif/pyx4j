@@ -56,7 +56,9 @@ public class OpenId {
 
     static String returnServletPath = OpenIdServlet.MAPPING.substring(1);
 
-    static boolean requestAttributes = false;
+    static boolean requestEmailAttributes = true;
+
+    static boolean requestNameAttributes = false;
 
     public static synchronized String getDestinationUrl(String userDomain) {
         try {
@@ -95,11 +97,15 @@ public class OpenId {
 
             AuthRequest authReq = manager.authenticate(discovered, ServerSideConfiguration.instance().getMainApplicationURL() + returnServletPath);
 
-            if (requestAttributes) {
+            if (requestNameAttributes || requestEmailAttributes) {
                 FetchRequest fetch = FetchRequest.createFetchRequest();
-                fetch.addAttribute("email", "http://schema.openid.net/contact/email", true);
-                fetch.addAttribute("firstname", "http://axschema.org/namePerson/first", true);
-                fetch.addAttribute("lastname", "http://axschema.org/namePerson/last", true);
+                if (requestEmailAttributes) {
+                    fetch.addAttribute("email", "http://schema.openid.net/contact/email", true);
+                }
+                if (requestNameAttributes) {
+                    fetch.addAttribute("firstname", "http://axschema.org/namePerson/first", true);
+                    fetch.addAttribute("lastname", "http://axschema.org/namePerson/last", true);
+                }
                 authReq.addExtension(fetch);
             }
 
@@ -190,7 +196,7 @@ public class OpenId {
             Identifier verified = verification.getVerifiedId();
             if (verified != null) {
                 AuthSuccess authSuccess = (AuthSuccess) verification.getAuthResponse();
-                if (requestAttributes) {
+                if (requestNameAttributes || requestEmailAttributes) {
                     if (authSuccess.hasExtension(AxMessage.OPENID_NS_AX)) {
                         FetchResponse fetchResp = (FetchResponse) authSuccess.getExtension(AxMessage.OPENID_NS_AX);
                         OpenIdResponse openIdResponse = new OpenIdResponse();

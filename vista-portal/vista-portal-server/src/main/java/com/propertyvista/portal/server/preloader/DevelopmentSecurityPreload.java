@@ -14,9 +14,8 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
+import java.util.Locale;
 
-import com.propertyvista.portal.domain.ref.Country;
-import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -30,6 +29,13 @@ public class DevelopmentSecurityPreload extends AbstractDataPreloader {
         int developersCount = 0;
 
         List<DevelopmentUser> developmentUsers = EntityCSVReciver.create(DevelopmentUser.class).loadFile("contacts.csv");
+
+        for (DevelopmentUser user : developmentUsers) {
+            if (!user.email().isNull()) {
+                user.email().setValue(user.email().getValue().toLowerCase(Locale.ENGLISH));
+            }
+        }
+
         PersistenceServicesFactory.getPersistenceService().persist(developmentUsers);
         developersCount += developmentUsers.size();
 
@@ -38,10 +44,9 @@ public class DevelopmentSecurityPreload extends AbstractDataPreloader {
         return b.toString();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public String delete() {
-        return deleteAll(Province.class, Country.class);
+        return deleteAll(DevelopmentUser.class);
     }
 
 }
