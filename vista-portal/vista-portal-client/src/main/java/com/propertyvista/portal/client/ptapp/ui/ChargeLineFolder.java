@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
@@ -29,7 +30,14 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
 
     @Override
     protected FolderDecorator<ChargeLine> createFolderDecorator() {
-        return new BoxReadOnlyFolderDecorator<ChargeLine>();
+        return new BoxReadOnlyFolderDecorator<ChargeLine>() {
+
+            @Override
+            public void setFolder(CEntityFolder<?> w) {
+                super.setFolder(w);
+                this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            }
+        };
     }
 
     @Override

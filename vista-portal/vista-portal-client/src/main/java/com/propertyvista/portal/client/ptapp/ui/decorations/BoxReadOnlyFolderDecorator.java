@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui.decorations;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -38,7 +37,6 @@ public class BoxReadOnlyFolderDecorator<E extends IEntity> extends SimplePanel i
     @Override
     public void setFolder(CEntityFolder<?> w) {
         super.setWidget(w.getContent());
-        this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
     }
 
 }

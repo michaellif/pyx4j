@@ -46,6 +46,7 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaTextPairDecorat
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -60,6 +61,7 @@ import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -114,6 +116,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges()));
+
         //bind(new ChargesViewForm(this), proto().charges());
         //main.add(get(proto().charges()));
 
@@ -145,7 +148,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         super.populate(value);
 
         // populate internal views:
-//        tenantsView.populate(value);
+        tenantsView.populate(value);
     }
 
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
@@ -304,8 +307,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
         private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
 
-        //      private FlowPanel content;
-
         public TenantsTable() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -329,9 +330,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             Widget sp = new ViewLineSeparator(100, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             add(sp);
-
-            // add table content panel:
-//            add(innerLevelElementElignment(content = new FlowPanel()));
         }
 
         private void addCell(Map<String, String> tableLayout, FlowPanel content, String cellName, Widget cellContent) {
@@ -352,13 +350,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                         @Override
                         public IsWidget createContent() {
                             FlowPanel content = new FlowPanel();
-                            addCell(tableLayout, content, "Name", inject(proto().firstName()).asWidget());
+                            addCell(tableLayout, content, "Name", formFullName(proto()));
                             addCell(tableLayout, content, "Date of Birht", inject(proto().birthDate()).asWidget());
                             addCell(tableLayout, content, "Email", inject(proto().email()).asWidget());
                             addCell(tableLayout, content, "Relationship", inject(proto().relationship()).asWidget());
                             addCell(tableLayout, content, "Dependant", inject(proto().dependant()).asWidget());
-                            return upperLevelElementElignment(content);
-//                            return content;
+                            upperLevelElementElignment(content);
+                            return content;
                         }
 
                         @Override
@@ -366,6 +364,15 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                             return new BoxReadOnlyFolderItemDecorator(false);
                         }
 
+                        private FlowPanel formFullName(IPerson person) {
+                            FlowPanel fullname = new FlowPanel();
+                            fullname.add(DecorationUtils.inline(inject(person.firstName()), "auto"));
+                            fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
+                            fullname.add(DecorationUtils.inline(inject(person.middleName()), "auto"));
+                            fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
+                            fullname.add(DecorationUtils.inline(inject(person.lastName()), "auto"));
+                            return fullname;
+                        }
                     };
                 }
 
@@ -741,7 +748,9 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             add(leaseTerms);
 
             // "I Agree" check-box:
-            VistaWidgetDecorator agree = new VistaWidgetDecorator(inject(proto().agree()), new DecorationData(0, Unit.EM, 0, Unit.EM));
+            CCheckBox check = new CCheckBox();
+            bind(check, proto().agree());
+            VistaWidgetDecorator agree = new VistaWidgetDecorator(check, new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             agree.asWidget().getElement().getStyle().setMarginBottom(0.5, Unit.EM);

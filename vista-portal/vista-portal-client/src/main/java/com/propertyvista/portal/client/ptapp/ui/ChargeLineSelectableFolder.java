@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -39,7 +40,14 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
     @Override
     protected FolderDecorator<ChargeLineSelectable> createFolderDecorator() {
-        return new BoxReadOnlyFolderDecorator<ChargeLineSelectable>();
+        return new BoxReadOnlyFolderDecorator<ChargeLineSelectable>() {
+
+            @Override
+            public void setFolder(CEntityFolder<?> w) {
+                super.setFolder(w);
+                this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            }
+        };
     }
 
     @Override
@@ -60,7 +68,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
                 String width = "60%";
                 if (valueChangeHandler != null) {
-                    main.add(DecorationUtils.inline(inject(proto().selected()), "3%", null));
+                    main.add(DecorationUtils.inline(inject(proto().selected()), "3%"));
                     CEditableComponent<Boolean, ?> cb = get(proto().selected());
                     if (cb instanceof CCheckBox) {
                         cb.addValueChangeHandler(valueChangeHandler);
@@ -71,7 +79,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                     width = "57%";
                 }
 
-                main.add(DecorationUtils.inline(inject(proto().type()), width, null));
+                main.add(DecorationUtils.inline(inject(proto().type()), width));
                 main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
 
                 return main;

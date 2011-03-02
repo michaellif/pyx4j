@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -47,7 +48,14 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
     @Override
     protected FolderDecorator<TenantCharge> createFolderDecorator() {
-        return new BoxReadOnlyFolderDecorator<TenantCharge>();
+        return new BoxReadOnlyFolderDecorator<TenantCharge>() {
+
+            @Override
+            public void setFolder(CEntityFolder<?> w) {
+                super.setFolder(w);
+                this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            }
+        };
     }
 
     @Override
