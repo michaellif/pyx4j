@@ -41,6 +41,8 @@ public class OpenIdServlet extends HttpServlet {
 
     static String DOMAIN = "birchwoodsoftwaregroup.com";
 
+    public static String USER_EMAIL_ATTRIBUTE = "com.pyx4j.keep." + "openId.email";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         OpenIdResponse openIdResponse = OpenId.readResponse(request, DOMAIN);
@@ -56,6 +58,9 @@ public class OpenIdServlet extends HttpServlet {
                 receivingURL = ServerSideConfiguration.instance().getMainApplicationURL();
             } else {
                 Context.getVisit().removeAttribute(OpenIdFilter.REQUESTED_URL_ATTRIBUTE);
+            }
+            if (openIdResponse.email != null) {
+                Context.getVisit().setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email);
             }
             createResponsePage(response, false, "Login successful Continue to application", receivingURL);
         }

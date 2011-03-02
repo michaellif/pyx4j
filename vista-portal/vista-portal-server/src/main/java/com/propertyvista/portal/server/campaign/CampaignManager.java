@@ -23,10 +23,12 @@ import com.propertyvista.callfire.CallFire;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
+import com.propertyvista.portal.server.access.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
 import com.propertyvista.server.domain.CampaignTriger;
 import com.propertyvista.server.domain.PhoneCallCampaign;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -68,17 +70,19 @@ public class CampaignManager {
     private static void execute(PhoneCallCampaign phoneCallCampaign, PotentialTenantInfo tenant) {
         List<String> numbers = new ArrayList<String>();
         String name = tenant.firstName().getValue() + " " + tenant.lastName().getValue();
-        String number = devNumberFilter(tenant.homePhone().getValue());
-        log.info("We will call {} {}", name, number);
-
+        String number = tenant.homePhone().getValue();
+        if (ApplicationMode.isDevelopment()) {
+            String allowedNumber = DevelopmentSecurity.callNumberFilter(number);
+            log.info("We will call {} instead of {}", allowedNumber, number);
+            if (allowedNumber == null) {
+                return;
+            }
+            number = allowedNumber;
+        }
         numbers.add(number + "," + name);
 
         boolean rc = CallFire.sendCalls(phoneCallCampaign.campaignid().getValue(), numbers);
         log.info("sendCalls result {}", rc);
-    }
-
-    private static String devNumberFilter(String number) {
-        return "14166028523";
     }
 
     public static PhoneCallCampaign getCampaign(CampaignTriger trigger) {

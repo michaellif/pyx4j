@@ -23,5 +23,6 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new CampaignPreload());
         add(new PreloadBuildings());
         add(new PreloadPT());
+        add(new DevelopmentSecurityPreload());
     }
 }
