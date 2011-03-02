@@ -12,8 +12,8 @@
 	<source path="security"/>
 	<source path="shared"/>
     
-    <define-configuration-property name="pyx.validateReservedKeywordsMemebers" is-multi-valued="false" />
-	<set-configuration-property name="pyx.validateReservedKeywordsMemebers" value="true"/>
+    <define-configuration-property name="pyx.validateReservedKeywordsMembers" is-multi-valued="false" />
+	<set-configuration-property name="pyx.validateReservedKeywordsMembers" value="true"/>
 
 	<!--
   		Remove IEntity type names from the Generated Code. 
