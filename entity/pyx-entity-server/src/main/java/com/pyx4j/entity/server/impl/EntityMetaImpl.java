@@ -32,6 +32,7 @@ import java.util.Vector;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
@@ -69,6 +70,8 @@ public class EntityMetaImpl implements EntityMeta {
     private List<String> memberNames;
 
     private List<String> toStringMemberNames;
+
+    private List<String> businessEqualMemberNames;
 
     private String ownerMemberName = null;
 
@@ -276,6 +279,20 @@ public class EntityMetaImpl implements EntityMeta {
             }
         }
         return toStringMemberNames;
+    }
+
+    @Override
+    public synchronized List<String> getBusinessEqualMemberNames() {
+        if (businessEqualMemberNames == null) {
+            businessEqualMemberNames = new Vector<String>();
+            for (Method method : entityClass.getMethods()) {
+                BusinessEqualValue ts = method.getAnnotation(BusinessEqualValue.class);
+                if (ts != null) {
+                    businessEqualMemberNames.add(method.getName());
+                }
+            }
+        }
+        return businessEqualMemberNames;
     }
 
     @Override

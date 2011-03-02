@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
@@ -100,5 +101,16 @@ public class EntityGraph {
             }
         }
         return true;
+    }
+
+    public static <E extends IEntity> boolean hasBusinessDuplicates(ICollection<E, ?> entityList) {
+        for (E item : entityList) {
+            for (E otherItem : entityList) {
+                if ((!item.equals(otherItem)) && item.businessEquals(otherItem)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

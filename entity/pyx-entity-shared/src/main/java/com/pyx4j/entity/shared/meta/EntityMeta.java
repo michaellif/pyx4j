@@ -89,6 +89,8 @@ public interface EntityMeta {
 
     public List<String> getToStringMemberNames();
 
+    public List<String> getBusinessEqualMemberNames();
+
     /**
      * Return the member that @Owner annotation referred to this Object. See
      * com.pyx4j.entity.annotations.Owner

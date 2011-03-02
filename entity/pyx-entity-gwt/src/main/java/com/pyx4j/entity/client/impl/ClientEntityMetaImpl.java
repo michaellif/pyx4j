@@ -62,10 +62,13 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
 
     private final List<String> toStringMemberNames;
 
+    private final List<String> businessEqualMemberNames;
+
     private final String nullString;
 
     public ClientEntityMetaImpl(Class<? extends IEntity> entityClass, String caption, String description, String watermark, boolean persistenceTransient,
-            boolean rpcTransient, String toStringFormat, String nullString, String ownerMemberName, String[] memberNamesToString) {
+            boolean rpcTransient, String toStringFormat, String nullString, String ownerMemberName, String[] memberNamesToString,
+            String[] businessEqualMemberNames) {
         this.entityClass = entityClass;
         this.caption = caption;
         this.description = description;
@@ -76,6 +79,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
         this.ownerMemberName = ownerMemberName;
         this.toStringMemberNames = Arrays.asList(memberNamesToString);
         this.nullString = nullString;
+        this.businessEqualMemberNames = Arrays.asList(businessEqualMemberNames);
     }
 
     @Override
@@ -177,6 +181,11 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     @Override
     public List<String> getToStringMemberNames() {
         return toStringMemberNames;
+    }
+
+    @Override
+    public List<String> getBusinessEqualMemberNames() {
+        return businessEqualMemberNames;
     }
 
     @Override

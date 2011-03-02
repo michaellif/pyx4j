@@ -38,18 +38,19 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -129,6 +130,7 @@ public class EntityMetaWriter {
 
         List<String> toStringMemberNames = new Vector<String>();
         final HashMap<String, ToString> sortKeys = new HashMap<String, ToString>();
+        List<String> businessEqualMemberNames = new Vector<String>();
 
         List<JMethod> allMethods = contextHelper.getAllEntityMethods(interfaceType);
 
@@ -146,6 +148,9 @@ public class EntityMetaWriter {
                 }
                 ownerMemberName = method.getName();
             }
+            if (method.getAnnotation(BusinessEqualValue.class) != null) {
+                businessEqualMemberNames.add(method.getName());
+            }
         }
 
         Collections.sort(toStringMemberNames, new Comparator<String>() {
@@ -162,6 +167,14 @@ public class EntityMetaWriter {
                 toStringMemberNamesStringArray.append(", ");
             }
             toStringMemberNamesStringArray.append(escapeSourceString(memberName));
+        }
+
+        StringBuilder businessEqualMemberNamesStringArray = new StringBuilder();
+        for (String memberName : businessEqualMemberNames) {
+            if (businessEqualMemberNamesStringArray.length() > 0) {
+                businessEqualMemberNamesStringArray.append(", ");
+            }
+            businessEqualMemberNamesStringArray.append(escapeSourceString(memberName));
         }
 
         writer.println();
@@ -203,6 +216,11 @@ public class EntityMetaWriter {
 
         writer.print("new String[] {");
         writer.print(toStringMemberNamesStringArray.toString());
+        writer.print("}");
+        writer.print(", ");
+
+        writer.print("new String[] {");
+        writer.print(businessEqualMemberNamesStringArray.toString());
         writer.print("}");
 
         writer.println(");");

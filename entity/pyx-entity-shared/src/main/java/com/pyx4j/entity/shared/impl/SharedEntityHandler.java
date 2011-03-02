@@ -30,6 +30,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.IFullDebug;
 import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.commons.LoopCounter;
@@ -235,6 +236,25 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
             return false;
         }
         return thisValue.equals(((IEntity) other).getValue());
+    }
+
+    @Override
+    public boolean businessEquals(IEntity other) {
+        if (other == this) {
+            return true;
+        } else if (isNull()) {
+            return ((other == null) || other.isNull());
+        }
+        List<String> m = getEntityMeta().getBusinessEqualMemberNames();
+        if (m.size() == 0) {
+            return equals(other);
+        }
+        for (String memberName : m) {
+            if (!EqualsHelper.equals(this.getMemberValue(memberName), other.getMemberValue(memberName))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

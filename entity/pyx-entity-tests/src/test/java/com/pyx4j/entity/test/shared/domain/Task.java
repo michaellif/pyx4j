@@ -22,6 +22,7 @@ package com.pyx4j.entity.test.shared.domain;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,11 +36,13 @@ public interface Task extends IEntity {
     IPrimitive<Boolean> finished();
 
     @ToString
+    @BusinessEqualValue
     IPrimitive<String> description();
 
     @ToString(index = 1)
     IPrimitive<Status> status();
 
+    @BusinessEqualValue
     IPrimitive<Date> deadLine();
 
     IPrimitiveSet<String> notes();

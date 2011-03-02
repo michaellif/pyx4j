@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.Printable;
+import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
@@ -91,6 +92,11 @@ public interface IEntity extends IObject<Map<String, Object>>, Serializable, Pri
     public List<Validator> getValidators(Path memberPath);
 
     public IEntity cloneEntity();
+
+    /**
+     * @see BusinessEqualValue
+     */
+    public boolean businessEquals(IEntity other);
 
     public <T extends IEntity> T cast();
 

@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.util.Date;
+
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -111,5 +113,18 @@ public class EntityEqualsTest extends InitializerTestCase {
         t2.notes().clear();
         t2.notes().add("Note X");
         assertFalse("Data should be different\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
+    }
+
+    public void testBusinessEqual() {
+        Task t1 = EntityFactory.create(Task.class);
+        t1.setPrimaryKey(Long.valueOf(22));
+        t1.description().setValue("Task1");
+
+        Task t2 = EntityFactory.create(Task.class);
+        t2.description().setValue("Task1");
+        assertTrue("Not Same business data\n" + t1.toString() + "\n!=\n" + t2.toString(), t1.businessEquals(t2));
+
+        t2.deadLine().setValue(new Date());
+        assertFalse("Same business data\n" + t1.toString() + "\n!=\n" + t2.toString(), t1.businessEquals(t2));
     }
 }
