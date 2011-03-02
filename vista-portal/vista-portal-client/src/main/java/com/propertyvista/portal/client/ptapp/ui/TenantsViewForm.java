@@ -189,7 +189,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
     private boolean hasDuplicates() {
         for (PotentialTenantInfo tenant : getValue().tenants()) {
             for (PotentialTenantInfo otherTenant : getValue().tenants()) {
-                if (tenant.firstName().equals(otherTenant.firstName()) && tenant.lastName().equals(otherTenant.lastName())) {
+                if ((!tenant.equals(otherTenant)) && tenant.firstName().equals(otherTenant.firstName()) && tenant.lastName().equals(otherTenant.lastName())) {
                     return true;
                 }
             }
@@ -199,8 +199,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
     @Override
     public boolean isValid() {
-        boolean result = super.isValid();
-        return result && !hasDuplicates();
+        return super.isValid() && !hasDuplicates();
     }
 
     @Override
