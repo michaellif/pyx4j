@@ -46,6 +46,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
@@ -118,11 +120,10 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                             main.setWidth("100%");
                             for (EntityFolderColumnDescriptor column : columns) {
                                 // Don't show dependent and takeOwnership 
-                                if (column.getObject() == proto.dependant() || column.getObject() == proto.takeOwnership()
-                                        || column.getObject() == proto.relationship()) {
+                                if (column.getObject() == proto.dependant() || column.getObject() == proto.takeOwnership()) {
                                     continue;
                                 }
-
+                                //|| column.getObject() == proto.relationship()
                                 CComponent<?> component = createCell(column);
                                 component.setWidth("100%");
                                 if (column.getObject() == proto.email()) {
@@ -162,11 +163,19 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
                     @SuppressWarnings({ "unchecked", "rawtypes" })
                     @Override
                     protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?> comp = super.createCell(column);
-                        if (proto.relationship() == column.getObject()) {
-                            Collection<Relationship> relationships = EnumSet.allOf(Relationship.class);
-                            relationships.remove(Relationship.Applicant);
-                            ((CComboBox) comp).setOptions(relationships);
+                        CComponent<?> comp = null;
+                        if (isFirst() && proto.relationship() == column.getObject()) {
+                            CTextField textComp = new CTextField();
+                            textComp.setEditable(false);
+                            textComp.setValue(Relationship.Applicant.name());
+                            comp = textComp;
+                        } else {
+                            comp = super.createCell(column);
+                            if (proto.relationship() == column.getObject()) {
+                                Collection<Relationship> relationships = EnumSet.allOf(Relationship.class);
+                                relationships.remove(Relationship.Applicant);
+                                ((CComboBox) comp).setOptions(relationships);
+                            }
                         }
                         return comp;
                     }

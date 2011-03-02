@@ -576,6 +576,7 @@ public abstract class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.readOnly));
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "none");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(TextBox.DEFAULT_STYLE_PREFIX, null, NativeTextBox.StyleDependent.invalid));
