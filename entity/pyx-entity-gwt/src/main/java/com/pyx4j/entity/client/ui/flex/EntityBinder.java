@@ -41,6 +41,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
 public class EntityBinder<E extends IEntity> {
 
@@ -173,8 +174,10 @@ public class EntityBinder<E extends IEntity> {
                     component.populate(m.getValue());
                 }
             } catch (ClassCastException e) {
+                log.error("Invalid property access {} valueClass: {}", memberPath, m.getMeta().getValueClass());
                 log.error("Error", e);
-                throw new ClassCastException("property " + memberPath + " ValueClass:" + m.getMeta().getValueClass() + " Error:" + e.getMessage());
+                throw new UnrecoverableClientError("Invalid property access " + memberPath + "; valueClass:" + m.getMeta().getValueClass() + " error:"
+                        + e.getMessage());
             }
 
         }
