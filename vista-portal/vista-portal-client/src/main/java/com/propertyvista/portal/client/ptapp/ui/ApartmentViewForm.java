@@ -275,14 +275,14 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             FlowPanel floorplan = new FlowPanel();
             floorplan.getElement().getStyle().setPaddingLeft(1, Unit.EM);
 
-            addCell("Plan", "&nbsp", floorplan);
+            addCell("Plan", "&nbsp;", floorplan);
             addCell("Type", availableUnits.floorplan().name().getStringView(), floorplan);
             addCell("Rent", "From " + "$" + minRentValue(availableUnits.units()), floorplan);
-            addCell("Deposit", "&nbsp", floorplan);
-            addCell("Beds", "&nbsp", floorplan);
-            addCell("Baths", "&nbsp", floorplan);
+            addCell("Deposit", "&nbsp;", floorplan);
+            addCell("Beds", "&nbsp;", floorplan);
+            addCell("Baths", "&nbsp;", floorplan);
             addCell("Sq F", availableUnits.floorplan().area().getStringView(), floorplan);
-            addCell("Available", "&nbsp", floorplan);
+            addCell("Available", "&nbsp;", floorplan);
 
             content.add(innerLevelElementElignment(floorplan));
             content.add(new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 0.5, Unit.EM));
@@ -323,10 +323,10 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                     }
                 }, MouseOutEvent.getType());
 
-                addCell("Plan", "&nbsp", unitRowPanel);
+                addCell("Plan", "&nbsp;", unitRowPanel);
                 addCell("Type", unit.unitType().getStringView(), unitRowPanel);
-                addCell("Rent", Double.toString(minRentValue(unit)) + "$", unitRowPanel);
-                addCell("Deposit", unit.requiredDeposit().getStringView() + "$", unitRowPanel);
+                addCell("Rent", "$" + Double.toString(minRentValue(unit)), unitRowPanel);
+                addCell("Deposit", "$" + unit.requiredDeposit().getStringView(), unitRowPanel);
                 addCell("Beds", unit.bedrooms().getStringView(), unitRowPanel);
                 addCell("Baths", unit.bathrooms().getStringView(), unitRowPanel);
                 addCell("Sq F", unit.area().getStringView(), unitRowPanel);
