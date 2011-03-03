@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -24,6 +23,7 @@ import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Address;
@@ -53,7 +53,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
 
@@ -165,30 +165,14 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         return new CEntityEditableComponent<Address>(Address.class) {
             @Override
             public IsWidget createContent() {
-                FlowPanel main = new FlowPanel();
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
                 injectIAddress(main, proto(), this);
-                DecorationData decorData = new DecorationData();
-                decorData = new DecorationData();
-                decorData.componentWidth = 10;
-                main.add(new VistaWidgetDecorator(inject(proto().moveInDate()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 10;
-                main.add(new VistaWidgetDecorator(inject(proto().moveOutDate()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 8;
-                main.add(new VistaWidgetDecorator(inject(proto().payment()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(inject(proto().phone()), decorData));
-                main.add(new HTML());
-                main.add(new VistaWidgetDecorator(inject(proto().rented())));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 30;
-                main.add(new VistaWidgetDecorator(inject(proto().managerName()), decorData));
+                main.add(inject(proto().moveInDate()), 10);
+                main.add(inject(proto().moveOutDate()), 10);
+                main.add(inject(proto().payment()), 8);
+                main.add(inject(proto().phone()), 15);
+                main.add(inject(proto().rented()), 15);
+                main.add(inject(proto().managerName()), 30);
                 main.add(new HTML());
                 return main;
             }
@@ -199,44 +183,17 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         return new CEntityEditableComponent<EmergencyContact>(EmergencyContact.class) {
             @Override
             public IsWidget createContent() {
-                FlowPanel main = new FlowPanel();
-                DecorationData decorData = new DecorationData();
-                decorData.componentWidth = 12;
-                main.add(new VistaWidgetDecorator(inject(proto().firstName()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 12;
-                main.add(new VistaWidgetDecorator(inject(proto().middleName()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 20;
-                main.add(new VistaWidgetDecorator(inject(proto().lastName()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(inject(proto().homePhone()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(inject(proto().mobilePhone()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 40;
-                main.add(new VistaWidgetDecorator(inject(proto().address().street1()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 40;
-                main.add(new VistaWidgetDecorator(inject(proto().address().street2()), decorData));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 15;
-                main.add(new VistaWidgetDecorator(inject(proto().address().city()), decorData));
-                main.add(new HTML());
-                main.add(new VistaWidgetDecorator(inject(proto().address().province())));
-                main.add(new HTML());
-                decorData = new DecorationData();
-                decorData.componentWidth = 7;
-                main.add(new VistaWidgetDecorator(inject(proto().address().postalCode()), decorData));
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
+                main.add(inject(proto().firstName()), 12);
+                main.add(inject(proto().middleName()), 12);
+                main.add(inject(proto().lastName()), 20);
+                main.add(inject(proto().homePhone()), 15);
+                main.add(inject(proto().mobilePhone()), 15);
+                main.add(inject(proto().address().street1()), 40);
+                main.add(inject(proto().address().street2()), 40);
+                main.add(inject(proto().address().city()), 15);
+                main.add(inject(proto().address().province()), 10);
+                main.add(inject(proto().address().postalCode()), 7);
                 main.add(new HTML());
                 return main;
 

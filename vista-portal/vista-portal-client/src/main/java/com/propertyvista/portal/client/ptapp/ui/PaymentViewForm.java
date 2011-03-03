@@ -28,6 +28,7 @@ import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
@@ -52,7 +53,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
+        VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new ViewHeaderDecorator(proto().applicationCharges()));
         main.add(inject(proto().applicationCharges().charges()));
@@ -85,10 +86,8 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         main.add(instrumentsPanel);
 
         main.add(new ViewHeaderDecorator(proto().billingAddress()));
-        DecorationData decorData = new DecorationData();
-        decorData.componentWidth = 12;
         CCheckBox sameAsCurrent = (CCheckBox) inject(proto().sameAsCurrent());
-        main.add(new VistaWidgetDecorator(sameAsCurrent, decorData));
+        main.add(sameAsCurrent, 12);
         sameAsCurrent.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -98,18 +97,14 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         injectIAddress(main, proto().billingAddress(), this);
 
-        decorData = new DecorationData();
-        decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(inject(proto().billingAddress().phone()), decorData));
+        main.add(inject(proto().billingAddress().phone()), 12);
 
         main.add(new ViewHeaderDecorator(i18n.tr("Pre-Authorized Payment")));
         HorizontalPanel preauthorisedNotes = new HorizontalPanel();
         preauthorisedNotes.add(new HTML(SiteResources.INSTANCE.paymentPreauthorisedNotes().getText()));
         main.add(preauthorisedNotes);
 
-        decorData = new DecorationData();
-        decorData.componentWidth = 12;
-        main.add(new VistaWidgetDecorator(inject(proto().preauthorised()), decorData));
+        main.add(inject(proto().preauthorised()), 12);
 
         main.add(new HTML(SiteResources.INSTANCE.paymentTermsNotes().getText()));
 

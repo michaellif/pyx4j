@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.ptapp.ui.decorations;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -89,8 +88,9 @@ public class VistaWidgetDecorator extends VerticalPanel {
         label.getElement().getStyle().setFloat(Float.LEFT);
 
         label.setHorizontalAlignment(decorData.labelAlignment);
-        if (decorData.labelWidth != 0)
+        if (decorData.labelWidth != 0) {
             label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
+        }
 
         label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
 
@@ -168,31 +168,33 @@ public class VistaWidgetDecorator extends VerticalPanel {
         firstLine.add(nativeComponentHolder);
         firstLine.add(mandatoryLabel);
 
-        FlowPanel secondLine = new FlowPanel();
-        secondLine.add(validationLabel);
-
         add(firstLine);
-        add(secondLine);
 
-        renderMandatoryMessage();
+        if (!decorData.readOnlyMode) {
+            FlowPanel secondLine = new FlowPanel();
+            secondLine.add(validationLabel);
+            add(secondLine);
 
-        setVisible(component.isVisible());
+            renderMandatoryMessage();
 
-        component.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
-                    setVisible(component.isVisible());
+            setVisible(component.isVisible());
+
+            component.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VISIBILITY_PROPERTY) {
+                        setVisible(component.isVisible());
+                    }
+                    if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
+                        renderValidationMessage();
+                    }
+                    renderMandatoryMessage();
                 }
-                if (propertyChangeEvent.getPropertyName() == PropertyChangeEvent.PropertyName.VALIDITY) {
-                    renderValidationMessage();
-                }
-                renderMandatoryMessage();
-            }
-        });
+            });
 
-        getElement().getStyle().setPadding(2, Unit.PX);
-        getElement().getStyle().setPaddingBottom(13, Unit.PX);
+            getElement().getStyle().setPadding(2, Unit.PX);
+            getElement().getStyle().setPaddingBottom(13, Unit.PX);
+        }
 
     }
 
@@ -234,6 +236,8 @@ public class VistaWidgetDecorator extends VerticalPanel {
         }
 
         public boolean editable = true;
+
+        public boolean readOnlyMode = false;
 
         public double labelWidth = 10;
 
