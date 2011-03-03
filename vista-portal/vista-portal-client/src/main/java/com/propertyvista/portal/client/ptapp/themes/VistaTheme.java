@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.themes;
 
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.ui.ApartmentViewForm;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
@@ -69,6 +70,7 @@ public abstract class VistaTheme extends Theme {
         initSuggestBoxStyle();
         initBannerStyle();
         initSiteViewStyles();
+        initVistaApartmentViewStyles();
         initVistaCaptionViewStyles();
         initVistaNavigViewStyles();
     }
@@ -884,6 +886,40 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         style.addProperty("display", "block");
         style.addProperty("color", ThemeColor.OBJECT_TONE5);
+        addStyle(style);
+
+    }
+
+    private void initVistaApartmentViewStyles() {
+        String prefix = ApartmentViewForm.DEFAULT_STYLE_PREFIX;
+
+        Style style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.UnitListHeader));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.hover));
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel));
+        style.addProperty("background-color", "auto");
+        style.addProperty("border", "none");
+//        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.selected));
+        style.addProperty("background-color", "white");
+        style.addProperty("border", "1px solid black");
+        style.addProperty("border-bottom", "none");
+//        style.addProperty("cursor", "default");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel));
+//        style.addProperty("visibility", "hidden");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel, ApartmentViewForm.StyleDependent.selected));
+//        style.addProperty("visibility", "visible");
         addStyle(style);
     }
 

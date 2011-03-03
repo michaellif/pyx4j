@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import static com.pyx4j.commons.HtmlUtils.*;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,6 +55,8 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.style.IStyleDependent;
+import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
@@ -62,6 +65,16 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     private AvailableUnitsTable availableUnitsTable;
 
     private ApartmentViewPresenter presenter;
+
+    public static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
+
+    public static enum StyleSuffix implements IStyleSuffix {
+        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
+    }
+
+    public static enum StyleDependent implements IStyleDependent {
+        selected, disabled, hover
+    }
 
     public ApartmentViewForm() {
         super(UnitSelection.class);
@@ -81,7 +94,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         // Form first table header: 
         FlowPanel header = new FlowPanel();
-        HTML caption = new HTML("<h2>Available Units</h2>");
+        HTML caption = new HTML(h2(i18n.tr("Available Units")));
         caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         caption.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
@@ -110,7 +123,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         header.add(dateTo);
 
-        Button changeBtn = new Button("Change");
+        Button changeBtn = new Button(i18n.tr("Change"));
         changeBtn.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         changeBtn.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         changeBtn.addClickHandler(new ClickHandler() {
@@ -138,7 +151,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
-        caption = new HTML("<h3>Start Rent Date</h3>");
+        caption = new HTML(h3(i18n.tr("Start Rent Date")));
         caption.getElement().getStyle().setFloat(Float.LEFT);
         caption.getElement().getStyle().setMarginTop(3, Unit.PX);
         main.add(caption);
@@ -213,12 +226,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         private final Map<String, String> tableLayout = new LinkedHashMap<String, String>();
 
-        private static final String UNIT_ROW_PANEL_STYLENAME = "unitRowPanel";
-
-        private static final String UNIT_DETAIL_PANEL_STYLENAME = "unitDetailPanel";
-
-        private static final String UNIT_PANELS_SELECTED_STYLENAME_SUFIX = "-selected";
-
         public AvailableUnitsTable() {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -235,7 +242,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             tableLayout.put("Available", "20%");
 
             FlowPanel header = new FlowPanel();
-            header.getElement().getStyle().setBackgroundColor("lightGray");
+            header.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
             header.getElement().getStyle().setMarginBottom(1, Unit.EM);
             header.setHeight("2.3em");
             innerLevelElementElignment(header);
@@ -271,9 +278,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             addCell("Plan", "&nbsp", floorplan);
             addCell("Type", availableUnits.floorplan().name().getStringView(), floorplan);
             addCell("Rent", "From " + "$" + minRentValue(availableUnits.units()), floorplan);
-            //                       addCell("From " + availableUnits.rent().getValue().getA() + "$" + "to " + availableUnits.rent().getValue().getB() + "$", tableLayout.get("Rent"), floorplan);
-            //            System.out.println(">>>" + availableUnits.rent().toString());
-
             addCell("Deposit", "&nbsp", floorplan);
             addCell("Beds", "&nbsp", floorplan);
             addCell("Baths", "&nbsp", floorplan);
@@ -288,7 +292,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             for (final com.propertyvista.portal.domain.Unit unit : availableUnits.units()) {
                 final FlowPanel unitRowPanel = new FlowPanel();
-                unitRowPanel.setStyleName(UNIT_ROW_PANEL_STYLENAME);
+                unitRowPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
                 unitRowPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
                 unitRowPanel.getElement().getStyle().setCursor(Cursor.POINTER);
                 unitRowPanel.addDomHandler(new ClickHandler() {
@@ -305,7 +309,9 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
                     @Override
                     public void onMouseOver(MouseOverEvent event) {
-                        unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
+                        if (!unitRowPanel.getStyleName().contains(StyleDependent.selected.name())) {
+                            unitRowPanel.addStyleDependentName(StyleDependent.hover.name());
+                        }
                     }
                 }, MouseOverEvent.getType());
 
@@ -313,10 +319,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
                     @Override
                     public void onMouseOut(MouseOutEvent event) {
-                        if (!unitRowPanel.getStyleName().equals(UNIT_ROW_PANEL_STYLENAME + UNIT_PANELS_SELECTED_STYLENAME_SUFIX)) {
-                            unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
-                            unitRowPanel.getElement().getStyle().setBackgroundColor("");
-                        }
+                        unitRowPanel.removeStyleDependentName(StyleDependent.hover.name());
                     }
                 }, MouseOutEvent.getType());
 
@@ -337,7 +340,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
                     selectUnitRow(unitRowPanel);
                 }
             }
-
         }
 
         private void addCell(String cellName, String cellContent, FlowPanel container) {
@@ -349,13 +351,13 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         private void populateUnitDetail(com.propertyvista.portal.domain.Unit unit) {
             FlowPanel unitDetailPanel = new FlowPanel();
-            unitDetailPanel.setStyleName(UNIT_DETAIL_PANEL_STYLENAME);
+            unitDetailPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel);
             unitDetailPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
 
             FlowPanel infoPanel = new FlowPanel();
             infoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             infoPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            infoPanel.add(new HTML("<h3>Info</h3>"));
+            infoPanel.add(new HTML(h3(i18n.tr("Info"))));
             infoPanel.add(new HTML(unit.infoDetails().getStringView()));
             infoPanel.setWidth("33%");
             unitDetailPanel.add(infoPanel);
@@ -363,7 +365,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             FlowPanel amenitiesPanel = new FlowPanel();
             amenitiesPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             amenitiesPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            amenitiesPanel.add(new HTML("<h3>Amenities/Utilities:</h3>"));
+            amenitiesPanel.add(new HTML(h3(i18n.tr("Amenities/Utilities:"))));
             amenitiesPanel.add(new HTML(unit.amenities().getStringView()));
             amenitiesPanel.add(new HTML(unit.utilities().getStringView()));
             amenitiesPanel.setWidth("33%");
@@ -372,7 +374,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             FlowPanel concessionPanel = new FlowPanel();
             concessionPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             concessionPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            concessionPanel.add(new HTML("<h3>Concession</h3>"));
+            concessionPanel.add(new HTML(h3(i18n.tr("Concession"))));
             concessionPanel.add(new HTML(unit.concessions().getStringView()));
             concessionPanel.setWidth("33%");
             unitDetailPanel.add(concessionPanel);
@@ -383,7 +385,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             FlowPanel addonsPanel = new FlowPanel();
             addonsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            addonsPanel.add(new HTML("<h3>Available add-ons</h3>"));
+            addonsPanel.add(new HTML(h3(i18n.tr("Available add-ons"))));
             addonsPanel.setWidth("33%");
             unitDetailPanel.add(addonsPanel);
             addonsPanel.add(new HTML(unit.concessions().getStringView()));
@@ -394,13 +396,13 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             // lease term:
             unitDetailPanel.add(new HTML());
-            unitDetailPanel.add(new HTML("<h3>Lease Terms</h3>"));
+            unitDetailPanel.add(new HTML(h3(i18n.tr("Lease Terms"))));
             FlowPanel leaseTermsPanel = new FlowPanel();
 
             String groupName = "TermVariants" + unit.hashCode();
             RadioButton term = null; // fill the variants:
             for (final MarketRent mr : unit.marketRent()) {
-                term = new RadioButton(groupName, mr.leaseTerm().getStringView() + "&nbsp&nbsp&nbsp&nbsp month &nbsp&nbsp&nbsp&nbsp $"
+                term = new RadioButton(groupName, mr.leaseTerm().getStringView() + "&nbsp;&nbsp;&nbsp;&nbsp; month &nbsp;&nbsp;&nbsp;&nbsp; $"
                         + mr.rent().amount().getValue(), true);
 
                 // set preselected term for selected unit:
@@ -429,6 +431,11 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
             unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+            unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
+            unitDetailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            unitDetailPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            unitDetailPanel.getElement().getStyle().setBorderColor("black");
+            unitDetailPanel.getElement().getStyle().setProperty("borderTop", "none");
             unitDetailPanel.setVisible(false);
             content.add(innerLevelElementElignment(unitDetailPanel));
         }
@@ -437,35 +444,21 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             // tweak selected unit data view:
             for (Widget w : content) {
-                // hide all detail panels:
-                if (w.getStyleName().contains(UNIT_DETAIL_PANEL_STYLENAME)) {
-                    w.setVisible(false);
-                    w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+                if (w.getStyleName().contains(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel)) {
+                    w.removeStyleDependentName(StyleDependent.selected.name());
                 }
-                // clear selected background:
-                if (w.getStyleName().contains(UNIT_ROW_PANEL_STYLENAME)) {
-                    w.getElement().getStyle().setBackgroundColor("");
-                    w.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
-                    w.getElement().getStyle().setCursor(Cursor.POINTER);
-                    w.setStyleName(UNIT_ROW_PANEL_STYLENAME);
+                // hide all detail panels:
+                if (w.getStyleName().contains(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel)) {
+                    w.removeStyleDependentName(StyleDependent.selected.name());
+                    w.setVisible(false);
                 }
             }
 
-            // show current selected row with details + their decorations: 
-            unitRowPanel.getElement().getStyle().setBackgroundColor("lightGray");
-            unitRowPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            unitRowPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            unitRowPanel.getElement().getStyle().setBorderColor("black");
-            unitRowPanel.getElement().getStyle().setProperty("borderBottom", "none");
-            unitRowPanel.getElement().getStyle().setCursor(Cursor.DEFAULT);
-            unitRowPanel.setStyleName(UNIT_ROW_PANEL_STYLENAME + UNIT_PANELS_SELECTED_STYLENAME_SUFIX);
-
-            Widget detailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
-            detailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            detailPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            detailPanel.getElement().getStyle().setBorderColor("black");
-            detailPanel.getElement().getStyle().setProperty("borderTop", "none");
-            detailPanel.setVisible(true);
+            // show current selected row with details:
+            unitRowPanel.addStyleDependentName(StyleDependent.selected.name());
+            Widget unitDetailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
+            unitDetailPanel.addStyleDependentName(StyleDependent.selected.name());
+            unitDetailPanel.setVisible(true);
         }
 
         private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
