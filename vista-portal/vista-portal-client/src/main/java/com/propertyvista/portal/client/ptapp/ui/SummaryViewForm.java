@@ -221,14 +221,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             upperLevelElementElignment(this);
 
             Map<String, String> tableLayout = new LinkedHashMap<String, String>();
-            tableLayout.put("Type", "20%");
+            tableLayout.put("Type", "25%");
             tableLayout.put("Unit", "20%");
-            //            tableLayout.put("Rent", "10%");
             tableLayout.put("Deposit", "10%");
             tableLayout.put("Beds", "10%");
             tableLayout.put("Baths", "10%");
             tableLayout.put("Sq F", "10%");
-            tableLayout.put("Available", "20%");
+            tableLayout.put("Available", "15%");
 
             // fill header:
             for (Entry<String, String> e : tableLayout.entrySet()) {
@@ -249,7 +248,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
             addCell(tableLayout, content, "Type", inject(proto().unitSelection().selectedUnit().floorplan().name()).asWidget());
             addCell(tableLayout, content, "Unit", inject(proto().unitSelection().selectedUnit().unitType()).asWidget());
-            //            addCell(tableLayout, content, "Rent", inject(proto().unitSelection().selectedUnit().marketRent()).asWidget());
             addCell(tableLayout, content, "Deposit", inject(proto().unitSelection().selectedUnit().requiredDeposit()).asWidget());
             addCell(tableLayout, content, "Beds", inject(proto().unitSelection().selectedUnit().bedrooms()).asWidget());
             addCell(tableLayout, content, "Baths", inject(proto().unitSelection().selectedUnit().bathrooms()).asWidget());
@@ -459,7 +457,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 addViewSwitcher(panel);
                 panel.setCellVerticalAlignment(panel.getWidget(panel.getWidgetCount() - 1), HasVerticalAlignment.ALIGN_MIDDLE);
 
-                HTML tenant = new HTML("<h2>" + pti.firstName().getStringView() + " &nbsp " + pti.lastName().getStringView() + "</h2>");
+                HTML tenant = new HTML(h2(pti.firstName().getStringView() + " &nbsp " + pti.lastName().getStringView()));
                 tenant.getElement().getStyle().setMarginLeft(4, Unit.EM);
                 panel.add(tenant);
                 panel.setCellVerticalAlignment(tenant, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -758,7 +756,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             VistaWidgetDecorator agree = new VistaWidgetDecorator(check, new DecorationData(0, Unit.EM, 0, Unit.EM));
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
-            agree.asWidget().getElement().getStyle().setMarginBottom(0.5, Unit.EM);
             add(agree);
         }
     }
