@@ -157,7 +157,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             {
                 TenantAsset proto = EntityFactory.getEntityPrototype(TenantAsset.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.assetType(), "120px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.assetType(), "180px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.percent(), "120px"));
                 columns.add(new EntityFolderColumnDescriptor(proto.assetValue(), "120px"));
             }
