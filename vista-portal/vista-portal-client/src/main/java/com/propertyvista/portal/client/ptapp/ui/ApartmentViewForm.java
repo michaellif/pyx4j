@@ -277,7 +277,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             addCell("Plan", "&nbsp;", floorplan);
             addCell("Type", availableUnits.floorplan().name().getStringView(), floorplan);
-            addCell("Rent", "From " + "$" + minRentValue(availableUnits.units()), floorplan);
+            addCell("Rent", "From <br />" + "$" + minRentValue(availableUnits.units()), floorplan);
             addCell("Deposit", "&nbsp;", floorplan);
             addCell("Beds", "&nbsp;", floorplan);
             addCell("Baths", "&nbsp;", floorplan);
@@ -465,14 +465,14 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             double rent = Double.MAX_VALUE;
             for (MarketRent mr : unit.marketRent())
                 rent = Math.min(rent, mr.rent().amount().getValue());
-            return rent;
+            return (rent != Double.MAX_VALUE ? rent : 0);
         }
 
         private double minRentValue(IList<com.propertyvista.portal.domain.Unit> units) {
             double rent = Double.MAX_VALUE;
             for (com.propertyvista.portal.domain.Unit u : units)
                 rent = Math.min(rent, minRentValue(u));
-            return rent;
+            return (rent != Double.MAX_VALUE ? rent : 0);
         }
     }
 }
