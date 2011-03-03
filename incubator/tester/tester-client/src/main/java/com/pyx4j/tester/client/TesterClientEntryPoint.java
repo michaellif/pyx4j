@@ -67,6 +67,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         menu.add(new HTML("This version compiled with GWT <b>" + GWT.getVersion() + "</b>"));
 
         final Button startButton = new Button("Start Client Side (GWT) Tests");
+        startButton.ensureDebugId("startClientTests");
         menu.add(startButton);
         startButton.addClickHandler(new ClickHandler() {
             @Override
@@ -76,6 +77,7 @@ public class TesterClientEntryPoint implements EntryPoint {
         });
 
         final Button serverStartButton = new Button("Start Server Side Tests");
+        serverStartButton.ensureDebugId("startServerTests");
         menu.add(serverStartButton);
         serverStartButton.addClickHandler(new ClickHandler() {
             @Override
