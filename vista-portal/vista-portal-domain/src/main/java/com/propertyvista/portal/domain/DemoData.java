@@ -41,6 +41,8 @@ public class DemoData {
 
     public static int NUM_UNITS_PER_FLOOR = 4;
 
+    public static final String PRELOADED_USERNAME = "cust001";
+
     public static final String REGISTRATION_DEFAULT_PROPERTY_CODE = "740";
 
     public static final String REGISTRATION_DEFAULT_FLOORPLAN = "Luxury 2-bedroom";

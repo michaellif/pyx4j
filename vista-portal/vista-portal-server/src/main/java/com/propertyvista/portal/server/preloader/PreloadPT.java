@@ -141,10 +141,9 @@ public class PreloadPT extends AbstractDataPreloader {
                 + RandomUtil.random(DemoData.EMAIL_DOMAINS);
         contact.email().setValue(email);
 
-        // TODO not going to save address - address already exists, will talk about this 
-        //        Address address = createAddress("500 Yonge St", "M2C 98C");
-        //        persist(address);
-        //        contact.address().set(address);
+        Address address = createAddress();
+        persist(address);
+        contact.address().set(address);
 
         return contact;
     }
@@ -236,11 +235,13 @@ public class PreloadPT extends AbstractDataPreloader {
 
         pti.canadianCitizen().setValue(RandomUtil.randomBoolean());
 
-        // there are problems saving this for now
-        //        Address currentAddress = createAddress(RandomUtil.randomInt(15000) + " Yonge St", "M2C 1J2");
-        //        PersistenceServicesFactory.getPersistenceService().persist(currentAddress);
-        //        pti.currentAddress().set(currentAddress);
-        //        pti.previousAddress().set(PreloadUtil.createAddress(RandomUtil.randomInt(15000) + " Yonge St", "H82 6K3"));
+        Address currentAddress = createAddress();
+        persist(currentAddress);
+        pti.currentAddress().set(currentAddress);
+
+        Address previousAddress = createAddress();
+        persist(previousAddress);
+        pti.previousAddress().set(previousAddress);
 
         for (int i = 0; i < RandomUtil.randomInt(3); i++) {
             Vehicle vehicle = createVehicle();
@@ -258,7 +259,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
         EmergencyContact ec2 = createEmergencyContact();
         PersistenceServicesFactory.getPersistenceService().persist(ec2);
-        pti.emergencyContact1().set(ec2);
+        pti.emergencyContact2().set(ec2);
 
         PersistenceServicesFactory.getPersistenceService().persist(pti);
 
@@ -308,22 +309,34 @@ public class PreloadPT extends AbstractDataPreloader {
     }
 
     private User createUser() {
-        user = EntityFactory.create(User.class);
-        user.name().setValue("Gregory Holmes");
-        user.email().setValue("gregory@221b.com");
+        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), DemoData.PRELOADED_USERNAME));
+        user = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
 
-        PersistenceServicesFactory.getPersistenceService().persist(user);
-
-        UserCredential credential = EntityFactory.create(UserCredential.class);
-        credential.setPrimaryKey(user.getPrimaryKey());
-
-        credential.user().set(user);
-        credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword("london"));
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
-
-        PersistenceServicesFactory.getPersistenceService().persist(credential);
+        //        user = EntityFactory.create(User.class);
+        //        user.name().setValue("Gregory Holmes");
+        //        user.email().setValue("gregory@221b.com");
+        //
+        //        PersistenceServicesFactory.getPersistenceService().persist(user);
+        //
+        //        UserCredential credential = EntityFactory.create(UserCredential.class);
+        //        credential.setPrimaryKey(user.getPrimaryKey());
+        //
+        //        credential.user().set(user);
+        //        credential.credential().setValue(VistaAuthenticationServicesImpl.encryptPassword("london"));
+        //        credential.enabled().setValue(Boolean.TRUE);
+        //        credential.behavior().setValue(VistaBehavior.POTENCIAL_TENANT);
+        //
+        //        PersistenceServicesFactory.getPersistenceService().persist(credential);
         return user;
+    }
+
+    private void loadUser(StringBuilder sb) {
+        EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), DemoData.PRELOADED_USERNAME));
+        user = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+
+        sb.append("User: ").append(user).append("\n");
     }
 
     private Application createApplication() {
@@ -335,10 +348,12 @@ public class PreloadPT extends AbstractDataPreloader {
 
     private void loadApplication(StringBuilder sb) {
         EntityQueryCriteria<Application> criteria = EntityQueryCriteria.create(Application.class);
+        assert (user != null);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
 
         Application loadedApplication = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         sb.append("Application :").append(loadedApplication.rent().amount()).append("\n");
+        sb.append("User: ").append(loadedApplication.user()).append("\n");
     }
 
     private ApplicationWizardStep createWizardStep(AppPlace place, ApplicationWizardStep.Status status) {
@@ -837,6 +852,9 @@ public class PreloadPT extends AbstractDataPreloader {
 
     public void load() {
         StringBuilder sb = new StringBuilder();
+
+        sb.append("\n\n---------------------------- USER -----------------------------------\n");
+        loadUser(sb);
 
         sb.append("\n\n---------------------------- APPLICATION -----------------------------\n");
         loadApplication(sb);
