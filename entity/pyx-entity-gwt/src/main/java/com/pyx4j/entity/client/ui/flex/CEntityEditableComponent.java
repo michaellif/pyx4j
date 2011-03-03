@@ -147,6 +147,11 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         return comp;
     }
 
+    public final CEditableComponent<?, ?> inject(IObject<?> member, CEditableComponent<?, ?> comp) {
+        bind(comp, member);
+        return comp;
+    }
+
     public <T> CEditableComponent<T, ?> get(IObject<T> member) {
         return binder.get(member);
     }
