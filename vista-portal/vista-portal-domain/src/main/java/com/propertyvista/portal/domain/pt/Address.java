@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -31,8 +32,10 @@ public interface Address extends IEntity, IAddress {
     }
 
     @NotNull
+    @Format("MM/dd/yyyy")
     IPrimitive<Date> moveInDate();
 
+    @Format("MM/dd/yyyy")
     IPrimitive<Date> moveOutDate();
 
     @Caption(name = "Monthly Payment")

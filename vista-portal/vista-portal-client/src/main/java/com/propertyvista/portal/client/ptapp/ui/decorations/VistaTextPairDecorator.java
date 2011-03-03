@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui.decorations;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 
@@ -64,6 +65,31 @@ public class VistaTextPairDecorator extends FlowPanel {
             rw.getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
 
         add(rw);
+
+    }
+
+    public VistaTextPairDecorator(String left, IsWidget right, DecorationData decorData) {
+
+        setStyleName(DEFAULT_STYLE_PREFIX);
+
+        Label lw = new Label(left);
+        lw.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Left);
+        lw.getElement().getStyle().setVerticalAlign(decorData.labelVerticalAlignment);
+        lw.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        lw.setHorizontalAlignment(decorData.labelAlignment);
+        if (decorData.labelWidth != 0)
+            lw.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
+
+        add(lw);
+
+        right.asWidget().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Right);
+        right.asWidget().getElement().getStyle().setVerticalAlign(decorData.componentVerticalAlignment);
+        right.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+//        right.asWidget().setHorizontalAlignment(decorData.componentAlignment);
+        if (decorData.componentWidth != 0)
+            right.asWidget().getElement().getStyle().setWidth(decorData.componentWidth, decorData.componentUnit);
+
+        add(right);
 
     }
 }
