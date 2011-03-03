@@ -50,7 +50,11 @@ public class DebugServlet extends GenericServlet {
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         if (req instanceof HttpServletRequest) {
             HttpServletRequest hrequest = (HttpServletRequest) req;
-            if (hrequest.getParameter("error") != null) {
+            String error = hrequest.getParameter("error");
+            if (error != null) {
+                if (error.equals("SecurityException")) {
+                    throw new SecurityException();
+                }
                 throw new Error();
             }
         }
