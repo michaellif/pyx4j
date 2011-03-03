@@ -40,8 +40,8 @@ public class CampaignManager {
 
     public static void fireEvent(CampaignTriger trigger, PotentialTenantList tenants) {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
-            if ((tenantInfo.relationship().getValue().equals(Relationship.Applicant))
-                    || (tenantInfo.relationship().getValue().equals(Relationship.CoApplicant))) {
+            Relationship relationship = tenantInfo.relationship().getValue();
+            if (Relationship.Applicant.equals(relationship) || Relationship.CoApplicant.equals(relationship)) {
                 fireEvent(trigger, tenantInfo);
             }
         }
