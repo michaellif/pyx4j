@@ -26,6 +26,7 @@ import org.xnap.commons.i18n.I18n;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.rpc.pt.PtUserVisit;
+import com.propertyvista.portal.server.access.openId.OpenIdServlet;
 import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -48,6 +49,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl {
@@ -138,11 +140,15 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
         @Override
         public AuthenticationResponse execute(String request) {
             boolean hasOpenIdSession = SecurityController.checkBehavior(CoreBehavior.USER);
+            String hasOpenIdEmail = (String) Context.getVisit().getAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE);
             Lifecycle.endSession();
             if (hasOpenIdSession) {
                 Set<Behavior> behaviours = new HashSet<Behavior>();
                 behaviours.add(CoreBehavior.USER);
                 Lifecycle.beginSession(null, behaviours);
+                if (hasOpenIdEmail != null) {
+                    Context.getVisit().setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, hasOpenIdEmail);
+                }
             }
             return createAuthenticationResponse(request);
         }
