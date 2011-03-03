@@ -42,6 +42,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.rpc.shared.RemoteService;
 import com.pyx4j.server.contexts.Context;
 
@@ -174,6 +175,18 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         }
 
         return implementation.execute(realServiceName, serviceRequest, userVisitHashCode);
+    }
+
+    /**
+     * Log broken request information in application log
+     */
+    @Override
+    protected void doUnexpectedFailure(Throwable failure) {
+        log.error("return http error {}", failure);
+        if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+            RequestDebug.debug(getThreadLocalRequest());
+        }
+        super.doUnexpectedFailure(failure);
     }
 
 }
