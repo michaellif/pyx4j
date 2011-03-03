@@ -19,6 +19,8 @@
 	
 	<inherits name='com.pyx4j.log4gwt.Log4gwtRPCAppender'/>
 
+    <inherits name='com.google.gwt.user.Debug'/>
+
 	<source path="client"/>
 
 	<entry-point class='com.pyx4j.tester.client.TesterClientEntryPoint'/>
