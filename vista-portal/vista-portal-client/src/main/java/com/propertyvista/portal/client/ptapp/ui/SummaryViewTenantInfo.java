@@ -23,6 +23,7 @@ import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -40,6 +41,8 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaReadOnlyDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.EmergencyContact;
 import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
@@ -76,22 +79,22 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
     @Override
     public IsWidget createContent() {
-        FlowPanel main = new FlowPanel();
 
-        main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        FlowPanel main = new FlowPanel();
         upperLevelElementElignment(main);
 
+        main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         main.getElement().getStyle().setBackgroundColor("white");
+
         main.getElement().getStyle().setBorderWidth(1, Unit.PX);
         main.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
         main.getElement().getStyle().setBorderColor("black");
 
-        //                getElement().getStyle().setPaddingRight(1, Unit.EM);
         main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
         main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
+        main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
         main.add(bindCompactView());
-
         main.add(bindFullView());
 
         return main;
@@ -105,6 +108,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
     }
 
     private FlowPanel formFullName(IPerson person) {
+
         FlowPanel fullname = new FlowPanel();
         fullname.add(DecorationUtils.inline(inject(person.firstName()), "auto"));
         fullname.add(DecorationUtils.inline(new HTML("&nbsp;")));
@@ -118,12 +122,16 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
         HorizontalPanel panel = new HorizontalPanel();
 
-        addViewSwitcher(panel);
-        panel.setCellVerticalAlignment(panel.getWidget(panel.getWidgetCount() - 1), HasVerticalAlignment.ALIGN_MIDDLE);
+        Widget sw;
+        panel.add(sw = addViewSwitcher());
+        panel.setCellVerticalAlignment(sw, HasVerticalAlignment.ALIGN_MIDDLE);
 
-        //                HTML tenant = new HTML(h2(proto().firstName()) + " &nbsp " + proto().lastName())));
         FlowPanel tenant = formFullName(proto());
-        tenant.getElement().getStyle().setMarginLeft(4, Unit.EM);
+        tenant.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        tenant.getElement().getStyle().setFontSize(1.5, Unit.EM);
+        tenant.getElement().getStyle().setPaddingTop(0.2, Unit.EM);
+        tenant.getElement().getStyle().setPaddingBottom(0.3, Unit.EM);
+        tenant.getElement().getStyle().setMarginLeft(2, Unit.EM);
         panel.add(tenant);
         panel.setCellVerticalAlignment(tenant, HasVerticalAlignment.ALIGN_MIDDLE);
 
@@ -132,13 +140,13 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
     public Widget bindFullView() {
 
-        DecorationData dd2ColumnsTable = new DecorationData(50, Unit.PCT, 50, Unit.PCT);
-        dd2ColumnsTable.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
-        dd2ColumnsTable.componentAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
+        DecorationData dd2ColumnsTable = new DecorationData(50, Unit.PCT, HasHorizontalAlignment.ALIGN_LEFT, 50, Unit.PCT, HasHorizontalAlignment.ALIGN_RIGHT);
 
         // ----------------------------------------------------------------------
+        // Person:
 
         HorizontalPanel subviewPanel = new HorizontalPanel();
+        subviewPanel.getElement().getStyle().setMarginTop(0.3, Unit.EM);
 
         FlowPanel panel = new FlowPanel();
         panel.add(new VistaReadOnlyDecorator(inject(proto().homePhone()), dd2ColumnsTable));
@@ -159,9 +167,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
-        // add empty cell just for proper resizing of the previous two ;)
-        subviewPanel.add(new FlowPanel());
-
+        subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
         subviewPanel.setWidth("100%");
         fullViewPanel.add(subviewPanel);
 
@@ -170,49 +176,21 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
+        // Addresses:
 
         subviewPanel = new HorizontalPanel();
 
-        panel = new FlowPanel();
-        panel.add(new HTML(h3(proto().currentAddress().getMeta().getCaption())));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().postalCode()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().city()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().province()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().street1()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().street2()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().moveInDate()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().moveOutDate()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().payment()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().phone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().rented()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().currentAddress().managerName()), dd2ColumnsTable));
-        subviewPanel.add(panel);
+        subviewPanel.add(panel = bindAddress(proto().currentAddress(), dd2ColumnsTable));
         subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
 
         panel = new FlowPanel();
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
 
-        panel = new FlowPanel();
-
-        panel.add(new HTML("<h3>" + proto().previousAddress().getMeta().getCaption() + "</h3>"));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().postalCode()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().city()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().province()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().street1()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().street2()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().moveInDate()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().moveOutDate()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().payment()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().phone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().rented()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().previousAddress().managerName()), dd2ColumnsTable));
-        subviewPanel.add(panel);
+        subviewPanel.add(panel = bindAddress(proto().previousAddress(), dd2ColumnsTable));
         subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
-        // add empty cell just for proper resizing of the previous two ;)
-        subviewPanel.add(new FlowPanel());
-
+        subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
         subviewPanel.setWidth("100%");
         fullViewPanel.add(subviewPanel);
 
@@ -221,40 +199,19 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
+        // Vehicles:
 
         fullViewPanel.add(new HTML(h3(proto().vehicles().getMeta().getCaption())));
 
         bind(createVehicleFolderEditorColumns(), proto().vehicles());
         fullViewPanel.add(get(proto().vehicles()));
 
-        //            Widget w;
-        //            for (Vehicle vhcl : proto().vehicles()) {
-        //                HorizontalPanel vehiclePanel = new HorizontalPanel();
-        //
-        //                vehiclePanel.add(w = new HTML(vhcl.plateNumber())));
-        //                vehiclePanel.setCellWidth(w, "20%");
-        //
-        //                vehiclePanel.add(w = new HTML(vhcl.year())));
-        //                vehiclePanel.setCellWidth(w, "20%");
-        //
-        //                vehiclePanel.add(w = new HTML(vhcl.make())));
-        //                vehiclePanel.setCellWidth(w, "20%");
-        //
-        //                vehiclePanel.add(w = new HTML(vhcl.model())));
-        //                vehiclePanel.setCellWidth(w, "20%");
-        //
-        //                vehiclePanel.add(w = new HTML(vhcl.province())));
-        //                vehiclePanel.setCellWidth(w, "20%");
-        //
-        //                vehiclePanel.setWidth("100%");
-        //                add(vehiclePanel);
-        //            }
-
         sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
+        // legal Questions:
 
         DecorationData ddQuestionay = new DecorationData(80, Unit.PCT, 10, Unit.PCT);
         ddQuestionay.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
@@ -280,44 +237,25 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         fullViewPanel.add(sp);
 
         // ----------------------------------------------------------------------
+        // Emergency:
 
         fullViewPanel.add(new HTML(h3(i18n.tr("Emergency Contacts"))));
 
         subviewPanel = new HorizontalPanel();
+        subviewPanel.getElement().getStyle().setMarginTop(0.3, Unit.EM);
+        subviewPanel.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
-        panel = new FlowPanel();
-        panel.add(formFullName(proto().emergencyContact1()));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().homePhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().mobilePhone()), dd2ColumnsTable));
-        //                panel.add(new VistaTextPairDecorator(proto().emergencyContact1().workPhone().getMeta().getCaption(), inject(proto().emergencyContact1().workPhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().address().street1()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().address().street2()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().address().city()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().address().province()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact1().address().postalCode()), dd2ColumnsTable));
-        subviewPanel.add(panel);
+        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact1(), dd2ColumnsTable));
         subviewPanel.setCellWidth(panel, LEFT_COLUMN_WIDTH);
 
         panel = new FlowPanel();
         subviewPanel.add(panel);
         subviewPanel.setCellWidth(panel, GAP_COLUMN_WIDTH);
 
-        panel = new FlowPanel();
-        panel.add(formFullName(proto().emergencyContact2()));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().homePhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().mobilePhone()), dd2ColumnsTable));
-        //                panel.add(new VistaTextPairDecorator(proto().emergencyContact2().workPhone().getMeta().getCaption(), inject(proto().emergencyContact2().workPhone()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().address().street1()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().address().street2()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().address().city()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().address().province()), dd2ColumnsTable));
-        panel.add(new VistaReadOnlyDecorator(inject(proto().emergencyContact2().address().postalCode()), dd2ColumnsTable));
-        subviewPanel.add(panel);
+        subviewPanel.add(panel = bindEmergencyContact(proto().emergencyContact2(), dd2ColumnsTable));
         subviewPanel.setCellWidth(panel, RIGHT_COLUMN_WIDTH);
 
-        // add empty cell just for proper resizing of the previous two ;)
-        subviewPanel.add(new FlowPanel());
-
+        subviewPanel.add(new FlowPanel()); // add empty cell just for proper resizing of the previous two ;)
         subviewPanel.setWidth("100%");
         fullViewPanel.add(subviewPanel);
 
@@ -325,7 +263,45 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         return fullViewPanel;
     }
 
-    private void addViewSwitcher(HorizontalPanel panel) {
+    private FlowPanel bindAddress(Address currentAddress, DecorationData dd2ColumnsTable) {
+        FlowPanel addressPanel = new FlowPanel();
+
+        addressPanel.add(new HTML(h3(currentAddress.getMeta().getCaption())));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.postalCode()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.city()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.province()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.street1()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.street2()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.moveInDate()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.moveOutDate()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.payment()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.phone()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.rented()), dd2ColumnsTable));
+        addressPanel.add(new VistaReadOnlyDecorator(inject(currentAddress.managerName()), dd2ColumnsTable));
+
+        return addressPanel;
+    }
+
+    private FlowPanel bindEmergencyContact(EmergencyContact emergencyContact, DecorationData dd2ColumnsTable) {
+        FlowPanel contactPanel = new FlowPanel();
+
+        FlowPanel person = formFullName(emergencyContact);
+        person.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        person.getElement().getStyle().setFontSize(1.1, Unit.EM);
+        contactPanel.add(person);
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.homePhone()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.mobilePhone()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.workPhone()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().street1()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().street2()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().city()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().province()), dd2ColumnsTable));
+        contactPanel.add(new VistaReadOnlyDecorator(inject(emergencyContact.address().postalCode()), dd2ColumnsTable));
+
+        return contactPanel;
+    }
+
+    private Widget addViewSwitcher() {
 
         Button switcher = new Button("v");
         switcher.addClickHandler(new ClickHandler() {
@@ -339,7 +315,8 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
                 }
             }
         });
-        panel.add(switcher);
+
+        return switcher;
     }
 
     private CEntityFolder<Vehicle> createVehicleFolderEditorColumns() {
@@ -359,13 +336,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
             @Override
             protected FolderDecorator<Vehicle> createFolderDecorator() {
-                return new BoxReadOnlyFolderDecorator<Vehicle>() {
-                    @Override
-                    public void setFolder(CEntityFolder<?> w) {
-                        super.setFolder(w);
-                        this.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-                    }
-                };
+                return new BoxReadOnlyFolderDecorator<Vehicle>();
             }
 
             @Override
@@ -387,5 +358,4 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         };
 
     }
-
 }
