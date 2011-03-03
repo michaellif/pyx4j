@@ -281,6 +281,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             PersistenceServicesFactory.getPersistenceService().retrieve(summary.unitSelection().selectedUnit().floorplan());
 
             retrieveApplicationEntity(summary.tenants());
+            summary.tenants2().set(summary.tenants());
             retrieveApplicationEntity(summary.financial());
             retrieveApplicationEntity(summary.pets());
             retrieveApplicationEntity(summary.charges());

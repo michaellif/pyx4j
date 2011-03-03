@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,6 +26,9 @@ public interface Summary extends IEntity, IApplicationEntity {
 
     @Transient
     PotentialTenantList tenants();
+
+    @Transient
+    PotentialTenantList tenants2();
 
     // TODO this would be PotentialTenantFinancialList after tabs are created.
     @Transient
