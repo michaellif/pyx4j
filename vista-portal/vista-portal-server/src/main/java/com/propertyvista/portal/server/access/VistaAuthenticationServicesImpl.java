@@ -120,7 +120,10 @@ public class VistaAuthenticationServicesImpl extends AuthenticationServicesImpl 
         if (SecurityController.checkBehavior(CoreBehavior.USER)) {
             behaviors.add(CoreBehavior.USER);
         }
-        String hasOpenIdEmail = (String) Context.getVisit().getAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE);
+        String hasOpenIdEmail = null;
+        if (Context.getVisit() != null) {
+            hasOpenIdEmail = (String) Context.getVisit().getAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE);
+        }
 
         visit.setEmail(user.email().getValue());
         Lifecycle.beginSession(visit, behaviors);

@@ -16,9 +16,10 @@ package com.propertyvista.portal.domain.pt;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface StudentIncome extends IAddress, IEmploymentInfo {
+public interface StudentIncome extends IEntity, IAddress, IEmploymentInfo {
 
     public enum FundingChoice {
         scolarship, bursary, grant, loan

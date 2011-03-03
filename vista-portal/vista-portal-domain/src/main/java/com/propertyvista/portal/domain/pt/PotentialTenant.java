@@ -14,9 +14,11 @@
 package com.propertyvista.portal.domain.pt;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -61,6 +63,11 @@ public interface PotentialTenant extends IPerson, IApplicationEntity {
     @ToString(index = 0)
     @NotNull
     IPrimitive<Relationship> relationship();
+
+    @Caption(name = "Birth Date")
+    @NotNull
+    @Format("MM/dd/yyyy")
+    IPrimitive<Date> birthDate();
 
     IPrimitive<Double> payment();
 

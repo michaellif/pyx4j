@@ -13,16 +13,27 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantGuarantor extends IEntity, IPerson {
 
-    @ToString(index = 0)
-    public abstract IPrimitive<Relationship> relationship();
-
     public enum Relationship {
         Mother, Father, Grandfather, Grandmother, Uncle, Aunt, Other
     }
+
+    @ToString(index = 0)
+    IPrimitive<Relationship> relationship();
+
+    @Caption(name = "Birth Date")
+    @NotNull
+    @Format("MM/dd/yyyy")
+    IPrimitive<Date> birthDate();
+
 }

@@ -17,9 +17,10 @@ import com.propertyvista.portal.domain.pt.IAddress;
 
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface BillingAddress extends IAddress {
+public interface BillingAddress extends IEntity, IAddress {
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();

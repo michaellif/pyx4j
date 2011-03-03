@@ -13,9 +13,10 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Employer extends IAddress, IEmploymentInfo {
+public interface Employer extends IEntity, IAddress, IEmploymentInfo {
 
     IPrimitive<String> name();
 

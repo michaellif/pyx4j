@@ -18,9 +18,10 @@ import java.util.Date;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface SocialServices extends IAddress {
+public interface SocialServices extends IEntity, IAddress {
 
     @Caption(name = "Social Services Agency")
     IPrimitive<String> agency();

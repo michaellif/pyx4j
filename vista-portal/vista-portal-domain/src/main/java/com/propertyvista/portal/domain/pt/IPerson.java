@@ -13,13 +13,10 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,36 +27,31 @@ public interface IPerson {
     @ToString(index = 1)
     @NotNull
     @BusinessEqualValue
-    public abstract IPrimitive<String> firstName();
+    IPrimitive<String> firstName();
 
     @Caption(name = "Middle")
-    public abstract IPrimitive<String> middleName();
+    IPrimitive<String> middleName();
 
     @Caption(name = "Last Name")
     @ToString(index = 2)
     @NotNull
     @BusinessEqualValue
-    public abstract IPrimitive<String> lastName();
-
-    @Caption(name = "Birth Date")
-    @NotNull
-    @Format("MM/dd/yyyy")
-    public abstract IPrimitive<Date> birthDate();
+    IPrimitive<String> lastName();
 
     @Editor(type = EditorType.phone)
     @Caption(name = "Home")
-    public abstract IPrimitive<String> homePhone();
+    IPrimitive<String> homePhone();
 
     @Editor(type = EditorType.phone)
     @Caption(name = "Mobile")
-    public abstract IPrimitive<String> mobilePhone();
+    IPrimitive<String> mobilePhone();
 
     @Editor(type = EditorType.phone)
     @Caption(name = "Work")
-    public abstract IPrimitive<String> workPhone();
+    IPrimitive<String> workPhone();
 
     @Editor(type = EditorType.email)
     @Caption(name = "Email")
-    public abstract IPrimitive<String> email();
+    IPrimitive<String> email();
 
 }
