@@ -47,6 +47,7 @@ public interface PotentialTenantInfo extends PotentialTenant {
     IList<Vehicle> vehicles();
 
     @Owned
+    @Caption(name = "General Questions")
     LegalQuestions legalQuestions();
 
     @Owned

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import static com.pyx4j.commons.HtmlUtils.h4;
+import static com.pyx4j.commons.HtmlUtils.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

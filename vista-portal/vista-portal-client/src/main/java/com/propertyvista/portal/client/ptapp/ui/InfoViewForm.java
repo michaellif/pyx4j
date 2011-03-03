@@ -16,6 +16,11 @@ package com.propertyvista.portal.client.ptapp.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pyx4j.commons.HtmlUtils.*;
+
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -47,6 +52,8 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 @Singleton
 public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
+    private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
+
     public InfoViewForm() {
         super(PotentialTenantInfo.class);
     }
@@ -55,7 +62,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Contact Details</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Contact Details")))));
 
         DecorationData decorData = new DecorationData();
         decorData.editable = false;
@@ -96,7 +103,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         decorData.componentWidth = 25;
         main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Secure Information</h4>")));
+        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Secure Information")))));
         decorData = new DecorationData();
         decorData.componentWidth = 20;
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), decorData));
@@ -108,16 +115,16 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new VistaWidgetDecorator(inject(proto().secureIdentifier()), decorData));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Current Address</h4>")));
+        main.add(new ViewHeaderDecorator(proto().currentAddress()));
         main.add(inject(proto().currentAddress()));
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Previous Address</h4>")));
+        main.add(new ViewHeaderDecorator(proto().previousAddress()));
         main.add(inject(proto().previousAddress()));
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Vehicles</h4>")));
+        main.add(new ViewHeaderDecorator(proto().vehicles()));
         main.add(inject(proto().vehicles()));
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>General Questions</h4>")));
+        main.add(new ViewHeaderDecorator(proto().legalQuestions()));
 
         VistaWidgetDecorator.DecorationData decor = new VistaWidgetDecorator.DecorationData(450, 100);
         decor.labelAlignment = HasHorizontalAlignment.ALIGN_LEFT;
@@ -137,12 +144,12 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new VistaWidgetDecorator(inject(proto().legalQuestions().filedBankruptcy()), decor));
         main.add(new HTML());
 
-        main.add(new ViewHeaderDecorator(new HTML("<h4>Emergency Contacts</h4>")));
+        main.add(new ViewHeaderDecorator(h4(i18n.tr("Emergency Contacts"))));
 
-        main.add(new HTML("<p/><h6>Contact1</h6>"));
+        main.add(new HTML("<p/>" + h6(proto().emergencyContact1().getMeta().getCaption())));
         main.add(inject(proto().emergencyContact1()));
 
-        main.add(new HTML("<p/><h6>Contact2</h6>"));
+        main.add(new HTML("<p/>" + h6(proto().emergencyContact2().getMeta().getCaption())));
         main.add(inject(proto().emergencyContact2()));
 
         return main;
@@ -189,6 +196,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 main.add(inject(proto().lastName()), 20);
                 main.add(inject(proto().homePhone()), 15);
                 main.add(inject(proto().mobilePhone()), 15);
+                main.add(inject(proto().workPhone()), 15);
                 main.add(inject(proto().address().street1()), 40);
                 main.add(inject(proto().address().street2()), 40);
                 main.add(inject(proto().address().city()), 15);
@@ -218,7 +226,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
             @Override
             protected FolderDecorator<Vehicle> createFolderDecorator() {
-                return new TableFolderDecorator<Vehicle>(columns, SiteImages.INSTANCE.addRow(), "Add a vehicle");
+                return new TableFolderDecorator<Vehicle>(columns, SiteImages.INSTANCE.addRow(), i18n.tr("Add a vehicle"));
             }
 
             @Override
@@ -231,7 +239,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), "Remove vehicle");
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove vehicle"));
                     }
 
                 };
