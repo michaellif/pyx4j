@@ -142,6 +142,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().name()), 10, 12);
                 main.add(inject(proto().employedForYears()), 10, 2);
                 BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
+                BaseEntityForm.injectIAddress(main, proto(), this);
                 return main;
             }
 
