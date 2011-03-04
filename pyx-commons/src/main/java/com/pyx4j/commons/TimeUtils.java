@@ -157,4 +157,10 @@ public class TimeUtils {
         return !(testDate.before(startDate) || testDate.after(endDate));
     }
 
+    @SuppressWarnings("deprecation")
+    // GWT requires Date
+    public static void addDays(Date date, int days) {
+        date.setDate(date.getDate() + days);
+    }
+
 }
