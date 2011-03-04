@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui.flex;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
@@ -114,8 +115,15 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
     }
 
     @Override
-    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
-        return null;
+    public HandlerRegistration addItemClickHandler(final ClickHandler handler) {
+        //TODO add proper handler removal
+        return rowHolder.addDomHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                handler.onClick(event);
+            }
+        }, ClickEvent.getType());
     }
 
     @Override
