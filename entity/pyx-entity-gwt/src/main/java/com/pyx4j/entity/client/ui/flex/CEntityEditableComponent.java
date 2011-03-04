@@ -81,7 +81,14 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
 
     @Override
     public boolean isValid() {
-        return containerHelper.isValid();
+        if (!isEditable() || !isEnabled()) {
+            return true;
+        }
+        if (!super.isValid()) {
+            return false;
+        } else {
+            return containerHelper.isValid();
+        }
     }
 
     @Override

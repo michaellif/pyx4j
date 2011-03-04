@@ -222,7 +222,14 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     @Override
     public boolean isValid() {
-        return containerHelper.isValid();
+        if (!isEditable() || !isEnabled()) {
+            return true;
+        }
+        if (!super.isValid()) {
+            return false;
+        } else {
+            return containerHelper.isValid();
+        }
     }
 
     @Override

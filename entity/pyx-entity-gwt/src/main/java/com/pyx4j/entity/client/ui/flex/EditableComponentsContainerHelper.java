@@ -46,9 +46,6 @@ public class EditableComponentsContainerHelper implements IAccessAdapter {
     }
 
     public boolean isValid() {
-        if (!container.isEditable() || !container.isEnabled()) {
-            return true;
-        }
         for (CEditableComponent<?, ?> ccomponent : ((IComponentContainer) container).getComponents()) {
             if (!ccomponent.isValid()) {
                 return false;
