@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 
 import org.slf4j.Logger;
@@ -43,7 +44,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 /**
  * This component represents list of IEntities
  */
-public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IFlexContentComponent {
+public abstract class CEntityFolder<E extends IEntity> extends CEditableComponent<IList<E>, NativeEntityFolder<IList<E>>> implements IComponentContainer,
+        IFlexContentComponent {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
@@ -57,9 +59,12 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private final LinkedHashMap<E, CEntityFolderItem<E>> itemsMap;
 
+    private final EditableComponentsContainerHelper containerHelper;
+
     public CEntityFolder() {
         content = new FlowPanel();
         itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
+        containerHelper = new EditableComponentsContainerHelper(this);
     }
 
     @Override
@@ -201,6 +206,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     }
 
+    @Override
+    public Collection<? extends CEditableComponent<?, ?>> getComponents() {
+        return itemsMap.values();
+    }
+
     protected CEntityFolderItem<E> getFolderRow(E value) {
         return itemsMap.get(value);
     }
@@ -210,14 +220,20 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         return new NativeEntityFolder<IList<E>>();
     }
 
+    @Override
+    public boolean isValid() {
+        return containerHelper.isValid();
+    }
+
+    @Override
     public ValidationResults getValidationResults() {
-        // TODO Implement propagation of validation
-        return null;
+        return containerHelper.getValidationResults();
     }
 
     @Override
     public void setVisited(boolean visited) {
         super.setVisited(visited);
+        containerHelper.setVisited(visited);
     }
 
     public FlowPanel getContent() {

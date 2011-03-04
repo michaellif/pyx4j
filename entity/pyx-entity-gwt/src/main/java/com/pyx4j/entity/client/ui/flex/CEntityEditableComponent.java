@@ -20,29 +20,33 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import java.util.Collection;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
 public abstract class CEntityEditableComponent<E extends IEntity> extends CEditableComponent<E, NativeEntityEditor<E>> implements IFlexContentComponent,
-        PropertyChangeHandler {
+        IComponentContainer, PropertyChangeHandler {
 
     private final EntityBinder<E> binder;
 
     private IFlexContentComponent bindParent;
 
-    public CEntityEditableComponent(EntityBinder<E> binder) {
-        this.binder = binder;
-    }
+    private EditableComponentsContainerHelper containerHelper;
 
     public CEntityEditableComponent(Class<E> clazz) {
-        binder = new EntityBinder<E>(clazz);
+        this(new EntityBinder<E>(clazz));
+    }
+
+    public CEntityEditableComponent(EntityBinder<E> binder) {
+        this.binder = binder;
+        containerHelper = new EditableComponentsContainerHelper(this);
     }
 
     public EntityBinder<E> binder() {
@@ -71,42 +75,24 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
     }
 
     @Override
-    public boolean isValid() {
-        if (!isEditable() || !isEnabled()) {
-            return true;
-        }
-        for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?> && !((CEditableComponent<?, ?>) ccomponent).isValid()) {
-                return false;
-            }
-        }
-        return true;
+    public Collection<? extends CEditableComponent<?, ?>> getComponents() {
+        return binder.getComponents();
     }
 
+    @Override
+    public boolean isValid() {
+        return containerHelper.isValid();
+    }
+
+    @Override
     public ValidationResults getValidationResults() {
-        ValidationResults validationResults = new ValidationResults();
-        for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEntityEditableComponent<?> && !((CEntityEditableComponent<?>) ccomponent).isValid()) {
-                validationResults.appendValidationErrors(((CEntityEditableComponent<?>) ccomponent).getValidationResults());
-            } else if (ccomponent instanceof CEditableComponent<?, ?>) {
-                CEditableComponent<?, ?> editableComponent = (CEditableComponent<?, ?>) ccomponent;
-                if (!editableComponent.isValid() && editableComponent.isVisited()) {
-                    validationResults.appendValidationError("Field '" + ccomponent.getTitle() + "'  is not valid. " + editableComponent.getValidationMessage());
-                }
-            } else if (ccomponent instanceof CEntityFolder<?> && !((CEntityFolder<?>) ccomponent).isValid()) {
-                validationResults.appendValidationErrors(((CEntityFolder<?>) ccomponent).getValidationResults());
-            }
-        }
-        return validationResults;
+        return containerHelper.getValidationResults();
     }
 
     @Override
     public void setVisited(boolean visited) {
-        for (CComponent<?> ccomponent : binder.getComponents()) {
-            if (ccomponent instanceof CEditableComponent<?, ?>) {
-                ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
-            }
-        }
+        super.setVisited(visited);
+        containerHelper.setVisited(visited);
     }
 
     @Override
