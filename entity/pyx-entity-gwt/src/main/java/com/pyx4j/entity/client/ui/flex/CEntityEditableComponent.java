@@ -105,6 +105,7 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
     public final void bind(CEditableComponent<?, ?> component, IObject<?> member) {
         binder.bind(component, member);
         component.addPropertyChangeHandler(this);
+        component.addAccessAdapter(containerHelper);
         if (component instanceof IFlexContentComponent) {
             ((IFlexContentComponent) component).onBound(this);
         }

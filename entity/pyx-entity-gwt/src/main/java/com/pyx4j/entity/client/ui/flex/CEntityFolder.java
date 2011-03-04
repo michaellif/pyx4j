@@ -180,27 +180,27 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         }
     }
 
-    private void abandonFolderItem(final CEntityFolderItem<E> comp) {
-        content.remove(comp);
-        itemsMap.remove(comp.getValue());
+    private void abandonFolderItem(final CEntityFolderItem<E> component) {
+        content.remove(component);
+        itemsMap.remove(component.getValue());
         ValueChangeEvent.fire(this, getValue());
     }
 
-    private void adoptFolderItem(final CEntityFolderItem<E> comp) {
+    private void adoptFolderItem(final CEntityFolderItem<E> component) {
 
-        final FolderItemDecorator folderItemDecorator = comp.createFolderItemDecorator();
+        final FolderItemDecorator folderItemDecorator = component.createFolderItemDecorator();
 
-        comp.setFolderItemDecorator(folderItemDecorator);
-
-        content.add(comp);
-        itemsMap.put(comp.getValue(), comp);
+        component.setFolderItemDecorator(folderItemDecorator);
+        component.addAccessAdapter(containerHelper);
+        content.add(component);
+        itemsMap.put(component.getValue(), component);
         ValueChangeEvent.fire(this, getValue());
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                removeItem(comp, folderItemDecorator);
+                removeItem(component, folderItemDecorator);
             }
         });
 

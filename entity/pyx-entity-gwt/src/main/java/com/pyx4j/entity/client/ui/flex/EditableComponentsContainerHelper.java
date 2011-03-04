@@ -24,25 +24,32 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.forms.client.ui.CButton;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.ContainerAccessAdapter;
+import com.pyx4j.forms.client.ui.IAccessAdapter;
 import com.pyx4j.forms.client.ui.ValidationResults;
 
-public class EditableComponentsContainerHelper {
+/**
+ * @see ContainerAccessAdapter
+ * 
+ */
+public class EditableComponentsContainerHelper implements IAccessAdapter {
 
     private static I18n i18n = I18nFactory.getI18n(EditableComponentsContainerHelper.class);
 
-    private final IComponentContainer container;
+    private final CEditableComponent<?, ?> container;
 
     public EditableComponentsContainerHelper(IComponentContainer container) {
-        this.container = container;
-        assert container instanceof CEditableComponent;
+        this.container = (CEditableComponent<?, ?>) container;
     }
 
     public boolean isValid() {
-        if (!((CEditableComponent<?, ?>) container).isEditable() || !((CEditableComponent<?, ?>) container).isEnabled()) {
+        if (!container.isEditable() || !container.isEnabled()) {
             return true;
         }
-        for (CEditableComponent<?, ?> ccomponent : container.getComponents()) {
+        for (CEditableComponent<?, ?> ccomponent : ((IComponentContainer) container).getComponents()) {
             if (!ccomponent.isValid()) {
                 return false;
             }
@@ -52,16 +59,16 @@ public class EditableComponentsContainerHelper {
 
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = new ValidationResults();
-        String message = ((CEditableComponent<?, ?>) container).getValidationMessage();
+        String message = container.getValidationMessage();
         if (message != null) {
-            if (CommonsStringUtils.isStringSet(((CEditableComponent<?, ?>) container).getTitle())) {
-                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", ((CEditableComponent<?, ?>) container).getTitle(), message));
+            if (CommonsStringUtils.isStringSet(container.getTitle())) {
+                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid. {1}", container.getTitle(), message));
             } else {
                 validationResults.appendValidationError(message);
             }
         }
 
-        for (CEditableComponent<?, ?> component : container.getComponents()) {
+        for (CEditableComponent<?, ?> component : ((IComponentContainer) container).getComponents()) {
             if (component.isValid()) {
                 continue;
             }
@@ -75,8 +82,27 @@ public class EditableComponentsContainerHelper {
     }
 
     public void setVisited(boolean visited) {
-        for (CEditableComponent<?, ?> ccomponent : container.getComponents()) {
+        for (CEditableComponent<?, ?> ccomponent : ((IComponentContainer) container).getComponents()) {
             ((CEditableComponent<?, ?>) ccomponent).setVisited(visited);
         }
+    }
+
+    @Override
+    public boolean isEnabled(CComponent<?> component) {
+        if (component instanceof CButton) {
+            return container.isEditable() && container.isEnabled();
+        } else {
+            return container.isEnabled();
+        }
+    }
+
+    @Override
+    public boolean isEditable(CComponent<?> component) {
+        return container.isEditable();
+    }
+
+    @Override
+    public boolean isVisible(CComponent<?> component) {
+        return container.isVisible();
     }
 }
