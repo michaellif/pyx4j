@@ -13,7 +13,11 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.ref.Province;
+
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -29,8 +33,10 @@ public interface IAddress {
     @NotNull
     IPrimitive<String> city();
 
+    @Caption(name = "Province/State")
     @NotNull
-    IPrimitive<String> province();
+    @Editor(type = EditorType.combo)
+    Province province();
 
     @NotNull
     IPrimitive<String> postalCode();

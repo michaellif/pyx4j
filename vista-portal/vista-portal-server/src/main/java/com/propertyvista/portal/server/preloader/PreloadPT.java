@@ -23,15 +23,14 @@ import org.slf4j.LoggerFactory;
 
 import com.propertyvista.portal.domain.AddOn;
 import com.propertyvista.portal.domain.Amenity;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.Utility;
-import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.Application;
@@ -48,9 +47,9 @@ import com.propertyvista.portal.domain.pt.IAddress;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant;
-import com.propertyvista.portal.domain.pt.Pet.WeightUnit;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
@@ -65,12 +64,11 @@ import com.propertyvista.portal.domain.pt.TenantIncome;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 import com.propertyvista.portal.domain.pt.Vehicle;
+import com.propertyvista.portal.domain.ref.Province;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.SiteMap;
-import com.propertyvista.portal.server.access.VistaAuthenticationServicesImpl;
 import com.propertyvista.portal.server.pt.ChargesServerCalculation;
 import com.propertyvista.portal.server.pt.PotentialTenantServicesImpl;
-import com.propertyvista.server.domain.UserCredential;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -93,7 +91,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
     private Application application;
 
-    private static Employer createEmployer() {
+    private Employer createEmployer() {
         Employer employer = EntityFactory.create(Employer.class);
 
         populateAddress(employer);
@@ -127,7 +125,7 @@ public class PreloadPT extends AbstractDataPreloader {
         loadAddress(employer, sb);
     }
 
-    public static EmergencyContact createEmergencyContact() {
+    public EmergencyContact createEmergencyContact() {
         EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
 
         contact.firstName().setValue(RandomUtil.random(DemoData.FIRST_NAMES));
@@ -161,7 +159,7 @@ public class PreloadPT extends AbstractDataPreloader {
         return lq;
     }
 
-    public static Address createAddress() {
+    public Address createAddress() {
         Address address = EntityFactory.create(Address.class);
 
         populateAddress(address);
@@ -178,7 +176,7 @@ public class PreloadPT extends AbstractDataPreloader {
         return address;
     }
 
-    public static void populateAddress(IAddress address) {
+    public void populateAddress(IAddress address) {
 
         String line1 = 100 + RandomUtil.randomInt(10000) + " " + RandomUtil.random(DemoData.STREETS);
 
@@ -187,7 +185,7 @@ public class PreloadPT extends AbstractDataPreloader {
         address.street1().setValue(line1);
         address.street2().setValue("");
         address.city().setValue(RandomUtil.random(DemoData.CITIES));
-        address.province().setValue(RandomUtil.random(DemoData.PROVINCES));
+        address.province().set(retrieveByMemeber(Province.class, address.province().code(), RandomUtil.random(DemoData.PROVINCES)));
         address.postalCode().setValue(zip);
     }
 
