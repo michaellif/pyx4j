@@ -114,6 +114,11 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
     }
 
     @Override
+    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
+        return null;
+    }
+
+    @Override
     public HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
         return null;
     }

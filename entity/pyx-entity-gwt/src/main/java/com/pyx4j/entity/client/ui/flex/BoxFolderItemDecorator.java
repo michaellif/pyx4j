@@ -56,6 +56,11 @@ public class BoxFolderItemDecorator extends FlowPanel implements FolderItemDecor
     }
 
     @Override
+    public HandlerRegistration addItemClickHandler(ClickHandler handler) {
+        return null;
+    }
+
+    @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
         return image.addClickHandler(handler);
     }
