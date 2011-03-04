@@ -73,7 +73,7 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         this.addable = addable && (addButton != null);
 
         FlowPanel imageHolder = null;
-        if (this.addable) {
+        if (addButton != null) {
             addImage = new Image(addButton);
             addImage.getElement().getStyle().setCursor(Cursor.POINTER);
             addImage.getElement().getStyle().setFloat(Float.LEFT);
@@ -95,7 +95,7 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         header = new FlowPanel();
         setHeaderVisible(false);
         header.setWidth("100%");
-        if (this.addable) {
+        if (addImage != null) {
             header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
         }
 

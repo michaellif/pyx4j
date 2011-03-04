@@ -46,7 +46,7 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
 
     private final SimplePanel content;
 
-    private final boolean removable;
+    private boolean removable;
 
     public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
         this.removable = (removable && removeButton != null);
@@ -54,20 +54,35 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        if (this.removable) {
+        FlowPanel imageHolder = null;
+        if (removeButton != null) {
             image = new Image(removeButton);
+            //image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
-            image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-            rowHolder.add(image);
+            imageHolder = new FlowPanel();
+            imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            //imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            //imageHolder.getElement().getStyle().setPaddingLeft(removeButton.getWidth(), Unit.PX);
+            imageHolder.add(image);
+
+            if (!removable) {
+                image.setVisible(false);
+            }
+
+            rowHolder.add(imageHolder);
         } else {
             image = null;
         }
 
         content = new SimplePanel();
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+        if (removeButton != null) {
+            //content.getElement().getStyle().setPaddingLeft(removeButton.getWidth(), Unit.PX);
+        }
+
         rowHolder.add(content);
 
-        if (removable) {
+        if (image != null) {
             image.setTitle(title);
             image.getElement().getStyle().setCursor(Cursor.POINTER);
         }
@@ -113,7 +128,7 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
 
     @Override
     public HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        if (removable) {
+        if (image != null) {
             return image.addClickHandler(handler);
         } else {
             return null;
@@ -145,6 +160,17 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
     @Override
     public HandlerRegistration addRowCollapseClickHandler(ClickHandler handler) {
         return null;
+    }
+
+    public boolean isRemovable() {
+        return removable;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+        if (image != null) {
+            image.setVisible(removable);
+        }
     }
 
 }
