@@ -32,6 +32,8 @@ public interface DevelopmentUser extends IEntity {
 
     IPrimitive<String> businessPhone();
 
+    IPrimitive<Boolean> testCallsOnHosts();
+
     IPrimitive<String> host1();
 
     IPrimitive<String> host2();

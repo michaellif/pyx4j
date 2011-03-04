@@ -24,9 +24,16 @@ import com.pyx4j.server.contexts.Context;
 
 public class DevelopmentSecurity {
 
+    private static boolean hostQueryDone = false;
+
+    private static DevelopmentUser developmentUserHostBased;
+
     public static String callNumberFilter(String number) {
         DevelopmentUser developmentUser = findDevelopmentUser();
         if (developmentUser == null) {
+            return null;
+        }
+        if ((developmentUserHostBased != null) && (!developmentUser.testCallsOnHosts().isBooleanTrue())) {
             return null;
         }
         if ((number != null)
@@ -46,10 +53,6 @@ public class DevelopmentSecurity {
         }
         return findByOpenId();
     }
-
-    private static boolean hostQueryDone = false;
-
-    private static DevelopmentUser developmentUserHostBased;
 
     private static DevelopmentUser findByHost() {
         if ((developmentUserHostBased != null) || (hostQueryDone)) {
