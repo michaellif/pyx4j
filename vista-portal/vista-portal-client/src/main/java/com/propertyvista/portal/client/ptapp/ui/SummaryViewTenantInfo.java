@@ -341,10 +341,10 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
             @Override
             protected CEntityFolderItem<Vehicle> createItem() {
-                return createEmployeeRowEditor(columns);
+                return createVechileRowEditor(columns);
             }
 
-            private CEntityFolderItem<Vehicle> createEmployeeRowEditor(final List<EntityFolderColumnDescriptor> columns) {
+            private CEntityFolderItem<Vehicle> createVechileRowEditor(final List<EntityFolderColumnDescriptor> columns) {
                 return new CEntityFolderRow<Vehicle>(Vehicle.class, columns) {
 
                     @Override
