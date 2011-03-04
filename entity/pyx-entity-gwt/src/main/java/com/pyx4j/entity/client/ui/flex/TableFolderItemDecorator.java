@@ -49,15 +49,19 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
     private final boolean removable;
 
     public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
-        this.removable = removable;
+        this.removable = (removable && removeButton != null);
 
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        image = new Image(removeButton);
+        if (this.removable) {
+            image = new Image(removeButton);
 
-        image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        rowHolder.add(image);
+            image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            rowHolder.add(image);
+        } else {
+            image = null;
+        }
 
         content = new SimplePanel();
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
@@ -102,7 +106,9 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
         super.onEnsureDebugId(baseID);
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
-        image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.getDebugIdString());
+        if (image != null) {
+            image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.getDebugIdString());
+        }
     }
 
     @Override

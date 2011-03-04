@@ -22,6 +22,7 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
@@ -52,27 +53,52 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
 
     private final SimplePanel content;
 
-    private FlowPanel header;
+    private final FlowPanel header;
+
+    private boolean addable;
+
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
+        this(columns, null, null, false);
+    }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title) {
+        this(columns, addButton, title, true);
+    }
 
-        addImage = new Image(addButton);
-        addImage.getElement().getStyle().setCursor(Cursor.POINTER);
-        addImage.getElement().getStyle().setFloat(Float.LEFT);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
+        this(columns, addButton, null, true);
+    }
 
-        FlowPanel imageHolder = new FlowPanel();
-        imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
-        imageHolder.add(addImage);
-        addButtonLabel = new Label(title);
-        addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-        addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
-        imageHolder.add(addButtonLabel);
+    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
+        this.addable = addable && (addButton != null);
+
+        FlowPanel imageHolder = null;
+        if (this.addable) {
+            addImage = new Image(addButton);
+            addImage.getElement().getStyle().setCursor(Cursor.POINTER);
+            addImage.getElement().getStyle().setFloat(Float.LEFT);
+
+            imageHolder = new FlowPanel();
+            imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+            imageHolder.add(addImage);
+
+            addButtonLabel = new Label(title);
+            addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
+            addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
+            imageHolder.add(addButtonLabel);
+        } else {
+            addImage = null;
+            addButtonLabel = null;
+        }
 
         header = new FlowPanel();
         setHeaderVisible(false);
         header.setWidth("100%");
-        header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+        if (this.addable) {
+            header.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
+        }
+
         for (EntityFolderColumnDescriptor column : columns) {
             HorizontalPanel cellPanel = new HorizontalPanel();
             cellPanel.getElement().getStyle().setFloat(Float.LEFT);
@@ -104,12 +130,9 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         content = new SimplePanel();
         add(content);
 
-        add(imageHolder);
-
-    }
-
-    public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton) {
-        this(columns, addButton, null);
+        if (this.addable) {
+            add(imageHolder);
+        }
     }
 
     @Override
@@ -117,17 +140,28 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         content.setWidget(entityFolder.getContent());
     }
 
+    //TODO Misha how do we customise style properly!
+    public Style getHeaderPanelStyle() {
+        return header.getElement().getStyle();
+    }
+
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
         //TODO use inheritance of objects
         //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
-        addImage.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
-        addButtonLabel.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString() + "_label");
+        if (addable) {
+            addImage.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
+            addButtonLabel.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString() + "_label");
+        }
     }
 
     @Override
     public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
+        if (!addable) {
+            return null;
+        }
+
         HandlerRegistrationGC h = new HandlerRegistrationGC();
         h.add(addImage.addClickHandler(handler));
         h.add(addButtonLabel.addClickHandler(handler));

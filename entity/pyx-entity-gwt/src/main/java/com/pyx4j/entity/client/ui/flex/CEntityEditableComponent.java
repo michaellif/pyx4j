@@ -156,6 +156,10 @@ public abstract class CEntityEditableComponent<E extends IEntity> extends CEdita
         return binder.get(member);
     }
 
+    public CEditableComponent<?, ?> getRaw(IObject<?> member) {
+        return binder.get(member);
+    }
+
     @Override
     protected NativeEntityEditor<E> createWidget() {
         return new NativeEntityEditor<E>();

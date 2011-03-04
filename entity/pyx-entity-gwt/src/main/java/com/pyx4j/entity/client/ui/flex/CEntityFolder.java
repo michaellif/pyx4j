@@ -191,6 +191,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     }
 
+    protected CEntityFolderItem<E> getFolderRow(E value) {
+        //TODO
+        return null;
+    }
+
     @Override
     protected NativeEntityFolder<IList<E>> createWidget() {
         return new NativeEntityFolder<IList<E>>();
