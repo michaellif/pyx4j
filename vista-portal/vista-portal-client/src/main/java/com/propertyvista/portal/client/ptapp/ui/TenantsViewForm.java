@@ -42,19 +42,19 @@ import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.ValidationResults;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
 public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
     private static I18n i18n = I18nFactory.getI18n(TenantsViewForm.class);
+
+    private int maxTenants;
 
     public TenantsViewForm() {
         super(PotentialTenantList.class);
@@ -63,17 +63,39 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(inject(proto().tenants()));
+        main.add(inject(proto().tenants(), createTenantsEditorColumns()));
+        addValidations();
         return main;
     }
 
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member == proto().tenants()) {
-            return createTenantsEditorColumns();
-        } else {
-            return super.create(member);
-        }
+    private void addValidations() {
+        super.addValueValidator(new EditableValueValidator<PotentialTenantList>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<PotentialTenantList, ?> component, PotentialTenantList value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().tenants());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<PotentialTenantList, ?> component, PotentialTenantList value) {
+                return i18n.tr("Duplicate tenants specified");
+            }
+        });
+
+        maxTenants = proto().tenants().getMeta().getLength();
+        super.addValueValidator(new EditableValueValidator<PotentialTenantList>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<PotentialTenantList, ?> component, PotentialTenantList value) {
+                int size = getValue().tenants().size();
+                return (size <= maxTenants) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue())));
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<PotentialTenantList, ?> component, PotentialTenantList value) {
+                return i18n.tr("Exceeded number of allowed tenants");
+            }
+        });
     }
 
     private CEntityFolder<PotentialTenantInfo> createTenantsEditorColumns() {
@@ -191,22 +213,4 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
         };
     }
 
-    private boolean hasDuplicates() {
-        return EntityGraph.hasBusinessDuplicates(getValue().tenants());
-    }
-
-    @Override
-    public boolean isValid() {
-        return super.isValid() && !hasDuplicates();
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        ValidationResults validationResults = new ValidationResults();
-        validationResults.appendValidationErrors(super.getValidationResults());
-        if (hasDuplicates()) {
-            validationResults.appendValidationError(i18n.tr("Duplicate tenants specified"));
-        }
-        return validationResults;
-    }
 }

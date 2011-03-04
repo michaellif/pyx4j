@@ -15,12 +15,18 @@ package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PotentialTenantList extends IApplicationEntity {
 
     @Owned
     @Length(6)
     IList<PotentialTenantInfo> tenants();
+
+    //TODO this should be AptUnit property
+    @Transient
+    IPrimitive<Integer> tenantsMaximum();
 
 }

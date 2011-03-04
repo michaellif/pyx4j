@@ -48,7 +48,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 @Singleton
 public class PetsViewForm extends CEntityForm<Pets> {
@@ -56,6 +56,8 @@ public class PetsViewForm extends CEntityForm<Pets> {
     private static I18n i18n = I18nFactory.getI18n(PetsViewForm.class);
 
     private boolean summaryViewMode = false;
+
+    private int maxPets;
 
     public PetsViewForm() {
         super(Pets.class);
@@ -73,22 +75,43 @@ public class PetsViewForm extends CEntityForm<Pets> {
     @Override
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-        main.add(inject(proto().pets()));
+        main.add(inject(proto().pets(), createPetsEditorColumns()));
+        addValidations();
         return main;
     }
 
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ChargeLine) {
-            return new CEntityLabel();
-        } else if (member == proto().pets()) {
-            return createPetsEditorColumns();
-        } else {
-            return super.create(member);
-        }
+    private void addValidations() {
+        super.addValueValidator(new EditableValueValidator<Pets>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Pets, ?> component, Pets value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().pets());
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Pets, ?> component, Pets value) {
+                return i18n.tr("Duplicate pets specified");
+            }
+        });
+
+        maxPets = proto().pets().getMeta().getLength();
+        super.addValueValidator(new EditableValueValidator<Pets>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<Pets, ?> component, Pets value) {
+                int size = getValue().pets().size();
+                return (size <= maxPets) && ((value.petsMaximum().isNull() || (size <= value.petsMaximum().getValue())));
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<Pets, ?> component, Pets value) {
+                return i18n.tr("Exceeded number of allowed pets");
+            }
+        });
     }
 
     private CEntityFolder<Pet> createPetsEditorColumns() {
+
         return new CEntityFolder<Pet>() {
 
             private List<EntityFolderColumnDescriptor> columns;
@@ -124,6 +147,15 @@ public class PetsViewForm extends CEntityForm<Pets> {
             }
 
             @Override
+            public CEditableComponent<?, ?> create(IObject<?> member) {
+                if (member instanceof ChargeLine) {
+                    return new CEntityLabel();
+                } else {
+                    return super.create(member);
+                }
+            }
+
+            @Override
             protected CEntityFolderItem<Pet> createItem() {
                 return new CEntityFolderRow<Pet>(Pet.class, columns) {
 
@@ -150,22 +182,4 @@ public class PetsViewForm extends CEntityForm<Pets> {
 
     }
 
-    private boolean hasDuplicates() {
-        return EntityGraph.hasBusinessDuplicates(getValue().pets());
-    }
-
-    @Override
-    public boolean isValid() {
-        return super.isValid() && !hasDuplicates();
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        ValidationResults validationResults = new ValidationResults();
-        validationResults.appendValidationErrors(super.getValidationResults());
-        if (hasDuplicates()) {
-            validationResults.appendValidationError(i18n.tr("Duplicate pets specified"));
-        }
-        return validationResults;
-    }
 }

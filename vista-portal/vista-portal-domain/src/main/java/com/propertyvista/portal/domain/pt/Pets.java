@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Pets extends IApplicationEntity {
 
@@ -26,4 +27,7 @@ public interface Pets extends IApplicationEntity {
 
     @Transient
     PetChargeRule petChargeRule();
+
+    @Transient
+    IPrimitive<Integer> petsMaximum();
 }

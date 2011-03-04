@@ -205,6 +205,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 petCharge.chargeType().setValue(ChargeType.monthly);
                 petCharge.value().setValue(20);
                 ((Pets) ret).petChargeRule().set(petCharge);
+                ((Pets) ret).petsMaximum().setValue(3);
             }
 
             return ret;
