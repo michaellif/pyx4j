@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.decorators;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,6 +30,11 @@ public class SpaceHolder extends SimplePanel {
     private final String width;
 
     private HTML spaceHolder;
+
+    public SpaceHolder(double value, Unit unit) {
+        this.width = value + unit.getType();
+        clear();
+    }
 
     public SpaceHolder(String width) {
         this.width = width;
