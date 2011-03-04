@@ -388,7 +388,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             addonsPanel.add(new HTML(h3(i18n.tr("Available add-ons"))));
             addonsPanel.setWidth("33%");
             unitDetailPanel.add(addonsPanel);
-            addonsPanel.add(new HTML(unit.concessions().getStringView()));
+            addonsPanel.add(new HTML(unit.addOns().getStringView()));
 
             sp = new ViewLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
             sp.getElement().getStyle().setPaddingLeft(0, Unit.EM);
