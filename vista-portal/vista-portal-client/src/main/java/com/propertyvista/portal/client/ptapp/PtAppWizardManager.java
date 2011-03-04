@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ptapp;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,6 +27,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.VistaBehavior;
 import com.propertyvista.portal.domain.pt.ApplicationWizardStep;
@@ -117,6 +119,11 @@ public class PtAppWizardManager {
         unitSelectionCriteria = EntityFactory.create(UnitSelectionCriteria.class);
         unitSelectionCriteria.propertyCode().setValue(Window.Location.getParameter("b"));
         unitSelectionCriteria.floorplanName().setValue(Window.Location.getParameter("u"));
+        unitSelectionCriteria.availableFrom().setValue(new Date());
+        Date d = new Date();
+        // Now + 1 months
+        CalendarUtil.addMonthsToDate(d, 1);
+        unitSelectionCriteria.availableTo().setValue(d);
 
         if (ApplicationMode.isDevelopment()) {
             if (unitSelectionCriteria.floorplanName().isNull()) {
@@ -133,7 +140,7 @@ public class PtAppWizardManager {
             public void onSuccess(Boolean result) {
                 ginjector.getPlaceHistoryHandler().handleCurrentHistory();
                 if (!result) {
-                    showMessageDialog("We can't find that building", "Error", "Back", new Command() {
+                    showMessageDialog(i18n.tr("We can't find that Building or avalable Units"), "Error", "Back", new Command() {
                         @Override
                         public void execute() {
                             History.back();
