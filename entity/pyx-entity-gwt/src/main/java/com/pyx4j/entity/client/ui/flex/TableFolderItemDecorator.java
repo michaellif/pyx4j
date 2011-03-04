@@ -35,10 +35,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
+import com.pyx4j.forms.client.ui.decorators.ImageHolder;
 
 public class TableFolderItemDecorator extends VerticalPanel implements FolderItemDecorator {
 
-    private final Image image;
+    private Image image;
+
+    private ImageHolder imageHolder;
 
     private final FlowPanel rowHolder;
 
@@ -54,19 +57,18 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
         rowHolder = new FlowPanel();
         rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        FlowPanel imageHolder = null;
+        imageHolder = null;
         if (removeButton != null) {
             image = new Image(removeButton);
             //image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
-            imageHolder = new FlowPanel();
+            imageHolder = new ImageHolder(image);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             //imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             //imageHolder.getElement().getStyle().setPaddingLeft(removeButton.getWidth(), Unit.PX);
-            imageHolder.add(image);
 
             if (!removable) {
-                image.setVisible(false);
+                imageHolder.setVisible(false);
             }
 
             rowHolder.add(imageHolder);
@@ -168,8 +170,8 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
 
     public void setRemovable(boolean removable) {
         this.removable = removable;
-        if (image != null) {
-            image.setVisible(removable);
+        if (imageHolder != null) {
+            imageHolder.setVisible(removable);
         }
     }
 
