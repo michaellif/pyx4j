@@ -15,9 +15,9 @@ package com.propertyvista.portal.domain.pt;
 
 import java.util.Date;
 
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.ApptUnit;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -43,7 +43,7 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     // user selected leaseTerm (aka as MarkerRent in Unit)..
     MarketRent markerRent();
 
-    @Caption(name = "")
+    @Caption(name = "Start Rent Date")
     @NotNull
     IPrimitive<Date> rentStart();
 }
