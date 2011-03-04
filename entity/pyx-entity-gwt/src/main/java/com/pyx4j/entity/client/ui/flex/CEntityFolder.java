@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
+import java.util.LinkedHashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +55,11 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     protected int currentRowDebugId = 0;
 
+    private final LinkedHashMap<E, CEntityFolderItem<E>> itemsMap;
+
     public CEntityFolder() {
         content = new FlowPanel();
+        itemsMap = new LinkedHashMap<E, CEntityFolderItem<E>>();
     }
 
     @Override
@@ -154,7 +159,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     public void populate(IList<E> value) {
         super.populate(value);
 
-        //TODO reuse existing  CEntityEditableComponent.  See  CEntityFormFolder
+        //TODO reuse existing  CEntityEditableComponent.
+        //LinkedHashMap<E, CEntityFolderItem<E>> oldMap = new LinkedHashMap<E, CEntityFolderItem<E>>(itemsMap);
+        itemsMap.clear();
+        currentRowDebugId = 0;
 
         content.clear();
         for (E item : value) {
@@ -169,6 +177,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
 
     private void abandonFolderItem(final CEntityFolderItem<E> comp) {
         content.remove(comp);
+        itemsMap.remove(comp.getValue());
         ValueChangeEvent.fire(this, getValue());
     }
 
@@ -179,6 +188,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
         comp.setFolderItemDecorator(folderItemDecorator);
 
         content.add(comp);
+        itemsMap.put(comp.getValue(), comp);
         ValueChangeEvent.fire(this, getValue());
 
         folderItemDecorator.addItemRemoveClickHandler(new ClickHandler() {
@@ -192,8 +202,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEditableComponen
     }
 
     protected CEntityFolderItem<E> getFolderRow(E value) {
-        //TODO
-        return null;
+        return itemsMap.get(value);
     }
 
     @Override
