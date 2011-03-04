@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import static com.pyx4j.commons.HtmlUtils.h2;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -35,7 +37,7 @@ public class LoginViewForm extends CEntityForm<AuthenticationRequest> {
 
     @Override
     public IsWidget createContent() {
-        HTML header = new HTML("<h2>Login to Your Account</h2>");
+        HTML header = new HTML(h2(i18n.tr("Login to Your Account")));
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
 
         FlowPanel main = new FlowPanel();

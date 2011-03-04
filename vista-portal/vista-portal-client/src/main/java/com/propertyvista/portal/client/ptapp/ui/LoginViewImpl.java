@@ -155,6 +155,7 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
         super.onUnload();
         if (ApplicationMode.isDevelopment()) {
             handlerRegistration.removeHandler();
+            devCount = 1;
         }
     }
 
