@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Unit extends Property {
+public interface ApptUnit extends Property {
 
     IPrimitive<Integer> floor();
 

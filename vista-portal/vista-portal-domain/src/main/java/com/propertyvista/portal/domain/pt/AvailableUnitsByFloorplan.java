@@ -15,7 +15,7 @@ package com.propertyvista.portal.domain.pt;
 
 import com.propertyvista.portal.domain.Currency;
 import com.propertyvista.portal.domain.Floorplan;
-import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -32,5 +32,5 @@ public interface AvailableUnitsByFloorplan extends IEntity {
 
     Currency rentCurrency();
 
-    IList<Unit> units();
+    IList<ApptUnit> units();
 }

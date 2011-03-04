@@ -53,7 +53,7 @@ public class UnitDetailsPanel extends FlowPanel {
 
     }
 
-    public void showUnitDetail(com.propertyvista.portal.domain.Unit unit) {
+    public void showUnitDetail(com.propertyvista.portal.domain.ApptUnit unit) {
         this.clear();
         FlowPanel unitDetailPanel = new FlowPanel();
         unitDetailPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel);

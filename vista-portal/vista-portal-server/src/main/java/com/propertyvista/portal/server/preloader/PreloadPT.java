@@ -27,7 +27,7 @@ import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Concession;
 import com.propertyvista.portal.domain.DemoData;
 import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.Utility;
@@ -515,7 +515,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
         sb.append(unitSelection.availableUnits().units().size());
         sb.append(" available units\n");
-        for (Unit unit : unitSelection.availableUnits().units()) {
+        for (ApptUnit unit : unitSelection.availableUnits().units()) {
             sb.append("\t");
             sb.append(unit.suiteNumber().getStringView());
             sb.append(" ");
@@ -545,7 +545,7 @@ public class PreloadPT extends AbstractDataPreloader {
         }
 
         // selected unit
-        Unit unit = unitSelection.selectedUnit();
+        ApptUnit unit = unitSelection.selectedUnit();
         sb.append("\n\n");
         sb.append("Selected: ").append(unit.suiteNumber().getStringView());
         sb.append("\n");

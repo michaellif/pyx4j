@@ -55,7 +55,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class UnitsTable extends CEntityFolder<com.propertyvista.portal.domain.Unit> {
+public class UnitsTable extends CEntityFolder<com.propertyvista.portal.domain.ApptUnit> {
 
     private static I18n i18n = I18nFactory.getI18n(UnitsTable.class);
 
@@ -75,12 +75,12 @@ public class UnitsTable extends CEntityFolder<com.propertyvista.portal.domain.Un
 
     private UnitDetailsPanel unitDetailsPanelShown = null;
 
-    com.propertyvista.portal.domain.Unit selectUnit;
+    com.propertyvista.portal.domain.ApptUnit selectUnit;
 
     public UnitsTable() {
         super();
 
-        com.propertyvista.portal.domain.Unit proto = EntityFactory.getEntityPrototype(com.propertyvista.portal.domain.Unit.class);
+        com.propertyvista.portal.domain.ApptUnit proto = EntityFactory.getEntityPrototype(com.propertyvista.portal.domain.ApptUnit.class);
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "120px"));
         columns.add(new EntityFolderColumnDescriptor(proto.marketRent(), "120px"));
@@ -101,13 +101,13 @@ public class UnitsTable extends CEntityFolder<com.propertyvista.portal.domain.Un
     }
 
     @Override
-    protected CEntityFolderItem<com.propertyvista.portal.domain.Unit> createItem() {
-        return new UnitTableRow(com.propertyvista.portal.domain.Unit.class, columns);
+    protected CEntityFolderItem<com.propertyvista.portal.domain.ApptUnit> createItem() {
+        return new UnitTableRow(com.propertyvista.portal.domain.ApptUnit.class, columns);
     }
 
     @Override
-    protected FolderDecorator<com.propertyvista.portal.domain.Unit> createFolderDecorator() {
-        return new TableFolderDecorator<com.propertyvista.portal.domain.Unit>(columns);
+    protected FolderDecorator<com.propertyvista.portal.domain.ApptUnit> createFolderDecorator() {
+        return new TableFolderDecorator<com.propertyvista.portal.domain.ApptUnit>(columns);
     }
 
     static private class MarketRentLabel extends CAbstractLabel<IList<MarketRent>> {
@@ -136,11 +136,11 @@ public class UnitsTable extends CEntityFolder<com.propertyvista.portal.domain.Un
     //
     // Unit representation:
     //
-    private class UnitTableRow extends CEntityFolderRow<com.propertyvista.portal.domain.Unit> {
+    private class UnitTableRow extends CEntityFolderRow<com.propertyvista.portal.domain.ApptUnit> {
 
         private UnitDetailsPanel unitDetailsPanel;
 
-        public UnitTableRow(Class<com.propertyvista.portal.domain.Unit> clazz, List<EntityFolderColumnDescriptor> columns) {
+        public UnitTableRow(Class<com.propertyvista.portal.domain.ApptUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
             super(clazz, columns);
         }
 
@@ -171,7 +171,7 @@ public class UnitsTable extends CEntityFolder<com.propertyvista.portal.domain.Un
         }
     }
 
-    public void setSelected(com.propertyvista.portal.domain.Unit unit, MarketRent marketRent) {
+    public void setSelected(com.propertyvista.portal.domain.ApptUnit unit, MarketRent marketRent) {
         selectUnit = unit;
         UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
         if (unitTableRow != null) {

@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.ISet;
 
 public interface Lease extends IEntity {
 
-    Unit unit();
+    ApptUnit unit();
 
     ISet<Tenant> tenants();
 

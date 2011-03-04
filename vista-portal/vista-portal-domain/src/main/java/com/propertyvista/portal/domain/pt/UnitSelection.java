@@ -17,7 +17,7 @@ import java.util.Date;
 
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.MarketRent;
-import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.ApptUnit;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -38,7 +38,7 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     AvailableUnitsByFloorplan availableUnits();
 
     // user selected Unit from availableUnits..
-    Unit selectedUnit();
+    ApptUnit selectedUnit();
 
     // user selected leaseTerm (aka as MarkerRent in Unit)..
     MarketRent markerRent();

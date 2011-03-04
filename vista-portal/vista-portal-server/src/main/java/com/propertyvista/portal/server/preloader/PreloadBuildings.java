@@ -41,7 +41,7 @@ import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Picture;
-import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
@@ -223,9 +223,9 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return building;
     }
 
-    private Unit createUnit(Building building, String suiteNumber, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan,
+    private ApptUnit createUnit(Building building, String suiteNumber, int floor, int area, double bedrooms, double bathrooms, Floorplan floorplan,
             LeaseTerms leaseTerms) {
-        Unit unit = EntityFactory.create(Unit.class);
+        ApptUnit unit = EntityFactory.create(ApptUnit.class);
 
         unit.suiteNumber().setValue(suiteNumber);
         unit.building().set(building);
@@ -337,7 +337,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(Building.class, Unit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, UnitInfoItem.class,
+            return deleteAll(Building.class, ApptUnit.class, Floorplan.class, Email.class, Phone.class, Complex.class, Utility.class, UnitInfoItem.class,
                     Amenity.class, Concession.class, AddOn.class, LeaseTerms.class);
         } else {
             return "This is production";
@@ -488,12 +488,12 @@ public class PreloadBuildings extends AbstractDataPreloader {
             sb.append("\n");
 
             // get the units
-            EntityQueryCriteria<Unit> criteria = new EntityQueryCriteria<Unit>(Unit.class);
+            EntityQueryCriteria<ApptUnit> criteria = new EntityQueryCriteria<ApptUnit>(ApptUnit.class);
             criteria.add(new PropertyCriterion("building", Restriction.EQUAL, building.getPrimaryKey()));
-            List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+            List<ApptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
             sb.append("\tBuilding has " + units.size() + " units\n");
 
-            for (Unit unit : units) {
+            for (ApptUnit unit : units) {
                 sb.append("\t");
                 sb.append(unit.floor().getStringView()).append(" floor");
                 sb.append(" ");

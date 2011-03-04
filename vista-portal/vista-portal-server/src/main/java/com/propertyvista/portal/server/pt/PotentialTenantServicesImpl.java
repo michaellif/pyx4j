@@ -24,7 +24,7 @@ import com.propertyvista.portal.domain.ChargeType;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.IUserEntity;
 import com.propertyvista.portal.domain.Picture;
-import com.propertyvista.portal.domain.Unit;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.User;
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.Application;
@@ -99,10 +99,10 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             }
 
             // find unit with floor plan
-            EntityQueryCriteria<Unit> unitCriteria = EntityQueryCriteria.create(Unit.class);
+            EntityQueryCriteria<ApptUnit> unitCriteria = EntityQueryCriteria.create(ApptUnit.class);
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building(), building));
             unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().floorplan(), floorplan));
-            Unit unit = PersistenceServicesFactory.getPersistenceService().retrieve(unitCriteria);
+            ApptUnit unit = PersistenceServicesFactory.getPersistenceService().retrieve(unitCriteria);
 
             boolean unitExists = (unit != null);
             log.debug("unitExists {}", unitExists);
@@ -420,7 +420,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         // find units
         log.info("Found floorplan {}, now will look for building {}", floorplan, building);
-        EntityQueryCriteria<Unit> criteria = EntityQueryCriteria.create(Unit.class);
+        EntityQueryCriteria<ApptUnit> criteria = EntityQueryCriteria.create(ApptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
 
@@ -433,7 +433,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                     .selectionCriteria().availableTo().getValue()));
         }
 
-        List<Unit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
+        List<ApptUnit> units = PersistenceServicesFactory.getPersistenceService().query(criteria);
         log.info("Found " + units.size() + " units");
         availableUnits.units().addAll(units);
     }

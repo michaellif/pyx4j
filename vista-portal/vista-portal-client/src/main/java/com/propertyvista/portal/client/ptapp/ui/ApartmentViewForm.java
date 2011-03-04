@@ -290,7 +290,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         private void populateUnits(AvailableUnitsByFloorplan availableUnits) {
 
-            for (final com.propertyvista.portal.domain.Unit unit : availableUnits.units()) {
+            for (final com.propertyvista.portal.domain.ApptUnit unit : availableUnits.units()) {
                 final FlowPanel unitRowPanel = new FlowPanel();
                 unitRowPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
                 unitRowPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
@@ -349,7 +349,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             container.add(label);
         }
 
-        private void populateUnitDetail(com.propertyvista.portal.domain.Unit unit) {
+        private void populateUnitDetail(com.propertyvista.portal.domain.ApptUnit unit) {
             FlowPanel unitDetailPanel = new FlowPanel();
             unitDetailPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel);
             unitDetailPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
@@ -461,16 +461,16 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
             unitDetailPanel.setVisible(true);
         }
 
-        private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
+        private double minRentValue(com.propertyvista.portal.domain.ApptUnit unit) {
             double rent = Double.MAX_VALUE;
             for (MarketRent mr : unit.marketRent())
                 rent = Math.min(rent, mr.rent().amount().getValue());
             return (rent != Double.MAX_VALUE ? rent : 0);
         }
 
-        private double minRentValue(IList<com.propertyvista.portal.domain.Unit> units) {
+        private double minRentValue(IList<com.propertyvista.portal.domain.ApptUnit> units) {
             double rent = Double.MAX_VALUE;
-            for (com.propertyvista.portal.domain.Unit u : units)
+            for (com.propertyvista.portal.domain.ApptUnit u : units)
                 rent = Math.min(rent, minRentValue(u));
             return (rent != Double.MAX_VALUE ? rent : 0);
         }

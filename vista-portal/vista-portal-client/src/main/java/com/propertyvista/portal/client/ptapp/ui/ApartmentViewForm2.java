@@ -310,21 +310,21 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
                 container.add(cellContent);
             }
 
-            public CEntityFolder<com.propertyvista.portal.domain.Unit> createUnitFolder() {
-                return new CEntityFolder<com.propertyvista.portal.domain.Unit>() {
+            public CEntityFolder<com.propertyvista.portal.domain.ApptUnit> createUnitFolder() {
+                return new CEntityFolder<com.propertyvista.portal.domain.ApptUnit>() {
 
                     @Override
-                    protected CEntityFolderItem<com.propertyvista.portal.domain.Unit> createItem() {
+                    protected CEntityFolderItem<com.propertyvista.portal.domain.ApptUnit> createItem() {
                         return createUnitRow();
                     }
 
                     @Override
-                    protected FolderDecorator<com.propertyvista.portal.domain.Unit> createFolderDecorator() {
-                        return new BoxReadOnlyFolderDecorator<com.propertyvista.portal.domain.Unit>();
+                    protected FolderDecorator<com.propertyvista.portal.domain.ApptUnit> createFolderDecorator() {
+                        return new BoxReadOnlyFolderDecorator<com.propertyvista.portal.domain.ApptUnit>();
                     }
 
-                    private CEntityFolderItem<com.propertyvista.portal.domain.Unit> createUnitRow() {
-                        return new CEntityFolderItem<com.propertyvista.portal.domain.Unit>(com.propertyvista.portal.domain.Unit.class) {
+                    private CEntityFolderItem<com.propertyvista.portal.domain.ApptUnit> createUnitRow() {
+                        return new CEntityFolderItem<com.propertyvista.portal.domain.ApptUnit>(com.propertyvista.portal.domain.ApptUnit.class) {
 
                             @Override
                             public IsWidget createContent() {
@@ -413,7 +413,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
         private void populateUnits(AvailableUnitsByFloorplan availableUnits) {
 
-            for (final com.propertyvista.portal.domain.Unit unit : availableUnits.units()) {
+            for (final com.propertyvista.portal.domain.ApptUnit unit : availableUnits.units()) {
                 final FlowPanel unitRowPanel = new FlowPanel();
                 unitRowPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
                 unitRowPanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
@@ -472,7 +472,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
             container.add(label);
         }
 
-        private void populateUnitDetail(com.propertyvista.portal.domain.Unit unit) {
+        private void populateUnitDetail(com.propertyvista.portal.domain.ApptUnit unit) {
             FlowPanel unitDetailPanel = new FlowPanel();
             unitDetailPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel);
             unitDetailPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
@@ -584,16 +584,16 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
             unitDetailPanel.setVisible(true);
         }
 
-        private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
+        private double minRentValue(com.propertyvista.portal.domain.ApptUnit unit) {
             double rent = Double.MAX_VALUE;
             for (MarketRent mr : unit.marketRent())
                 rent = Math.min(rent, mr.rent().amount().getValue());
             return (rent != Double.MAX_VALUE ? rent : 0);
         }
 
-        private double minRentValue(IList<com.propertyvista.portal.domain.Unit> units) {
+        private double minRentValue(IList<com.propertyvista.portal.domain.ApptUnit> units) {
             double rent = Double.MAX_VALUE;
-            for (com.propertyvista.portal.domain.Unit u : units)
+            for (com.propertyvista.portal.domain.ApptUnit u : units)
                 rent = Math.min(rent, minRentValue(u));
             return (rent != Double.MAX_VALUE ? rent : 0);
         }
