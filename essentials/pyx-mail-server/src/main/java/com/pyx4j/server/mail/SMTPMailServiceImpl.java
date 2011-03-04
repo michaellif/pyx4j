@@ -210,7 +210,7 @@ class SMTPMailServiceImpl implements IMailService {
                 }
                 sendTo.append(a.toString());
             }
-            log.info("mail sent to :" + sendTo);
+            log.info("mail sent to '{}'", sendTo);
             return MailDeliveryStatus.Success;
         } catch (MessagingException e) {
             log.error("Error", e);
