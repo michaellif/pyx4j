@@ -21,6 +21,8 @@ import static com.pyx4j.commons.HtmlUtils.*;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -32,7 +34,9 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowP
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.Address;
+import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
+import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
@@ -47,6 +51,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
@@ -170,20 +175,43 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
     private CEntityEditableComponent<Address> createAddressEditor() {
         return new CEntityEditableComponent<Address>(Address.class) {
+            @SuppressWarnings({ "rawtypes", "unchecked" })
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
                 injectIAddress(main, proto(), this);
                 main.add(inject(proto().moveInDate()), 10);
                 main.add(inject(proto().moveOutDate()), 10);
-                main.add(inject(proto().payment()), 8);
                 main.add(inject(proto().phone()), 15);
-                main.add(inject(proto().rented()), 15);
+
+                CEditableComponent<?, ?> rentedComponent = inject(proto().rented());
+                rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent event) {
+                        setVizibility(getValue());
+                    }
+                });
+                main.add(rentedComponent, 15);
+                main.add(inject(proto().payment()), 8);
                 main.add(inject(proto().managerName()), 30);
                 main.add(new HTML());
                 return main;
             }
+
+            @Override
+            public void populate(Address value) {
+                super.populate(value);
+                setVizibility(value);
+            }
+
+            private void setVizibility(Address value) {
+                boolean rented = OwnedRented.Rented.equals(value.rented().getValue());
+                get(proto().payment()).setVisible(rented);
+                get(proto().managerName()).setVisible(rented);
+            }
+
         };
+
     }
 
     private CEntityEditableComponent<EmergencyContact> createEmergencyContactEditor() {
@@ -197,8 +225,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
                 main.add(inject(proto().homePhone()), 15);
                 main.add(inject(proto().mobilePhone()), 15);
                 main.add(inject(proto().workPhone()), 15);
-                main.add(inject(proto().address().street1()), 40);
-                main.add(inject(proto().address().street2()), 40);
+                main.add(inject(proto().address().street1()), 20);
+                main.add(inject(proto().address().street2()), 20);
                 main.add(inject(proto().address().city()), 15);
                 main.add(inject(proto().address().province()), 10);
                 main.add(inject(proto().address().postalCode()), 7);

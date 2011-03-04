@@ -16,36 +16,44 @@ package com.propertyvista.portal.domain.pt;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface LegalQuestions extends IEntity {
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever been sued for rent?")
+    @NotNull
     IPrimitive<Boolean> suedForRent();
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever been sued for damages?")
+    @NotNull
     IPrimitive<Boolean> suedForDamages();
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever been evicted?")
+    @NotNull
     IPrimitive<Boolean> everEvicted();
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever defaulted on a lease?")
+    @NotNull
     IPrimitive<Boolean> defaultedOnLease();
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever been convicted of a felony that involved an offence against property, persons, government officials, or that involved firearms, illegal drugs, or sex or sex crimes?")
+    @NotNull
     IPrimitive<Boolean> convictedOfFelony();
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever had any public record suits, liens, judgements or reposessions?")
+    @NotNull
     IPrimitive<Boolean> legalTroubles();
 
     @Editor(type = EditorType.radiogroup)
     @Caption(name = "Have you ever filed for bankruptcy protection?")
+    @NotNull
     IPrimitive<Boolean> filedBankruptcy();
 
 }

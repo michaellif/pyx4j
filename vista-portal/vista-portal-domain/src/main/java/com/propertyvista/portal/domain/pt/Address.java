@@ -46,6 +46,7 @@ public interface Address extends IEntity, IAddress {
 
     @Caption(name = "Owned/Rented")
     @Editor(type = EditorType.radiogroup)
+    @NotNull
     IPrimitive<OwnedRented> rented();
 
     IPrimitive<String> managerName();

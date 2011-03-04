@@ -46,8 +46,8 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
     }
 
     protected static void injectIAddress(VistaDecoratorsFlowPanel main, IAddress proto, CEntityEditableComponent<?> parent) {
-        main.add(parent.inject(proto.street1()), 40);
-        main.add(parent.inject(proto.street2()), 40);
+        main.add(parent.inject(proto.street1()), 20);
+        main.add(parent.inject(proto.street2()), 20);
         main.add(parent.inject(proto.city()), 15);
         main.add(parent.inject(proto.province()), 10);
         main.add(parent.inject(proto.postalCode()), 7);
