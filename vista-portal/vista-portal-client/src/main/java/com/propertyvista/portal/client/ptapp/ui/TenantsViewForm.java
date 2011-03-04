@@ -182,11 +182,7 @@ public class TenantsViewForm extends CEntityForm<PotentialTenantList> {
 
                     @Override
                     public FolderItemDecorator createFolderItemDecorator() {
-                        if (isFirst()) {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.hideRemoveRow(), null, false);
-                        } else {
-                            return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove person"), true);
-                        }
+                        return new TableFolderItemDecorator(SiteImages.INSTANCE.removeRow(), i18n.tr("Remove person"), !isFirst());
                     }
 
                 };
