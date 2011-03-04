@@ -60,12 +60,9 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
         imageHolder = null;
         if (removeButton != null) {
             image = new Image(removeButton);
-            //image.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
 
             imageHolder = new ImageHolder(image);
             imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-            //imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            //imageHolder.getElement().getStyle().setPaddingLeft(removeButton.getWidth(), Unit.PX);
 
             if (!removable) {
                 imageHolder.setVisible(false);
@@ -78,9 +75,6 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
 
         content = new SimplePanel();
         content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        if (removeButton != null) {
-            //content.getElement().getStyle().setPaddingLeft(removeButton.getWidth(), Unit.PX);
-        }
 
         rowHolder.add(content);
 
