@@ -22,10 +22,13 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.portal.domain.pt.Application;
 import com.propertyvista.portal.domain.pt.ChargeLine.ChargeType;
 import com.propertyvista.portal.domain.pt.Charges;
+import com.propertyvista.portal.domain.pt.Pet;
+import com.propertyvista.portal.domain.pt.Pets;
 import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantList;
 import com.propertyvista.portal.domain.pt.TenantCharge;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
@@ -38,10 +41,33 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     private final static Logger log = LoggerFactory.getLogger(ChargesServerCalculation.class);
 
-    // created a copy of this method so that not to break existing functionality
-    public static void dummyPopulate(Charges charges, double rentAmount, double petChargeAmount, double depositAmount) {
+    public static void dummyPopulate(Charges charges) {
+
+        // find unit selection
+        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), charges.application()));
+        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        if (unitSelection == null) {
+            log.warn("Could not find unit selection for charges {}", charges);
+            return;
+        }
+
+        // find appropriate pet charges
+        EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), charges.application()));
+        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
 
         charges.rentStart().setValue(TimeUtils.createDate(2011, 4, 7)); // dummy date
+
+        // calculate things that we can
+        double rentAmount = unitSelection.markerRent().rent().amount().getValue();
+        double petChargeAmount = 0d;
+
+        for (Pet pet : pets.pets()) {
+            petChargeAmount += pet.chargeLine().charge().amount().getValue();
+        }
+
+        double depositAmount = unitSelection.selectedUnit().requiredDeposit().getValue();
 
         // monthly charges
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
@@ -60,32 +86,6 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // payment splits
         updatePaymentSplitCharges(charges, charges.application());
-
-        // make sure to calculate charges
-        calculateCharges(charges);
-    }
-
-    public static void dummyPopulate(Charges charges, Application application) {
-
-        charges.rentStart().setValue(TimeUtils.createDate(2011, 4, 7)); // dummy date
-
-        // monthly charges
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, 1500));
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, 75));
-
-        // available upgrades
-        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, false));
-        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, false));
-
-        // application charges
-        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.deposit, 1500));
-        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petDeposit, 100));
-        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
-
-        // payment splits
-        updatePaymentSplitCharges(charges, application);
 
         // make sure to calculate charges
         calculateCharges(charges);

@@ -767,16 +767,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
         charges.application().set(application);
 
-        double rentAmount = unitSelection.markerRent().rent().amount().getValue();
-        double petChargeAmount = 0d;
-
-        for (Pet pet : pets.pets()) {
-            petChargeAmount += pet.chargeLine().charge().amount().getValue();
-        }
-
-        double depositAmount = unitSelection.selectedUnit().requiredDeposit().getValue();
-
-        ChargesServerCalculation.dummyPopulate(charges, rentAmount, petChargeAmount, depositAmount);
+        ChargesServerCalculation.dummyPopulate(charges);
 
         persist(charges);
     }

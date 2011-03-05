@@ -214,7 +214,8 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
 
         private Charges createCharges() {
             Charges charges = EntityFactory.create(Charges.class);
-            ChargesServerCalculation.dummyPopulate(charges, PtUserDataAccess.getCurrentUserApplication());
+            charges.application().set(PtUserDataAccess.getCurrentUserApplication());
+            ChargesServerCalculation.dummyPopulate(charges);
             return charges;
         }
 
