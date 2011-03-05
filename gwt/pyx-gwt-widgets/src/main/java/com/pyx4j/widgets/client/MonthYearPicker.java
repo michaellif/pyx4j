@@ -93,7 +93,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             if (!showYearOnly) {
                 monthSelector.setSelectedIndex(date.getMonth() + 1);
             }
-            yearSelector.setSelectedIndex(yearRange.getStart() + yearRange.getLength() - date.getYear() + 1);
+            yearSelector.setSelectedIndex(yearRange.getStart() + yearRange.getLength() - (1900 + date.getYear()) + 1);
         }
     }
 
@@ -106,7 +106,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         if (!showYearOnly) {
             month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
         }
-        return new Date(year, month, 1);
+        return new Date(year - 1900, month, 1);
     }
 
     @Override
