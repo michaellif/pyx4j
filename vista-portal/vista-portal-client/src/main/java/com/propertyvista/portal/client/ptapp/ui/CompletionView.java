@@ -14,10 +14,6 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType;
-import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.Presenter;
-import com.propertyvista.portal.domain.pt.Charges;
-import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
 public interface CompletionView extends IsWidget {
 

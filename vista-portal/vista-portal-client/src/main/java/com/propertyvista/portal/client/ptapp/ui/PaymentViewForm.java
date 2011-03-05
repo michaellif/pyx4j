@@ -116,6 +116,8 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         main.add(new HTML(SiteResources.INSTANCE.paymentTermsNotes().getText()));
 
+        main.setWidth("700px");
+
         return main;
     }
 

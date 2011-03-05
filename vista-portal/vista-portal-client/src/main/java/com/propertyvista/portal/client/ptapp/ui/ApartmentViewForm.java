@@ -13,7 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import static com.pyx4j.commons.HtmlUtils.*;
+import static com.pyx4j.commons.HtmlUtils.h3;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,7 +26,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;

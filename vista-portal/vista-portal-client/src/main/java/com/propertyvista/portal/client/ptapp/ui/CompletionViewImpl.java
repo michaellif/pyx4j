@@ -13,7 +13,57 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+
+import com.pyx4j.essentials.client.crud.CrudDebugId;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
+
+    private static I18n i18n = I18nFactory.getI18n(RetrievePasswordViewImpl.class);
+
+    private Presenter presenter;
+
+    private final HTML titleHtml;
+
+    private final HTML messageHtml;
+
+    private final Button actionButton;
+
+    public CompletionViewImpl() {
+
+        titleHtml = new HTML("Application completed!");
+        add(titleHtml);
+
+        messageHtml = new HTML("Application completed!");
+        add(messageHtml);
+
+        actionButton = new Button("Back");
+        actionButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        actionButton.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+
+            }
+
+        });
+        actionButton.getElement().getStyle().setMarginLeft(6.4, Unit.EM);
+        actionButton.getElement().getStyle().setMarginRight(1, Unit.EM);
+        actionButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
+        add(actionButton);
+
+        setWidth("100%");
+
+        getElement().getStyle().setMarginTop(1, Unit.EM);
+        getElement().getStyle().setMarginBottom(1, Unit.EM);
+    }
+
 }
