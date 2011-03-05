@@ -866,7 +866,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX, ViewHeaderDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        style.addProperty("font-size", "1.5em");
+        style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
@@ -874,7 +874,6 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
-//        style.addProperty("padding", "0 1em 0 1em");
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "400px");
         addStyle(style);
@@ -885,7 +884,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf("logo"));
         style.addProperty("font-size", "30px");
-        style.addProperty("line-heigh", "1.2em");
+        style.addProperty("line-height", "1.2em");
         style.addProperty("text-align", "center");
         style.addProperty("vertical-align", "middle");
         style.addProperty("display", "block");
@@ -900,6 +899,12 @@ public abstract class VistaTheme extends Theme {
         Style style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.UnitListHeader));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
         style.addProperty("width", "700px");
+        style.addProperty("height", "2em");
+        style.addProperty("margin-top", "-10px");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.UnitListHeader) + " td");
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.hover));

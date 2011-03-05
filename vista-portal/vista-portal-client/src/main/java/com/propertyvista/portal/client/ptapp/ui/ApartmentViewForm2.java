@@ -109,7 +109,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
         FlowPanel buildingView = new FlowPanel();
         buildingView.add(new Image(SiteImages.INSTANCE.building()));
-        buildingView.add(new HTML("ADDRESS: 2060-2070 Prospect Street, Burlington"));
+        buildingView.add(new HTML("<b>ADDRESS: </b><br/>2060-2070 Prospect Street, Burlington"));
         buildingView.getElement().getStyle().setMarginLeft(20, Unit.PX);
 
         content.add(buildingView);
