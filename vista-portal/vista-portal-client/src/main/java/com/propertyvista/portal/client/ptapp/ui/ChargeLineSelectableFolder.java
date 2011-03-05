@@ -66,7 +66,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
                 FlowPanel main = new FlowPanel();
 
-                String width = "500px";
+                String width = "300px";
                 if (valueChangeHandler != null) {
                     main.add(DecorationUtils.inline(inject(proto().selected()), "50px"));
                     CEditableComponent<Boolean, ?> cb = get(proto().selected());
@@ -76,11 +76,11 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                         //TODO this is hack for Misha to fix.
                         cb.asWidget().setStyleName(null);
                     }
-                    width = "450px";
+                    width = "250px";
                 }
 
                 main.add(DecorationUtils.inline(inject(proto().type()), width));
-                main.add(DecorationUtils.inline(inject(proto().charge()), "200px", "right"));
+                main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
 
                 return main;
             }

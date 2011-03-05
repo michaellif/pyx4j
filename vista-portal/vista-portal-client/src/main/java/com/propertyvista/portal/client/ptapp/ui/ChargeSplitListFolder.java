@@ -73,7 +73,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             public IsWidget createContent() {
 
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(inject(proto().tenant()), "550px", null));
+                main.add(DecorationUtils.inline(inject(proto().tenant()), "250px", null));
                 main.add(DecorationUtils.inline(new HTML("%"), "10px", "right"));
 
                 if (isFirst() || valueChangeHandler == null) {

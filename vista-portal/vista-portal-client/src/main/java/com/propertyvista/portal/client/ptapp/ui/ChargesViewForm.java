@@ -103,13 +103,13 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
     private Widget createTotal(Money member) {
         FlowPanel totalRow = new FlowPanel();
 
-        Widget sp = new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
+        Widget sp = new ViewLineSeparator(400, Unit.PX, 0.5, Unit.EM, 0.5, Unit.EM);
         sp.getElement().getStyle().setPadding(0, Unit.EM);
         sp.getElement().getStyle().setProperty("border", "1px dotted black");
         totalRow.add(sp);
 
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
-        totalRow.add(DecorationUtils.inline(total, "600px", null));
+        totalRow.add(DecorationUtils.inline(total, "300px", null));
         totalRow.add(DecorationUtils.inline(inject(member), "100px", "right"));
         totalRow.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         return totalRow;
