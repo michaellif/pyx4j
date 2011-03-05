@@ -862,7 +862,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
         style.addProperty("margin", "0.2em 0 0.5em 0");
-        style.addProperty("width", "70%");
+        style.addProperty("width", "700px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
@@ -872,7 +872,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("padding-left", "1em");
         style.addProperty("padding-right", "1em");
         style.addProperty("margin-bottom", "0.3em");
-        style.addProperty("width", "70%");
+        style.addProperty("width", "700px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));

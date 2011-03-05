@@ -66,9 +66,9 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
 
                 FlowPanel main = new FlowPanel();
 
-                String width = "60%";
+                String width = "500px";
                 if (valueChangeHandler != null) {
-                    main.add(DecorationUtils.inline(inject(proto().selected()), "3%"));
+                    main.add(DecorationUtils.inline(inject(proto().selected()), "50px"));
                     CEditableComponent<Boolean, ?> cb = get(proto().selected());
                     if (cb instanceof CCheckBox) {
                         cb.addValueChangeHandler(valueChangeHandler);
@@ -76,11 +76,11 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                         //TODO this is hack for Misha to fix.
                         cb.asWidget().setStyleName(null);
                     }
-                    width = "57%";
+                    width = "450px";
                 }
 
                 main.add(DecorationUtils.inline(inject(proto().type()), width));
-                main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
+                main.add(DecorationUtils.inline(inject(proto().charge()), "200px", "right"));
 
                 return main;
             }

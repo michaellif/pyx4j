@@ -96,7 +96,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
 
             main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
-            main.setWidth("70%");
+            main.setWidth("700px");
         }
 
         return main;

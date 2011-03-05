@@ -185,7 +185,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     private Widget upperLevelElementElignment(Widget e) {
         e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         e.getElement().getStyle().setPaddingRight(1, Unit.EM);
-        e.setWidth("70%");
+        e.setWidth("700px");
         return e;
     }
 

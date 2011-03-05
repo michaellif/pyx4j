@@ -103,7 +103,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
     private Widget upperLevelElementElignment(Widget e) {
         e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
         e.getElement().getStyle().setPaddingRight(1, Unit.EM);
-        e.setWidth("70%");
+        e.setWidth("700px");
         return e;
     }
 
@@ -229,7 +229,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
         panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().convictedOfFelony()), ddQuestionay));
         panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().legalTroubles()), ddQuestionay));
         panel.add(new VistaReadOnlyDecorator(inject(proto().legalQuestions().filedBankruptcy()), ddQuestionay));
-        panel.setWidth("70%");
+        panel.setWidth("700px");
         fullViewPanel.add(panel);
 
         sp = new ViewLineSeparator(100, Unit.PCT, 1, Unit.EM, 1, Unit.EM);

@@ -13,32 +13,18 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import static com.pyx4j.commons.HtmlUtils.h3;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.propertyvista.portal.domain.ApptUnit;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
-import com.propertyvista.portal.client.ptapp.ui.ApartmentViewForm.StyleDependent;
-import com.propertyvista.portal.client.ptapp.ui.ApartmentViewForm.StyleSuffix;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
-import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
-import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -87,7 +73,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
 //        this.asWidget().getElement().getStyle().setPaddingLeft(1, Unit.EM);
 //        this.asWidget().getElement().getStyle().setPaddingRight(1, Unit.EM);
-        this.setWidth("70%");
+        this.setWidth("700px");
 
         ApptUnit proto = EntityFactory.getEntityPrototype(ApptUnit.class);
         columns = new ArrayList<EntityFolderColumnDescriptor>();

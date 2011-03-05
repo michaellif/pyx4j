@@ -73,18 +73,18 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
             public IsWidget createContent() {
 
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(inject(proto().tenant()), "52%", null));
-                main.add(DecorationUtils.inline(new HTML("%"), "3%", "right"));
+                main.add(DecorationUtils.inline(inject(proto().tenant()), "550px", null));
+                main.add(DecorationUtils.inline(new HTML("%"), "10px", "right"));
 
                 if (isFirst() || valueChangeHandler == null) {
                     CNumberLabel fixedPrc = new CNumberLabel();
                     bind(fixedPrc, proto().percentage());
-                    main.add(DecorationUtils.inline(fixedPrc, "5%", "right"));
+                    main.add(DecorationUtils.inline(fixedPrc, "40px", "right"));
                 } else {
-                    main.add(DecorationUtils.inline(inject(proto().percentage()), "5%", "right"));
+                    main.add(DecorationUtils.inline(inject(proto().percentage()), "40px", "right"));
                 }
 
-                main.add(DecorationUtils.inline(inject(proto().charge()), "10%", "right"));
+                main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
                 if (valueChangeHandler != null) {
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
 
