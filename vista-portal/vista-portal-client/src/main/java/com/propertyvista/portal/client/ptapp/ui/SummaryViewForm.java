@@ -415,7 +415,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             SimplePanel container = new SimplePanel();
             container.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
             container.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            container.getElement().getStyle().setBorderColor("black");
+            container.getElement().getStyle().setBorderColor("#bbb");
             container.getElement().getStyle().setBackgroundColor("white");
             container.getElement().getStyle().setColor("black");
 

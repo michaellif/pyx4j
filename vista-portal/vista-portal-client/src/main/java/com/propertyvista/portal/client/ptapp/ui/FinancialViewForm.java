@@ -92,7 +92,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
             padder.getElement().getStyle().setBackgroundColor("white");
             padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
             padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            padder.getElement().getStyle().setBorderColor("black");
+            padder.getElement().getStyle().setBorderColor("#bbb");
             padder.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
             main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);

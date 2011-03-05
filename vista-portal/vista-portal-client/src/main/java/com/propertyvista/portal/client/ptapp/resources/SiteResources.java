@@ -41,9 +41,6 @@ public interface SiteResources extends ClientBundleWithLookup {
     @Source("digitalSignature.html")
     TextResource digitalSignature();
 
-    @Source("leaseTerms.html")
-    TextResource leaseTerms();
-
     //PaymentViewForm
 
     @Source("paymentApprovalNotes.html")
