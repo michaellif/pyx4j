@@ -423,7 +423,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTerms.getElement().getStyle().setPosition(Position.RELATIVE);
             leaseTerms.getElement().getStyle().setPaddingLeft(1, Unit.EM);
             leaseTerms.getElement().getStyle().setPaddingRight(1, Unit.EM);
-            leaseTerms.setWidth("100%");
             leaseTerms.setHeight("20em");
             container.add(leaseTerms);
             add(container);

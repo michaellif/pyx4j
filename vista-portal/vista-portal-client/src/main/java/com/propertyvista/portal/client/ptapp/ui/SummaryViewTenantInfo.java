@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
@@ -81,30 +82,28 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
     public IsWidget createContent() {
 
         FlowPanel main = new FlowPanel();
-        upperLevelElementElignment(main);
 
-        main.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        main.getElement().getStyle().setBackgroundColor("white");
+        SimplePanel padder = new SimplePanel();
+        padder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        padder.getElement().getStyle().setBackgroundColor("white");
 
-        main.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        main.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        main.getElement().getStyle().setBorderColor("black");
+        padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+        padder.getElement().getStyle().setBorderColor("black");
+        padder.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
         main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
         main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
-        main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+        main.getElement().getStyle().setPaddingLeft(15, Unit.PX);
+        main.getElement().getStyle().setPaddingRight(15, Unit.PX);
+        main.setWidth("670");
 
         main.add(bindCompactView());
         main.add(bindFullView());
 
-        return main;
-    }
-
-    private Widget upperLevelElementElignment(Widget e) {
-        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
-        e.setWidth("700px");
-        return e;
+        padder.setWidget(main);
+        padder.setWidth("700px");
+        return padder;
     }
 
     private FlowPanel formFullName(IPerson person) {

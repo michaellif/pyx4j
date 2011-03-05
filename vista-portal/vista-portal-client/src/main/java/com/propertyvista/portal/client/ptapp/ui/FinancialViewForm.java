@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
@@ -72,6 +73,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
     @Override
     public IsWidget createContent() {
+
         FlowPanel main = new FlowPanel();
         main.add(createHeader(proto().incomes()));
         main.add(inject(proto().incomes()));
@@ -85,22 +87,24 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         main.add(inject(proto().guarantors()));
         main.add(new HTML());
 
+        SimplePanel padder = new SimplePanel();
         if (isReadOnlyMode()) {
-            main.getElement().getStyle().setBackgroundColor("white");
-            main.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            main.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            main.getElement().getStyle().setBorderColor("black");
+            padder.getElement().getStyle().setBackgroundColor("white");
+            padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            padder.getElement().getStyle().setBorderColor("black");
+            padder.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
-            main.getElement().getStyle().setPadding(1, Unit.EM);
             main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
             main.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
-
-            main.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+            main.getElement().getStyle().setPaddingLeft(15, Unit.PX);
+            main.getElement().getStyle().setPaddingRight(15, Unit.PX);
+            main.setWidth("670");
         }
 
-        main.setWidth("700px");
-
-        return main;
+        padder.setWidget(main);
+        padder.setWidth("700px");
+        return padder;
     }
 
     private Widget createHeader(IObject<?> member) {
