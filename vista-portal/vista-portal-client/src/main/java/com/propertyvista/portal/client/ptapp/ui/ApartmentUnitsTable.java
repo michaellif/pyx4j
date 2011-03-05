@@ -30,7 +30,10 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.ApptUnit;
@@ -50,6 +53,7 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
@@ -142,11 +146,13 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             cellPanel.setWidth(column.getWidth());
 
             String caption = "&nbsp";
+            Widget widgetToInsert = null;
 
             // fill the row:
             if (proto.floorplan().name() == column.getObject()) {
-                caption = availableUnits.floorplan().name().getStringView();
+                widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
             } else if (proto.unitType() == column.getObject()) {
+                caption = availableUnits.floorplan().name().getStringView();
             } else if (proto.marketRent() == column.getObject()) {
                 caption = "From <br />" + "$" + minRentValue(availableUnits.units());
             } else if (proto.requiredDeposit() == column.getObject()) {
@@ -157,8 +163,9 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             } else if (proto.avalableForRent() == column.getObject()) {
             }
 
-            cellPanel.add(new HTML(caption));
+            cellPanel.add(widgetToInsert != null ? widgetToInsert : new HTML(caption));
             floorplanRawPanel.add(cellPanel);
+            widgetToInsert = null;
         }
     }
 

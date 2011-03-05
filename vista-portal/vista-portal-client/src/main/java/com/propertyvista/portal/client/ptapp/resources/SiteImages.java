@@ -120,4 +120,6 @@ public interface SiteImages extends ClientBundle {
     @Source("bild.gif")
     ImageResource building();
 
+    @Source("home.png")
+    ImageResource floorplan();
 }
