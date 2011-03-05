@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import static com.pyx4j.commons.HtmlUtils.h2;
-import static com.pyx4j.commons.HtmlUtils.h3;
 
 import java.util.Date;
 
@@ -22,7 +21,6 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -43,8 +41,6 @@ import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
@@ -52,22 +48,8 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
     private ApartmentViewPresenter presenter;
 
-    public static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
-    }
-
     public ApartmentViewForm2() {
         super(UnitSelection.class);
-    }
-
-    public ApartmentViewPresenter getPresenter() {
-        return presenter;
     }
 
     public void setPresenter(ApartmentViewPresenter presenter) {
@@ -131,11 +113,9 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
-        caption = new HTML(h3(i18n.tr("Start Rent Date")));
-        caption.getElement().getStyle().setFloat(Float.LEFT);
-        caption.getElement().getStyle().setMarginTop(3, Unit.PX);
-        main.add(caption);
-        main.add(new VistaWidgetDecorator(inject(proto().rentStart()), 0, 7.2));
+        DecorationData captionDecoration = new DecorationData(10, 7.2);
+        captionDecoration.labelFont = 1.2;
+        main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
         addValidations();
 

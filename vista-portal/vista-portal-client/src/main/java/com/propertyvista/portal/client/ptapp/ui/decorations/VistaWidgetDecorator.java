@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -36,8 +37,6 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
-import com.pyx4j.forms.client.ui.NativePasswordTextBox;
-import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -86,7 +85,10 @@ public class VistaWidgetDecorator extends VerticalPanel {
         this.component = component;
         this.decorData = decorData;
 
-        label = new Label(component.getTitle() == null ? "" : component.getTitle());
+        label = new Label(CommonsStringUtils.nvl(component.getTitle()));
+        if (this.decorData.labelFont != 0) {
+            label.getElement().getStyle().setFontSize(this.decorData.labelFont, Unit.EM);
+        }
         label.getElement().getStyle().setFloat(Float.LEFT);
 
         label.setHorizontalAlignment(decorData.labelAlignment);
@@ -244,6 +246,8 @@ public class VistaWidgetDecorator extends VerticalPanel {
         public double labelWidth = 10;
 
         public Unit labelUnit = Unit.EM;
+
+        public double labelFont = 0;
 
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
