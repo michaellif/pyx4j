@@ -143,7 +143,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
                         }
                     };
                 } else {
-                    return new BoxFolderDecorator<TenantIncome>(SiteImages.INSTANCE.addRow());
+                    return new BoxFolderDecorator<TenantIncome>(SiteImages.INSTANCE.addRow(), i18n.tr("Add an income source"));
                 }
             }
 
