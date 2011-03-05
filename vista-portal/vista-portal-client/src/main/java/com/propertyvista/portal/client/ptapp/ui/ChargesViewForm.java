@@ -87,6 +87,8 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
         main.add(inject(proto().paymentSplitCharges().charges()));
         main.add(createTotal(proto().paymentSplitCharges().total()));
 
+        main.setWidth("700px");
+
         return main;
     }
 
