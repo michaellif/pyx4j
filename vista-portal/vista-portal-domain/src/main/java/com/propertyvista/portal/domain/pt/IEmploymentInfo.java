@@ -16,6 +16,7 @@ package com.propertyvista.portal.domain.pt;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface IEmploymentInfo extends IAddress, IIncomeInfo {
@@ -39,5 +40,6 @@ public interface IEmploymentInfo extends IAddress, IIncomeInfo {
 
     @Override
     @Caption(name = "Monthly Salary")
+    @NotNull
     Money monthlyAmount();
 }

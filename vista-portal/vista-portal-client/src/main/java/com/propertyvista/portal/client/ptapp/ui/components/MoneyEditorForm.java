@@ -7,46 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 26, 2011
+ * Created on 2011-03-04
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.client.ptapp.ui.components;
 
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.ui.IFormat;
 
-public class ReadOnlyMoneyForm extends CEntityEditableComponent<Money> {
+public class MoneyEditorForm extends CEntityEditableComponent<Money> {
 
-    public ReadOnlyMoneyForm() {
+    public MoneyEditorForm() {
         super(Money.class);
     }
 
     @Override
     public IsWidget createContent() {
-        CNumberLabel amount = new CNumberLabel();
-        amount.setFormat(new IFormat<Number>() {
-
-            NumberFormat nf = NumberFormat.getFormat("#.00");
-
-            @Override
-            public String format(Number value) {
-                return "$" + nf.format(value);
-            }
-
-            @Override
-            public Number parse(String string) {
-                return null;
-            }
-
-        });
-        return inject(proto().amount(), amount);
-
+        return inject(proto().amount());
     }
 
 }

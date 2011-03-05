@@ -27,6 +27,7 @@ public interface TenantIncome extends IEntity {
     // NOTHING
 
     // incomeSource =  unemployment and other
+    @Owned
     IncomeInfoOther otherIncomeInfo();
 
     // incomeSource = fulltime, parttime

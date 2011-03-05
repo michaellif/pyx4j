@@ -18,6 +18,7 @@ import java.util.Date;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 /**
@@ -29,6 +30,7 @@ public interface IIncomeInfo {
     @Caption(name = "Description")
     IPrimitive<String> name();
 
+    @NotNull
     Money monthlyAmount();
 
     /**

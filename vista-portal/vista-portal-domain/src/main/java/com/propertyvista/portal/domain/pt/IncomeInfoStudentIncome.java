@@ -18,6 +18,7 @@ import java.util.Date;
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -33,6 +34,7 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo 
 
     @Override
     @Caption(name = "Gross monthly amount")
+    @NotNull
     Money monthlyAmount();
 
     @Override
