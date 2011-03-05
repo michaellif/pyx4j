@@ -108,11 +108,10 @@ public class UnitDetailsPanel extends FlowPanel {
             public void onValueChange(ValueChangeEvent<Integer> event) {
                 for (final MarketRent mr : unit.marketRent()) {
                     if (event.getValue().equals(mr.leaseTerm().getValue())) {
-                        marketRent.set(mr);
+                        marketRent.setValue(mr.getValue());
                         break;
                     }
                 }
-
             }
         });
 

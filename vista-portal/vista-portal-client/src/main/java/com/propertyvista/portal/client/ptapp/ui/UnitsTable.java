@@ -19,7 +19,6 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -28,7 +27,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.propertyvista.portal.client.ptapp.ui.ApartmentViewForm.StyleDependent;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
@@ -218,8 +216,8 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
         if (unitTableRow != null) {
             unitTableRow.showDetails(unit, selectedmarketRent);
             unitTableRow.getContent().addStyleDependentName(StyleDependent.selected.name());
-            if (selectedUnit != unit) {
-                selectedUnit.set(unit);
+            if (!selectedUnit.equals(unit)) {
+                selectedUnit.setValue(unit.getValue());
             }
         }
     }
