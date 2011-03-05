@@ -39,24 +39,14 @@ public class UnitDetailsPanel extends FlowPanel {
 
     private static I18n i18n = I18nFactory.getI18n(UnitsTable.class);
 
-    public static String DEFAULT_STYLE_PREFIX = "UnitsTable";
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
-    }
-
     public UnitDetailsPanel() {
 
     }
 
-    public void showUnitDetail(com.propertyvista.portal.domain.ApptUnit unit) {
+    public void showUnitDetail(com.propertyvista.portal.domain.ApptUnit unit, MarketRent marketRent) {
         this.clear();
+
         FlowPanel unitDetailPanel = new FlowPanel();
-        unitDetailPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel);
         unitDetailPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TEXT_TOP);
 
         FlowPanel infoPanel = new FlowPanel();
@@ -111,12 +101,9 @@ public class UnitDetailsPanel extends FlowPanel {
                     + mr.rent().amount().getValue(), true);
 
             // set preselected term for selected unit:
-//            if (unit.equals(getValue().selectedUnit())) {
-//                term.setValue(mr.leaseTerm().equals(getValue().markerRent().leaseTerm()));
-//            }
+            term.setValue(mr.equals(marketRent));
 
             term.addClickHandler(new ClickHandler() {
-
                 @Override
                 public void onClick(ClickEvent event) {
 //                    getValue().markerRent().setValue(mr.getValue());
@@ -137,18 +124,12 @@ public class UnitDetailsPanel extends FlowPanel {
         unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
         unitDetailPanel.getElement().getStyle().setBackgroundColor("white");
-        unitDetailPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        unitDetailPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        unitDetailPanel.getElement().getStyle().setBorderColor("black");
-        unitDetailPanel.getElement().getStyle().setProperty("borderTop", "none");
-//        unitDetailPanel.setVisible(false);
-
-        //content.add(innerLevelElementElignment(unitDetailPanel));
         this.add(unitDetailPanel);
     }
 
     public void hide() {
         this.clear();
+//        this.setVisible(false);
     }
 
 //    public void selectUnitRow(FlowPanel unitRowPanel) {
@@ -171,7 +152,7 @@ public class UnitDetailsPanel extends FlowPanel {
 //        unitDetailPanel.addStyleDependentName(StyleDependent.selected.name());
 //        unitDetailPanel.setVisible(true);
 //    }
-//
+
 //    private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
 //        double rent = Double.MAX_VALUE;
 //        for (MarketRent mr : unit.marketRent())

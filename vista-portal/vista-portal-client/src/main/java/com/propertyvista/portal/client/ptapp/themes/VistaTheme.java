@@ -904,14 +904,13 @@ public abstract class VistaTheme extends Theme {
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel));
         style.addProperty("background-color", "auto");
         style.addProperty("border", "none");
-//        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.selected));
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid black");
-        style.addProperty("border-bottom", "none");
-//        style.addProperty("cursor", "default");
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel));

@@ -245,11 +245,11 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             {
                 Vehicle proto = EntityFactory.getEntityPrototype(Vehicle.class);
                 columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.year(), "120px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.make(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.model(), "100px"));
-                columns.add(new EntityFolderColumnDescriptor(proto.province(), "100px"));
+                columns.add(new EntityFolderColumnDescriptor(proto.plateNumber(), "5em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.year(), "5em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.make(), "5em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.model(), "5em", "1em"));
+                columns.add(new EntityFolderColumnDescriptor(proto.province(), "5em", "1em"));
             }
 
             @Override

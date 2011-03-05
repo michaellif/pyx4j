@@ -34,7 +34,10 @@ public class BoxReadOnlyFolderItemDecorator extends FlowPanel implements FolderI
             sp.getElement().getStyle().setPadding(0, Unit.EM);
             add(sp);
         }
+        content.setWidth("100%");
         add(content);
+
+        setWidth("100%");
     }
 
     @Override

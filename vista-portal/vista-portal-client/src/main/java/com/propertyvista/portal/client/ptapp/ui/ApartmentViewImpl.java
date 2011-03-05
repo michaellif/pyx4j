@@ -20,13 +20,15 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 public class ApartmentViewImpl extends WizardStepViewImpl<UnitSelection, ApartmentViewPresenter> implements ApartmentView {
 
     public ApartmentViewImpl() {
-        super(new ApartmentViewForm());
+//        super(new ApartmentViewForm());
+        super(new ApartmentViewForm2());
 
     }
 
     @Override
     public void setPresenter(ApartmentViewPresenter presenter) {
         super.setPresenter(presenter);
-        ((ApartmentViewForm) getForm()).setPresenter(getPresenter());
+//        ((ApartmentViewForm) getForm()).setPresenter(getPresenter());
+        ((ApartmentViewForm2) getForm()).setPresenter(getPresenter());
     }
 }
