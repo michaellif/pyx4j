@@ -154,6 +154,8 @@ public class CaptchaComposite extends SimplePanel {
 
         divHolder.add(images);
         response = new TextBox();
+        response.getElement().getStyle().setProperty("padding", "2px 5px");
+
         response.setName("recaptcha_response_field");
         response.getElement().getStyle().setMarginTop(5, Unit.PX);
         response.getElement().getStyle().setWidth(100, Unit.PCT);
