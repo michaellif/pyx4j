@@ -47,16 +47,19 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.IPerson;
 import com.propertyvista.portal.domain.pt.Pets;
+import com.propertyvista.portal.domain.pt.PotentialTenant.Relationship;
 import com.propertyvista.portal.domain.pt.PotentialTenantFinancial;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Summary;
 import com.propertyvista.portal.rpc.pt.SiteMap;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -470,6 +473,48 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             signature.getElement().getStyle().setPaddingTop(1, Unit.EM);
             signature.setHeight("3em");
             add(signature);
+
+            edit.addValueValidator(new EditableValueValidator<String>() {
+
+                @Override
+                public boolean isValid(CEditableComponent<String, ?> component, String value) {
+                    return isSignatureValid(value);
+                }
+
+                @Override
+                public String getValidationMessage(CEditableComponent<String, ?> component, String value) {
+                    return i18n.tr("Digital Signature string should match your name");
+                }
+            });
         }
+    }
+
+    private boolean isSignatureValid(String signature) {
+        if (CommonsStringUtils.isEmpty(signature)) {
+            return false;
+        }
+        for (PotentialTenantInfo pti : getValue().tenants().tenants()) {
+            if (pti.relationship().getValue() == Relationship.Applicant) {
+                return isCombinationMatch(signature, pti.firstName(), pti.lastName(), pti.middleName());
+            }
+        }
+        return false;
+    }
+
+    private boolean isCombinationMatch(String signature, IPrimitive<String> value1, IPrimitive<String> value2, IPrimitive<String> value3) {
+        signature = signature.trim().toLowerCase().replace("  ", " ");
+        String s1 = CommonsStringUtils.nvl(value1.getValue()).trim().toLowerCase();
+        String s2 = CommonsStringUtils.nvl(value2.getValue()).trim().toLowerCase();
+        String s3 = CommonsStringUtils.nvl(value3.getValue()).trim().toLowerCase();
+        if ((signature.equals(CommonsStringUtils.nvl_concat(s1, s2, " ")) || (signature.equals(CommonsStringUtils.nvl_concat(s2, s1, " "))))) {
+            return true;
+        }
+        if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s1, s3, " "), s2, " ")))) {
+            return true;
+        }
+        if ((signature.equals(CommonsStringUtils.nvl_concat(CommonsStringUtils.nvl_concat(s2, s3, " "), s1, " ")))) {
+            return true;
+        }
+        return false;
     }
 }
