@@ -148,16 +148,20 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             String caption = "&nbsp";
             Widget widgetToInsert = null;
 
+            UnitsDataCalculatino calcs = new UnitsDataCalculatino(availableUnits.units());
+
             // fill the row:
             if (proto.floorplan().name() == column.getObject()) {
                 widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
             } else if (proto.unitType() == column.getObject()) {
                 caption = availableUnits.floorplan().name().getStringView();
             } else if (proto.marketRent() == column.getObject()) {
-                caption = "From <br />" + "$" + minRentValue(availableUnits.units());
+                caption = "From <br />" + "$" + calcs.minRent;
             } else if (proto.requiredDeposit() == column.getObject()) {
             } else if (proto.bedrooms() == column.getObject()) {
+                caption = calcs.minBed + " - <br />" + calcs.maxBed;
             } else if (proto.bathrooms() == column.getObject()) {
+                caption = calcs.minBath + " - <br />" + calcs.maxBath;
             } else if (proto.area() == column.getObject()) {
                 caption = availableUnits.floorplan().area().getStringView();
             } else if (proto.avalableForRent() == column.getObject()) {
@@ -291,17 +295,69 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         }
     }
 
-    private double minRentValue(com.propertyvista.portal.domain.ApptUnit unit) {
-        double rent = Double.MAX_VALUE;
-        for (MarketRent mr : unit.marketRent())
-            rent = Math.min(rent, mr.rent().amount().getValue());
-        return (rent != Double.MAX_VALUE ? rent : 0);
-    }
+    private static class UnitsDataCalculatino {
 
-    private double minRentValue(IList<ApptUnit> units) {
-        double rent = Double.MAX_VALUE;
-        for (com.propertyvista.portal.domain.ApptUnit u : units)
-            rent = Math.min(rent, minRentValue(u));
-        return (rent != Double.MAX_VALUE ? rent : 0);
+        private double minTemp, maxTemp;
+
+        public double minRent, maxRent;
+
+        public double minBed, maxBed;
+
+        public double minBath, maxBath;
+
+        public UnitsDataCalculatino() {
+        }
+
+        public UnitsDataCalculatino(IList<ApptUnit> units) {
+            calcValues(units);
+        }
+
+        public void calcValues(IList<ApptUnit> units) {
+            minRent = Double.MAX_VALUE;
+            maxRent = Double.MIN_VALUE;
+
+            minBed = Double.MAX_VALUE;
+            maxBed = Double.MIN_VALUE;
+
+            minBath = Double.MAX_VALUE;
+            maxBath = Double.MIN_VALUE;
+
+            for (com.propertyvista.portal.domain.ApptUnit u : units) {
+                calcValues(u);
+                minRent = Math.min(minRent, minTemp);
+                maxRent = Math.max(maxRent, maxTemp);
+
+                minBed = Math.min(minBed, u.bedrooms().getValue());
+                maxBed = Math.max(maxBed, u.bedrooms().getValue());
+
+                minBath = Math.min(minBath, u.bedrooms().getValue());
+                maxBath = Math.max(maxBath, u.bedrooms().getValue());
+            }
+
+            // correct values if there was no integrations at all!
+            if (minRent == Double.MAX_VALUE)
+                minRent = 0;
+            if (maxRent == Double.MIN_VALUE)
+                maxRent = 0;
+
+            if (minBed == Double.MAX_VALUE)
+                minBed = 0;
+            if (maxBed == Double.MIN_VALUE)
+                maxBed = 0;
+
+            if (minBath == Double.MAX_VALUE)
+                minBath = 0;
+            if (maxBath == Double.MIN_VALUE)
+                maxBath = 0;
+        }
+
+        private void calcValues(ApptUnit unit) {
+            minTemp = Double.MAX_VALUE;
+            maxTemp = Double.MIN_VALUE;
+            for (MarketRent mr : unit.marketRent()) {
+                minTemp = Math.min(minTemp, mr.rent().amount().getValue());
+                maxTemp = Math.max(minTemp, mr.rent().amount().getValue());
+            }
+        }
     }
 }
