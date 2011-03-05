@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
+import java.util.Date;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
@@ -38,7 +40,6 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.payment.CreditCardInfo;
 import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
-import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.ref.Province;
 
@@ -46,8 +47,10 @@ import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
@@ -62,7 +65,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
         main.add(new ViewHeaderDecorator(proto().applicationCharges()));
-        main.add(inject(proto().applicationCharges().charges()));
+        main.add(inject(proto().applicationCharges().charges(), new ChargeLineFolder()));
 
         main.add(new ViewLineSeparator(0, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM));
 
@@ -91,8 +94,8 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         instrumentsPanel.asWidget().getElement().getStyle().setFloat(Float.RIGHT);
         instrumentsPanel.getElement().getStyle().setPaddingRight(50, Unit.PX);
         instrumentsPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        instrumentsPanel.add(inject(proto().echeck()));
-        instrumentsPanel.add(inject(proto().creditCard()));
+        instrumentsPanel.add(inject(proto().echeck(), createEcheckInfoEditor()));
+        instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
         main.add(instrumentsPanel);
 
         main.add(new ViewHeaderDecorator(proto().billingAddress()));
@@ -140,6 +143,7 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
             get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
 
+            @SuppressWarnings("unchecked")
             CEditableComponent<Province, ?> prov = (CEditableComponent<Province, ?>) getRaw(proto().billingAddress().province());
             prov.setValue(getValue().currentAddress().province());
             editable = false;
@@ -158,19 +162,6 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         super.populate(value);
         setInstrumentsVisibility(value.type().getValue());
         setAsCurrentAddress(value.sameAsCurrent().getValue());
-    }
-
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(EcheckInfo.class)) {
-            return createEcheckInfoEditor();
-        } else if (member.getValueClass().equals(CreditCardInfo.class)) {
-            return createCreditCardInfoEditor();
-        } else if (member.getValueClass().equals(ChargeLine.class)) {
-            return new ChargeLineFolder();
-        } else {
-            return super.create(member);
-        }
     }
 
     private CEntityEditableComponent<EcheckInfo> createEcheckInfoEditor() {
@@ -210,6 +201,37 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
                 panel.add(new VistaWidgetDecorator(inject(proto().exactName()), decorData));
                 panel.add(new VistaWidgetDecorator(inject(proto().bankPhone()), decorData));
                 return panel;
+            }
+
+            @Override
+            public CEditableComponent<?, ?> create(IObject<?> member) {
+                CEditableComponent<?, ?> comp = super.create(member);
+                if (comp instanceof CMonthYearPicker) {
+                    Date now = new Date();
+                    @SuppressWarnings("deprecation")
+                    int y = 1900 + now.getYear();
+                    ((CMonthYearPicker) comp).setYearOptionsRange(y, y + 10);
+
+                    ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
+
+                        @Override
+                        public boolean isValid(CEditableComponent<Date, ?> component, Date value) {
+                            if (value == null) {
+                                return true;
+                            } else {
+                                Date now = new Date();
+                                Date thisMonth = new Date(now.getYear(), now.getMonth(), 1);
+                                return value.compareTo(thisMonth) >= 0;
+                            }
+                        }
+
+                        @Override
+                        public String getValidationMessage(CEditableComponent<Date, ?> component, Date value) {
+                            return i18n.tr("Card expiry should be a future date");
+                        }
+                    });
+                }
+                return comp;
             }
         };
     }
