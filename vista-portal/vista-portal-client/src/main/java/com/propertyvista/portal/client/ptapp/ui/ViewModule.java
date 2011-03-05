@@ -47,6 +47,7 @@ public class ViewModule extends AbstractGinModule {
         bind(PaymentView.class).to(PaymentViewImpl.class).in(Singleton.class);
         bind(ChargesView.class).to(ChargesViewImpl.class).in(Singleton.class);
         bind(SummaryView.class).to(SummaryViewImpl.class).in(Singleton.class);
+        bind(CompletionView.class).to(CompletionViewImpl.class).in(Singleton.class);
 
         bind(GenericMessageView.class).to(GenericMessageViewImpl.class).in(Singleton.class);
 

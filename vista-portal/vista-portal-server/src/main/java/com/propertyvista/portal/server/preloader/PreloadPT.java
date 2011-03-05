@@ -155,6 +155,7 @@ public class PreloadPT extends AbstractDataPreloader {
         lq.convictedOfFelony().setValue(RandomUtil.randomBoolean());
         lq.everEvicted().setValue(RandomUtil.randomBoolean());
         lq.legalTroubles().setValue(RandomUtil.randomBoolean());
+        lq.filedBankruptcy().setValue(RandomUtil.randomBoolean());
 
         return lq;
     }
@@ -495,7 +496,7 @@ public class PreloadPT extends AbstractDataPreloader {
             building = unitSelection.building();
             //            log.info("Created building {}", unitSelection.selectedUnit().building());
             unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-            unitSelection.rentStart().setValue(DateUtils.createDate(2011, 3, 17));
+            unitSelection.rentStart().setValue(DateUtils.createDate(2011, 2, 17));
         }
 
         persist(unitSelection);

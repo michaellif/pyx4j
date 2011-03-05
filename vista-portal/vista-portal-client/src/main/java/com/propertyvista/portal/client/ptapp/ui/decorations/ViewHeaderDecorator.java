@@ -34,6 +34,7 @@ public class ViewHeaderDecorator extends HorizontalPanel {
         captionHolder.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Caption.name());
         add(captionHolder);
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
+        setCellWidth(captionHolder, "200px");
         if (widget != null) {
             add(widget);
             setCellVerticalAlignment(widget, HorizontalPanel.ALIGN_MIDDLE);

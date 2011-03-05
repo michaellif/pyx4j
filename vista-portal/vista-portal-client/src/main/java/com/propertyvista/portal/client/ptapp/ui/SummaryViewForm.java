@@ -123,6 +123,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(new ViewHeaderDecorator(i18n.tr("Digital Signature")));
         main.add(new SignatureView());
 
+        main.setWidth("700px");
+
         return main;
     }
 

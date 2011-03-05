@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.activity.MainNavigActivity;
+import com.propertyvista.portal.rpc.pt.SiteMap;
 
 import com.pyx4j.security.client.ClientContext;
 
@@ -35,7 +36,7 @@ public class MainNavigActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (ClientContext.isAuthenticated()) {
+        if (ClientContext.isAuthenticated() && !(place instanceof SiteMap.Completion)) {
             RootPanel.getBodyElement().setClassName("body-nonavig");
             return mainNavigActivityProvider.get().withPlace(place);
         } else {

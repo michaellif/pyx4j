@@ -860,6 +860,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("margin", "0.4em 0 0.4em 0");
         style.addProperty("width", "100%");
         addStyle(style);
 

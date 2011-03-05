@@ -17,16 +17,23 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.ui.CompletionView;
 
 import com.pyx4j.site.rpc.AppPlace;
 
 public class CompletionActivity extends AbstractActivity implements CompletionView.Presenter {
 
+    private final CompletionView view;
+
+    @Inject
+    public CompletionActivity(CompletionView view) {
+        this.view = view;
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        // TODO Auto-generated method stub
-
+        panel.setWidget(view);
     }
 
     public Activity withPlace(AppPlace place) {
