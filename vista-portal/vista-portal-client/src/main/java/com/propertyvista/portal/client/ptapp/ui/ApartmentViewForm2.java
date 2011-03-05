@@ -43,7 +43,7 @@ import com.pyx4j.widgets.client.Button;
 
 public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
-    private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
+    private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm2.class);
 
     private ApartmentViewPresenter presenter;
 
