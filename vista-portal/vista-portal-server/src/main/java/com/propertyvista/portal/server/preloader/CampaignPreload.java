@@ -27,8 +27,11 @@ public class CampaignPreload extends AbstractDataPreloader {
     public String create() {
         PhoneCallCampaign campaign = EntityFactory.create(PhoneCallCampaign.class);
 
-        campaign.triger().setValue(CampaignTriger.Registration);
-        campaign.message().setValue("Hello ${b}, thank you for registering as Potential Tenant. Property Vista will call you later.");
+        //campaign.triger().setValue(CampaignTriger.Registration);
+        //campaign.message().setValue("Hello ${b}, thank you for registering as Potential Tenant. Property Vista will call you later.");
+
+        campaign.triger().setValue(CampaignTriger.ApplicationCompleated);
+        campaign.message().setValue("Hello ${b}, at this point our presentation is concluded. Thank you very much for your time.");
 
         PersistenceServicesFactory.getPersistenceService().persist(campaign);
 

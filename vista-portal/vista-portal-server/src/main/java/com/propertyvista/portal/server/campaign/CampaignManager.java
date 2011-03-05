@@ -41,8 +41,17 @@ public class CampaignManager {
     public static void fireEvent(CampaignTriger trigger, PotentialTenantList tenants) {
         for (PotentialTenantInfo tenantInfo : tenants.tenants()) {
             Relationship relationship = tenantInfo.relationship().getValue();
-            if (Relationship.Applicant.equals(relationship) || Relationship.CoApplicant.equals(relationship)) {
-                fireEvent(trigger, tenantInfo);
+
+            switch (trigger) {
+            case ApplicationCompleated:
+                if (Relationship.Applicant.equals(relationship)) {
+                    fireEvent(trigger, tenantInfo);
+                }
+                break;
+            default:
+                if (Relationship.Applicant.equals(relationship) || Relationship.CoApplicant.equals(relationship)) {
+                    fireEvent(trigger, tenantInfo);
+                }
             }
         }
     }

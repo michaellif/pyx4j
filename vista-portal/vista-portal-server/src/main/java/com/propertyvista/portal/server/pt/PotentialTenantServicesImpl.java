@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xnap.commons.i18n.I18n;
 
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
@@ -61,6 +63,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.i18n.shared.I18nFactory;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.rpc.AppPlace;
@@ -69,6 +72,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 public class PotentialTenantServicesImpl extends EntityServicesImpl implements PotentialTenantServices {
 
     private final static Logger log = LoggerFactory.getLogger(PotentialTenantServicesImpl.class);
+
+    private static I18n i18n = I18nFactory.getI18n();
 
     public static class UnitExistsImpl implements PotentialTenantServices.UnitExists {
 
@@ -360,6 +365,19 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 }
 
                 CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
+            } else if (ret instanceof PaymentInfo) {
+                EntityQueryCriteria<PotentialTenantList> criteria = EntityQueryCriteria.create(PotentialTenantList.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtUserDataAccess.getCurrentUserApplication()));
+                CampaignManager.fireEvent(CampaignTriger.ApplicationCompleated, secureRetrieve(criteria));
+
+                PaymentInfo pi = (PaymentInfo) ret;
+                if ((EnumSet.of(PaymentType.Amex, PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(pi.type().getValue()))
+                        && ("2011".equals(pi.creditCard().cardNumber().getValue()))) {
+                    // Ok
+                } else {
+                    throw new UserRuntimeException(i18n.tr("Your card has been declined"));
+                }
+
             }
 
             return ret;
