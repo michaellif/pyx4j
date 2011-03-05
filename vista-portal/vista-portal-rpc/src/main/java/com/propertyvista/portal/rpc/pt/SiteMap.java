@@ -79,6 +79,11 @@ public class SiteMap {
     public static class Payment extends AppPlace {
     }
 
+    @NavigationItem(navigLabel = "Completion")
+    @PlaceProperties(caption = "Completion")
+    public static class Completion extends AppPlace {
+    }
+
     @PlaceProperties(caption = "Application Form", staticContent = "privacyPolicy")
     public static class PrivacyPolicy extends AppPlace {
     }

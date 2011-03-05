@@ -21,6 +21,7 @@ import com.google.inject.Provider;
 import com.propertyvista.portal.client.ptapp.activity.ApartmentActivity;
 import com.propertyvista.portal.client.ptapp.activity.ChangePasswordActivity;
 import com.propertyvista.portal.client.ptapp.activity.ChargesActivity;
+import com.propertyvista.portal.client.ptapp.activity.CompletionActivity;
 import com.propertyvista.portal.client.ptapp.activity.CreateAccountActivity;
 import com.propertyvista.portal.client.ptapp.activity.FinancialActivity;
 import com.propertyvista.portal.client.ptapp.activity.GenericMessageActivity;
@@ -65,6 +66,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     Provider<SummaryActivity> summaryActivityProvider;
 
+    Provider<CompletionActivity> completionActivityProvider;
+
     Provider<StaticContentActivity> staticContentActivity;
 
     Provider<GenericMessageActivity> genericMessageActivity;
@@ -96,6 +99,8 @@ public class Center3ActivityMapper implements ActivityMapper {
 
     final Provider<SummaryActivity> summaryActivityProvider,
 
+    final Provider<CompletionActivity> completionActivityProvider,
+
     final Provider<StaticContentActivity> staticContentActivity,
 
     final Provider<GenericMessageActivity> genericMessageActivity) {
@@ -114,6 +119,7 @@ public class Center3ActivityMapper implements ActivityMapper {
         this.paymentActivityProvider = paymentActivityProvider;
         this.chargesActivityProvider = chargesActivityProvider;
         this.summaryActivityProvider = summaryActivityProvider;
+        this.completionActivityProvider = completionActivityProvider;
         this.staticContentActivity = staticContentActivity;
         this.genericMessageActivity = genericMessageActivity;
     }
@@ -146,6 +152,8 @@ public class Center3ActivityMapper implements ActivityMapper {
             return paymentActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.Summary) {
             return summaryActivityProvider.get().withPlace((AppPlace) place);
+        } else if (place instanceof SiteMap.Completion) {
+            return completionActivityProvider.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.TermsAndConditions) {
             return staticContentActivity.get().withPlace((AppPlace) place);
         } else if (place instanceof SiteMap.PrivacyPolicy) {
