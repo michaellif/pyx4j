@@ -111,4 +111,7 @@ public interface SiteImages extends ClientBundle {
     @Source("cheque-guide.jpg")
     ImageResource chequeGuide();
 
+    @Source("bild.gif")
+    ImageResource building();
+
 }

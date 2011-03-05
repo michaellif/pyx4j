@@ -215,7 +215,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             //            upperLevelElementElignment(this);
-            setWidth("70%");
+            setWidth("700px");
 
             tableLayout.put("Plan", "10%");
             tableLayout.put("Type", "20%");

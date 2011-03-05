@@ -92,12 +92,12 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto.floorplan().name(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "140px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "100px"));
         columns.add(new EntityFolderColumnDescriptor(proto.marketRent(), "70px"));
         columns.add(new EntityFolderColumnDescriptor(proto.requiredDeposit(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.bedrooms(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.bathrooms(), "70px"));
-        columns.add(new EntityFolderColumnDescriptor(proto.area(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.bedrooms(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.bathrooms(), "60px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.area(), "60px"));
         columns.add(new EntityFolderColumnDescriptor(proto.avalableForRent(), "140px"));
     }
 

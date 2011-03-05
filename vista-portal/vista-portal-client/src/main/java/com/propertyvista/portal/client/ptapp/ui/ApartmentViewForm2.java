@@ -22,9 +22,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
@@ -54,7 +57,9 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
     @Override
     public IsWidget createContent() {
+        HorizontalPanel content = new HorizontalPanel();
         FlowPanel main = new FlowPanel();
+        content.add(main);
 
         // Form first table header: 
         HorizontalPanel header = new HorizontalPanel();
@@ -100,8 +105,16 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
 
         addValidations();
 
-        main.setWidth("900px");
-        return main;
+        main.setWidth("700px");
+
+        FlowPanel buildingView = new FlowPanel();
+        buildingView.add(new Image(SiteImages.INSTANCE.building()));
+        buildingView.add(new HTML("ADDRESS: 2060-2070 Prospect Street, Burlington"));
+        buildingView.getElement().getStyle().setMarginLeft(20, Unit.PX);
+
+        content.add(buildingView);
+
+        return content;
     }
 
     @Override
