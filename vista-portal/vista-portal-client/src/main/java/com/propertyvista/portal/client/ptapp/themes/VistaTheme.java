@@ -919,7 +919,7 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.selected));
         style.addProperty("background-color", "white");
-        style.addProperty("border", "1px solid black");
+        style.addProperty("border", "1px solid #bbb");
         style.addProperty("cursor", "default");
         addStyle(style);
 
