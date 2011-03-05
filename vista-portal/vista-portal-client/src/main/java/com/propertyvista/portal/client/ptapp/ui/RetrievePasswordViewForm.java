@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 
 public class RetrievePasswordViewForm extends CEntityForm<PasswordRetrievalRequest> {
@@ -35,10 +36,9 @@ public class RetrievePasswordViewForm extends CEntityForm<PasswordRetrievalReque
 
     @Override
     public IsWidget createContent() {
-        HTML header = new HTML("<h2>Retrieve Password</h2>");
-        header.getElement().getStyle().setMarginBottom(1, Unit.EM);
-
         FlowPanel main = new FlowPanel();
+        HTML header = new HTML(HtmlUtils.h2(i18n.tr("Retrieve Password")));
+        header.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(header);
         main.add(new VistaWidgetDecorator(inject(proto().email()), 62, 152));
         main.add(new HTML());

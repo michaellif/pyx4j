@@ -24,21 +24,24 @@ import com.propertyvista.portal.client.ptapp.ui.NewPasswordView.ConversationType
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 
 public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
 
     private static I18n i18n = I18nFactory.getI18n(NewPasswordViewForm.class);
 
-    private final HTML header;
+    private HTML header;
 
-    private final VistaWidgetDecorator currentPassword;
+    private VistaWidgetDecorator currentPassword;
 
     public NewPasswordViewForm() {
         super(PasswordChangeRequest.class);
+    }
 
+    @Override
+    public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
-
         header = new HTML();
         header.getElement().getStyle().setMarginBottom(1, Unit.EM);
         main.add(header);
@@ -52,22 +55,18 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(inject(proto().newPassword2()), 144, 152));
         setWidget(main);
-    }
-
-    @Override
-    public IsWidget createContent() {
-        return null;
+        return main;
     }
 
     public void setConversationType(ConversationType type) {
 
         switch (type) {
         case CHANGE:
-            header.setHTML("<h2>Change Password</h2>");
+            header.setHTML(HtmlUtils.h2(i18n.tr("Change Password")));
             currentPassword.setVisible(true);
             break;
         case RESET:
-            header.setHTML("<h2>Create Password</h2>");
+            header.setHTML(HtmlUtils.h2(i18n.tr("Create Password")));
             currentPassword.setVisible(false);
             break;
         }
