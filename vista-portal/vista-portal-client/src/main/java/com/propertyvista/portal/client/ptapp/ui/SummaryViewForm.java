@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteResources;
@@ -175,23 +176,13 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      * padding values!
      */
     private Widget upperLevelElementElignment(Widget e) {
-        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
+//        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+//        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
         e.setWidth("700px");
         return e;
     }
 
     private Widget innerLevelElementElignment(Widget e) {
-        e.setWidth("100%");
-        return e;
-    }
-
-    // this block of styles alight width and left position: 
-    private Widget innerElement2upperElignment(Widget e) {
-        e.getElement().getStyle().setPosition(Position.RELATIVE);
-        e.getElement().getStyle().setLeft(-1, Unit.EM);
-        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
         e.setWidth("100%");
         return e;
     }
@@ -420,16 +411,21 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             leaseTermContent.setWordWrap(true);
             bind(leaseTermContent, proto().leaseTerms().text());
 
-            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent.asWidget());
-            leaseTerms.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-            leaseTerms.getElement().getStyle().setBorderWidth(1, Unit.PX);
-            leaseTerms.getElement().getStyle().setBorderColor("black");
-            leaseTerms.getElement().getStyle().setBackgroundColor("white");
-            leaseTerms.getElement().getStyle().setColor("black");
+            SimplePanel container = new SimplePanel();
+            container.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+            container.getElement().getStyle().setBorderWidth(1, Unit.PX);
+            container.getElement().getStyle().setBorderColor("black");
+            container.getElement().getStyle().setBackgroundColor("white");
+            container.getElement().getStyle().setColor("black");
 
-            innerElement2upperElignment(leaseTerms);
+            ScrollPanel leaseTerms = new ScrollPanel(leaseTermContent.asWidget());
+            leaseTerms.getElement().getStyle().setPosition(Position.RELATIVE);
+            leaseTerms.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+            leaseTerms.getElement().getStyle().setPaddingRight(1, Unit.EM);
+            leaseTerms.setWidth("100%");
             leaseTerms.setHeight("20em");
-            add(leaseTerms);
+            container.add(leaseTerms);
+            add(container);
 
             // "I Agree" check-box:
             CCheckBox check = new CCheckBox();
