@@ -25,6 +25,7 @@ import com.propertyvista.portal.rpc.pt.PasswordRetrievalRequest;
 
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePasswordView {
 
@@ -41,12 +42,16 @@ public class RetrievePasswordViewImpl extends FlowPanel implements RetrievePassw
         form.populate(null);
         add(form);
 
-        Button retrievePasswordButton = new Button("Retrieve Password");
+        Button retrievePasswordButton = new Button(i18n.tr("Retrieve Password"));
         retrievePasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         retrievePasswordButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
                 presenter.retrievePassword(form.getValue());
             }
 

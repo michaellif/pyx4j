@@ -33,6 +33,7 @@ public interface PasswordRetrievalRequest extends IEntity {
      */
     @Caption(name = "Enter the code")
     @Editor(type = Editor.EditorType.captcha)
+    @NotNull
     IPrimitive<Pair<String, String>> captcha();
 
 }

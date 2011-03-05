@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
@@ -39,12 +40,16 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
         form.populate(null);
         add(form);
 
-        Button newPasswordButton = new Button("New Password");
+        Button newPasswordButton = new Button(i18n.tr("New Password"));
         newPasswordButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         newPasswordButton.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
                 presenter.passwordReset(form.getValue());
             }
 
