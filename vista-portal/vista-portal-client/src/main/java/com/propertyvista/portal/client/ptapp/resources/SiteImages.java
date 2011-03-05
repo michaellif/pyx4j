@@ -107,4 +107,8 @@ public interface SiteImages extends ClientBundle {
 
     @Source("payment-amex.gif")
     ImageResource paymentAMEX();
+
+    @Source("cheque-guide.jpg")
+    ImageResource chequeGuide();
+
 }

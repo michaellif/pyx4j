@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain.payment;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -33,12 +34,15 @@ public interface EcheckInfo extends IEntity {
     IPrimitive<String> bankName();
 
     @NotNull
+    @Caption(name = "Routing Number")
     IPrimitive<Integer> routingNo();
 
     @NotNull
+    @Caption(name = "Account Number")
     IPrimitive<Integer> accountNo();
 
     @NotNull
+    @Caption(name = "Check Number")
     IPrimitive<Integer> checkNo();
 
 }
