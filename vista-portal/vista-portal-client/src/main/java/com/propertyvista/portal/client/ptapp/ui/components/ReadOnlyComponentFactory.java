@@ -15,6 +15,8 @@ package com.propertyvista.portal.client.ptapp.ui.components;
 
 import java.util.Date;
 
+import com.propertyvista.portal.domain.ref.Province;
+
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.flex.EntityFormComponentFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -37,8 +39,6 @@ public class ReadOnlyComponentFactory extends EntityFormComponentFactory {
                 return new CLabel();
             } else if (mm.getValueClass().isEnum()) {
                 return new CEnumLabel();
-            } else if (mm.isEntity()) {
-                return new CEntityLabel();
             } else if (mm.isNumberValueClass()) {
                 return new CNumberLabel();
             } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
@@ -52,6 +52,8 @@ public class ReadOnlyComponentFactory extends EntityFormComponentFactory {
             } else {
                 return super.create(member);
             }
+        } else if (member.getValueClass().equals(Province.class)) {
+            return new CEntityLabel();
         } else {
             return super.create(member);
         }
