@@ -74,7 +74,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         private final E to;
 
         public NumberFieldRangeValidator(E from, E to) {
-            super(i18n.tr("Should be numeric in range from {} to {}", from, to));
+            super(i18n.tr("Should be numeric in range from {0} to {1}", from, to));
             this.from = from;
             this.to = to;
         }
