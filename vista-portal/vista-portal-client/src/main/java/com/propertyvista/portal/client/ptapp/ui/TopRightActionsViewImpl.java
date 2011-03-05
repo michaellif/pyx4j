@@ -18,7 +18,7 @@ import com.pyx4j.site.rpc.AppPlace;
 public class TopRightActionsViewImpl extends VerticalPanel implements TopRightActionsView {
 
     public enum Theme {
-        Gainsboro, LightSkyBlue
+        Gainsboro, VillageGreen
     }
 
     private static I18n i18n = I18nFactory.getI18n(TopRightActionsViewImpl.class);
@@ -37,7 +37,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final CHyperlink themes;
 
-    private Theme otherTheme = Theme.LightSkyBlue;
+    private Theme otherTheme = Theme.VillageGreen;
 
     @Inject
     public TopRightActionsViewImpl() {
@@ -81,7 +81,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
             @Override
             public void execute() {
                 presenter.setTheme(otherTheme);
-                otherTheme = (otherTheme == Theme.LightSkyBlue ? Theme.Gainsboro : Theme.LightSkyBlue);
+                otherTheme = (otherTheme == Theme.VillageGreen ? Theme.Gainsboro : Theme.VillageGreen);
                 themes.setValue(otherTheme.name());
             }
         });

@@ -892,7 +892,7 @@ public abstract class VistaTheme extends Theme {
 
     }
 
-    private void initVistaApartmentViewStyles() {
+    protected void initVistaApartmentViewStyles() {
         String prefix = VistaStyles.ApartmentUnits.StylePrefix;
 
         Style style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader));
@@ -907,7 +907,7 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.hover));
-        style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("background-color", ThemeColor.SELECTION);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel));
@@ -917,7 +917,7 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.selected));
-        style.addProperty("background-color", "white");
+        style.addProperty("background-color", ThemeColor.OBJECT_TONE2);
         style.addProperty("border", "1px solid #bbb");
         style.addProperty("cursor", "default");
         addStyle(style);

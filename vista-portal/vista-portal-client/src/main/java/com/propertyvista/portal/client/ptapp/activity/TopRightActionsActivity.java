@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.propertyvista.portal.client.ptapp.themes.GainsboroTheme;
-import com.propertyvista.portal.client.ptapp.themes.LightSkyBlueTheme;
+import com.propertyvista.portal.client.ptapp.themes.VillageGreenTheme;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ptapp.ui.TopRightActionsViewImpl.Theme;
 import com.propertyvista.portal.rpc.pt.SiteMap;
@@ -87,8 +87,8 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         case Gainsboro:
             StyleManger.installTheme(new GainsboroTheme());
             break;
-        case LightSkyBlue:
-            StyleManger.installTheme(new LightSkyBlueTheme());
+        case VillageGreen:
+            StyleManger.installTheme(new VillageGreenTheme());
             break;
         }
 
