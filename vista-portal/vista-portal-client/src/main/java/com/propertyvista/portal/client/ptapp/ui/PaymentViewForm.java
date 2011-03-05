@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ptapp.ui;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -83,9 +84,12 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
                 setInstrumentsVisibility(event.getValue());
             }
         });
+        paymentType.asWidget().getElement().getStyle().setFloat(Float.LEFT);
         main.add(paymentType);
 
         ComplexPanel instrumentsPanel = new FlowPanel();
+        instrumentsPanel.asWidget().getElement().getStyle().setFloat(Float.RIGHT);
+        instrumentsPanel.getElement().getStyle().setPaddingRight(50, Unit.PX);
         instrumentsPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
         instrumentsPanel.add(inject(proto().echeck()));
         instrumentsPanel.add(inject(proto().creditCard()));
