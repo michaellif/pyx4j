@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.domain;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
@@ -24,6 +25,7 @@ public interface Floorplan extends IEntity {
     @Detached
     Building building();
 
+    @Caption(name = "Plan")
     IPrimitive<String> name();
 
     /**

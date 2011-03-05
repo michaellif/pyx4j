@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
@@ -27,6 +28,7 @@ public interface ApptUnit extends Property {
 
     IPrimitive<Integer> floor();
 
+    @Caption(name = "Type")
     IPrimitive<String> unitType();
 
     /**
@@ -39,6 +41,7 @@ public interface ApptUnit extends Property {
     /**
      * Square ft. size of unit
      */
+    @Caption(name = "Sq F")
     IPrimitive<Integer> area();
 
     /**
@@ -46,6 +49,7 @@ public interface ApptUnit extends Property {
      * 
      * TODO Artur: Can we move this to floorplan?
      */
+    @Caption(name = "Beds")
     IPrimitive<Double> bedrooms();
 
     /**
@@ -55,6 +59,7 @@ public interface ApptUnit extends Property {
      * 
      * TODO Are the units with the same number of b*rooms have the same plan.
      */
+    @Caption(name = "Baths")
     IPrimitive<Double> bathrooms();
 
     /**
@@ -63,11 +68,13 @@ public interface ApptUnit extends Property {
     Lease currentLease();
 
     @Owned
+    @Caption(name = "Rent")
     IList<MarketRent> marketRent();
 
     IPrimitive<Date> moveOut();
 
     @Format("MM/dd/yyyy")
+    @Caption(name = "Avalable")
     IPrimitive<Date> avalableForRent();
 
     @Detached
@@ -83,6 +90,7 @@ public interface ApptUnit extends Property {
     /**
      * How much does the user need to put down
      */
+    @Caption(name = "Deposit")
     IPrimitive<Double> requiredDeposit();
 
     // need a lease-terms object

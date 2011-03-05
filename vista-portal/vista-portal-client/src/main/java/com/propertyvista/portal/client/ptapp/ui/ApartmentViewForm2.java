@@ -59,14 +59,14 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         // Form first table header: 
         HorizontalPanel header = new HorizontalPanel();
 
-        DecorationData decorData = new DecorationData(0, 7.2);
+        DecorationData decorData = new DecorationData(0, 8.1);
         decorData.hideInfoHolder = true;
         decorData.showMandatory = DecorationData.ShowMandatory.None;
         VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), decorData);
 
         header.add(dateFrom);
 
-        decorData = new DecorationData(0, 7.2);
+        decorData = new DecorationData(0, 8.1);
         decorData.hideInfoHolder = true;
         decorData.showMandatory = DecorationData.ShowMandatory.None;
         VistaWidgetDecorator dateTo = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData);
