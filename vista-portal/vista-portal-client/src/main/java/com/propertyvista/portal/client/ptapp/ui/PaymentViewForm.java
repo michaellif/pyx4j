@@ -70,8 +70,8 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         FlowPanel applicationFeePanel = new FlowPanel();
         applicationFeePanel.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().type()), "60%", null));
-        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().charge()), "10%", "right"));
+        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().type()), "300px", null));
+        applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().charge()), "100px", "right"));
         main.add(applicationFeePanel);
 
         main.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));

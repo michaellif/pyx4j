@@ -873,9 +873,9 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("padding", "0 1em 0 1em");
+//        style.addProperty("padding", "0 1em 0 1em");
         style.addProperty("margin-bottom", "0.3em");
-        style.addProperty("width", "700px");
+        style.addProperty("width", "400px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(VistaWidgetDecorator.DEFAULT_STYLE_PREFIX + StyleSuffix.Label));
