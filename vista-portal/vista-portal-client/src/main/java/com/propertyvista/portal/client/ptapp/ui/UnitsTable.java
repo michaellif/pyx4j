@@ -77,14 +77,14 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
         ApptUnit proto = EntityFactory.getEntityPrototype(ApptUnit.class);
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto.floorplan().name(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.marketRent(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.requiredDeposit(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.bedrooms(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.bathrooms(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.area(), "5em"));
-        columns.add(new EntityFolderColumnDescriptor(proto.avalableForRent(), "10em"));
+        columns.add(new EntityFolderColumnDescriptor(proto.floorplan().name(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "140px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.marketRent(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.requiredDeposit(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.bedrooms(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.bathrooms(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.area(), "70px"));
+        columns.add(new EntityFolderColumnDescriptor(proto.avalableForRent(), "140px"));
     }
 
     @Override

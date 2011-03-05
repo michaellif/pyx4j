@@ -869,8 +869,7 @@ public abstract class VistaTheme extends Theme {
         style.addProperty("border-top-width", "1px");
         style.addProperty("border-top-style", "dotted");
         style.addProperty("border-top-color", ThemeColor.OBJECT_TONE4);
-        style.addProperty("padding-left", "1em");
-        style.addProperty("padding-right", "1em");
+        style.addProperty("padding", "0 1em 0 1em");
         style.addProperty("margin-bottom", "0.3em");
         style.addProperty("width", "700px");
         addStyle(style);
@@ -895,6 +894,7 @@ public abstract class VistaTheme extends Theme {
 
         Style style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.UnitListHeader));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
+        style.addProperty("width", "700px");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.hover));
