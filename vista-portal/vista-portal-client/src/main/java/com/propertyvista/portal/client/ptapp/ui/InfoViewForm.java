@@ -67,7 +67,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
     public IsWidget createContent() {
         VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel();
 
-        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Contact Details")))));
+        main.add(new ViewHeaderDecorator(i18n.tr("Contact Details")));
 
         DecorationData decorData = new DecorationData();
         decorData.editable = false;
@@ -108,7 +108,7 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         decorData.componentWidth = 25;
         main.add(new VistaWidgetDecorator(inject(proto().email()), decorData));
 
-        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Secure Information")))));
+        main.add(new ViewHeaderDecorator(i18n.tr("Secure Information")));
         decorData = new DecorationData();
         decorData.componentWidth = 20;
         main.add(new VistaWidgetDecorator(inject(proto().driversLicense()), decorData));
@@ -156,6 +156,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         main.add(new HTML("<p/>" + h6(proto().emergencyContact2().getMeta().getCaption())));
         main.add(inject(proto().emergencyContact2()));
+
+        main.setWidth("700px");
 
         return main;
     }

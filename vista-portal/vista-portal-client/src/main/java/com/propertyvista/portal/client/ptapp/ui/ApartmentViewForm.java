@@ -94,14 +94,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
         // Form first table header: 
         FlowPanel header = new FlowPanel();
-        HTML caption = new HTML(h2(i18n.tr("Available Units")));
-        caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        caption.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
-        caption.getElement().getStyle().setMarginRight(8, Unit.EM);
-        caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
-        header.add(caption);
-
         DecorationData decorData = new DecorationData();
         decorData.labelWidth = 0;
         decorData.componentWidth = 7.2;
@@ -137,10 +129,7 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         });
         header.add(changeBtn);
 
-        Widget w = new ViewHeaderDecorator(header);
-        w.getElement().getStyle().setMarginBottom(0, Unit.EM);
-        w.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
-        w.setHeight("2.2em");
+        Widget w = new ViewHeaderDecorator(i18n.tr("Available Units"), header);
         main.add(w);
 
         // units table:
@@ -151,10 +140,6 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
-        caption = new HTML(h3(i18n.tr("Start Rent Date")));
-        caption.getElement().getStyle().setFloat(Float.LEFT);
-        caption.getElement().getStyle().setMarginTop(3, Unit.PX);
-        main.add(caption);
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), 0, 7.2));
 
         addValidations();

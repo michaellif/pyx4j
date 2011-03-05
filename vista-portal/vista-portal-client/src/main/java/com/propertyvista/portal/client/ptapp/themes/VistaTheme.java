@@ -860,9 +860,13 @@ public abstract class VistaTheme extends Theme {
 
         style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE4);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(Selector.valueOf(ViewHeaderDecorator.DEFAULT_STYLE_PREFIX, ViewHeaderDecorator.StyleSuffix.Caption));
         style.addProperty("padding", "0.3em 1em 0.4em 1em");
-        style.addProperty("margin", "0.2em 0 0.5em 0");
-        style.addProperty("width", "700px");
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(Selector.valueOf(ViewLineSeparator.DEFAULT_STYLE_PREFIX));
@@ -914,11 +918,11 @@ public abstract class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel));
-//        style.addProperty("visibility", "hidden");
+        //        style.addProperty("visibility", "hidden");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel, ApartmentViewForm.StyleDependent.selected));
-//        style.addProperty("visibility", "visible");
+        //        style.addProperty("visibility", "visible");
         addStyle(style);
     }
 

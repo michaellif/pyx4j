@@ -93,7 +93,11 @@ public class VistaWidgetDecorator extends VerticalPanel {
             label.getElement().getStyle().setWidth(decorData.labelWidth, decorData.labelUnit);
         }
 
-        label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
+        if (decorData.labelStyle == null) {
+            label.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Label);
+        } else {
+            label.addStyleName(decorData.labelStyle);
+        }
 
         Cursor.setDefault(label.getElement());
 
@@ -243,6 +247,8 @@ public class VistaWidgetDecorator extends VerticalPanel {
         public double labelWidth = 10;
 
         public Unit labelUnit = Unit.EM;
+
+        public String labelStyle;
 
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 

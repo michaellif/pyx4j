@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import static com.pyx4j.commons.HtmlUtils.h2;
-
 import java.util.Date;
 
 import org.xnap.commons.i18n.I18n;
@@ -26,12 +24,13 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator.StyleSuffix;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
@@ -61,21 +60,12 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         FlowPanel main = new FlowPanel();
 
         // Form first table header: 
-        FlowPanel header = new FlowPanel();
-        HTML caption = new HTML(h2(i18n.tr("Available Units")));
-        caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        caption.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
-        caption.getElement().getStyle().setMarginRight(8, Unit.EM);
-        caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
-        header.add(caption);
+        HorizontalPanel header = new HorizontalPanel();
 
         DecorationData decorData = new DecorationData(0, 7.2);
         decorData.hideInfoHolder = true;
         decorData.showMandatory = DecorationData.ShowMandatory.None;
         VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), decorData);
-        dateFrom.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        dateFrom.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         header.add(dateFrom);
 
@@ -83,13 +73,10 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         decorData.hideInfoHolder = true;
         decorData.showMandatory = DecorationData.ShowMandatory.None;
         VistaWidgetDecorator dateTo = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData);
-        dateTo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        dateTo.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         header.add(dateTo);
 
         Button changeBtn = new Button(i18n.tr("Change"));
-        changeBtn.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        changeBtn.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        changeBtn.getElement().getStyle().setMargin(5, Unit.PX);
         changeBtn.addClickHandler(new ClickHandler() {
 
             @Override
@@ -101,10 +88,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         });
         header.add(changeBtn);
 
-        Widget w = new ViewHeaderDecorator(header);
-        w.getElement().getStyle().setMarginBottom(0, Unit.EM);
-        w.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
-        w.setHeight("2.2em");
+        Widget w = new ViewHeaderDecorator(i18n.tr("Available Units"), header);
         main.add(w);
 
         // units table:
@@ -113,12 +97,13 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
-        DecorationData captionDecoration = new DecorationData(10, 10);
+        DecorationData captionDecoration = new DecorationData(150, 100);
+        captionDecoration.labelStyle = ViewHeaderDecorator.DEFAULT_STYLE_PREFIX + ViewHeaderDecorator.StyleSuffix.Caption.name();
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
         addValidations();
 
-        main.setWidth("700px");
+        main.setWidth("900px");
         return main;
     }
 

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import static com.pyx4j.commons.HtmlUtils.*;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -92,11 +90,11 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
     public IsWidget createContent() {
         FlowPanel main = new FlowPanel();
 
-        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Apartment")))));
+        main.add(new ViewHeaderDecorator(i18n.tr("Apartment")));
 
         main.add(new ApartmentView());
 
-        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Lease Term")))));
+        main.add(new ViewHeaderDecorator(i18n.tr("Lease Term")));
         main.add(new LeaseTermView());
 
         main.add(createHeaderWithEditLink(i18n.tr("Tenants"), new SiteMap.Tenants()));
@@ -113,7 +111,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         main.add(createHeaderWithEditLink(i18n.tr("Pets"), new SiteMap.Pets()));
         main.add(inject(proto().pets()));
 
-        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Lease Terms")))));
+        main.add(new ViewHeaderDecorator(i18n.tr("Lease Terms")));
         main.add(new LeaseTermsCheck());
 
         main.add(inject(proto().charges()));
@@ -122,7 +120,7 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
         //bind(new ChargesViewForm(this), proto().charges());
         //main.add(get(proto().charges()));
 
-        main.add(new ViewHeaderDecorator(new HTML(h4(i18n.tr("Digital Signature")))));
+        main.add(new ViewHeaderDecorator(i18n.tr("Digital Signature")));
         main.add(new SignatureView());
 
         return main;
@@ -154,14 +152,6 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
 
     private Widget createHeaderWithEditLink(String captionTxt, final AppPlace link) {
 
-        FlowPanel header = new FlowPanel();
-        HTML caption = new HTML(h4(captionTxt));
-        caption.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        caption.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-        caption.getElement().getStyle().setMarginRight(4, Unit.EM);
-        caption.getElement().getStyle().setPaddingBottom(0, Unit.EM);
-        header.add(caption);
-
         Button edit = new Button(i18n.tr("Edit"));
         edit.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         edit.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
@@ -172,8 +162,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
                 getPresenter().goToPlace(link);
             }
         });
-        header.add(edit);
-        return new ViewHeaderDecorator(header);
+
+        return new ViewHeaderDecorator(captionTxt, edit);
     }
 
     /*
