@@ -17,7 +17,6 @@ import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyMoneyForm;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
 import com.propertyvista.portal.domain.Money;
 import com.propertyvista.portal.domain.pt.IAddress;
-import com.propertyvista.portal.domain.pt.IEmploymentInfo;
 
 import com.pyx4j.entity.client.ui.EditableComponentFactory;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
@@ -53,10 +52,4 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         main.add(parent.inject(proto.postalCode()), 7);
     }
 
-    protected static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
-        main.add(parent.inject(proto.supervisorName()), 30);
-        main.add(parent.inject(proto.supervisorPhone()), 15);
-        main.add(parent.inject(proto.monthlySalary()), 8);
-        main.add(parent.inject(proto.position()), 20);
-    }
 }

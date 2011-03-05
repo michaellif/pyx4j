@@ -13,31 +13,26 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.propertyvista.portal.domain.Money;
-
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface IEmploymentInfo extends IAddress, IIncomeInfo {
+public interface IncomeInfoSocialServices extends IEntity, IEmploymentInfo {
 
     @Override
-    @Caption(name = "Employer Name")
+    @Caption(name = "Social Services Agency")
     IPrimitive<String> name();
 
-    //TODO: either one of starts/ends,  may be optional/hidden ?
-    @Caption(name = "Employed for (years)")
+    @Override
+    @Caption(name = "Years receiving")
     IPrimitive<Integer> employedForYears();
 
-    @Caption(name = "Supervisor/Manager Name")
+    @Override
+    @Caption(name = "Social Service Agent or Case Worker")
     IPrimitive<String> supervisorName();
 
-    @Caption(name = "Supervisor/Manager Phone")
+    @Override
+    @Caption(name = "Social Service Agent's or Case Worker's phone")
     IPrimitive<String> supervisorPhone();
 
-    @Caption(name = "Position")
-    IPrimitive<String> position();
-
-    @Override
-    @Caption(name = "Monthly Salary")
-    Money monthlyAmount();
 }

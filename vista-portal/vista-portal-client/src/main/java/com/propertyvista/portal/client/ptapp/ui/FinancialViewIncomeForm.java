@@ -15,26 +15,25 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaDecoratorsFlowPanel;
-import com.propertyvista.portal.domain.pt.Employer;
+import com.propertyvista.portal.domain.pt.IEmploymentInfo;
+import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
+import com.propertyvista.portal.domain.pt.IncomeInfoOther;
+import com.propertyvista.portal.domain.pt.IncomeInfoSeasonallyEmployed;
+import com.propertyvista.portal.domain.pt.IncomeInfoSelfEmployed;
+import com.propertyvista.portal.domain.pt.IncomeInfoSocialServices;
+import com.propertyvista.portal.domain.pt.IncomeInfoStudentIncome;
 import com.propertyvista.portal.domain.pt.IncomeSource;
-import com.propertyvista.portal.domain.pt.SeasonallyEmployed;
-import com.propertyvista.portal.domain.pt.SelfEmployed;
-import com.propertyvista.portal.domain.pt.SocialServices;
-import com.propertyvista.portal.domain.pt.StudentIncome;
 import com.propertyvista.portal.domain.pt.TenantIncome;
 
 import com.pyx4j.entity.client.ui.flex.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
 
@@ -63,11 +62,12 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             main.add(inject(proto().incomeSource()), 10, 20);
         }
 
-        main.add(inject(proto().employer()));
-        main.add(inject(proto().seasonallyEmployed()));
-        main.add(inject(proto().selfEmployed()));
-        main.add(inject(proto().studentIncome()));
-        main.add(inject(proto().socialServices()));
+        main.add(inject(proto().employer(), createEmployerEditor()));
+        main.add(inject(proto().seasonallyEmployed(), createSeasonallyEmployedEditor()));
+        main.add(inject(proto().selfEmployed(), createSelfEmployedEditor()));
+        main.add(inject(proto().studentIncome(), createStudentIncomeEditor()));
+        main.add(inject(proto().socialServices(), createSocialServicesEditor()));
+        main.add(inject(proto().otherIncomeInfo(), createOtherIncomeInfoEditor()));
 
         return main;
     }
@@ -82,37 +82,22 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     }
 
     @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member.getValueClass().equals(Employer.class)) {
-            return createEmployerEditor();
-        } else if (member.getValueClass().equals(SelfEmployed.class)) {
-            return createSelfEmployedEditor();
-        } else if (member.getValueClass().equals(SeasonallyEmployed.class)) {
-            return createSeasonallyEmployedEditor();
-        } else if (member.getValueClass().equals(SocialServices.class)) {
-            return createSocialServicesEditor();
-        } else if (member.getValueClass().equals(StudentIncome.class)) {
-            return createStudentIncomeEditor();
-        } else {
-            return super.create(member);
-        }
-    }
-
-    @Override
     public void populate(TenantIncome value) {
         super.populate(value);
         setVisibility(value.incomeSource().getValue());
     }
 
-    private void setVisibility(IncomeSource value) {
+    @SuppressWarnings("unchecked")
+    private void setVisibility(IncomeSource incomeSource) {
         get(proto().employer()).setVisible(false);
         get(proto().seasonallyEmployed()).setVisible(false);
         get(proto().selfEmployed()).setVisible(false);
         get(proto().studentIncome()).setVisible(false);
         get(proto().socialServices()).setVisible(false);
+        get(proto().otherIncomeInfo()).setVisible(false);
 
-        if (value != null) {
-            switch (value) {
+        if (incomeSource != null) {
+            switch (incomeSource) {
             case fulltime:
             case parttime:
                 get(proto().employer()).setVisible(true);
@@ -129,82 +114,134 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             case student:
                 get(proto().studentIncome()).setVisible(true);
                 break;
+            default:
+                @SuppressWarnings("rawtypes")
+                CEntityEditableComponent comp = (CEntityEditableComponent) get(proto().otherIncomeInfo());
+                comp.setVisible(true);
+                applyOtherLables(incomeSource, comp);
             }
         }
     }
 
-    private CEntityEditableComponent<Employer> createEmployerEditor() {
-        return new CEntityEditableComponent<Employer>(Employer.class) {
+    private void applyOtherLables(IncomeSource incomeSource, CEntityEditableComponent<IncomeInfoOther> comp) {
+        switch (incomeSource) {
+        case pension:
+        case retired:
+            comp.get(comp.proto().name()).setVisible(false);
+            comp.get(comp.proto().ends()).setVisible(false);
+            break;
+        default:
+            comp.get(comp.proto().name()).setVisible(true);
+            comp.get(comp.proto().ends()).setVisible(true);
+        }
+    }
+
+    private static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
+        main.add(parent.inject(proto.supervisorName()), 30);
+        main.add(parent.inject(proto.supervisorPhone()), 15);
+        main.add(parent.inject(proto.monthlyAmount()), 8);
+        main.add(parent.inject(proto.position()), 20);
+    }
+
+    private CEntityEditableComponent<IncomeInfoEmployer> createEmployerEditor() {
+        return new CEntityEditableComponent<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
 
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
                 main.add(inject(proto().name()), 10, 12);
                 main.add(inject(proto().employedForYears()), 10, 2);
-                BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
                 BaseEntityForm.injectIAddress(main, proto(), this);
+                injectIEmploymentInfo(main, proto(), this);
+
+                main.add(inject(proto().starts()), 10, 10);
+                main.add(inject(proto().ends()), 10, 10);
                 return main;
             }
 
         };
     }
 
-    private CEntityEditableComponent<SeasonallyEmployed> createSeasonallyEmployedEditor() {
-        return new CEntityEditableComponent<SeasonallyEmployed>(SeasonallyEmployed.class) {
+    private CEntityEditableComponent<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
+        return new CEntityEditableComponent<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
+                main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
+                injectIEmploymentInfo(main, proto(), this);
+
+                main.add(inject(proto().starts()), 10, 10);
+                main.add(inject(proto().ends()), 10, 10);
                 return main;
             }
         };
     }
 
-    private CEntityEditableComponent<StudentIncome> createStudentIncomeEditor() {
-        return new CEntityEditableComponent<StudentIncome>(StudentIncome.class) {
+    private CEntityEditableComponent<IncomeInfoStudentIncome> createStudentIncomeEditor() {
+        return new CEntityEditableComponent<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                main.add(new HTML());
-                BaseEntityForm.injectIEmploymentInfo(main, proto(), this);
+                main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
-                main.add(new HTML());
+
+                main.add(inject(proto().graduate()), 10, 10);
+                main.add(inject(proto().fieldOfStudy()), 10, 10);
+                main.add(inject(proto().fundingChoices()), 10, 10);
+
+                main.add(inject(proto().monthlyAmount()), 10, 10);
+
+                main.add(inject(proto().starts()), 10, 10);
+                main.add(inject(proto().ends()), 10, 10);
                 return main;
             }
         };
     }
 
-    private CEntityEditableComponent<SelfEmployed> createSelfEmployedEditor() {
-        return new CEntityEditableComponent<SelfEmployed>(SelfEmployed.class) {
+    private CEntityEditableComponent<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
+        return new CEntityEditableComponent<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                main.add(inject(proto().companyName()), 10, 15);
-                main.add(inject(proto().yearsInBusiness()), 10, 2);
+                main.add(inject(proto().name()), 10, 10);
+                BaseEntityForm.injectIAddress(main, proto(), this);
+                injectIEmploymentInfo(main, proto(), this);
                 main.add(inject(proto().fullyOwned()), 10, 10);
                 main.add(inject(proto().monthlyRevenue()), 10, 10);
-                main.add(inject(proto().monthlySalary()), 10, 8);
                 main.add(inject(proto().numberOfEmployees()), 10, 4);
-                BaseEntityForm.injectIAddress(main, proto(), this);
-                main.add(new HTML());
+
+                main.add(inject(proto().starts()), 10, 10);
+                main.add(inject(proto().ends()), 10, 10);
                 return main;
             }
         };
     }
 
-    private CEntityEditableComponent<SocialServices> createSocialServicesEditor() {
-        return new CEntityEditableComponent<SocialServices>(SocialServices.class) {
+    private CEntityEditableComponent<IncomeInfoSocialServices> createSocialServicesEditor() {
+        return new CEntityEditableComponent<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             public IsWidget createContent() {
                 VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
-                main.add(inject(proto().agency()), 10, 15);
-                main.add(inject(proto().yearsReceiving()), 10, 15);
-                main.add(inject(proto().worker()), 10, 30);
-                main.add(inject(proto().workerPhone()), 10, 15);
-                main.add(inject(proto().monthlyAmount()), 10, 8);
+                main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
-                main.add(new HTML());
+                injectIEmploymentInfo(main, proto(), this);
+
+                main.add(inject(proto().starts()), 10, 10);
+                main.add(inject(proto().ends()), 10, 10);
+                return main;
+            }
+        };
+    }
+
+    private CEntityEditableComponent<IncomeInfoOther> createOtherIncomeInfoEditor() {
+        return new CEntityEditableComponent<IncomeInfoOther>(IncomeInfoOther.class) {
+            @Override
+            public IsWidget createContent() {
+                VistaDecoratorsFlowPanel main = new VistaDecoratorsFlowPanel(readOnlyMode);
+                main.add(inject(proto().name()), 10, 10);
+                main.add(inject(proto().monthlyAmount()), 10, 10);
+                main.add(inject(proto().ends()), 10, 10);
                 return main;
             }
         };

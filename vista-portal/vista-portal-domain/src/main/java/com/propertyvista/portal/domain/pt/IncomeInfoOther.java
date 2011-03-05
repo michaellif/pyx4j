@@ -7,17 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 12, 2011
- * @author dmitry
+ * Created on 2011-03-04
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
-public interface Employer extends IEntity, IAddress, IEmploymentInfo {
-
-    IPrimitive<String> name();
+public interface IncomeInfoOther extends IEntity, IIncomeInfo {
 
 }

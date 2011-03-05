@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 12, 2011
- * @author dmitry
+ * Created on 2011-02-20
+ * @author antonk
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
@@ -19,20 +19,26 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface StudentIncome extends IEntity, IAddress, IEmploymentInfo {
+public interface IncomeInfoSelfEmployed extends IEntity, IEmploymentInfo {
 
-    public enum FundingChoice {
-        scolarship, bursary, grant, loan
-    }
+    @Override
+    @Caption(name = "Name of Company")
+    IPrimitive<String> name();
 
-    IPrimitive<String> school();
+    @Override
+    @Caption(name = "Years in business")
+    IPrimitive<Integer> employedForYears();
 
-    @Caption(name = "Graduate/undergraduate")
-    IPrimitive<Boolean> graduate();
+    @Caption(name = "Is fully owned")
+    IPrimitive<Boolean> fullyOwned();
 
-    IPrimitive<String> fieldOfStudy();
+    @Caption(name = "Monthly revenue")
+    Money monthlyRevenue();
 
-    IPrimitive<FundingChoice> fundingChoices();
-
+    @Override
+    @Caption(name = "Monthly salary/dividend")
     Money monthlyAmount();
+
+    @Caption(name = "Number of employees")
+    IPrimitive<Integer> numberOfEmployees();
 }

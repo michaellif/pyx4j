@@ -7,34 +7,36 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author antonk
+ * Created on 2011-03-04
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
+import java.util.Date;
+
 import com.propertyvista.portal.domain.Money;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface SelfEmployed extends IEntity, IAddress {
-    @Caption(name = "Name of Company")
-    IPrimitive<String> companyName();
+/**
+ * General required information for all Income types.
+ * 
+ */
+public interface IIncomeInfo {
 
-    @Caption(name = "Years in business")
-    IPrimitive<Integer> yearsInBusiness();
+    @Caption(name = "Description")
+    IPrimitive<String> name();
 
-    @Caption(name = "Is fully owned")
-    IPrimitive<Boolean> fullyOwned();
+    Money monthlyAmount();
 
-    @Caption(name = "Monthly revenue")
-    Money monthlyRevenue();
+    /**
+     * Start of income period. For employment that would be employment start date.
+     */
+    @Caption(name = "Start on")
+    IPrimitive<Date> starts();
 
-    @Caption(name = "Monthly salary/dividend")
-    Money monthlySalary();
-
-    @Caption(name = "Number of employees")
-    IPrimitive<Integer> numberOfEmployees();
+    @Caption(name = "Stop on")
+    IPrimitive<Date> ends();
 }

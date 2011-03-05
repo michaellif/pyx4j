@@ -13,59 +13,40 @@
  */
 package com.propertyvista.portal.domain.pt;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TenantIncome extends IEntity {
 
+    @NotNull
     IPrimitive<IncomeSource> incomeSource();
-
-    @Caption(name = "Monthly amount")
-    IPrimitive<Double> monthlyAmount();
-
-    // incomeSource = other 
-    //TODO description    
 
     // incomeSource =  pension, retired, odsp, dividends
     // NOTHING
 
-    //    /**
-    //     * Start of income period. For employment that would be employment start date.
-    //     */
-    //    IPrimitive<Date> dateStart();
-    //
-    //    /**
-    //     * End of income period
-    //     */
-    //    IPrimitive<Date> dateEnd();
+    // incomeSource =  unemployment and other
+    IncomeInfoOther otherIncomeInfo();
 
     // incomeSource = fulltime, parttime
     @Owned
-    Employer employer();
-
-    /**
-     * Still is employed
-     */
-    IPrimitive<Boolean> active();
+    IncomeInfoEmployer employer();
 
     // incomeSource = selfemployed
     @Owned
-    SelfEmployed selfEmployed();
+    IncomeInfoSelfEmployed selfEmployed();
 
     // incomeSource = seasonallyEmployed
     @Owned
-    SeasonallyEmployed seasonallyEmployed();
+    IncomeInfoSeasonallyEmployed seasonallyEmployed();
 
     // incomeSource = socialServices
     @Owned
-    SocialServices socialServices();
+    IncomeInfoSocialServices socialServices();
 
     // incomeSource = student
     @Owned
-    StudentIncome studentIncome();
+    IncomeInfoStudentIncome studentIncome();
 
-    // incomeSource =  unemployment
-    // TODO add "Stop On"
 }

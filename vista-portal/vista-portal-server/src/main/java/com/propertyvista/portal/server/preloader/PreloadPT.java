@@ -42,8 +42,8 @@ import com.propertyvista.portal.domain.pt.ChargeLineList;
 import com.propertyvista.portal.domain.pt.ChargeLineSelectable;
 import com.propertyvista.portal.domain.pt.Charges;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.Employer;
 import com.propertyvista.portal.domain.pt.IAddress;
+import com.propertyvista.portal.domain.pt.IncomeInfoEmployer;
 import com.propertyvista.portal.domain.pt.IncomeSource;
 import com.propertyvista.portal.domain.pt.LegalQuestions;
 import com.propertyvista.portal.domain.pt.Pet;
@@ -91,34 +91,34 @@ public class PreloadPT extends AbstractDataPreloader {
 
     private Application application;
 
-    private Employer createEmployer() {
-        Employer employer = EntityFactory.create(Employer.class);
+    private IncomeInfoEmployer createEmployer() {
+        IncomeInfoEmployer employer = EntityFactory.create(IncomeInfoEmployer.class);
 
         populateAddress(employer);
 
         employer.name().setValue(RandomUtil.random(DemoData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + RandomUtil.random(DemoData.LAST_NAMES));
         employer.supervisorPhone().setValue(RandomUtil.randomPhone());
-        employer.monthlySalary().setValue(1000d + RandomUtil.randomInt(4000));
+        employer.monthlyAmount().set(DomainUtil.createMoney(1000d + RandomUtil.randomInt(4000)));
         employer.position().setValue(RandomUtil.random(DemoData.OCCUPATIONS));
 
         int startYear = 1990 + RandomUtil.randomInt(20);
         int endYear = startYear + 1 + RandomUtil.randomInt(8);
 
-        employer.jobStart().setValue(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
-        employer.jobEnd().setValue(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
+        employer.starts().setValue(DateUtils.createDate(startYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
+        employer.ends().setValue(DateUtils.createDate(endYear, RandomUtil.randomInt(12), RandomUtil.randomInt(28)));
 
         return employer;
     }
 
-    private void loadEmployer(Employer employer, StringBuilder sb) {
+    private void loadEmployer(IncomeInfoEmployer employer, StringBuilder sb) {
         sb.append(" Employer: ").append(employer.name().getStringView());
-        sb.append(" \t").append(employer.jobStart().getStringView()).append(" - ").append(employer.jobEnd().getStringView());
+        sb.append(" \t").append(employer.starts().getStringView()).append(" - ").append(employer.ends().getStringView());
 
         sb.append(" Supervisor: ").append(employer.supervisorName().getStringView());
         sb.append(" at ").append(employer.supervisorPhone().getStringView());
 
-        sb.append(", Monthly salary $").append(employer.monthlySalary().getValue());
+        sb.append(", Monthly salary ").append(employer.monthlyAmount().getValue());
         sb.append(", Poisiton ").append(employer.position().getStringView());
 
         sb.append(", \tAddress: ");
@@ -494,7 +494,7 @@ public class PreloadPT extends AbstractDataPreloader {
             building = unitSelection.building();
             //            log.info("Created building {}", unitSelection.selectedUnit().building());
             unitSelection.markerRent().set(unitSelection.selectedUnit().marketRent().get(1)); // choose second lease
-            unitSelection.rentStart().setValue(DateUtils.createDate(2011, 4, 8));
+            unitSelection.rentStart().setValue(DateUtils.createDate(2011, 3, 17));
         }
 
         persist(unitSelection);
@@ -672,9 +672,9 @@ public class PreloadPT extends AbstractDataPreloader {
 
             income.incomeSource().setValue(IncomeSource.fulltime);
             income.employer().set(createEmployer());
-            income.monthlyAmount().setValue(300d + RandomUtil.randomInt(4000));
+            //income.monthlyAmount().setValue(300d + RandomUtil.randomInt(4000));
 
-            income.active().setValue(RandomUtil.randomBoolean());
+            //income.active().setValue(RandomUtil.randomBoolean());
 
             ptf.incomes().add(income);
         }
@@ -723,11 +723,11 @@ public class PreloadPT extends AbstractDataPreloader {
             sb.append("\t");
             sb.append(income.incomeSource().getValue());
             sb.append(" $");
-            sb.append(income.monthlyAmount().getValue());
+            // sb.append(income.monthlyAmount().getValue());
 
             loadEmployer(income.employer(), sb);
 
-            sb.append(" Active: ").append(income.active().getValue());
+            //sb.append(" Active: ").append(income.active().getValue());
 
             sb.append("\n");
         }

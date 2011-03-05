@@ -7,13 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author antonk
+ * Created on Feb 12, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface SeasonallyEmployed extends IEntity, IAddress, IEmploymentInfo {
+public interface IncomeInfoEmployer extends IEntity, IEmploymentInfo {
+
 }

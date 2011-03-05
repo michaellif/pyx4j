@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author antonk
+ * Created on Feb 12, 2011
+ * @author dmitry
  * @version $Id$
  */
 package com.propertyvista.portal.domain.pt;
@@ -21,27 +21,33 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface SocialServices extends IEntity, IAddress {
+public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo {
 
-    @Caption(name = "Social Services Agency")
-    IPrimitive<String> agency();
+    public enum FundingChoice {
+        scolarship, bursary, grant, loan
+    }
 
-    @Caption(name = "Social Service Agent or Case Worker")
-    IPrimitive<String> worker();
+    @Override
+    @Caption(name = "School")
+    IPrimitive<String> name();
 
-    @Caption(name = "Social Service Agent's or Case Worker's phone")
-    IPrimitive<String> workerPhone();
-
-    @Caption(name = "Monthly amount")
+    @Override
+    @Caption(name = "Gross monthly amount")
     Money monthlyAmount();
 
-    @Caption(name = "Years receiving")
-    IPrimitive<String> yearsReceiving();
+    @Override
+    @Caption(name = "Program Start")
+    IPrimitive<Date> starts();
 
-    @Caption(name = "Started on")
-    IPrimitive<Date> started();
+    @Override
+    @Caption(name = "Program (Planned) to be completed on")
+    IPrimitive<Date> ends();
 
-    @Caption(name = "Ended on")
-    IPrimitive<Date> ended();
+    @Caption(name = "Graduate/undergraduate")
+    IPrimitive<Boolean> graduate();
+
+    IPrimitive<String> fieldOfStudy();
+
+    IPrimitive<FundingChoice> fundingChoices();
 
 }
