@@ -14,7 +14,6 @@
 package com.propertyvista.portal.client.ptapp.themes;
 
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
-import com.propertyvista.portal.client.ptapp.ui.ApartmentViewForm;
 import com.propertyvista.portal.client.ptapp.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.MainNavigViewImpl;
 import com.propertyvista.portal.client.ptapp.ui.SiteView;
@@ -894,40 +893,40 @@ public abstract class VistaTheme extends Theme {
     }
 
     private void initVistaApartmentViewStyles() {
-        String prefix = ApartmentViewForm.DEFAULT_STYLE_PREFIX;
+        String prefix = VistaStyles.ApartmentUnits.StylePrefix;
 
-        Style style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.UnitListHeader));
+        Style style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
         style.addProperty("width", "700px");
         style.addProperty("height", "2em");
         style.addProperty("margin-top", "-10px");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.UnitListHeader) + " td");
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader) + " td");
         style.addProperty("line-height", "2em");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.hover));
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.hover));
         style.addProperty("background-color", ThemeColor.OBJECT_TONE5);
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel));
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel));
         style.addProperty("background-color", "auto");
         style.addProperty("border", "none");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitRowPanel, ApartmentViewForm.StyleDependent.selected));
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel, VistaStyles.ApartmentUnits.StyleDependent.selected));
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid #bbb");
         style.addProperty("cursor", "default");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel));
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitDetailPanel));
         //        style.addProperty("visibility", "hidden");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, ApartmentViewForm.StyleSuffix.unitDetailPanel, ApartmentViewForm.StyleDependent.selected));
+        style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.unitDetailPanel, VistaStyles.ApartmentUnits.StyleDependent.selected));
         //        style.addProperty("visibility", "visible");
         addStyle(style);
     }

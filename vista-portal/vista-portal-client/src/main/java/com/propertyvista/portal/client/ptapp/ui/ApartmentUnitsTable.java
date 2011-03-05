@@ -34,10 +34,10 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
+import com.propertyvista.portal.client.ptapp.themes.VistaStyles;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.ApptUnit;
-import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
@@ -53,28 +53,15 @@ import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
 
 public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
-
-    public final static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
-
-    public static enum StyleSuffix implements IStyleSuffix {
-        UnitListHeader, SelectedUnit, unitRowPanel, unitDetailPanel
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
-    }
 
     private final List<EntityFolderColumnDescriptor> columns;
 
@@ -125,7 +112,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
     @Override
     protected FolderDecorator<ApptUnit> createFolderDecorator() {
         TableFolderDecorator<ApptUnit> tfd = new TableFolderDecorator<ApptUnit>(columns);
-        tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
+        tfd.getHeader().setStyleName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader);
 
         floorplanRawPanel = new FlowPanel();
         floorplanRawPanel.setWidth("100%");
@@ -218,7 +205,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
                         unitDetailsPanelShown.hide();
                     }
 
-                    getContent().addStyleDependentName(StyleDependent.selected.name());
+                    getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleDependent.selected.name());
                     setSelected(getValue());
                 }
             });
@@ -227,8 +214,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
-                        getContent().addStyleDependentName(StyleDependent.hover.name());
+                    if (!getContent().getStyleName().contains(VistaStyles.ApartmentUnits.StyleDependent.selected.name())) {
+                        getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.hover.name());
                     }
                 }
             }, MouseOverEvent.getType());
@@ -237,11 +224,11 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    getContent().removeStyleDependentName(StyleDependent.hover.name());
+                    getContent().removeStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.hover.name());
                 }
             }, MouseOutEvent.getType());
 
-            getContent().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
+            getContent().setStyleName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleSuffix.unitRowPanel);
             return decorator;
         }
 
@@ -282,13 +269,13 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         // clear all selected style:
         for (ApptUnit au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
-            unitTableRow.getContent().removeStyleDependentName(StyleDependent.selected.name());
+            unitTableRow.getContent().removeStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
         }
 
         UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
         if (unitTableRow != null) {
             unitTableRow.showDetails(unit, selectedmarketRent);
-            unitTableRow.getContent().addStyleDependentName(StyleDependent.selected.name());
+            unitTableRow.getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
             if (!selectedUnit.equals(unit)) {
                 selectedUnit.setValue(unit.getValue());
             }

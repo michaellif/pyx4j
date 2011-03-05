@@ -41,13 +41,13 @@ import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.Button;
 
-public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
+public class ApartmentViewForm extends CEntityForm<UnitSelection> {
 
-    private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm2.class);
+    private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 
     private ApartmentViewPresenter presenter;
 
-    public ApartmentViewForm2() {
+    public ApartmentViewForm() {
         super(UnitSelection.class);
     }
 
