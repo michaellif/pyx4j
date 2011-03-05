@@ -20,9 +20,14 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NativeTextBox<E>> {
+
+    private static I18n i18n = I18nFactory.getI18n(CNumberField.class);
 
     private TextBoxParserValidator<E> validator;
 
@@ -69,7 +74,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         private final E to;
 
         public NumberFieldRangeValidator(E from, E to) {
-            super("Should be numeric in range from " + from + " to " + to);
+            super(i18n.tr("Should be numeric in range from {} to {}", from, to));
             this.from = from;
             this.to = to;
         }
