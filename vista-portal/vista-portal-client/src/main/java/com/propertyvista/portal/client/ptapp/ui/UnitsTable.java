@@ -77,8 +77,8 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
     public UnitsTable() {
         super();
 
-//        this.asWidget().getElement().getStyle().setPaddingLeft(1, Unit.EM);
-//        this.asWidget().getElement().getStyle().setPaddingRight(1, Unit.EM);
+        //        this.asWidget().getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        //        this.asWidget().getElement().getStyle().setPaddingRight(1, Unit.EM);
         this.setWidth("700px");
 
         ApptUnit proto = EntityFactory.getEntityPrototype(ApptUnit.class);
@@ -161,7 +161,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
                     }
 
                     getContent().addStyleDependentName(StyleDependent.selected.name());
-                    setSelected(getValue(), null);
+                    setSelected(getValue());
                 }
             });
 
@@ -195,16 +195,19 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
             return content;
         }
 
-        public void showDetails(ApptUnit unit, MarketRent marketRent) {
-            unitDetailsPanel.showUnitDetail(unit, marketRent);
+        private void showDetails(ApptUnit unit, MarketRent marketRent) {
+            unitDetailsPanel.showUnitDetail(unit, selectedmarketRent);
             unitDetailsPanelShown = unitDetailsPanel;
         }
     }
 
-    public void setSelected(ApptUnit unit, MarketRent marketRent) {
+    public void populate(ApptUnit unit, MarketRent marketRent) {
         selectedUnit = unit;
         selectedmarketRent = marketRent;
+        setSelected(selectedUnit);
+    }
 
+    private void setSelected(ApptUnit unit) {
         // clear all selected style:
         for (ApptUnit au : getValue()) {
             UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(au);
@@ -213,8 +216,11 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
         UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
         if (unitTableRow != null) {
-            unitTableRow.showDetails(selectedUnit, selectedmarketRent);
+            unitTableRow.showDetails(unit, selectedmarketRent);
             unitTableRow.getContent().addStyleDependentName(StyleDependent.selected.name());
+            if (selectedUnit != unit) {
+                selectedUnit.set(unit);
+            }
         }
     }
 }

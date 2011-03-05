@@ -15,25 +15,27 @@ package com.propertyvista.portal.client.ptapp.ui;
 
 import static com.pyx4j.commons.HtmlUtils.h3;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
 
-import com.pyx4j.widgets.client.style.IStyleDependent;
-import com.pyx4j.widgets.client.style.IStyleSuffix;
+import com.pyx4j.forms.client.ui.CRadioGroup;
+import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 
 public class UnitDetailsPanel extends FlowPanel {
 
@@ -43,7 +45,7 @@ public class UnitDetailsPanel extends FlowPanel {
 
     }
 
-    public void showUnitDetail(com.propertyvista.portal.domain.ApptUnit unit, MarketRent marketRent) {
+    public void showUnitDetail(final ApptUnit unit, final MarketRent marketRent) {
         this.clear();
 
         FlowPanel unitDetailPanel = new FlowPanel();
@@ -92,34 +94,29 @@ public class UnitDetailsPanel extends FlowPanel {
         // lease term:
         unitDetailPanel.add(new HTML());
         unitDetailPanel.add(new HTML(h3(i18n.tr("Lease Terms"))));
-        FlowPanel leaseTermsPanel = new FlowPanel();
-
-        String groupName = "TermVariants" + unit.hashCode();
-        RadioButton term = null; // fill the variants:
+        Map<Integer, String> options = new TreeMap<Integer, String>();
         for (final MarketRent mr : unit.marketRent()) {
-            term = new RadioButton(groupName, mr.leaseTerm().getStringView() + "&nbsp;&nbsp;&nbsp;&nbsp; month &nbsp;&nbsp;&nbsp;&nbsp; $"
-                    + mr.rent().amount().getValue(), true);
-
-            // set preselected term for selected unit:
-            term.setValue(mr.equals(marketRent));
-
-            term.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-//                    getValue().markerRent().setValue(mr.getValue());
-                }
-            });
-
-            term.getElement().getStyle().setDisplay(Display.BLOCK);
-            leaseTermsPanel.add(term);
+            options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + " $" + mr.rent().amount().getValue());
         }
+        CRadioGroupInteger mr = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
+        if (unit.marketRent().contains(marketRent)) {
+            mr.populate(marketRent.leaseTerm().getValue());
+        }
+        mr.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 
-        // set last (longest) term for all other units:
-//        if (term != null && !unit.equals(getValue().selectedUnit())) {
-//            term.setValue(true);
-//        }
+            @Override
+            public void onValueChange(ValueChangeEvent<Integer> event) {
+                for (final MarketRent mr : unit.marketRent()) {
+                    if (event.getValue().equals(mr.leaseTerm().getValue())) {
+                        marketRent.set(mr);
+                        break;
+                    }
+                }
 
-        unitDetailPanel.add(leaseTermsPanel);
+            }
+        });
+
+        unitDetailPanel.add(mr);
 
         unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
@@ -129,41 +126,6 @@ public class UnitDetailsPanel extends FlowPanel {
 
     public void hide() {
         this.clear();
-//        this.setVisible(false);
     }
 
-//    public void selectUnitRow(FlowPanel unitRowPanel) {
-//
-//        // tweak selected unit data view:
-//        for (Widget w : content) {
-//            if (w.getStyleName().contains(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel)) {
-//                w.removeStyleDependentName(StyleDependent.selected.name());
-//            }
-//            // hide all detail panels:
-//            if (w.getStyleName().contains(DEFAULT_STYLE_PREFIX + StyleSuffix.unitDetailPanel)) {
-//                w.removeStyleDependentName(StyleDependent.selected.name());
-//                w.setVisible(false);
-//            }
-//        }
-//
-//        // show current selected row with details:
-//        unitRowPanel.addStyleDependentName(StyleDependent.selected.name());
-//        Widget unitDetailPanel = content.getWidget(content.getWidgetIndex(unitRowPanel) + 1);
-//        unitDetailPanel.addStyleDependentName(StyleDependent.selected.name());
-//        unitDetailPanel.setVisible(true);
-//    }
-
-//    private double minRentValue(com.propertyvista.portal.domain.Unit unit) {
-//        double rent = Double.MAX_VALUE;
-//        for (MarketRent mr : unit.marketRent())
-//            rent = Math.min(rent, mr.rent().amount().getValue());
-//        return (rent != Double.MAX_VALUE ? rent : 0);
-//    }
-//
-//    private double minRentValue(IList<com.propertyvista.portal.domain.Unit> units) {
-//        double rent = Double.MAX_VALUE;
-//        for (com.propertyvista.portal.domain.Unit u : units)
-//            rent = Math.min(rent, minRentValue(u));
-//        return (rent != Double.MAX_VALUE ? rent : 0);
-//    }
 }

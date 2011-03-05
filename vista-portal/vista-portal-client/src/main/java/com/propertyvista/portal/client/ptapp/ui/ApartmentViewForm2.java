@@ -113,8 +113,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
 
-        DecorationData captionDecoration = new DecorationData(10, 7.2);
-        captionDecoration.labelFont = 1.2;
+        DecorationData captionDecoration = new DecorationData(10, 10);
         main.add(new VistaWidgetDecorator(inject(proto().rentStart()), captionDecoration));
 
         addValidations();
@@ -126,7 +125,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
     @Override
     public void populate(UnitSelection value) {
         super.populate(value);
-        ((UnitsTable) getRaw(value.availableUnits().units())).setSelected(value.selectedUnit(), value.markerRent());
+        ((UnitsTable) getRaw(value.availableUnits().units())).populate(value.selectedUnit(), value.markerRent());
     }
 
     private void addValidations() {

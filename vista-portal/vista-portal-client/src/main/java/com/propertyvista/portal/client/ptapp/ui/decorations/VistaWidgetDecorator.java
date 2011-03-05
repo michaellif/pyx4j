@@ -86,9 +86,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
         this.decorData = decorData;
 
         label = new Label(CommonsStringUtils.nvl(component.getTitle()));
-        if (this.decorData.labelFont != 0) {
-            label.getElement().getStyle().setFontSize(this.decorData.labelFont, Unit.EM);
-        }
         label.getElement().getStyle().setFloat(Float.LEFT);
 
         label.setHorizontalAlignment(decorData.labelAlignment);
@@ -246,8 +243,6 @@ public class VistaWidgetDecorator extends VerticalPanel {
         public double labelWidth = 10;
 
         public Unit labelUnit = Unit.EM;
-
-        public double labelFont = 0;
 
         public HorizontalAlignmentConstant labelAlignment = HasHorizontalAlignment.ALIGN_RIGHT;
 
