@@ -104,7 +104,7 @@ public class CreateAccountViewImpl extends FlowPanel implements CreateAccountVie
 
             @Override
             public void onClick(ClickEvent event) {
-
+                form.setVisited(true);
                 if (!form.isValid()) {
                     throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 }

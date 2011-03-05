@@ -61,6 +61,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 
@@ -176,8 +177,8 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
      * padding values!
      */
     private Widget upperLevelElementElignment(Widget e) {
-//        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-//        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
+        //        e.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        //        e.getElement().getStyle().setPaddingRight(1, Unit.EM);
         e.setWidth("700px");
         return e;
     }
@@ -434,6 +435,19 @@ public class SummaryViewForm extends BaseEntityForm<Summary> {
             agree.asWidget().getElement().getStyle().setMarginLeft(40, Unit.PCT);
             agree.asWidget().getElement().getStyle().setMarginTop(0.5, Unit.EM);
             add(agree);
+
+            check.addValueValidator(new EditableValueValidator<Boolean>() {
+
+                @Override
+                public boolean isValid(CEditableComponent<Boolean, ?> component, Boolean value) {
+                    return value == Boolean.TRUE;
+                }
+
+                @Override
+                public String getValidationMessage(CEditableComponent<Boolean, ?> component, Boolean value) {
+                    return i18n.tr("You should agree to terms");
+                }
+            });
         }
     }
 
