@@ -33,6 +33,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -116,6 +117,19 @@ public abstract class AbstractDataPreloader implements DataPreloader {
         }
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
         criteria.add(PropertyCriterion.eq("name", name));
+        T ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        namesCache.put(key, ent);
+        return ent;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends IEntity> T retrieveByMemeber(Class<T> clazz, IObject<?> member, String value) {
+        String key = clazz.getName() + "-" + member.getFieldName() + "=" + value;
+        if (namesCache.containsKey(key)) {
+            return (T) namesCache.get(key);
+        }
+        EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
+        criteria.add(PropertyCriterion.eq(member, value));
         T ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         namesCache.put(key, ent);
         return ent;
