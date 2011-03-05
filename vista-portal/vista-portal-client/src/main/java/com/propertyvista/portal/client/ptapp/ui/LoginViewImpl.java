@@ -35,6 +35,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 public class LoginViewImpl extends FlowPanel implements LoginView {
@@ -65,6 +66,10 @@ public class LoginViewImpl extends FlowPanel implements LoginView {
 
             @Override
             public void onClick(ClickEvent event) {
+                form.setVisited(true);
+                if (!form.isValid()) {
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                }
                 presenter.login(form.getValue());
             }
 
