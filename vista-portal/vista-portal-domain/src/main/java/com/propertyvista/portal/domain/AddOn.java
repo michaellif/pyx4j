@@ -35,7 +35,6 @@ public interface AddOn extends IEntity {
     /**
      * How much it costs monthly for this add-on
      */
-    @ToString
     IPrimitive<Double> monthlyCost();
 
 }
