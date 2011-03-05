@@ -20,6 +20,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -31,9 +32,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
+import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
@@ -124,32 +127,37 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
         floorplanRawPanel.setWidth("100%");
         floorplanRawPanel.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
         tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
-
+        tfd.insert(new ViewLineSeparator(700, Unit.PX, 0, Unit.EM, 0.5, Unit.EM), tfd.getWidgetCount() - 1);
         return tfd;
 
     }
 
-    private void createFloorplanRaw(Floorplan floorplan) {
+    private void createFloorplanRaw(AvailableUnitsByFloorplan availableUnits) {
         floorplanRawPanel.clear();
         for (EntityFolderColumnDescriptor column : columns) {
             HorizontalPanel cellPanel = new HorizontalPanel();
             cellPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
-            cellPanel.setWidth(column.getWidth());
             cellPanel.getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
             cellPanel.getElement().getStyle().setMarginRight(3, Style.Unit.PX);
+            cellPanel.setWidth(column.getWidth());
 
-            String caption = "TODO";
-            column.getObject().getMeta().getCaption();
-            if (caption == "") {
-                caption = "&nbsp";
-            }
-            // TODO All other stuff
+            String caption = "&nbsp";
+
+            // fill the row:
             if (proto.floorplan().name() == column.getObject()) {
-                caption = floorplan.name().getStringView();
+                caption = availableUnits.floorplan().name().getStringView();
+            } else if (proto.unitType() == column.getObject()) {
+            } else if (proto.marketRent() == column.getObject()) {
+                caption = "From <br />" + "$" + minRentValue(availableUnits.units());
+            } else if (proto.requiredDeposit() == column.getObject()) {
+            } else if (proto.bedrooms() == column.getObject()) {
+            } else if (proto.bathrooms() == column.getObject()) {
+            } else if (proto.area() == column.getObject()) {
+                caption = availableUnits.floorplan().area().getStringView();
+            } else if (proto.avalableForRent() == column.getObject()) {
             }
-            HTML label = new HTML(caption);
-            cellPanel.add(label);
 
+            cellPanel.add(new HTML(caption));
             floorplanRawPanel.add(cellPanel);
         }
     }
@@ -255,7 +263,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
     public void populate(UnitSelection value) {
         selectedUnit = value.selectedUnit();
         selectedmarketRent = value.markerRent();
-        createFloorplanRaw(value.availableUnits().floorplan());
+        createFloorplanRaw(value.availableUnits());
         setSelected(selectedUnit);
     }
 
@@ -274,5 +282,19 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
                 selectedUnit.setValue(unit.getValue());
             }
         }
+    }
+
+    private double minRentValue(com.propertyvista.portal.domain.ApptUnit unit) {
+        double rent = Double.MAX_VALUE;
+        for (MarketRent mr : unit.marketRent())
+            rent = Math.min(rent, mr.rent().amount().getValue());
+        return (rent != Double.MAX_VALUE ? rent : 0);
+    }
+
+    private double minRentValue(IList<ApptUnit> units) {
+        double rent = Double.MAX_VALUE;
+        for (com.propertyvista.portal.domain.ApptUnit u : units)
+            rent = Math.min(rent, minRentValue(u));
+        return (rent != Double.MAX_VALUE ? rent : 0);
     }
 }

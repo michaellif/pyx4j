@@ -74,7 +74,7 @@ public interface ApptUnit extends Property {
     IPrimitive<Date> moveOut();
 
     @Format("MM/dd/yyyy")
-    @Caption(name = "Avalable")
+    @Caption(name = "Available")
     IPrimitive<Date> avalableForRent();
 
     @Detached
