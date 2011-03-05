@@ -56,16 +56,18 @@ public class UnitDetailsPanel extends FlowPanel {
         infoPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         infoPanel.add(new HTML(h3(i18n.tr("Info"))));
         infoPanel.add(new HTML(unit.infoDetails().getStringView()));
-        infoPanel.setWidth("33%");
+        infoPanel.getElement().getStyle().setMarginRight(3, Unit.PCT);
+        infoPanel.setWidth("30%");
         unitDetailPanel.add(infoPanel);
 
         FlowPanel amenitiesPanel = new FlowPanel();
         amenitiesPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         amenitiesPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-        amenitiesPanel.add(new HTML(h3(i18n.tr("Amenities/Utilities:"))));
+        amenitiesPanel.add(new HTML(h3(i18n.tr("Amenities/Utilities"))));
         amenitiesPanel.add(new HTML(unit.amenities().getStringView()));
         amenitiesPanel.add(new HTML(unit.utilities().getStringView()));
-        amenitiesPanel.setWidth("33%");
+        amenitiesPanel.getElement().getStyle().setMarginRight(3, Unit.PCT);
+        amenitiesPanel.setWidth("30%");
         unitDetailPanel.add(amenitiesPanel);
 
         FlowPanel concessionPanel = new FlowPanel();
@@ -73,7 +75,8 @@ public class UnitDetailsPanel extends FlowPanel {
         concessionPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         concessionPanel.add(new HTML(h3(i18n.tr("Concession"))));
         concessionPanel.add(new HTML(unit.concessions().getStringView()));
-        concessionPanel.setWidth("33%");
+        concessionPanel.getElement().getStyle().setMarginRight(3, Unit.PCT);
+        concessionPanel.setWidth("30%");
         unitDetailPanel.add(concessionPanel);
 
         Widget sp = new ViewLineSeparator(98, Unit.PCT, 0.5, Unit.EM, 0.5, Unit.EM);
