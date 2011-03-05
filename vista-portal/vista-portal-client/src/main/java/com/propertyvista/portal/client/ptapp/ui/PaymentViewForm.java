@@ -19,7 +19,6 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -40,15 +39,12 @@ import com.propertyvista.portal.domain.payment.EcheckInfo;
 import com.propertyvista.portal.domain.payment.PaymentType;
 import com.propertyvista.portal.domain.pt.ChargeLine;
 import com.propertyvista.portal.domain.pt.PaymentInfo;
+import com.propertyvista.portal.domain.ref.Province;
 
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 
 public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
@@ -136,8 +132,10 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
             get(proto().billingAddress().street2()).setValue(getValue().currentAddress().street2().getValue());
             get(proto().billingAddress().city()).setValue(getValue().currentAddress().city().getValue());
             get(proto().billingAddress().postalCode()).setValue(getValue().currentAddress().postalCode().getValue());
-            get(proto().billingAddress().province()).setValue(getValue().currentAddress().province().getValue());
             get(proto().billingAddress().phone()).setValue(getValue().currentPhone().getValue());
+
+            CEditableComponent<Province, ?> prov = (CEditableComponent<Province, ?>) getRaw(proto().billingAddress().province());
+            prov.setValue(getValue().currentAddress().province());
             editable = false;
         }
 
