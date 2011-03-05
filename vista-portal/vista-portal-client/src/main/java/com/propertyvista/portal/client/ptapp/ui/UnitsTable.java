@@ -19,6 +19,7 @@ import java.util.List;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -26,10 +27,14 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.domain.ApptUnit;
+import com.propertyvista.portal.domain.Floorplan;
 import com.propertyvista.portal.domain.MarketRent;
+import com.propertyvista.portal.domain.pt.UnitSelection;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -43,7 +48,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CAbstractLabel;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
@@ -72,14 +79,17 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
     private MarketRent selectedmarketRent;
 
+    private FlowPanel floorplanRawPanel;
+
+    private final ApptUnit proto;
+
     public UnitsTable() {
         super();
 
-        //        this.asWidget().getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        //        this.asWidget().getElement().getStyle().setPaddingRight(1, Unit.EM);
+        proto = EntityFactory.getEntityPrototype(ApptUnit.class);
+
         this.setWidth("700px");
 
-        ApptUnit proto = EntityFactory.getEntityPrototype(ApptUnit.class);
         columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto.floorplan().name(), "70px"));
         columns.add(new EntityFolderColumnDescriptor(proto.unitType(), "140px"));
@@ -109,8 +119,39 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
     protected FolderDecorator<ApptUnit> createFolderDecorator() {
         TableFolderDecorator<ApptUnit> tfd = new TableFolderDecorator<ApptUnit>(columns);
         tfd.getHeader().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.UnitListHeader);
+
+        floorplanRawPanel = new FlowPanel();
+        floorplanRawPanel.setWidth("100%");
+        floorplanRawPanel.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);
+        tfd.insert(floorplanRawPanel, tfd.getWidgetIndex(tfd.getHeader()) + 1);
+
         return tfd;
 
+    }
+
+    private void createFloorplanRaw(Floorplan floorplan) {
+        floorplanRawPanel.clear();
+        for (EntityFolderColumnDescriptor column : columns) {
+            HorizontalPanel cellPanel = new HorizontalPanel();
+            cellPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
+            cellPanel.setWidth(column.getWidth());
+            cellPanel.getElement().getStyle().setMarginLeft(3, Style.Unit.PX);
+            cellPanel.getElement().getStyle().setMarginRight(3, Style.Unit.PX);
+
+            String caption = "TODO";
+            column.getObject().getMeta().getCaption();
+            if (caption == "") {
+                caption = "&nbsp";
+            }
+            // TODO All other stuff
+            if (proto.floorplan().name() == column.getObject()) {
+                caption = floorplan.name().getStringView();
+            }
+            HTML label = new HTML(caption);
+            cellPanel.add(label);
+
+            floorplanRawPanel.add(cellPanel);
+        }
     }
 
     static private class MarketRentLabel extends CAbstractLabel<IList<MarketRent>> {
@@ -197,11 +238,24 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
             unitDetailsPanel.showUnitDetail(unit, selectedmarketRent);
             unitDetailsPanelShown = unitDetailsPanel;
         }
+
+        @Override
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            if (column.getObject() == proto.floorplan().name()) {
+                CLabel l = new CLabel();
+                l.setAllowHtml(true);
+                l.setValue("&nbsp");
+                return l;
+            } else {
+                return super.createCell(column);
+            }
+        }
     }
 
-    public void populate(ApptUnit unit, MarketRent marketRent) {
-        selectedUnit = unit;
-        selectedmarketRent = marketRent;
+    public void populate(UnitSelection value) {
+        selectedUnit = value.selectedUnit();
+        selectedmarketRent = value.markerRent();
+        createFloorplanRaw(value.availableUnits().floorplan());
         setSelected(selectedUnit);
     }
 

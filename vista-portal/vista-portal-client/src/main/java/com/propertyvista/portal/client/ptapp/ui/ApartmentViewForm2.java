@@ -107,7 +107,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
     @Override
     public void populate(UnitSelection value) {
         super.populate(value);
-        ((UnitsTable) getRaw(value.availableUnits().units())).populate(getValue().selectedUnit(), getValue().markerRent());
+        ((UnitsTable) getRaw(value.availableUnits().units())).populate(getValue());
     }
 
     private void addValidations() {
