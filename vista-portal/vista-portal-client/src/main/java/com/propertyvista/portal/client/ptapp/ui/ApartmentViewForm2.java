@@ -140,8 +140,6 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         addValidations();
 
         main.setWidth("700px");
-        main.getElement().getStyle().setPaddingLeft(1, Unit.EM);
-        main.getElement().getStyle().setPaddingRight(1, Unit.EM);
         return main;
     }
 
