@@ -76,15 +76,15 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
         FlowPanel main = new FlowPanel();
         main.add(createHeader(proto().incomes()));
-        main.add(inject(proto().incomes()));
+        main.add(inject(proto().incomes(), createIncomeFolderEditor()));
         main.add(new HTML());
 
         main.add(createHeader(proto().assets()));
-        main.add(inject(proto().assets()));
+        main.add(inject(proto().assets(), createAssetFolderEditorColumns()));
         main.add(new HTML());
 
         main.add(createHeader(proto().guarantors()));
-        main.add(inject(proto().guarantors()));
+        main.add(inject(proto().guarantors(), createGuarantorFolderEditorColumns()));
         main.add(new HTML());
 
         SimplePanel padder = new SimplePanel();
@@ -104,6 +104,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
         padder.setWidget(main);
         padder.setWidth("700px");
+        addValidations();
         return padder;
     }
 
@@ -115,17 +116,19 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
         }
     }
 
-    @Override
-    public CEditableComponent<?, ?> create(IObject<?> member) {
-        if (member == proto().incomes()) {
-            return createIncomeFolderEditor();
-        } else if (member == proto().assets()) {
-            return createAssetFolderEditorColumns();
-        } else if (member == proto().guarantors()) {
-            return createGuarantorFolderEditorColumns();
-        } else {
-            return super.create(member);
-        }
+    private void addValidations() {
+        this.addValueValidator(new EditableValueValidator<PotentialTenantFinancial>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<PotentialTenantFinancial, ?> component, PotentialTenantFinancial value) {
+                return (value.assets().size() > 0) || (value.incomes().size() > 0);
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<PotentialTenantFinancial, ?> component, PotentialTenantFinancial value) {
+                return i18n.tr("At least one source of income or one asset is required");
+            }
+        });
     }
 
     private CEntityFolder<TenantIncome> createIncomeFolderEditor() {
