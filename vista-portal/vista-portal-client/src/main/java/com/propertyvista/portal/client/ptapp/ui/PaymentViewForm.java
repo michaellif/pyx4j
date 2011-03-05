@@ -46,6 +46,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CRadioGroup;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 
 public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
@@ -74,7 +75,8 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
 
         main.add(new ViewHeaderDecorator(proto().type()));
         @SuppressWarnings("unchecked")
-        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type());
+        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class,
+                CRadioGroup.Layout.VERTICAL));
         paymentType.addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
