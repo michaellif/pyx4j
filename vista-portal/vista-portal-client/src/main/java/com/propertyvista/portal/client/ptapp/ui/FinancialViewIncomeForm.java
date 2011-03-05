@@ -150,7 +150,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
     }
 
     private static void injectIEmploymentInfo(VistaDecoratorsFlowPanel main, IEmploymentInfo proto, CEntityEditableComponent<?> parent) {
-        main.add(parent.inject(proto.supervisorName()), 30);
+        main.add(parent.inject(proto.supervisorName()), 20);
         main.add(parent.inject(proto.supervisorPhone()), 15);
         main.add(parent.inject(proto.monthlyAmount()), 8);
         main.add(parent.inject(proto.position()), 20);

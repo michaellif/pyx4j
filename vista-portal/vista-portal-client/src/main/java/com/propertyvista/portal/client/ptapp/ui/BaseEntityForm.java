@@ -48,7 +48,7 @@ public abstract class BaseEntityForm<E extends IEntity> extends CEntityForm<E> {
         main.add(parent.inject(proto.street1()), 20);
         main.add(parent.inject(proto.street2()), 20);
         main.add(parent.inject(proto.city()), 15);
-        main.add(parent.inject(proto.province()), 10);
+        main.add(parent.inject(proto.province()), 15);
         main.add(parent.inject(proto.postalCode()), 7);
     }
 
