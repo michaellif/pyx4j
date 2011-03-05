@@ -56,7 +56,7 @@ public class VillageGreenTheme extends VistaTheme {
         String prefix = VistaStyles.ApartmentUnits.StylePrefix;
 
         Style style = new Style(Selector.valueOf(prefix, VistaStyles.ApartmentUnits.StyleSuffix.UnitListHeader));
-        style.addProperty("background-color", "#548D00");
+        style.addProperty("background-color", "#558E00");
         style.addProperty("color", ThemeColor.SELECTION_TEXT);
         style.addProperty("font-weight", "bolder");
         style.addProperty("width", "700px");
