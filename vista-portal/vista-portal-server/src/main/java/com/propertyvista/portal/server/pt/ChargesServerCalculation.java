@@ -38,6 +38,33 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     private final static Logger log = LoggerFactory.getLogger(ChargesServerCalculation.class);
 
+    // created a copy of this method so that not to break existing functionality
+    public static void dummyPopulate(Charges charges, double rentAmount, double petChargeAmount, double depositAmount) {
+
+        charges.rentStart().setValue(TimeUtils.createDate(2011, 4, 7)); // dummy date
+
+        // monthly charges
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
+        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, petChargeAmount));
+
+        // available upgrades
+        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, false));
+        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, false));
+
+        // application charges
+        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.deposit, depositAmount));
+        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petDeposit, 100));
+        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
+
+        // payment splits
+        updatePaymentSplitCharges(charges, charges.application());
+
+        // make sure to calculate charges
+        calculateCharges(charges);
+    }
+
     public static void dummyPopulate(Charges charges, Application application) {
 
         charges.rentStart().setValue(TimeUtils.createDate(2011, 4, 7)); // dummy date

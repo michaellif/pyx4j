@@ -87,7 +87,11 @@ public class PreloadPT extends AbstractDataPreloader {
 
     private User user;
 
+    private Pets pets;
+
     private Building building;
+
+    private UnitSelection unitSelection;
 
     private Application application;
 
@@ -408,7 +412,7 @@ public class PreloadPT extends AbstractDataPreloader {
     }
 
     private void createPets() {
-        Pets pets = EntityFactory.create(Pets.class);
+        pets = EntityFactory.create(Pets.class);
         pets.application().set(application);
 
         for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
@@ -469,7 +473,7 @@ public class PreloadPT extends AbstractDataPreloader {
     }
 
     private void createUnitSelection() {
-        UnitSelection unitSelection = EntityFactory.create(UnitSelection.class);
+        unitSelection = EntityFactory.create(UnitSelection.class);
         unitSelection.application().set(application);
 
         // unit selection criteria
@@ -491,7 +495,8 @@ public class PreloadPT extends AbstractDataPreloader {
 
         // now chose the first unit
         if (!unitSelection.availableUnits().units().isEmpty()) {
-            unitSelection.selectedUnit().set(unitSelection.availableUnits().units().iterator().next());
+            ApptUnit selectedUnit = unitSelection.availableUnits().units().iterator().next();
+            unitSelection.selectedUnit().set(selectedUnit);
             unitSelection.building().set(unitSelection.selectedUnit().building());
             building = unitSelection.building();
             //            log.info("Created building {}", unitSelection.selectedUnit().building());
@@ -762,7 +767,16 @@ public class PreloadPT extends AbstractDataPreloader {
 
         charges.application().set(application);
 
-        ChargesServerCalculation.dummyPopulate(charges, application);
+        double rentAmount = unitSelection.markerRent().rent().amount().getValue();
+        double petChargeAmount = 0d;
+
+        for (Pet pet : pets.pets()) {
+            petChargeAmount += pet.chargeLine().charge().amount().getValue();
+        }
+
+        double depositAmount = unitSelection.selectedUnit().requiredDeposit().getValue();
+
+        ChargesServerCalculation.dummyPopulate(charges, rentAmount, petChargeAmount, depositAmount);
 
         persist(charges);
     }
