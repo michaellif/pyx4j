@@ -20,42 +20,24 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-public class BoxFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
+public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
-    private final Image image;
+    public BoxFolderDecorator(ImageResource addButton, String title) {
+        this(addButton, title, true);
+    }
 
-    private final SimplePanel content;
+    public BoxFolderDecorator(ImageResource addButton, String title, boolean addable) {
+        super(addButton, title, addable);
 
-    public BoxFolderDecorator(ImageResource addButton) {
-        image = new Image(addButton);
-        image.getElement().getStyle().setCursor(Cursor.POINTER);
-
-        content = new SimplePanel();
         add(content);
 
-        add(image);
-    }
-
-    @Override
-    public void setFolder(CEntityFolder<?> w) {
-        content.setWidget(w.getContent());
-    }
-
-    @Override
-    public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
-        return image.addClickHandler(handler);
+        add(imageHolder);
     }
 
     @Override

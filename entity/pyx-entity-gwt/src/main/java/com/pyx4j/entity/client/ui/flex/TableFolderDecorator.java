@@ -22,41 +22,25 @@ package com.pyx4j.entity.client.ui.flex;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.forms.client.ui.FormNavigationDebugId;
-import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.widgets.client.Tooltip;
 
-public class TableFolderDecorator<E extends IEntity> extends FlowPanel implements FolderDecorator<E> {
-
-    private final Image addImage;
-
-    private final Label addButtonLabel;
-
-    private final SimplePanel content;
+public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E> {
 
     private final FlowPanel header;
-
-    private boolean addable;
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns) {
         this(columns, null, null, false);
@@ -71,27 +55,7 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
     }
 
     public TableFolderDecorator(final List<EntityFolderColumnDescriptor> columns, ImageResource addButton, String title, boolean addable) {
-        this.addable = addable && (addButton != null);
-
-        FlowPanel imageHolder = null;
-        if (addButton != null) {
-            addImage = new Image(addButton);
-            addImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            addImage.getElement().getStyle().setFloat(Float.LEFT);
-
-            imageHolder = new FlowPanel();
-            imageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            imageHolder.getElement().getStyle().setPaddingLeft(addImage.getWidth(), Unit.PX);
-            imageHolder.add(addImage);
-
-            addButtonLabel = new Label(title);
-            addButtonLabel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-            addButtonLabel.getElement().getStyle().setFloat(Float.LEFT);
-            imageHolder.add(addButtonLabel);
-        } else {
-            addImage = null;
-            addButtonLabel = null;
-        }
+        super(addButton, title, addable);
 
         header = new FlowPanel();
         setHeaderVisible(false);
@@ -128,7 +92,6 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
 
         add(header);
 
-        content = new SimplePanel();
         add(content);
 
         if (this.addable) {
@@ -136,36 +99,8 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         }
     }
 
-    @Override
-    public void setFolder(CEntityFolder<?> entityFolder) {
-        content.setWidget(entityFolder.getContent());
-    }
-
     public Widget getHeader() {
         return header;
-    }
-
-    @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        //TODO use inheritance of objects
-        //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
-        if (addable) {
-            addImage.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString());
-            addButtonLabel.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Add.getDebugIdString() + "_label");
-        }
-    }
-
-    @Override
-    public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
-        if (!addable) {
-            return null;
-        }
-
-        HandlerRegistrationGC h = new HandlerRegistrationGC();
-        h.add(addImage.addClickHandler(handler));
-        h.add(addButtonLabel.addClickHandler(handler));
-        return h;
     }
 
     @Override

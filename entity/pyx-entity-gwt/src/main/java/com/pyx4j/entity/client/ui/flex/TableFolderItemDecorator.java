@@ -20,74 +20,32 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
-import com.pyx4j.forms.client.ui.decorators.ImageHolder;
 
-public class TableFolderItemDecorator extends VerticalPanel implements FolderItemDecorator {
-
-    private Image image;
-
-    private ImageHolder imageHolder;
-
-    private final FlowPanel rowHolder;
+public class TableFolderItemDecorator extends BaseFolderItemDecorator {
 
     private final HTML validationMessageHolder;
 
-    private final SimplePanel content;
-
-    private boolean removable;
-
     public TableFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
-        this.removable = (removable && removeButton != null);
+        super(removeButton, title, removable);
 
-        rowHolder = new FlowPanel();
-        rowHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        VerticalPanel mainPanel = new VerticalPanel();
+        setWidget(mainPanel);
 
-        imageHolder = null;
-        if (removeButton != null) {
-            image = new Image(removeButton);
-
-            imageHolder = new ImageHolder(image);
-            imageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-
-            if (!removable) {
-                imageHolder.setVisible(false);
-            }
-
-            rowHolder.add(imageHolder);
-        } else {
-            image = null;
-        }
-
-        content = new SimplePanel();
-        content.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-
-        rowHolder.add(content);
-
-        if (image != null) {
-            image.setTitle(title);
-            image.getElement().getStyle().setCursor(Cursor.POINTER);
-        }
-
-        add(rowHolder);
+        mainPanel.add(rowHolder);
 
         validationMessageHolder = new HTML();
         validationMessageHolder.getElement().getStyle().setColor("red");
-        add(validationMessageHolder);
+        mainPanel.add(validationMessageHolder);
 
     }
 
@@ -101,7 +59,7 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
 
     @Override
     public void setFolderItem(final CEntityFolderItem<?> folderItem) {
-        content.setWidget(folderItem.getContent());
+        super.setFolderItem(folderItem);
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent propertyChangeEvent) {
@@ -110,16 +68,6 @@ public class TableFolderItemDecorator extends VerticalPanel implements FolderIte
                 }
             }
         });
-    }
-
-    @Override
-    protected void onEnsureDebugId(String baseID) {
-        super.onEnsureDebugId(baseID);
-        //TODO use inheritance of objects
-        //image.ensureDebugId(CompositeDebugId.debugId(parentFolder.getDebugId(), FormNavigationDebugId.Form_Add));
-        if (image != null) {
-            image.ensureDebugId(baseID + "_" + FormNavigationDebugId.Form_Remove.getDebugIdString());
-        }
     }
 
     @Override

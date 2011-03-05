@@ -20,39 +20,34 @@
  */
 package com.pyx4j.entity.client.ui.flex;
 
-import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 
-public class BoxFolderItemDecorator extends FlowPanel implements FolderItemDecorator {
+public class BoxFolderItemDecorator extends BaseFolderItemDecorator {
 
-    private final Image image;
+    public BoxFolderItemDecorator(ImageResource removeButton, String title, boolean removable) {
+        super(removeButton, title, removable);
 
-    private final SimplePanel content;
+        content.getElement().getStyle().setMarginTop(10, Unit.PX);
+        content.getElement().getStyle().setMarginLeft(10, Unit.PX);
+        content.getElement().getStyle().setPadding(10, Unit.PX);
+        content.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
+        content.getElement().getStyle().setBorderWidth(1, Unit.PX);
+        content.getElement().getStyle().setBorderColor("#999");
 
-    public BoxFolderItemDecorator(ImageResource removeButton) {
-        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        image = new Image(removeButton);
-        image.getElement().getStyle().setCursor(Cursor.POINTER);
-        image.getElement().getStyle().setFloat(Float.RIGHT);
-        image.getElement().getStyle().setDisplay(Display.BLOCK);
-        add(image);
-
-        content = new SimplePanel();
-        add(content);
+        setWidget(rowHolder);
 
     }
 
-    @Override
-    public void setFolderItem(CEntityFolderItem<?> folderItem) {
-        content.setWidget(folderItem.getContent());
+    public BoxFolderItemDecorator(ImageResource removeButton, String title) {
+        this(removeButton, title, true);
+    }
+
+    public BoxFolderItemDecorator(ImageResource removeButton) {
+        this(removeButton, null, true);
     }
 
     @Override
