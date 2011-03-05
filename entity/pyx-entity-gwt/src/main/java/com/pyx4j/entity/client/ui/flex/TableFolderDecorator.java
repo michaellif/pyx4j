@@ -37,6 +37,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -140,9 +141,8 @@ public class TableFolderDecorator<E extends IEntity> extends FlowPanel implement
         content.setWidget(entityFolder.getContent());
     }
 
-    //TODO Misha how do we customise style properly!
-    public Style getHeaderPanelStyle() {
-        return header.getElement().getStyle();
+    public Widget getHeader() {
+        return header;
     }
 
     @Override
