@@ -30,6 +30,7 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 
@@ -67,7 +68,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 return new BoxReadOnlyFolderItemDecorator(!isFirst());
             }
 
-            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @SuppressWarnings("unchecked")
             @Override
             public IsWidget createContent() {
 
@@ -86,9 +87,11 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
                 if (valueChangeHandler != null) {
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
-                    ((CNumberField) get(proto().percentage())).setRange(0, 100);
                 }
-
+                CEditableComponent<Integer, ?> prc = get(proto().percentage());
+                if (prc instanceof CNumberField) {
+                    ((CNumberField<Integer>) prc).setRange(0, 100);
+                }
                 return main;
             }
         };
