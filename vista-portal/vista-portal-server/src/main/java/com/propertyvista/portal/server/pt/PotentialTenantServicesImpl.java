@@ -345,7 +345,20 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
             }
 
             if (ret instanceof PotentialTenantList) {
-                CampaignManager.fireEvent(CampaignTriger.Registration, (PotentialTenantList) ret);
+                PotentialTenantList tenants = (PotentialTenantList) ret;
+                // we need to load charges and re-calculate them
+                log.info("Load charges and re-calculate them");
+                EntityQueryCriteria<Charges> criteria = EntityQueryCriteria.create(Charges.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().application(), tenants.application()));
+                Charges charges = secureRetrieve(criteria);
+
+                if (charges != null) {
+                    ChargesServerCalculation.updatePaymentSplitCharges(charges, tenants.application());
+                    secureSave(charges);
+                    log.info("Re-calculated and saved charges");
+                }
+
+                CampaignManager.fireEvent(CampaignTriger.Registration, tenants);
             }
 
             return ret;

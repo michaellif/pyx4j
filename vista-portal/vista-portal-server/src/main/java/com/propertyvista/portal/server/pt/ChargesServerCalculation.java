@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.server.pt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,30 +74,55 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // compare current tenant list with what we have on the form
         boolean dirty = charges.paymentSplitCharges().charges().isEmpty(); // if there a no charges let's create them
+        List<PotentialTenantInfo> chargedTenants = new ArrayList<PotentialTenantInfo>();
         for (TenantCharge tenantCharge : charges.paymentSplitCharges().charges()) {
 
-            // first, find the tenant (matching by first name and last name)
-            PotentialTenantInfo tenant = null;
-            for (PotentialTenantInfo existingTenant : tenantList.tenants()) {
-                if (tenantCharge.tenant().firstName().equals(existingTenant.firstName()) && tenantCharge.tenant().lastName().equals(existingTenant.lastName())) {
-                    tenant = existingTenant;
-                }
-            }
-            if (tenant == null) {
+            // only applicant and co-applicant can be charged
+            if (tenantCharge.tenant().relationship().getValue() != Relationship.Applicant
+                    && tenantCharge.tenant().relationship().getValue() != Relationship.CoApplicant) {
+                log.info("Charges contained tenant {} who should be removed", tenantCharge.tenant());
                 dirty = true;
                 break;
             }
+            chargedTenants.add(tenantCharge.tenant());
+        }
 
-            // second, change their roles
-            if (!tenant.relationship().getValue().equals(tenantCharge.tenant().relationship().getValue())) {
-                dirty = true;
-                break;
-            }
+        // go through both lists and make sure that they match
+        if (!dirty) {
+            dirty = examineTenantLists(chargedTenants, tenantList.tenants());
+        }
+        if (!dirty) {
+            dirty = examineTenantLists(tenantList.tenants(), chargedTenants);
         }
 
         if (dirty) {
             resetPaymentSplitCharges(charges, tenantList);
         }
+    }
+
+    private static boolean examineTenantLists(List<PotentialTenantInfo> tenants1, List<PotentialTenantInfo> tenants2) {
+
+        for (PotentialTenantInfo tenant1 : tenants1) {
+            // first, find the tenant (matching by first name and last name)
+            PotentialTenantInfo tenant2 = null;
+            for (PotentialTenantInfo currTenant : tenants2) {
+                if (currTenant.firstName().equals(tenant1.firstName()) && currTenant.lastName().equals(tenant1.lastName())) {
+                    tenant2 = currTenant;
+                    continue;
+                }
+            }
+
+            if (tenant2 == null) {
+                return false;
+            }
+
+            // second, change their roles
+            if (!tenant1.relationship().getValue().equals(tenant2.relationship().getValue())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static void resetPaymentSplitCharges(Charges charges, PotentialTenantList tenantList) {
