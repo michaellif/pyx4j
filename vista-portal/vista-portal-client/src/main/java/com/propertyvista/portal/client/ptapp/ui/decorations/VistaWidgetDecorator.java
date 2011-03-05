@@ -34,7 +34,9 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.ui.Cursor;
+import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NativeCheckBox;
+import com.pyx4j.forms.client.ui.NativePasswordTextBox;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 import com.pyx4j.forms.client.ui.decorators.SpaceHolder;
 import com.pyx4j.widgets.client.Tooltip;
@@ -136,7 +138,7 @@ public class VistaWidgetDecorator extends VerticalPanel {
         if (nativeComponent instanceof NativeCheckBox) {
             ((NativeCheckBox) nativeComponent).setText(null);
             nativeComponent.getElement().getStyle().setMargin(0, Unit.PX);
-        } else if (nativeComponent instanceof NativeTextBox) {
+        } else if (nativeComponent instanceof INativeTextComponent<?>) {
             nativeComponent.getElement().getStyle().setProperty("padding", "2px 5px");
             mandatoryLabel.getElement().getStyle().setPaddingLeft(14, Unit.PX);
         }
