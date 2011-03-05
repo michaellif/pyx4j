@@ -13,6 +13,10 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.ref.Province;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,5 +32,6 @@ public interface Vehicle extends IEntity {
 
     IPrimitive<String> model();
 
-    IPrimitive<String> province();
+    @Editor(type = EditorType.combo)
+    Province province();
 }

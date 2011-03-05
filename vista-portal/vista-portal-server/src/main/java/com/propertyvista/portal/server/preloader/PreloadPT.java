@@ -204,7 +204,7 @@ public class PreloadPT extends AbstractDataPreloader {
         vehicle.year().setValue(1990 + RandomUtil.randomInt(20));
         vehicle.make().setValue(RandomUtil.random(DemoData.CAR_MAKES));
         vehicle.model().setValue(RandomUtil.random(DemoData.CAR_MODELS));
-        vehicle.province().setValue(RandomUtil.random(DemoData.PROVINCES));
+        vehicle.province().set(retrieveByMemeber(Province.class, vehicle.province().code(), RandomUtil.random(DemoData.PROVINCES)));
 
         return vehicle;
     }
@@ -227,7 +227,7 @@ public class PreloadPT extends AbstractDataPreloader {
 
         String driversLicense = "JTVMX" + RandomUtil.randomInt(10) + "VMIEK";
         pti.driversLicense().setValue(driversLicense);
-        pti.driversLicenseState().setValue(RandomUtil.random(DemoData.PROVINCES));
+        pti.driversLicenseState().set(retrieveByMemeber(Province.class, pti.driversLicenseState().code(), RandomUtil.random(DemoData.PROVINCES)));
 
         String si = RandomUtil.randomInt(1000) + " " + RandomUtil.randomInt(1000) + " " + RandomUtil.randomInt(1000);
         pti.secureIdentifier().setValue(si);

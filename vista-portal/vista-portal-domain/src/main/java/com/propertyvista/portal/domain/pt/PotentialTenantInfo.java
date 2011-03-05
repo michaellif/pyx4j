@@ -13,7 +13,11 @@
  */
 package com.propertyvista.portal.domain.pt;
 
+import com.propertyvista.portal.domain.ref.Province;
+
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
@@ -25,7 +29,8 @@ public interface PotentialTenantInfo extends PotentialTenant {
     IPrimitive<String> driversLicense();
 
     @Caption(name = "License Province", description = "Province, in which a license has been issued.")
-    IPrimitive<String> driversLicenseState();
+    @Editor(type = EditorType.combo)
+    Province driversLicenseState();
 
     @Caption(name = "SIN")
     IPrimitive<String> secureIdentifier();
