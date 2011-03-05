@@ -49,8 +49,10 @@ public class ChargesViewForm extends BaseEntityForm<Charges> {
 
             @Override
             public void onValueChange(ValueChangeEvent event) {
-                ChargesSharedCalculation.calculateCharges(getValue());
-                setValue(getValue());
+                if (isValid()) {
+                    ChargesSharedCalculation.calculateCharges(getValue());
+                    setValue(getValue());
+                }
             }
         };
 

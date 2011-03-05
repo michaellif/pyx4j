@@ -30,9 +30,8 @@ import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.flex.FolderDecorator;
 import com.pyx4j.entity.client.ui.flex.FolderItemDecorator;
-import com.pyx4j.forms.client.ui.CEditableComponent;
+import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
 
 public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
 
@@ -68,7 +67,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 return new BoxReadOnlyFolderItemDecorator(!isFirst());
             }
 
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings({ "unchecked", "rawtypes" })
             @Override
             public IsWidget createContent() {
 
@@ -87,20 +86,7 @@ public class ChargeSplitListFolder extends CEntityFolder<TenantCharge> {
                 main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
                 if (valueChangeHandler != null) {
                     get(proto().percentage()).addValueChangeHandler(valueChangeHandler);
-
-                    get(proto().percentage()).addValueValidator(new EditableValueValidator<Integer>() {
-
-                        @Override
-                        public boolean isValid(CEditableComponent<Integer, ?> component, Integer value) {
-                            return (value == null) || ((value >= 0) && (value <= 100));
-                        }
-
-                        @Override
-                        public String getValidationMessage(CEditableComponent<Integer, ?> component, Integer value) {
-                            return i18n.tr("Lorem ipsum dolor sit amet: 0% - 100%");
-                        }
-
-                    });
+                    ((CNumberField) get(proto().percentage())).setRange(0, 100);
                 }
 
                 return main;
