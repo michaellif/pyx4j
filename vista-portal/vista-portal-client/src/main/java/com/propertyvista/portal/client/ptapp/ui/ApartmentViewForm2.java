@@ -94,7 +94,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
         main.add(w);
 
         // units table:
-        main.add(inject(proto().availableUnits().units(), new UnitsTable()));
+        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable()));
 
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
@@ -120,7 +120,7 @@ public class ApartmentViewForm2 extends CEntityForm<UnitSelection> {
     @Override
     public void populate(UnitSelection value) {
         super.populate(value);
-        ((UnitsTable) getRaw(value.availableUnits().units())).populate(getValue());
+        ((ApartmentUnitsTable) getRaw(value.availableUnits().units())).populate(getValue());
     }
 
     private void addValidations() {

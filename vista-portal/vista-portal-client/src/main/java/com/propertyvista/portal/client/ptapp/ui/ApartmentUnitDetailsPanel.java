@@ -37,11 +37,11 @@ import com.propertyvista.portal.domain.MarketRent;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupInteger;
 
-public class UnitDetailsPanel extends FlowPanel {
+public class ApartmentUnitDetailsPanel extends FlowPanel {
 
-    private static I18n i18n = I18nFactory.getI18n(UnitsTable.class);
+    private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
 
-    public UnitDetailsPanel() {
+    public ApartmentUnitDetailsPanel() {
 
     }
 

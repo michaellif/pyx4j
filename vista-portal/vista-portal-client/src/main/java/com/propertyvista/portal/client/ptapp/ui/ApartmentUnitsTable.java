@@ -58,9 +58,9 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.widgets.client.style.IStyleDependent;
 import com.pyx4j.widgets.client.style.IStyleSuffix;
 
-public class UnitsTable extends CEntityFolder<ApptUnit> {
+public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
-    private static I18n i18n = I18nFactory.getI18n(UnitsTable.class);
+    private static I18n i18n = I18nFactory.getI18n(ApartmentUnitsTable.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "ApartmentViewForm";
 
@@ -76,7 +76,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
     private final ReadOnlyComponentFactory factory = new ReadOnlyComponentFactory();
 
-    private UnitDetailsPanel unitDetailsPanelShown = null;
+    private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
 
     private ApptUnit selectedUnit;
 
@@ -86,7 +86,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
 
     private final ApptUnit proto;
 
-    public UnitsTable() {
+    public ApartmentUnitsTable() {
         super();
 
         proto = EntityFactory.getEntityPrototype(ApptUnit.class);
@@ -190,7 +190,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
     //
     private class UnitTableRow extends CEntityFolderRow<ApptUnit> {
 
-        private UnitDetailsPanel unitDetailsPanel;
+        private ApartmentUnitDetailsPanel unitDetailsPanel;
 
         public UnitTableRow(Class<ApptUnit> clazz, List<EntityFolderColumnDescriptor> columns) {
             super(clazz, columns);
@@ -238,7 +238,7 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
         public IsWidget createContent() {
             FlowPanel content = new FlowPanel();
             content.add(super.createContent());
-            content.add(unitDetailsPanel = new UnitDetailsPanel());
+            content.add(unitDetailsPanel = new ApartmentUnitDetailsPanel());
             return content;
         }
 
