@@ -96,6 +96,12 @@ public interface SiteImages extends ClientBundle {
     @Source("pointer_menu.png")
     ImageResource pointer();
 
+    @Source("pointer_expanded.png")
+    ImageResource pointerExpanded();
+
+    @Source("pointer_collapsed.png")
+    ImageResource pointerCollapsed();
+
     @Source("qv.png")
     ImageResource qv();
 

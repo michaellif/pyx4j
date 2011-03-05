@@ -22,6 +22,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -33,9 +34,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.BoxReadOnlyFolderItemDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.DecorationUtils;
@@ -89,7 +92,7 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
         padder.getElement().getStyle().setBorderWidth(1, Unit.PX);
         padder.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-        padder.getElement().getStyle().setBorderColor("black");
+        padder.getElement().getStyle().setBorderColor("#bbb");
         padder.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
         main.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
@@ -302,15 +305,18 @@ public class SummaryViewTenantInfo extends CEntityFolderItem<PotentialTenantInfo
 
     private Widget addViewSwitcher() {
 
-        Button switcher = new Button("v");
+        final Image switcher = new Image(SiteImages.INSTANCE.pointerCollapsed());
+        switcher.getElement().getStyle().setCursor(Cursor.POINTER);
         switcher.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 if (fullViewPanel.isVisible()) {
                     fullViewPanel.setVisible(false);
+                    switcher.setResource(SiteImages.INSTANCE.pointerCollapsed());
                 } else {
                     fullViewPanel.setVisible(true);
+                    switcher.setResource(SiteImages.INSTANCE.pointerExpanded());
                 }
             }
         });
