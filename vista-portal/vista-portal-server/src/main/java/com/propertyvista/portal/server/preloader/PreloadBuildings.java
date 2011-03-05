@@ -151,15 +151,28 @@ public class PreloadBuildings extends AbstractDataPreloader {
         return item;
     }
 
-    public static Concession createConcession(ConcessionType type, float freeMonths, float percentage) {
+    public static Concession createConcession(ConcessionType type, int freeMonths, int percentage) {
         Concession concession = EntityFactory.create(Concession.class);
-        concession.name().setValue(type.toString()); // TODO this has to be changed to use proper type
-        if (freeMonths > 0) {
-            concession.freeMonths().setValue("" + freeMonths);
+
+        StringBuilder sb = new StringBuilder();
+
+        if (type == ConcessionType.freeMonths) {
+            sb.append(freeMonths).append(" free month");
+            if (freeMonths != 1) {
+                sb.append("s");
+            }
+        } else if (type == ConcessionType.percentDiscount) {
+            sb.append(percentage).append("% discount for ");
+            sb.append(freeMonths).append(" month");
+            if (freeMonths != 1) {
+                sb.append("s");
+            }
         }
-        if (percentage > 0) {
-            concession.percentage().setValue("" + percentage);
-        }
+        concession.name().setValue(sb.toString());
+
+        concession.freeMonths().setValue("" + freeMonths);
+        concession.percentage().setValue("" + percentage);
+
         persist(concession);
         return concession;
     }
@@ -287,10 +300,10 @@ public class PreloadBuildings extends AbstractDataPreloader {
 
         // concessions
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.freeMonths, 2f, 0));
+            unit.concessions().add(createConcession(ConcessionType.freeMonths, 1 + RandomUtil.randomInt(3), 0));
         }
         if (RandomUtil.randomBoolean()) {
-            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 0, 15));
+            unit.concessions().add(createConcession(ConcessionType.percentDiscount, 1 + RandomUtil.randomInt(11), 15));
         }
 
         // add-ons

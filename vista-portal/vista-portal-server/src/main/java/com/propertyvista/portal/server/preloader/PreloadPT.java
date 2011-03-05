@@ -590,8 +590,6 @@ public class PreloadPT extends AbstractDataPreloader {
         for (Concession concession : unit.concessions()) {
             sb.append("\t\t");
             sb.append(concession.name().getStringView());
-            sb.append(" freeMonths:").append(concession.freeMonths().getStringView());
-            sb.append(" percentage:").append(concession.percentage().getStringView());
             sb.append("\n");
         }
 
