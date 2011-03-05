@@ -22,8 +22,13 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.client.ptapp.ui.ApartmentViewForm.StyleDependent;
 import com.propertyvista.portal.client.ptapp.ui.components.ReadOnlyComponentFactory;
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
@@ -159,6 +164,24 @@ public class UnitsTable extends CEntityFolder<ApptUnit> {
                     setSelected(getValue(), null);
                 }
             });
+
+            decorator.addDomHandler(new MouseOverHandler() {
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    if (!getContent().getStyleName().contains(StyleDependent.selected.name())) {
+                        getContent().addStyleDependentName(StyleDependent.hover.name());
+                    }
+                }
+            }, MouseOverEvent.getType());
+
+            decorator.addDomHandler(new MouseOutHandler() {
+
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    getContent().removeStyleDependentName(StyleDependent.hover.name());
+                }
+            }, MouseOutEvent.getType());
 
             getContent().setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.unitRowPanel);
             return decorator;
