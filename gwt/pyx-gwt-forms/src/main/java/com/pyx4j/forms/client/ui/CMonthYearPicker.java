@@ -22,10 +22,14 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
+import com.google.gwt.view.client.Range;
 
 public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPicker> {
 
     private final boolean yearOnly;
+
+    @SuppressWarnings("deprecation")
+    private Range yearRange = new Range(1900, new Date().getYear() + 7 - 1900);
 
     public CMonthYearPicker(boolean yearOnly) {
         this.yearOnly = yearOnly;
@@ -40,4 +44,12 @@ public class CMonthYearPicker extends CEditableComponent<Date, NativeMonthYearPi
         return yearOnly;
     }
 
+    //TODO allow propagation of values to native component after creation of widget
+    public void setYearOptionsRange(int from, int to) {
+        yearRange = new Range(from, to - from);
+    }
+
+    public Range getYearRange() {
+        return yearRange;
+    }
 }

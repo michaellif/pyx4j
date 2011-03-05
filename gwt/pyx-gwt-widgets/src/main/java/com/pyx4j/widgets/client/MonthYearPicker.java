@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.view.client.Range;
 
 public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers {
 
@@ -36,16 +37,17 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
 
     protected final ListBox yearSelector;
 
-    private final int lastYear = new Date().getYear() + 7;
+    private final Range yearRange;
 
     private final boolean showYearOnly;
 
     public MonthYearPicker() {
-        this(true);
+        this(new Range(1900, new Date().getYear() + 7 - 1900), true);
     }
 
-    public MonthYearPicker(boolean showYearOnly) {
+    public MonthYearPicker(Range yearRange, boolean showYearOnly) {
         this.showYearOnly = showYearOnly;
+        this.yearRange = yearRange;
         ChangeHandler changeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -70,8 +72,8 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         yearSelector = new ListBox();
         add(yearSelector);
         yearSelector.addItem("");
-        for (int i = lastYear; i >= 0; i--) {
-            yearSelector.addItem(String.valueOf(i + 1900));
+        for (int i = yearRange.getStart() + yearRange.getLength(); i >= yearRange.getStart(); i--) {
+            yearSelector.addItem(String.valueOf(i));
         }
         if (!showYearOnly) {
             setCellWidth(yearSelector, "50%");
@@ -91,7 +93,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
             if (!showYearOnly) {
                 monthSelector.setSelectedIndex(date.getMonth() + 1);
             }
-            yearSelector.setSelectedIndex(lastYear - date.getYear() + 1);
+            yearSelector.setSelectedIndex(yearRange.getStart() + yearRange.getLength() - date.getYear() + 1);
         }
     }
 
@@ -99,7 +101,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         if (yearSelector.getSelectedIndex() == 0) {
             return null;
         }
-        int year = lastYear - yearSelector.getSelectedIndex() + 1;
+        int year = yearRange.getStart() + yearRange.getLength() - yearSelector.getSelectedIndex() + 1;
         int month = 0;
         if (!showYearOnly) {
             month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;

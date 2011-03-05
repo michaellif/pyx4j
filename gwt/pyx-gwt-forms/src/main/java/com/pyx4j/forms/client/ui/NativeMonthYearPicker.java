@@ -41,7 +41,7 @@ public class NativeMonthYearPicker extends MonthYearPicker implements INativeEdi
     private boolean nativeValueUpdate = false;
 
     public NativeMonthYearPicker(CMonthYearPicker cComponent) {
-        super(cComponent.isYearOnly());
+        super(cComponent.getYearRange(), cComponent.isYearOnly());
         this.cComponent = cComponent;
 
         addChangeHandler(new ChangeHandler() {
