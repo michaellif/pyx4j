@@ -26,15 +26,12 @@ import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
-import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
 
     private static I18n i18n = I18nFactory.getI18n(NewPasswordViewForm.class);
 
     private HTML header;
-
-    private CEditableComponent<?, ?> currentPassword;
 
     public NewPasswordViewForm() {
         super(PasswordChangeRequest.class);
@@ -48,7 +45,7 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
         main.add(header);
 
         main.add(new HTML());
-        main.add(new VistaWidgetDecorator(currentPassword = inject(proto().currentPassword()), 144, 152));
+        main.add(new VistaWidgetDecorator(inject(proto().currentPassword()), 144, 152));
 
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(inject(proto().newPassword()), 144, 152));
@@ -63,11 +60,11 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
         switch (type) {
         case CHANGE:
             header.setHTML(HtmlUtils.h2(i18n.tr("Change Password")));
-            currentPassword.setVisible(true);
+            get(proto().currentPassword()).setVisible(true);
             break;
         case RESET:
             header.setHTML(HtmlUtils.h2(i18n.tr("Create Password")));
-            currentPassword.setVisible(false);
+            get(proto().currentPassword()).setVisible(false);
             break;
         }
     }
