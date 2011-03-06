@@ -22,6 +22,7 @@ import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -30,6 +31,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.propertyvista.portal.client.ptapp.resources.SiteResources;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
@@ -119,7 +121,13 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
             }
         });
 
+        mr.asWidget().getElement().getStyle().setFloat(Float.LEFT);
         unitDetailPanel.add(mr);
+
+        HTML availabilityAndPricing = new HTML(SiteResources.INSTANCE.availabilityAndPricing().getText());
+        availabilityAndPricing.getElement().getStyle().setFloat(Float.RIGHT);
+        unitDetailPanel.add(availabilityAndPricing);
+        availabilityAndPricing.setWidth("70%");
 
         unitDetailPanel.getElement().getStyle().setPadding(1, Unit.EM);
         unitDetailPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
