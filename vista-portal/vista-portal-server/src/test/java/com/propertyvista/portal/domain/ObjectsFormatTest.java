@@ -23,13 +23,13 @@ import com.pyx4j.entity.shared.EntityFactory;
 public class ObjectsFormatTest extends TestCase {
 
     public void testMoneyFormat() {
-        assertEquals("10", "$10", DomainUtil.createMoney(10).getStringView());
+        assertEquals("10", "$10.00", DomainUtil.createMoney(10).getStringView());
     }
 
     public void testChargeLineFormat() {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.charge().set(DomainUtil.createMoney(10));
         cl.label().setValue("Monthly");
-        assertEquals("10", "$10 Monthly", cl.getStringView());
+        assertEquals("10", "$10.00 Monthly", cl.getStringView());
     }
 }
