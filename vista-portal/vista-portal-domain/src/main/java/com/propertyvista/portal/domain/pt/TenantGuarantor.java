@@ -29,6 +29,7 @@ public interface TenantGuarantor extends IEntity, IPerson {
     }
 
     @ToString(index = 0)
+    @NotNull
     IPrimitive<Relationship> relationship();
 
     @Caption(name = "Birth Date")
