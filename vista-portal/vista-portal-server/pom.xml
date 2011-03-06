@@ -121,6 +121,7 @@
 
     <properties>
         <deployableName>vista</deployableName>
+        <deployContext>vista</deployContext>
         <vista-tomcat-url>http://ve.kvrmmdsf.vesrv.com</vista-tomcat-url>
         <vista-tomcat-username>vista</vista-tomcat-username>
         <vista-tomcat-pwd>Vista1102</vista-tomcat-pwd>
@@ -242,6 +243,22 @@
 
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>deploy-www33</id>
+            <properties>
+                <deployContext>vista33</deployContext>
+                 <vista-app-ping-url>http://www33.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-www44</id>
+            <properties>
+                <deployContext>vista44</deployContext>
+                 <vista-app-ping-url>http://www44.birchwoodsoftwaregroup.com</vista-app-ping-url>
+            </properties>
         </profile>
 
         <profile>
