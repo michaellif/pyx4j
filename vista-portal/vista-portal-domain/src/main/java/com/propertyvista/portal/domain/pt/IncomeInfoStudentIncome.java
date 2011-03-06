@@ -28,6 +28,15 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo 
         scolarship, bursary, grant, loan
     }
 
+    public enum Degree {
+
+        undergraduate,
+
+        graduate,
+
+        postgraduate;
+    }
+
     @Override
     @Caption(name = "School")
     IPrimitive<String> name();
@@ -45,8 +54,8 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo 
     @Caption(name = "Program (Planned) to be completed on")
     IPrimitive<Date> ends();
 
-    @Caption(name = "Graduate/undergraduate")
-    IPrimitive<Boolean> graduate();
+    @Caption(name = "Degree")
+    IPrimitive<Degree> degree();
 
     IPrimitive<String> fieldOfStudy();
 
