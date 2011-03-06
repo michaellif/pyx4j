@@ -14,6 +14,8 @@
 package com.propertyvista.portal.domain.pt;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -33,6 +35,7 @@ public interface IncomeInfoSocialServices extends IEntity, IEmploymentInfo {
 
     @Override
     @Caption(name = "Social Service Agent's or Case Worker's phone")
+    @Editor(type = EditorType.phone)
     IPrimitive<String> supervisorPhone();
 
 }
