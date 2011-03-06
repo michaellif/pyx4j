@@ -214,7 +214,7 @@ public class FinancialViewForm extends BaseEntityForm<PotentialTenantFinancial> 
 
                             @Override
                             public String getValidationMessage(CEditableComponent<Double, ?> component, Double value) {
-                                return i18n.tr("Lorem ipsum dolor sit amet: 0% - 100%");
+                                return i18n.tr("Value can not increase 100%");
                             }
 
                         });
