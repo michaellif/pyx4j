@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ptapp.ui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
@@ -29,6 +30,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -129,6 +131,14 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     }
 
+    private String formatDoubleAsInt(double value) {
+        if (Math.floor(value) == Math.ceil(value)) {
+            return String.valueOf((int) value);
+        } else {
+            return String.valueOf(value);
+        }
+    }
+
     private void createFloorplanRaw(AvailableUnitsByFloorplan availableUnits) {
         floorplanRawPanel.clear();
         for (EntityFolderColumnDescriptor column : columns) {
@@ -141,23 +151,28 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             String caption = "&nbsp";
             Widget widgetToInsert = null;
 
-            UnitsDataCalculatino calcs = new UnitsDataCalculatino(availableUnits.units());
-
-            // fill the row:
             if (proto.floorplan().name() == column.getObject()) {
                 widgetToInsert = new Image(SiteImages.INSTANCE.floorplan());
             } else if (proto.unitType() == column.getObject()) {
                 caption = availableUnits.floorplan().name().getStringView();
-            } else if (proto.marketRent() == column.getObject()) {
-                caption = "From <br />" + "$" + calcs.minRent;
-            } else if (proto.requiredDeposit() == column.getObject()) {
-            } else if (proto.bedrooms() == column.getObject()) {
-                caption = calcs.minBed + " - <br />" + calcs.maxBed;
-            } else if (proto.bathrooms() == column.getObject()) {
-                caption = calcs.minBath + " - <br />" + calcs.maxBath;
-            } else if (proto.area() == column.getObject()) {
-                caption = availableUnits.floorplan().area().getStringView();
-            } else if (proto.avalableForRent() == column.getObject()) {
+            } else {
+                if (availableUnits.units().size() != 0) {
+                    UnitsDataCalc calcs = new UnitsDataCalc(availableUnits.units());
+                    // fill the row:
+                    if (proto.marketRent() == column.getObject()) {
+                        caption = "From <br />" + "$" + calcs.minRent;
+                    } else if (proto.requiredDeposit() == column.getObject()) {
+                        caption = "<br />" + "$" + String.valueOf(calcs.minDeposit);
+                    } else if (proto.bedrooms() == column.getObject()) {
+                        caption = "<br />" + formatDoubleAsInt(calcs.minBed);
+                    } else if (proto.bathrooms() == column.getObject()) {
+                        caption = "<br />" + formatDoubleAsInt(calcs.minBath);
+                    } else if (proto.area() == column.getObject()) {
+                        caption = "<br />" + availableUnits.floorplan().area().getStringView();
+                    } else if (proto.avalableForRent() == column.getObject()) {
+                        caption = "<br />" + DateTimeFormat.getFormat(proto.avalableForRent().getMeta().getFormat()).format(calcs.minAvalableForRent);
+                    }
+                }
             }
 
             cellPanel.add(widgetToInsert != null ? widgetToInsert : new HTML(caption));
@@ -286,69 +301,37 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
         }
     }
 
-    private static class UnitsDataCalculatino {
+    private static class UnitsDataCalc {
 
-        private double minTemp, maxTemp;
+        public double minRent;
 
-        public double minRent, maxRent;
+        public double minDeposit;
 
-        public double minBed, maxBed;
+        public double minBed;
 
-        public double minBath, maxBath;
+        public double minBath;
 
-        public UnitsDataCalculatino() {
-        }
+        public Date minAvalableForRent;
 
-        public UnitsDataCalculatino(IList<ApptUnit> units) {
-            calcValues(units);
-        }
-
-        public void calcValues(IList<ApptUnit> units) {
+        public UnitsDataCalc(IList<ApptUnit> units) {
             minRent = Double.MAX_VALUE;
-            maxRent = Double.MIN_VALUE;
-
+            minDeposit = Double.MAX_VALUE;
             minBed = Double.MAX_VALUE;
-            maxBed = Double.MIN_VALUE;
-
             minBath = Double.MAX_VALUE;
-            maxBath = Double.MIN_VALUE;
 
             for (com.propertyvista.portal.domain.ApptUnit u : units) {
-                calcValues(u);
-                minRent = Math.min(minRent, minTemp);
-                maxRent = Math.max(maxRent, maxTemp);
-
+                for (MarketRent mr : u.marketRent()) {
+                    minRent = Math.min(minRent, mr.rent().amount().getValue());
+                }
                 minBed = Math.min(minBed, u.bedrooms().getValue());
-                maxBed = Math.max(maxBed, u.bedrooms().getValue());
+                minBath = Math.min(minBath, u.bathrooms().getValue());
+                minDeposit = Math.min(minDeposit, u.requiredDeposit().getValue());
 
-                minBath = Math.min(minBath, u.bedrooms().getValue());
-                maxBath = Math.max(maxBath, u.bedrooms().getValue());
-            }
-
-            // correct values if there was no integrations at all!
-            if (minRent == Double.MAX_VALUE)
-                minRent = 0;
-            if (maxRent == Double.MIN_VALUE)
-                maxRent = 0;
-
-            if (minBed == Double.MAX_VALUE)
-                minBed = 0;
-            if (maxBed == Double.MIN_VALUE)
-                maxBed = 0;
-
-            if (minBath == Double.MAX_VALUE)
-                minBath = 0;
-            if (maxBath == Double.MIN_VALUE)
-                maxBath = 0;
-        }
-
-        private void calcValues(ApptUnit unit) {
-            minTemp = Double.MAX_VALUE;
-            maxTemp = Double.MIN_VALUE;
-            for (MarketRent mr : unit.marketRent()) {
-                minTemp = Math.min(minTemp, mr.rent().amount().getValue());
-                maxTemp = Math.max(minTemp, mr.rent().amount().getValue());
+                if ((minAvalableForRent == null) || (minAvalableForRent.after(u.avalableForRent().getValue()))) {
+                    minAvalableForRent = u.avalableForRent().getValue();
+                }
             }
         }
+
     }
 }
