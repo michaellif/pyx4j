@@ -13,10 +13,11 @@
  */
 package com.propertyvista.portal.client.ptapp.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.pyx4j.commons.HtmlUtils.h4;
 
-import static com.pyx4j.commons.HtmlUtils.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -26,6 +27,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import com.propertyvista.portal.client.ptapp.resources.SiteImages;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
@@ -36,10 +38,10 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator
 import com.propertyvista.portal.domain.pt.Address;
 import com.propertyvista.portal.domain.pt.Address.OwnedRented;
 import com.propertyvista.portal.domain.pt.EmergencyContact;
-import com.propertyvista.portal.domain.pt.PaymentInfo;
 import com.propertyvista.portal.domain.pt.PotentialTenantInfo;
 import com.propertyvista.portal.domain.pt.Vehicle;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityEditableComponent;
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -51,7 +53,6 @@ import com.pyx4j.entity.client.ui.flex.TableFolderDecorator;
 import com.pyx4j.entity.client.ui.flex.TableFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 
 @Singleton
@@ -59,8 +60,15 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
     private static I18n i18n = I18nFactory.getI18n(SummaryViewForm.class);
 
+    private static Date needPreviousAddress;
+
+    private Widget previousAddressHeader;
+
+    @SuppressWarnings("deprecation")
     public InfoViewForm() {
         super(PotentialTenantInfo.class);
+        Date now = new Date();
+        needPreviousAddress = TimeUtils.createDate(now.getYear() - 3, now.getMonth(), now.getDate());
     }
 
     @Override
@@ -123,11 +131,11 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
         main.add(new ViewHeaderDecorator(proto().currentAddress()));
         main.add(inject(proto().currentAddress()));
 
-        main.add(new ViewHeaderDecorator(proto().previousAddress()));
+        main.add(previousAddressHeader = new ViewHeaderDecorator(proto().previousAddress()));
         main.add(inject(proto().previousAddress()));
 
         main.add(new ViewHeaderDecorator(proto().vehicles()));
-        main.add(inject(proto().vehicles()));
+        main.add(inject(proto().vehicles(), createVehicleFolderEditorColumns()));
 
         main.add(new ViewHeaderDecorator(proto().legalQuestions()));
 
@@ -157,6 +165,8 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
 
         main.setWidth("700px");
 
+        addValidations();
+
         return main;
     }
 
@@ -166,11 +176,37 @@ public class InfoViewForm extends BaseEntityForm<PotentialTenantInfo> {
             return createAddressEditor();
         } else if (member.getValueClass().equals(EmergencyContact.class)) {
             return createEmergencyContactEditor();
-        } else if (member == proto().vehicles()) {
-            return createVehicleFolderEditorColumns();
         } else {
             return super.create(member);
         }
+    }
+
+    private void addValidations() {
+        @SuppressWarnings("unchecked")
+        CEntityEditableComponent<Address> currentAddressForm = ((CEntityEditableComponent<Address>) getRaw(proto().currentAddress()));
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<Date>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Date> event) {
+                enablePreviousAddress();
+            }
+        });
+
+    }
+
+    private void enablePreviousAddress() {
+        boolean enabled = false;
+        if (!getValue().currentAddress().moveInDate().isNull()) {
+            enabled = needPreviousAddress.before(getValue().currentAddress().moveInDate().getValue());
+        }
+        get(proto().previousAddress()).setVisible(enabled);
+        previousAddressHeader.setVisible(enabled);
+    }
+
+    @Override
+    public void populate(PotentialTenantInfo value) {
+        super.populate(value);
+        enablePreviousAddress();
     }
 
     private CEntityEditableComponent<Address> createAddressEditor() {
