@@ -20,16 +20,21 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
+
 import com.google.gwt.i18n.client.NumberFormat;
 
 public class CDoubleField extends CNumberField<Double> {
+
+    private static I18n i18n = I18nFactory.getI18n(CDoubleField.class);
 
     public CDoubleField() {
         this(null);
     }
 
     public CDoubleField(String title) {
-        super(title, "Should be numeric value");
+        super(title, i18n.tr("Should be a numeric value"));
     }
 
     @Override
@@ -57,6 +62,7 @@ public class CDoubleField extends CNumberField<Double> {
             nf = NumberFormat.getFormat(pattern);
         }
 
+        @Override
         public String format(Double value) {
             if (value == null) {
                 return "";
@@ -65,6 +71,7 @@ public class CDoubleField extends CNumberField<Double> {
             }
         }
 
+        @Override
         public Double parse(String string) {
             try {
                 return valueOf(string);
