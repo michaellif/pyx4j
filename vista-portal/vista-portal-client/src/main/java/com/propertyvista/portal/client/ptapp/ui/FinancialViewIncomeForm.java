@@ -143,6 +143,13 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
             comp.get(comp.proto().name()).setVisible(false);
             comp.get(comp.proto().ends()).setVisible(false);
             break;
+        case odsp:
+        case dividends:
+        case other:
+            comp.get(comp.proto().name()).setVisible(true);
+            comp.get(comp.proto().ends()).setVisible(false);
+            break;
+
         default:
             comp.get(comp.proto().name()).setVisible(true);
             comp.get(comp.proto().ends()).setVisible(true);
