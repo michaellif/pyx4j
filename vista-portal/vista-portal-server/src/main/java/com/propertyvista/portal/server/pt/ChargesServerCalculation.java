@@ -41,7 +41,9 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     private final static Logger log = LoggerFactory.getLogger(ChargesServerCalculation.class);
 
     public static void updateChargesFromApplication(Charges charges) {
-
+        if (charges.application().isNull()) {
+            throw new Error("Data error");
+        }
         // find unit selection
         EntityQueryCriteria<UnitSelection> aptUnitCriteria = EntityQueryCriteria.create(UnitSelection.class);
         aptUnitCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
@@ -62,16 +64,15 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
 
         EntityQueryCriteria<PotentialTenantList> tenantCriteria = EntityQueryCriteria.create(PotentialTenantList.class);
-        aptUnitCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
+        tenantCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
         PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
         int carsCount = 0;
-        double parkingChargeAmount = 0d;
         for (PotentialTenantInfo pti : tenantList.tenants()) {
             carsCount += pti.vehicles().size();
-            parkingChargeAmount += 50;
         }
 
-        if (parkingChargeAmount > 0) {
+        if (carsCount > 0) {
+            double parkingChargeAmount = carsCount * 50;
             if (carsCount == 1) {
                 charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, parkingChargeAmount));
             } else {
@@ -85,7 +86,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
         // find appropriate pet charges
         EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
-        aptUnitCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
+        petCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
         Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
 
         double petChargeAmount = 0d;
