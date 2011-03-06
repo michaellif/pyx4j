@@ -39,6 +39,8 @@ public class VistaServerSideConfiguration extends EssentialsServerSideConfigurat
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         if ("vista33".equals(contextName)) {
             return new VistaServerSideConfiguration33();
+        } else if ("vista44".equals(contextName)) {
+            return new VistaServerSideConfiguration44();
         } else if (servletContext.getServerInfo().contains("jetty")) {
             return new VistaServerSideConfigurationDev();
         } else if ("vista".equals(contextName)) {
