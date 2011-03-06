@@ -26,6 +26,7 @@ import com.propertyvista.portal.rpc.pt.PasswordChangeRequest;
 
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.client.ui.flex.CEntityForm;
+import com.pyx4j.forms.client.ui.CEditableComponent;
 
 public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
 
@@ -33,7 +34,7 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
 
     private HTML header;
 
-    private VistaWidgetDecorator currentPassword;
+    private CEditableComponent<?, ?> currentPassword;
 
     public NewPasswordViewForm() {
         super(PasswordChangeRequest.class);
@@ -47,8 +48,7 @@ public class NewPasswordViewForm extends CEntityForm<PasswordChangeRequest> {
         main.add(header);
 
         main.add(new HTML());
-        currentPassword = new VistaWidgetDecorator(inject(proto().currentPassword()), 144, 152);
-        main.add(currentPassword);
+        main.add(new VistaWidgetDecorator(currentPassword = inject(proto().currentPassword()), 144, 152));
 
         main.add(new HTML());
         main.add(new VistaWidgetDecorator(inject(proto().newPassword()), 144, 152));
