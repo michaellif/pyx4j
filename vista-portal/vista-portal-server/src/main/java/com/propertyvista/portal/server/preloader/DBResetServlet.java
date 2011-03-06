@@ -46,12 +46,9 @@ public class DBResetServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
         long start = System.currentTimeMillis();
-        VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
-        response.setHeader("Content-Disposition", "attachment; filename=\"db-reset.log\"");
-        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        response.setContentType("text/plain");
-        OutputStream output = response.getOutputStream();
+        StringBuilder buf = new StringBuilder();
         try {
+            VistaServerSideConfiguration conf = (VistaServerSideConfiguration) ServerSideConfiguration.instance();
             EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) PersistenceServicesFactory.getPersistenceService();
             List<String> allClasses = EntityClassFinder.findEntityClasses();
             for (String className : allClasses) {
@@ -62,13 +59,26 @@ public class DBResetServlet extends HttpServlet {
                 }
                 if (srv.isTableExists(meta.getEntityClass())) {
                     log.warn("drop table {}", meta.getEntityClass());
-                    output.write(("drop table " + meta.getEntityClass() + "\n").getBytes());
+                    buf.append("drop table " + meta.getEntityClass() + "\n");
                     srv.dropTable(meta.getEntityClass());
                 }
             }
+            buf.append(conf.getDataPreloaders().preloadAll());
+            buf.append("\nTotal time: " + TimeUtils.secSince(start));
 
-            output.write(conf.getDataPreloaders().preloadAll().getBytes());
-            output.write(("\nTotal time: " + TimeUtils.secSince(start)).getBytes());
+        } catch (Throwable t) {
+            log.error("DB reset error", t);
+            buf.append("\nError:");
+            buf.append(t.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        response.setDateHeader("Expires", System.currentTimeMillis());
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
+        response.setContentType("text/plain");
+        OutputStream output = response.getOutputStream();
+        try {
+            output.write(buf.toString().getBytes());
         } finally {
             IOUtils.closeQuietly(output);
         }
