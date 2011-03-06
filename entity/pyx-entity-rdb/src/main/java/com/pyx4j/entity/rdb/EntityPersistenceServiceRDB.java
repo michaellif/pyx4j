@@ -113,9 +113,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public void dropTable(Class<? extends IEntity> entityClass) {
-        TableModel tm = new TableModel(connectionProvider.getDialect(), EntityFactory.getEntityMeta(entityClass));
+        EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
+        TableModel tm = new TableModel(connectionProvider.getDialect(), entityMeta);
         try {
             tm.dropTable(connectionProvider);
+            mappings.droppedTable(entityMeta);
         } catch (SQLException e) {
             log.error("drop table error", e);
             throw new RuntimeExceptionSerializable(e);

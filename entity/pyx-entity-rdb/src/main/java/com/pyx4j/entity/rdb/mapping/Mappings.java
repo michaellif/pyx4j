@@ -73,4 +73,10 @@ public class Mappings {
             return model;
         }
     }
+
+    public void droppedTable(EntityMeta entityMeta) {
+        String tableName = entityMeta.getPersistenceName().toUpperCase(Locale.ENGLISH);
+        usedTableNames.remove(tableName);
+        tables.remove(entityMeta.getEntityClass());
+    }
 }
