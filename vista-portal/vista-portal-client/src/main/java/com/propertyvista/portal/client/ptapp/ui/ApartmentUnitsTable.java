@@ -45,6 +45,7 @@ import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.AvailableUnitsByFloorplan;
 import com.propertyvista.portal.domain.pt.UnitSelection;
+import com.propertyvista.portal.domain.util.DomainUtil;
 
 import com.pyx4j.entity.client.ui.flex.CEntityFolder;
 import com.pyx4j.entity.client.ui.flex.CEntityFolderItem;
@@ -160,9 +161,9 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
                     UnitsDataCalc calcs = new UnitsDataCalc(availableUnits.units());
                     // fill the row:
                     if (proto.marketRent() == column.getObject()) {
-                        caption = "From <br />" + "$" + calcs.minRent;
+                        caption = "From <br />" + DomainUtil.createMoney(calcs.minRent).getStringView();
                     } else if (proto.requiredDeposit() == column.getObject()) {
-                        caption = "<br />" + "$" + String.valueOf(calcs.minDeposit);
+                        caption = "<br />" + DomainUtil.createMoney(calcs.minDeposit).getStringView();
                     } else if (proto.bedrooms() == column.getObject()) {
                         caption = "<br />" + formatDoubleAsInt(calcs.minBed);
                     } else if (proto.bathrooms() == column.getObject()) {
@@ -325,7 +326,7 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
                 }
                 minBed = Math.min(minBed, u.bedrooms().getValue());
                 minBath = Math.min(minBath, u.bathrooms().getValue());
-                minDeposit = Math.min(minDeposit, u.requiredDeposit().getValue());
+                minDeposit = Math.min(minDeposit, u.requiredDeposit().amount().getValue());
 
                 if ((minAvalableForRent == null) || (minAvalableForRent.after(u.avalableForRent().getValue()))) {
                     minAvalableForRent = u.avalableForRent().getValue();

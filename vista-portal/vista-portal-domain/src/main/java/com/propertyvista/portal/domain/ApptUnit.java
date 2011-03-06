@@ -91,7 +91,7 @@ public interface ApptUnit extends Property {
      * How much does the user need to put down
      */
     @Caption(name = "Deposit")
-    IPrimitive<Double> requiredDeposit();
+    Money requiredDeposit();
 
     // need a lease-terms object
     //IPrimitive<String> unitLeaseStatus();

@@ -14,6 +14,7 @@
 package com.propertyvista.portal.domain;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,5 +23,6 @@ public interface MarketRent extends IEntity {
     IPrimitive<Integer> leaseTerm();
 
     @Owned
+    @ToString(index = 0)
     Money rent();
 }

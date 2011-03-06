@@ -99,7 +99,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
         unitDetailPanel.add(new HTML(h3(i18n.tr("Lease Terms"))));
         Map<Integer, String> options = new TreeMap<Integer, String>();
         for (final MarketRent mr : unit.marketRent()) {
-            options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + " $" + mr.rent().amount().getValue());
+            options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + " month " + mr.rent().getStringView());
         }
         CRadioGroupInteger mr = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
         if (unit.marketRent().contains(selectedmarketRent)) {

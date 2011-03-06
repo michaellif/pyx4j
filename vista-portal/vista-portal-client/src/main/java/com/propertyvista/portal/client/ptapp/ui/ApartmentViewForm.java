@@ -40,12 +40,11 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.flex.CEntityForm;
 import com.pyx4j.forms.client.ui.CEditableComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.widgets.client.Button;
 
-public class ApartmentViewForm extends CEntityForm<UnitSelection> {
+public class ApartmentViewForm extends BaseEntityForm<UnitSelection> {
 
     private static I18n i18n = I18nFactory.getI18n(ApartmentViewForm.class);
 

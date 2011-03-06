@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.portal.domain.AddOn;
 import com.propertyvista.portal.domain.Address;
 import com.propertyvista.portal.domain.Amenity;
+import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.Building;
 import com.propertyvista.portal.domain.Building.BuildingType;
 import com.propertyvista.portal.domain.ChargeType;
@@ -41,12 +42,12 @@ import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.Phone;
 import com.propertyvista.portal.domain.Phone.PhoneType;
 import com.propertyvista.portal.domain.Picture;
-import com.propertyvista.portal.domain.ApptUnit;
 import com.propertyvista.portal.domain.UnitInfoItem;
 import com.propertyvista.portal.domain.Utility;
 import com.propertyvista.portal.domain.pt.LeaseTerms;
 import com.propertyvista.portal.domain.pt.PetChargeRule;
 import com.propertyvista.portal.domain.pt.PropertyProfile;
+import com.propertyvista.portal.domain.util.DomainUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -329,7 +330,7 @@ public class PreloadBuildings extends AbstractDataPreloader {
             unit.addOns().add(createAddOn("Dishwasher", 30));
         }
 
-        unit.requiredDeposit().setValue(150d + 5 * RandomUtil.randomInt(20));
+        unit.requiredDeposit().set(DomainUtil.createMoney(150d + 5 * RandomUtil.randomInt(20)));
 
         Calendar avalable = new GregorianCalendar();
         avalable.setTime(new Date());

@@ -30,23 +30,23 @@ public class ReadOnlyMoneyForm extends CEntityEditableComponent<Money> {
     @Override
     public IsWidget createContent() {
         CNumberLabel amount = new CNumberLabel();
-        amount.setFormat(new IFormat<Number>() {
-
-            NumberFormat nf = NumberFormat.getFormat("#.00");
-
-            @Override
-            public String format(Number value) {
-                return "$" + nf.format(value);
-            }
-
-            @Override
-            public Number parse(String string) {
-                return null;
-            }
-
-        });
+        amount.setFormat(new MoneyFormat());
         return inject(proto().amount(), amount);
 
     }
 
+    public static class MoneyFormat implements IFormat<Number> {
+
+        NumberFormat nf = NumberFormat.getFormat("#.00");
+
+        @Override
+        public String format(Number value) {
+            return "$" + nf.format(value);
+        }
+
+        @Override
+        public Number parse(String string) {
+            return null;
+        }
+    }
 }
