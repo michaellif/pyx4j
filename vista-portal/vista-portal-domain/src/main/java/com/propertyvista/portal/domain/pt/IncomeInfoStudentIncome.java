@@ -28,13 +28,27 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo 
         scolarship, bursary, grant, loan
     }
 
-    public enum Degree {
+    public enum Program {
 
-        undergraduate,
+        //TODO i18n
+        undergraduate("Undergraduate"),
 
-        graduate,
+        graduate("Graduate");
 
-        postgraduate;
+        private final String label;
+
+        Program() {
+            this.label = name();
+        }
+
+        Program(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
 
     @Override
@@ -54,8 +68,8 @@ public interface IncomeInfoStudentIncome extends IEntity, IAddress, IIncomeInfo 
     @Caption(name = "Program (Planned) to be completed on")
     IPrimitive<Date> ends();
 
-    @Caption(name = "Degree")
-    IPrimitive<Degree> degree();
+    @Caption(name = "Program")
+    IPrimitive<Program> program();
 
     IPrimitive<String> fieldOfStudy();
 

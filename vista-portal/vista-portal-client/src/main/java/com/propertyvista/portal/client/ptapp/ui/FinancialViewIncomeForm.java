@@ -206,7 +206,7 @@ public class FinancialViewIncomeForm extends CEntityFolderItem<TenantIncome> {
                 main.add(inject(proto().name()), 10, 10);
                 BaseEntityForm.injectIAddress(main, proto(), this);
 
-                main.add(inject(proto().degree()), 10, 10);
+                main.add(inject(proto().program()), 10, 10);
                 main.add(inject(proto().fieldOfStudy()), 10, 10);
                 main.add(inject(proto().fundingChoices()), 10, 10);
 
