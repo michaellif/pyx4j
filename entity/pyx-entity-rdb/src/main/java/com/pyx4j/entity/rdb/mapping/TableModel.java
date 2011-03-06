@@ -122,6 +122,15 @@ public class TableModel {
         return entityOperationsMeta;
     }
 
+    public boolean isTableExists(ConnectionProvider connectionProvider) throws SQLException {
+        Connection connection = connectionProvider.getConnection();
+        try {
+            return (TableMetadata.getTableMetadata(connection, tableName) != null);
+        } finally {
+            SQLUtils.closeQuietly(connection);
+        }
+    }
+
     public void dropTable(ConnectionProvider connectionProvider) throws SQLException {
         List<String> sqls = new Vector<String>();
         sqls.add("drop table " + tableName);
