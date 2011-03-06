@@ -23,6 +23,7 @@ public interface IEmploymentInfo extends IAddress, IIncomeInfo {
 
     @Override
     @Caption(name = "Employer Name")
+    @NotNull
     IPrimitive<String> name();
 
     //TODO: either one of starts/ends,  may be optional/hidden ?
