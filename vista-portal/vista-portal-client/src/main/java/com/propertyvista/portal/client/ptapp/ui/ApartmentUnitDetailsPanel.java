@@ -45,7 +45,7 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
 
     }
 
-    public void showUnitDetail(final ApptUnit unit, final MarketRent marketRent) {
+    public void showUnitDetail(final ApptUnit unit, final MarketRent selectedmarketRent, final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
         this.clear();
 
         FlowPanel unitDetailPanel = new FlowPanel();
@@ -102,8 +102,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
             options.put(mr.leaseTerm().getValue(), mr.leaseTerm().getStringView() + " $" + mr.rent().amount().getValue());
         }
         CRadioGroupInteger mr = new CRadioGroupInteger(CRadioGroup.Layout.VERTICAL, options);
-        if (unit.marketRent().contains(marketRent)) {
-            mr.populate(marketRent.leaseTerm().getValue());
+        if (unit.marketRent().contains(selectedmarketRent)) {
+            mr.populate(selectedmarketRent.leaseTerm().getValue());
         }
         mr.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 
@@ -111,7 +111,8 @@ public class ApartmentUnitDetailsPanel extends FlowPanel {
             public void onValueChange(ValueChangeEvent<Integer> event) {
                 for (final MarketRent mr : unit.marketRent()) {
                     if (event.getValue().equals(mr.leaseTerm().getValue())) {
-                        marketRent.setValue(mr.getValue());
+                        selectedMarketRentChangeHandler.onValueChange(new ValueChangeEvent<MarketRent>(mr) {
+                        });
                         break;
                     }
                 }

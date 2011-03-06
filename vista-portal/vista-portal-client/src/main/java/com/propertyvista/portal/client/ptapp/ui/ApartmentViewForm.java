@@ -21,6 +21,8 @@ import org.xnap.commons.i18n.I18nFactory;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -32,6 +34,8 @@ import com.propertyvista.portal.client.ptapp.ui.decorations.ViewHeaderDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.ViewLineSeparator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator;
 import com.propertyvista.portal.client.ptapp.ui.decorations.VistaWidgetDecorator.DecorationData;
+import com.propertyvista.portal.domain.ApptUnit;
+import com.propertyvista.portal.domain.MarketRent;
 import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.pt.UnitSelectionCriteria;
 
@@ -67,15 +71,12 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         DecorationData decorData = new DecorationData(0, 8.1);
         decorData.hideInfoHolder = true;
         decorData.showMandatory = DecorationData.ShowMandatory.None;
-        VistaWidgetDecorator dateFrom = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), decorData);
-
-        header.add(dateFrom);
+        header.add(new VistaWidgetDecorator(inject(proto().selectionCriteria().availableFrom()), decorData));
 
         decorData = new DecorationData(0, 8.1);
         decorData.hideInfoHolder = true;
         decorData.showMandatory = DecorationData.ShowMandatory.None;
-        VistaWidgetDecorator dateTo = new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData);
-        header.add(dateTo);
+        header.add(new VistaWidgetDecorator(inject(proto().selectionCriteria().availableTo()), decorData));
 
         Button changeBtn = new Button(i18n.tr("Change"));
         changeBtn.getElement().getStyle().setMargin(5, Unit.PX);
@@ -94,7 +95,27 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
         main.add(w);
 
         // units table:
-        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable()));
+        main.add(inject(proto().availableUnits().units(), new ApartmentUnitsTable(new ValueChangeHandler<ApptUnit>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<ApptUnit> event) {
+                if (!getValue().selectedUnit().equals(event.getValue())) {
+                    getValue().selectedUnit().set(event.getValue());
+                    getValue().markerRent().set(null);
+                    CEditableComponent<Date, ?> rentStart = get(proto().rentStart());
+                    if (rentStart.getValue() == null) {
+                        rentStart.setValue(getValue().selectedUnit().avalableForRent().getValue());
+                    }
+                }
+
+            }
+        }, new ValueChangeHandler<MarketRent>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<MarketRent> event) {
+                getValue().markerRent().set(event.getValue());
+            }
+        })));
 
         // start date:
         main.add(new ViewLineSeparator(0, Unit.PCT, 1, Unit.EM, 1, Unit.EM));
@@ -124,6 +145,32 @@ public class ApartmentViewForm extends CEntityForm<UnitSelection> {
     }
 
     private void addValidations() {
+        this.addValueValidator(new EditableValueValidator<UnitSelection>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<UnitSelection, ?> component, UnitSelection value) {
+                return !value.selectedUnit().isNull();
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<UnitSelection, ?> component, UnitSelection value) {
+                return i18n.tr("Please select the Unit");
+            }
+        });
+
+        this.addValueValidator(new EditableValueValidator<UnitSelection>() {
+
+            @Override
+            public boolean isValid(CEditableComponent<UnitSelection, ?> component, UnitSelection value) {
+                return !value.markerRent().isNull();
+            }
+
+            @Override
+            public String getValidationMessage(CEditableComponent<UnitSelection, ?> component, UnitSelection value) {
+                return i18n.tr("Please select the Lease Terms");
+            }
+        });
+
         this.get(proto().rentStart()).addValueValidator(new EditableValueValidator<Date>() {
 
             @SuppressWarnings("deprecation")

@@ -27,6 +27,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -69,7 +71,9 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private ApartmentUnitDetailsPanel unitDetailsPanelShown = null;
 
-    private ApptUnit selectedUnit;
+    private final ValueChangeHandler<ApptUnit> selectedUnitChangeHandler;
+
+    private final ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler;
 
     private MarketRent selectedmarketRent;
 
@@ -77,8 +81,10 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
     private final ApptUnit proto;
 
-    public ApartmentUnitsTable() {
+    public ApartmentUnitsTable(ValueChangeHandler<ApptUnit> selectedUnitChangeHandler, ValueChangeHandler<MarketRent> selectedMarketRentChangeHandler) {
         super();
+        this.selectedUnitChangeHandler = selectedUnitChangeHandler;
+        this.selectedMarketRentChangeHandler = selectedMarketRentChangeHandler;
 
         proto = EntityFactory.getEntityPrototype(ApptUnit.class);
 
@@ -207,6 +213,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
                     getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StylePrefix + VistaStyles.ApartmentUnits.StyleDependent.selected.name());
                     setSelected(getValue());
+                    selectedUnitChangeHandler.onValueChange(new ValueChangeEvent<ApptUnit>(getValue()) {
+                    });
                 }
             });
 
@@ -240,8 +248,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
             return content;
         }
 
-        private void showDetails(ApptUnit unit, MarketRent marketRent) {
-            unitDetailsPanel.showUnitDetail(unit, selectedmarketRent);
+        private void showDetails(ApptUnit unit) {
+            unitDetailsPanel.showUnitDetail(unit, selectedmarketRent, selectedMarketRentChangeHandler);
             unitDetailsPanelShown = unitDetailsPanel;
         }
 
@@ -259,10 +267,9 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
     }
 
     public void populate(UnitSelection value) {
-        selectedUnit = value.selectedUnit();
         selectedmarketRent = value.markerRent();
         createFloorplanRaw(value.availableUnits());
-        setSelected(selectedUnit);
+        setSelected(value.selectedUnit());
     }
 
     private void setSelected(ApptUnit unit) {
@@ -274,11 +281,8 @@ public class ApartmentUnitsTable extends CEntityFolder<ApptUnit> {
 
         UnitTableRow unitTableRow = (UnitTableRow) getFolderRow(unit);
         if (unitTableRow != null) {
-            unitTableRow.showDetails(unit, selectedmarketRent);
+            unitTableRow.showDetails(unit);
             unitTableRow.getContent().addStyleDependentName(VistaStyles.ApartmentUnits.StyleDependent.selected.name());
-            if (!selectedUnit.equals(unit)) {
-                selectedUnit.setValue(unit.getValue());
-            }
         }
     }
 

@@ -38,9 +38,11 @@ public interface UnitSelection extends IEntity, IApplicationEntity {
     AvailableUnitsByFloorplan availableUnits();
 
     // user selected Unit from availableUnits..
+    @NotNull
     ApptUnit selectedUnit();
 
     // user selected leaseTerm (aka as MarkerRent in Unit)..
+    @NotNull
     MarketRent markerRent();
 
     @Caption(name = "Start Rent Date")
