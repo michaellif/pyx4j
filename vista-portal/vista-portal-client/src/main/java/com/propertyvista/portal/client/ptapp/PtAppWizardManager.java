@@ -182,7 +182,9 @@ public class PtAppWizardManager {
             idx++;
         }
         WizardStep nextStep = getWizardSteps().get(idx);
-        nextStep.setStatus(ApplicationWizardStep.Status.latest);
+        if (nextStep.getStatus() == ApplicationWizardStep.Status.notVisited) {
+            nextStep.setStatus(ApplicationWizardStep.Status.latest);
+        }
 
         ginjector.getPlaceController().goTo(nextStep.getPlace());
 
