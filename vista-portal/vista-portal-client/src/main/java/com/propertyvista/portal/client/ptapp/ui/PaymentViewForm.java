@@ -75,7 +75,10 @@ public class PaymentViewForm extends BaseEntityForm<PaymentInfo> {
         applicationFeePanel.add(DecorationUtils.inline(inject(proto().applicationFee().charge()), "100px", "right"));
         main.add(applicationFeePanel);
 
-        main.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
+        HorizontalPanel info = new HorizontalPanel();
+        info.add(new Image(SiteImages.INSTANCE.userMessageInfo()));
+        info.add(new HTML(SiteResources.INSTANCE.paymentApprovalNotes().getText()));
+        main.add(info);
 
         main.add(new ViewHeaderDecorator(proto().type()));
         @SuppressWarnings("unchecked")
