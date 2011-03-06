@@ -196,8 +196,7 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
                 loadAvailableUnits((UnitSelection) ret);
             } else if (ret instanceof Charges) {
                 Charges charges = (Charges) ret;
-                ChargesServerCalculation.updatePaymentSplitCharges(charges, PtUserDataAccess.getCurrentUserApplication());
-                ChargesServerCalculation.calculateCharges(charges);
+                ChargesServerCalculation.updateChargesFromApplication(charges);
             } else if (ret instanceof Summary) {
                 retrieveSummary((Summary) ret);
             } else if (ret instanceof PaymentInfo) {
@@ -220,7 +219,6 @@ public class PotentialTenantServicesImpl extends EntityServicesImpl implements P
         private Charges createCharges() {
             Charges charges = EntityFactory.create(Charges.class);
             charges.application().set(PtUserDataAccess.getCurrentUserApplication());
-            ChargesServerCalculation.dummyPopulate(charges);
             return charges;
         }
 

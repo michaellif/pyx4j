@@ -45,6 +45,15 @@ public class DomainUtil {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.charge().set(createMoney(money));
         cl.type().setValue(type);
+        cl.label().setValue(type.toString());
+        return cl;
+    }
+
+    public static ChargeLine createChargeLine(String label, ChargeType type, double money) {
+        ChargeLine cl = EntityFactory.create(ChargeLine.class);
+        cl.charge().set(createMoney(money));
+        cl.type().setValue(type);
+        cl.label().setValue(label);
         return cl;
     }
 
@@ -52,6 +61,7 @@ public class DomainUtil {
         ChargeLineSelectable cl = EntityFactory.create(ChargeLineSelectable.class);
         cl.charge().set(createMoney(money));
         cl.type().setValue(type);
+        cl.label().setValue(type.toString());
         cl.selected().setValue(selected);
         return cl;
     }

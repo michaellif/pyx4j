@@ -53,7 +53,7 @@ public class ChargeLineFolder extends CEntityFolder<ChargeLine> {
             @Override
             public IsWidget createContent() {
                 FlowPanel main = new FlowPanel();
-                main.add(DecorationUtils.inline(inject(proto().type()), "300px", null));
+                main.add(DecorationUtils.inline(inject(proto().label()), "300px", null));
                 main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
                 return main;
             }

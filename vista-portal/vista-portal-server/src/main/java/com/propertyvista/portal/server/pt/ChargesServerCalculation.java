@@ -32,7 +32,6 @@ import com.propertyvista.portal.domain.pt.UnitSelection;
 import com.propertyvista.portal.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.pt.ChargesSharedCalculation;
 
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -41,47 +40,75 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
 
     private final static Logger log = LoggerFactory.getLogger(ChargesServerCalculation.class);
 
-    public static void dummyPopulate(Charges charges) {
+    public static void updateChargesFromApplication(Charges charges) {
 
         // find unit selection
-        EntityQueryCriteria<UnitSelection> criteria = EntityQueryCriteria.create(UnitSelection.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), charges.application()));
-        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        EntityQueryCriteria<UnitSelection> aptUnitCriteria = EntityQueryCriteria.create(UnitSelection.class);
+        aptUnitCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
+        UnitSelection unitSelection = PersistenceServicesFactory.getPersistenceService().retrieve(aptUnitCriteria);
         if (unitSelection == null) {
             log.warn("Could not find unit selection for charges {}", charges);
             return;
         }
-
-        // find appropriate pet charges
-        EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), charges.application()));
-        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
-
-        charges.rentStart().setValue(TimeUtils.createDate(2011, 4, 7)); // dummy date
+        charges.rentStart().setValue(unitSelection.rentStart().getValue());
 
         // calculate things that we can
         double rentAmount = unitSelection.markerRent().rent().amount().getValue();
-        double petChargeAmount = 0d;
-
-        for (Pet pet : pets.pets()) {
-            petChargeAmount += pet.chargeLine().charge().amount().getValue();
-        }
-
         double depositAmount = unitSelection.selectedUnit().requiredDeposit().getValue();
 
         // monthly charges
+        //TODO use update.
+        charges.monthlyCharges().charges().clear();
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.rent, rentAmount));
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, 100));
+
+        EntityQueryCriteria<PotentialTenantList> tenantCriteria = EntityQueryCriteria.create(PotentialTenantList.class);
+        aptUnitCriteria.add(PropertyCriterion.eq(tenantCriteria.proto().application(), charges.application()));
+        PotentialTenantList tenantList = PersistenceServicesFactory.getPersistenceService().retrieve(tenantCriteria);
+        int carsCount = 0;
+        double parkingChargeAmount = 0d;
+        for (PotentialTenantInfo pti : tenantList.tenants()) {
+            carsCount += pti.vehicles().size();
+            parkingChargeAmount += 50;
+        }
+
+        if (parkingChargeAmount > 0) {
+            if (carsCount == 1) {
+                charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.parking, parkingChargeAmount));
+            } else {
+                String label = "Parking " + carsCount + " Cars";
+                charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(label, ChargeType.parking, parkingChargeAmount));
+            }
+        }
+
+        // TODO 
         charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.locker, 25));
-        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, petChargeAmount));
+
+        // find appropriate pet charges
+        EntityQueryCriteria<Pets> petCriteria = EntityQueryCriteria.create(Pets.class);
+        aptUnitCriteria.add(PropertyCriterion.eq(aptUnitCriteria.proto().application(), charges.application()));
+        Pets pets = PersistenceServicesFactory.getPersistenceService().retrieve(petCriteria);
+
+        double petChargeAmount = 0d;
+        for (Pet pet : pets.pets()) {
+            petChargeAmount += pet.chargeLine().charge().amount().getValue();
+        }
+        if (petChargeAmount > 0) {
+            charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petCharge, petChargeAmount));
+        }
 
         // available upgrades
-        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 100, false));
-        charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, false));
+        if (charges.monthlyCharges().upgradeCharges().size() == 0) {
+            charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.parking2, 75, false));
+            charges.monthlyCharges().upgradeCharges().add(DomainUtil.createChargeLine(ChargeType.locker, 50, false));
+        }
 
         // application charges
-        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.deposit, depositAmount));
-        charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petDeposit, 100));
+        //TODO use update.
+        charges.applicationCharges().charges().clear();
+        if (depositAmount > 0) {
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.deposit, depositAmount));
+        }
+        //charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.petDeposit, 100));
         charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeType.applicationFee, 29));
 
         // payment splits

@@ -762,10 +762,8 @@ public class PreloadPT extends AbstractDataPreloader {
 
     private void createCharges() {
         Charges charges = EntityFactory.create(Charges.class);
-
         charges.application().set(application);
-
-        ChargesServerCalculation.dummyPopulate(charges);
+        ChargesServerCalculation.updateChargesFromApplication(charges);
 
         persist(charges);
     }

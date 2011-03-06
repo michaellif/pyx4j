@@ -79,7 +79,7 @@ public class ChargeLineSelectableFolder extends CEntityFolder<ChargeLineSelectab
                     width = "250px";
                 }
 
-                main.add(DecorationUtils.inline(inject(proto().type()), width));
+                main.add(DecorationUtils.inline(inject(proto().label()), width));
                 main.add(DecorationUtils.inline(inject(proto().charge()), "100px", "right"));
 
                 return main;
